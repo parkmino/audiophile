@@ -1,0 +1,82 @@
+Format: 1.0
+Source: mpd
+Binary: mpd, mpd-dbg
+Architecture: any
+Version: 0.16.7-2
+Maintainer: mpd maintainers <pkg-mpd-maintainers@lists.alioth.debian.org>
+Uploaders: Alexander Wirt <formorer@debian.org>
+Homepage: http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki
+Standards-Version: 3.9.2
+Vcs-Browser: http://git.debian.org/?p=pkg-mpd/pkg-mpd.git
+Vcs-Git: git://git.debian.org/pkg-mpd/pkg-mpd.git
+Build-Depends: debhelper (>= 8), libao-dev (>= 0.8.3), libasound2-dev [linux-any], libaudiofile-dev, libavahi-client-dev, libavahi-glib-dev, libavcodec-dev, libavformat-dev, libcurl4-gnutls-dev | libcurl-dev, libfaad-dev, libflac-dev (>= 1.1.4), libid3tag0-dev, libjack-dev, libmad0-dev, libmikmod2-dev, libmms-dev, libmp3lame-dev, libmpcdec-dev, libogg-dev, libpulse-dev, libresid-builder-dev, libsamplerate0-dev, libshout3-dev, libsidplay2-dev, libsqlite3-dev, libvorbis-dev [!arm !armel !armeb], libvorbisidec-dev [arm armel armeb], libwavpack-dev, xmlto, zlib1g-dev
+Checksums-Sha1: 
+ f59fe27d863bbe76e03c558f1ac7651d8ea270a5 643632 mpd_0.16.7.orig.tar.gz
+ fdad0d4affdde3a1cf62c3999ad3c4b8d928c13d 18694 mpd_0.16.7-2.diff.gz
+Checksums-Sha256: 
+ 95f216a115cbeb73df2ceb465a730ac9d4ca3569c96bd189a67cccc2bd5ad87b 643632 mpd_0.16.7.orig.tar.gz
+ 7cef22c5d4ac11a309c30df18e8f13fc6534a94142469acc9840586c8d1cbd77 18694 mpd_0.16.7-2.diff.gz
+Files: 
+ cbe09571fe1d0b3e83ac38d5b7629b16 643632 mpd_0.16.7.orig.tar.gz
+ 95d28076c351f68f06db7ef28c5227f7 18694 mpd_0.16.7-2.diff.gz
+
+sudo apt-get install git autoconf automake build-essential
+sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev libboost-dev
+wget http://sourceforge.net/projects/musicpd/files/mpd/0.17/mpd-0.17.tar.bz2
+tar -jxvf mpd-0.17.tar.bz2
+cd mpd-0.17
+git clone git://git.musicpd.org/master/mpd.git
+cd mpd
+
+#export CFLAGS="-march=native -O2"
+export CFLAGS="-O0"
+export CXXFLAGS="-O0"
+export CPPFLAGS="-O0"
+./autogen.sh
+./configure --help
+./configure --disable-aac --enable-alsa --disable-ao --enable-audiofile --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-debug --disable-despotify --disable-documentation --disable-ffado --enable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-lastfm --disable-lame-encoder --disable-libwrap --disable-lsr --enable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --disable-mpg123 --disable-mvp --disable-openal --enable-oss --disable-pipe-output --disable-pulse --disable-recorder-output --disable-roar --disable-sidplay --disable-shout --enable-sndfile --disable-solaris-output --disable-soundcloud --disable-soup --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --with-zeroconf=no
+
+0.18.x
+./configure --enable-libmpdclient --disable-adplug --enable-alsa --disable-roar --disable-ao --enable-audiofile --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-debug --disable-documentation --enable-dsd --enable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-despotify --disable-soundcloud --disable-lame-encoder --disable-libwrap --disable-lsr --disable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --enable-mpg123 --disable-openal --disable-opus --disable-oss --disable-osx --disable-pipe-output --disable-pulse --disable-recorder-output --disable-sidplay --disable-shout --enable-sndfile --disable-solaris-output --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --disable-aac --with-zeroconf=no
+
+0.19.x
+./configure --enable-database --enable-libmpdclient --disable-expat --disable-upnp --disable-adplug --enable-alsa --disable-roar --disable-ao --enable-audiofile --disable-zlib --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-smbclient --disable-nfs --disable-debug --disable-documentation --enable-dsd --enable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-soundcloud --disable-lame-encoder --disable-libwrap --disable-lsr --disable-soxr --disable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --enable-mpg123 --disable-openal --disable-opus --disable-oss --disable-osx --disable-pipe-output --disable-pulse --disable-recorder-output --disable-sidplay --disable-shine-encoder --disable-shout --enable-sndfile --disable-solaris-output --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --disable-icu --disable-glib --disable-neighbor-plugins --disable-aac --with-zeroconf=no
+
+make
+sudo make install
+/usr/local/bin/mpd -V
+#sudo strip --strip-unneeded /usr/local/bin/mpd && /usr/local/bin/mpd -V
+sudo /etc/init.d/mpd stop
+#sudo killall mpd or sudo pkill mpd
+sudo mv /usr/bin/mpd /usr/bin/mpd.org && sudo cp /usr/local/bin/mpd /usr/bin
+#sudo vi /etc/default/mpd DAEMON=/usr/local/bin/mpd
+sudo /etc/init.d/mpd start
+ls -al /usr/bin/mpd*
+
+wget http://www.symphonic-net.com/kubotayo/cgi-bin/downlog.cgi?edata/mpd-0.17git-20120226rtopt.diff.gz
+gunzip mpd-0.17git-20120226rtopt.diff.gz
+#wget http://hpcgi3.nifty.com/yo_kubota/downlog.cgi?data/mpd-buffer-c.diff.gz
+#gunzip mpd-buffer-c.diff.gz
+cd mpd
+patch -p1 < ./mpd-0.17git-20130805rtopt.diff
+patch -p1 < ./mpd-0.18.x-rtopt20131118.diff
+#patch -p1 < ./buffer.c.diff
+./autogen.sh
+./configure ... --enable-rtopt
+vi src/rt_opt.c
+
+vi mpd/src/output/alsa_output_plugin.c
+	.mixer_plugin = &alsa_mixer_plugin, # Remove this line
+vi mpd/src/output/oss_output_plugin.c
+	.mixer_plugin = &oss_mixer_plugin,  # Remove this line
+
+
+export CFLAGS="-O0"
+export CPPFLAGS="-O0"
+cd ~/Downloads/alsa-driver-1.0.25/
+./configure --help
+sudo ln -s /usr/src/linux-headers-3.8.0-24-generic/include/generated/uapi/linux/version.h /lib/modules/3.8.0-24-generic/build/include/linux/
+./configure --with-kernel=/usr/src/linux-headers-$(uname -r) --with-redhat=no --with-suse=no --with-debug=no --with-isapnp=no --with-sequencer=no --with-oss=no --with-pcm-oss-plugins=no --with-cards=hda-intel, usb-audio
+make
+sudo make install-modules
+
