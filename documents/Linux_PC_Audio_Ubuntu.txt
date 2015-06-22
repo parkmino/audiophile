@@ -1,0 +1,463 @@
+Linux PC Audio for Ubuntu as of 2015/06/19 - For the poor and stingy like me, mailto:parkmino@dreamwiz.com
+
+1.PC-Fi
+
+Hi-Fi
+	CDP (CDT+DAC) + Amplifier + Loud speakers.
+	Convenient, Dedicated, Optimized, Real-time.
+PC-Fi
+	CDT (PC/Read+Save+Play) + DAC (External Preferred) + Amplifier + Loud speakers.
+	More advanced digital technologies, Upgradable, Flexible, Versatile.
+
+PC = H/W + BIOS + OS + S/W <- Multipurpose and multitasking.
+
+H/W -> High Specs -> Speed Down -> Disable, Under-clocking, Under-voltaging for low power consumption and noise.
+S/W -> Low Specs -> Speed Up -> Preemptive Real-time Kernel, Prioritized Scheduling for low latency and jitter.
+
+High Performance Audio Output
+	Windows XP:Kernel Streaming,ASIO=Windows7:WASAPI=Linux:OSS,ALSA=OS X:CoreAudio
+Secure Ripping S/W
+	Windows:dBPowerAMP,EAC,Cdex=Linux:Rubyripper=OS X:XLD,Max,xACT
+
+2. BIOS Setting (ASUS P5Q with E7300)
+
+2.1 Disable
+	Load-Line Calibration, CPU/PCIE Spectrum -> Disabled
+	CPU Margin Enhancement -> Compatible.
+	HDD SMART/C1E Support/Max CPU ID Value Limit/CPU TM Function/Execute Disable Bit -> Disabled.
+	Disable unnecessary FDD, Serial&Parallel Ports, LAN (*), USB and HDD
+	* Wireless or Shielded Twist Pair Cable preferred and unplug it during off-line playback.
+
+2.2 Under-clocking based on the same frequency
+	CPU Ratio Setting -> Minimize (x6)
+	FSB Frequency -> Minimize (200MHz=100MHzx2)
+	PCIE Frequency -> Minimize (100MHz=100MHzx1)
+	DRAM Frequency -> Minimize (400MHz=100MHzx4)
+
+2.3 Under-voltaging
+	CPU Voltage -> 0.85v (min) ...
+	CPU GTL Voltage -> 0.61x (%)
+
+3. Linux Install and Configuration.
+
+3.1 Install the command line system from Ubuntu Alternate CD/Server or GUI all at once.
+	https://help.ubuntu.com/community/Installation/LowMemorySystems
+3.2 Install Alternative Kernels (Obsolete)
+	https://launchpad.net/~abogani/+archive/ppa
+		$ sudo add-apt-repository ppa:abogani/ppa
+		$ sudo apt-get update
+		$ sudo apt-get install linux-lowlatency
+	Liquorix Kernel
+		http://liquorix.net/
+		http://www.webupd8.org/2011/03/how-to-install-liquorix-kernel-in.html
+		$ sudo apt-get install linux-image-liquorix-686
+	AV Linux Kernels with IRQ Threading
+		http://www.bandshed.net/kernels/
+3.3 Install GUI with Window Manager and Desktop Environments.
+	Minimal Window Managers.
+		$ sudo apt-get install miwm dwm sawfish openbox ...
+		$ startx /usr/bin/miwm dwm sawfish
+			MIWM : Microscopic Window Manager
+			Button 1/2/3=raise/drag/hide window, Button 1=shell command menu(~/.miwm/miwm.usermenu), Ctrl-Button 1/2/3=lower window/change windows workspace/window manager operaions
+			DWM  : Dynamic Windows Manager
+			Alt+P=dmenu, Alt+Shift+Enter=terminal, Alt+Shift+C=Close, Alt+Shift+Q=Quit
+			Sawfish
+			Button 2=Popup root menu
+	Lightweight X11 Desktop Environment.
+		$ sudo apt-get install lxde-core or lxde
+		Disable unneeded Startup Applications.
+3.4 Install Sound Systems, ALSA or OSS.
+	Advanced Linux Sound Architecture.
+		$ sudo apt-get install linux-sound-base alsa-base alsa-utils
+		$ speaker-test -c 2 -D plug:iec958 -t sine -r 44100(/48000/96000/192000)
+		$ aplay -D iec958:CARD=ICE1724,DEV=0 *.wav
+		$ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
+		$ sudo gedit /usr/share/alsa/alsa.conf
+			pcm.default.type hw
+			pcm.default.card 0
+			pcm.default.device 0
+			pcm.default.subdevice 0
+			pcm.default.sync_ptr_ioctl 0
+			pcm.default.nonblock 0
+
+			defaults.pcm.nonblock 0
+			defaults.pcm.compat 1
+			defaults.pcm.minperiodtime 1000
+
+			ctl.default.type hw
+			ctl.default.card 0
+
+			#ctl.hw.type hw
+			#ctl.hw.card 0
+			#ctl.hw.@args.0 CARD
+			#ctl.hw.@args.CARD.type string
+		$ sudo gedit /etc/modprobe.d/alsa-base.conf
+		Comment out optional modules
+			#options snd-usb-audio nrpacks=8
+		$ sudo reboot
+		$ lsmod | grep snd
+		$ cat /sys/module/snd_usb_audio/parameters/nrpacks
+	Open Sound System - will not be supported any more
+		https://help.ubuntu.com/community/OpenSound
+		http://www.4front-tech.com/wiki/index.php/Configuring_Applications_for_OSSv4
+		$ ossinfo -v3 && sudo gedit /etc/rc.local
+			ln -sf /dev/oss/oss_envy24ht0/spdout /dev/dsp
+		$ osstest && ossplay -d/dev/dsp1 *.wav
+		Reinstallation might be needed after driver expiration or kernel update.
+		$ cat /dev/sndstat
+		$ sudo dpkg -i oss-linux*.deb
+		OSS Configuration
+		$ sudo gedit /usr/lib/oss/conf/osscore.conf
+			dma_buffsize=56 ;16 to 128(KB)
+			max_intrate=400
+			#cooked_enable=0
+			vmix_disabled=1
+		$ sudo soundoff && sudo soundon
+	Set Mixer with oss(x)mix for OSS or alsamixer for ALSA.
+	Set System Sound to none.
+3.5 Install CD Rippers and Players.
+	Cdparanoia
+		$ cdparanoia -O48 -z -X "1-" && mkcue > cdda.cue
+	Rubyripper
+		https://launchpad.net/~ferramroberto/+archive/extra
+		$ rrip_cli
+	CLI Players, i.e. aplay(alsa), ossplay(oss), play(sox), avplay(ffmpeg), sndfile-play(sndfile), mpg321(mp3), ogg123(ogg/flac), bplay, wavplay, cmus(ncurses), mp3blaster(ncurses), mplayer(av), cvlc(av).
+		$ cdparanoia -O48 -S2 -w 1- - (| buffer) | bplay
+		$ sox *.* -t raw - rate -v 96k > /dev/dsp1
+		$ cat output.raw > /dev/dsp1 or dd if=output.raw of=/dev/dsp1
+	Music Player Daemon
+		$ sudo add-apt-repository ppa:gmpc-trunk/mpd-trunk
+		$ sudo apt-get update && sudo apt-get install mpd ncmpc
+		$ sudo gedit /etc/mpd.conf
+			bind_to_address         "127.0.0.1"
+			gapless_mp3_playback    "no"
+			zeroconf_enabled        "no"
+			audio_output {
+			type			"alsa"
+			name			"My ALSA Device"
+			device			"pcm.default"
+			use_mmap		"yes"
+			auto_resample		"no"
+			auto_channels		"no"
+			auto_format		"no"
+			#format			"*:*:*"
+			mixer_type		"none"
+			mixer_device		"ctl.default"
+			mixer_control		"XMOS Clock Selector"
+			mixer_index		"0"
+			replay_gain_handler	"none"
+			}
+			#audio_output_format    "*:*:*"
+			 mixer_type             "disabled"
+			#replaygain             "off"
+			#volume_normalization   "no"
+			#audio_buffer_size      "4096"
+			#buffer_before_play     "10%"
+		$ sudo /etc/init.d/mpd restart
+		$ sudo ln -s /media/music /var/lib/mpd/music/mpd
+		$ mpc update
+		$ mpc listall | mpc add && mpc play
+	GUI Player, i.e. Audacious, Qmmp or DeaDBeeF.
+		$ sudo apt-get install audacious(qmmp) or
+		$ sudo add-apt-repository ppa:alexey-smirnov/deadbeef && sudo apt-get update
+		$ sudo apt-get install deadbeef
+		Move and disable plugins in /usr/lib/audacious(qmmp,deadbeef)/*.so not is use.
+		$ startx /usr/bin/audacious(qmmp,deadbeef)
+		
+3.6 MPD input & decoder
+	$ sudo gedit /etc/mpd.conf
+		#
+		#input {
+		#	plugin  "file"
+		#	enabled "no"
+		#}
+		
+		input {
+			plugin  "alsa"
+			enabled "no"
+		}
+		#
+		#input {
+		#        plugin  "curl"
+		#        enabled "no"
+		#}
+
+		input {
+			plugin  "ffmpeg"
+			enabled "no"
+		}
+		
+		decoder {
+			plugin "oggflac"
+			enabled "no"
+		}
+
+		decoder {
+			plugin "audiofile"
+			enabled "no"
+		}
+
+		decoder {
+			plugin "dsdiff"
+			enabled "no"
+		}
+
+		decoder {
+			plugin "dsf"
+			enabled "no"
+		}
+	
+3.7 MPD Buffer
+	$ sudo gedit /etc/mpd.conf
+		audio_output { ...
+		#buffer_time		"800000"
+		#period_time		"50"	
+		... }
+		#audio_buffer_size	"4736"
+		#buffer_before_play	"10.077%"
+			
+3.8 MPD priotiries
+	$ sudo gedit /etc/init.d/mpd
+		start-stop-daemon --start --quiet --oknodo --pidfile "$PIDFILE" \
+			--exec "$DAEMON" -- $MPD_OPTS "$MPDCONF"
+		MPD_PID=`pgrep -n mpd`
+		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+		       MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+		     UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+		     PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+		    DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+		     OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+		 taskset -acp 0       "$MPD_PID"
+		 chrt    -aop 0       "$MPD_PID"
+		 #chrt    -rp  4       "$MAIN_PID"
+		 #chrt    -ip  0       "$UPDATE_PID"
+		 #chrt    -rp  2       "$PLAYER_PID"
+		 #chrt    -rp  3       "$DECODER_PID"
+		 #chrt    -rp  1       "$OUTPUT_PID"
+		 #renice   -4          "$MAIN_PID"
+	 	 #renice   19          "$UPDATE_PID"
+		 #renice   -2          "$PLAYER_PID"
+		 #renice   -3          "$DECODER_PID"
+		 #renice   -1          "$OUTPUT_PID"
+		 #ionice  -c 2 -n 4 -p "$MAIN_PID"
+		 #ionice  -c 3      -p "$UPDATE_PID"
+		 #ionice  -c 2 -n 6 -p "$PLAYER_PID"
+		 #ionice  -c 2 -n 5 -p "$DECODER_PID"
+		 #ionice  -c 2 -n 7 -p "$OUTPUT_PID"
+		
+3.9 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
+	$ sudo gedit /etc/default/grub
+		GRUB_CMDLINE_LINUX_DEFAULT="... text ..." or "... s ..."
+	$ sudo update-grub2
+	$ gedit ~/.xinitrc
+		exec startlxde or gnome-session
+	$ startx
+3.10 Disable unneeded TTYs
+	Upstart
+	$ sudo gedit /etc/default/console-setup
+		ACTIVE_CONSOLES="/dev/tty[1]"
+	$ sudo gedit /etc/init/tty2~6.conf
+		#respawn
+		#exec /sbin/getty ...
+	Systemd
+	$ sudo gedit /etc/systemd/logind.conf
+		NAutoVTs=0
+		ReserveVT=0
+	$ ps -e | grep -e login -e tty
+3.11 Disable Networking, Network Manager or Wicd
+	$ sudo apt-get remove network-manager wicd
+	$ sudo gedit /etc/network/interfaces
+		#auto eth0
+	$ ps -e | grep -e dhclient -e NetworkManager -e wicd
+3.12 Diasble APIC, APM, Consoleblank.
+	$ sudo gedit /etc/default/grub
+		GRUB_CMDLINE_LINUX_DEFAULT="... noapic apm=off consoleblank=0"
+	$ sudo update-grub2
+	$ ps -e | grep acpi
+3.13 Disable CPU Multi-core and Hyper-threading
+	$ cat /proc/cpuinfo && sudo gedit /etc/default/grub
+		GRUB_CMDLINE_LINUX_DEFAULT="... nosmp noht"
+	$ sudo update-grub2
+
+3.14 Disable unneeded modules.
+	$ lsmod && sudo gedit /etc/modprobe.d/blacklist.conf
+		blacklist module
+3.15 Disable unneeded Services at your own risk.
+	Consider disabling acpid, anacron, apport, atd, avahi-daemon, bluetooth, brltty, console-kit-daemon, cron, cups, dns-clean, pcmcia/pcmciautils, ppp/pppd-dns, rsync, rsyslogd, samba, saned, speech-dispatcher, windbind, ...
+		Edit shell scripts at /etc/init.d/ and /etc/rc*.d/ or
+		$ sudo apt-get install sysv-rc-conf && sudo sysv-rc-conf or
+		$ ps aux && cd /usr/sbin && sudo chmod -x -v acpid anacron atd ...
+3.16 Unmount and Shut down data HDD during Playback
+	$ df -hT && sudo umount /dev/sdb1 && sudo hdparm -Y /dev/sdb
+	$ play *.wav
+	$ sudo mount /dev/sdb1
+
+3.17 Disable Pluggable Authentication Modules.
+	$ sudo gedit /etc/security/limits.conf
+		#@audio - rtprio  99
+		#@audio - nice    -19
+		#@audio - memlock unlimited
+		#@audio - stack   unlimited
+	$ sudo adduser username audio
+
+3.18 Initialize and customize real-time priorities
+	Check real-time priorities
+	$ gedit pri
+		#!/bin/sh
+		PIDS=`ps -e --no-headers | awk '{print $1}'`
+		for PID in ${PIDS}
+		do
+		    ps -p ${PID} -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
+		done
+		echo " --- Inquiry Priorities --- "
+		PIDS=`ps -eo pid,pri --no-headers | awk '$2 != 19 {print $1}'`
+		for PID in ${PIDS}
+		do
+		    ps -p ${PID} -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
+		done
+	$ sudo chmod +x pri
+	$ ./pri
+	Intialize
+	$ cat /proc/interrupts && ps -e | grep -i irq/
+	$ sudo gedit /etc/rc.local
+		PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+		for PID in ${PIDS}
+		do
+		    chrt -op 0 ${PID}
+		done
+		PIDS=`ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}'`
+		for PID in ${PIDS}
+		do
+		    renice 0 ${PID}
+		done	
+
+3.19 Options.
+
+	-. Kernel Options
+		# sudo gedit /etc/default/grub
+			GRUB_CMDLINE_LINUX_DEFAULT="... noht nosmp acpi=off apm=off noapic consoleblank=0 noswap"
+		# sudo update-grub2
+	-. High Precision Event Timer
+		$ cat /sys/devices/system/clocksource/clocksource0/current_clocksource
+		$ cat /sys/devices/system/clocksource/clocksource0/available_clocksource
+		$ sudo gedit /etc/default/grub
+			GRUB_CMDLINE_LINUX_DEFAULT="... clocksource=hpet"
+		$ sudo update-grub2
+	-. Timer Frequency
+		$ cat /sys/class/rtc/rtc0/max_user_freq
+		$ cat /proc/sys/dev/rtc/max-user-freq
+		$ cat /proc/sys/dev/hpet/max-user-freq
+		$ cat /proc/driver/rtc
+		$ dmesg | grep hpet
+		$ sudo gedit /etc/rc.local
+			echo 4032 > /sys/class/rtc/rtc0/max_user_freq
+			#sysctl -w dev.rtc.max-user-freq=4032
+			#sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
+			#chrt -rp 2 `pgrep irq/x-rtc`
+			taskset -apc 0 `pgrep rtc`
+	-. PCI Latency Timer
+		$ lspci -nn
+		$ sudo gedit /etc/rc.local
+			setpci -v -d 1412:1724 latency_timer=ff
+		$ lspci -v -d 1412:1724
+	-. RAM Disk with tmpfs or ramfs preferably.
+		$ sudo mkdir /mnt/ram(tmp)fs
+		$ sudo gedit /etc/fstab
+			#ramfs /tmp ramfs defaults,mode=1777 0 0
+			ram(tmp)fs /mnt/ram(tmp)fs ram(tmp)fs (size=800m,)defaults,noatime,mode=1777 0 0
+		$ rm /mnt/ram(tmp)fs/*.* && free(df)
+	-. Shared Memory
+		$ mount | grep -e tmpfs -e ramfs && df -hT && sudo gedit /etc/rc.local
+			#umount /run/shm
+			#mount -t ramfs -o nosuid,nodev,noatime,nodiratime,nostrictatime none /run/shm
+			#chmod 1777 /run/shm
+		$ mount | grep -e tmpfs -e ramfs && df -hT
+	-. Remounting system directories
+		$ mount && sudo gedit /etc/rc.local
+			for i in /proc /sys /sys/fs/fuse/connections /sys/kernel/debug /sys/kernel/security /run /run/lock /run/user /sys/fs/pstore /dev/sda2
+			do
+			    mount -o remount,nosuid,noatime,nodiratime $i
+			done
+			mount -o remount,nodev,noatime /
+			mount -o remount,nosuid,noatime,nodiratime /dev
+			mount -o remount,nosuid,noatime,nodiratime /dev/pts
+			for i in /tmp /var/cache
+			do
+			    mount -t tmpfs -o noauto,nosuid,nodev,nodiratime none $i
+			done
+		$ mount
+	-. Swappiness Kernel Parameters
+		$ sudo gedit /etc/rc.local
+			sysctl -w vm.swappiness=9
+		$ cat /proc/sys/vm/swappiness
+		$ sudo gedit /etc/fstab
+			# .../swap.disk none swap sw 0 0
+	-. HDD Readahead, Quiet & Standby Mode
+		# sudo gedit /etc/rc.local
+			hdparm -A0 -a2048 -B255 -M0 /dev/sda
+			#chrt -rp 1 `pgrep irq/x-ata` or `pgrep ahci`
+			#renice  -1 `pgrep ata_sff`
+		# sudo gedit /etc/hdparm.conf
+			read_ahead_sect = 2048
+			lookahead = off
+			apm = 255
+	-. NTFS format & mount
+		$ sudo apt-get install gparted ntfsprogs
+		Unmount the disk and format with GParted
+		$ sudo mkdir /media/MUSIC
+		$ sudo blkid && sudo gedit /etc/fstab
+			UUID=...  /media/MUSIC ntfs-3g defaults 0 0
+		or GUI NTFS mount
+		$ sudo apt-get install ntfs-config && ntfs-config
+	-. Set process I/O scheduling
+		$ sudo gedit /etc/rc.local
+			#ionice  -c 0      -p `pgrep ahci` `pgrep ata_sff`
+			#renice  -18          `pgrep ahci` `pgrep ata_sff`
+			#ionice  -c 2 -n 6 -p `pgrep irq/42-xhci`
+			#chrt    -rp 2        `pgrep irq/42-xhci`
+			#renice  -2           `pgrep irq/42-xhci`
+			#taskset -apc 0       `pgrep irq/42-xhci`
+	-. ZRAM
+		$ sudo apt-get install zram-config
+		$ ls /sys/block && cat /proc/swaps
+		$ sudo service zram-config stop  # stop zram
+		$ sudo service zram-config start # start zram
+	-. Network Tweak
+		$ sudo gedit /etc/rc.local
+			 ifconfig eth0  txqueuelen 10000 			# default: 1000
+			 ifconfig wlan0 txqueuelen 10000 			# default: 1000
+			 sysctl -w net.core.rmem_max=12582912			# default: 163840
+			 sysctl -w net.core.wmem_max=12582912			# default: 163840
+			#sysctl -w net.ipv4.conf.default.forwarding=1		# default: 0
+			 sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'	# default: 4096 16384 6151168
+			 sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'	# default: 4096 16384 4194304
+			#sysctl -w net.ipv4.tcp_timestamps=1			# default: 1
+			#sysctl -w net.ipv4.tcp_window_scaling=1		# default: 1
+			#sysctl -w net.ipv4.tcp_sack=1				# default: 1
+			 sysctl -w net.ipv4.tcp_no_metrics_save=1		# default: 0
+			 sysctl -w net.core.netdev_max_backlog=5000		# default: 1000
+
+4. References.
+
+	BIOS
+		http://www.cicsmemoryplayer.com/index.php?n=CMP.06BIOS
+	Ubuntu
+		http://www.ubuntu.com
+	Ubuntu Studio
+		http://ubuntustudio.org
+		https://help.ubuntu.com/community/UbuntuStudio
+	Ubuntu Wubi
+		http://wubi-installer.org
+	Ubuntu Korea
+		http://ubuntu.or.kr
+	Ubuntu Free Manual
+		http://ubuntu-manual.org/downloads
+		http://www.ubuntupocketguide.com
+	Open Sound System
+		http://www.opensound.com/
+	ALSA low latency
+		http://www.alsa-project.org/main/index.php/Low_latency_howto
+	ALSA digital output
+		http://alsa.opensrc.org/index.php/DigitalOut
+	Secure Ripping
+		http://wiki.hydrogenaudio.org/index.php?title=Secure_ripping
