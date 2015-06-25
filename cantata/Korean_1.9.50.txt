@@ -67,4 +67,10 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Tweaks : 수정, 비틀기, 꼼수
 
 -. Sort > 정리
+-. Library : 음원
+-. Internet : 인터넷
+-. Radio stations streams : 라디오 방송 스트림
+-. The world's largest digital service for free music : 무료 음악을 위한 최대 디지털 서비스
+-. Online music from magnatune.com : magnatune.com의 온라인 음악
+-. Subscribe to RSS feeds : RSS 피드 구독
 
