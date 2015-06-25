@@ -69,6 +69,7 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Sort > 정리
 -. Library : 음원
 -. Internet : 인터넷
+-. Internet Streams : 인터넷 스트림
 -. Radio stations streams : 라디오 방송 스트림
 -. The world's largest digital service for free music : 무료 음악을 위한 최대 디지털 서비스
 -. Online music from magnatune.com : magnatune.com의 온라인 음악
