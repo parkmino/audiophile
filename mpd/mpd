@@ -1,0 +1,161 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          mpd
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Should-Start:      autofs $network $named alsa-utils pulseaudio
+# Should-Stop:       autofs $network $named alsa-utils pulseaudio
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Music Player Daemon
+# Description:       Start the Music Player Daemon (MPD) service
+#                    for network access to the local audio queue.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+NAME=mpd
+DESC="Music Player Daemon"
+DAEMON=/usr/bin/mpd
+MPDCONF=/etc/mpd.conf
+START_MPD=true
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+if [ -n "$MPD_DEBUG" ]; then
+    set -x
+    MPD_OPTS=--verbose
+fi
+
+DBFILE=$(sed -n 's/^[[:space:]]*db_file[[:space:]]*"\?\([^"]*\)\"\?/\1/p' $MPDCONF)
+PIDFILE=$(sed -n 's/^[[:space:]]*pid_file[[:space:]]*"\?\([^"]*\)\"\?/\1/p' $MPDCONF)
+USER=`awk 'BEGIN{ao=0} /[ \t]*audio_output[ \t]*{/{ ao = 1 } /[ \t]*}/{ ao = 0 } /^[ \t]*user[ \t]*/{ if (ao == 0) user = $2 } END{ print substr(user, 2, length(user) - 2) }' $MPDCONF`
+
+mpd_start () {
+    if [ "$START_MPD" != "true" ]; then
+        log_action_msg "Not starting MPD: disabled by /etc/default/$NAME".
+        exit 0
+    fi
+
+    log_daemon_msg "Starting $DESC" "$NAME"
+
+    if [ -z "$PIDFILE" -o -z "$DBFILE" ]; then
+        log_failure_msg \
+            "$MPDCONF must have db_file and pid_file set; cannot start daemon."
+        exit 1
+    fi
+
+    PIDDIR=$(dirname "$PIDFILE")
+    if [ ! -d "$PIDDIR" ]; then
+        mkdir -m 0755 $PIDDIR
+
+        if dpkg-statoverride --list --quiet /run/mpd > /dev/null; then
+            # if dpkg-statoverride is used update it with permissions there
+            dpkg-statoverride --force --quiet --update --add $( dpkg-statoverride --list --quiet /run/mpd ) 2> /dev/null
+        else
+            # use defaults
+            chown mpd:audio $PIDDIR
+        fi
+    fi
+    start-stop-daemon --start --quiet --oknodo --pidfile "$PIDFILE" \
+        --exec "$DAEMON" -- $MPD_OPTS "$MPDCONF"
+
+    MPD_PID=`pgrep -n $NAME`
+
+#   MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+
+#     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+#   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+#   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+#  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+#   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+# For MPD 0.19 in rare cases
+#      MAIN1_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+#      MAIN2_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+#     PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+#    DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+#     UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+#     OUTPUT_PID=`echo "$MPD_PIDS" | awk 'END{print}'`
+
+     taskset -acp 0   "$MPD_PID"
+     chrt    -aop 0   "$MPD_PID"
+
+#    chrt -op  0 "$MAIN1_PID"
+#    chrt -op  0 "$MAIN2_PID"
+#    chrt -op  0 "$MAIN_PID"
+#    chrt -ip  0 "$UPDATE_PID"
+#    chrt -op  0 "$PLAYER_PID"
+#    chrt -op  0 "$DECODER_PID"
+#    chrt -op  0 "$OUTPUT_PID"
+
+#    renice -n  -1 -p "$MAIN1_PID"
+#    renice -n  -1 -p "$MAIN2_PID"
+#    renice -n   0 -p "$MAIN_PID"
+#    renice -n   5 -p "$UPDATE_PID"
+#    renice -n   0 -p "$PLAYER_PID"
+#    renice -n   0 -p "$DECODER_PID"
+#    renice -n   0 -p "$OUTPUT_PID"
+
+#    ionice -c 0      -p "$MAIN1_PID"
+#    ionice -c 3      -p "$MAIN2_PID"
+#    ionice -c 2 -n 7 -p "$MAIN_PID"
+#    ionice -c 3      -p "$UPDATE_PID"
+#    ionice -c 2 -n 7 -p "$PLAYER_PID"
+#    ionice -c 2 -n 7 -p "$DECODER_PID"
+#    ionice -c 2 -n 7 -p "$OUTPUT_PID"
+
+    log_end_msg $?
+}
+
+mpd_stop () {
+    if [ -z "$PIDFILE" ]; then
+        log_failure_msg \
+            "$MPDCONF must have pid_file set; cannot stop daemon."
+        exit 1
+    fi
+
+    log_daemon_msg "Stopping $DESC" "$NAME"
+    start-stop-daemon --stop --quiet --oknodo --retry 5 --pidfile "$PIDFILE" \
+        --exec $DAEMON
+    log_end_msg $?
+}
+
+# note to self: don't call the non-standard args for this in
+# {post,pre}{inst,rm} scripts since users are not forced to upgrade
+# /etc/init.d/mpd when mpd is updated
+case "$1" in
+    start)
+        mpd_start
+        ;;
+    stop)
+        mpd_stop
+        ;;
+    status)
+    	status_of_proc -p $PIDFILE $DAEMON $NAME
+	;;
+    restart|force-reload)
+        mpd_stop
+        mpd_start
+        ;;
+    force-start)
+        mpd_start
+        ;;
+    force-restart)
+        mpd_stop
+        mpd_start
+        ;;
+    force-reload)
+	mpd_stop
+	mpd_start
+	;;
+    *)
+        echo "Usage: $0 {start|stop|restart|force-reload}"
+        exit 2
+        ;;
+esac
