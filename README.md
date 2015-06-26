@@ -1,5 +1,7 @@
 ### Private Audiophile Logs / 오디오파일용 개인 설정 파일
 
+Files                            | Discription
+---------------------------------|-------------------------------------------
 alsa/alsa.conf                   | ALSA config at /usr/share/alsa/alsa.conf
 apcast/rooting.txt               | APCast ALSA rooting
 cantata/Compile_Cantata.txt      | Cantata compile
