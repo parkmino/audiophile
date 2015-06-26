@@ -1,0 +1,92 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+#cpufreq-selector -g powersave
+
+#umount /run/shm
+#mount -t ramfs -o noauto,nosuid,nodev,nodiratime none /run/shm
+#for i in /proc /sys /sys/fs/fuse/connections /sys/kernel/debug /sys/kernel/security /run /run/lock /run/user /sys/fs/pstore /dev/sda2
+#do
+#    mount -o remount,nosuid,nodev,noatime,nodiratime $i
+#done
+#mount -o remount,nodev,noatime /
+#mount -o remount,nosuid,noatime,nodiratime /dev
+#mount -o remount,nosuid,noatime,nodiratime /dev/pts
+
+for i in /tmp /var/backups /var/cache /var/crash /var/local /var/log /var/mail /var/metrics /var/opt /var/spool /var/tmp 
+do
+    mount -t tmpfs -o noauto,nosuid,nodev,nodiratime none $i
+done
+
+echo 4032 > /sys/class/rtc/rtc0/max_user_freq
+sysctl -w dev.hpet.max-user-freq=2147483520 # max=2147483647
+sysctl -w vm.swappiness=0
+
+ifconfig eth0  txqueuelen 10000
+ifconfig wlan0 txqueuelen 10000
+
+sysctl -w net.core.rmem_max=12582912
+sysctl -w net.core.wmem_max=12582912
+#sysctl -w net.ipv4.conf.default.forwarding=1
+sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'
+sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'
+#sysctl -w net.ipv4.tcp_timestamps=1
+#sysctl -w net.ipv4.tcp_window_scaling=1
+#sysctl -w net.ipv4.tcp_sack=1
+sysctl -w net.ipv4.tcp_no_metrics_save=1
+sysctl -w net.core.netdev_max_backlog=5000
+
+modprobe -r psmouse
+
+PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+for PID in ${PIDS}
+do
+    chrt -op 0 ${PID}
+done
+
+PIDS=`ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}'`
+for PID in ${PIDS}
+do
+    renice 0 ${PID}
+done
+
+#chrt -fp 1 `pgrep nouveau`
+
+#MODS=`lsmod | awk '$1 !~ /snd/ && $3 ~ 0 {print $1}'`
+#for Module in ${MODS}
+#do
+#   modprobe -r "$Module"
+#done
+
+/usr/bin/mpd /etc/mpd.conf
+chrt    -apo 0 `pgrep mpd`
+taskset -apc 0 `pgrep mpd`
+
+ taskset -apc 0      `pgrep snd_hda`
+#renice -n -2     -p `pgrep snd_hda`
+#ionice -c 2 -n 6 -p `pgrep snd_hda`
+#chrt -rp 2          `pgrep snd_hda`
+
+#taskset -apc 0      `pgrep hd-audio0`
+#renice -n -1     -p `pgrep hd-audio0`
+#ionice -c 2 -n 7 -p `pgrep hd-audio0`
+#chrt -rp 1          `pgrep hd-audio0`
+
+#ionice -c 2 -n 7 -p `pgrep ahci` `pgrep ata_sff`
+ taskset -apc 0      `pgrep rtc0`
+#ionice -c 0      -p `pgrep rtc0`
+#ionice -c 3 -p `pgrep init` `pgrep kthreadd` `pgrep ksoftirqd` `pgrep kworker` `pgrep migration` `pgrep rcu_` `pgrep watchdog`
+
+#hdparm -A1 -a2048 -B255 /dev/sda
+
+exit 0
