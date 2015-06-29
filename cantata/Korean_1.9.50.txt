@@ -1,4 +1,4 @@
-1.5.51에서 바뀐 점
+1.9.50에서 바뀐 점
 
 Changelog
 
@@ -60,6 +60,8 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Group albums by composer for genres > 장르의 작곡가로 음반 묶기
 -. Genres should be separated via a comma (e.g. 'Classical,Symphonic')
    장르는 쉼표로 나뉘어야 합니다 (예. 'Classical,Symphonic')
+-. Single track files folder : 한 곡 파일 폴더
+-. Changing any of the above will require a DB refresh in order to take affect : 위 값을 바꾸면 데이터베이스 새로 읽기를 해야 적용됩니다.DB 
 
 -. Library : 음원
 -. Group by : 묶기
@@ -69,9 +71,16 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Sort > 정리
 -. Library : 음원
 -. Internet : 인터넷
+-. Sort Albums : 정리
+-. Modified Date : 바뀐 날짜
+-. Stored Playlists : 저장된 연주목록
+-. Standard playlists : 표준 연주목록
+-. Dynamically generated playlists : 활동 연주목록
 -. Internet Streams : 인터넷 스트림
 -. Radio stations streams : 라디오 방송 스트림
 -. The world's largest digital service for free music : 무료 음악을 위한 최대 디지털 서비스
 -. Online music from magnatune.com : magnatune.com의 온라인 음악
+-. Search for tracks from soundcloud.com : soundcloud.com의 곡 찾기
 -. Subscribe to RSS feeds : RSS 피드 구독
+-. Cantata caches various pieces of information (covers,lyrics, etc). Below is a summary of Cantata's current cache usage. : 음반 표지, 가사 등 여러 정보를 캐시합니다. 아래는 캐시 사용 내역입니다.
 
