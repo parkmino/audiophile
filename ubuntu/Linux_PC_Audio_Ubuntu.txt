@@ -350,7 +350,7 @@ Secure Ripping S/W
 		$ sudo gedit /etc/rc.local
 			echo 4032 > /sys/class/rtc/rtc0/max_user_freq
 			#sysctl -w dev.rtc.max-user-freq=4032
-			#sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
+			sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
 			#chrt -rp 2 `pgrep irq/x-rtc`
 			taskset -apc 0 `pgrep rtc`
 	-. PCI Latency Timer
@@ -387,8 +387,14 @@ Secure Ripping S/W
 	-. Swappiness Kernel Parameters
 		$ sudo gedit /etc/rc.local
 			sysctl -w vm.swappiness=0
-			sysctl -w vm.overcommit_memory=2
+			sysctl -w vm.overcommit_memory=1
 			sysctl -w vm.overcommit_ratio=100
+			sysctl -w vm.dirty_writeback_centisecs=0
+			sysctl -w vm.oom_dump_tasks=0
+			sysctl -w vm.oom_kill_allocating_task=1
+			sysctl -w vm.panic_on_oom=2
+			sysctl -w vm.stat_interval=3
+			sysctl -w vm.user_reserve_kbytes=0
 		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
 		$ sudo gedit /etc/fstab
 			# .../swap.disk none swap sw 0 0
