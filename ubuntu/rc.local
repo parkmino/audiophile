@@ -31,8 +31,14 @@ done
 echo 4032 > /sys/class/rtc/rtc0/max_user_freq
 sysctl -w dev.hpet.max-user-freq=2147483520 # max=2147483647
 sysctl -w vm.swappiness=0
-sysctl -w vm.overcommit_memory=2
+sysctl -w vm.overcommit_memory=1
 sysctl -w vm.overcommit_ratio=100
+sysctl -w vm.dirty_writeback_centisecs=0
+sysctl -w vm.oom_dump_tasks=0
+sysctl -w vm.oom_kill_allocating_task=1
+sysctl -w vm.panic_on_oom=2
+sysctl -w vm.stat_interval=3
+sysctl -w vm.user_reserve_kbytes=0
 
 ifconfig eth0  txqueuelen 10000
 ifconfig wlan0 txqueuelen 10000
