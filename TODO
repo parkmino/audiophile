@@ -1,0 +1,8 @@
+ sysctl -w vm.overcommit_memory=1           #default: 0
+ sysctl -w vm.dirty_writeback_centisecs=0   #default: 500
+ sysctl -w vm.oom_dump_tasks=0              #default: 1
+ sysctl -w vm.oom_kill_allocating_task=1    #default: 0
+ sysctl -w vm.panic_on_oom=2                #default: 0
+ sysctl -w vm.stat_interval=3               #default: 1
+ sysctl -w vm.user_reserve_kbytes=0         #default: 124894
+ mount -t cifs -o ...,rsize=8192,...
