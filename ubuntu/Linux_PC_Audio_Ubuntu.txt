@@ -1,5 +1,3 @@
-Linux PC Audio for Ubuntu as of 2015/06/19 - For the poor and stingy like me, mailto:parkmino@dreamwiz.com
-
 1.PC-Fi
 
 Hi-Fi
@@ -388,8 +386,10 @@ Secure Ripping S/W
 		$ mount
 	-. Swappiness Kernel Parameters
 		$ sudo gedit /etc/rc.local
-			sysctl -w vm.swappiness=9
-		$ cat /proc/sys/vm/swappiness
+			sysctl -w vm.swappiness=0
+			sysctl -w vm.overcommit_memory=2
+			sysctl -w vm.overcommit_ratio=100
+		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
 		$ sudo gedit /etc/fstab
 			# .../swap.disk none swap sw 0 0
 	-. HDD Readahead, Quiet & Standby Mode
@@ -431,9 +431,9 @@ Secure Ripping S/W
 			#sysctl -w net.ipv4.conf.default.forwarding=1		# default: 0
 			 sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'	# default: 4096 16384 6151168
 			 sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'	# default: 4096 16384 4194304
-			#sysctl -w net.ipv4.tcp_timestamps=1			# default: 1
+			 sysctl -w net.ipv4.tcp_timestamps=0			# default: 1
 			#sysctl -w net.ipv4.tcp_window_scaling=1		# default: 1
-			#sysctl -w net.ipv4.tcp_sack=1				# default: 1
+			 sysctl -w net.ipv4.tcp_sack=0				# default: 1
 			 sysctl -w net.ipv4.tcp_no_metrics_save=1		# default: 0
 			 sysctl -w net.core.netdev_max_backlog=5000		# default: 1000
 
