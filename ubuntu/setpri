@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+for PID in ${PIDS}
+do
+    sudo chrt -op 0 ${PID}
+done
+
+PIDS=`ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}'`
+for PID in ${PIDS}
+do
+    sudo renice 0 ${PID}
+done
