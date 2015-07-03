@@ -1,0 +1,13 @@
+#!/bin/sh
+PIDS=`ps -e --no-headers | awk '{print $1}'`
+for PID in ${PIDS}
+do
+    ps -p ${PID} -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
+done
+echo " --- Inquiry Priorities --- "
+PIDS=`ps -eo pid,pri --no-headers | awk '$2 != 19 {print $1}'`
+for PID in ${PIDS}
+do
+    ps -p ${PID} -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
+done
+
