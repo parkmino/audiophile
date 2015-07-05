@@ -83,4 +83,16 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Search for tracks from soundcloud.com : soundcloud.com의 곡 찾기
 -. Subscribe to RSS feeds : RSS 피드 구독
 -. Cantata caches various pieces of information (covers,lyrics, etc). Below is a summary of Cantata's current cache usage. : 음반 표지, 가사 등 여러 정보를 캐시합니다. 아래는 캐시 사용 내역입니다.
+-. Style > 모양
 
+-. Composer Support : 작곡가 지원
+-. By default, Cantata uses the 'Album Artist' tag (or 'Artist' tag if a song has no 'Album Artist') to group songs and albums. For certain genres, e.g. 'Classical', it may be preferable to use the 'Composer' tag (if set) to perform this grouping. Please enter a (comma separated) list of the genres with which you would like Cantata to use the 'Composer' tag.
+   곡이나 음반을 묶기 위해서 기본적으로 '음반 연주자' 태그(없으면 '연주자' 태그)를 씁니다. 'Classical' 등 특정 장르는 '작곡가' 태그로 묶는 것이 좋을 수 있습니다. '작곡가' 태그를 사용할 장르를 쉼표로 나누어 입력합니다.
+-. Enter comma separated list of genres...
+   쉼표로 나누어진 장르를 입력합니다
+-. If you have a lot of artists in your collection that only contain a single track, then it can be combersome for each of these to have their own entry in the list of artists. As a work-around for this, if you place these tracks into a separate folder, and enter this folder name below, then Cantata will group these under an album named 'Single tracks' with an album artist of 'Various Artists'
+   음원에 한 곡만을 가진 연주자가 많다면, 연주자 항목에 두기가 번거로울 수 있습니다. 해결 방법으로 이 곡들을 별도 폴더에 두고 이 폴더를 아래에 입력하면, '여러 연주자' 음반 연주자의 '한 곡들' 아래에 묶습니다. 
+-. Folder that contains sing track files...
+   한 곡 파일을 둔 폴더
+-. Cantata caches various pieces of information (covers, lyrics, etc). Below is a summary of Cantata's current cache usage.
+   칸타타는 다양한 정보(음반 표지, 가사 등)를 저장합니다. 아래는 현재 캐시 사용량 요약입니다.
