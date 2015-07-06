@@ -386,6 +386,8 @@ Secure Ripping S/W
 		$ mount
 	-. Swappiness Kernel Parameters
 		$ sudo gedit /etc/rc.local
+			sysctl -w debug.exception-trace=0
+			sysctl -w kernel.watchdog=0
 			sysctl -w vm.swappiness=0
 			sysctl -w vm.overcommit_memory=1
 			sysctl -w vm.overcommit_ratio=100
