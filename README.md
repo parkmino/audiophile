@@ -1,3 +1,4 @@
 ## Private Audiophile Logs / 오디오파일용 개인 설정
-This is my audiophile configuration.  
+It is my audiophile configurations. Most of them are related to Linux, ALSA, MPD server and clients.
+
 You can modify it as you want.
