@@ -2,4 +2,4 @@
 It is my audiophile configurations.
 
 Most of them are related to Linux, ALSA, MPD server and clients.You can modify it as you want.  
-FYI, my Korean blog site is [here](http://parkmino45.blog.me)
+FYI, my Korean blog is [here](http://parkmino45.blog.me)
