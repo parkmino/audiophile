@@ -45,40 +45,48 @@ L4/H8n7pF7mm+OQGKfBg
 =u72x
 -----END PGP SIGNATURE-----
 
+### Install Build Package ###
+
 #sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libmtp-dev libavcodec-dev libspeexdsp-dev libmpg123-dev libqtwebkit-dev libtag1c2a libtag-extras1 libmtp9 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
+
 sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libtag1c2a libtag-extras1 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
 
-wget --no-parent --recursive http://cantata.googlecode.com/svn/trunk/
-cd cantata.googlecode.com/svn/trunk/
+### Build from GitHub ###
 
-#cd ~/Downloads/mpd
-#svn checkout http://cantata.googlecode.com/svn/trunk/ cantata-read-only
+wget https://github.com/CDrummond/cantata/archive/master.zip
+unzip -u master.zip -d ~/Downloads/mpd
+mv master.zip ~/Downloads/mpd/cantata-master
 
-##cd cantata-read-only
-##rm -rf build
-##mkdir build && cd build
-#cd cantata-read-only/build
+if [ ! -d "~/Downloads/mpd/cantata-master/build" ]; then mkdir ~/Downloads/mpd/cantata-master/build ; fi ; cd ~/Downloads/mpd/cantata-master/build
+
+or
 
 cd ~/Downloads/mpd
 rm -rf cantata
 git clone git://github.com/CDrummond/cantata.git
 cd cantata
 mkdir build && cd build
-#cd cantata/build
 
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_KDE=OFF -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_MTP=OFF -DENABLE_REMOTE_DEVICES=OFF -DENABLE_UDISKS2=OFF -DENABLE_QT5=OFF -DENABLE_EXTERNAL_TAGS=ON -DINSTALL_UBUNTU_ICONS=ON -DENABLE_HTTP_STREAM_PLAYBACK=OFF
-sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "1.9.50" --pkgrelease="2015.6.21" --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt4-dbus,libqt4-network,libqtcore4,libqtgui4,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,phonon,zlib1g --backup=no --maintainer=parkmino@gmail.com
+
+sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "1.9.50" --pkgrelease=$(date +"%Y.%m.%d") --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt4-dbus,libqt4-network,libqtcore4,libqtgui4,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,phonon,zlib1g --backup=no --maintainer=parkmino@gmail.com
+
+cp ~/Downloads/mpd/cantata-master/build/cantata*.deb ~/git/cantata
+
+cd
+
+### QT5 ###
 
 sudo apt-get install qt5-default qttools5-dev-tools libgt5svg5-dev
 
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_KDE=OFF -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_MTP=OFF -DENABLE_REMOTE_DEVICES=OFF -DENABLE_UDISKS2=OFF -DENABLE_QT5=ON -DENABLE_EXTERNAL_TAGS=ON -DINSTALL_UBUNTU_ICONS=ON -DENABLE_HTTP_STREAM_PLAYBACK=OFF
-sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt5 --pkgversion "1.5.50" --pkgrelease "r5706" --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt5dbus5,libqt5network5,libqt5core5a,libqt5gui5,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,zlib1g --backup=no --maintainer=parkmino@gmail.com
 
-sudo dpkg -i cantata_1.*
+sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt5 --pkgversion "1.5.50" --pkgrelease=$(date +"%Y.%m.%d") --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt5dbus5,libqt5network5,libqt5core5a,libqt5gui5,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,zlib1g --backup=no --maintainer=parkmino@gmail.com
+
+### Korean Translation Inquiry ###
 
 svn log http://cantata.googlecode.com/svn/trunk/po/cantata.pot | head
 svn log http://cantata.googlecode.com/svn/trunk/po/ko.po | head
 CANTATA_LANG=ko cantata
 sudo cp /usr/share/cantata/translations/cantata_ko.qm /usr/share/cantata/translations/cantata_en.qm
 diff ~/Documents/ko.po ~/Downloads/cantata-read-only/po/ko.po
-	
