@@ -72,7 +72,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_KDE=OFF
 sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "1.9.50" --pkgrelease=$(date +"%Y.%m.%d") --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt4-dbus,libqt4-network,libqtcore4,libqtgui4,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,phonon,zlib1g --backup=no --maintainer=parkmino@gmail.com
 
 cd ~/git
-git rm cantata/cantata-qt*.deb
+[ -f cantata/cantata-qt*.dev ] ; git rm cantata/cantata-qt*.deb
 cp ~/Downloads/mpd/cantata-master/build/cantata-qt*$(date +"%Y.%m.%d")*.deb ~/git/cantata
 git add cantata/cantata-qt*$(date +"%Y.%m.%d")*.deb
 git commit -m "Updated the latest build package"
