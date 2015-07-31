@@ -74,7 +74,7 @@ sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion
 cd ~/git
 git rm cantata/cantata-qt*.deb
 cp ~/Downloads/mpd/cantata-master/build/cantata-qt*$(date +"%Y.%m.%d")*.deb ~/git/cantata
-git add cantata/cantata-master/build/cantata-qt*$(date +"%Y.%m.%d")*.deb
+git add cantata/cantata-qt*$(date +"%Y.%m.%d")*.deb
 git commit -m "Updated the latest build package"
 git push origin master
 
