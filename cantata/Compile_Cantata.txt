@@ -57,7 +57,7 @@ wget https://github.com/CDrummond/cantata/archive/master.zip
 unzip -ou master.zip -d ~/Downloads/mpd
 mv master.zip ~/Downloads/mpd/cantata-master
 
-if [ ! -d ~/Downloads/mpd/cantata-master/build ]; then mkdir ~/Downloads/mpd/cantata-master/build ; fi ; cd ~/Downloads/mpd/cantata-master/build
+if [ ! -d ~/Downloads/mpd/cantata-master/build ]; then mkdir ~/Downloads/mpd/cantata-master/build ; fi ; cd ~/Downloads/mpd/cantata-master/build ; [ -f cantata-qt*$(date +"%Y.%m.%d")*.deb ] && rm cantata-qt*$(date +"%Y.%m.%d")*.deb
 
 or
 
