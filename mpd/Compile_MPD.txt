@@ -1,32 +1,39 @@
-Format: 1.0
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 3.0 (quilt)
 Source: mpd
 Binary: mpd, mpd-dbg
 Architecture: any
-Version: 0.16.7-2
+Version: 0.19.1-1.1
 Maintainer: mpd maintainers <pkg-mpd-maintainers@lists.alioth.debian.org>
-Uploaders: Alexander Wirt <formorer@debian.org>
-Homepage: http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki
-Standards-Version: 3.9.2
-Vcs-Browser: http://git.debian.org/?p=pkg-mpd/pkg-mpd.git
-Vcs-Git: git://git.debian.org/pkg-mpd/pkg-mpd.git
-Build-Depends: debhelper (>= 8), libao-dev (>= 0.8.3), libasound2-dev [linux-any], libaudiofile-dev, libavahi-client-dev, libavahi-glib-dev, libavcodec-dev, libavformat-dev, libcurl4-gnutls-dev | libcurl-dev, libfaad-dev, libflac-dev (>= 1.1.4), libid3tag0-dev, libjack-dev, libmad0-dev, libmikmod2-dev, libmms-dev, libmp3lame-dev, libmpcdec-dev, libogg-dev, libpulse-dev, libresid-builder-dev, libsamplerate0-dev, libshout3-dev, libsidplay2-dev, libsqlite3-dev, libvorbis-dev [!arm !armel !armeb], libvorbisidec-dev [arm armel armeb], libwavpack-dev, xmlto, zlib1g-dev
-Checksums-Sha1: 
- f59fe27d863bbe76e03c558f1ac7651d8ea270a5 643632 mpd_0.16.7.orig.tar.gz
- fdad0d4affdde3a1cf62c3999ad3c4b8d928c13d 18694 mpd_0.16.7-2.diff.gz
-Checksums-Sha256: 
- 95f216a115cbeb73df2ceb465a730ac9d4ca3569c96bd189a67cccc2bd5ad87b 643632 mpd_0.16.7.orig.tar.gz
- 7cef22c5d4ac11a309c30df18e8f13fc6534a94142469acc9840586c8d1cbd77 18694 mpd_0.16.7-2.diff.gz
-Files: 
- cbe09571fe1d0b3e83ac38d5b7629b16 643632 mpd_0.16.7.orig.tar.gz
- 95d28076c351f68f06db7ef28c5227f7 18694 mpd_0.16.7-2.diff.gz
+Uploaders: Florian Schlichting <fsfs@debian.org>
+Homepage: http://www.musicpd.org/
+Standards-Version: 3.9.6
+Vcs-Browser: http://anonscm.debian.org/gitweb?p=pkg-mpd/pkg-mpd.git
+Vcs-Git: git://anonscm.debian.org/pkg-mpd/pkg-mpd.git
+Build-Depends: debhelper (>= 9), dh-autoreconf, dh-systemd, dpkg-dev (>= 1.16.1~), libadplug-dev, libao-dev, libasound2-dev [linux-any], libaudiofile-dev (>= 0.3), libavahi-client-dev, libavahi-glib-dev, libavcodec-dev, libavformat-dev, libboost-dev, libbz2-dev, libcdio-paranoia-dev, libcppunit-dev, libcurl4-gnutls-dev | libcurl-dev, libexpat1-dev, libfaad-dev, libflac-dev, libfluidsynth-dev, libglib2.0-dev, libgme-dev, libicu-dev, libid3tag0-dev, libiso9660-dev, libjack-jackd2-dev, libmad0-dev, libmikmod-dev, libmms-dev, libmodplug-dev, libmp3lame-dev, libmpcdec-dev, libmpdclient-dev, libmpg123-dev, libnfs-dev, libogg-dev, libopenal-dev, libopus-dev, libpulse-dev, libresid-builder-dev, libroar-dev (>= 0.4), libsamplerate0-dev, libshine-dev [arm armel armeb], libshout3-dev, libsidplay2-dev, libsidutils-dev, libsmbclient-dev, libsndfile1-dev, libsoxr-dev, libsqlite3-dev, libsystemd-daemon-dev [linux-any], libupnp-dev, libvorbis-dev [!arm !armel !armeb], libvorbisidec-dev [arm armel armeb], libwavpack-dev, libwildmidi-dev, libwrap0-dev, libyajl-dev, libzzip-dev, xmlto
+Package-List:
+ mpd deb sound optional arch=any
+ mpd-dbg deb debug extra arch=any
+Checksums-Sha1:
+ 68f1ff43a2dd4de913d6c979db504dc2955f5737 701192 mpd_0.19.1.orig.tar.xz
+ 2c1e82e5c357e62552787904bc873a60badb30ea 27424 mpd_0.19.1-1.1.debian.tar.xz
+Checksums-Sha256:
+ 8b3afcd440181c9bd18b229b5974e529d59648344dd371370d6f7d62ec2847c5 701192 mpd_0.19.1.orig.tar.xz
+ cee4b33941c15c88671620f60652570798d0c975d0fccff6bd4047e0282f304c 27424 mpd_0.19.1-1.1.debian.tar.xz
+Files:
+ d235f6e53e5442b6926c49946a303f8d 701192 mpd_0.19.1.orig.tar.xz
+ 561026bcbec8a1e081c7d4f6ffb24e3e 27424 mpd_0.19.1-1.1.debian.tar.xz
 
+### Install build packages
 sudo apt-get install git autoconf automake build-essential
 sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev libboost-dev
-wget http://sourceforge.net/projects/musicpd/files/mpd/0.17/mpd-0.17.tar.bz2
-tar -jxvf mpd-0.17.tar.bz2
-cd mpd-0.17
-git clone git://git.musicpd.org/master/mpd.git
-cd mpd
+
+### Download & Compile
+wget http://www.musicpd.org/download/mpd/0.17/mpd-0.17.6.tar.xz
+tar xvf mpd-0.17.6.tar.xz
+cd mpd-0.17.6
 
 #export CFLAGS="-march=native -O2"
 export CFLAGS="-O0"
@@ -45,38 +52,18 @@ export CPPFLAGS="-O0"
 make
 sudo make install
 /usr/local/bin/mpd -V
-#sudo strip --strip-unneeded /usr/local/bin/mpd && /usr/local/bin/mpd -V
+#sudo strip --strip-unneeded /usr/local/bin/mpd
 sudo /etc/init.d/mpd stop
-#sudo killall mpd or sudo pkill mpd
 sudo mv /usr/bin/mpd /usr/bin/mpd.org && sudo cp /usr/local/bin/mpd /usr/bin
-#sudo vi /etc/default/mpd DAEMON=/usr/local/bin/mpd
 sudo /etc/init.d/mpd start
 ls -al /usr/bin/mpd*
 
-wget http://www.symphonic-net.com/kubotayo/cgi-bin/downlog.cgi?edata/mpd-0.17git-20120226rtopt.diff.gz
-gunzip mpd-0.17git-20120226rtopt.diff.gz
-#wget http://hpcgi3.nifty.com/yo_kubota/downlog.cgi?data/mpd-buffer-c.diff.gz
-#gunzip mpd-buffer-c.diff.gz
+### Yan's patch
+https://skydrive.live.com/?cid=CE384832F08DA832&id=CE384832F08DA832%21105
 cd mpd
-patch -p1 < ./mpd-0.17git-20130805rtopt.diff
-patch -p1 < ./mpd-0.18.x-rtopt20131118.diff
+patch -p1 < ./mpd-0.17.6-rtopt20140327.diff
+patch -p1 < ./mpd-0.18.9-rtopt20140327.diff
+patch -p1 < ./mpd-0.19git-rtopt20150418
 #patch -p1 < ./buffer.c.diff
 ./autogen.sh
 ./configure ... --enable-rtopt
-vi src/rt_opt.c
-
-vi mpd/src/output/alsa_output_plugin.c
-	.mixer_plugin = &alsa_mixer_plugin, # Remove this line
-vi mpd/src/output/oss_output_plugin.c
-	.mixer_plugin = &oss_mixer_plugin,  # Remove this line
-
-
-export CFLAGS="-O0"
-export CPPFLAGS="-O0"
-cd ~/Downloads/alsa-driver-1.0.25/
-./configure --help
-sudo ln -s /usr/src/linux-headers-3.8.0-24-generic/include/generated/uapi/linux/version.h /lib/modules/3.8.0-24-generic/build/include/linux/
-./configure --with-kernel=/usr/src/linux-headers-$(uname -r) --with-redhat=no --with-suse=no --with-debug=no --with-isapnp=no --with-sequencer=no --with-oss=no --with-pcm-oss-plugins=no --with-cards=hda-intel, usb-audio
-make
-sudo make install-modules
-
