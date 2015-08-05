@@ -103,4 +103,13 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Artist & Album Sorting : 연주자와 음반 정렬
 -. Enter a (comma separated) list of prefixes to ignore when sorting artist and albums. e.g. if set to 'The' then 'The Beatles' would be sorted by 'Beatles'
    연주자와 음반을 정렬할 때 건너뛸 첫 단어를 (쉼표로 나누어) 입력합니다. 예) 'The'로 되어있으면 'The Beatles'는 'Beatles'로 정렬됩니다.
+-. Refresh all subscriptions, or only those selected?
+   전체 또는 선택된 구독만 다시 읽을까요?
+-. Refresh all subscriptions?
+   전체 구독을 다시 읽을까요?
+-. Refreshed Selected : 선택 다시 읽기
+-. Refresh All : 전체 다시 읽기
+-. Stored Playlist : 저장된 연주목록
+-. Standard playlists : 일반 연주목록
+-. Dynamically generated playlists : 만들어진 동적 연주목록
 -. 
