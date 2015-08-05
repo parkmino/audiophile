@@ -95,6 +95,9 @@ Secure Ripping S/W
 		$ sudo reboot
 		$ lsmod | grep snd
 		$ cat /sys/module/snd_usb_audio/parameters/nrpacks
+		Masking store restore alsa mixer
+		$ sudo systemctl mask alsa-store.service
+		$ sudo systemctl mask alsa-restore.service
 	Open Sound System - will not be supported any more
 		https://help.ubuntu.com/community/OpenSound
 		http://www.4front-tech.com/wiki/index.php/Configuring_Applications_for_OSSv4
