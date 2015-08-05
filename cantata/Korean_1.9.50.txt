@@ -112,4 +112,4 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Stored Playlist : 저장된 연주목록
 -. Standard playlists : 일반 연주목록
 -. Dynamically generated playlists : 만들어진 동적 연주목록
--. Refresh > 새로 읽기
+-. Refresh : 다시 읽기 > 새로 읽기, Reload : 다시 읽기
