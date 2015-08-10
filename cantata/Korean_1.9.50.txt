@@ -52,7 +52,7 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
    표준 - 다른 기기에서 이미 설정된 음원을 공유하거나, 다른 클라이언트(예. MPDroid)에서 접속할 수 있습니다. 기본 - 음원을 공유하지 않고 칸타타가 MPD를 설정하고 제어합니다. 이것은 칸타타만의 설정으로 다른 MPD 클라이언트에서는 접속이 <b>안</b>됩니다. 참고: MPD의 고급 설정을 하려면(예. 다중 오디오 출력, DSD 지원 등) <b>반드시</b> '표준'을 선택해야 합니다.
 
 -. Save downloaded covers, artist, and composer images, in music folder
-   음악 폴더에 내려받은 음반 표지, 연주자, 작곡가 이미지 저장하기
+   내려받은 음반 표지, 연주자, 작곡가 이미지를 음악 폴더에 저장하기
 -. Cantata can only save backdrops, artist, and composer images within the music folder hierarchy if this is 2 levels deep. i.e. 'Artist/Album/Tracks'.
    두 단계 이상이면 배경, 연주자, 작곡가 이미지만 음악 폴더에 저장할 수 있습니다. 즉 '연주자/음반/곡'.
 
@@ -113,3 +113,14 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Standard playlists : 일반 연주목록
 -. Dynamically generated playlists : 만들어진 동적 연주목록
 -. Refresh : 다시 읽기 > 새로 읽기, Reload : 다시 읽기
+
+-. Downloaded Files : 내려받은 파일
+-. Downloaded Files Settings : 내려받은 파일 설정
+
+-. CUE Files : CUE 파일
+-. A cue file is a metadata file which describes how the tracks of a CD are laid out.
+   cue 파일은 CD 곡의 배치를 알려주는 메타데이터 파일입니다.
+-. Parse in Library view, and show in Folders view
+   음원 보기에서 분석하고, 폴더 보기에 보여줌
+-. Only show in Folders view : 폴더 보기에만 보여줌
+-. Do not list : 보이지 않음
