@@ -5,7 +5,7 @@ Changelog
   1. MPD 음원 및 Jamendo, Magnatune 캐시에 SQLite DB 사용
   2. 연주자 및 음반 탭을 음원으로 묶음
   3. 스트림 및 온라인 탭을 인터넷으로 묶음
-  4. 
+  4. 곡 더하기, 덧붙이기, 끼워 넣기 추가
   5. 
 
 번역 및 수정
@@ -124,3 +124,10 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
    음원 보기에서 분석하고, 폴더 보기에 보여줌
 -. Only show in Folders view : 폴더 보기에만 보여줌
 -. Do not list : 보이지 않음
+
+-. Play Now (And Replace Play Queue) : 지금 연주 (연주순서도 바꿈)
+-. Append : 덧붙이기
+-. Append And Play : 덧붙이고 연주
+-. Add And Play : 더하고 연주
+-. Insert After Current : 지금 다음에 끼워 넣기
+
