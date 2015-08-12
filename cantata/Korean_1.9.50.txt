@@ -6,7 +6,9 @@ Changelog
   2. 연주자 및 음반 탭을 음원으로 묶음
   3. 스트림 및 온라인 탭을 인터넷으로 묶음
   4. 곡 더하기, 덧붙이기, 끼워 넣기 추가
-  5. 
+  5. 사용자 메뉴 추가
+  6. 
+  7. 
 
 번역 및 수정
 
@@ -130,4 +132,11 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Append And Play : 덧붙이고 연주
 -. Add And Play : 더하고 연주
 -. Insert After Current : 지금 다음에 끼워 넣기
+
+-. Custom Actions : 사용자 메뉴
+-. To have Cantata call external commands (e.g. to edit tags with another application), add an entry for the command below. When at least one command is defined, a 'Custom Actions' entry will be added to the context menus in the Library, Folders, and Playlists views.
+   외부 명령어 (예. 다른 어플로 태그 수정)를 사용하려면, 아래 항목을 추가합니다. 명령어가 정의되면, '사용자 메뉴' 항목이 음원, 폴더, 음원목록에 추가됩니다.
+-. Command : 명령어
+-. In the command line above, %f will be replaced with the file list and %d with the folder list. If neither are supplied, the list of files will be appended to the command
+   위 명령어줄에서, %f는 파일항목으로 %d는 폴더항목으로 대체됩니다. 둘다 없으면, 명령어에 파일항목이 덧붙여집니다.
 
