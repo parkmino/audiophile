@@ -53,17 +53,17 @@ sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libtag1c2a lib
 
 ### 1. Git Clone
 
-rm -rf ~/Downloads/mpd/cantata-trunk
+rm -rf ~/Downloads/mpd/cantata-git
 
-git clone git://github.com/CDrummond/cantata.git ~/Downloads/mpd/cantata-trunk
+git clone git://github.com/CDrummond/cantata.git ~/Downloads/mpd/cantata-git
 
-mkdir ~/Downloads/mpd/cantata-trunk/build && cd ~/Downloads/mpd/cantata-trunk/build
+mkdir ~/Downloads/mpd/cantata-git/build && cd ~/Downloads/mpd/cantata-git/build
 
 ### 2. Svn Checkout
 
-svn checkout https://github.com/CDrummond/cantata/trunk ~/Downloads/mpd/cantata-trunk
+svn checkout https://github.com/CDrummond/cantata/trunk ~/Downloads/mpd/cantata-svn
 
-if [ ! -d ~/Downloads/mpd/cantata-trunk/build ] ; then mkdir ~/Downloads/mpd/cantata-trunk/build ; fi ; rm -f ~/Downloads/mpc/cantata-trunk/*.build ; cd ~/Downloads/mpd/cantata-trunk/build
+if [ ! -d ~/Downloads/mpd/cantata-svn/build ] ; then mkdir ~/Downloads/mpd/cantata-svn/build ; fi ; rm -f ~/Downloads/mpc/cantata-svn/build/*.deb ; cd ~/Downloads/mpd/cantata-svn/build
 
 ### 3. Wget
 
