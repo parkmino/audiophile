@@ -65,7 +65,7 @@ svn checkout https://github.com/CDrummond/cantata/trunk ~/Downloads/mpd/cantata-
 
 svn update ~/Downloads/mpd/cantata-svn
 
-if [ ! -d ~/Downloads/mpd/cantata-svn/build ] ; then mkdir ~/Downloads/mpd/cantata-svn/build ; fi ; rm -f ~/Downloads/mpc/cantata-svn/build/*.deb ; cd ~/Downloads/mpd/cantata-svn/build
+if [ ! -d ~/Downloads/mpd/cantata-svn/build ] ; then mkdir ~/Downloads/mpd/cantata-svn/build ; else rm -f ~/Downloads/mpc/cantata-svn/build/*.deb ; fi ; cd ~/Downloads/mpd/cantata-svn/build
 
 ### 3. Wget
 
