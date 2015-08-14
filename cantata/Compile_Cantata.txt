@@ -51,26 +51,33 @@ L4/H8n7pF7mm+OQGKfBg
 
 sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libtag1c2a libtag-extras1 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
 
-### Build from GitHub ###
+### 1. Git Clone
+
+rm -rf ~/Downloads/mpd/cantata-trunk
+
+git clone git://github.com/CDrummond/cantata.git ~/Downloads/mpd/cantata-trunk
+
+mkdir ~/Downloads/mpd/cantata-trunk/build && cd ~/Downloads/mpd/cantata-trunk/build
+
+### 2. Svn Checkout
+
+svn checkout https://github.com/CDrummond/cantata/trunk ~/Downloads/mpd/cantata-trunk
+
+if [ ! -d ~/Downloads/mpd/cantata-trunk/build ] ; then mkdir ~/Downloads/mpd/cantata-trunk/build ; fi ; rm -f ~/Downloads/mpc/cantata-trunk/*.build ; cd ~/Downloads/mpd/cantata-trunk/build
+
+### 3. Wget
 
 wget https://github.com/CDrummond/cantata/archive/master.zip
 
 rm -rf ~/Downloads/mpd/cantata-master && unzip master.zip -d ~/Downloads/mpd && mv master.zip ~/Downloads/mpd/cantata-master && mkdir ~/Downloads/mpd/cantata-master/build && cd ~/Downloads/mpd/cantata-master/build
 
-or
-
-git clone git://github.com/CDrummond/cantata.git ~/Downloads/mpd/cantata-trunk
-
-or
-
-svn checkout https://github.com/CDrummond/cantata/trunk ~/Downloads/mpd/cantata-trunk
-
-if [ ! -d ~/Downloads/mpd/cantata-trunk/build ] ; then mkdir ~/Downloads/mpd/cantata-trunk/build ; fi ; cd ~/Downloads/mpd/cantata-trunk/build
-
+### Build
 
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF
 
 sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "1.9.50" --pkgrelease=$(date +"%Y.%m.%d") --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt4-dbus,libqt4-network,libqtcore4,libqtgui4,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,phonon,zlib1g --backup=no --maintainer=parkmino@gmail.com
+
+### Git Add
 
 cd ~/git
 [ -f cantata/cantata-qt*.deb ] && git rm cantata/cantata-qt*.deb
