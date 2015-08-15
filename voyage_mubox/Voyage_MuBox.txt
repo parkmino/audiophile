@@ -1,0 +1,203 @@
+1. Configuration file
+
+	nano /config.txt
+		arm_freq=750 #1000 or 750 or 500
+		core_freq=500
+		sdram_freq=500
+		gpu_mem=16
+		disable_splash=1
+		#force_turbo=1
+		#disable_l2cache=1
+		#disable_pvt=1
+	cat /proc/cpuinfo
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+	dmidecode --type memory
+
+2. Kernel option
+
+	nano /cmdline.txt
+		maxcpus=2
+		dwc_otg.fiq_split_enable=0 (?)
+		apm=off noapic consoleblank=0 noswap
+		#kgdboc=ttyAMA0,115200
+
+3. Update & upgrade
+
+	remountrw
+	apt-get update
+	apt-get upgrade
+	apt-get dist-upgrade
+	apt-get install ca-certificates curl (rpi-update)
+	rpi-update
+	sync
+	reboot
+
+4. Localisation
+
+	remountrw
+	apt-get install apt-utils fbterm unifont (locales)
+	dpkg-reconfigure locales
+	nano ~/.fbterm
+		font-names=unifont
+		font-size=16 or 24
+	apt-get install --reinstall tzdata
+	dpkg-reconfigure tzdata
+	sync
+	
+5. Startup scripts
+
+	/etc/rc.local # attached
+
+6. Remove TTY2~6
+
+	nano /etc/inittab
+		disable #tty2-6 and 1(?)
+	
+7. Static IP
+
+	nano /etc/network/interfaces
+	auto  eth0
+	#iface eth0 inet dhcp
+	iface eth0 inet static
+	address 	192.168.0.3
+	netmask 	255.255.255.0
+	broadcast 	192.168.0.255
+	network 	192.168.0.0
+	gateway 	192.168.0.1 
+	dns-nameservers 168.126.63.1
+	
+8. Disable modules
+
+	lsmod
+	nano /etc/modprobe.d/raspi-blacklist.conf
+		blacklist uio
+		blacklist uio-pdrv-genirq
+		blacklist joydev
+		blacklist evdev
+		
+9. Disable IPv6
+
+	nano /etc/modprobe.d/blacklist
+		blacklist ipv6
+	nano /etc/rc.local
+		sysctl -w net.ipv6.conf.all.disable_ipv6=1
+
+10. Disable services
+
+	apt-get install sysv-rc-conf
+		avahi-daemon	  2 3 4 5 
+		cron		  2 3 4 5
+		dbus		  2 3 4 5
+		dnsmasq		  2 3 4 5
+		hosapd		  2 3 4 5
+		inetutils-syslogd 
+		lirc		  2 3 4 5
+		nfs-common	  2 3 4 5 S
+		nginx		  2 3 4 5
+		php-fastcgi	  2 3 4 5
+		rpcbind		  2 3 4 5 S
+		watchdog	  2 3 4 5
+		wd_keepalive	  2 3 4 5
+	
+11. ALSA configuration
+
+	mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
+	nano /usr/share/alsa/alsa.conf
+		pcm.default.type hw
+		pcm.default.card 0
+		pcm.default.device 0
+		pcm.default.subdevice 0
+		pcm.default.sync_ptr_ioctl 0
+		pcm.default.nonblock 0
+
+		defaults.pcm.nonblock 0
+		defaults.pcm.compat 1
+		defaults.pcm.minperiodtime 1000
+
+		ctl.default.type hw
+		ctl.default.card 0
+	nano /etc/modprobe.d/alsa-base.conf
+		Comment out optional modules
+	sysv-rc-conf
+		alsa-utils	  2 3 4 5 S
+	
+12. Compile MPD
+
+	wget http://www.musicpd.org/download/mpd/0.17/mpd-0.17.6.tar.xz
+	tar xvf mpd-0.17.6.tar.xz
+	cd mpd-0.17.6
+	#export CFLAGS="-march=native -O2"
+	export CFLAGS="-O0"
+	export CXXFLAGS="-O0"
+	export CPPFLAGS="-O0"
+	apt-get install git autoconf automake build-essential
+	apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev (libboost-dev)
+	./autogen.sh
+	./configure --help
+	./configure --disable-aac --enable-alsa --disable-ao --enable-audiofile --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-debug --disable-despotify --disable-documentation --disable-ffado --enable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-lastfm --disable-lame-encoder --disable-libwrap --disable-lsr --enable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --disable-mpg123 --disable-mvp --disable-openal --enable-oss --disable-pipe-output --disable-pulse --disable-recorder-output --disable-roar --disable-sidplay --disable-shout --enable-sndfile --disable-solaris-output --disable-soundcloud --disable-soup --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --with-zeroconf=no
+	make
+	make install
+	/usr/local/bin/mpd -V
+	#strip --strip-unneeded /usr/local/bin/mpd
+	/etc/init.d/mpd stop
+	mv /usr/bin/mpd /usr/bin/mpd.org && cp /usr/local/bin/mpd /usr/bin
+	/etc/init.d/mpd start
+	ls -al /usr/bin/mpd*
+	
+13. MPD configuration
+
+	/etc/mpd.conf # attached
+
+14. CIFS mounting
+
+	nano /etc/fstab
+		//192.168.0.9/intel_520 /mnt/Music cifs guest,ro,rsize=8192,iocharset=utf8 0 0
+	or
+	nano /etc/rc.local
+	mount -t cifs //192.168.0.9/intel_520 /mnt/Music -o pass="",ro,rsize=8192,iocharset=utf8
+	
+15. CPU affinity
+
+	nano /etc/rc.local
+		#for IRQ in /proc/irq/* ; do echo 1 > $IRQ/smp_affinity ; done
+		#echo 2 > /proc/irq/32/smp_affinity
+		#taskset -acp 1 `pgrep dwc_otg`
+		taskset -acp 1 $(pgrep mpd) # /root/go
+	
+16. Autologin just in case (Not recommended)
+
+	apt-get install mingetty
+	nano /etc/inittab
+	1:2345:respawn:/sbin/mingetty --autologin <user-name>  --noclear tty1
+	or 
+	http://mimizukobo.sakura.ne.jp/articles/voyagempd.html#autologin
+	
+17. Startup bash
+
+	nano go
+		#!/bin/bash
+		ifconfig eth0 txqueuelen 10000
+		taskset -acp 1 `pgrep mpd`
+		/root/setpri
+		pkill udevd
+		pkill sshd
+	chmod +x go
+	./go
+
+17. Local mode
+
+	sysv-rc-conf
+		sshd 2 3 4 5
+	nano /etc/mpd.conf
+		bind_to_address "127.0.0.1:6600"
+		
+18. Documentation
+	https://github.com/raspberrypi/documentation
+
+cf) Difference between mounting in /etc/fstab and /etc/rc.local ???
+
+cf) ntpdate 192.168.0.9 or date -s "00:00:00 Jan 1, 2015"
+
+cf) raspi-config
+	apt-get install raspi-config
+	advanced options
