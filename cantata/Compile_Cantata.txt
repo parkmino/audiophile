@@ -1,4 +1,4 @@
-Compile or download Cantata - MPD Client.
+Download and Compile Cantata, MPD Client.
 
 https://launchpad.net/~bertrand-pietu/+archive/ubuntu/cantata-qt
 
