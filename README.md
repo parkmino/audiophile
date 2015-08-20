@@ -3,4 +3,4 @@
 It is my audiophile setup related to Linux, ALSA and MPD.  
 I hope it could be any help and you can modify it as you want.
 
-FYI, my Korean blog is here.
+FYI, my Korean blog is [here](http://parkmino45.blog.me/).
