@@ -356,6 +356,10 @@ Secure Ripping S/W
 			sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
 			#chrt -rp 2 `pgrep irq/x-rtc`
 			taskset -apc 0 `pgrep rtc`
+	-. SMP Affinity for Sound IRQ
+		$ cat /proc/interrupts
+		$ sudo nano /etc/rc.local
+			echo 2 > /proc/irq/30/smp_affinity
 	-. PCI Latency Timer
 		$ lspci -nn
 		$ sudo gedit /etc/rc.local
