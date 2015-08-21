@@ -359,7 +359,15 @@ Secure Ripping S/W
 	-. SMP Affinity for Sound IRQ
 		$ cat /proc/interrupts
 		$ sudo nano /etc/rc.local
-			echo 2 > /proc/irq/30/smp_affinity
+			for i in 25 28 29 30 31
+			do
+				echo 2 > /proc/irq/$i/smp_affinity
+				echo 2 > /proc/irq/$i/smp_affinity
+			done
+
+			#echo 2 > /proc/irq/default_smp_affinity
+			#echo 2 > /proc/irq/default_smp_affinity
+		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
 		$ lspci -nn
 		$ sudo gedit /etc/rc.local
