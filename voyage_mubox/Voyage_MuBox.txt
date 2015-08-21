@@ -80,7 +80,7 @@
 	nano /etc/modprobe.d/blacklist
 		blacklist ipv6
 	nano /etc/rc.local
-		sysctl -w net.ipv6.conf.all.disable_ipv6=1
+		#sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
 10. Disable services
 
