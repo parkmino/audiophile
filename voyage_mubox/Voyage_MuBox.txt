@@ -162,7 +162,7 @@
 		#for IRQ in /proc/irq/* ; do echo 1 > $IRQ/smp_affinity ; done
 		#echo 2 > /proc/irq/32/smp_affinity
 		#taskset -acp 1 `pgrep dwc_otg`
-		taskset -acp 1 $(pgrep mpd) # /root/go
+		taskset -acp 1 `pgrep mpd`
 	
 16. Autologin just in case (Not recommended)
 
