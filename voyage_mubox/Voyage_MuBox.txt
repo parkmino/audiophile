@@ -162,8 +162,11 @@
 		#for IRQ in /proc/irq/* ; do echo 1 > $IRQ/smp_affinity ; done
 		#echo 2 > /proc/irq/32/smp_affinity
 		#taskset -acp 1 `pgrep dwc_otg`
-		taskset -acp 1 `pgrep mpd`
-	
+	nano /etc/init.d/mpd
+		MPD_PID=`pgrep -n $NAME`
+		chrt    -aop 0 "$MPD_PID"
+		taskset -acp 1 "$MPD_PID"
+
 16. Autologin just in case (Not recommended)
 
 	apt-get install mingetty
