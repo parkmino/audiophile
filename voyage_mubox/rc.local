@@ -1,0 +1,74 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+for i in /var/cache /var/backups /var/local /var/mail /var/opt /var/spool /var/www
+do
+    mount -t tmpfs -o noauto,nosuid,nodev,nodiratime none $i
+done
+
+#/sbin/modprobe -r microcode mfd_core i2c_i801 scsi_wait_scan
+#sysctl -w debug.exception-trace=0
+#sysctl -w kernel.watchdog=0
+sysctl -w kernel.sched_rt_runtime_us=-1
+sysctl -w kernel.sched_rt_period_us=42700
+sysctl -w kernel.printk='4 4 1 4'
+sysctl -w vm.swappiness=0
+sysctl -w vm.overcommit_memory=1
+sysctl -w vm.overcommit_ratio=100
+sysctl -w vm.dirty_writeback_centisecs=0
+sysctl -w vm.oom_dump_tasks=0
+sysctl -w vm.oom_kill_allocating_task=1
+sysctl -w vm.panic_on_oom=2
+sysctl -w vm.stat_interval=3
+sysctl -w vm.user_reserve_kbytes=0
+#hdparm -A0 -a2048 -B255 -M0 /dev/sda
+#echo 2147483520 > /proc/sys/dev/hpet/max-user-freq
+#echo 4032 > /sys/class/rtc/rtc0/max_user_freq
+
+#mount -t cifs //192.168.0.9/intel_520 /mnt/Music -o pass="",ro,rsize=8192,iocharset=utf8
+
+ifconfig eth0 txqueuelen 10000
+
+sysctl -w net.core.rmem_max=12582912
+sysctl -w net.core.wmem_max=12582912
+#sysctl -w net.ipv4.conf.default.forwarding=1
+sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'
+sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'
+sysctl -w net.ipv4.tcp_timestamps=0
+#sysctl -w net.ipv4.tcp_window_scaling=1
+sysctl -w net.ipv4.tcp_sack=0
+sysctl -w net.ipv4.tcp_no_metrics_save=1
+sysctl -w net.core.netdev_max_backlog=5000
+#sysctl -w net.ipv6.conf.all.disable_ipv6=1
+
+PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+for PID in ${PIDS}
+do
+    chrt -op 0 ${PID}
+done
+
+PIDS=`ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /dwc_otg/ {print $1}'`
+for PID in ${PIDS}
+do
+    renice 0 ${PID}
+done
+
+renice 0 `pgrep dwc_otg`
+#taskset -acp 1 `pgrep dwc_otg`
+
+amixer -D ctl.default set 'XMOS Clock Selector',0 Capture 0 0 off off
+amixer -D ctl.default set 'XMOS Clock Selector',1 Capture 0 off
+
+pkill udevd
+
+exit 0
