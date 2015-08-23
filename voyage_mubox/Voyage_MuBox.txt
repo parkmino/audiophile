@@ -179,9 +179,6 @@
 
 	nano go
 		#!/bin/bash
-		ifconfig eth0 txqueuelen 10000
-		taskset -acp 1 `pgrep mpd`
-		/root/setpri
 		pkill udevd
 		pkill sshd
 	chmod +x go
