@@ -140,3 +140,4 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. In the command line above, %f will be replaced with the file list and %d with the folder list. If neither are supplied, the list of files will be appended to the command
    위 명령어줄에서, %f는 파일항목으로 %d는 폴더항목으로 대체됩니다. 둘다 없으면, 명령어에 파일항목이 덧붙여집니다.
 
+-. 지웁니까? > 지울까요?
