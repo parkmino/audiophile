@@ -394,9 +394,13 @@ Secure Ripping S/W
 			mount -o remount,nodev,noatime /
 			mount -o remount,nosuid,noatime,nodiratime /dev
 			mount -o remount,nosuid,noatime,nodiratime /dev/pts
-			for i in /tmp /var/cache
+	-. Ramfs
+		sudo nano /etc/fstab
+			ramfs /tmp ramfs nosuid,nodev 0	0
+		sudo nano /etc/rc.local
+			for i in /var/backups /var/cache /var/crash /var/local /var/log /var/mail /var/metrics /var/opt /var/spool /var/tmp
 			do
-			    mount -t tmpfs -o noauto,nosuid,nodev,nodiratime none $i
+			    mount -t ramfs -o noauto,nosuid,nodev,nodiratime none $i
 			done
 		$ mount
 	-. Swappiness Kernel Parameters
