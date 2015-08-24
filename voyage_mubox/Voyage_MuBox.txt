@@ -166,8 +166,12 @@
 		MPD_PID=`pgrep -n $NAME`
 		chrt    -aop 0 "$MPD_PID"
 		taskset -acp 1 "$MPD_PID"
+		
+16. Ramfs
+	nano /etc/fstab
+		ramfs /tmp ramfs nosuid,nodev 0 0
 
-16. Autologin just in case (Not recommended)
+17. Autologin just in case (Not recommended)
 
 	apt-get install mingetty
 	nano /etc/inittab
@@ -175,7 +179,7 @@
 	or 
 	http://mimizukobo.sakura.ne.jp/articles/voyagempd.html#autologin
 	
-17. Startup bash
+18. Startup bash
 
 	nano go
 		#!/bin/bash
@@ -184,14 +188,14 @@
 	chmod +x go
 	./go
 
-17. Local mode
+19. Local mode
 
 	sysv-rc-conf
 		sshd 2 3 4 5
 	nano /etc/mpd.conf
 		bind_to_address "127.0.0.1:6600"
 		
-18. Documentation
+20. Documentation
 	https://github.com/raspberrypi/documentation
 
 cf) Difference between mounting in /etc/fstab and /etc/rc.local ???
