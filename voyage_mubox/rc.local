@@ -13,7 +13,7 @@
 
 for i in /var/cache /var/backups /var/local /var/mail /var/opt /var/spool /var/www
 do
-    mount -t tmpfs -o noauto,nosuid,nodev,nodiratime none $i
+    mount -t ramfs -o noauto,nosuid,nodev,nodiratime none $i
 done
 
 #/sbin/modprobe -r microcode mfd_core i2c_i801 scsi_wait_scan
@@ -35,7 +35,7 @@ sysctl -w vm.user_reserve_kbytes=0
 #echo 2147483520 > /proc/sys/dev/hpet/max-user-freq
 #echo 4032 > /sys/class/rtc/rtc0/max_user_freq
 
-mount -t cifs //192.168.0.9/intel_520 /mnt/Music -o pass="",ro,rsize=8192,iocharset=utf8
+#mount -t cifs //192.168.0.9/intel_520 /mnt/Music -o pass="",ro,rsize=8192,iocharset=utf8
 
 ifconfig eth0 txqueuelen 10000
 
