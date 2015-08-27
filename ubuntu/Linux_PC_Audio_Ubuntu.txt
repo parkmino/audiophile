@@ -379,12 +379,6 @@ Secure Ripping S/W
 			#ramfs /tmp ramfs defaults,mode=1777 0 0
 			ram(tmp)fs /mnt/ram(tmp)fs ram(tmp)fs (size=800m,)defaults,noatime,mode=1777 0 0
 		$ rm /mnt/ram(tmp)fs/*.* && free(df)
-	-. Shared Memory
-		$ mount | grep -e tmpfs -e ramfs && df -hT && sudo gedit /etc/rc.local
-			#umount /run/shm
-			#mount -t ramfs -o nosuid,nodev,noatime,nodiratime,nostrictatime none /run/shm
-			#chmod 1777 /run/shm
-		$ mount | grep -e tmpfs -e ramfs && df -hT
 	-. Remounting system directories
 		$ mount && sudo gedit /etc/rc.local
 			for i in /proc /sys /sys/fs/fuse/connections /sys/kernel/debug /sys/kernel/security /run /run/lock /run/user /sys/fs/pstore /dev/sda2
@@ -398,6 +392,8 @@ Secure Ripping S/W
 		sudo nano /etc/fstab
 			ramfs /tmp ramfs nosuid,nodev 0	0
 		sudo nano /etc/rc.local
+			umount /dev/shm
+			mount mount -t tmpfs -o noauto,nosuid,nodiratime ramfs /dev/shm
 			for i in /var/backups /var/cache /var/crash /var/local /var/log /var/mail /var/metrics /var/opt /var/spool /var/tmp
 			do
 			    mount -t ramfs -o noauto,nosuid,nodev,nodiratime none $i
