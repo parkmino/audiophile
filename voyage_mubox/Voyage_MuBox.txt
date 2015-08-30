@@ -1,14 +1,14 @@
 1. Configuration file
 
 	nano /config.txt
-		arm_freq=750 #1000 or 750 or 500
-		core_freq=500
-		sdram_freq=500
+		#arm_freq=1000 #1000 or 750 or 500
+		#core_freq=250
+		#sdram_freq=400
 		gpu_mem=16
 		disable_splash=1
 		#force_turbo=1
 		#disable_l2cache=1
-		#disable_pvt=1
+		disable_pvt=1
 	cat /proc/cpuinfo
 	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
 	dmidecode --type memory
@@ -16,7 +16,7 @@
 2. Kernel option
 
 	nano /cmdline.txt
-		maxcpus=2
+		#maxcpus=2
 		dwc_otg.fiq_split_enable=0 (?)
 		apm=off noapic consoleblank=0 noswap
 		#kgdboc=ttyAMA0,115200
