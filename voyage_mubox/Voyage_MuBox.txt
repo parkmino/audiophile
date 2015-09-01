@@ -89,7 +89,7 @@
 		cron		  2 3 4 5
 		dbus		  2 3 4 5
 		dnsmasq		  2 3 4 5
-		hosapd		  2 3 4 5
+		hostapd		  2 3 4 5
 		inetutils-syslogd 
 		lirc		  2 3 4 5
 		nfs-common	  2 3 4 5 S
