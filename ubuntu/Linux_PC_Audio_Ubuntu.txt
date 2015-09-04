@@ -355,18 +355,21 @@ Secure Ripping S/W
 			#sysctl -w dev.rtc.max-user-freq=4032
 			sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
 			#chrt -rp 2 `pgrep irq/x-rtc`
-			taskset -apc 0 `pgrep rtc`
-	-. SMP Affinity for Sound IRQ
+			taskset -apc 1 `pgrep rtc`
+	-. Taskset & SMP Affinity
+		$ ps aux
 		$ cat /proc/interrupts
 		$ sudo nano /etc/rc.local
-			for i in 25 28 29 30 31
+			taskset -apc 1      `pgrep rtc0`
+			taskset -apc 1      `pgrep mei_me`
+			taskset -apc 1      `pgrep snd_hda`
+			taskset -apc 1      `pgrep i915`
+			IRQS=`cat /proc/interrupts | awk '$5 ~ /mei/ || $5 ~ /snd/ || $5 ~ /i915/ {print +$1}'`
+			for IRQ in ${IRQS}
 			do
-				echo 2 > /proc/irq/$i/smp_affinity
-				echo 2 > /proc/irq/$i/smp_affinity
+				echo 2 > /proc/irq/${IRQ}/smp_affinity
+				echo 2 > /proc/irq/${IRQ}/smp_affinity
 			done
-
-			#echo 2 > /proc/irq/default_smp_affinity
-			#echo 2 > /proc/irq/default_smp_affinity
 		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
 		$ lspci -nn
@@ -435,14 +438,6 @@ Secure Ripping S/W
 			UUID=...  /media/MUSIC ntfs-3g defaults 0 0
 		or GUI NTFS mount
 		$ sudo apt-get install ntfs-config && ntfs-config
-	-. Set process I/O scheduling
-		$ sudo gedit /etc/rc.local
-			#ionice  -c 0      -p `pgrep ahci` `pgrep ata_sff`
-			#renice  -18          `pgrep ahci` `pgrep ata_sff`
-			#ionice  -c 2 -n 6 -p `pgrep irq/42-xhci`
-			#chrt    -rp 2        `pgrep irq/42-xhci`
-			#renice  -2           `pgrep irq/42-xhci`
-			#taskset -apc 0       `pgrep irq/42-xhci`
 	-. ZRAM
 		$ #sudo apt-get install zram-config
 		$ #ls /sys/block && cat /proc/swaps
