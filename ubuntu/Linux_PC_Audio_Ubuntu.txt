@@ -361,20 +361,20 @@ Secure Ripping S/W
 		$ cat /proc/interrupts
 		$ sudo nano /etc/rc.local
 			taskset -apc 0      `pgrep xhci`
-			taskset -apc 0      `pgrep 0000:`
+			taskset -apc 0      `pgrep nouveau`
+			taskset -apc 1      `pgrep 0000:`
 			taskset -apc 1      `pgrep rtc0`
 			taskset -apc 1      `pgrep mei_me`
-			taskset -apc 1      `pgrep snd_hda`
 			taskset -apc 1      `pgrep i915`
-			
-			IRQS=`cat /proc/interrupts | awk '$5 ~ /xhci/ || $5 ~ /0000:/ || $5 ~ /iwlwifi/ || $5 ~ /nouveau/ {prin +$1}'`
+
+			IRQS=`cat /proc/interrupts | awk '$5 ~ /xhci/ || $5 ~ /iwlwifi/ || $5 ~ /nouveau/ {prin +$1}'`
 			for IRQ in ${IRQS}
 			do
 				echo 1 > /proc/irq/${IRQ}/smp_affinity
 				echo 1 > /proc/irq/${IRQ}/smp_affinity
 			done
 
-			IRQS=`cat /proc/interrupts | awk '$5 ~ /mei/ || $5 ~ /snd/ || $5 ~ /i915/ {print +$1}'`
+			IRQS=`cat /proc/interrupts | awk '$5 ~ /0000:/ || $5 ~ /mei/ || $5 ~ /snd/ || $5 ~ /i915/ {print +$1}'`
 			for IRQ in ${IRQS}
 			do
 				echo 2 > /proc/irq/${IRQ}/smp_affinity
