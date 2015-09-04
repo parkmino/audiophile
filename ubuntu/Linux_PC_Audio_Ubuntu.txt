@@ -367,7 +367,7 @@ Secure Ripping S/W
 				echo 1 > /proc/irq/${IRQ}/smp_affinity
 			done
 
-			IRQS=`cat /proc/interrupts | awk '$5 ~ /0000:/ || $5 ~ /mei/ || $5 ~ /snd/ || $5 ~ /i915/ {print +$1}'`
+			IRQS=`cat /proc/interrupts | awk '$5 ~ /mei/ || $5 ~ /snd/ || $5 ~ /i915/ {print +$1}'`
 			for IRQ in ${IRQS}
 			do
 				echo 2 > /proc/irq/${IRQ}/smp_affinity
