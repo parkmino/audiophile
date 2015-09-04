@@ -356,18 +356,11 @@ Secure Ripping S/W
 			sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
 			#chrt -rp 2 `pgrep irq/x-rtc`
 			taskset -apc 1 `pgrep rtc`
-	-. Taskset & SMP Affinity
+	-. SMP Affinity
 		$ ps aux
 		$ cat /proc/interrupts
 		$ sudo nano /etc/rc.local
-			taskset -apc 0      `pgrep xhci`
-			taskset -apc 0      `pgrep nouveau`
-			taskset -apc 1      `pgrep 0000:`
-			taskset -apc 1      `pgrep rtc0`
-			taskset -apc 1      `pgrep mei_me`
-			taskset -apc 1      `pgrep i915`
-
-			IRQS=`cat /proc/interrupts | awk '$5 ~ /xhci/ || $5 ~ /iwlwifi/ || $5 ~ /nouveau/ {prin +$1}'`
+			IRQS=`cat /proc/interrupts | awk '$4 ~ /PCI-MSI-edge/ {prin +$1}'`
 			for IRQ in ${IRQS}
 			do
 				echo 1 > /proc/irq/${IRQ}/smp_affinity
@@ -380,6 +373,9 @@ Secure Ripping S/W
 				echo 2 > /proc/irq/${IRQ}/smp_affinity
 				echo 2 > /proc/irq/${IRQ}/smp_affinity
 			done
+			
+			echo 1 > /proc/irq/default_smp_affinity
+			echo 1 > /proc/irq/default_smp_affinity
 		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
 		$ lspci -nn
