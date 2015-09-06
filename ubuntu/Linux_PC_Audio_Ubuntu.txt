@@ -360,22 +360,22 @@ Secure Ripping S/W
 		$ ps aux
 		$ cat /proc/interrupts
 		$ sudo nano /etc/rc.local
-			IRQS=`cat /proc/interrupts | awk '$4 ~ /PCI-MSI-edge/ {prin +$1}'`
+			IRQS=`cat /proc/interrupts | awk '$6 ~ /PCI-MSI-edge/ {print +$1}'`
 			for IRQ in ${IRQS}
 			do
-				echo 1 > /proc/irq/${IRQ}/smp_affinity
-				echo 1 > /proc/irq/${IRQ}/smp_affinity
+				echo b > /proc/irq/${IRQ}/smp_affinity
+				echo b > /proc/irq/${IRQ}/smp_affinity
 			done
 
-			IRQS=`cat /proc/interrupts | awk '$5 ~ /snd/ {print +$1}'`
+			IRQS=`cat /proc/interrupts | awk '$7 ~ /snd/ {print +$1}'`
 			for IRQ in ${IRQS}
 			do
-				echo 2 > /proc/irq/${IRQ}/smp_affinity
-				echo 2 > /proc/irq/${IRQ}/smp_affinity
+				echo 8 > /proc/irq/${IRQ}/smp_affinity
+				echo 8 > /proc/irq/${IRQ}/smp_affinity
 			done
-			
-			echo 1 > /proc/irq/default_smp_affinity
-			echo 1 > /proc/irq/default_smp_affinity
+
+			echo b > /proc/irq/default_smp_affinity
+			echo b > /proc/irq/default_smp_affinity
 		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
 		$ lspci -nn
