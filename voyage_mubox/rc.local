@@ -68,6 +68,12 @@ done
 renice 0 `pgrep dwc_otg`
 #taskset -acp 1 `pgrep dwc_otg`
 
+PIDS=`ps -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ {print $1}'`
+for PID in ${PIDS}
+do
+    taskset -acp 0-2 ${PID}
+done
+
 amixer -D ctl.default set 'XMOS Clock Selector',0 Capture 0 0 off off
 amixer -D ctl.default set 'XMOS Clock Selector',1 Capture 0 off
 

@@ -159,13 +159,15 @@
 15. CPU affinity
 
 	nano /etc/rc.local
-		#for IRQ in /proc/irq/* ; do echo 1 > $IRQ/smp_affinity ; done
-		#echo 2 > /proc/irq/32/smp_affinity
-		#taskset -acp 1 `pgrep dwc_otg`
+		PIDS=`ps -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ {print $1}'`
+		for PID in ${PIDS}
+		do
+		    taskset -acp 0-2 ${PID}
+		done
 	nano /etc/init.d/mpd
 		MPD_PID=`pgrep -n $NAME`
 		chrt    -aop 0 "$MPD_PID"
-		taskset -acp 1 "$MPD_PID"
+		taskset -acp 3 "$MPD_PID"
 		
 16. Ramfs
 	nano /etc/fstab
