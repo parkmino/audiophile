@@ -159,7 +159,7 @@
 15. CPU affinity
 
 	nano /etc/rc.local
-		PIDS=`ps -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ {print $1}'`
+		PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ {print $1}'`
 		for PID in ${PIDS}
 		do
 		    taskset -acp 0-2 ${PID}
