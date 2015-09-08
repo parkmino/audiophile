@@ -376,37 +376,33 @@ Secure Ripping S/W
 
 			echo b > /proc/irq/default_smp_affinity
 			echo b > /proc/irq/default_smp_affinity
+			
+			PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ {print $1}'`
+			for PID in ${PIDS}
+			do
+			    taskset -acp 0-2 ${PID} || /bin/true
+			done
 		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
 		$ lspci -nn
 		$ sudo gedit /etc/rc.local
 			setpci -v -d 1412:1724 latency_timer=ff
 		$ lspci -v -d 1412:1724
-	-. RAM Disk with tmpfs or ramfs preferably.
-		$ sudo mkdir /mnt/ram(tmp)fs
-		$ sudo gedit /etc/fstab
-			#ramfs /tmp ramfs defaults,mode=1777 0 0
-			ram(tmp)fs /mnt/ram(tmp)fs ram(tmp)fs (size=800m,)defaults,noatime,mode=1777 0 0
-		$ rm /mnt/ram(tmp)fs/*.* && free(df)
-	-. Remounting system directories
-		$ mount && sudo gedit /etc/rc.local
-			for i in /proc /sys /sys/fs/fuse/connections /sys/kernel/debug /sys/kernel/security /run /run/lock /run/user /sys/fs/pstore /dev/sda2
-			do
-			    mount -o remount,nosuid,noatime,nodiratime $i
-			done
-			mount -o remount,nodev,noatime /
-			mount -o remount,nosuid,noatime,nodiratime /dev
-			mount -o remount,nosuid,noatime,nodiratime /dev/pts
-	-. Ramfs
-		sudo nano /etc/fstab
-			ramfs /tmp ramfs nosuid,nodev 0	0
-		sudo nano /etc/rc.local
-			umount /dev/shm
-			mount mount -t tmpfs -o noauto,nosuid,nodiratime ramfs /dev/shm
-			for i in /var/backups /var/cache /var/crash /var/local /var/log /var/mail /var/metrics /var/opt /var/spool /var/tmp
-			do
-			    mount -t ramfs -o noauto,nosuid,nodev,nodiratime none $i
-			done
+	-. Tmpfs in /etc/fstab
+		$ sudo nano /etc/fstab
+			tmpfs 	/tmp		tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/backups	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/cache	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/crash	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/local	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/log	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/mail	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/metrics	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/opt	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/spool	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/tmp	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+			tmpfs	/var/www	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+		$ reboot
 		$ mount
 	-. Swappiness Kernel Parameters
 		$ sudo gedit /etc/rc.local
