@@ -92,7 +92,6 @@
 		hostapd		  2 3 4 5
 		inetutils-syslogd 
 		lirc		  2 3 4 5
-		nfs-common	  2 3 4 5 S
 		nginx		  2 3 4 5
 		php-fastcgi	  2 3 4 5
 		rpcbind		  2 3 4 5 S
