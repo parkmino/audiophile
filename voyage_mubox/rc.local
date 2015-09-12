@@ -10,14 +10,14 @@
 # bits.
 #
 # By default this script does nothing.
-
-umount /run/shm # /run/lock
-
-for i in /run/shm # /var/cache /var/backups /var/local /var/mail /var/opt /var/spool /var/www /run/lock
-do
-    mount -t ramfs -o noauto,nosuid,nodev,nodiratime ramfs $i
-done
-
+#
+#umount /run/shm # /run/lock
+#
+#for i in /run/shm # /var/cache /var/backups /var/local /var/mail /var/opt /#var/spool /var/www /run/lock
+#do
+#    mount -t ramfs -o noauto,nosuid,nodev,nodiratime ramfs $i
+#done
+#
 #/sbin/modprobe -r microcode mfd_core i2c_i801 scsi_wait_scan
 #sysctl -w debug.exception-trace=0
 #sysctl -w kernel.watchdog=0
