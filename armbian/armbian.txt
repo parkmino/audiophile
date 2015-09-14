@@ -36,7 +36,7 @@ Orange Pi Mini
 	Change password
 	USB Tweak for Orane Pi Mini
 	# lsusb && cat /proc/interrupts | grep usb
-조	# mv /boot/dtb/sun7i-a20-orangepi.dtb /boot/dtb/sun7i-a20-orangepi.dtb.org
+	# mv /boot/dtb/sun7i-a20-orangepi.dtb /boot/dtb/sun7i-a20-orangepi.dtb.org
 	# cp /boot/dtb/sun7i-a20-orangepi-mini.dtb /boot/dtb/sun7i-a20-orangepi.dtb
 	# apt-get update
 	# apt-get upgrade
@@ -125,7 +125,7 @@ Orange Pi Mini
 		
 9. Masking store/restore alsa mixer
 
-우	# systemctl mask alsa-store.service
+	# systemctl mask alsa-store.service
 	
 10. MPD CLI Clients
 
