@@ -40,7 +40,6 @@ Orange Pi Mini
 	# cp /boot/dtb/sun7i-a20-orangepi-mini.dtb /boot/dtb/sun7i-a20-orangepi.dtb
 	# apt-get update
 	# apt-get upgrade
-	# apt-get install mpc ncmpc fbterm unifont
 	# (apt-get dist-upgrade)
 	# dpkg-reconfigure locales
 	# dpkg-reconfigure tzdata
@@ -50,12 +49,7 @@ Orange Pi Mini
 		blacklist evdev
 		(blacklist sun4i_ts)
 	# systemctl disable lirc.service
-	# (systemctl disable cron.service)
-	# nano /etc/hdparm.conf
-		#read_ahead_sect = 256
-		lookahead = off
-		apm = 255
-	# hdparm -A -a -B /dev/sda	
+	# (systemctl disable cron.service)	
 	# nano /etc/fstab
 		tmpfs ...
 	# cat /proc/interrupts
@@ -75,75 +69,8 @@ Orange Pi Mini
 	# reboot (/etc/init.d/nfs-kernel-server restart)
 	# (/etc/init.d/portmap restart)
 	# rpcinfo -p
-
-6. Wireless Bridge Mode
-
-	/usr/sbin/hostapd(-rt)
-	/etc/hostapd.conf(-rt)
-	# ln -sf /etc/network/interfaces.hostapd /etc/network/interfaces
-	# nano /etc/network/interfaces
-		auto  lo br0
-		iface lo inet loopback
-		
-		allow-hotplug eth0
-		iface eth0 inet manual
-		
-		allow-hotplug wlan0
-		iface wlan0 inet manual
-
-		iface br0 inet static
-			bridge_ports	eth0 wlan0
-			address 	192.168.0.5
-			netmask 	255.255.255.0
-			broadcast 	192.168.0.255
-			network 	192.168.0.0
-			gateway 	192.168.0.1 
-			dns-nameservers 168.126.63.1
-	# nano /etc/init.d/hostapd
-		DAEMON_SBIN=/usr/sbin/hostapd-rt
-		DAEMON_CONF=/etc/hostapd.conf-rt
-	# nano /etc/hostapd.conf
-		ssid=xxx
-		wpa_passphrase=xxx
-	# nano /etc/hostapd.conf-rt
-
-7. (Install Create_ap)
-
-	Debian Bridge
-		https://wiki.debian.org/BridgeNetworkConnections
-	# sudo nano /etc/network/interfaces
-		auto  lo br0
-		iface lo inet loopback
-		
-		iface eth0 inet manual
-		
-		iface wlan0 inet manual
-
-		iface br0 inet static
-			bridge_ports	eth0 wlan0
-			address 	192.168.0.5
-			netmask 	255.255.255.0
-			broadcast 	192.168.0.255
-			network 	192.168.0.0
-			gateway 	192.168.0.1 
-			dns-nameservers 168.126.63.1
-	# wget https://github.com/oblique/create_ap/archive/master.zip
-	# unzip master.zip
-	# cd create_ap-master
-	# apt-get install bash util-linux procps (hostapd) iproute2 iw  haveged dnsmasq iptables make
-	# make install
-	# sudo nano /etc/rc.local
-		create_ap -m bridge -c? --daemon --hidden wlan0 br0 orangepi
-		create_ap -m bridge --no-virt --driver r8188eu --daemon wlan0 br0 orangepi
-		
-8. No swap
-
-	# swapon -s
-	# swapoff /dev/sda
-	# sudo nano /etc/fstab
-		#/var/swap none swap sw 0 0
 	
-9.rc.local
+6.rc.local
 	# nano /etc/rc.local
 		sysctl -w kernel.sched_rt_runtime_us=-1
 		sysctl -w kernel.sched_rt_period_us=42700
@@ -181,8 +108,28 @@ Orange Pi Mini
 		#    taskset -acp 1 ${PID}
 		#done
 
-10. mpc & ncmpc
+7. Hdparm
 
+	# nano /etc/hdparm.conf
+		#read_ahead_sect = 256
+		lookahead = off
+		apm = 255
+	# hdparm -A -a -B /dev/sda
+
+8. No swap
+
+	# swapon -s
+	# swapoff /dev/sda
+	# sudo nano /etc/fstab
+		#/var/swap none swap sw 0 0
+		
+9. Masking store/restore alsa mixer
+
+	# systemctl mask alsa-store.service
+	
+10. MPD CLI Clients
+
+	# apt-get install mpc ncmpc fbterm unifont
 	# nano /etc/profile.d/export.sh
 		#!/bin/bash
 		export MPD_HOST=192.168.0.3
@@ -192,9 +139,66 @@ Orange Pi Mini
 		enable-mouse = no
 		#display-time = yes
 		enable-colors = yes
+
+11. Wireless Bridge Mode
+
+	/usr/sbin/hostapd(-rt)
+	/etc/hostapd.conf(-rt)
+	# ln -sf /etc/network/interfaces.hostapd /etc/network/interfaces
+	# nano /etc/network/interfaces
+		auto  lo br0
+		iface lo inet loopback
 		
-11. Masking store restore alsa mixer
-	$ systemctl mask alsa-store.service
+		allow-hotplug eth0
+		iface eth0 inet manual
+		
+		allow-hotplug wlan0
+		iface wlan0 inet manual
+
+		iface br0 inet static
+			bridge_ports	eth0 wlan0
+			address 	192.168.0.5
+			netmask 	255.255.255.0
+			broadcast 	192.168.0.255
+			network 	192.168.0.0
+			gateway 	192.168.0.1 
+			dns-nameservers 168.126.63.1
+	# nano /etc/init.d/hostapd
+		DAEMON_SBIN=/usr/sbin/hostapd-rt
+		DAEMON_CONF=/etc/hostapd.conf-rt
+	# nano /etc/hostapd.conf
+		ssid=xxx
+		wpa_passphrase=xxx
+	# nano /etc/hostapd.conf-rt
+
+12. (Install Create_ap)
+
+	Debian Bridge
+		https://wiki.debian.org/BridgeNetworkConnections
+	# sudo nano /etc/network/interfaces
+		auto  lo br0
+		iface lo inet loopback
+		
+		iface eth0 inet manual
+		
+		iface wlan0 inet manual
+
+		iface br0 inet static
+			bridge_ports	eth0 wlan0
+			address 	192.168.0.5
+			netmask 	255.255.255.0
+			broadcast 	192.168.0.255
+			network 	192.168.0.0
+			gateway 	192.168.0.1 
+			dns-nameservers 168.126.63.1
+	# wget https://github.com/oblique/create_ap/archive/master.zip
+	# unzip master.zip
+	# cd create_ap-master
+	# apt-get install bash util-linux procps (hostapd) iproute2 iw  haveged dnsmasq iptables make
+	# make install
+	# sudo nano /etc/rc.local
+		create_ap -m bridge -c? --daemon --hidden wlan0 br0 orangepi
+		create_ap -m bridge --no-virt --driver r8188eu --daemon wlan0 br0 orangepi
 
 ==============
 Raspberry Pi 2
