@@ -102,6 +102,8 @@ Orange Pi Mini
 		
 		echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
+		ionice -c 2 -n 7 -p `pgrep -o nfsd4`
+
 		#PIDS=`ps h -eo pid,class,comm | awk '$3 ~ /nfsd/ && $3 !~ /nfsd4/ {print $1}'`
 		#for PID in ${PIDS}
 		#do
@@ -111,7 +113,7 @@ Orange Pi Mini
 7. Hdparm
 
 	# nano /etc/hdparm.conf
-		#read_ahead_sect = 256
+		read_ahead_sect = 768
 		lookahead = off
 		apm = 255
 	# hdparm -A -a -B /dev/sda
