@@ -85,6 +85,7 @@
 10. Disable services
 
 	apt-get install sysv-rc-conf
+	sysv-rc-conf
 		avahi-daemon	  2 3 4 5 
 		cron		  2 3 4 5
 		dbus		  2 3 4 5
@@ -95,6 +96,7 @@
 		nginx		  2 3 4 5
 		php-fastcgi	  2 3 4 5
 		rpcbind		  2 3 4 5 S
+		sshd		  2 3 4 5
 		watchdog	  2 3 4 5
 		wd_keepalive	  2 3 4 5
 	
@@ -185,17 +187,11 @@
 	nano go
 		#!/bin/bash
 		pkill udevd
-		pkill sshd
-	chmod +x go
-	./go
 
-19. Local mode
+19. Ionice
+	nano /etc/rc.local
+		ionice -c 2 -n 7 -p `dwc_otg`
 
-	sysv-rc-conf
-		sshd 2 3 4 5
-	nano /etc/mpd.conf
-		bind_to_address "127.0.0.1:6600"
-		
 20. Documentation
 	https://github.com/raspberrypi/documentation
 
