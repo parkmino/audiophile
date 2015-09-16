@@ -374,8 +374,8 @@ Secure Ripping S/W
 				echo 8 > /proc/irq/${IRQ}/smp_affinity
 			done
 
-			echo b > /proc/irq/default_smp_affinity
-			echo b > /proc/irq/default_smp_affinity
+			#echo b > /proc/irq/default_smp_affinity
+			#echo b > /proc/irq/default_smp_affinity
 			
 			PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ {print $1}'`
 			for PID in ${PIDS}
