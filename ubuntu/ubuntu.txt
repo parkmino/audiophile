@@ -240,11 +240,16 @@ Secure Ripping S/W
 		 #renice   -2          "$PLAYER_PID"
 		 #renice   -3          "$DECODER_PID"
 		 #renice   -1          "$OUTPUT_PID"
-		 #ionice  -c 2 -n 4 -p "$MAIN_PID"
-		 #ionice  -c 3      -p "$UPDATE_PID"
-		 #ionice  -c 2 -n 6 -p "$PLAYER_PID"
-		 #ionice  -c 2 -n 5 -p "$DECODER_PID"
-		 #ionice  -c 2 -n 7 -p "$OUTPUT_PID"
+		  ionice  -c 2 -n 5 -p "$MAIN_PID"
+		  ionice  -c 2 -n 7 -p "$UPDATE_PID"
+		  ionice  -c 2 -n 4 -p "$PLAYER_PID"
+		  ionice  -c 2 -n 6 -p "$DECODER_PID"
+		  ionice  -c 2 -n 3 -p "$OUTPUT_PID"
+	$ sudo nano /etc/rc.local
+		 taskset -apc 3      `pgrep snd_hda`
+		#renice -n -2     -p `pgrep snd_hda`
+		 ionice -c 2 -n 2 -p `pgrep snd_hda`
+		#chrt -rp 2          `pgrep snd_hda`
 		
 3.9 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
 	$ sudo gedit /etc/default/grub
