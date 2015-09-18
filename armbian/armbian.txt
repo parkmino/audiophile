@@ -51,7 +51,8 @@ Orange Pi Mini
 	# systemctl disable lirc.service
 	# (systemctl disable cron.service)	
 	# nano /etc/fstab
-		tmpfs ...
+		tmpfs /tmp tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	# cat /proc/interrupts
 	# cat /etc/fstab
 	
@@ -103,6 +104,7 @@ Orange Pi Mini
 		echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
 		ionice -c 2 -n 7 -p `pgrep -o nfsd4`
+		ionice -c 0      -p `pgrep -o ata_sff`
 
 		#PIDS=`ps h -eo pid,class,comm | awk '$3 ~ /nfsd/ && $3 !~ /nfsd4/ {print $1}'`
 		#for PID in ${PIDS}
@@ -169,37 +171,11 @@ Orange Pi Mini
 		DAEMON_SBIN=/usr/sbin/hostapd-rt
 		DAEMON_CONF=/etc/hostapd.conf-rt
 	# nano /etc/hostapd.conf-rt
-		ssid=xxx
-		wpa_passphrase=xxx
-
-12. (Install Create_ap)
-
-	Debian Bridge
-		https://wiki.debian.org/BridgeNetworkConnections
-	# sudo nano /etc/network/interfaces
-		auto  lo br0
-		iface lo inet loopback
+		ssid=*****
+		wpa_passphrase=********
 		
-		iface eth0 inet manual
-		
-		iface wlan0 inet manual
-
-		iface br0 inet static
-			bridge_ports	eth0 wlan0
-			address 	192.168.0.5
-			netmask 	255.255.255.0
-			broadcast 	192.168.0.255
-			network 	192.168.0.0
-			gateway 	192.168.0.1 
-			dns-nameservers 168.126.63.1
-	# wget https://github.com/oblique/create_ap/archive/master.zip
-	# unzip master.zip
-	# cd create_ap-master
-	# apt-get install bash util-linux procps (hostapd) iproute2 iw  haveged dnsmasq iptables make
-	# make install
-	# sudo nano /etc/rc.local
-		create_ap -m bridge -c? --daemon --hidden wlan0 br0 orangepi
-		create_ap -m bridge --no-virt --driver r8188eu --daemon wlan0 br0 orangepi
+13. Remove sshd service
+	# systemctl disable ssh.service
 
 ==============
 Raspberry Pi 2
@@ -207,11 +183,5 @@ Raspberry Pi 2
 
 1. Raspberry Pi 2
 
-	# remountrw
-	# (sudo apt-get install nfs-common)
-	# sysv-rc-conf
-		nfs-common	  2 3 4 5 S
-	# nano /etc/mpd.conf
-		bind_to_address	"any" or "192.168.0.3" "192.168.0.5"
 	# nano /etc/fstab
 		192.168.0.5:/mnt/Music /mnt/Music nfs ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
