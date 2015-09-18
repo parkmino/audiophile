@@ -70,6 +70,7 @@
 
 	lsmod
 	nano /etc/modprobe.d/raspi-blacklist.conf
+		blacklist ipv6
 		blacklist uio
 		blacklist uio-pdrv-genirq
 		blacklist joydev
@@ -95,7 +96,6 @@
 		lirc		  2 3 4 5
 		nginx		  2 3 4 5
 		php-fastcgi	  2 3 4 5
-		rpcbind		  2 3 4 5 S
 		sshd		  2 3 4 5
 		watchdog	  2 3 4 5
 		wd_keepalive	  2 3 4 5
@@ -165,10 +165,28 @@
 		do
 		    taskset -acp 0-2 ${PID} || /bin/true
 		done
+
+16. MPD ionice & taskset
+
 	nano /etc/init.d/mpd
 		MPD_PID=`pgrep -n $NAME`
-		chrt    -aop 0 "$MPD_PID"
-		taskset -acp 3 "$MPD_PID"
+
+		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+
+		   MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+		 UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+		 PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+		DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+		 OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+
+		ionice -c 2 -n 5 -p "$MAIN_PID"
+		ionice -c 2 -n 7 -p "$UPDATE_PID"
+		ionice -c 2 -n 4 -p "$PLAYER_PID"
+		ionice -c 2 -n 6 -p "$DECODER_PID"
+		ionice -c 2 -n 3 -p "$OUTPUT_PID"
+
+		chrt    -apo 0 "$MPD_PID"
+		taskset -apc 3 "$MPD_PID"
 		
 16. Ramfs
 	nano /etc/fstab
@@ -190,7 +208,7 @@
 
 19. Ionice
 	nano /etc/rc.local
-		ionice -c 2 -n 7 -p `dwc_otg`
+		ionice -c 2 -n 2 -p `dwc_otg`
 
 20. Documentation
 	https://github.com/raspberrypi/documentation
