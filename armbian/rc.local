@@ -1,0 +1,66 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+sysctl -w kernel.sched_rt_runtime_us=-1
+sysctl -w kernel.sched_rt_period_us=42700
+sysctl -w kernel.printk='4 4 1 4'
+sysctl -w vm.swappiness=0
+sysctl -w vm.overcommit_memory=1
+sysctl -w vm.overcommit_ratio=100
+sysctl -w vm.dirty_writeback_centisecs=0
+sysctl -w vm.oom_dump_tasks=0
+sysctl -w vm.oom_kill_allocating_task=1
+sysctl -w vm.panic_on_oom=2
+sysctl -w vm.stat_interval=3
+sysctl -w vm.user_reserve_kbytes=0
+
+ifconfig eth0  txqueuelen 10000
+ifconfig wlan0 txqueuelen 10000
+
+sysctl -w net.core.rmem_max=12582912
+sysctl -w net.core.wmem_max=12582912
+sysctl -w net.ipv4.conf.default.forwarding=1
+sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'
+sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'
+sysctl -w net.ipv4.tcp_timestamps=0
+sysctl -w net.ipv4.tcp_window_scaling=1
+sysctl -w net.ipv4.tcp_sack=0
+sysctl -w net.ipv4.tcp_no_metrics_save=1
+sysctl -w net.core.netdev_max_backlog=5000
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+
+echo none > /sys/class/leds/orangepi\:green\:usr/trigger
+
+PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+for PID in ${PIDS}
+do
+    sudo chrt -op 0 ${PID}
+done
+
+PIDS=`ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}'`
+for PID in ${PIDS}
+do
+    sudo renice 0 ${PID}
+done
+
+PIDS=`ps h -eo pid,class,comm | awk '$3 ~ /nfsd/ && $3 !~ /nfsd4/ {print $1}'`
+for PID in ${PIDS}
+do
+    taskset -acp 1 ${PID}
+done
+
+ ionice -c 2 -n 7 -p `pgrep -o nfsd4`
+#ionice -c 2 -n 7 -p `pgrep -n nfsd4`
+ ionice -c 0         `pgrep ata_sff`
+
+exit 0
