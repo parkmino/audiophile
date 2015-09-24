@@ -1,16 +1,17 @@
 #/dev/hda1	/	ext2	defaults,noatime,rw		0	0
 proc		/proc	proc	defaults                	0       0
-ramfs		/tmp	ramfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs		/tmp	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
 #tmpfs		/rw	tmpfs	defaults,size=32M		0	0
 
-ramfs	/var/cache	ramfs	nosuid,nodev,noatime,nodiratime	0	0
-ramfs	/var/backups	ramfs	nosuid,nodev,noatime,nodiratime	0	0
-ramfs	/var/local	ramfs	nosuid,nodev,noatime,nodiratime	0	0
-ramfs	/var/mail	ramfs	nosuid,nodev,noatime,nodiratime	0	0
-ramfs	/var/opt	ramfs	nosuid,nodev,noatime,nodiratime	0	0
-ramfs	/var/spool	ramfs	nosuid,nodev,noatime,nodiratime	0	0
-ramfs	/var/www	ramfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs	/var/cache	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs	/var/backups	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs	/var/local	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs	/var/mail	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs	/var/opt	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs	/var/spool	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
+tmpfs	/var/www	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
 
 /dev/mmcblk0p1 /boot	vfat	defaults			0	0
 
-//192.168.0.9/intel_520 /mnt/Music cifs guest,ro,rsize=8192,iocharset=utf8 0 0
+#//192.168.0.9/intel_520 /mnt/Music cifs guest,ro,rsize=8192,iocharset=utf8 0 0
+192.168.0.5:/mnt/Music /mnt/Music nfs ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
