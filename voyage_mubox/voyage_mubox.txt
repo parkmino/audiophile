@@ -1,6 +1,6 @@
 1. Configuration file
 
-	nano /config.txt
+	nano /boot/config.txt
 		#arm_freq=1000 #1000 or 750 or 500
 		#core_freq=250
 		#sdram_freq=400
@@ -15,7 +15,7 @@
 
 2. Kernel option
 
-	nano /cmdline.txt
+	nano /boot/cmdline.txt
 		#maxcpus=2
 		dwc_otg.fiq_split_enable=0 (?)
 		apm=off noapic consoleblank=0 noswap
