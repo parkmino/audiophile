@@ -156,17 +156,8 @@
 	or
 	nano /etc/rc.local
 	mount -t cifs //192.168.0.9/intel_520 /mnt/Music -o pass="",ro,rsize=8192,iocharset=utf8
-	
-15. CPU affinity
 
-	nano /etc/rc.local
-		PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ {print $1}'`
-		for PID in ${PIDS}
-		do
-		    taskset -acp 0-2 ${PID} || /bin/true
-		done
-
-16. MPD ionice & taskset
+15. MPD ionice & taskset
 
 	nano /etc/init.d/mpd
 		MPD_PID=`pgrep -n $NAME`
@@ -192,30 +183,8 @@
 	nano /etc/fstab
 		ramfs /tmp ramfs nosuid,nodev 0 0
 
-17. Autologin just in case (Not recommended)
-
-	apt-get install mingetty
-	nano /etc/inittab
-	1:2345:respawn:/sbin/mingetty --autologin <user-name>  --noclear tty1
-	or 
-	http://mimizukobo.sakura.ne.jp/articles/voyagempd.html#autologin
-	
-18. Startup bash
-
-	nano go
-		#!/bin/bash
-		pkill udevd
-
-19. Ionice
-	nano /etc/rc.local
-		ionice -c 2 -n 2 -p `dwc_otg`
-
-20. Documentation
+17. Documentation
 	https://github.com/raspberrypi/documentation
-
-cf) Difference between mounting in /etc/fstab and /etc/rc.local ???
-
-cf) ntpdate 192.168.0.9 or date -s "00:00:00 Jan 1, 2015"
 
 cf) raspi-config
 	apt-get install raspi-config
