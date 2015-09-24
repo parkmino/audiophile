@@ -12,8 +12,7 @@
 # By default this script does nothing.
 #
 #umount /run/shm # /run/lock
-#
-#for i in /run/shm # /var/cache /var/backups /var/local /var/mail /var/opt /#var/spool /var/www /run/lock
+#for i in /run/shm # /var/cache /var/backups /var/local /var/mail /var/opt /var/spool /var/www /run/lock
 #do
 #    mount -t ramfs -o noauto,nosuid,nodev,nodiratime ramfs $i
 #done
@@ -67,6 +66,7 @@ done
 
 renice 0 `pgrep dwc_otg`
 #taskset -acp 1 `pgrep dwc_otg`
+ionice -c 2 -n 2 -p `pgrep dwc_otg`
 
 amixer -D ctl.default set 'XMOS Clock Selector',0 Capture 0 0 off off
 amixer -D ctl.default set 'XMOS Clock Selector',1 Capture 0 off
@@ -78,5 +78,10 @@ for PID in ${PIDS}
 do
     taskset -acp 0-2 ${PID} || /bin/true
 done
+
+echo none > /sys/class/leds/led0/trigger
+echo 0    > /sys/class/leds/led0/brightness
+echo 0    > /sys/class/leds/led1/brightness
+/root/llctl/llctl f0 l0 d0
 
 exit 0
