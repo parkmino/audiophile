@@ -1,8 +1,0 @@
-cat /sys/block/sda/queue/scheduler
-echo noop > /sys/block/sda/queue/scheduler
-
-cat /proc/asound/modules
-dpkg -s pulseaudio
-sudo nano /etc/modprobe.d/alsa-base.conf
-	options snd-usb-audio index=0
-	options snd_bcm2835 index=1
