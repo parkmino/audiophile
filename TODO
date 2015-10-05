@@ -1,0 +1,2 @@
+nano /usr/share/alsa/alsa.conf
+	#pcm.default.subdevice -1
