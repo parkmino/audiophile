@@ -74,7 +74,7 @@ Secure Ripping S/W
 			pcm.default.type hw
 			pcm.default.card 0
 			pcm.default.device 0
-			pcm.default.subdevice 0
+			#pcm.default.subdevice -1
 			pcm.default.sync_ptr_ioctl 0
 			pcm.default.nonblock 0
 
@@ -84,11 +84,28 @@ Secure Ripping S/W
 
 			ctl.default.type hw
 			ctl.default.card 0
-
+			
+			#pcm.hw.type hw
+			#pcm.hw.card 0
+			#pcm.hw.device 0
+			##pcm.hw.subdevice -1
+			#pcm.hw.sync_ptr_ioctl 0
+			#pcm.hw.nonblock 0
+			#pcm.hw.@args.0 CARD
+			##pcm.hw.@args.1 DEV
+			##pcm.hw.@args.2 SUBDEV
+			#pcm.hw.@args.CARD.type string
+			##pcm.hw.@args.DEV.type integer
+			##pcm.hw.@args.SUBDEV.type integer
+			#pcm.hw.hint.description "ALSA Tweak for pcm.hw"
+			#
+			#defaults.namehint.extended on
+			#
 			#ctl.hw.type hw
 			#ctl.hw.card 0
 			#ctl.hw.@args.0 CARD
 			#ctl.hw.@args.CARD.type string
+
 		$ sudo gedit /etc/modprobe.d/alsa-base.conf
 		Comment out optional modules
 			#options snd-usb-audio nrpacks=8
