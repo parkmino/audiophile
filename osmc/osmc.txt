@@ -1,0 +1,116 @@
+1. ALSA Tweak
+
+$ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
+$ sudo nano /usr/share/alsa/alsa.conf
+
+pcm.default.type hw
+pcm.default.card 1
+pcm.default.device 0
+#pcm.default.subdevice 0
+pcm.default.sync_ptr_ioctl 0
+pcm.default.nonblock 0
+
+defaults.pcm.nonblock 0
+defaults.pcm.compat 1
+defaults.pcm.minperiodtime 1000
+
+ctl.default.type hw
+ctl.default.card 1
+
+2. rc.local
+
+$ sudo nano /etc/rc.local
+
+#sysctl -w debug.exception-trace=0
+#sysctl -w kernel.watchdog=0
+sysctl -w kernel.sched_rt_runtime_us=-1
+sysctl -w kernel.sched_rt_period_us=42700
+sysctl -w kernel.printk='4 4 1 4'
+sysctl -w vm.swappiness=0
+sysctl -w vm.overcommit_memory=1
+sysctl -w vm.overcommit_ratio=100
+sysctl -w vm.dirty_writeback_centisecs=0
+sysctl -w vm.oom_dump_tasks=0
+sysctl -w vm.oom_kill_allocating_task=1
+sysctl -w vm.panic_on_oom=2
+sysctl -w vm.stat_interval=3
+sysctl -w vm.user_reserve_kbytes=0
+
+ifconfig eth0 txqueuelen 10000
+
+sysctl -w net.core.rmem_max=12582912
+sysctl -w net.core.wmem_max=12582912
+#sysctl -w net.ipv4.conf.default.forwarding=1
+sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'
+sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'
+sysctl -w net.ipv4.tcp_timestamps=0
+#sysctl -w net.ipv4.tcp_window_scaling=1
+sysctl -w net.ipv4.tcp_sack=0
+sysctl -w net.ipv4.tcp_no_metrics_save=1
+sysctl -w net.core.netdev_max_backlog=5000
+#sysctl -w net.ipv6.conf.all.disable_ipv6=1
+
+PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+for PID in ${PIDS}
+do
+    chrt -op 0 ${PID}
+done
+
+PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /otg/ {print $1}'`
+for PID in ${PIDS}
+do
+    taskset -acp 0-2 ${PID} || /bin/true
+done
+
+PIDS=`ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /dwc_otg/ {print $1}'`
+for PID in ${PIDS}
+do
+    renice 0 ${PID}
+done
+
+renice 0            `pgrep dwc_otg`
+#taskset -acp 3     `pgrep dwc_otg`
+#ionice -c 2 -n 6 -p `pgrep dwc_otg`
+taskset -acp 3      `pgrep kodi.bin`
+ionice -c 2 -n 7 -p `pgrep kodi.bin`
+
+echo noop > /sys/block/mmcblk0/queue/scheduler
+
+echo none > /sys/class/leds/led0/trigger
+echo 0    > /sys/class/leds/led0/brightness
+#echo 0    > /sys/class/leds/led1/brightness
+/home/osmc/llctl f0 l0 d0
+
+3. fstab
+
+sudo nano /etc/fstab
+
+tmpfs /tmp	tmpfs nosuid,nodev,noatime,nodiratime 0 0
+tmpfs /var/log	tmpfs nosuid,nodev,noatime,nodiratime 0	0
+
+4. cmdline.txt
+
+sudo nano /boot/cmdline.txt
+
+consoleblank=0 noswap
+
+5. Disable modules
+
+lsmod
+nano /etc/modprobe.d/raspi-blacklist.conf
+
+blacklist ipv6
+blacklist joydev
+blacklist evdev
+blacklist snd_soc_pcm512x_i2c
+blacklist snd_soc_bcm2708_i2c
+blacklist snd_soc_tas5713
+blacklist snd_soc_wm8804_i2c
+blacklist i2c_bcm2708
+blacklist spi_bcm2708
+
+6. Disable systemctl
+
+sudo systemctl disable eventlircd
+sudo systemctl disable irqbalance
+sudo systemctl disable wpa_supplicant
