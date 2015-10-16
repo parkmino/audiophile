@@ -8,7 +8,7 @@ mv alsa.conf alsa.conf.org
 echo "pcm.default.type hw
 pcm.default.card 0
 pcm.default.device 0
-pcm.default.subdevice 0
+#pcm.default.subdevice 0
 pcm.default.sync_ptr_ioctl 0
 pcm.default.nonblock 0
 
@@ -20,17 +20,3 @@ ctl.default.type hw
 ctl.default.card 0" > alsa.conf
 
 cat alsa.conf
-
-mount -o remount,rw /dev/root/ /
-
-2. RTC user_max_freq
-
-echo "echo 4032 > /sys/class/rtc/rtc0/max_user_freq" >> /etc/init.d/rcS2
-
-3. VM.swappiness
-
-echo "echo 25 > /proc/sys/vm/swappiness" >> /etc/init.d/rcS2
-
-4. Test
-
-cat /usr/local/etc/alsa.conf ; cat /sys/class/rtc/rtc0/max_user_freq /proc/sys/vm/swappiness
