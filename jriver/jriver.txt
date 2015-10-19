@@ -1,0 +1,43 @@
+http://yabb.jriver.com/interact/index.php?board=44.0
+
+http://yabb.jriver.com/interact/index.php?topic=99370.0
+http://yabb.jriver.com/interact/index.php?topic=84477.0
+
+1. Disk Cloning
+
+	sudo fdisk -l
+	sudo dd bs=4M if=/dev/sdb of=/dev/sdd
+	sync
+	ssh root@192.168.0.5
+	
+	systemctl enable ssh.service
+	systemctl enable upmpdcli.service
+
+2. Install JRiver MC 21 on Armbian
+
+	apt-get install xorg openbox (lxde-core)
+	apt-get install libgtk2.0-0 libpango1.0-0 xdg-utils gvfs-bin
+	wget http://files.jriver.com/mediacenter/channels/v21/latest/MediaCenter-21.0.14-armhf.deb
+	dpkg -i MediaCenter-21.0.14-armhf.deb
+
+3. Install tightvncserver
+
+	apt-get install tightvncserver
+	tightvncserver
+	
+4. Run Xorg & JRiver MC
+
+	nano /etc/rc.local
+		su - root -c"tightvncserver;export DISPLAY=:1;mediacenter21 /mediaserver"
+
+5. Remove NFS daemon & client
+
+	apt-get remove nfs-kernel-server
+	sysv-rc-conf
+		     2   3   4   5
+		ssh [ ] [ ] [ ] [ ]
+
+6. MPD Optimization
+
+	nano /etc/mpd.conf
+		#music_directory
