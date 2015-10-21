@@ -162,7 +162,7 @@ Secure Ripping S/W
 			mixer_type		"none"
 			mixer_device		"ctl.default"
 			mixer_control		"XMOS Clock Selector"
-			mixer_index		"0"
+			#mixer_index		"0"
 			replay_gain_handler	"none"
 			}
 			#audio_output_format    "*:*:*"
