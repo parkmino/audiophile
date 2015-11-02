@@ -59,8 +59,10 @@ do
     taskset -acp 1 ${PID}
 done
 
- ionice -c 2 -n 7 -p `pgrep -o nfsd4`
+#ionice -c 2 -n 7 -p `pgrep -o nfsd4`
 #ionice -c 2 -n 7 -p `pgrep -n nfsd4`
- ionice -c 0         `pgrep ata_sff`
+#ionice -c 0         `pgrep ata_sff`
+
+ionice -c 2 -n 7 mediatomb -d
 
 exit 0
