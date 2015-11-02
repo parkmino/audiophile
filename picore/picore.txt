@@ -1,0 +1,62 @@
+1. Download
+
+	http://www.tinycorelinux.net/7.x/armv7/
+	http://distro.ibiblio.org/tinycorelinux/7.x/armv7/
+	
+2. microSD Flashing
+
+	$ cat /proc/partitions ; df -h; sudo fdisk -l
+	$ sudo umount /dev/sdb1
+	$ sudo dd bs=4M if='...piCore-7.0alpha7_v7-SSH.img' of=/dev/sdb
+	$ sync
+	$ sudo fdisk -u /dev/sdb
+	  p > d > Enter(2) > n > Enter(p) > Enter(2) > 69648 > Enter > w
+	$ sudo e2fsck -f /dev/sdb2
+	$ sudo resize2fs /dev/sdb2
+	
+3. SSH Login
+
+	$ ssh tc@192.168.0.3
+	  password:piCore
+
+4. Install
+
+	$ sudo mcedit /opt/tcemirror
+	  http://repo.tinycorelinux.net/
+	  or
+	  http://distro.ibiblio.org/tinycorelinux/
+	$ tce-load -wi alsa libcue libid3tag curl flac libsndfile libmpdclient libmad mpg123 expat2
+	$ tce-load -wi krb5 p11-kit util-linux procps-ng libusb-compat
+	$ cp -r /mnt/mmcblk0p2/copy/* /home/tc/
+	$ sudo mcedit /opt/bootlocal.sh
+	  ln -s  /home/tc/lib/* /usr/lib/
+	  ln -sf /home/tc/alsa.conf /usr/local/share/alsa/alsa.conf
+	  /home/tc/mpd /home/tc/mpd.conf
+
+5. Cmdline.txt & Static IP
+
+	cmdline.txt
+	  ... consoleblank=0 noswap nozswap nodhcp embed ip=192.168.0.3::192.168.0.1:255.255.255.0:tc:eth0:none:168.126.63.1
+	  (ip=ip::gateway:netmask:hostname:interface:none:dns0-ip:dns1-ip)
+	$ sudo mcedit /opt/bootlocal.sh
+	  echo nameserver 168.126.63.1 > /etc/resolv.conf
+		
+6. Config.txt
+   	config.txt
+   	  #dtparam=i2c_arm=on,spi=on
+   	  #device_tree_overlay=iqaudio-dacplus
+   		
+7. Bootlocal.sh
+   	$ sudo mcedit /opt/bootlocal.sh
+   	  #/usr/sbin/startserialtty &
+	  #/sbin/modprobe i2c-dev
+	  #/usr/local/etc/init.d/openssh start
+		
+8. filetool.sh -b
+
+cf.Compile MPD
+
+	$ tce-load -wi autoconf automake compile-essentials
+	$ tce-load -wi glib2-dev libcue-dev libid3tag-dev curl-dev flac-dev libsndfile-dev libmpdclient-dev libmad-dev mpg123-dev alsa-dev expat2-dev
+	$ tce-load -wi audiofile-dev libupnp6-dev # Not available
+	$ ...
