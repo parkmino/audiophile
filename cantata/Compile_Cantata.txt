@@ -90,7 +90,7 @@ git push origin master
 
 ### QT5 ###
 
-sudo apt-get install qt5-default qttools5-dev-tools libgt5svg5-dev
+sudo apt-get install qt5-default qttools5-dev-tools libqt5svg5-dev
 
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_KDE=OFF -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_MTP=OFF -DENABLE_REMOTE_DEVICES=OFF -DENABLE_UDISKS2=OFF -DENABLE_QT5=ON -DENABLE_EXTERNAL_TAGS=ON -DINSTALL_UBUNTU_ICONS=ON -DENABLE_HTTP_STREAM_PLAYBACK=OFF
 
