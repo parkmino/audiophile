@@ -63,6 +63,7 @@ done
 #ionice -c 2 -n 7 -p `pgrep -n nfsd4`
 #ionice -c 0         `pgrep ata_sff`
 
-ionice -c 2 -n 7 mediatomb -d
+#ionice -c 2 -n 7 mediatomb -c /root/.mediatomb/config.xml -d
+ionice -c 2 -n 7 rygel -c /etc/rygel.conf >/dev/null >2&1 &
 
 exit 0
