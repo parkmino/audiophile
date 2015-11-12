@@ -66,4 +66,11 @@ done
 #ionice -c 2 -n 7 mediatomb -c /root/.mediatomb/config.xml -d
 ionice -c 2 -n 7 rygel -c /etc/rygel.conf >/dev/null >2&1 &
 
+service systemd-journald stop
+service systemd-udevd    stop
+service systemd-logind   stop
+service dbus             stop
+service haveged          stop
+service sshd             stop
+
 exit 0
