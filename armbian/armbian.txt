@@ -133,8 +133,14 @@ Orange Pi Mini
 		ssid=*****
 		wpa_passphrase=********
 		
-11. Remove sshd service
-	# systemctl disable ssh.service
+11. Remove unnecessary services
+	systemctl disable rpcbind cron ntp rsyslog
+	service systemd-journald stop
+	service systemd-udevd stop
+	service systemd-logind stop
+	service dbus stop
+	service haveged stop
+	service	sshd stop
 
 ==============
 Raspberry Pi 2
