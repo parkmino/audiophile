@@ -402,7 +402,7 @@ Secure Ripping S/W
 			PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ {print $1}'`
 			for PID in ${PIDS}
 			do
-			    taskset -acp 0-2 ${PID} || /bin/true
+			    taskset -acp 0-1 ${PID} || /bin/true
 			done
 		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
