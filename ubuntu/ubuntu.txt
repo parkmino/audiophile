@@ -245,7 +245,7 @@ Secure Ripping S/W
 		     PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
 		    DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
 		     OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-		 taskset -acp 3       "$MPD_PID"
+		 taskset -acp 2       "$MPD_PID"
 		 chrt    -aop 0       "$MPD_PID"
 		 #chrt    -rp  4       "$MAIN_PID"
 		 #chrt    -ip  0       "$UPDATE_PID"
@@ -263,7 +263,7 @@ Secure Ripping S/W
 		  ionice  -c 2 -n 6 -p "$DECODER_PID"
 		  ionice  -c 2 -n 3 -p "$OUTPUT_PID"
 	$ sudo nano /etc/rc.local
-		 taskset -acp 2      `pgrep snd_hda`
+		 taskset -acp 3      `pgrep snd_hda`
 		#renice -n -2     -p `pgrep snd_hda`
 		 ionice -c 2 -n 2 -p `pgrep snd_hda`
 		#chrt -rp 2          `pgrep snd_hda`
