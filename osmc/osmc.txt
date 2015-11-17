@@ -6,7 +6,7 @@ $ sudo nano /usr/share/alsa/alsa.conf
 pcm.default.type hw
 pcm.default.card 1
 pcm.default.device 0
-#pcm.default.subdevice 0
+pcm.default.subdevice 0
 pcm.default.sync_ptr_ioctl 0
 pcm.default.nonblock 0
 
@@ -59,7 +59,7 @@ done
 PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /otg/ {print $1}'`
 for PID in ${PIDS}
 do
-    taskset -acp 0-2 ${PID} || /bin/true
+    taskset -acp 0-1 ${PID} || /bin/true
 done
 
 PIDS=`ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /dwc_otg/ {print $1}'`
@@ -68,11 +68,11 @@ do
     renice 0 ${PID}
 done
 
-renice 0            `pgrep dwc_otg`
-#taskset -acp 3     `pgrep dwc_otg`
-#ionice -c 2 -n 6 -p `pgrep dwc_otg`
-taskset -acp 3      `pgrep kodi.bin`
-ionice -c 2 -n 7 -p `pgrep kodi.bin`
+renice 0       `pgrep dwc_otg`
+#taskset -acp 3 `pgrep dwc_otg`
+ionice -c 0 -p `pgrep dwc_otg`
+taskset -acp 2 `pgrep kodi.bin`
+ionice -c 0 -p `pgrep kodi.bin`
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 
@@ -97,13 +97,13 @@ consoleblank=0 noswap
 5. Disable modules
 
 lsmod
-nano /etc/modprobe.d/raspi-blacklist.conf
+sudo nano /etc/modprobe.d/raspi-blacklist.conf
 
 blacklist ipv6
 blacklist joydev
 blacklist evdev
 blacklist snd_soc_pcm512x_i2c
-blacklist snd_soc_bcm2708_i2c
+blacklist snd_soc_bcm2708_i2s
 blacklist snd_soc_tas5713
 blacklist snd_soc_wm8804_i2c
 blacklist i2c_bcm2708
@@ -114,3 +114,18 @@ blacklist spi_bcm2708
 sudo systemctl disable eventlircd
 sudo systemctl disable irqbalance
 sudo systemctl disable wpa_supplicant
+
+7. Disable services
+
+sudo nano /etc/rc.local
+
+service systemd-journald stop
+service systemd-udevd stop
+service systemd-logind stop
+service	ntp stop
+service	ssh stop
+service	udisks stop
+service	udisks-glue stop
+service	rpcbind stop
+service	polkitd stop
+service	wpa_supplicant stop
