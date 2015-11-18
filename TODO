@@ -3,6 +3,8 @@ nano /usr/share/alsa/alsa.conf
 	#defaults.pcm.minperiodtime 1000
 	#ctl.default.type hw
 	#ctl.default.card 0
+	mixer.control.type hw
+	mixer.control.card 0
 	
 nano /et/rc.local
 	#ionice -c 0 -p "$MAIN_PID"
