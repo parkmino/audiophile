@@ -8,15 +8,15 @@ mv alsa.conf alsa.conf.org
 echo "pcm.default.type hw
 pcm.default.card 0
 pcm.default.device 0
-#pcm.default.subdevice 0
+pcm.default.subdevice 0
 pcm.default.sync_ptr_ioctl 0
 pcm.default.nonblock 0
 
 defaults.pcm.nonblock 0
-defaults.pcm.compat 1
-defaults.pcm.minperiodtime 1000
+defaults.pcm.compat 1" > alsa.conf
+#defaults.pcm.minperiodtime 1000
 
-ctl.default.type hw
-ctl.default.card 0" > alsa.conf
+#ctl.default.type hw
+#ctl.default.card 0" > alsa.conf
 
 cat alsa.conf
