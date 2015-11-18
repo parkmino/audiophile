@@ -10,3 +10,6 @@ nano /et/rc.local
 	
 	ionice -c 0 -p `pgrep snd_hda`
 	ionice -c 2 -n 7 -p `pgrep snd_hda`
+
+nano /etc/mpd.conf
+	mixer_index "0"
