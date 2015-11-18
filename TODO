@@ -1,5 +1,6 @@
 nano /usr/share/alsa/alsa.conf
 	pcm.default.subdevice 0
+	#defaults.pcm.minperiodtime 1000
 	#ctl.default.type hw
 	#ctl.default.card 0
 	
