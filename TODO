@@ -2,14 +2,13 @@ nano /usr/share/alsa/alsa.conf
 	pcm.default.subdevice 0
 	
 nano /et/rc.local
-	ionice -c 0 -p "$MAIN_PID"
-	ionice -c 0 -p "$UPDATE_PID"
-	ionice -c 0 -p "$PLAYER_PID"
-	ionice -c 0 -p "$DECODER_PID"
-	ionice -c 0 -p "$OUTPUT_PID"
+	#ionice -c 0 -p "$MAIN_PID"
+	#ionice -c 0 -p "$UPDATE_PID"
+	#ionice -c 0 -p "$PLAYER_PID"
+	#ionice -c 0 -p "$DECODER_PID"
+	#ionice -c 0 -p "$OUTPUT_PID"
 	
-	ionice -c 0 -p `pgrep snd_hda`
-	ionice -c 2 -n 7 -p `pgrep snd_hda`
+	#ionice -c 0 -p `pgrep snd_hda`
 
 nano /etc/mpd.conf
 	mixer_index "0"
