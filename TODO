@@ -1,5 +1,7 @@
 nano /usr/share/alsa/alsa.conf
 	pcm.default.subdevice 0
+	#ctl.default.type hw
+	#ctl.default.card 0
 	
 nano /et/rc.local
 	#ionice -c 0 -p "$MAIN_PID"
@@ -12,5 +14,7 @@ nano /et/rc.local
 
 nano /etc/mpd.conf
 	#device "pcm.default"
+	mixer_type "none"
 	#mixer_device "ctl.default"
-	mixer_index "0"
+	#mixer_control "..."
+	#mixer_index "0"
