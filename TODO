@@ -18,3 +18,5 @@ nano /etc/mpd.conf
 	#mixer_device "ctl.default"
 	#mixer_control "..."
 	#mixer_index "0"
+
+hdparm -A1 -a2048 -B255 /dev/sda
