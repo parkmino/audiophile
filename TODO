@@ -11,6 +11,6 @@ nano /et/rc.local
 	#ionice -c 0 -p `pgrep snd_hda`
 
 nano /etc/mpd.conf
-	device "pcm.default"
-	mixer_device "ctl.default"
+	#device "pcm.default"
+	#mixer_device "ctl.default"
 	mixer_index "0"
