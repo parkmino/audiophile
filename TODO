@@ -30,4 +30,4 @@ nano /etc/mpd.conf
 	#mixer_control "..."
 	#mixer_index "0"
 
-hdparm -A1 -a1792 -B255 /dev/sda
+hdparm -A1 -a1664 -B255 /dev/sda
