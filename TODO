@@ -19,6 +19,9 @@ nano /et/rc.local
 	#ionice -c 0 -p "$OUTPUT_PID"
 	
 	#ionice -c 0 -p `pgrep snd_hda`
+	
+	#sysctl -w kernel.sched_rt_runtime_us=-1
+	#sysctl -w kernel.sched_rt_period_us=42700
 
 nano /etc/mpd.conf
 	device "output.sound"
