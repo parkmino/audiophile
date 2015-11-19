@@ -5,11 +5,15 @@ nano /usr/share/alsa/alsa.conf
 	output.sound.subdevice 0
 	output.sound.sync_ptr_ioctl 0
 	output.sound.nonblock 0
-	#defaults.pcm.minperiodtime 1000
-	#ctl.default.type hw
-	#ctl.default.card 0
+	
 	mixer.control.type hw
 	mixer.control.card 0
+	
+	pcm.default output.sound
+	ctl.default mixer.control
+	
+	defaults.pcm.nonblock 0
+	defaults.pcm.compat 1
 	
 nano /et/rc.local
 	#ionice -c 0 -p "$MAIN_PID"
