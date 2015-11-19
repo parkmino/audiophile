@@ -18,7 +18,7 @@ nano /et/rc.local
 nano /etc/mpd.conf
 	#device "pcm.default"
 	mixer_type "none"
-	#mixer_device "ctl.default"
+	mixer_device "mixer.control"
 	#mixer_control "..."
 	#mixer_index "0"
 
