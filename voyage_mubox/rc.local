@@ -78,7 +78,7 @@ pkill udevd
 PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /otg/ {print $1}'`
 for PID in ${PIDS}
 do
-    taskset -acp 0-2 ${PID} || /bin/true
+    taskset -acp 0-1 ${PID} || /bin/true
 done
 
 echo none > /sys/class/leds/led0/trigger
