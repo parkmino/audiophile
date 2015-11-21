@@ -134,15 +134,15 @@ Secure Ripping S/W
 			audio_output {
 			type			"alsa"
 			name			"My ALSA Device"
-			device			"pcm.default"
+			device			"output.sound"
 			use_mmap		"yes"
 			auto_resample		"no"
 			auto_channels		"no"
 			auto_format		"no"
 			#format			"*:*:*"
 			mixer_type		"none"
-			mixer_device		"ctl.default"
-			mixer_control		"XMOS Clock Selector"
+			mixer_device		"mixer.control"
+			#mixer_control		"XMOS Clock Selector"
 			#mixer_index		"0"
 			replay_gain_handler	"none"
 			}
