@@ -13,8 +13,8 @@
 
 #cpufreq-selector -g powersave
 
-#umount /run/shm
-#mount -t ramfs -o noauto,nosuid,nodev,nodiratime none /run/shm
+#umount /dev/shm
+#mount -t tmpfs -o noauto,nosuid,nodiratime ramfs /dev/shm
 #for i in /proc /sys /sys/fs/fuse/connections /sys/kernel/debug /sys/kernel/security /run /run/lock /run/user /sys/fs/pstore /dev/sda2
 #do
 #    mount -o remount,nosuid,nodev,noatime,nodiratime $i
@@ -22,23 +22,28 @@
 #mount -o remount,nodev,noatime /
 #mount -o remount,nosuid,noatime,nodiratime /dev
 #mount -o remount,nosuid,noatime,nodiratime /dev/pts
-
-for i in /tmp /var/backups /var/cache /var/crash /var/local /var/log /var/mail /var/metrics /var/opt /var/spool /var/tmp 
-do
-    mount -t tmpfs -o noauto,nosuid,nodev,nodiratime none $i
-done
+#
+#for i in /var/backups /var/cache /var/crash /var/local /var/log /var/mail /var/metrics /var/opt /var/spool /var/tmp /var/www
+#do
+#    mount -t ramfs -o noauto,nosuid,nodev,nodiratime none $i
+#done
 
 echo 4032 > /sys/class/rtc/rtc0/max_user_freq
-sysctl -w dev.hpet.max-user-freq=2147483520 # max=2147483647
-sysctl -w vm.swappiness=0
-sysctl -w vm.overcommit_memory=1
-sysctl -w vm.overcommit_ratio=100
-sysctl -w vm.dirty_writeback_centisecs=0
-sysctl -w vm.oom_dump_tasks=0
-sysctl -w vm.oom_kill_allocating_task=1
-sysctl -w vm.panic_on_oom=2
-sysctl -w vm.stat_interval=3
-sysctl -w vm.user_reserve_kbytes=0
+ sysctl -w dev.hpet.max-user-freq=2147483520 # max=2147483647
+ sysctl -w debug.exception-trace=0
+ sysctl -w kernel.watchdog=0
+#sysctl -w kernel.sched_rt_runtime_us=-1
+#sysctl -w kernel.sched_rt_period_us=42700
+ sysctl -w kernel.printk='4 4 1 4'
+ sysctl -w vm.swappiness=0
+ sysctl -w vm.overcommit_memory=1
+ sysctl -w vm.overcommit_ratio=100
+ sysctl -w vm.dirty_writeback_centisecs=0
+ sysctl -w vm.oom_dump_tasks=0
+ sysctl -w vm.oom_kill_allocating_task=1
+ sysctl -w vm.panic_on_oom=2
+ sysctl -w vm.stat_interval=3
+ sysctl -w vm.user_reserve_kbytes=0
 
 ifconfig eth0  txqueuelen 10000
 ifconfig wlan0 txqueuelen 10000
@@ -53,6 +58,7 @@ ifconfig wlan0 txqueuelen 10000
  sysctl -w net.ipv4.tcp_sack=0
  sysctl -w net.ipv4.tcp_no_metrics_save=1
  sysctl -w net.core.netdev_max_backlog=5000
+ sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
 modprobe -r psmouse
 
@@ -68,33 +74,82 @@ do
     renice 0 ${PID}
 done
 
-#chrt -fp 1 `pgrep nouveau`
-
 #MODS=`lsmod | awk '$1 !~ /snd/ && $3 ~ 0 {print $1}'`
 #for Module in ${MODS}
 #do
 #   modprobe -r "$Module"
 #done
 
-/usr/bin/mpd /etc/mpd.conf
-chrt    -apo 0 `pgrep mpd`
-taskset -apc 0 `pgrep mpd`
+IRQS=`cat /proc/interrupts | awk '$6 ~ /PCI-MSI/ {print +$1}'`
+for IRQ in ${IRQS}
+do
+        echo 7 > /proc/irq/${IRQ}/smp_affinity
+        echo 7 > /proc/irq/${IRQ}/smp_affinity
+done
 
- taskset -apc 0      `pgrep snd_hda`
+#echo 7 > /proc/irq/default_smp_affinity
+#echo 7 > /proc/irq/default_smp_affinity
+
+IRQS=`cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}'`
+for IRQ in ${IRQS}
+do
+	echo 8 > /proc/irq/${IRQ}/smp_affinity
+	echo 8 > /proc/irq/${IRQ}/smp_affinity
+done
+
+PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ && $3 !~ /audio/ {print $1}'`
+for PID in ${PIDS}
+do
+    taskset -acp 0-1 ${PID} || /bin/true
+done
+
+taskset -acp 1 `pgrep rtc`
+
+##taskset -apc 0      `pgrep hd-audio0`
+##renice -n -1     -p `pgrep hd-audio0`
+#ionice -c 0 -p      `pgrep hd-audio0`
+##chrt -rp 1          `pgrep hd-audio0`
+
+/usr/bin/mpd /etc/mpd.conf
+
+MPD_PID=`pgrep -n mpd`
+
+MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+
+     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+
+#ionice -c 0 -p "$MAIN_PID"
+#ionice -c 0 -p "$UPDATE_PID"
+#ionice -c 0 -p "$PLAYER_PID"
+#ionice -c 0 -p "$DECODER_PID"
+#ionice -c 0 -p "$OUTPUT_PID"
+
+#ionice -c 2 -n 5 -p "$MAIN_PID"
+#ionice -c 0 -p "$MAIN_PID"
+#ionice -c 2 -n 7 -p "$UPDATE_PID"
+#ionice -c 0 -p "$UPDATE_PID"
+#ionice -c 2 -n 4 -p "$PLAYER_PID"
+#ionice -c 0 -p "$PLAYER_PID"
+#ionice -c 2 -n 6 -p "$DECODER_PID"
+#ionice -c 0 -p "$DECODER_PID"
+#ionice -c 2 -n 3 -p "$OUTPUT_PID"
+#ionice -c 0 -p "$OUTPUT_PID"
+
+ chrt    -apo 0 "$MPD_PID"
+ taskset -apc 2 "$MPD_PID"
+
+ taskset -apc 3      `pgrep snd_hda`
 #renice -n -2     -p `pgrep snd_hda`
-#ionice -c 2 -n 6 -p `pgrep snd_hda`
+#ionice -c 2 -n 7 -p `pgrep snd_hda`
+#ionice -c 0 -p `pgrep snd_hda`
 #chrt -rp 2          `pgrep snd_hda`
 
-#taskset -apc 0      `pgrep hd-audio0`
-#renice -n -1     -p `pgrep hd-audio0`
-#ionice -c 2 -n 7 -p `pgrep hd-audio0`
-#chrt -rp 1          `pgrep hd-audio0`
+#hdparm -A1 -a1792 -B255 /dev/sda
 
-#ionice -c 2 -n 7 -p `pgrep ahci` `pgrep ata_sff`
- taskset -apc 0      `pgrep rtc0`
-#ionice -c 0      -p `pgrep rtc0`
-#ionice -c 3 -p `pgrep init` `pgrep kthreadd` `pgrep ksoftirqd` `pgrep kworker` `pgrep migration` `pgrep rcu_` `pgrep watchdog`
-
-#hdparm -A1 -a2048 -B255 /dev/sda
+echo noop > /sys/block/sda/queue/scheduler
 
 exit 0
