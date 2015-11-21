@@ -11,8 +11,8 @@
 #
 # By default this script does nothing.
 
-sysctl -w kernel.sched_rt_runtime_us=-1
-sysctl -w kernel.sched_rt_period_us=42700
+#sysctl -w kernel.sched_rt_runtime_us=-1
+#sysctl -w kernel.sched_rt_period_us=42700
 sysctl -w kernel.printk='4 4 1 4'
 sysctl -w vm.swappiness=0
 sysctl -w vm.overcommit_memory=1
@@ -59,12 +59,8 @@ do
     taskset -acp 1 ${PID}
 done
 
-#ionice -c 2 -n 7 -p `pgrep -o nfsd4`
-#ionice -c 2 -n 7 -p `pgrep -n nfsd4`
-#ionice -c 0         `pgrep ata_sff`
-
-#ionice -c 2 -n 7 mediatomb -c /root/.mediatomb/config.xml -d
-ionice -c 2 -n 7 rygel -c /etc/rygel.conf >/dev/null >2&1 &
+#mediatomb -c /root/.mediatomb/config.xml -d
+rygel -c /etc/rygel.conf >/dev/null >2&1 &
 
 service systemd-journald stop
 service systemd-udevd    stop

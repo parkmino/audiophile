@@ -238,15 +238,15 @@ Secure Ripping S/W
 		 #renice   -2          "$PLAYER_PID"
 		 #renice   -3          "$DECODER_PID"
 		 #renice   -1          "$OUTPUT_PID"
-		  ionice  -c 2 -n 5 -p "$MAIN_PID"
-		  ionice  -c 2 -n 7 -p "$UPDATE_PID"
-		  ionice  -c 2 -n 4 -p "$PLAYER_PID"
-		  ionice  -c 2 -n 6 -p "$DECODER_PID"
-		  ionice  -c 2 -n 3 -p "$OUTPUT_PID"
+		 #ionice  -c 2 -n 5 -p "$MAIN_PID"
+		 #ionice  -c 2 -n 7 -p "$UPDATE_PID"
+		 #ionice  -c 2 -n 4 -p "$PLAYER_PID"
+		 #ionice  -c 2 -n 6 -p "$DECODER_PID"
+		 #ionice  -c 2 -n 3 -p "$OUTPUT_PID"
 	$ sudo nano /etc/rc.local
 		 taskset -acp 3      `pgrep snd_hda`
 		#renice -n -2     -p `pgrep snd_hda`
-		 ionice -c 2 -n 2 -p `pgrep snd_hda`
+		#ionice -c 2 -n 2 -p `pgrep snd_hda`
 		#chrt -rp 2          `pgrep snd_hda`
 		
 3.9 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
@@ -411,8 +411,8 @@ Secure Ripping S/W
 		$ sudo gedit /etc/rc.local
 			sysctl -w debug.exception-trace=0
 			sysctl -w kernel.watchdog=0
-			sysctl -w kernel.sched_rt_runtime_us=-1
-			sysctl -w kernel.sched_rt_period_us=42700
+			#sysctl -w kernel.sched_rt_runtime_us=-1
+			#sysctl -w kernel.sched_rt_period_us=42700
 			sysctl -w kernel.printk='4 4 1 4'
 			sysctl -w vm.swappiness=0
 			sysctl -w vm.overcommit_memory=1

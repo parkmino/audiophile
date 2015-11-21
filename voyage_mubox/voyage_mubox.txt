@@ -173,11 +173,11 @@
 		DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
 		 OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
 
-		ionice -c 2 -n 5 -p "$MAIN_PID"
-		ionice -c 2 -n 7 -p "$UPDATE_PID"
-		ionice -c 2 -n 4 -p "$PLAYER_PID"
-		ionice -c 2 -n 6 -p "$DECODER_PID"
-		ionice -c 2 -n 3 -p "$OUTPUT_PID"
+		#ionice -c 2 -n 5 -p "$MAIN_PID"
+		#ionice -c 2 -n 7 -p "$UPDATE_PID"
+		#ionice -c 2 -n 4 -p "$PLAYER_PID"
+		#ionice -c 2 -n 6 -p "$DECODER_PID"
+		#ionice -c 2 -n 3 -p "$OUTPUT_PID"
 
 		chrt    -apo 0 "$MPD_PID"
 		taskset -apc 3 "$MPD_PID"

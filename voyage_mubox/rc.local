@@ -20,8 +20,8 @@
 #/sbin/modprobe -r microcode mfd_core i2c_i801 scsi_wait_scan
 #sysctl -w debug.exception-trace=0
 #sysctl -w kernel.watchdog=0
-sysctl -w kernel.sched_rt_runtime_us=-1
-sysctl -w kernel.sched_rt_period_us=42700
+#sysctl -w kernel.sched_rt_runtime_us=-1
+#sysctl -w kernel.sched_rt_period_us=42700
 sysctl -w kernel.printk='4 4 1 4'
 sysctl -w vm.swappiness=0
 sysctl -w vm.overcommit_memory=1
@@ -52,7 +52,7 @@ sysctl -w net.ipv4.tcp_no_metrics_save=1
 sysctl -w net.core.netdev_max_backlog=5000
 #sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
-ionice -c 2 -n 7 taskset -c 3 /usr/bin/mpd /etc/mpd.conf
+taskset -c 3 /usr/bin/mpd /etc/mpd.conf
 
 PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
 for PID in ${PIDS}
@@ -68,7 +68,7 @@ done
 
 renice 0 `pgrep dwc_otg`
 #taskset -acp 1 `pgrep dwc_otg`
-ionice -c 2 -n 6 -p `pgrep dwc_otg`
+#ionice -c 2 -n 6 -p `pgrep dwc_otg`
 
 amixer -D ctl.default set 'XMOS Clock Selector',0 Capture 0 0 off off
 amixer -D ctl.default set 'XMOS Clock Selector',1 Capture 0 off

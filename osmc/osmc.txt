@@ -26,8 +26,8 @@ $ sudo nano /etc/rc.local
 
 #sysctl -w debug.exception-trace=0
 #sysctl -w kernel.watchdog=0
-sysctl -w kernel.sched_rt_runtime_us=-1
-sysctl -w kernel.sched_rt_period_us=42700
+#sysctl -w kernel.sched_rt_runtime_us=-1
+#sysctl -w kernel.sched_rt_period_us=42700
 sysctl -w kernel.printk='4 4 1 4'
 sysctl -w vm.swappiness=0
 sysctl -w vm.overcommit_memory=1
@@ -73,9 +73,9 @@ done
 
 renice 0       `pgrep dwc_otg`
 #taskset -acp 3 `pgrep dwc_otg`
-ionice -c 0 -p `pgrep dwc_otg`
-taskset -acp 2 `pgrep kodi.bin`
-ionice -c 0 -p `pgrep kodi.bin`
+#ionice -c 0 -p `pgrep dwc_otg`
+taskset -acp 3 `pgrep kodi.bin`
+#ionice -c 0 -p `pgrep kodi.bin`
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 
