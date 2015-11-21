@@ -5,14 +5,17 @@ telnet -l root 192.168.0.x
 cd /usr/local/etc/
 mv alsa.conf alsa.conf.org
 
-echo "pcm.default.type hw
-pcm.default.card 0
-pcm.default.device 0
-pcm.default.subdevice 0
-pcm.default.sync_ptr_ioctl 0
-pcm.default.nonblock 0
+echo "output.sound.type hw
+output.sound.card 0
+output.sound.device 0
+output.sound.subdevice 0
+output.sound.sync_ptr_ioctl 0
+output.sound.nonblock 0
 
-defaults.pcm.nonblock 0
-defaults.pcm.compat 1" > alsa.conf
+mixer.control.type hw
+mixer.control.card 0
+
+pcm.default output.sound
+ctl.default mixer.control" > alsa.conf
 
 cat alsa.conf
