@@ -3,19 +3,22 @@
 $ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
 $ sudo nano /usr/share/alsa/alsa.conf
 
-pcm.default.type hw
-pcm.default.card 1
-pcm.default.device 0
-pcm.default.subdevice 0
-pcm.default.sync_ptr_ioctl 0
-pcm.default.nonblock 0
+output.sound.type hw
+output.sound.card 1
+output.sound.device 0
+output.sound.subdevice 0
+output.sound.sync_ptr_ioctl 0
+output.sound.nonblock 0
+
+mixer.control.type hw
+mixer.control.card 1
+
+pcm.default output.sound
+ctl.default mixer.control
 
 defaults.pcm.nonblock 0
 defaults.pcm.compat 1
-defaults.pcm.minperiodtime 1000
-
-ctl.default.type hw
-ctl.default.card 1
+#defaults.pcm.minperiodtime 1000 # in us
 
 2. rc.local
 
