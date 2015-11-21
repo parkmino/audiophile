@@ -430,7 +430,7 @@ Secure Ripping S/W
 		# sudo hdparm -A -a -B -M /dev/sda
 		# cat /sys/block/sd*/queue/scheduler
 		# sudo gedit /etc/rc.local
-			hdparm -A1 -a768 -B255 -M0 /dev/sda
+			hdparm -A1 -a1664 -B255 -M0 /dev/sda
 			echo noop > /sys/block/sda/queue/scheduler
 			#chrt -rp 1 `pgrep irq/x-ata` or `pgrep ahci`
 			#renice  -1 `pgrep ata_sff`
