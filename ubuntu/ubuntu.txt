@@ -435,7 +435,7 @@ Secure Ripping S/W
 			#chrt -rp 1 `pgrep irq/x-ata` or `pgrep ahci`
 			#renice  -1 `pgrep ata_sff`
 		# sudo gedit /etc/hdparm.conf
-			read_ahead_sect = 768
+			read_ahead_sect = 1664
 			lookahead = on
 			apm = 255
 	-. NTFS format & mount
