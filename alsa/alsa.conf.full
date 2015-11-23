@@ -1,0 +1,34 @@
+pcm.sound.type hw
+pcm.sound.card 0
+pcm.sound.device 0
+pcm.sound.subdevice 0
+pcm.sound.sync_ptr_ioctl 0
+pcm.sound.nonblock 0
+
+ctl.sound.type hw
+ctl.sound.card 0
+
+pcm.default pcm.sound
+ctl.default ctl.sound
+
+#pcm.hw.type hw
+#pcm.hw.card 0
+#pcm.hw.device 0
+#pcm.hw.subdevice 0
+#pcm.hw.sync_ptr_ioctl 0
+#pcm.hw.nonblock 0
+#pcm.hw.@args.0 CARD
+##pcm.hw.@args.1 DEV
+##pcm.hw.@args.2 SUBDEV
+#pcm.hw.@args.CARD.type string
+##pcm.hw.@args.DEV.type integer
+##pcm.hw.@args.SUBDEV.type integer
+#
+#ctl.hw.type hw
+#ctl.hw.card 0
+#ctl.hw.@args.0 CARD
+#ctl.hw.@args.CARD.type string
+
+defaults.pcm.nonblock 0
+defaults.pcm.compat 1
+#defaults.pcm.minperiodtime 5000 # in us
