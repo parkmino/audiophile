@@ -1,0 +1,22 @@
+1. sudo nano /usr/share/alsa/alsa.conf
+
+pcm.sound.type hw
+pcm.sound.card 0
+pcm.sound.device 0
+pcm.sound.subdevice 0
+pcm.sound.sync_ptr_ioctl 0
+pcm.sound.nonblock 0
+
+ctl.sound.type hw
+ctl.sound.card 0
+
+pcm.default pcm.sound
+ctl.default ctl.control
+
+defaults.pcm.nonblock 0
+defaults.pcm.compat 1
+
+2. sudo nano /etc/mpd.conf
+
+device		"sound"
+mixer_device	"sound"
