@@ -11,7 +11,7 @@ ctl.sound.type hw
 ctl.sound.card 0
 
 pcm.default pcm.sound
-ctl.default ctl.control
+ctl.default ctl.sound
 
 defaults.pcm.nonblock 0
 defaults.pcm.compat 1
