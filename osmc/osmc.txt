@@ -1,7 +1,4 @@
-1. ALSA Tweak
-
-$ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
-$ sudo nano /usr/share/alsa/alsa.conf
+1. /usr/share/alsa/alsa.conf
 
 output.sound.type hw
 output.sound.card 1
@@ -20,9 +17,7 @@ defaults.pcm.nonblock 0
 defaults.pcm.compat 1
 #defaults.pcm.minperiodtime 1000 # in us
 
-2. rc.local
-
-$ sudo nano /etc/rc.local
+2. /etc/rc.local
 
 #sysctl -w debug.exception-trace=0
 #sysctl -w kernel.watchdog=0
@@ -84,23 +79,27 @@ echo 0    > /sys/class/leds/led0/brightness
 #echo 0    > /sys/class/leds/led1/brightness
 /home/osmc/llctl f0 l0 d0
 
-3. fstab
+service systemd-journald stop
+service systemd-udevd stop
+service systemd-logind stop
+service	ntp stop
+service	ssh stop
+service	udisks stop
+service	udisks-glue stop
+service	rpcbind stop
+service	polkitd stop
+service	wpa_supplicant stop
 
-sudo nano /etc/fstab
+3. /etc/fstab
 
 tmpfs /tmp	tmpfs nosuid,nodev,noatime,nodiratime 0 0
 tmpfs /var/log	tmpfs nosuid,nodev,noatime,nodiratime 0	0
 
 4. cmdline.txt
 
-sudo nano /boot/cmdline.txt
-
 consoleblank=0 noswap
 
-5. Disable modules
-
-lsmod
-sudo nano /etc/modprobe.d/raspi-blacklist.conf
+5. /etc/modprobe.d/raspi-blacklist.conf
 
 blacklist ipv6
 blacklist joydev
@@ -118,17 +117,3 @@ sudo systemctl disable eventlircd
 sudo systemctl disable irqbalance
 sudo systemctl disable wpa_supplicant
 
-7. Disable services
-
-sudo nano /etc/rc.local
-
-service systemd-journald stop
-service systemd-udevd stop
-service systemd-logind stop
-service	ntp stop
-service	ssh stop
-service	udisks stop
-service	udisks-glue stop
-service	rpcbind stop
-service	polkitd stop
-service	wpa_supplicant stop
