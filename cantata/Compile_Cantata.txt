@@ -51,6 +51,8 @@ L4/H8n7pF7mm+OQGKfBg
 
 sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libtag1c2a libtag-extras1 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
 
+sudo apt-get install libvlc-dev libvlccore-dev
+
 ### 1. Git Clone ###
 
 rm -rf ~/Downloads/mpd/cantata-git
