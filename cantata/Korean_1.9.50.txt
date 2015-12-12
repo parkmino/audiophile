@@ -68,7 +68,7 @@ and you wish Cantata to configure and control the MPD instance. This setup will 
 -. Genres should be separated via a comma (e.g. 'Classical,Symphonic')
    장르는 쉼표로 나뉘어야 합니다 (예. 'Classical,Symphonic')
 -. Single track files folder : 한 곡 파일 폴더
--. Changing any of the above will require a DB refresh in order to take affect : 위 값을 바꾸면 데이터베이스 새로 읽기를 해야 적용됩니다.DB 
+-. Changing any of the above will require a DB refresh in order to take affect : 위 값을 바꾸면 데이터베이스 새로 읽기를 해야 적용됩니다.
 
 -. Library : 음원
 -. Group by : 묶기
