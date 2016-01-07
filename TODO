@@ -34,9 +34,11 @@ sudo nano /etc/rc.local
 
 4. Start MPD
 
-sudo nano /etc/rc.local
+sudo nano /etc/init.d/mpd
 
 chrt -o 0 /usr/bin/mpd --no-daemon /etc/mpd.conf
+
+sudo nano /etc/rc.local
 
 MPD_PID=`pgrep -n mpd`
 
