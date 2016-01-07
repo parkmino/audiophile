@@ -22,6 +22,7 @@ defaults.pcm.minperiodtime 1000
  device		"sound"
 #mixer_device	"sound"
  period_time	"1000"
+ user		"mpd"
 
 3. Virtual Memory
 
