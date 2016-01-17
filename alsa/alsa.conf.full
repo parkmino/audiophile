@@ -31,4 +31,4 @@ ctl.default ctl.sound
 
 defaults.pcm.nonblock 0
 defaults.pcm.compat 1
-#defaults.pcm.minperiodtime 5000 # in us
+defaults.pcm.minperiodtime 1000 # in us
