@@ -90,14 +90,6 @@ git add cantata/cantata-qt*$(date +"%Y.%m.%d")*.deb
 git commit -m "Updated the latest Cantata build package"
 git push origin master
 
-### QT5 ###
-
-sudo apt-get install qt5-default qttools5-dev-tools libqt5svg5-dev
-
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_KDE=OFF -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_MTP=OFF -DENABLE_REMOTE_DEVICES=OFF -DENABLE_UDISKS2=OFF -DENABLE_QT5=ON -DENABLE_EXTERNAL_TAGS=ON -DINSTALL_UBUNTU_ICONS=ON -DENABLE_HTTP_STREAM_PLAYBACK=OFF
-
-sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt5 --pkgversion "1.5.50" --pkgrelease=$(date +"%Y.%m.%d") --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt5dbus5,libqt5network5,libqt5core5a,libqt5gui5,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,zlib1g --backup=no --maintainer=parkmino@gmail.com
-
 ### Korean Translation Inquiry ###
 
 svn log http://cantata.googlecode.com/svn/trunk/po/cantata.pot | head
