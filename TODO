@@ -54,3 +54,11 @@ MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
  ionice -c  3 -p "$UPDATE_PID"
  renice -n 19    "$UPDATE_PID"
  chrt   -ip 0    "$UPDATE_PID"
+ 
+ taskset -apc 3  "$MPD_PID"
+ 
+5. Start MPD for UPnP @Voyage MuBox
+
+sudo nano /etc/init.d/mpd
+
+chrt -o 0 taskset -apc 3 /usr/bin/mpd --no-daemon /etc/mpd.conf
