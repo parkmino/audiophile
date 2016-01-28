@@ -2,7 +2,7 @@
 
 Changelog
 
-  1. 
+  1. 리눅스에서 사용자 아이콘 사용 옵션 추가 (useStandardIcons=true)
   2. 
   3. 
   4. 
