@@ -15,13 +15,13 @@ ctl.default ctl.sound
 
 defaults.pcm.nonblock 0
 defaults.pcm.compat 1
-defaults.pcm.minperiodtime 1000
+defaults.pcm.minperiodtime 0
 
 2. sudo nano /etc/mpd.conf
 
  device		"sound"
 #mixer_device	"sound"
- period_time	"1000"
+#period_time	"1000"
  user		"mpd"
 
 3. Virtual Memory
@@ -37,9 +37,11 @@ sudo nano /etc/rc.local
 
 sudo nano /etc/init.d/mpd
 
-chrt -o 0 /usr/bin/mpd --no-daemon /etc/mpd.conf
+chrt -o 0 taskset -apc 3 /usr/bin/mpd --no-daemon /etc/mpd.conf
 
 sudo nano /etc/rc.local
+
+sleep xx
 
 MPD_PID=`pgrep -n mpd`
 
@@ -55,10 +57,4 @@ MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
  renice -n 19    "$UPDATE_PID"
  chrt   -ip 0    "$UPDATE_PID"
  
- taskset -apc 3  "$MPD_PID"
- 
-5. Start MPD for UPnP @Voyage MuBox
-
-sudo nano /etc/init.d/mpd
-
-chrt -o 0 taskset -apc 3 /usr/bin/mpd --no-daemon /etc/mpd.conf
+#taskset -apc 3  "$MPD_PID"
