@@ -19,10 +19,13 @@ defaults.pcm.minperiodtime 0
 
 2. sudo nano /etc/mpd.conf
 
+user		"mpd"
+audio_output {
  device		"sound"
 #mixer_device	"sound"
 #period_time	"1000"
- user		"mpd"
+ dsd_usb	"no"	# enables DoP 1.0
+}
 
 3. Virtual Memory
 
