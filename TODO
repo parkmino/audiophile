@@ -1,33 +1,4 @@
-1. sudo nano /usr/share/alsa/alsa.conf
-
-pcm.sound.type hw
-pcm.sound.card 0
-pcm.sound.device 0
-pcm.sound.subdevice 0
-pcm.sound.sync_ptr_ioctl 0
-pcm.sound.nonblock 0
-
-ctl.sound.type hw
-ctl.sound.card 0
-
-pcm.default pcm.sound
-ctl.default ctl.sound
-
-defaults.pcm.nonblock 0
-defaults.pcm.compat 1
-#defaults.pcm.minperiodtime 0
-
-2. sudo nano /etc/mpd.conf
-
-user		"mpd"
-audio_output {
- device		"sound"
-#mixer_device	"sound"
-#period_time	"0"
- dsd_usb	"no"	# enables DoP 1.0
-}
-
-3. Virtual Memory
+1. Virtual Memory
 
 sudo nano /etc/rc.local
 
@@ -35,29 +6,3 @@ sudo nano /etc/rc.local
 #sudo sysctl -w vm.swappiness=60
 #sudo sysctl -w vm.dirty_background_ratio=10
 #sudo sysctl -w vm.dirty_ratio=20
-
-4. Start MPD
-
-sudo nano /etc/init.d/mpd
-
-chrt -o 0 taskset -apc 3 /usr/bin/mpd --no-daemon /etc/mpd.conf
-
-sudo nano /etc/rc.local
-
-sleep xx
-
-MPD_PID=`pgrep -n mpd`
-
-MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-#
-#     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-    UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-#   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-#  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-#   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-
- ionice -c  3 -p "$UPDATE_PID"
- renice -n 19    "$UPDATE_PID"
- chrt   -ip 0    "$UPDATE_PID"
- 
-#taskset -apc 3  "$MPD_PID"
