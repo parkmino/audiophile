@@ -1,21 +1,7 @@
 1. /usr/share/alsa/alsa.conf
 
-output.sound.type hw
-output.sound.card 1
-output.sound.device 0
-output.sound.subdevice 0
-output.sound.sync_ptr_ioctl 0
-output.sound.nonblock 0
-
-mixer.control.type hw
-mixer.control.card 1
-
-pcm.default output.sound
-ctl.default mixer.control
-
-defaults.pcm.nonblock 0
-defaults.pcm.compat 1
-defaults.pcm.minperiodtime 1000 # in us
+sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.org
+sudo nano /usr/share/alsa/alsa.conf
 
 2. /etc/rc.local
 
@@ -116,4 +102,3 @@ blacklist spi_bcm2708
 sudo systemctl disable eventlircd
 sudo systemctl disable irqbalance
 sudo systemctl disable wpa_supplicant
-

@@ -71,22 +71,6 @@ Secure Ripping S/W
 		$ aplay -D iec958:CARD=ICE1724,DEV=0 *.wav
 		$ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
 		$ sudo gedit /usr/share/alsa/alsa.conf
-			pcm.sound.type hw
-			pcm.sound.card 0
-			pcm.sound.device 0
-			pcm.sound.subdevice 0
-			pcm.sound.sync_ptr_ioctl 0
-			pcm.sound.nonblock 0
-
-			ctl.sound.type hw
-			ctl.sound.card 0
-
-			pcm.default pcm.sound
-			ctl.default ctl.sound
-
-			defaults.pcm.nonblock 0
-			defaults.pcm.compat 1
-			defaults.pcm.minperiodtime 1000
 		$ sudo gedit /etc/modprobe.d/alsa-base.conf
 		Comment out optional modules
 			#options snd-usb-audio nrpacks=8

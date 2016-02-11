@@ -102,24 +102,8 @@
 	
 11. ALSA configuration
 
-	mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
+	mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.org
 	nano /usr/share/alsa/alsa.conf
-		pcm.sound.type hw
-		pcm.sound.card 0
-		pcm.sound.device 0
-		pcm.sound.subdevice 0
-		pcm.sound.sync_ptr_ioctl 0
-		pcm.sound.nonblock 0
-
-		ctl.sound.type hw
-		ctl.sound.card 0
-
-		#pcm.default pcm.sound
-		#ctl.default ctl.sound
-
-		defaults.pcm.nonblock 0
-		defaults.pcm.compat 1
-		defaults.pcm.minperiodtime 1000
 	nano /etc/modprobe.d/alsa-base.conf
 		Comment out optional modules
 	sysv-rc-conf
