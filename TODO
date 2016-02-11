@@ -15,7 +15,7 @@ ctl.default ctl.sound
 
 defaults.pcm.nonblock 0
 defaults.pcm.compat 1
-defaults.pcm.minperiodtime 0
+#defaults.pcm.minperiodtime 0
 
 2. sudo nano /etc/mpd.conf
 
@@ -23,7 +23,7 @@ user		"mpd"
 audio_output {
  device		"sound"
 #mixer_device	"sound"
-#period_time	"1000"
+#period_time	"0"
  dsd_usb	"no"	# enables DoP 1.0
 }
 
