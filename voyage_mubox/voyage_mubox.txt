@@ -109,32 +109,11 @@
 	sysv-rc-conf
 		alsa-utils	  2 3 4 5 S
 	
-12. Compile MPD
-
-	wget http://www.musicpd.org/download/mpd/0.17/mpd-0.17.6.tar.xz
-	tar xvf mpd-0.17.6.tar.xz
-	cd mpd-0.17.6
-	#export CFLAGS="-march=native -O2"
-	export CFLAGS="-O0"
-	export CXXFLAGS="-O0"
-	export CPPFLAGS="-O0"
-	apt-get install git autoconf automake build-essential
-	apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev (libboost-dev)
-	./autogen.sh
-	./configure --help
-	./configure --disable-aac --enable-alsa --disable-ao --enable-audiofile --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-debug --disable-despotify --disable-documentation --disable-ffado --enable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-lastfm --disable-lame-encoder --disable-libwrap --disable-lsr --disable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --enable-mpg123 --disable-mvp --disable-openal --disable-oss --disable-pipe-output --disable-pulse --disable-recorder-output --disable-roar --disable-sidplay --disable-shout --enable-sndfile --disable-solaris-output --disable-soundcloud --disable-soup --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --with-zeroconf=no
-	make
-	make install
-	/usr/local/bin/mpd -V
-	#strip --strip-unneeded /usr/local/bin/mpd
-	/etc/init.d/mpd stop
-	mv /usr/bin/mpd /usr/bin/mpd.org && cp /usr/local/bin/mpd /usr/bin
-	/etc/init.d/mpd start
-	ls -al /usr/bin/mpd*
+12. MPD compile
 	
-13. MPD configuration
+13. MPD setup
 
-	/etc/mpd.conf # attached
+	/etc/mpd.conf
 
 14. CIFS mounting
 
