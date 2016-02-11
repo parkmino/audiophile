@@ -112,31 +112,6 @@ Secure Ripping S/W
 		$ sudo add-apt-repository ppa:gmpc-trunk/mpd-trunk
 		$ sudo apt-get update && sudo apt-get install mpd ncmpc
 		$ sudo gedit /etc/mpd.conf
-			bind_to_address         "127.0.0.1"
-			gapless_mp3_playback    "no"
-			zeroconf_enabled        "no"
-			audio_output {
-			type			"alsa"
-			name			"My ALSA Device"
-			device			"sound"
-			use_mmap		"yes"
-			auto_resample		"no"
-			auto_channels		"no"
-			auto_format		"no"
-			#format			"*:*:*"
-			mixer_type		"none"
-			#mixer_device		"sound"
-			period_time		"1000"
-			#mixer_control		"XMOS Clock Selector"
-			#mixer_index		"0"
-			replay_gain_handler	"none"
-			}
-			#audio_output_format    "*:*:*"
-			 mixer_type             "disabled"
-			#replaygain             "off"
-			#volume_normalization   "no"
-			#audio_buffer_size      "4096"
-			#buffer_before_play     "10%"
 		$ sudo /etc/init.d/mpd restart
 		$ sudo ln -s /media/music /var/lib/mpd/music/mpd
 		$ mpc update
