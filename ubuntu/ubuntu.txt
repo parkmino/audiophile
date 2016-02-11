@@ -122,60 +122,8 @@ Secure Ripping S/W
 		$ sudo apt-get install deadbeef
 		Move and disable plugins in /usr/lib/audacious(qmmp,deadbeef)/*.so not is use.
 		$ startx /usr/bin/audacious(qmmp,deadbeef)
-		
-3.6 MPD input & decoder
-	$ sudo gedit /etc/mpd.conf
-		#
-		#input {
-		#	plugin  "file"
-		#	enabled "no"
-		#}
-		
-		input {
-			plugin  "alsa"
-			enabled "no"
-		}
-		#
-		#input {
-		#        plugin  "curl"
-		#        enabled "no"
-		#}
-
-		input {
-			plugin  "ffmpeg"
-			enabled "no"
-		}
-		
-		decoder {
-			plugin "oggflac"
-			enabled "no"
-		}
-
-		decoder {
-			plugin "audiofile"
-			enabled "no"
-		}
-
-		decoder {
-			plugin "dsdiff"
-			enabled "no"
-		}
-
-		decoder {
-			plugin "dsf"
-			enabled "no"
-		}
-	
-3.7 MPD Buffer
-	$ sudo gedit /etc/mpd.conf
-		audio_output { ...
-		#buffer_time		"800000"
-		#period_time		"50"	
-		... }
-		#audio_buffer_size	"4736"
-		#buffer_before_play	"10.077%"
 			
-3.8 MPD priotiries
+3.6 MPD priotiries
 	$ sudo gedit /etc/init.d/mpd
 		start-stop-daemon --start --quiet --oknodo --pidfile "$PIDFILE" \
 			--exec "$DAEMON" -- $MPD_OPTS "$MPDCONF"
@@ -209,14 +157,14 @@ Secure Ripping S/W
 		#ionice -c 2 -n 2 -p `pgrep snd_hda`
 		#chrt -rp 2          `pgrep snd_hda`
 		
-3.9 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
+3.7 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
 	$ sudo gedit /etc/default/grub
 		GRUB_CMDLINE_LINUX_DEFAULT="... text ..." or "... s ..."
 	$ sudo update-grub2
 	$ gedit ~/.xinitrc
 		exec startlxde or gnome-session
 	$ startx
-3.10 Disable unneeded TTYs
+3.8 Disable unneeded TTYs
 	Upstart
 	$ sudo gedit /etc/default/console-setup
 		ACTIVE_CONSOLES="/dev/tty[1]"
@@ -228,25 +176,25 @@ Secure Ripping S/W
 		NAutoVTs=0
 		ReserveVT=0
 	$ ps -e | grep -e login -e tty
-3.11 Disable Networking, Network Manager or Wicd
+3.9 Disable Networking, Network Manager or Wicd
 	$ sudo apt-get remove network-manager wicd
 	$ sudo gedit /etc/network/interfaces
 		#auto eth0
 	$ ps -e | grep -e dhclient -e NetworkManager -e wicd
-3.12 Diasble APIC, APM, Consoleblank.
+3.10 Diasble APIC, APM, Consoleblank.
 	$ sudo gedit /etc/default/grub
 		GRUB_CMDLINE_LINUX_DEFAULT="... noapic apm=off consoleblank=0"
 	$ sudo update-grub2
 	$ ps -e | grep acpi
-3.13 Disable CPU Multi-core and Hyper-threading
+3.11 Disable CPU Multi-core and Hyper-threading
 	$ cat /proc/cpuinfo && sudo gedit /etc/default/grub
 		GRUB_CMDLINE_LINUX_DEFAULT="... nosmp noht"
 	$ sudo update-grub2
 
-3.14 Disable unneeded modules.
+3.12 Disable unneeded modules.
 	$ lsmod && sudo gedit /etc/modprobe.d/blacklist.conf
 		blacklist module
-3.15 Disable unneeded Services at your own risk.
+3.13 Disable unneeded Services at your own risk.
 	Consider disabling acpid, anacron, apport, atd, avahi-daemon, bluetooth, brltty, console-kit-daemon, cron, cups, dns-clean, pcmcia/pcmciautils, ppp/pppd-dns, rsync, rsyslogd, samba, saned, speech-dispatcher, windbind, ...
 		Edit shell scripts at /etc/init.d/ and /etc/rc*.d/ or
 		$ sudo apt-get install sysv-rc-conf && sudo sysv-rc-conf or
@@ -256,7 +204,7 @@ Secure Ripping S/W
 	$ play *.wav
 	$ sudo mount /dev/sdb1
 
-3.17 Disable Pluggable Authentication Modules.
+3.14 Disable Pluggable Authentication Modules.
 	$ sudo gedit /etc/security/limits.conf
 		#@audio - rtprio  99
 		#@audio - nice    -19
@@ -264,7 +212,7 @@ Secure Ripping S/W
 		#@audio - stack   unlimited
 	$ sudo adduser username audio
 
-3.18 Initialize and customize real-time priorities
+3.15 Initialize and customize real-time priorities
 	Check real-time priorities
 	$ gedit pri
 		#!/bin/sh
@@ -295,7 +243,7 @@ Secure Ripping S/W
 		    renice 0 ${PID}
 		done	
 
-3.19 Options.
+3.16 Options.
 
 	-. Kernel Options
 		# sudo gedit /etc/default/grub
