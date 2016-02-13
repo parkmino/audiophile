@@ -2,6 +2,8 @@
 
 sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.org
 sudo nano /usr/share/alsa/alsa.conf
+	pcm.sound.card 1
+	ctl.sound.card 1
 
 2. /etc/rc.local
 
