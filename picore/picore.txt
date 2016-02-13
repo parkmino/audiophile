@@ -36,7 +36,7 @@
 5. Cmdline.txt & Static IP
 
 	cmdline.txt
-	  ... consoleblank=0 noswap nozswap nodhcp embed ip=192.168.0.3::192.168.0.1:255.255.255.0:tc:eth0:none:168.126.63.1
+	  ... consoleblank=0 nodhcp embed ip=192.168.0.3::192.168.0.1:255.255.255.0:tc:eth0:none:168.126.63.1
 	  (ip=ip::gateway:netmask:hostname:interface:none:dns0-ip:dns1-ip)
 	$ sudo mcedit /opt/bootlocal.sh
 	  echo nameserver 168.126.63.1 > /etc/resolv.conf

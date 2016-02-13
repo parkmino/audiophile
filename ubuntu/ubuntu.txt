@@ -247,7 +247,7 @@ Secure Ripping S/W
 
 	-. Kernel Options
 		# sudo gedit /etc/default/grub
-			GRUB_CMDLINE_LINUX_DEFAULT="... noht nosmp apm=off noapic consoleblank=0 noswap"
+			GRUB_CMDLINE_LINUX_DEFAULT="... noht nosmp apm=off noapic consoleblank=0"
 		# sudo update-grub2
 	-. High Precision Event Timer
 		$ cat /sys/devices/system/clocksource/clocksource0/current_clocksource
@@ -333,7 +333,7 @@ Secure Ripping S/W
 			sysctl -w vm.user_reserve_kbytes=0
 		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
 		$ sudo gedit /etc/fstab
-			# .../swap.disk none swap sw 0 0
+			.../swap.disk none swap sw 0 0
 	-. HDD configuration
 		# sudo hdparm -A -a -B -M /dev/sda
 		# cat /sys/block/sd*/queue/scheduler

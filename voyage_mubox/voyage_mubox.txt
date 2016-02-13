@@ -18,7 +18,7 @@
 	nano /boot/cmdline.txt
 		#maxcpus=2
 		dwc_otg.fiq_split_enable=0 (?)
-		apm=off noapic consoleblank=0 noswap
+		apm=off noapic consoleblank=0
 		#kgdboc=ttyAMA0,115200
 
 3. Update & upgrade

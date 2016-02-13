@@ -83,7 +83,7 @@ tmpfs /var/log	tmpfs nosuid,nodev,noatime,nodiratime 0	0
 
 4. cmdline.txt
 
-consoleblank=0 noswap
+consoleblank=0
 
 5. /etc/modprobe.d/raspi-blacklist.conf
 

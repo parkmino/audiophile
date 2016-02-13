@@ -68,5 +68,6 @@ service systemd-logind   stop
 service dbus             stop
 service haveged          stop
 service sshd             stop
+service getty@tty1	 stop
 
 exit 0

@@ -79,12 +79,11 @@ Orange Pi Mini
 		apm = 255
 	# hdparm -A -a -B /dev/sda
 
-7. No swap
+7. Swap
 
 	# swapon -s
-	# swapoff /dev/sda
-	# sudo nano /etc/fstab
-		#/var/swap none swap sw 0 0
+	# nano /etc/fstab
+		/var/swap none swap sw 0 0
 		
 8. Masking store/restore alsa mixer
 
@@ -141,6 +140,7 @@ Orange Pi Mini
 	service dbus stop
 	service haveged stop
 	service	sshd stop
+	service getty@tty1 stop
 
 ==============
 Raspberry Pi 2
