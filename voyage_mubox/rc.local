@@ -70,8 +70,8 @@ renice 0 `pgrep dwc_otg`
 #taskset -acp 1 `pgrep dwc_otg`
 #ionice -c 2 -n 6 -p `pgrep dwc_otg`
 
-amixer -D ctl.default set 'XMOS Clock Selector',0 Capture 0 0 off off
-amixer -D ctl.default set 'XMOS Clock Selector',1 Capture 0 off
+amixer -D ctl.sound set 'XMOS Clock Selector',0 Capture 0 0 off off
+amixer -D ctl.sound set 'XMOS Clock Selector',1 Capture 0 off
 
 pkill udevd
 
