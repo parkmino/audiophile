@@ -1,8 +1,6 @@
 1. nano /usr/share/alsa/alsa.conf
 
-	#pcm.sound.device 0
-	#pcm.sound.subdevice 0
-
+	pcm.sound.subdevice -1
 	#defaults.pcm.compat 1
 
 2. 
