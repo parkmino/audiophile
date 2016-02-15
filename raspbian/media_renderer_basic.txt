@@ -1,0 +1,133 @@
+Raspbian Jessie Lite
+
+0. Flashing
+
+	$ sudo fdisk -l
+	$ sudo dd bs=4M if=2016-02-09-raspbian-jessie-lite.img of=/dev/sdb
+	$ copy mpd.0.19.12.w.ffmpeg llctl /home/pi
+	$ ssh pi@rpi_ip
+	pi@rpi_ip's password: raspberry
+
+1. Configuration file
+
+	sudo nano /boot/config.txt
+		gpu_mem=16
+		disable_splash=1
+		disable_pvt=1
+		#dtoverlay=...
+		#dtparam=audio=on
+	cat /proc/cpuinfo
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+
+2. Kernel option
+
+	sudo nano /boot/cmdline.txt
+		dwc_otg.fiq_split_enable=0 (?)
+		consoleblank=0
+
+3. Update & upgrade
+
+	sudo apt-get update
+	sudo apt-get upgrade
+	sudo apt-get dist-upgrade
+	sudo apt-get install rpi-update
+	sudo rpi-update
+	sudo reboot
+
+4. Localisation
+
+	sudo apt-get install apt-utils fbterm unifont
+		nano ~/.fbterm
+		font-names=unifont
+		font-size=16 or 24
+	sudo dpkg-reconfigure locales
+	sudo dpkg-reconfigure tzdata
+	
+5. Disable modules
+
+	lsmod
+	nano /etc/modprobe.d/raspi-blacklist.conf
+		blacklist uio
+		blacklist uio-pdrv-genirq
+
+6. Disable services
+
+	systemctl disable ...
+	
+7. ALSA configuration
+
+	sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
+	sudo nano /usr/share/alsa/alsa.conf
+		pcm.sound.card 1
+		ctl.sound.card 1
+	sudo systemctl mask alsa-store.service
+	sudo systemctl mask alsa-restore.service
+
+8. MPD install & recompile
+
+	sudo apt-get install mpd mpc ncmpc
+	
+9. MPD Settings
+
+	sudo mv /usr/bin/mpd /usr/bin/mpd.org
+	sudo cp ~/mpd.0.19.12.ffmpeg /usr/bin/mpd
+	sudo nano /etc/mpd.conf
+	sudo nano /lib/systemd/system/mpd.service
+	sudo nano /etc/default/mpd
+	sudo systemctl restart mpd
+		
+10. Upmpdcli Setup
+
+11. CIFS & NFS mounting
+
+	sudo mkdir /mnt/cifs /mnt/nfs
+	sudo ln -s /mnt/     /var/lib/mpd/music
+	sudo nano /etc/fstab
+		//192.168.0.9/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
+		192.168.0.5:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
+		
+12. Ramfs
+
+	nano /etc/fstab
+		ramfs /tmp ramfs nosuid,nodev 0 0
+		
+13. Edit /etc/rc.local
+
+	sleep 5
+
+	MPD_PID=`pgrep -F /run/mpd/pid`
+
+	MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+
+	#   MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+	  UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+	# PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+	#DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+	# OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+
+	chrt    -apo 0 "$MPD_PID"
+	taskset -apc 3 "$MPD_PID"
+
+	ionice -c 3 -p "$UPDATE_PID"
+	renice -n 19   "$UPDATE_PID"
+	chrt   -ip 0   "$UPDATE_PID"
+	
+	### For Criterion from Reference Club
+	amixer -D ctl.sound set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
+	amixer -D ctl.sound set 'XMOS Clock Selector',1 Capture 0 off     || /bin/true
+
+	echo none > /sys/class/leds/led0/trigger
+	echo 0    > /sys/class/leds/led0/brightness
+	echo 0    > /sys/class/leds/led1/brightness
+	/home/pi/llctl f0 l0 d0
+
+14. Remove bash history
+
+	rm ~/.bash_history
+
+15. Documentation
+	https://github.com/raspberrypi/documentation
+
+cf) raspi-config
+	sudo raspi-config
+	advanced options
