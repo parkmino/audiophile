@@ -1,7 +1,7 @@
 pcm.sound.type hw
 pcm.sound.card 0
 pcm.sound.device 0
-pcm.sound.subdevice 0
+pcm.sound.subdevice -1
 pcm.sound.sync_ptr_ioctl 0
 pcm.sound.nonblock 0
 
@@ -30,5 +30,5 @@ ctl.default ctl.sound
 #ctl.hw.@args.CARD.type string
 
 defaults.pcm.nonblock 0
-defaults.pcm.compat 1
-#defaults.pcm.minperiodtime 1000 # in us
+#defaults.pcm.compat 1
+#defaults.pcm.minperiodtime 5000 # in us
