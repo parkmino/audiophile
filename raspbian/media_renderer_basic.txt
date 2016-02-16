@@ -4,7 +4,7 @@ Raspbian Jessie Lite
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2016-02-09-raspbian-jessie-lite.img of=/dev/sdb
-	$ copy mpd.0.19.12.w.ffmpeg llctl /home/pi
+	$ copy mpd.0.19.12.ffmpeg llctl /home/pi
 	$ ssh pi@rpi_ip
 	pi@rpi_ip's password: raspberry
 
@@ -36,10 +36,6 @@ Raspbian Jessie Lite
 
 4. Localisation
 
-	sudo apt-get install apt-utils fbterm unifont
-		nano ~/.fbterm
-		font-names=unifont
-		font-size=16 or 24
 	sudo dpkg-reconfigure locales
 	sudo dpkg-reconfigure tzdata
 	
@@ -83,8 +79,8 @@ Raspbian Jessie Lite
 	sudo mkdir /mnt/cifs /mnt/nfs
 	sudo ln -s /mnt/     /var/lib/mpd/music
 	sudo nano /etc/fstab
-		//192.168.0.9/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
-		192.168.0.5:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
+		#//192.168.0.9/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
+		#192.168.0.5:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 		
 12. Ramfs
 
@@ -95,26 +91,29 @@ Raspbian Jessie Lite
 
 	sleep 5
 
-	MPD_PID=`pgrep -F /run/mpd/pid`
-
-	MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-
-	#   MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-	  UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-	# PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-	#DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-	# OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-
-	chrt    -apo 0 "$MPD_PID"
-	#taskset -apc 3 "$MPD_PID"
-
-	ionice -c 3 -p "$UPDATE_PID"
-	renice -n 19   "$UPDATE_PID"
-	chrt   -ip 0   "$UPDATE_PID"
+	#MPD_PID=`pgrep -F /run/mpd/pid`
+	#
+	#MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+	#
+	##   MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+	#  UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+	## PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+	##DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+	## OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+	#
+	#chrt    -apo 0 "$MPD_PID"
+	##taskset -apc 3 "$MPD_PID"
+	#
+	#ionice -c 3 -p "$UPDATE_PID"
+	#renice -n 19   "$UPDATE_PID"
+	#chrt   -ip 0   "$UPDATE_PID"
+	
+	 chrt    -apo 0 "pgrep -F /run/mpd/pid"
+	#taskset -apc 3 "pgrep -F /run/mpd/pid"
 	
 	### For Criterion from Reference Club
-	amixer -D ctl.sound set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
-	amixer -D ctl.sound set 'XMOS Clock Selector',1 Capture 0 off     || /bin/true
+	#amixer -D ctl.sound set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
+	#amixer -D ctl.sound set 'XMOS Clock Selector',1 Capture 0 off     || /bin/true
 
 	echo none > /sys/class/leds/led0/trigger
 	echo 0    > /sys/class/leds/led0/brightness
