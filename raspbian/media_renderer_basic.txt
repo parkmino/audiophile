@@ -106,7 +106,7 @@ Raspbian Jessie Lite
 	# OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
 
 	chrt    -apo 0 "$MPD_PID"
-	taskset -apc 3 "$MPD_PID"
+	#taskset -apc 3 "$MPD_PID"
 
 	ionice -c 3 -p "$UPDATE_PID"
 	renice -n 19   "$UPDATE_PID"
