@@ -109,7 +109,7 @@ Raspbian Jessie Lite
 	#chrt   -ip 0   "$UPDATE_PID"
 	
 	 chrt    -apo 0 "pgrep -F /run/mpd/pid"
-	#taskset -apc 3 "pgrep -F /run/mpd/pid"
+	#taskset -apc 3 "pgrep -F /run/mpd/pid" # RPi1&Zero:single-core, RPi2:quad-core
 	
 	### For Criterion from Reference Club
 	#amixer -D ctl.sound set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
