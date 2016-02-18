@@ -123,6 +123,9 @@ Raspbian Jessie Lite
 14. Shairplay (Airplay)
 
 	https://github.com/juhovh/shairplay
+	https://github.com/juhovh/shairplay/archive/master.zip
+	unzip master.zip
+	cd shairplay-master
 	
 	sudo apt-get install autoconf automake libtool
 	sudo apt-get install libltdl-dev libao-dev libavahi-compat-libdnssd-dev
