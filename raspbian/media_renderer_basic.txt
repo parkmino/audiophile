@@ -122,7 +122,17 @@ Raspbian Jessie Lite
 	
 14. Shairplay (Airplay)
 
-	sudo apt-get install shairplay                                            # Airplay를 지원하는 shairplay 어플 설치
+	https://github.com/juhovh/shairplay
+	
+	sudo apt-get install autoconf automake libtool
+	sudo apt-get install libltdl-dev libao-dev libavahi-compat-libdnssd-dev
+	sudo apt-get install avahi-daemon
+	
+	./autogen.sh
+	./configure
+	make
+	sudo make install
+
 	cd /etc/shairport
 	shairplay --ao_driver=alsa --ao_devicename=sound
 
