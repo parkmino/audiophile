@@ -120,7 +120,7 @@ Raspbian Jessie Lite
 	echo 0    > /sys/class/leds/led1/brightness
 	/home/pi/llctl f0 l0 d0
 	
-14. Shairplay (Airplay)
+14. Shairplay (AirPlay)
 
 	https://github.com/juhovh/shairplay
 	https://github.com/juhovh/shairplay/archive/master.zip
