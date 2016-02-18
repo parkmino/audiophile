@@ -119,14 +119,25 @@ Raspbian Jessie Lite
 	echo 0    > /sys/class/leds/led0/brightness
 	echo 0    > /sys/class/leds/led1/brightness
 	/home/pi/llctl f0 l0 d0
+	
+14. Shairplay (Airplay)
 
-14. Remove bash history
+	sudo apt-get install shairplay                                            # Airplay를 지원하는 shairplay 어플 설치
+	cd /etc/shairport
+	shairplay --ao_driver=alsa --ao_devicename=sound
+
+	If it succeeds,
+	sudo nano /etc/rc.local
+	#cd /etc/shairport
+	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
+	#cd
+
+15. Remove bash history
 
 	rm ~/.bash_history
 
-15. Documentation
+16. Documentation
 	https://github.com/raspberrypi/documentation
 
 cf) raspi-config
 	sudo raspi-config
-	advanced options
