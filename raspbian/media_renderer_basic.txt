@@ -120,7 +120,14 @@ Raspbian Jessie Lite
 	echo 0    > /sys/class/leds/led1/brightness
 	/home/pi/llctl f0 l0 d0
 	
-14. Shairplay (AirPlay)
+14. USB Mount
+
+	sudo apt-get install usbmount
+	sudo nano /etc/usbmount/usbmount.conf
+		MOUNTPOINTS="/mnt/usb0-7"
+	sudo reboot
+	
+15. Shairplay (AirPlay)
 
 	https://github.com/juhovh/shairplay
 	https://github.com/juhovh/shairplay/archive/master.zip
@@ -145,11 +152,11 @@ Raspbian Jessie Lite
 	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
 	#cd
 
-15. Remove bash history
+16. Remove bash history
 
 	rm ~/.bash_history
 
-16. Documentation
+17. Documentation
 	https://github.com/raspberrypi/documentation
 
 cf) raspi-config
