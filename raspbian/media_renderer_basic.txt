@@ -141,11 +141,25 @@ Raspbian Jessie Lite
 	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
 	#cd
 
-16. Remove bash history
+16. Internet Radio
+
+	sudo apt-get install mplayer2
+	nano ~/.mplayer/config
+		ao=alsa:device=sound
+		mixer=sound
+		softvol=no
+		cache=192
+		vc=null
+		vo=null
+	(taskset -c 3) mplayer http://juoradio.appspot.com/kbs1 # KBS Classic FM
+	(taskset -c 3) mplayer http://juoradio.appspot.com/kbs2 # KBS2 FM
+	(taskset -c 3) mplayer rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
+
+17. Remove bash history
 
 	rm ~/.bash_history
 
-17. Documentation
+18. Documentation
 	https://github.com/raspberrypi/documentation
 
 cf) raspi-config
