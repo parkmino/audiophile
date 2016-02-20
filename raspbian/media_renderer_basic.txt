@@ -130,20 +130,9 @@ Raspbian Jessie Lite
 15. Shairplay (AirPlay)
 
 	https://github.com/juhovh/shairplay
-	https://github.com/juhovh/shairplay/archive/master.zip
-	unzip master.zip
-	cd shairplay-master
 	
-	sudo apt-get install autoconf automake libtool
-	sudo apt-get install libltdl-dev libao-dev libavahi-compat-libdnssd-dev
-	sudo apt-get install avahi-daemon
-	
-	./autogen.sh
-	./configure
-	make
-	sudo make install
-
-	cd /etc/shairport
+	sudo apt-get install shairplay
+	cp /etc/shairplay/airport.key /home/pi/
 	shairplay --ao_driver=alsa --ao_devicename=sound
 
 	If it succeeds,
