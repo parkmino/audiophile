@@ -4,6 +4,7 @@ Raspbian Jessie Lite
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2016-02-09-raspbian-jessie-lite.img of=/dev/sdb
+	$ sudo gparted
 	$ copy mpd.0.19.12.ffmpeg llctl /home/pi
 	$ ssh pi@rpi_ip
 	pi@rpi_ip's password: raspberry
@@ -114,11 +115,46 @@ Raspbian Jessie Lite
 	### For Criterion from Reference Club
 	#amixer -D ctl.sound set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
 	#amixer -D ctl.sound set 'XMOS Clock Selector',1 Capture 0 off     || /bin/true
+	
+	ifconfig eth0 txqueuelen 10000
 
 	echo none > /sys/class/leds/led0/trigger
 	echo 0    > /sys/class/leds/led0/brightness
 	echo 0    > /sys/class/leds/led1/brightness
 	/home/pi/llctl f0 l0 d0
+	
+14. Sysctl Configuration
+
+	sudo nano /etc/sysctl.conf
+		#debug.exception-trace = 0
+		#kernel.watchdog = 0
+		#kernel.sched_rt_runtime_us = -1
+		#kernel.sched_rt_period_us = 42700
+		kernel.printk = '4 4 1 4'
+		#vm.swappiness = 0
+		vm.overcommit_memory = 1
+		vm.overcommit_ratio = 100
+		vm.dirty_writeback_centisecs = 0
+		vm.oom_dump_tasks = 0
+		vm.oom_kill_allocating_task = 1
+		vm.panic_on_oom = 2
+		vm.stat_interval = 3
+		vm.user_reserve_kbytes = 0
+
+		net.core.rmem_max = 12582912
+		net.core.wmem_max = 12582912
+		#net.ipv4.conf.default.forwarding = 1
+		net.ipv4.tcp_rmem = '10240 87380 12582912'
+		net.ipv4.tcp_wmem = '10240 87380 12582912'
+		net.ipv4.tcp_timestamps = 0
+		#net.ipv4.tcp_window_scaling = 1
+		net.ipv4.tcp_sack = 0
+		net.ipv4.tcp_no_metrics_save = 1
+		net.core.netdev_max_backlog = 5000
+		#net.ipv6.conf.all.disable_ipv6 = 1
+
+	sudo reboot
+	cat /proc/sys/net/ipv4/tcp_sack /proc/sys/net/ipv4/tcp_no_metrics_save /proc/sys/net/core/netdev_max_backlog
 	
 14. USB Mount
 
