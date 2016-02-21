@@ -170,6 +170,14 @@ Raspbian Jessie Lite
 	cp /etc/shairplay/airport.key /home/pi/
 	shairplay --ao_driver=alsa --ao_devicename=sound
 
+
+	nano ~/airport
+		#!/bin/sh
+		shairplay --ao_driver=alsa --ao_devicename=sound
+	chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
+	sudo ln -s /home/pi/airport /usr/bin/
+	airport
+
 	If it succeeds,
 	sudo nano /etc/rc.local
 	#cd /etc/shairport
@@ -209,8 +217,14 @@ Raspbian Jessie Lite
 18. Remove bash history
 
 	rm ~/.bash_history
+	
+19. Make Image
 
-19. Documentation
+	$ sudo fdisk -l
+	$ sudo dd if=/dev/sdb of=2016-02-09-raspbian-jessie-lite.img
+
+20. Documentation
+
 	https://github.com/raspberrypi/documentation
 
 cf) raspi-config
