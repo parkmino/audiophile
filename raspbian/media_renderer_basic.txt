@@ -179,6 +179,7 @@ Raspbian Jessie Lite
 17. Internet Radio
 
 	sudo apt-get install mplayer2
+	mkdir ~/.mplayer
 	nano ~/.mplayer/config
 		ao=alsa:device=sound
 		mixer=sound
