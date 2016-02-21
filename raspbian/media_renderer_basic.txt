@@ -156,14 +156,14 @@ Raspbian Jessie Lite
 	sudo reboot
 	cat /proc/sys/net/ipv4/tcp_sack /proc/sys/net/ipv4/tcp_no_metrics_save /proc/sys/net/core/netdev_max_backlog
 	
-14. USB Mount
+15. USB Mount
 
 	sudo apt-get install usbmount
 	sudo nano /etc/usbmount/usbmount.conf
 		MOUNTPOINTS="/mnt/usb0-7"
 	sudo reboot
 	
-15. Shairplay (AirPlay)
+16. Shairplay (AirPlay)
 
 	https://github.com/juhovh/shairplay
 	
@@ -177,7 +177,7 @@ Raspbian Jessie Lite
 	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
 	#cd
 
-16. Internet Radio
+17. Internet Radio
 
 	sudo apt-get install mplayer2
 	nano ~/.mplayer/config
@@ -187,15 +187,30 @@ Raspbian Jessie Lite
 		cache=192
 		vc=null
 		vo=null
+	nano ~/kbs1fm
+		#!/bin/sh
+		mplayer http://juoradio.appspot.com/kbs1 # KBS Classic FM
+	nano ~/kbs2fm
+		#!/bin/sh
+		mplayer http://juoradio.appspot.com/kbs2 # KBS2 FM
+	nano ~/cbsfm
+		#!/bin/sh
+		mplayer rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
+	chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
+	sudo ln -s ~/kbs1fm ~/kbs2fm ~/cbsfm /usr/bin/
+	kbs1fm
+	kbs2fm
+	cbsfm
+	
 	(taskset -c 3) mplayer http://juoradio.appspot.com/kbs1 # KBS Classic FM
 	(taskset -c 3) mplayer http://juoradio.appspot.com/kbs2 # KBS2 FM
 	(taskset -c 3) mplayer rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
 
-17. Remove bash history
+18. Remove bash history
 
 	rm ~/.bash_history
 
-18. Documentation
+19. Documentation
 	https://github.com/raspberrypi/documentation
 
 cf) raspi-config
