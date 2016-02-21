@@ -5,7 +5,7 @@ Raspbian Jessie Lite
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2016-02-09-raspbian-jessie-lite.img of=/dev/sdb
 	$ sudo gparted
-	$ copy mpd.0.19.12.ffmpeg llctl /home/pi
+	$ copy mpd.0.19.12.ffmpeg llctl icon.png /home/pi
 	$ ssh pi@rpi_ip
 	pi@rpi_ip's password: raspberry
 
