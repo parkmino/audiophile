@@ -77,7 +77,7 @@ Raspbian Jessie Lite
 
 11. CIFS & NFS mounting
 
-	sudo apt-get install smbfs nfs-common
+	sudo apt-get install cifs-utils nfs-common
 	sudo mkdir /mnt/cifs /mnt/nfs
 	sudo ln -s /mnt/     /var/lib/mpd/music
 	sudo nano /etc/fstab
