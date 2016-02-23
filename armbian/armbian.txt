@@ -25,7 +25,7 @@ Orange Pi Mini
 	# sudo fdisk -l
 	# unzip Armbian_4.2_Orangepi_Debian_jessie_4.1.6.zip
 	# sudo dd bs=4M if='Armbian_4.2_Orangepi_Debian_jessie_4.1.6.raw' of=/dev/sdb
-	# sudo sync
+	# sync
 
 4. Initial Configuration
 
