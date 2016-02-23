@@ -88,6 +88,7 @@ Orange Pi Mini
 8. Masking store/restore alsa mixer
 
 	# systemctl mask alsa-store.service
+	# systemctl mask alsa-restore.service
 	
 9. MPD CLI Clients
 
