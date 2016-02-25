@@ -1,0 +1,25 @@
+https://www.ympd.org
+https://github.com/notandy/ympd
+
+1. Raspbian (Raspberry PI)
+
+ARMv6 Hardfloat Download
+Installation:
+
+https://www.ympd.org/downloads/ympd-1.2.3-armhf.tar.bz2
+tar -xvf ympd-1.2.3-armhf.tar.bz2
+sudo ./ympd --webport 80
+
+2. Build
+
+sudo apt-get install cmake libmpdclient2
+wget https://github.com/notandy/ympd/archive/master.zip
+unzip master.zip
+cd ympd-master
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/usr
+make
+./ympd
+http://localhost:8080
+
