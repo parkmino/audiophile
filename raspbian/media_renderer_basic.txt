@@ -221,7 +221,7 @@ Raspbian Jessie Lite
 19. Make Image
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=raspbian_media_renderer_basic_v.0.9.0.img
+	$ sudo dd bs=4M (count=500) if=/dev/sdb of=raspbian_media_renderer_basic_v.0.9.0.img
 	$ zip raspbian_media_renderer_basic_v.0.9.0.zip raspbian_media_renderer_basic_v.0.9.0.img
 	
 	https://drive.google.com/file/d/0B33LiMpVXH_FalhZaTVjVnNfU0k/view?usp=sharing
