@@ -155,14 +155,28 @@ Raspbian Jessie Lite
 	sudo reboot
 	cat /proc/sys/net/ipv4/tcp_sack /proc/sys/net/ipv4/tcp_no_metrics_save /proc/sys/net/core/netdev_max_backlog
 	
-15. USB Mount
+15. Enable I2C
+	sudo raspi-config
+		8 Advanced Option > A7 I2C
+	or
+	sudo nano /etc/modules
+		i2c-bcm2708 
+		i2c-dev
+	sudo nano /etc/modprobe.d/raspi-blacklist.conf
+		#blacklist spi-bcm2708
+		#blacklist i2c-bcm2708
+	sudo nano /boot/config.txt
+		dtparam=i2c1=on
+		dtparam=i2c_arm=on
+	
+16. USB Mount
 
 	sudo apt-get install usbmount
 	sudo nano /etc/usbmount/usbmount.conf
 		MOUNTPOINTS="/mnt/usb0-7"
 	sudo reboot
 	
-16. Shairplay (AirPlay)
+17. Shairplay (AirPlay)
 
 	https://github.com/juhovh/shairplay
 	
@@ -184,7 +198,7 @@ Raspbian Jessie Lite
 	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
 	#cd
 
-17. Internet Radio
+18. Internet Radio
 
 	sudo apt-get install mplayer2
 	mkdir ~/.mplayer
@@ -214,11 +228,11 @@ Raspbian Jessie Lite
 	(taskset -c 3) mplayer http://juoradio.appspot.com/kbs2 # KBS2 FM
 	(taskset -c 3) mplayer rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
 
-18. Remove bash history
+19. Remove bash history
 
 	rm ~/.bash_history
 	
-19. Make Image
+20. Make Image
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M (count=500) if=/dev/sdb of=raspbian_media_renderer_basic_v.0.9.0.img
@@ -226,7 +240,7 @@ Raspbian Jessie Lite
 	
 	https://drive.google.com/file/d/0B33LiMpVXH_FalhZaTVjVnNfU0k/view?usp=sharing
 
-20. Documentation
+21. Documentation
 
 	https://github.com/raspberrypi/documentation
 
