@@ -84,10 +84,10 @@ Raspbian Jessie Lite
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 		
-12. Ramfs
+12. Tmpfs
 
 	nano /etc/fstab
-		ramfs /tmp ramfs nosuid,nodev 0 0
+		tmpfs /tmp tmfs nosuid,nodev 0 0
 		
 13. Edit /etc/rc.local
 
@@ -115,6 +115,7 @@ Raspbian Jessie Lite
 	#amixer -D ctl.sound set 'XMOS Clock Selector',1 Capture 0 off     || /bin/true
 	
 	ifconfig eth0 txqueuelen 10000
+	echo noop > /sys/block/mmcblk0/queue/scheduler
 	
 	### Turn off LEDs
 	echo none > /sys/class/leds/led0/trigger
