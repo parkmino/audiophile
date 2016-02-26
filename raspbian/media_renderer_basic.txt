@@ -186,6 +186,9 @@ Raspbian Jessie Lite
 		#echo "1" > /sys/class/gpio/gpio22/value
 		### Digital Volume to 40 (0...100)
 		#amixer -D ctl.sound set 'Digital',0 67% || /bin/true
+	sudo nano /usr/share/alsa/alsa.conf
+		#pcm.sound.card 0
+		#ctl.sound.card 0
 	sudo nano /etc/mpd.conf
 		### Volume for I2C
 		#mixer_type "hardware"
