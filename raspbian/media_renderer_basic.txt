@@ -169,6 +169,26 @@ Raspbian Jessie Lite
 	sudo nano /boot/config.txt
 		dtparam=i2c1=on
 		dtparam=i2c_arm=on
+		
+	sudo nano /boot/config.txt
+		### HiFiBerry I2C
+		#dtoverlay=hifiberry-amp
+		#dtoverlay=hifiberry-dac
+		#dtoverlay=hifiberry-dacplus
+		#dtoverlay=hifiberry-digi
+		### IQaudIO I2C
+		#dtoverlay=iqaudio-dac
+		#dtoverlay=iqaudio-dacplus
+	sudo nano /etc/rc.local
+		### Unmute IQaudIO I2C
+		#echo "22" > /sys/class/gpio/export
+		#echo "out" > /sys/class/gpio/gpio22/direction
+		#echo "1" > /sys/class/gpio/gpio22/value
+	sudo nano /etc/mpd.conf
+		### Volume for I2C
+		#mixer_type "hardware"
+		#mixer_control "Digital"
+		#mixer_device "sound"
 	
 16. USB Mount
 
@@ -212,22 +232,18 @@ Raspbian Jessie Lite
 		vo=null
 	nano ~/kbs1fm
 		#!/bin/sh
-		mplayer http://juoradio.appspot.com/kbs1 # KBS Classic FM
+		(taskset -c 3) mplayer http://juoradio.appspot.com/kbs1 # KBS Classic FM
 	nano ~/kbs2fm
 		#!/bin/sh
-		mplayer http://juoradio.appspot.com/kbs2 # KBS2 FM
+		(taskset -c 3) mplayer http://juoradio.appspot.com/kbs2 # KBS2 FM
 	nano ~/cbsfm
 		#!/bin/sh
-		mplayer rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
+		(taskset -c 3) mplayer rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
 	chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
 	sudo ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/cbsfm /usr/bin/
 	kbs1fm
 	kbs2fm
 	cbsfm
-	
-	(taskset -c 3) mplayer http://juoradio.appspot.com/kbs1 # KBS Classic FM
-	(taskset -c 3) mplayer http://juoradio.appspot.com/kbs2 # KBS2 FM
-	(taskset -c 3) mplayer rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
 
 19. Remove bash history
 
