@@ -260,6 +260,3 @@ Raspbian Jessie Lite
 21. Documentation
 
 	https://github.com/raspberrypi/documentation
-
-cf) raspi-config
-	sudo raspi-config
