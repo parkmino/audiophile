@@ -23,3 +23,6 @@ make
 ./ympd
 http://localhost:8080
 
+3. Add in /etc/rc.local
+
+#/home/pi/ympd --webport 80 >/dev/null 2>&1 &
