@@ -184,6 +184,8 @@ Raspbian Jessie Lite
 		#echo "22" > /sys/class/gpio/export
 		#echo "out" > /sys/class/gpio/gpio22/direction
 		#echo "1" > /sys/class/gpio/gpio22/value
+		### Digital Volume to 40 (0...100)
+		#amixer -D ctl.sound set 'Digital',0 67% || /bin/true
 	sudo nano /etc/mpd.conf
 		### Volume for I2C
 		#mixer_type "hardware"
