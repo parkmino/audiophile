@@ -202,23 +202,50 @@ Raspbian Jessie Lite
 		MOUNTPOINTS="/mnt/usb0-7"
 	sudo reboot
 	
-17. Shairplay (AirPlay)
+17. AirPlay
+
+	https://github.com/mikebrady/shairport-sync
+	
+	wget http://ftp.us.debian.org/debian/pool/main/s/shairport-sync/shairport-sync_2.8.0-1_armhf.deb
+	wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_2.8.0-1_armhf.deb
+	wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl1.0.2_1.0.2g-1_armhf.deb
+	sudo dpkg -i libssl1.0.2_1.0.2g-1_armhf.deb
+	sudo apt-get install libconfig9
+	sudo dpkg -i shairport-sync*.deb
+	sudo systemctl disable shairport-sync
+	sudo nano /etc/shairport-sync.conf
+		general =
+		{
+		ignore_volume_control = "yes"
+		};
+		sessioncontrol =
+		{
+		run_this_before_play_begins = "mpc stop"
+		};
+		alsa =
+		{
+		output_device = "sound"
+		mixer_device = "sound"
+		};
+	nano ~/airport
+	#!/bin/sh
+	shairport-sync
+	chmod +x ~/airport
+	sudo ln -s /home/pi/airport /usr/bin/
+	airport
 
 	https://github.com/juhovh/shairplay
 	
 	sudo apt-get install shairplay
+	shairplay -h
 	cp /etc/shairplay/airport.key /home/pi/
 	shairplay --ao_driver=alsa --ao_devicename=sound
-
-
 	nano ~/airport
 		#!/bin/sh
 		shairplay --ao_driver=alsa --ao_devicename=sound
-	chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
+	chmod +x ~/airport
 	sudo ln -s /home/pi/airport /usr/bin/
 	airport
-
-	If it succeeds,
 	sudo nano /etc/rc.local
 	#cd /etc/shairport
 	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
