@@ -206,8 +206,6 @@ Raspbian Jessie Lite
 
 	https://github.com/mikebrady/shairport-sync
 	
-	wget http://ftp.us.debian.org/debian/pool/main/s/shairport-sync/shairport-sync_2.8.0-1_armhf.deb
-	wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_2.8.0-1_armhf.deb
 	wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl1.0.2_1.0.2g-1_armhf.deb
 	sudo dpkg -i libssl1.0.2_1.0.2g-1_armhf.deb
 	sudo apt-get install shairport-sync
