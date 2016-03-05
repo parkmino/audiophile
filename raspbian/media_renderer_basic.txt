@@ -206,8 +206,6 @@ Raspbian Jessie Lite
 
 	https://github.com/mikebrady/shairport-sync
 	
-	wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl1.0.2_1.0.2g-1_armhf.deb
-	sudo dpkg -i libssl1.0.2_1.0.2g-1_armhf.deb
 	sudo apt-get install shairport-sync
 	sudo systemctl disable shairport-sync
 	sudo nano /etc/shairport-sync.conf
