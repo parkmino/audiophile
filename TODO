@@ -1,0 +1,4 @@
+1. sudo nano /etc/mpd.conf
+	audio_output {
+	#mixer_device	"sound"
+	}
