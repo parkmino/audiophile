@@ -1,7 +1,9 @@
 1. sudo nano /etc/mpd.conf
 	audio_output {
 	device		"pcm.default"
+	#mixer_type	"none"
 	mixer_device	"ctl.default"
+	mixer_control	"XMOS Clock Selector"
 	}
 
 2. sudo nano /usr/share/alsa/alsa.conf
