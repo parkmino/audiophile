@@ -2,3 +2,7 @@
 	audio_output {
 	#mixer_device	"sound"
 	}
+
+2. sudo nano /usr/share/alsa/alsa.conf
+	pcm.default pcm.sound
+	ctl.default ctl.sound
