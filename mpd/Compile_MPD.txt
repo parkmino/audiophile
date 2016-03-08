@@ -42,6 +42,8 @@ export CXXFLAGS="-O0"
 export CPPFLAGS="-O0"
 ./autogen.sh
 ./configure --help
+
+0.17.x
 ./configure --disable-aac --enable-alsa --disable-ao --enable-audiofile --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-debug --disable-despotify --disable-documentation --disable-ffado --disable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-lastfm --disable-lame-encoder --disable-libwrap --disable-lsr --enable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --enable-mpg123 --disable-mvp --disable-openal --disable-oss --disable-pipe-output --disable-pulse --disable-recorder-output --disable-roar --disable-sidplay --disable-shout --enable-sndfile --disable-solaris-output --disable-soundcloud --disable-soup --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --with-zeroconf=no
 
 0.18.x
