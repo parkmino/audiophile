@@ -16,12 +16,12 @@
 	pcm.default.card 0
 	pcm.default.device 0
 	pcm.default.subdevice -1
-	pcm.default.sync_ptr_ioctl 0
+	#pcm.default.sync_ptr_ioctl 0
 	pcm.default.nonblock 0
 
 	ctl.default.type hw
 	ctl.default.card 0
 	
-	defaults.pcm.nonblock 0
+	#defaults.pcm.nonblock 0
 	#defaults.pcm.compat 1
 	#defaults.pcm.minperiodtime 0 # 5000 # in us
