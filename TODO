@@ -17,7 +17,7 @@
 	pcm.default.device 0
 	pcm.default.subdevice -1
 	#pcm.default.sync_ptr_ioctl 0
-	pcm.default.nonblock 0
+	#pcm.default.nonblock 0
 
 	ctl.default.type hw
 	ctl.default.card 0
