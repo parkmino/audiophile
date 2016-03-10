@@ -4,12 +4,12 @@
 	defaults.pcm.minperiodtime 0 # 5000                # in us
    sudo nano /etc/mpd.conf
 	audio_output {
-	device			"hw:0,0,0"
+	device			"pcm.hw:0,0,0"
 	auto_resample		"no"
 	auto_channels		"no"
 	auto_format		"no"
-	mixer_type		"none"
-	#mixer_device		"hw:0"
+	#mixer_type		"none"
+	mixer_device		"pcm.null"
 	#mixer_control		"XMOS Clock Selector"
 	#replay_gain_handler	"none"
 	}
