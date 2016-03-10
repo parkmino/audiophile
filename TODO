@@ -8,8 +8,8 @@
 	auto_resample		"no"
 	auto_channels		"no"
 	auto_format		"no"
-	#mixer_type		"none"
-	mixer_device		"pcm.null"
+	mixer_type		"none"
+	#mixer_device		"ctl.hw:0"
 	#mixer_control		"XMOS Clock Selector"
 	#replay_gain_handler	"none"
 	}
