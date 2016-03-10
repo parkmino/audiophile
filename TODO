@@ -1,16 +1,28 @@
-1. sudo mv /usr/share/alsa/alsa.conf     /usr/share/alsa/alsa.conf.min
-   sudo mv /usr/share/alsa/alsa.conf.org /usr/share/alsa/alsa.conf
-   sudo nano /usr/share/alsa/alsa.conf
-	defaults.pcm.minperiodtime 0 # 5000                # in us
+1. sudo nano /usr/share/alsa/alsa.conf
+   	pcm.default.type hw
+	pcm.default.card 0
+	pcm.default.device 0
+	pcm.default.subdevice 0
+	#pcm.default.sync_ptr_ioctl 1
+	#pcm.default.nonblock 0
+
+	ctl.default.type hw
+	ctl.default.card 0
+	
+	#defaults.pcm.nonblock 0
+	#defaults.pcm.compat 1
+	#defaults.pcm.minperiodtime 0 # 5000 # in us
+
    sudo nano /etc/mpd.conf
 	audio_output {
-	device			"pcm.hw:0,0,0"
+	device			"pcm.default"
 	auto_resample		"no"
 	auto_channels		"no"
 	auto_format		"no"
 	mixer_type		"none"
-	#mixer_device		"ctl.hw:0"
+	#mixer_device		"ctl.default"
 	#mixer_control		"XMOS Clock Selector"
-	#replay_gain_handler	"none"
+	replay_gain_handler	"mixer"
+	always_on               "yes"
 	}
-	#mixer_type		"disabled"
+	mixer_type		"disabled"
