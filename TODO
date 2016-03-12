@@ -89,7 +89,7 @@
    	pcm.shm.type hw
 	pcm.shm.card 0
 	pcm.shm.device 0
-	pcm.shm.subdevice 0
+	pcm.shm.subdevice -1
 	#pcm.shm.sync_ptr_ioctl 1
 	#pcm.shm.nonblock 0
 
