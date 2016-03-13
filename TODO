@@ -9,6 +9,9 @@
 	ctl.hw.type hw
 	ctl.hw.card 0
 	
+	pcm.default pcm.shm
+	ctl.default ctl.shm
+	
 	#defaults.pcm.nonblock 0
 	#defaults.pcm.compat 1
 	#defaults.pcm.minperiodtime 0 # 5000 # in us
