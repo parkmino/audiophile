@@ -1,33 +1,4 @@
 1. sudo nano /usr/share/alsa/alsa.conf
-   	pcm.default.type hw
-	pcm.default.card 0
-	pcm.default.device 0
-	pcm.default.subdevice 0
-	#pcm.default.sync_ptr_ioctl 1
-	#pcm.default.nonblock 0
-
-	ctl.default.type hw
-	ctl.default.card 0
-	
-	#defaults.pcm.nonblock 0
-	#defaults.pcm.compat 1
-	#defaults.pcm.minperiodtime 0 # 5000 # in us
-
-   sudo nano /etc/mpd.conf
-	audio_output {
-	device			"pcm.default"
-	auto_resample		"no"
-	auto_channels		"no"
-	auto_format		"no"
-	mixer_type		"none"
-	#mixer_device		"ctl.default"
-	#mixer_control		"XMOS Clock Selector"
-	replay_gain_handler	"mixer"
-	always_on               "yes"
-	}
-	mixer_type		"disabled"
-
-2. sudo nano /usr/share/alsa/alsa.conf
    	pcm.hw.type hw
 	pcm.hw.card 0
 	pcm.hw.device 0
@@ -56,36 +27,7 @@
 	}
 	mixer_type		"disabled"
 
-3. sudo nano /usr/share/alsa/alsa.conf
-   	pcm.null.type hw
-	pcm.null.card 0
-	pcm.null.device 0
-	pcm.null.subdevice 0
-	#pcm.null.sync_ptr_ioctl 1
-	#pcm.null.nonblock 0
-
-	ctl.null.type hw
-	ctl.null.card 0
-	
-	#defaults.pcm.nonblock 0
-	#defaults.pcm.compat 1
-	#defaults.pcm.minperiodtime 0 # 5000 # in us
-
-   sudo nano /etc/mpd.conf
-	audio_output {
-	device			"pcm.null"
-	auto_resample		"no"
-	auto_channels		"no"
-	auto_format		"no"
-	mixer_type		"none"
-	#mixer_device		"ctl.hw"
-	#mixer_control		"XMOS Clock Selector"
-	replay_gain_handler	"mixer"
-	always_on               "yes"
-	}
-	mixer_type		"disabled"
-
-4. sudo nano /usr/share/alsa/alsa.conf
+2. sudo nano /usr/share/alsa/alsa.conf
    	pcm.shm.type hw
 	pcm.shm.card 0
 	pcm.shm.device 0
@@ -116,4 +58,3 @@
 	always_on               "yes"
 	}
 	#mixer_type		"disabled"
-	
