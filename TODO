@@ -62,11 +62,7 @@
 	}
 	mixer_type		"disabled"
 
-3. sudo nano /usr/share/alsa/cards/aliases.conf
-	#<confdir:pcm/default.conf>
-	#<confdir:pcm/dmix.conf>
-	#<confdir:pcm/dsnoop.conf>
-
-   sudo mv /usr/share/alsa/cards/USB-Audio.conf /usr/share/alsa/cards/USB-Audio.conf.sav
-
-
+3. cd /usr/share/alsa/cards/
+   ls
+   sudo rename -v 's/\.conf$/\.conf.sav/' *.conf
+   ls
