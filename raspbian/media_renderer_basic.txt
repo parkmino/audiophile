@@ -55,8 +55,8 @@ Raspbian Jessie Lite
 
 	sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
 	sudo nano /usr/share/alsa/alsa.conf
-		pcm.sound.card 1
-		ctl.sound.card 1
+		pcm.shm.card 1
+		ctl.shm.card 1
 	sudo systemctl mask alsa-store.service
 	sudo systemctl mask alsa-restore.service
 
@@ -111,8 +111,8 @@ Raspbian Jessie Lite
 	#chrt   -ip 0   "$UPDATE_PID"
 	
 	### For Criterion from Reference Club
-	#amixer -D ctl.sound set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
-	#amixer -D ctl.sound set 'XMOS Clock Selector',1 Capture 0 off     || /bin/true
+	#amixer set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
+	#amixer set 'XMOS Clock Selector',1 Capture 0 off       || /bin/true
 	
 	ifconfig eth0 txqueuelen 10000
 	echo noop > /sys/block/mmcblk0/queue/scheduler
@@ -156,44 +156,31 @@ Raspbian Jessie Lite
 	sudo reboot
 	cat /proc/sys/net/ipv4/tcp_sack /proc/sys/net/ipv4/tcp_no_metrics_save /proc/sys/net/core/netdev_max_backlog
 	
-15. Enable I2C
-	sudo raspi-config
-		8 Advanced Option > A7 I2C
-	or
-	sudo nano /etc/modules
-		i2c-bcm2708 
-		i2c-dev
-	sudo nano /etc/modprobe.d/raspi-blacklist.conf
-		#blacklist spi-bcm2708
-		#blacklist i2c-bcm2708
-	sudo nano /boot/config.txt
-		dtparam=i2c1=on
-		dtparam=i2c_arm=on
+15. Enable I2S DDC/DAC
 		
 	sudo nano /boot/config.txt
-		### HiFiBerry I2C
+		### HiFiBerry I2S
 		#dtoverlay=hifiberry-amp
 		#dtoverlay=hifiberry-dac
 		#dtoverlay=hifiberry-dacplus
 		#dtoverlay=hifiberry-digi
-		### IQaudIO I2C
+		### IQaudIO I2S
 		#dtoverlay=iqaudio-dac
 		#dtoverlay=iqaudio-dacplus
 	sudo nano /etc/rc.local
-		### Unmute IQaudIO I2C
+		### Unmute IQaudIO I2S
 		#echo "22" > /sys/class/gpio/export
 		#echo "out" > /sys/class/gpio/gpio22/direction
 		#echo "1" > /sys/class/gpio/gpio22/value
 		### Digital Volume
-		#amixer -D ctl.sound set 'Digital',0 67% || /bin/true # 40@67% 60@81%
+		#amixer set 'Digital',0 67% || /bin/true # 40@67% 60@81%
 	sudo nano /usr/share/alsa/alsa.conf
-		#pcm.sound.card 0
-		#ctl.sound.card 0
+		#pcm.shm.card 0
+		#ctl.shm.card 0
 	sudo nano /etc/mpd.conf
-		### Volume for I2C
+		### Volume for I2S
 		#mixer_type "hardware"
 		#mixer_control "Digital"
-		#mixer_device "sound"
 	
 16. USB Mount
 
@@ -219,8 +206,8 @@ Raspbian Jessie Lite
 		};
 		alsa =
 		{
-		output_device = "sound"
-		mixer_device = "sound"
+		output_device = "shm"
+		mixer_device = "shm"
 		};
 	nano ~/airport
 	#!/bin/sh
@@ -234,16 +221,16 @@ Raspbian Jessie Lite
 	sudo apt-get install shairplay
 	shairplay -h
 	cp /etc/shairplay/airport.key /home/pi/
-	shairplay --ao_driver=alsa --ao_devicename=sound
+	shairplay --ao_driver=alsa --ao_devicename=shm
 	nano ~/airport
 		#!/bin/sh
-		shairplay --ao_driver=alsa --ao_devicename=sound
+		shairplay --ao_driver=alsa --ao_devicename=shm
 	chmod +x ~/airport
 	sudo ln -s /home/pi/airport /usr/bin/
 	airport
 	sudo nano /etc/rc.local
 	#cd /etc/shairport
-	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
+	#shairplay --ao_driver=alsa --ao_devicename=shm >/dev/null 2>&1 &
 	#cd
 
 18. Internet Radio
@@ -251,8 +238,8 @@ Raspbian Jessie Lite
 	sudo apt-get install mplayer2
 	mkdir ~/.mplayer
 	nano ~/.mplayer/config
-		ao=alsa:device=sound
-		mixer=sound
+		ao=alsa:device=shm
+		mixer=shm
 		softvol=no
 		cache=192
 		vc=null
