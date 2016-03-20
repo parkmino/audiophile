@@ -1,10 +1,9 @@
-1. sudo nano /usr/share/alsa/alsa.conf
-	pcm.shm.subdevice 0
-
-2. sudo nano /etc/rc.local
+1. sudo nano /etc/rc.local
 	taskset -pc 3  "$MAIN_PID"
+	ionice -n 3 -p "$MAIN_PID"
 	taskset -pc 1  "$UPDATE_PID"
 	taskset -pc 3  "$PLAYER_PID"
+	ionice -n 3 -p "$PLAYER_PID"
 	taskset -pc 1  "$DECODER_PID"
 	taskset -pc 3  "$OUTPUT_PID"
-	
+	ionice -n 3 -p "$OUTPUT_PID"
