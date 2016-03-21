@@ -1,4 +1,5 @@
 1. sudo nano /etc/rc.local
+
 	taskset -pc 3  "$MAIN_PID"
 	ionice -n 7 -p "$MAIN_PID"
 	taskset -pc 1  "$UPDATE_PID"
@@ -7,3 +8,22 @@
 	taskset -pc 1  "$DECODER_PID"
 	taskset -pc 3  "$OUTPUT_PID"
 	ionice -n 7 -p "$OUTPUT_PID"
+	
+2. sudo nano /usr/share/alsa/alsa.conf
+	
+	pcm.shm.type hw
+	pcm.shm.card 0
+	pcm.shm.device 0
+	pcm.shm.subdevice -1
+	#pcm.shm.sync_ptr_ioctl 1
+	pcm.shm.nonblock 1
+
+	ctl.shm.type hw
+	ctl.shm.card 0
+
+	pcm.default pcm.shm
+	ctl.default ctl.shm
+
+	defaults.pcm.nonblock 1
+	defaults.pcm.compat 0
+	defaults.pcm.minperiodtime 0 # 5000 # in us
