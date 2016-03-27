@@ -1,18 +1,18 @@
 1. sudo nano /etc/rc.local
 
-	if [ "$(nproc -all)" != '4' ]; then
-	sleep 15
-	MPD_PID=`pgrep -n mpd`
-	MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-	     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-	   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-	taskset -pc 3  "$MAIN_PID"
-	taskset -pc 1  "$UPDATE_PID"
-	taskset -pc 3  "$PLAYER_PID"
-	taskset -pc 1  "$DECODER_PID"
-	taskset -pc 3  "$OUTPUT_PID"
-	exit 1;
+	if [ "$(nproc -all)" = '4' ]
+	then
+		sleep 15
+		MPD_PID=`pgrep -n mpd`
+		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+		   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+		   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+		taskset -pc 3  "$MAIN_PID"
+		taskset -pc 1  "$UPDATE_PID"
+		taskset -pc 3  "$PLAYER_PID"
+		taskset -pc 1  "$DECODER_PID"
+		taskset -pc 3  "$OUTPUT_PID"
 	fi
