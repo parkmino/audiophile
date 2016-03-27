@@ -1,6 +1,6 @@
 1. sudo nano /etc/rc.local
 
-	if [ "$(nproc -all)" = '4' ]
+	if [ "$(nproc --all)" = '4' ]
 	then
 		sleep 15
 		MPD_PID=`pgrep -n mpd`
