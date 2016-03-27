@@ -194,6 +194,10 @@ Raspbian Jessie Lite
 	https://github.com/mikebrady/shairport-sync
 	
 	sudo apt-get install shairport-sync
+		wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_2.8.1-1_armhf.deb
+		wget http://archive.raspbian.org/raspbian/pool/main/o/openssl/libssl1.0.2_1.0.2g-1_armhf.deb
+		sudo apt-get install libconfig9
+		sudo dpkg -i shairport-sync*.deb libssl1.0.2*.deb
 	sudo systemctl disable shairport-sync
 	sudo nano /etc/shairport-sync.conf
 		general =
