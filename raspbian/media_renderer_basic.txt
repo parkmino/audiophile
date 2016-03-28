@@ -262,19 +262,13 @@ Raspbian Jessie Lite
 	kbs1fm
 	kbs2fm
 	cbsfm
-
-19. Remove bash history
-
-	rm ~/.bash_history
 	
-20. Make Image
+19. Make Image
 
+	$ mpc clear
+	$ rm ~/.bash_history
 	$ sudo fdisk -l
 	$ sudo dd bs=4M (count=500) if=/dev/sdb of=raspbian_media_renderer_basic_v.0.9.0.img
 	$ zip raspbian_media_renderer_basic_v.0.9.0.zip raspbian_media_renderer_basic_v.0.9.0.img
 	
 	https://drive.google.com/file/d/0B33LiMpVXH_FalhZaTVjVnNfU0k/view?usp=sharing
-
-21. Documentation
-
-	https://github.com/raspberrypi/documentation
