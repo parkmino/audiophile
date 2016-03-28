@@ -2,7 +2,7 @@
 
 	if [ "$(nproc --all)" = '4' ]
 	then
-		sleep 15
+		sleep 7
 		MPD_PID=`pgrep -n mpd`
 		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
@@ -20,7 +20,7 @@
 2. sudo hdparm -A -a -B /dev/sda
 
 	# nano /etc/hdparm.conf
-		read_ahead_sect = 1024
+		read_ahead_sect = 1664
 		lookahead = on
 		apm = 255
 
