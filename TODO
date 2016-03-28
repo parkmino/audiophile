@@ -16,3 +16,17 @@
 		taskset -pc 1 "$DECODER_PID"
 		taskset -pc 3 "$OUTPUT_PID"
 	fi
+
+2. sudo hdparm -A -a -B /dev/sda
+
+	# nano /etc/hdparm.conf
+		read_ahead_sect = 1024
+		lookahead = on
+		apm = 255
+
+3. cat /sys/block/mmcblk0/queue/scheduler
+
+	sudo nano /etc/rc.local
+		echo noop > /sys/block/mmcblk0/queue/scheduler
+
+
