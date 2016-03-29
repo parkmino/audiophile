@@ -15,8 +15,8 @@
 		taskset -pc 2 "$PLAYER_PID"
 		taskset -pc 1 "$DECODER_PID"
 		taskset -pc 3 "$OUTPUT_PID"
+		taskset -apc 0 `pgrep upmpdcli`
 	fi
-	taskset -apc 0 `pgrep upmpdcli`
 	chrt    -api 0 `pgrep upmpdcli`
 
 2. sudo hdparm -A -a -B /dev/sda
