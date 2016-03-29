@@ -27,8 +27,15 @@
 		apm = 255
 
 3. cat /sys/block/mmcblk0/queue/scheduler
+   cat /sys/block/sda/queue/scheduler
 
 	sudo nano /etc/rc.local
 		echo noop > /sys/block/mmcblk0/queue/scheduler
+		echo noop > /sys/block/sda/queue/scheduler
 
+4. mount
+
+	sudo nano /etc/fstab
+		tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
 
