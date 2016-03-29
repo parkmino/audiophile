@@ -87,7 +87,8 @@ Raspbian Jessie Lite
 12. Tmpfs
 
 	nano /etc/fstab
-		tmpfs /tmp tmfs nosuid,nodev 0 0
+		tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
 		
 13. Edit /etc/rc.local
 
