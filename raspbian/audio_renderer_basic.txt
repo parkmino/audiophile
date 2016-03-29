@@ -92,32 +92,33 @@ Raspbian Jessie Lite
 		
 13. Edit /etc/rc.local
 
-	sleep 5
+	echo noop > /sys/block/mmcblk0/queue/scheduler
+	ifconfig eth0 txqueuelen 10000
 
-	MPD_PID=`pgrep -F /run/mpd/pid`
-	#
-	#MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-	#
-	##   MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-	#  UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-	## PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-	##DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-	## OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-	#
-	chrt    -apo 0 "$MPD_PID"
-	#taskset -apc 3 "$MPD_PID"	# RPi1&Zero:single-core, RPi2:quad-core
-	#
-	#ionice -c 3 -p "$UPDATE_PID"
-	#renice -n 19   "$UPDATE_PID"
-	#chrt   -ip 0   "$UPDATE_PID"
+	if [ "$(nproc --all)" = '4' ]
+	then
+		sleep 5
+		MPD_PID=`pgrep -F /run/mpd/pid`
+		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+		   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+		   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+		taskset -pc 2 "$MAIN_PID"
+		taskset -pc 0 "$UPDATE_PID"
+		taskset -pc 2 "$PLAYER_PID"
+		taskset -pc 1 "$DECODER_PID"
+		taskset -pc 3 "$OUTPUT_PID"
+		taskset -apc 0 `pgrep upmpdcli`
+	fi
+
+	chrt    -api 0 `pgrep upmpdcli`
 	
 	### For Criterion from Reference Club
 	#amixer set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
 	#amixer set 'XMOS Clock Selector',1 Capture 0 off       || /bin/true
-	
-	ifconfig eth0 txqueuelen 10000
-	echo noop > /sys/block/mmcblk0/queue/scheduler
-	
+	#
 	### Turn off LEDs
 	echo none > /sys/class/leds/led0/trigger
 	echo 0    > /sys/class/leds/led0/brightness
