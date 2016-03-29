@@ -3,7 +3,7 @@
 	if [ "$(nproc --all)" = '4' ]
 	then
 		sleep 7
-		MPD_PID=`pgrep -n mpd`
+		MPD_PID=`pgrep -F /run/mpd/pid`
 		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
 		   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
