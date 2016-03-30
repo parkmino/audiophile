@@ -1,6 +1,27 @@
-1. mount
+1. sudo nano /etc/rc.local
 
-	sudo nano /etc/fstab
-		tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+#	if [ "$(nproc --all)" = '4' ]
+#	then
+#		sleep 5
+#		MPD_PID=`pgrep -F /run/mpd/pid`
+#		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+#		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+#		   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+#		   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+#		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+#		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+#		taskset -pc 1 "$MAIN_PID"
+#		taskset -pc 0 "$UPDATE_PID"
+#		taskset -pc 2 "$PLAYER_PID"
+#		taskset -pc 1 "$DECODER_PID"
+#		taskset -pc 3 "$OUTPUT_PID"
+#		taskset -apc 0 `pgrep upmpdcli`
+#	fi
+#
+	chrt    -api 0 `pgrep upmpdcli`
+
+2. sudo nano /etc/fstab
+
+	tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+	tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
 
