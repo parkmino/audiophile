@@ -34,6 +34,12 @@
 	 sysctl -w vm.panic_on_oom=2
 	 sysctl -w vm.stat_interval=3
 	#sysctl -w vm.user_reserve_kbytes=0
+	
+	#PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ && $3 !~ /audio/ {print $1}'`
+	#for PID in ${PIDS}
+	#do
+	#    taskset -acp 0-1 ${PID} || /bin/true
+	#done
 
 2. sudo nano /etc/fstab
 
