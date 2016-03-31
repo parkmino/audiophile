@@ -20,6 +20,21 @@
 #
 	chrt    -api 0 `pgrep upmpdcli`
 
+	#sysctl -w debug.exception-trace=0
+	#sysctl -w kernel.watchdog=0
+	#sysctl -w kernel.sched_rt_runtime_us=-1
+	#sysctl -w kernel.sched_rt_period_us=42700
+	 sysctl -w kernel.printk='4 4 1 4'
+	#sysctl -w vm.swappiness=30
+	 sysctl -w vm.overcommit_memory=1
+	#sysctl -w vm.overcommit_ratio=0
+	 sysctl -w vm.dirty_writeback_centisecs=0
+	 sysctl -w vm.oom_dump_tasks=0
+	 sysctl -w vm.oom_kill_allocating_task=1
+	 sysctl -w vm.panic_on_oom=2
+	 sysctl -w vm.stat_interval=3
+	#sysctl -w vm.user_reserve_kbytes=0
+
 2. sudo nano /etc/fstab
 
 	tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
