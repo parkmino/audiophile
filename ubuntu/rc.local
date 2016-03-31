@@ -28,22 +28,23 @@
 #    mount -t ramfs -o noauto,nosuid,nodev,nodiratime none $i
 #done
 
+echo noop > /sys/block/sda/queue/scheduler
 echo 4032 > /sys/class/rtc/rtc0/max_user_freq
  sysctl -w dev.hpet.max-user-freq=2147483520 # max=2147483647
- sysctl -w debug.exception-trace=0
- sysctl -w kernel.watchdog=0
+#sysctl -w debug.exception-trace=0
+#sysctl -w kernel.watchdog=0
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=42700
  sysctl -w kernel.printk='4 4 1 4'
-#sysctl -w vm.swappiness=0
+#sysctl -w vm.swappiness=30
  sysctl -w vm.overcommit_memory=1
- sysctl -w vm.overcommit_ratio=100
+#sysctl -w vm.overcommit_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
  sysctl -w vm.oom_dump_tasks=0
  sysctl -w vm.oom_kill_allocating_task=1
  sysctl -w vm.panic_on_oom=2
  sysctl -w vm.stat_interval=3
- sysctl -w vm.user_reserve_kbytes=0
+#sysctl -w vm.user_reserve_kbytes=0
 
 ifconfig eth0  txqueuelen 10000
 ifconfig wlan0 txqueuelen 10000
@@ -80,37 +81,40 @@ done
 #   modprobe -r "$Module"
 #done
 
-IRQS=`cat /proc/interrupts | awk '$6 ~ /PCI-MSI/ {print +$1}'`
-for IRQ in ${IRQS}
-do
-        echo 7 > /proc/irq/${IRQ}/smp_affinity
-        echo 7 > /proc/irq/${IRQ}/smp_affinity
-done
-
+#IRQS=`cat /proc/interrupts | awk '$6 ~ /PCI-MSI/ {print +$1}'`
+#for IRQ in ${IRQS}
+#do
+#        echo 7 > /proc/irq/${IRQ}/smp_affinity
+#        echo 7 > /proc/irq/${IRQ}/smp_affinity
+#done
+#
 #echo 7 > /proc/irq/default_smp_affinity
 #echo 7 > /proc/irq/default_smp_affinity
 
 IRQS=`cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}'`
 for IRQ in ${IRQS}
 do
-	echo 8 > /proc/irq/${IRQ}/smp_affinity
-	echo 8 > /proc/irq/${IRQ}/smp_affinity
+	echo 2 > /proc/irq/${IRQ}/smp_affinity
+	echo 2 > /proc/irq/${IRQ}/smp_affinity
 done
 
-PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ && $3 !~ /audio/ {print $1}'`
-for PID in ${PIDS}
-do
-    taskset -acp 0-1 ${PID} || /bin/true
-done
-
-taskset -acp 1 `pgrep rtc`
-
-##taskset -apc 0      `pgrep hd-audio0`
-##renice -n -1     -p `pgrep hd-audio0`
+#PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ && $3 !~ /audio/ {print $1}'`
+#for PID in ${PIDS}
+#do
+#    taskset -acp 0-1 ${PID} || /bin/true
+#done
+#
+#taskset -acp 1 `pgrep rtc`
+#
+#taskset -apc 0      `pgrep hd-audio0`
+#renice -n -1     -p `pgrep hd-audio0`
 #ionice -c 0 -p      `pgrep hd-audio0`
-##chrt -rp 1          `pgrep hd-audio0`
+#chrt -rp 1          `pgrep hd-audio0`
+#
+#chrt -o 0 /usr/bin/mpd --no-daemon /etc/mpd.conf
+#systemctl start mpd.service
 
-/usr/bin/mpd /etc/mpd.conf
+sleep 15
 
 MPD_PID=`pgrep -n mpd`
 
@@ -122,34 +126,27 @@ MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
   DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
    OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
 
-#ionice -c 0 -p "$MAIN_PID"
-#ionice -c 0 -p "$UPDATE_PID"
-#ionice -c 0 -p "$PLAYER_PID"
-#ionice -c 0 -p "$DECODER_PID"
-#ionice -c 0 -p "$OUTPUT_PID"
-
-#ionice -c 2 -n 5 -p "$MAIN_PID"
-#ionice -c 0 -p "$MAIN_PID"
-#ionice -c 2 -n 7 -p "$UPDATE_PID"
-#ionice -c 0 -p "$UPDATE_PID"
-#ionice -c 2 -n 4 -p "$PLAYER_PID"
-#ionice -c 0 -p "$PLAYER_PID"
-#ionice -c 2 -n 6 -p "$DECODER_PID"
-#ionice -c 0 -p "$DECODER_PID"
-#ionice -c 2 -n 3 -p "$OUTPUT_PID"
-#ionice -c 0 -p "$OUTPUT_PID"
+#ionice -c  3 -p "$UPDATE_PID"
+#renice -n 19    "$UPDATE_PID"
+#chrt   -ip 0    "$UPDATE_PID"
 
  chrt    -apo 0 "$MPD_PID"
- taskset -apc 2 "$MPD_PID"
-
- taskset -apc 3      `pgrep snd_hda`
+#taskset -apc 3 "$MPD_PID"
+ taskset -pc 1  "$MAIN_PID"
+#ionice -n 7 -p "$MAIN_PID"
+ taskset -pc 0  "$UPDATE_PID"
+ taskset -pc 3  "$PLAYER_PID"
+#ionice -c 0 -p "$PLAYER_PID"
+ taskset -pc 1  "$DECODER_PID"
+ taskset -pc 2  "$OUTPUT_PID"
+#ionice -c 0 -p "$OUTPUT_PID"
+#
+#taskset -apc 1      `pgrep snd_hda`
 #renice -n -2     -p `pgrep snd_hda`
 #ionice -c 2 -n 7 -p `pgrep snd_hda`
 #ionice -c 0 -p `pgrep snd_hda`
 #chrt -rp 2          `pgrep snd_hda`
-
-#hdparm -A1 -a1792 -B255 /dev/sda
-
-echo noop > /sys/block/sda/queue/scheduler
+#
+#hdparm -A1 -a1664 -B255 /dev/sda
 
 exit 0
