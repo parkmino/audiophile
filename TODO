@@ -46,3 +46,6 @@
 	tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
 
+
+3. mplayer --novideo
+
