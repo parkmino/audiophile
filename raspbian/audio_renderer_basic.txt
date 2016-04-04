@@ -94,6 +94,20 @@ Raspbian Jessie Lite
 
 	echo noop > /sys/block/mmcblk0/queue/scheduler
 	ifconfig eth0 txqueuelen 10000
+	
+	PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+	for PID in ${PIDS}
+	do
+	    chrt -op 0 ${PID}
+	done
+
+	PIDS=`ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /dwc_otg/ {print $1}'`
+	for PID in ${PIDS}
+	do
+	    renice 0 ${PID}
+	done
+
+	renice 0 `pgrep dwc_otg`
 
 	sleep 10
 	    MPD_PID=`pgrep -F /run/mpd/pid`
@@ -168,13 +182,13 @@ Raspbian Jessie Lite
 		kernel.printk = '4 4 1 4'
 		#vm.swappiness = 0
 		vm.overcommit_memory = 1
-		vm.overcommit_ratio = 100
+		#vm.overcommit_ratio = 0
 		vm.dirty_writeback_centisecs = 0
 		vm.oom_dump_tasks = 0
 		vm.oom_kill_allocating_task = 1
 		vm.panic_on_oom = 2
 		vm.stat_interval = 3
-		vm.user_reserve_kbytes = 0
+		#vm.user_reserve_kbytes = 0
 
 		net.core.rmem_max = 12582912
 		net.core.wmem_max = 12582912
@@ -306,5 +320,5 @@ Raspbian Jessie Lite
 	$ mpc clear
 	$ rm ~/.bash_history
 	$ sudo fdisk -l
-	$ sudo dd bs=4M count=500 if=/dev/sdb of=raspbian_audio_renderer_basic_v.0.9.4.img
-	$ zip raspbian_audio_renderer_basic_v.0.9.4.zip raspbian_audio_renderer_basic_v.0.9.4.img
+	$ sudo dd bs=4M count=500 if=/dev/sdb of=raspbian_audio_renderer_basic_v.0.9.5.img
+	$ zip raspbian_audio_renderer_basic_v.0.9.5.zip raspbian_audio_renderer_basic_v.0.9.5.img
