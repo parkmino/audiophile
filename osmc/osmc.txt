@@ -14,13 +14,13 @@ sudo nano /usr/share/alsa/alsa.conf
 sysctl -w kernel.printk='4 4 1 4'
 #sysctl -w vm.swappiness=0
 sysctl -w vm.overcommit_memory=1
-sysctl -w vm.overcommit_ratio=100
+#sysctl -w vm.overcommit_ratio=0
 sysctl -w vm.dirty_writeback_centisecs=0
 sysctl -w vm.oom_dump_tasks=0
 sysctl -w vm.oom_kill_allocating_task=1
 sysctl -w vm.panic_on_oom=2
 sysctl -w vm.stat_interval=3
-sysctl -w vm.user_reserve_kbytes=0
+#sysctl -w vm.user_reserve_kbytes=0
 
 ifconfig eth0 txqueuelen 10000
 
@@ -42,11 +42,11 @@ do
     chrt -op 0 ${PID}
 done
 
-PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /otg/ {print $1}'`
-for PID in ${PIDS}
-do
-    taskset -acp 0-1 ${PID} || /bin/true
-done
+#PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /otg/ {print $1}'`
+#for PID in ${PIDS}
+#do
+#    taskset -acp 0-1 ${PID} || /bin/true
+#done
 
 PIDS=`ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /dwc_otg/ {print $1}'`
 for PID in ${PIDS}
