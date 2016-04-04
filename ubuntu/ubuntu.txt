@@ -129,30 +129,20 @@ Secure Ripping S/W
 			--exec "$DAEMON" -- $MPD_OPTS "$MPDCONF"
 		MPD_PID=`pgrep -n mpd`
 		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-		       MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-		     UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-		     PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-		    DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-		     OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-		 taskset -acp 2       "$MPD_PID"
-		 chrt    -aop 0       "$MPD_PID"
-		 #chrt    -rp  4       "$MAIN_PID"
-		 #chrt    -ip  0       "$UPDATE_PID"
-		 #chrt    -rp  2       "$PLAYER_PID"
-		 #chrt    -rp  3       "$DECODER_PID"
-		 #chrt    -rp  1       "$OUTPUT_PID"
-		 #renice   -4          "$MAIN_PID"
-	 	 #renice   19          "$UPDATE_PID"
-		 #renice   -2          "$PLAYER_PID"
-		 #renice   -3          "$DECODER_PID"
-		 #renice   -1          "$OUTPUT_PID"
-		 #ionice  -c 2 -n 5 -p "$MAIN_PID"
-		 #ionice  -c 2 -n 7 -p "$UPDATE_PID"
-		 #ionice  -c 2 -n 4 -p "$PLAYER_PID"
-		 #ionice  -c 2 -n 6 -p "$DECODER_PID"
-		 #ionice  -c 2 -n 3 -p "$OUTPUT_PID"
+		
+		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+		   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+		   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+		     chrt    -apo 0 "$MPD_PID"
+		     taskset -pc  1 "$MAIN_PID"
+		     taskset -pc  0 "$UPDATE_PID"
+		     taskset -pc  3 "$PLAYER_PID"
+		     taskset -pc  1 "$DECODER_PID"
+		     taskset -pc  2 "$OUTPUT_PID"
 	$ sudo nano /etc/rc.local
-		 taskset -acp 3      `pgrep snd_hda`
+		 taskset -acp 1      `pgrep snd_hda`
 		#renice -n -2     -p `pgrep snd_hda`
 		#ionice -c 2 -n 2 -p `pgrep snd_hda`
 		#chrt -rp 2          `pgrep snd_hda`
@@ -188,7 +178,7 @@ Secure Ripping S/W
 	$ ps -e | grep acpi
 3.11 Disable CPU Multi-core and Hyper-threading
 	$ cat /proc/cpuinfo && sudo gedit /etc/default/grub
-		GRUB_CMDLINE_LINUX_DEFAULT="... nosmp noht"
+		#GRUB_CMDLINE_LINUX_DEFAULT="... nosmp noht"
 	$ sudo update-grub2
 
 3.12 Disable unneeded modules.
@@ -247,13 +237,13 @@ Secure Ripping S/W
 
 	-. Kernel Options
 		# sudo gedit /etc/default/grub
-			GRUB_CMDLINE_LINUX_DEFAULT="... noht nosmp apm=off noapic consoleblank=0"
+			GRUB_CMDLINE_LINUX_DEFAULT="... apm=off noapic consoleblank=0"
 		# sudo update-grub2
 	-. High Precision Event Timer
 		$ cat /sys/devices/system/clocksource/clocksource0/current_clocksource
 		$ cat /sys/devices/system/clocksource/clocksource0/available_clocksource
 		$ sudo gedit /etc/default/grub
-			GRUB_CMDLINE_LINUX_DEFAULT="... clocksource=hpet"
+			#GRUB_CMDLINE_LINUX_DEFAULT="... clocksource=hpet"
 		$ sudo update-grub2
 	-. Timer Frequency
 		$ cat /sys/class/rtc/rtc0/max_user_freq
@@ -271,12 +261,12 @@ Secure Ripping S/W
 		$ ps aux
 		$ cat /proc/interrupts
 		$ sudo nano /etc/rc.local
-			IRQS=`cat /proc/interrupts | awk '$6 ~ /PCI-MSI-edge/ {print +$1}'`
-			for IRQ in ${IRQS}
-			do
-				echo b > /proc/irq/${IRQ}/smp_affinity
-				echo b > /proc/irq/${IRQ}/smp_affinity
-			done
+			#IRQS=`cat /proc/interrupts | awk '$6 ~ /PCI-MSI-edge/ {print +$1}'`
+			#for IRQ in ${IRQS}
+			#do
+			#	echo b > /proc/irq/${IRQ}/smp_affinity
+			#	echo b > /proc/irq/${IRQ}/smp_affinity
+			#done
 
 			IRQS=`cat /proc/interrupts | awk '$7 ~ /snd/ {print +$1}'`
 			for IRQ in ${IRQS}
@@ -288,11 +278,11 @@ Secure Ripping S/W
 			#echo b > /proc/irq/default_smp_affinity
 			#echo b > /proc/irq/default_smp_affinity
 			
-			PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ {print $1}'`
-			for PID in ${PIDS}
-			do
-			    taskset -acp 0-1 ${PID} || /bin/true
-			done
+			#PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ {print $1}'`
+			#for PID in ${PIDS}
+			#do
+			#    taskset -acp 0-1 ${PID} || /bin/true
+			#done
 		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
 		$ lspci -nn
@@ -324,13 +314,13 @@ Secure Ripping S/W
 			sysctl -w kernel.printk='4 4 1 4'
 			#sysctl -w vm.swappiness=0
 			sysctl -w vm.overcommit_memory=1
-			sysctl -w vm.overcommit_ratio=100
+			#sysctl -w vm.overcommit_ratio=0
 			sysctl -w vm.dirty_writeback_centisecs=0
 			sysctl -w vm.oom_dump_tasks=0
 			sysctl -w vm.oom_kill_allocating_task=1
 			sysctl -w vm.panic_on_oom=2
 			sysctl -w vm.stat_interval=3
-			sysctl -w vm.user_reserve_kbytes=0
+			#sysctl -w vm.user_reserve_kbytes=0
 		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
 		$ sudo gedit /etc/fstab
 			.../swap.disk none swap sw 0 0
