@@ -68,47 +68,21 @@ mpd_start () {
 
     MPD_PID=`pgrep -n $NAME`
 
-#   MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+   MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 
-#     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-#   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-#   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-#  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-#   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-# For MPD 0.19 in rare cases
-#      MAIN1_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-#      MAIN2_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-#     PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-#    DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-#     UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-#     OUTPUT_PID=`echo "$MPD_PIDS" | awk 'END{print}'`
+     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
 
-     taskset -acp 0   "$MPD_PID"
-     chrt    -aop 0   "$MPD_PID"
+   chrt    -apo 0   "$MPD_PID"
 
-#    chrt -op  0 "$MAIN1_PID"
-#    chrt -op  0 "$MAIN2_PID"
-#    chrt -op  0 "$MAIN_PID"
-#    chrt -ip  0 "$UPDATE_PID"
-#    chrt -op  0 "$PLAYER_PID"
-#    chrt -op  0 "$DECODER_PID"
-#    chrt -op  0 "$OUTPUT_PID"
-
-#    renice -n  -1 -p "$MAIN1_PID"
-#    renice -n  -1 -p "$MAIN2_PID"
-#    renice -n   0 -p "$MAIN_PID"
-#    renice -n   5 -p "$UPDATE_PID"
-#    renice -n   0 -p "$PLAYER_PID"
-#    renice -n   0 -p "$DECODER_PID"
-#    renice -n   0 -p "$OUTPUT_PID"
-
-#    ionice -c 0      -p "$MAIN1_PID"
-#    ionice -c 3      -p "$MAIN2_PID"
-#    ionice -c 2 -n 7 -p "$MAIN_PID"
-#    ionice -c 3      -p "$UPDATE_PID"
-#    ionice -c 2 -n 7 -p "$PLAYER_PID"
-#    ionice -c 2 -n 7 -p "$DECODER_PID"
-#    ionice -c 2 -n 7 -p "$OUTPUT_PID"
+   taskset -pc 2  "$MAIN_PID"
+   taskset -pc 0  "$UPDATE_PID"
+   taskset -pc 3  "$PLAYER_PID"
+   taskset -pc 1  "$DECODER_PID"
+   taskset -pc 1  "$OUTPUT_PID"
 
     log_end_msg $?
 }
