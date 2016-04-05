@@ -122,11 +122,11 @@ Raspbian Jessie Lite
 		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
 		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
 		     chrt    -apo 0 "$MPD_PID"
-		     taskset -pc  1 "$MAIN_PID"
+		     taskset -pc  2 "$MAIN_PID"
 		     taskset -pc  0 "$UPDATE_PID"
 		     taskset -pc  3 "$PLAYER_PID"
 		     taskset -pc  1 "$DECODER_PID"
-		     taskset -pc  2 "$OUTPUT_PID"
+		     taskset -pc  1 "$OUTPUT_PID"
 		     taskset -apc 0 `pgrep upmpdcli`
 	   fi
 
