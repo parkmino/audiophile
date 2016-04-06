@@ -1,0 +1,6 @@
+1. nano kbs1fm
+
+mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 </dev/null >/dev/null 2>&1 &
+sleep 3
+taskset -pc 1 `pgrep -o mplayer`
+taskset -pc 3 `pgrep -n mplayer`
