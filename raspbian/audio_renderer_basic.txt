@@ -270,15 +270,15 @@ Raspbian Jessie Lite
 	nano ~/kbs1fm
 		#!/bin/sh
 		mpc stop
-		taskset -c 3 mplayer --cache=192 http://juoradio.appspot.com/kbs1 # KBS Classic FM
+		taskset -c 3 mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 # KBS Classic FM
 	nano ~/kbs2fm
 		#!/bin/sh
 		mpc stop
-		taskset -c 3 mplayer --cache=192 http://juoradio.appspot.com/kbs2 # KBS2 FM
+		taskset -c 3 mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs2 # KBS2 FM
 	nano ~/cbsfm
 		#!/bin/sh
 		mpc stop
-		taskset -c 3 mplayer --cache=192 rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
+		taskset -c 3 mplayer --novideo --cache=192 rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
 	chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
 	sudo ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/cbsfm /usr/bin/
 	kbs1fm
