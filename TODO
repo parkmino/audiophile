@@ -2,5 +2,9 @@
 
 mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 </dev/null >/dev/null 2>&1 &
 sleep 3
-taskset -pc 1 `pgrep -o mplayer`
+taskset -pc 2 `pgrep -o mplayer`
 taskset -pc 3 `pgrep -n mplayer`
+
+2. sudo nano /etc/rc.local
+
+taskset 1-0-3-2-2 in place of 2-0-3-1-1
