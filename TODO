@@ -8,3 +8,55 @@ taskset -pc 3 `pgrep -n mplayer`
 2. sudo nano /etc/rc.local
 
 taskset 1-0-3-2-2 in place of 2-0-3-1-1
+
+3. sudo nano /etc/rc.local
+
+if [ "$(nproc --all)"=="4" ]; then
+	sleep 5
+	if [ "$PIDS"=="5" ]; then
+	     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+	   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+	     chrt    -apo 0 "$MPD_PID"
+	     taskset -pc  2 "$MAIN_PID"
+	     taskset -pc  0 "$UPDATE_PID"
+	     taskset -pc  3 "$PLAYER_PID"
+	     taskset -pc  1 "$DECODER_PID"
+	     taskset -pc  1 "$OUTPUT_PID"
+	    #taskset -apc 0 `pgrep upmpdcli`
+	 fi
+
+	 sleep 5
+	 if [ "$PIDS"=="12" ]; then
+	    UPNP1_PID=`echo "$MPD_PIDS" | awk 'NR == 1  {print}'`
+	    UPNP2_PID=`echo "$MPD_PIDS" | awk 'NR == 2  {print}'`
+	    UPNP3_PID=`echo "$MPD_PIDS" | awk 'NR == 3  {print}'`
+	    UPNP4_PID=`echo "$MPD_PIDS" | awk 'NR == 4  {print}'`
+	    UPNP5_PID=`echo "$MPD_PIDS" | awk 'NR == 5  {print}'`
+	    UPNP6_PID=`echo "$MPD_PIDS" | awk 'NR == 6  {print}'`
+	    UPNP7_PID=`echo "$MPD_PIDS" | awk 'NR == 7  {print}'`
+	    UPNP8_PID=`echo "$MPD_PIDS" | awk 'NR == 8  {print}'`
+	    UPNP9_PID=`echo "$MPD_PIDS" | awk 'NR == 9  {print}'`
+	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 10 {print}'`
+	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 11 {print}'`
+	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 12 {print}'`
+	     chrt    -apo 0 "$MPD_PID"
+	     taskset -pc  0 "$UPNP1_PID"
+	     taskset -pc  0 "$UPNP2_PID"
+	     taskset -pc  0 "$UPNP3_PID"
+	     taskset -pc  0 "$UPNP4_PID"
+	     taskset -pc  0 "$UPNP5_PID"
+	     taskset -pc  0 "$UPNP6_PID"
+	     taskset -pc  0 "$UPNP7_PID"
+	     taskset -pc  0 "$UPNP8_PID"
+	     taskset -pc  0 "$UPNP9_PID"
+	     taskset -pc  3 "$PLAYER_PID"
+	     taskset -pc  2 "$DECODER_PID"
+	     taskset -pc  1 "$OUTPUT_PID"
+	    #taskset -apc 0 `pgrep upmpdcli`
+	 fi
+fi
+
+#chrt    -api 0 `pgrep upmpdcli`
