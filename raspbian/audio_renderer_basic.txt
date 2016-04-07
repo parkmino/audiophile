@@ -288,7 +288,7 @@ Raspbian Jessie Lite
 19. Make Image
 
 	$ mpc clear
-	$ rm ~/.bash_history
+	$ history -c ; rm ~/.bash_history
 	$ sudo fdisk -l
 	$ sudo dd bs=4M count=500 if=/dev/sdb of=raspbian_audio_renderer_basic_v.0.9.5.img
 	$ zip raspbian_audio_renderer_basic_v.0.9.5.zip raspbian_audio_renderer_basic_v.0.9.5.img
