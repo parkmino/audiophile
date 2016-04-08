@@ -130,9 +130,8 @@ Raspbian Jessie Lite
 		     taskset -apc 0 `pgrep upmpdcli`
 	   fi
 
-	 UPMPDCLI_PID=`pgrep upmpdcli`
-	UPMPDCLI_PIDS=`chrt -ap "$UPMPDCLI_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-	chrt -aip 0 `pgrep upmpdcli`
+	  chrt -aip 0 `pgrep upmpdcli`
+	UPMPDCLI_PIDS=`chrt -ap $(pgrep upmpdcli) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 	for i in $UPMPDCLI_PIDS
 		do
 			ionice -c  3 -p $i
