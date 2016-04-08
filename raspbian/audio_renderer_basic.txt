@@ -127,9 +127,7 @@ Raspbian Jessie Lite
 		     taskset -pc  3 "$PLAYER_PID"
 		     taskset -pc  1 "$DECODER_PID"
 		     taskset -pc  1 "$OUTPUT_PID"
-		     taskset -apc 0  `pgrep upmpdcli`
-		     ionice -c 3 -p  `pgrep upmpdcli`
-		     renice -n 19 -p `pgrep upmpdcli`
+		     taskset -apc 0 `pgrep upmpdcli`
 	   fi
 
 	chrt    -api 0 `pgrep upmpdcli`
