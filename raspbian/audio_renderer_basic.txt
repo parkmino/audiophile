@@ -130,7 +130,14 @@ Raspbian Jessie Lite
 		     taskset -apc 0 `pgrep upmpdcli`
 	   fi
 
-	chrt    -api 0 `pgrep upmpdcli`
+	 UPMPDCLI_PID=`pgrep upmpdcli`
+	UPMPDCLI_PIDS=`chrt -ap "$UPMPDCLI_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+	chrt -aip 0 `pgrep upmpdcli`
+	for i in $UPMPDCLI_PIDS
+		do
+			ionice -c  3 -p $i
+			renice -n 19 -p $i
+		done
 	
 	### For Criterion from Reference Club
 	#amixer set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
