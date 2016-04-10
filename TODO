@@ -79,3 +79,5 @@ fi
 	#auto_resample "no"
 	#auto_channels "no"
 	#auto_format   "no"
+
+8. Same taskset in rygel
