@@ -75,4 +75,7 @@ fi
 	#pcm.shm.nonblock 1
 
 7. sudo nano /etc/mpd.conf
-	#mixer_type "disabled"
+	#mixer_type    "disabled"
+	#auto_resample "no"
+	#auto_channels "no"
+	#auto_format   "no"
