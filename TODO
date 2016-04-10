@@ -1,5 +1,6 @@
 1. nano kbs1fm
 
+mpc stop
 mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 </dev/null >/dev/null 2>&1 &
 if [ "$(nproc --all)"=="4" ]; then
 	sleep 3
