@@ -1,0 +1,9 @@
+#!/bin/sh
+chrt -aip 0     `pgrep login`
+chrt -aip 0     `pgrep agetty`
+ionice -c 3 -p  `pgrep login`
+ionice -c 3 -p  `pgrep agetty`
+renice -n 19 -p `pgrep login`
+renice -n 19 -p `pgrep agetty`
+taskset -pc 1   `pgrep login`
+taskset -pc 1   `pgrep agetty`
