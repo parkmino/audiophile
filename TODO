@@ -10,7 +10,7 @@ fi
 
 2. sudo nano /etc/rc.local
 
-taskset 1-0-3-2-2 in place of 2-0-3-1-1
+taskset 1-0-3-2-3 in place of 2-0-3-1-1
 
 3. sudo nano /etc/rc.local
 
@@ -26,11 +26,11 @@ if [ "$(nproc --all)"=="4" ]; then
 	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
 	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
 	     chrt    -apo 0 "$MPD_PID"
-	     taskset -pc  2 "$MAIN_PID"
+	     taskset -pc  1 "$MAIN_PID"
 	     taskset -pc  0 "$UPDATE_PID"
 	     taskset -pc  3 "$PLAYER_PID"
-	     taskset -pc  1 "$DECODER_PID"
-	     taskset -pc  1 "$OUTPUT_PID"
+	     taskset -pc  2 "$DECODER_PID"
+	     taskset -pc  3 "$OUTPUT_PID"
 	 fi
 
 	 if [ "$(($(chrt -ap `pgrep mpd` | wc -l)/2))"=="12" ]; then
@@ -50,21 +50,29 @@ if [ "$(nproc --all)"=="4" ]; then
 	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 11 {print}'`
 	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 12 {print}'`
 	     chrt    -apo 0 "$MPD_PID"
-	     taskset -pc  0 "$UPNP1_PID"
-	     taskset -pc  0 "$UPNP2_PID"
-	     taskset -pc  0 "$UPNP3_PID"
-	     taskset -pc  0 "$UPNP4_PID"
-	     taskset -pc  0 "$UPNP5_PID"
+	     taskset -pc  1 "$UPNP1_PID"
+	     taskset -pc  1 "$UPNP2_PID"
+	     taskset -pc  1 "$UPNP3_PID"
+	     taskset -pc  1 "$UPNP4_PID"
+	     taskset -pc  1 "$UPNP5_PID"
 	     taskset -pc  0 "$UPNP6_PID"
 	     taskset -pc  0 "$UPNP7_PID"
 	     taskset -pc  0 "$UPNP8_PID"
 	     taskset -pc  0 "$UPNP9_PID"
 	     taskset -pc  3 "$PLAYER_PID"
 	     taskset -pc  2 "$DECODER_PID"
-	     taskset -pc  1 "$OUTPUT_PID"
+	     taskset -pc  3 "$OUTPUT_PID"
 	 fi
 fi
 
 #chrt    -api 0 `pgrep upmpdcli`
 
 4. sudo sysctl -w vm.panic_on_oom=1
+
+5. Comment out all the vm.* kernel configs.
+
+6. sudo nano /usr/share/alsa/alsa.conf
+	#pcm.shm.nonblock 1
+
+7. sudo nano /etc/mpd.conf
+	#mixer_type "disabled"
