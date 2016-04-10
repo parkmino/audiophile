@@ -63,3 +63,5 @@ if [ "$(nproc --all)"=="4" ]; then
 fi
 
 #chrt    -api 0 `pgrep upmpdcli`
+
+4. sudo sysctl -w vm.panic_on_oom=1
