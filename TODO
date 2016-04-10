@@ -1,9 +1,11 @@
 1. nano kbs1fm
 
 mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 </dev/null >/dev/null 2>&1 &
-sleep 3
-taskset -pc 2 `pgrep -o mplayer`
-taskset -pc 3 `pgrep -n mplayer`
+if [ "$(nproc --all)"=="4" ]; then
+	sleep 3
+	taskset -pc 2 `pgrep -o mplayer`
+	taskset -pc 3 `pgrep -n mplayer`
+fi
 
 2. sudo nano /etc/rc.local
 
