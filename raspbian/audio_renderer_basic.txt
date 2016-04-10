@@ -240,7 +240,12 @@ Raspbian Jessie Lite
 		};
 	nano ~/airport
 	#!/bin/sh
-	shairport-sync
+	if [ "$(nproc --all)"=="4" ]
+	 then
+	  taskset -c 3 shairport-sync
+	 else
+	  shairport-sync
+	if
 	chmod +x ~/airport
 	sudo ln -s /home/pi/airport /usr/bin/
 	airport
