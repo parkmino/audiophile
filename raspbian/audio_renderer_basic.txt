@@ -281,15 +281,30 @@ Raspbian Jessie Lite
 	nano ~/kbs1fm
 		#!/bin/sh
 		mpc stop
-		taskset -c 3 mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 # KBS Classic FM
+		mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 </dev/null >/dev/null 2>&1 &
+		if [ "$(nproc --all)"=="4" ]; then
+			sleep 3
+			taskset -pc 2 `pgrep -o mplayer`
+			taskset -pc 3 `pgrep -n mplayer`
+		fi
 	nano ~/kbs2fm
 		#!/bin/sh
 		mpc stop
-		taskset -c 3 mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs2 # KBS2 FM
+		mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs2 </dev/null >/dev/null 2>&1 &
+		if [ "$(nproc --all)"=="4" ]; then
+			sleep 3
+			taskset -pc 2 `pgrep -o mplayer`
+			taskset -pc 3 `pgrep -n mplayer`
+		fi
 	nano ~/cbsfm
 		#!/bin/sh
 		mpc stop
-		taskset -c 3 mplayer --novideo --cache=192 rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream # CBS Music FM
+		mplayer --novideo --cache=192 rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream </dev/null >/dev/null 2>&1 &
+		if [ "$(nproc --all)"=="4" ]; then
+			sleep 3
+			taskset -pc 2 `pgrep -o mplayer`
+			taskset -pc 3 `pgrep -n mplayer`
+		fi
 	chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
 	sudo ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/cbsfm /usr/bin/
 	kbs1fm
