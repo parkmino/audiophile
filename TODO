@@ -8,14 +8,12 @@ if [ "$(nproc --all)"=="4" ]; then
 taskset -apc 0 `pgrep upmpdcli`
 	if [ "$(($(chrt -ap `pgrep mpd` | wc -l)/2))"=="5" ]; then
 	     sleep 5
-	      MPD_PID=`pgrep -F /run/mpd/pid`
-	     MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+	     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 	     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
 	   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
 	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
 	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
 	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-	     chrt    -apo 0 "$MPD_PID"
 	     taskset -pc  1 "$MAIN_PID"
 	     taskset -pc  0 "$UPDATE_PID"
 	     taskset -pc  3 "$PLAYER_PID"
@@ -25,8 +23,7 @@ taskset -apc 0 `pgrep upmpdcli`
 
 	 if [ "$(($(chrt -ap `pgrep mpd` | wc -l)/2))"=="12" ]; then
 	     sleep 10
-	      MPD_PID=`pgrep -F /run/mpd/pid`
-	     MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+	     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 	    UPNP1_PID=`echo "$MPD_PIDS" | awk 'NR == 1  {print}'`
 	    UPNP2_PID=`echo "$MPD_PIDS" | awk 'NR == 2  {print}'`
 	    UPNP3_PID=`echo "$MPD_PIDS" | awk 'NR == 3  {print}'`
@@ -39,7 +36,6 @@ taskset -apc 0 `pgrep upmpdcli`
 	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 10 {print}'`
 	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 11 {print}'`
 	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 12 {print}'`
-	     chrt    -apo 0 "$MPD_PID"
 	     taskset -pc  1 "$UPNP1_PID"
 	     taskset -pc  1 "$UPNP2_PID"
 	     taskset -pc  1 "$UPNP3_PID"
@@ -55,6 +51,7 @@ taskset -apc 0 `pgrep upmpdcli`
 	 fi
 fi
 
+chrt -aop 0 `pgrep -F /run/mpd/pid`
 chrt -aip 0 `pgrep upmpdcli`
 UPMPDCLI_PIDS=`chrt -ap $(pgrep upmpdcli) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 for i in $UPMPDCLI_PIDS
