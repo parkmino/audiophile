@@ -36,18 +36,18 @@ taskset -apc 0 `pgrep upmpdcli`
 	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 10 {print}'`
 	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 11 {print}'`
 	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 12 {print}'`
-	     taskset -pc  1 "$UPNP1_PID"
-	     taskset -pc  1 "$UPNP2_PID"
-	     taskset -pc  1 "$UPNP3_PID"
-	     taskset -pc  1 "$UPNP4_PID"
-	     taskset -pc  1 "$UPNP5_PID"
+	     taskset -pc  0 "$UPNP1_PID"
+	     taskset -pc  0 "$UPNP2_PID"
+	     taskset -pc  0 "$UPNP3_PID"
+	     taskset -pc  0 "$UPNP4_PID"
+	     taskset -pc  0 "$UPNP5_PID"
 	     taskset -pc  0 "$UPNP6_PID"
 	     taskset -pc  0 "$UPNP7_PID"
 	     taskset -pc  0 "$UPNP8_PID"
 	     taskset -pc  0 "$UPNP9_PID"
 	     taskset -pc  3 "$PLAYER_PID"
-	     taskset -pc  2 "$DECODER_PID"
-	     taskset -pc  3 "$OUTPUT_PID"
+	     taskset -pc  1 "$DECODER_PID"
+	     taskset -pc  2 "$OUTPUT_PID"
 	 fi
 fi
 
