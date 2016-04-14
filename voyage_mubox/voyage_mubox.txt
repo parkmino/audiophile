@@ -125,31 +125,7 @@
 
 15. MPD ionice & taskset
 
-	nano /etc/init.d/mpd
-		MPD_PID=`pgrep -n $NAME`
-
-		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-
-		   MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-		 UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-		 PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-		DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-		 OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-
-		#ionice -c 2 -n 5 -p "$MAIN_PID"
-		#ionice -c 2 -n 7 -p "$UPDATE_PID"
-		#ionice -c 2 -n 4 -p "$PLAYER_PID"
-		#ionice -c 2 -n 6 -p "$DECODER_PID"
-		#ionice -c 2 -n 3 -p "$OUTPUT_PID"
-
-		chrt    -apo 0 "$MPD_PID"
-		taskset -apc 3 "$MPD_PID"
-		
-16. Ramfs
-	nano /etc/fstab
-		ramfs /tmp ramfs nosuid,nodev 0 0
-
-17. Documentation
+16. Documentation
 	https://github.com/raspberrypi/documentation
 
 cf) raspi-config

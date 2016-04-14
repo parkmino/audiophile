@@ -183,15 +183,15 @@ Raspbian Jessie Lite
 		#kernel.watchdog = 0
 		#kernel.sched_rt_runtime_us = -1
 		#kernel.sched_rt_period_us = 42700
-		kernel.printk = '4 4 1 4'
+		# kernel.printk = '4 4 1 4'
 		#vm.swappiness = 0
-		vm.overcommit_memory = 1
+		# vm.overcommit_memory = 1
 		#vm.overcommit_ratio = 0
-		vm.dirty_writeback_centisecs = 0
-		vm.oom_dump_tasks = 0
-		vm.oom_kill_allocating_task = 1
-		vm.panic_on_oom = 2
-		vm.stat_interval = 3
+		# vm.dirty_writeback_centisecs = 0
+		# vm.oom_dump_tasks = 0
+		# vm.oom_kill_allocating_task = 1
+		# vm.panic_on_oom = 2
+		# vm.stat_interval = 3
 		#vm.user_reserve_kbytes = 0
 
 		net.core.rmem_max = 12582912

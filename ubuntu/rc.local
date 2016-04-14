@@ -35,15 +35,15 @@ echo 4032 > /sys/class/rtc/rtc0/max_user_freq
 #sysctl -w kernel.watchdog=0
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=42700
- sysctl -w kernel.printk='4 4 1 4'
+# sysctl -w kernel.printk='4 4 1 4'
 #sysctl -w vm.swappiness=30
- sysctl -w vm.overcommit_memory=1
+# sysctl -w vm.overcommit_memory=1
 #sysctl -w vm.overcommit_ratio=0
- sysctl -w vm.dirty_writeback_centisecs=0
- sysctl -w vm.oom_dump_tasks=0
- sysctl -w vm.oom_kill_allocating_task=1
- sysctl -w vm.panic_on_oom=2
- sysctl -w vm.stat_interval=3
+# sysctl -w vm.dirty_writeback_centisecs=0
+# sysctl -w vm.oom_dump_tasks=0
+# sysctl -w vm.oom_kill_allocating_task=1
+# sysctl -w vm.panic_on_oom=1
+# sysctl -w vm.stat_interval=3
 #sysctl -w vm.user_reserve_kbytes=0
 
 ifconfig eth0  txqueuelen 10000
@@ -126,27 +126,15 @@ MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
   DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
    OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
 
-#ionice -c  3 -p "$UPDATE_PID"
-#renice -n 19    "$UPDATE_PID"
-#chrt   -ip 0    "$UPDATE_PID"
-
  chrt    -apo 0 "$MPD_PID"
-#taskset -apc 3 "$MPD_PID"
- taskset -pc 2  "$MAIN_PID"
-#ionice -n 7 -p "$MAIN_PID"
- taskset -pc 0  "$UPDATE_PID"
- taskset -pc 3  "$PLAYER_PID"
-#ionice -c 0 -p "$PLAYER_PID"
- taskset -pc 2  "$DECODER_PID"
- taskset -pc 1  "$OUTPUT_PID"
-#ionice -c 0 -p "$OUTPUT_PID"
-#
- taskset -apc 3      `pgrep snd_hda`
-#renice -n -2     -p `pgrep snd_hda`
-#ionice -c 2 -n 7 -p `pgrep snd_hda`
-#ionice -c 0 -p `pgrep snd_hda`
-#chrt -rp 2          `pgrep snd_hda`
-#
+ taskset -pc  1 "$MAIN_PID"
+ taskset -pc  0 "$UPDATE_PID"
+ taskset -pc  3 "$PLAYER_PID"
+ taskset -pc  2 "$DECODER_PID"
+ taskset -pc  3 "$OUTPUT_PID"
+
+ taskset -apc 3 `pgrep snd_hda`
+
 #hdparm -A1 -a1664 -B255 /dev/sda
 
 exit 0

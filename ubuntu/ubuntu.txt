@@ -307,19 +307,19 @@ Secure Ripping S/W
 		$ mount
 	-. Swappiness Kernel Parameters
 		$ sudo gedit /etc/rc.local
-			sysctl -w debug.exception-trace=0
-			sysctl -w kernel.watchdog=0
+			# sysctl -w debug.exception-trace=0
+			# sysctl -w kernel.watchdog=0
 			#sysctl -w kernel.sched_rt_runtime_us=-1
 			#sysctl -w kernel.sched_rt_period_us=42700
-			sysctl -w kernel.printk='4 4 1 4'
+			# sysctl -w kernel.printk='4 4 1 4'
 			#sysctl -w vm.swappiness=0
 			sysctl -w vm.overcommit_memory=1
 			#sysctl -w vm.overcommit_ratio=0
-			sysctl -w vm.dirty_writeback_centisecs=0
-			sysctl -w vm.oom_dump_tasks=0
-			sysctl -w vm.oom_kill_allocating_task=1
-			sysctl -w vm.panic_on_oom=2
-			sysctl -w vm.stat_interval=3
+			# sysctl -w vm.dirty_writeback_centisecs=0
+			# sysctl -w vm.oom_dump_tasks=0
+			# sysctl -w vm.oom_kill_allocating_task=1
+			# sysctl -w vm.panic_on_oom=2
+			# sysctl -w vm.stat_interval=3
 			#sysctl -w vm.user_reserve_kbytes=0
 		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
 		$ sudo gedit /etc/fstab
