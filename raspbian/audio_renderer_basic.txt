@@ -7,7 +7,7 @@ Raspbian Jessie Lite
 	$ sudo gparted
 	$ copy mpd.0.19.12.ffmpeg llctl icon.png /home/pi
 	$ ssh pi@rpi_ip
-	pi@rpi_ip's password: raspberry
+	  pi@rpi_ip's password: raspberry
 
 1. Configuration file
 
@@ -108,7 +108,6 @@ Raspbian Jessie Lite
 	done
 
 	renice 0 `pgrep dwc_otg`
-
 
 	if [ "$(nproc --all)"=="4" ]; then
 	taskset -apc 0 `pgrep upmpdcli`
