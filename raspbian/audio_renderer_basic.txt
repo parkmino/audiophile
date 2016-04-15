@@ -182,7 +182,7 @@ Raspbian Jessie Lite
 		#kernel.watchdog = 0
 		#kernel.sched_rt_runtime_us = -1
 		#kernel.sched_rt_period_us = 42700
-		# kernel.printk = '4 4 1 4'
+		# kernel.printk = 4 4 1 4
 		#vm.swappiness = 0
 		# vm.overcommit_memory = 1
 		#vm.overcommit_ratio = 0
@@ -196,8 +196,8 @@ Raspbian Jessie Lite
 		net.core.rmem_max = 12582912
 		net.core.wmem_max = 12582912
 		#net.ipv4.conf.default.forwarding = 1
-		net.ipv4.tcp_rmem = '10240 87380 12582912'
-		net.ipv4.tcp_wmem = '10240 87380 12582912'
+		net.ipv4.tcp_rmem = 10240 87380 12582912
+		net.ipv4.tcp_wmem = 10240 87380 12582912
 		net.ipv4.tcp_timestamps = 0
 		#net.ipv4.tcp_window_scaling = 1
 		net.ipv4.tcp_sack = 0
@@ -272,7 +272,7 @@ Raspbian Jessie Lite
 	  taskset -c 3 shairport-sync
 	 else
 	  shairport-sync
-	if
+	fi
 	chmod +x ~/airport
 	sudo ln -s /home/pi/airport /usr/bin/
 	airport
