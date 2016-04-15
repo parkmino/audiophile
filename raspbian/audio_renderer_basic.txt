@@ -337,8 +337,14 @@ Raspbian Jessie Lite
 	kbs1fm
 	kbs2fm
 	cbsfm
-	
-19. Make Image
+
+19. Show release
+
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.0.9.5 basic" > release
+	$ sudo nano /etc/rc.local
+		cat /home/pi/release
+
+20. Make Image
 
 	$ mpc clear
 	$ history -c ; rm ~/.bash_history
