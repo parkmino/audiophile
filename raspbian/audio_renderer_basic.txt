@@ -265,7 +265,7 @@ Raspbian Jessie Lite
 		output_device = "shm"
 		mixer_device = "shm"
 		};
-	nano ~/airport
+	nano ~/airplay
 	#!/bin/sh
 	if [ "$(nproc --all)"=="4" ]
 	 then
