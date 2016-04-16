@@ -270,7 +270,7 @@ Raspbian Jessie Lite
 		};
 	nano ~/airplay
 	#!/bin/sh
-	if [ "$(nproc --all)"=="4" ]
+	if [ "$(nproc --all)" = "4" ]
 	 then
 	  taskset -c 3 shairport-sync
 	 else
@@ -312,7 +312,7 @@ Raspbian Jessie Lite
 		#!/bin/sh
 		mpc stop
 		mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs1 </dev/null >/dev/null 2>&1 &
-		if [ "$(nproc --all)"=="4" ]; then
+		if [ "$(nproc --all)" = "4" ]; then
 			sleep 3
 			taskset -pc 2 `pgrep -o mplayer`
 			taskset -pc 3 `pgrep -n mplayer`
@@ -321,7 +321,7 @@ Raspbian Jessie Lite
 		#!/bin/sh
 		mpc stop
 		mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs2 </dev/null >/dev/null 2>&1 &
-		if [ "$(nproc --all)"=="4" ]; then
+		if [ "$(nproc --all)" = "4" ]; then
 			sleep 3
 			taskset -pc 2 `pgrep -o mplayer`
 			taskset -pc 3 `pgrep -n mplayer`
@@ -330,7 +330,7 @@ Raspbian Jessie Lite
 		#!/bin/sh
 		mpc stop
 		mplayer --novideo --cache=192 rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream </dev/null >/dev/null 2>&1 &
-		if [ "$(nproc --all)"=="4" ]; then
+		if [ "$(nproc --all)" = "4" ]; then
 			sleep 3
 			taskset -pc 2 `pgrep -o mplayer`
 			taskset -pc 3 `pgrep -n mplayer`
