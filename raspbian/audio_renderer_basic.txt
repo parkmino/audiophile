@@ -108,14 +108,12 @@ Raspbian Jessie Lite
 	done
 
 	renice 0 `pgrep dwc_otg`
+	
+	if [ "$(nproc --all)" = "4" ]; then
+	 sleep 5
+	 taskset -apc 0 `pgrep upmpdcli`
 
-	sleep 5
-	    MPD_PID=`pgrep -F /run/mpd/pid`
-	   MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-	       PIDS=$(echo $MPD_PIDS | wc -w)
-
-	if [ "$(nproc --all)" = "4" ] && [ "$PIDS" = "5" ]; then
-
+	  if [ "$(($(chrt -ap `pgrep -F /run/mpd/pid` | wc -l)/2))" = "5" ]; then
 	     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 	     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
 	   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
@@ -127,11 +125,11 @@ Raspbian Jessie Lite
 	     taskset -pc  3 "$PLAYER_PID"
 	     taskset -pc  2 "$DECODER_PID"
 	     taskset -pc  3 "$OUTPUT_PID"
-	     taskset -apc 0 `pgrep upmpdcli`
-	 fi
-	 
-	 if [ "$(nproc --all)" = "4" ] && [ "$PIDS" = "12" ]; then
-	     sleep 5
+	  else
+	  sleep 5
+	  fi
+
+	  if [ "$(($(chrt -ap `pgrep -F /run/mpd/pid` | wc -l)/2))" = "12" ]; then
 	     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
 	    UPNP1_PID=`echo "$MPD_PIDS" | awk 'NR == 1  {print}'`
 	    UPNP2_PID=`echo "$MPD_PIDS" | awk 'NR == 2  {print}'`
@@ -157,6 +155,7 @@ Raspbian Jessie Lite
 	     taskset -pc  3 "$PLAYER_PID"
 	     taskset -pc  1 "$DECODER_PID"
 	     taskset -pc  2 "$OUTPUT_PID"
+	  fi
 	fi
 	
 	chrt -aop 0 `pgrep -F /run/mpd/pid`
