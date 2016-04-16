@@ -109,51 +109,54 @@ Raspbian Jessie Lite
 
 	renice 0 `pgrep dwc_otg`
 
-	if [ "$(nproc --all)"=="4" ]; then
-	taskset -apc 0 `pgrep upmpdcli`
-		if [ "$(($(chrt -ap `pgrep mpd` | wc -l)/2))"=="5" ]; then
-		     sleep 5
-		     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-		   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-		   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-		     taskset -pc  1 "$MAIN_PID"
-		     taskset -pc  0 "$UPDATE_PID"
-		     taskset -pc  3 "$PLAYER_PID"
-		     taskset -pc  2 "$DECODER_PID"
-		     taskset -pc  3 "$OUTPUT_PID"
-		 fi
+	sleep 5
+	    MPD_PID=`pgrep -F /run/mpd/pid`
+	   MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+	       PIDS=$(echo $MPD_PIDS | wc -w)
 
-		 if [ "$(($(chrt -ap `pgrep mpd` | wc -l)/2))"=="12" ]; then
-		     sleep 10
-		     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-		    UPNP1_PID=`echo "$MPD_PIDS" | awk 'NR == 1  {print}'`
-		    UPNP2_PID=`echo "$MPD_PIDS" | awk 'NR == 2  {print}'`
-		    UPNP3_PID=`echo "$MPD_PIDS" | awk 'NR == 3  {print}'`
-		    UPNP4_PID=`echo "$MPD_PIDS" | awk 'NR == 4  {print}'`
-		    UPNP5_PID=`echo "$MPD_PIDS" | awk 'NR == 5  {print}'`
-		    UPNP6_PID=`echo "$MPD_PIDS" | awk 'NR == 6  {print}'`
-		    UPNP7_PID=`echo "$MPD_PIDS" | awk 'NR == 7  {print}'`
-		    UPNP8_PID=`echo "$MPD_PIDS" | awk 'NR == 8  {print}'`
-		    UPNP9_PID=`echo "$MPD_PIDS" | awk 'NR == 9  {print}'`
-		   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 10 {print}'`
-		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 11 {print}'`
-		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 12 {print}'`
-		     taskset -pc  0 "$UPNP1_PID"
-		     taskset -pc  0 "$UPNP2_PID"
-		     taskset -pc  0 "$UPNP3_PID"
-		     taskset -pc  0 "$UPNP4_PID"
-		     taskset -pc  0 "$UPNP5_PID"
-		     taskset -pc  0 "$UPNP6_PID"
-		     taskset -pc  0 "$UPNP7_PID"
-		     taskset -pc  0 "$UPNP8_PID"
-		     taskset -pc  0 "$UPNP9_PID"
-		     taskset -pc  3 "$PLAYER_PID"
-		     taskset -pc  1 "$DECODER_PID"
-		     taskset -pc  2 "$OUTPUT_PID"
-		 fi
+	if [ "$(nproc --all)" = "4" ] && [ "$PIDS" = "5" ]; then
+
+	     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+	     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
+	   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
+	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
+	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
+	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
+	     taskset -pc  1 "$MAIN_PID"
+	     taskset -pc  0 "$UPDATE_PID"
+	     taskset -pc  3 "$PLAYER_PID"
+	     taskset -pc  2 "$DECODER_PID"
+	     taskset -pc  3 "$OUTPUT_PID"
+	     taskset -apc 0 `pgrep upmpdcli`
+	 fi
+	 
+	 if [ "$(nproc --all)" = "4" ] && [ "$PIDS" = "12" ]; then
+	     sleep 5
+	     MPD_PIDS=`chrt -ap $(pgrep -F /run/mpd/pid) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+	    UPNP1_PID=`echo "$MPD_PIDS" | awk 'NR == 1  {print}'`
+	    UPNP2_PID=`echo "$MPD_PIDS" | awk 'NR == 2  {print}'`
+	    UPNP3_PID=`echo "$MPD_PIDS" | awk 'NR == 3  {print}'`
+	    UPNP4_PID=`echo "$MPD_PIDS" | awk 'NR == 4  {print}'`
+	    UPNP5_PID=`echo "$MPD_PIDS" | awk 'NR == 5  {print}'`
+	    UPNP6_PID=`echo "$MPD_PIDS" | awk 'NR == 6  {print}'`
+	    UPNP7_PID=`echo "$MPD_PIDS" | awk 'NR == 7  {print}'`
+	    UPNP8_PID=`echo "$MPD_PIDS" | awk 'NR == 8  {print}'`
+	    UPNP9_PID=`echo "$MPD_PIDS" | awk 'NR == 9  {print}'`
+	   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 10 {print}'`
+	  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 11 {print}'`
+	   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 12 {print}'`
+	     taskset -pc  0 "$UPNP1_PID"
+	     taskset -pc  0 "$UPNP2_PID"
+	     taskset -pc  0 "$UPNP3_PID"
+	     taskset -pc  0 "$UPNP4_PID"
+	     taskset -pc  0 "$UPNP5_PID"
+	     taskset -pc  0 "$UPNP6_PID"
+	     taskset -pc  0 "$UPNP7_PID"
+	     taskset -pc  0 "$UPNP8_PID"
+	     taskset -pc  0 "$UPNP9_PID"
+	     taskset -pc  3 "$PLAYER_PID"
+	     taskset -pc  1 "$DECODER_PID"
+	     taskset -pc  2 "$OUTPUT_PID"
 	fi
 	
 	chrt -aop 0 `pgrep -F /run/mpd/pid`
