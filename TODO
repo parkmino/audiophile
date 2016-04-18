@@ -3,12 +3,12 @@
 pcm.sound.type hw
 pcm.sound.card 0
 pcm.sound.device 0
-pcm.sound.subdevice 0
+pcm.sound.subdevice -1
 #pcm.sound.sync_ptr_ioctl 1
 #pcm.sound.nonblock 1
 
-ctl.hw.type hw
-ctl.hw.card 0
+ctl.default.type hw
+ctl.default.card 0
 
 defaults.pcm.nonblock 1
 defaults.pcm.compat 0
