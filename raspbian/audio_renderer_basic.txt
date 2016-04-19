@@ -265,7 +265,7 @@ Raspbian Jessie Lite
 		alsa =
 		{
 		output_device = "sound"
-		#mixer_device = "default"
+		//  mixer_device = "default"
 		};
 	nano ~/airplay
 	#!/bin/sh
