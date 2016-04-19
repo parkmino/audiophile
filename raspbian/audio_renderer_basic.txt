@@ -168,8 +168,8 @@ Raspbian Jessie Lite
 	 done
 	
 	### For Criterion from Reference Club
-	#amixer set 'XMOS Clock Selector',0 Capture 0 0 off off || /bin/true
-	#amixer set 'XMOS Clock Selector',1 Capture 0 off       || /bin/true
+	#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
+	#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
 	#
 	### Turn off LEDs
 	echo none > /sys/class/leds/led0/trigger
