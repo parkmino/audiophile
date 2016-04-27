@@ -1,3 +1,6 @@
 1. sudo nano /usr/share/alsa/alsa.conf
 	#ctl.default.type hw
 	#ctl.default.card -1
+
+2. dpkg -l pulseaudio
+	sudo apt-get purge pulseaudio
