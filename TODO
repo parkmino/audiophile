@@ -7,3 +7,6 @@
 
 3. lspci -nn
 	sudo setpci -v -d xxxx:xxxx latency_timer=ff
+
+4. sudo nano /boot/cmdline.txt
+	smsc95xx.turbo_mode=N
