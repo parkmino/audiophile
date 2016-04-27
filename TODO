@@ -4,3 +4,6 @@
 
 2. dpkg -l pulseaudio
 	sudo apt-get purge pulseaudio
+
+3. lspci -nn
+	sudo setpci -v -d xxxx:xxxx latency_timer=ff
