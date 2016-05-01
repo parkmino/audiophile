@@ -1,7 +1,0 @@
-1. sudo nano /usr/share/alsa/alsa.conf
-	#ctl.default.type hw
-	#ctl.default.card -1
-
-2. sudo nano /boot/cmdline.txt
-	#console=serial0,115200 console=tty1
-	smsc95xx.turbo_mode=0

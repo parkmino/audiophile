@@ -20,6 +20,8 @@
 		dwc_otg.fiq_split_enable=0 (?)
 		apm=off noapic consoleblank=0
 		#kgdboc=ttyAMA0,115200
+		#console=serial0,115200 console=tty1
+		smsc95xx.turbo_mode=0
 
 3. Update & upgrade
 
