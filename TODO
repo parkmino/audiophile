@@ -3,4 +3,5 @@
 	#ctl.default.card -1
 
 2. sudo nano /boot/cmdline.txt
-	smsc95xx.turbo_mode=N
+	#console=serial0,115200 console=tty1
+	smsc95xx.turbo_mode=0
