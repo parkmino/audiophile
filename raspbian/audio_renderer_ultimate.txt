@@ -6,8 +6,13 @@ Raspbian MPD Renderer
 	$ ssh pi@RPi_IP
 	$ sudo mv /usr/bin/mpd /usr/bin/mpd.0.19.12.ffmpeg
 	$ sudo mv ~/mpd.0.19.12.minimal /usr/bin/mpd
-	
-2. UPnP
+
+2. Remove pcm.default
+
+	$ sudo nano /usr/share/alsa/alsa.conf
+		#pcm.default pcm.sound
+
+3. UPnP
 
 	$ sudo nano /etc/mpd.conf
 		#music_directory
@@ -21,11 +26,11 @@ Raspbian MPD Renderer
 		}
 	$ sudo service mpd restart
 
-3. Disable Upmpdcli
+4. Disable Upmpdcli
 
 	$ sudo systemctl disable upmpdcli
 
-4. Static IP
+5. Static IP
 
 	$ sudo nano /etc/network/interfaces
 		auto  eth0
@@ -39,7 +44,7 @@ Raspbian MPD Renderer
 			dns-nameservers 168.126.63.1
 	$ sudo systemctl disable dhcpcd.service
 
-5. Remove unnecessay modules
+6. Remove unnecessay modules
 
 	$ lsmod
 	$ sudo nano /etc/modprobe.d/raspi-blacklist.conf
@@ -52,7 +57,7 @@ Raspbian MPD Renderer
 		#blacklist joydev
 		#blacklist evdev
 
-6. Remove unnecessay processes
+7. Remove unnecessay processes
 
 	$ ps ax
 	$ sudo systemctl disable cron ntp rsyslog avahi-daemon
