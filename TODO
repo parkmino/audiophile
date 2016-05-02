@@ -5,3 +5,5 @@
 	elevator=noop
    sudo nano /etc/rc.local
    	#echo noop > /sys/block/mmcblk0/queue/scheduler
+
+3. dpkg -L alsa-base alsa-utils | grep alsa-base.conf
