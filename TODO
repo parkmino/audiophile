@@ -7,3 +7,9 @@
    	#echo noop > /sys/block/mmcblk0/queue/scheduler
 
 3. dpkg -L alsa-base alsa-utils | grep alsa-base.conf
+
+4. sudo nano /etc/rc.local
+	sleep 3
+	taskset -acp 3 `pgrep -x kodi.bin`
+	taskset -cp  2 $(pstree -np `pgrep kodi.bin` | grep FDE | grep -o '[0-9]*' | sed -n 2p)
+	pstree -np `pgrep kodi.bin` | grep -v kodi.bin | grep -o '[0-9]*' | xargs -n1 taskset -cp 2
