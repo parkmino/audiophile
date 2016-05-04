@@ -13,3 +13,15 @@
 	taskset -acp 3 `pgrep -x kodi.bin`
 	taskset -cp  2 $(pstree -np `pgrep kodi.bin` | grep FDE | grep -o '[0-9]*' | sed -n 2p)
 	pstree -np `pgrep kodi.bin` | grep -v kodi.bin | grep -o '[0-9]*' | xargs -n1 taskset -cp 2
+
+5. sudo nano /etc/rc.local
+	if [ "$(nproc --all)" = "4" ]; then
+	sleep $(($(chrt -ap `pgrep -F /run/mpd/pid` | wc -l)/2))
+	MPD_PID=`pgrep -F /run/mpd/pid`
+	sudo chrt    -aop 0 "$MPD_PID"
+	sudo taskset -acp 1 "$MPD_PID"
+	sudo taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
+	sudo taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
+	sudo taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
+	sudo taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
+	fi
