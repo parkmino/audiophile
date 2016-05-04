@@ -16,12 +16,15 @@
 
 5. sudo nano /etc/rc.local
 	if [ "$(nproc --all)" = "4" ]; then
-	sleep $(($(chrt -ap `pgrep -F /run/mpd/pid` | wc -l)/2))
-	MPD_PID=`pgrep -F /run/mpd/pid`
-	sudo chrt    -aop 0 "$MPD_PID"
-	sudo taskset -acp 1 "$MPD_PID"
-	sudo taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
-	sudo taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
-	sudo taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
-	sudo taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
+	 sleep 5
+	 taskset -apc 0 `pgrep upmpdcli`
+	 MPD_PID=`pgrep -F /run/mpd/pid`
+	  if [ "$(($(chrt -ap "$MPD_PID" | wc -l)/2))" != "5" ]; then
+	  sleep 5
+	  fi
+	 taskset -acp 1 "$MPD_PID"
+	 taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
+	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
+	 taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
+	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
