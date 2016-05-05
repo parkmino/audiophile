@@ -1,20 +1,12 @@
-1. sudo nano /usr/share/alsa/alsa.conf
-	pcm.default pcm.sound
+1. dpkg -L alsa-base alsa-utils | grep alsa-base.conf
 
-2. sudo nano /boot/cmdline.txt
-	elevator=noop
-   sudo nano /etc/rc.local
-   	#echo noop > /sys/block/mmcblk0/queue/scheduler
-
-3. dpkg -L alsa-base alsa-utils | grep alsa-base.conf
-
-4. sudo nano /etc/rc.local
+2. sudo nano /etc/rc.local
 	sleep 3
 	taskset -acp 3 `pgrep -x kodi.bin`
 	taskset -cp  2 $(pstree -np `pgrep -x kodi.bin` | grep FDE | grep -o '[0-9]*' | sed -n 2p)
 	pstree -np `pgrep -x kodi.bin` | grep -v kodi.bin | grep -o '[0-9]*' | xargs -n1 taskset -cp 2
 
-5. sudo nano /etc/rc.local
+3. sudo nano /etc/rc.local
 	if [ "$(nproc --all)" = "4" ]; then
 	 sleep 5
 	 taskset -apc 0 `pgrep upmpdcli`

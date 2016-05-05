@@ -27,6 +27,7 @@ Raspbian Jessie Lite
 		consoleblank=0
 		#console=serial0,115200 console=tty1
 		smsc95xx.turbo_mode=0
+		elevator=noop
 
 3. Update & upgrade
 

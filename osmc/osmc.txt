@@ -87,6 +87,7 @@ tmpfs /var/log	tmpfs nosuid,nodev,noatime,nodiratime 0	0
 consoleblank=0
 #console=serial0,115200 console=tty1
 smsc95xx.turbo_mode=0
+elevator=noop
 
 5. /etc/modprobe.d/raspi-blacklist.conf
 
