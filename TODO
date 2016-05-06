@@ -1,5 +1,6 @@
-1. sudo nano /etc/rc.local
-	sleep 3
+1. sudo apt-get install psmisc
+   sudo nano /etc/rc.local
+	sleep 7
 	taskset -acp 3 `pgrep -x kodi.bin`
 	taskset -cp  2 $(pstree -np `pgrep -x kodi.bin` | grep FDE | grep -o '[0-9]*' | sed -n 2p)
 	pstree -np `pgrep -x kodi.bin` | grep -v kodi.bin | grep -o '[0-9]*' | xargs -n1 taskset -cp 2
