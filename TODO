@@ -32,3 +32,8 @@
 	 taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
+
+3. sudo nano /boot/cmdline.txt
+	selinux=0
+	dwc_otg.fiq_split_enable=0 dwc_otg.fiq_fix_enable=0
+	dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
