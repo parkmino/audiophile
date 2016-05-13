@@ -32,8 +32,6 @@
 		sudo ./hub-ctrl -h 0 -P 4 -p 0
 		sudo ./hub-ctrl -h 0 -P 3 -p 0
 		# Edit /etc/rc.local
-		apt-cache show libusb-dev
-		sudo apt-get install libusb-0.1-4
 		sudo nano /etc/rc.local
 
 	/devices/platform/bcm2708_usb/usb1/1-1/1-1.2/
