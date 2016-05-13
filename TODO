@@ -26,17 +26,12 @@
 		wget https://github.com/codazoda/hub-ctrl.c/raw/master/hub-ctrl.c
 		sudo apt-get install libusb-dev
 		gcc -o hub-ctrl hub-ctrl.c -lusb
-		# For self-powered USB DAC
-		sudo ./hub-ctrl -h 0 -P 2 -p 0
 		# For external-powered USB DAC
 		sudo ./hub-ctrl -h 0 -P 4 -p 0
 		sudo ./hub-ctrl -h 0 -P 3 -p 0
+		# For self-powered USB DAC
+		sudo ./hub-ctrl -h 0 -P 4 -p 0
+		sudo ./hub-ctrl -h 0 -P 3 -p 0
+		sudo ./hub-ctrl -h 0 -P 2 -p 0
 		# Edit /etc/rc.local
 		sudo nano /etc/rc.local
-
-	/devices/platform/bcm2708_usb/usb1/1-1/1-1.2/
-	/devices/platform/bcm2708_usb/usb1/1-1/1-1.3/
-	/sys/bus/usb/devices/
-	find / -iname bcm2708_usb
-	echo -n "1-1.2:1.0" > /sys/bus/usb/drivers/usbhid/unbind
-	echo -n "1-1.3:1.0" > /sys/bus/usb/drivers/usbhid/unbind
