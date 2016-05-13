@@ -23,7 +23,7 @@
 3. USB Tweak
 	https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=93463
 	https://github.com/codazoda/hub-ctrl.c
-		wget https://github.com/codazoda/hub-ctrl.c/blob/master/hub-ctrl.c
+		wget https://github.com/codazoda/hub-ctrl.c/raw/master/hub-ctrl.c
 		sudo apt-get install libusb-dev
 		gcc -o hub-ctrl hub-ctrl.c -lusb
 		# For self-powered USB DAC
