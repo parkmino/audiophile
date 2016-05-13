@@ -1,23 +1,4 @@
-1. sudo apt-get install psmisc
-   sudo nano /etc/rc.local
-	sleep 7
-	taskset -acp 0-1 `pgrep -x kodi.bin`
-	FDE_PID=$(pstree -np `pgrep kodi.bin` | grep FDE      | grep -o '[0-9]*' | sed $
-	AAE_PID=$(pstree -np `pgrep kodi.bin` | grep ActiveAE | grep -o '[0-9]*')
-	AES_PID=$(pstree -np `pgrep kodi.bin` | grep AESink   | grep -o '[0-9]*')
-	CEC_PID=$(pstree -np `pgrep kodi.bin` | grep CEC      | grep -o '[0-9]*')
-	USB_PID=$(pstree -np `pgrep kodi.bin` | grep USB      | grep -o '[0-9]*')
-	DVD_PID=$(pstree -np `pgrep kodi.bin` | grep DVD      | grep -o '[0-9]*')
-	TIM_PID=$(pstree -np `pgrep kodi.bin` | grep Timer    | grep -o '[0-9]*')
-	taskset -cp  2 "$AES_PID"
-	taskset -cp  3 "$AAE_PID"
-	for i in "$FDE_PID" "$CEC_PID" "$USB_PID" "$DVD_PID" "$TIM_PID"
-	do
-	 ionice -c 3  -p $i
-	 renice -n 19 -p $i
-	done
-
-2. sudo nano /etc/rc.local
+1. sudo nano /etc/rc.local
 	if [ "$(nproc --all)" = "4" ]; then
 	 sleep 5
 	 taskset -apc 0 `pgrep upmpdcli`
@@ -33,13 +14,13 @@
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
 
-3. sudo nano /boot/cmdline.txt
+2. sudo nano /boot/cmdline.txt
 	selinux=0
 	dwc_otg.fiq_split_enable=0 dwc_otg.fiq_fix_enable=0
 	dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
 	dwc_otg.fiq_fsm_enable=0
 
-4. USB Tweak
+3. USB Tweak
 	https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=93463
 	https://github.com/codazoda/hub-ctrl.c
 		wget https://github.com/codazoda/hub-ctrl.c/blob/master/hub-ctrl.c

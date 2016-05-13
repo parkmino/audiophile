@@ -106,3 +106,31 @@ blacklist spi_bcm2708
 sudo systemctl disable eventlircd
 sudo systemctl disable irqbalance
 sudo systemctl disable wpa_supplicant
+
+7. Kodi.bin priorities
+
+sudo apt-get install psmisc
+sudo nano /etc/rc.local
+
+sleep 7
+taskset -acp 0-1 `pgrep -x kodi.bin`
+ FDE_PID=$(pstree -np `pgrep kodi.bin` | grep FDE      | grep -o '[0-9]*' | sed -n 2p)
+ AAE_PID=$(pstree -np `pgrep kodi.bin` | grep ActiveAE | grep -o '[0-9]*')
+ AES_PID=$(pstree -np `pgrep kodi.bin` | grep AESink   | grep -o '[0-9]*')
+ CEC_PID=$(pstree -np `pgrep kodi.bin` | grep CEC      | grep -o '[0-9]*')
+ USB_PID=$(pstree -np `pgrep kodi.bin` | grep USB      | grep -o '[0-9]*')
+  RC_PID=$(pstree -np `pgrep kodi.bin` | grep Remote   | grep -o '[0-9]*')
+ VCH_PID=$(pstree -np `pgrep kodi.bin` | grep VCH      | grep -o '[0-9]*')
+ Not_PID=$(pstree -np `pgrep kodi.bin` | grep Not      | grep -o '[0-9]*')
+ ILC_PID=$(pstree -np `pgrep kodi.bin` | grep ILC      | grep -o '[0-9]*')
+ ker_PID=$(pstree -np `pgrep kodi.bin` | grep ker      | grep -o '[0-9]*')
+#DVD_PID=$(pstree -np `pgrep kodi.bin` | grep DVD      | grep -o '[0-9]*')
+#TIM_PID=$(pstree -np `pgrep kodi.bin` | grep Timer    | grep -o '[0-9]*')
+taskset -cp  2 "$AES_PID"
+taskset -cp  3 "$AAE_PID"
+for i in "$FDE_PID" "$CEC_PID" "$USB_PID" "$RC_PID" "$VCH_PID" "$Not_PID" "$ILC_PID" "$ker_PID" # "$DVD_PID" "$TIM_PID"
+do
+ chrt   -ip 0    $i
+ ionice -c  3 -p $i
+ renice -n 19 -p $i
+done
