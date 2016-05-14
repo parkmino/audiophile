@@ -173,7 +173,7 @@ Secure Ripping S/W
 	$ ps -e | grep -e dhclient -e NetworkManager -e wicd
 3.10 Diasble APIC, APM, Consoleblank.
 	$ sudo gedit /etc/default/grub
-		GRUB_CMDLINE_LINUX_DEFAULT="... noapic apm=off consoleblank=0"
+		GRUB_CMDLINE_LINUX_DEFAULT="... noapic apm=off consoleblank=0 elevator=noop selinux=0"
 	$ sudo update-grub2
 	$ ps -e | grep acpi
 3.11 Disable CPU Multi-core and Hyper-threading
