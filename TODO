@@ -13,21 +13,3 @@
 	 taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
-
-2. sudo nano /boot/cmdline.txt
-	selinux=0
-	dwc_otg.fiq_split_enable=0 dwc_otg.fiq_fix_enable=0
-	dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
-	dwc_otg.fiq_fsm_enable=0
-
-3. USB Tweak
-	https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=93463
-	https://github.com/codazoda/hub-ctrl.c
-		wget https://github.com/codazoda/hub-ctrl.c/raw/master/hub-ctrl.c
-		sudo apt-get install libusb-dev
-		gcc -o hub-ctrl hub-ctrl.c -lusb
-		sudo nano /etc/rc.local
-			### Turn off USBs
-			 /home/pi/hub-ctrl -h 0 -P 5 -p 0
-			 /home/pi/hub-ctrl -h 0 -P 4 -p 0
-			#/home/pi/hub-ctrl -h 0 -P 2 -p 0

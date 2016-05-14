@@ -28,6 +28,10 @@ Raspbian Jessie Lite
 		#console=serial0,115200 console=tty1
 		smsc95xx.turbo_mode=0
 		elevator=noop
+		selinux=0
+		#dwc_otg.fiq_split_enable=0 dwc_otg.fiq_fix_enable=0
+		dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
+		#dwc_otg.fiq_fsm_enable=0
 
 3. Update & upgrade
 
@@ -238,15 +242,23 @@ Raspbian Jessie Lite
 		### Volume for I2S
 		#mixer_type "hardware"
 		#mixer_control "Digital"
-	
-16. USB Mount
+
+16. Turn off USBs
+	cp hub-ctrl /home/pi/
+	sudo nano /etc/rc.local
+		### Turn off USBs
+		 /home/pi/hub-ctrl -h 0 -P 5 -p 0
+		 /home/pi/hub-ctrl -h 0 -P 4 -p 0
+		#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off
+
+17. USB Mount
 
 	sudo apt-get install usbmount
 	sudo nano /etc/usbmount/usbmount.conf
 		MOUNTPOINTS="/mnt/usb0-7"
 	sudo reboot
 	
-17. AirPlay
+18. AirPlay
 
 	https://github.com/mikebrady/shairport-sync
 	
@@ -299,7 +311,7 @@ Raspbian Jessie Lite
 	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
 	#cd
 
-18. Internet Radio
+19. Internet Radio
 
 	sudo apt-get install mplayer2
 	mkdir ~/.mplayer
@@ -343,13 +355,13 @@ Raspbian Jessie Lite
 	kbs2fm
 	cbsfm
 
-19. Show release
+20. Show release
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.x.x.x basic" > release
 	$ sudo nano /etc/rc.local
 		cat /home/pi/release
 
-20. Make Image
+21. Make Image
 
 	$ nano ~/release
 	$ mpc clear
