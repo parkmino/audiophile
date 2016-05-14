@@ -1,0 +1,10 @@
+https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=93463
+https://github.com/codazoda/hub-ctrl.c
+	wget https://github.com/codazoda/hub-ctrl.c/raw/master/hub-ctrl.c
+	sudo apt-get install libusb-dev
+	gcc -o hub-ctrl hub-ctrl.c -lusb
+sudo nano /etc/rc.local
+	### Turn off USBs
+	 /home/pi/hub-ctrl -h 0 -P 5 -p 0
+	 /home/pi/hub-ctrl -h 0 -P 4 -p 0
+	#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off USBs
