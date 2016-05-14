@@ -26,14 +26,6 @@
 		wget https://github.com/codazoda/hub-ctrl.c/raw/master/hub-ctrl.c
 		sudo apt-get install libusb-dev
 		gcc -o hub-ctrl hub-ctrl.c -lusb
-		# For external-powered USB DAC
-		sudo ./hub-ctrl -h 0 -P 4 -p 0
-		sudo ./hub-ctrl -h 0 -P 3 -p 0
-		# For self-powered USB DAC
-		sudo ./hub-ctrl -h 0 -P 4 -p 0
-		sudo ./hub-ctrl -h 0 -P 3 -p 0
-		sudo ./hub-ctrl -h 0 -P 2 -p 0
-		# Edit /etc/rc.local
 		sudo nano /etc/rc.local
 			### Turn off USBs
 			 /home/pi/hub-ctrl -h 0 -P 5 -p 0
