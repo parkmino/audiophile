@@ -69,3 +69,11 @@ Raspbian MPD Renderer
 		service dbus stop
 		service	sshd stop
 		service getty@tty1 stop
+
+8. Turn off USBs
+	$ cp hub-ctrl /home/pi/
+	$ sudo nano /etc/rc.local
+		### Turn off USBs
+		/home/pi/hub-ctrl -h 0 -P 5 -p 0
+		/home/pi/hub-ctrl -h 0 -P 4 -p 0
+		/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off
