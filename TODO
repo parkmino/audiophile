@@ -15,5 +15,5 @@
 
 2. nano /etc/rc.local in Armbian
 	./hub-ctrl -h 0 -P 1 -p 0
-	./hub-ctrl 0h 0 -P 2 -p 0
+	./hub-ctrl -h 0 -P 2 -p 0
 	...
