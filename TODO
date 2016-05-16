@@ -8,8 +8,12 @@
 	  fi
 	 taskset -acp 1 "$MPD_PID"
 	 taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
-	 chrt    -ip  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
 	 taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
+
+2. nano /etc/rc.local in Armbian
+	./hub-ctrl -h 0 -P 1 -p 0
+	./hub-ctrl 0h 0 -P 2 -p 0
+	...
