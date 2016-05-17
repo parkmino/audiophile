@@ -14,6 +14,14 @@
 	fi
 
 2. nano /etc/rc.local in Armbian
+	cp ./hub-ctrl /home/orangepi/
 	./hub-ctrl -h 0 -P 1 -p 0
-	./hub-ctrl -h 0 -P 2 -p 0
 	...
+	nano /etc/rc.local
+		/home/orangepi/hub-ctrl -h0 -P 1 -p 0
+		...
+
+3. Edit boot parameters in Armbian
+	nano /boot/boot.cmd
+		(consoleblank=0 elevator=noop) selinux=0
+	mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
