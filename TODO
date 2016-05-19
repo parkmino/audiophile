@@ -42,3 +42,8 @@
 		http://89.16.185.174:8004/stream#Linn Classical
 		http://37.130.228.60:8090/#Naim Radio
 		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
+
+6. Ram log
+	mount | grep log
+	sudo nano /etc/fstab
+		tmpfs /var/log tmpfs nosuid,nodev,noatime,nodiratime 0 0
