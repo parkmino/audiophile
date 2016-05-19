@@ -26,3 +26,11 @@
 		(consoleblank=0 elevator=noop) selinux=0
 	mv /boot/boot.scr /boot/boot.scr.sav
 	mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
+
+4. Add hub-ctrl logic
+	### Turn off USBs
+	if lsusb | grep -q 0424:9514; then
+	 /home/pi/hub-ctrl -h 0 -P 5 -p 0
+	 /home/pi/hub-ctrl -h 0 -P 4 -p 0
+	fi
+	#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off
