@@ -292,9 +292,9 @@ Raspbian Jessie Lite
 	 else
 	  shairport-sync
 	fi
-	chmod +x ~/airport
-	sudo ln -s /home/pi/airport /usr/bin/
-	airport
+	chmod +x ~/airplay
+	sudo ln -s /home/pi/airplay /usr/bin/
+	airplay
 
 	https://github.com/juhovh/shairplay
 	
