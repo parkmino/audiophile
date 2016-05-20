@@ -47,3 +47,13 @@
 	mount | grep log
 	sudo nano /etc/fstab
 		tmpfs /var/log tmpfs nosuid,nodev,noatime,nodiratime 0 0
+
+7. Optimize Shairport-sync
+	airplay
+	(sudo apt-get install psmisc)
+	pstree -np shairport-sync
+	nano ~/airplay
+		if [ "$(nproc --all)" = "4" ]; then
+		taskset -apc 0 `pgrep -x shairport-sync`
+		taskset -pc  3 $(pstree -np `pgrep -x shairport-sync` | grep xxx | grep -o '[0-9]*')
+		...
