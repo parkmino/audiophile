@@ -13,15 +13,15 @@
 
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=42700
-sysctl -w kernel.printk='4 4 1 4'
+# sysctl -w kernel.printk='4 4 1 4'
 #sysctl -w vm.swappiness=0
-sysctl -w vm.overcommit_memory=1
+# sysctl -w vm.overcommit_memory=1
 #sysctl -w vm.overcommit_ratio=0
-sysctl -w vm.dirty_writeback_centisecs=0
-sysctl -w vm.oom_dump_tasks=0
-sysctl -w vm.oom_kill_allocating_task=1
-sysctl -w vm.panic_on_oom=2
-sysctl -w vm.stat_interval=3
+# sysctl -w vm.dirty_writeback_centisecs=0
+# sysctl -w vm.oom_dump_tasks=0
+# sysctl -w vm.oom_kill_allocating_task=1
+# sysctl -w vm.panic_on_oom=2
+# sysctl -w vm.stat_interval=3
 #sysctl -w vm.user_reserve_kbytes=0
 
 ifconfig eth0  txqueuelen 10000
@@ -58,18 +58,22 @@ done
 #do
 #    taskset -acp 1 ${PID}
 #done
+#
+#ionice -c 2 -n 7 -p `pgrep -o nfsd4`
+#ionice -c 2 -n 7 -p `pgrep -n nfsd4`
+#ionice -c 0         `pgrep ata_sff`
 
 #mediatomb -c /root/.mediatomb/config.xml -d
-rygel -c /etc/rygel.conf >/dev/null >2&1 &
-
+ rygel -c /etc/rygel.conf >/dev/null >2&1 &
+ 
 sleep 5
 
 RYGEL_PID=`pgrep rygel`
 RYGEL_PIDS=`chrt -ap "$RYGEL_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-MAIN_PID=`echo "$RYGEL_PIDS" | awk 'NR == 1 {print}'`
-SUB1_PID=`echo "$RYGEL_PIDS" | awk 'NR == 2 {print}'`
-taskset -pc  0 "$MAIN_PID"
-taskset -pc  1 "$SUB1_PID"
+RYGEL1_PID=`echo "$RYGEL_PIDS" | awk 'NR == 1 {print}'`
+RYGEL2_PID=`echo "$RYGEL_PIDS" | awk 'NR == 2 {print}'`
+taskset -pc  0 "$RYGEL1_PID"
+taskset -pc  1 "$RYGEL2_PID"
 
 service systemd-journald stop
 service systemd-udevd    stop
@@ -77,6 +81,6 @@ service systemd-logind   stop
 service dbus             stop
 service haveged          stop
 service sshd             stop
-service getty@tty1	 stop
+#service getty@tty1	 stop
 
 exit 0
