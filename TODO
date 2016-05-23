@@ -15,6 +15,7 @@
 
 2. Add sample streams
 	sudo nano /var/lib/mpd/playlists/Streams.m3u
+		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
 		http://50.7.173.162:8010/#Audiophile Baroque
 		http://50.7.173.162:8012/#Audiophile Classical
 		http://89.16.185.174:8004/stream#Linn Classical
@@ -25,6 +26,8 @@
 	mount | grep log
 	sudo nano /etc/fstab
 		tmpfs /var/log tmpfs nosuid,nodev,noatime,nodiratime 0 0
+	sudo nano /etc/mpd.conf
+		#log_file   "/var/log/mpd/mpd.log"
 
 4. Optimize Shairport-sync
 	airplay
