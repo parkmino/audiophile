@@ -51,8 +51,9 @@ Orange Pi Mini
 	# systemctl disable lirc.service
 	# (systemctl disable cron.service)	
 	# nano /etc/fstab
-		tmpfs /tmp tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
 		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		tmpfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	# cat /proc/interrupts
 	# cat /etc/fstab
 	

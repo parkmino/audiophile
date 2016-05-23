@@ -13,23 +13,7 @@
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
 
-2. Add sample streams
-	sudo nano /var/lib/mpd/playlists/Streams.m3u
-		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
-		http://50.7.173.162:8010/#Audiophile Baroque
-		http://50.7.173.162:8012/#Audiophile Classical
-		http://89.16.185.174:8004/stream#Linn Classical
-		http://37.130.228.60:8090/#Naim Radio
-		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
-
-3. Ram log
-	mount | grep log
-	sudo nano /etc/fstab
-		tmpfs /var/log tmpfs nosuid,nodev,noatime,nodiratime 0 0
-	sudo nano /etc/mpd.conf
-		#log_file   "/var/log/mpd/mpd.log"
-
-4. Optimize Shairport-sync
+2. Optimize Shairport-sync
 	airplay
 	(sudo apt-get install psmisc)
 	pstree -np shairport-sync

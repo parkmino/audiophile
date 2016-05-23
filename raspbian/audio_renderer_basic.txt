@@ -96,7 +96,8 @@ Raspbian Jessie Lite
 	nano /etc/fstab
 		tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
 		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		
+		tmpfs /var/log tmpfs nosuid,nodev,noatime,nodiratime 0 0
+
 13. Edit /etc/rc.local
 
 	echo noop > /sys/block/mmcblk0/queue/scheduler
@@ -253,14 +254,21 @@ Raspbian Jessie Lite
 		#fi
 		#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off
 
-17. USB Mount
+17. Ramlog
+	mount | grep log
+	sudo nano /etc/fstab
+		tmpfs /var/log tmpfs nosuid,nodev,noatime,nodiratime 0 0
+	sudo nano /etc/mpd.conf
+		#log_file   "/var/log/mpd/mpd.log"
+
+18. USB Mount
 
 	sudo apt-get install usbmount
 	sudo nano /etc/usbmount/usbmount.conf
 		MOUNTPOINTS="/mnt/usb0-7"
 	sudo reboot
 	
-18. AirPlay
+19. AirPlay
 
 	https://github.com/mikebrady/shairport-sync
 	
@@ -314,7 +322,7 @@ Raspbian Jessie Lite
 	#shairplay --ao_driver=alsa --ao_devicename=sound >/dev/null 2>&1 &
 	#cd
 
-19. Internet Radio
+20. Internet Radio
 
 	sudo apt-get install mplayer2
 	mkdir ~/.mplayer
@@ -357,14 +365,21 @@ Raspbian Jessie Lite
 	kbs1fm
 	kbs2fm
 	cbsfm
+	sudo nano /var/lib/mpd/playlists/Internet_Radios.m3u
+		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
+		http://50.7.173.162:8010/#Audiophile Baroque
+		http://50.7.173.162:8012/#Audiophile Classical
+		http://89.16.185.174:8004/stream#Linn Classical
+		http://37.130.228.60:8090/#Naim Radio
+		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
 
-20. Show release
+21. Show release
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.x.x.x basic" > release
 	$ sudo nano /etc/rc.local
 		cat /home/pi/release
 
-21. Make Image
+22. Make Image
 
 	$ nano ~/release
 	$ mpc clear
