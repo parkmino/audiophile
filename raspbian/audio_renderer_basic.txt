@@ -281,7 +281,7 @@ Raspbian Jessie Lite
 	sudo nano /etc/shairport-sync.conf
 		general =
 		{
-		//  interpolation = "basic"
+		interpolation = "soxr"
 		ignore_volume_control = "yes"
 		};
 		sessioncontrol =
