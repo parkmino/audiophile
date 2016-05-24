@@ -12,13 +12,3 @@
 	 taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
-
-2. Optimize Shairport-sync
-	airplay
-	(sudo apt-get install psmisc)
-	pstree -np shairport-sync
-	nano ~/airplay
-		if [ "$(nproc --all)" = "4" ]; then
-		taskset -apc 0 `pgrep -x shairport-sync`
-		taskset -pc  3 $(pstree -np `pgrep -x shairport-sync` | grep xxx | grep -o '[0-9]*')
-		...
