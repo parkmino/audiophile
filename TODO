@@ -12,3 +12,9 @@
 	 taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
+
+2. Turn off HDMI/Composite
+	sudo /opt/vc/bin/tvservice -o # Turn Off to save 20~30mA
+	sudo /opt/vc/bin/tvservice -p # Turn On
+	sudo nano /etc/rc.local
+		/opt/vc/bin/tvservice -o
