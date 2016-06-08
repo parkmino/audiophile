@@ -41,51 +41,6 @@ hRrfQK5WqzjEzbwovui3vGksP6R5s+7sj+DVWPLh1yMjw8UAMCM6OJuLKq7qQg0=
 =8BLR
 -----END PGP SIGNATURE-----
 
-https://launchpad.net/~bertrand-pietu/+archive/ubuntu/cantata-qt
-
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
-
-Format: 3.0 (quilt)
-Source: cantata
-Binary: cantata
-Architecture: any
-Version: 1.5.2-1ppa1
-Maintainer: Bertrand Piétu <bertrand.pietu@openmailbox.org>
-Homepage: https://code.google.com/p/cantata
-Standards-Version: 3.9.4
-Build-Depends: debhelper (>= 8.0.0), cmake, libx11-dev, libqt4-dev, qt4-dev-tools, libtag1-dev, libcdparanoia-dev, libcddb2-dev, libmusicbrainz5-dev, libmtp-dev, libmpg123-dev, libmp3lame-dev, libphonon-dev, libtag-extras-dev, libspeexdsp-dev, libudev-dev, libavcodec-dev, libavformat-dev, libqjson-dev
-Package-List: 
- cantata deb kde extra
-Checksums-Sha1: 
- 162987456cfa85384e8d243a444859caf1f5550e 2556153 cantata_1.5.2.orig.tar.gz
- c8866c3bbcb8e09e0cd3e55984869a48d9f6cc29 3525 cantata_1.5.2-1ppa1.debian.tar.gz
-Checksums-Sha256: 
- e3d5ce86208331715e18251ebe59fdab9d25290758cdd7625a0f0511668076f5 2556153 cantata_1.5.2.orig.tar.gz
- f0ceef3c74561df0864d65e82ca26d872757aa185402d89ad13764213589403b 3525 cantata_1.5.2-1ppa1.debian.tar.gz
-Files: 
- 543d1c06c335a62e8d4f27170ea74af1 2556153 cantata_1.5.2.orig.tar.gz
- 020602ae68ff99aad0c4abb1f1e8fda7 3525 cantata_1.5.2-1ppa1.debian.tar.gz
-Original-Maintainer: Ben Vassie <vassie@ntlworld.com>
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJVEticAAoJEBXCm+Rac36wZN4P/1dUxXelVV6KNvUOvPR36693
-QeCJXetqCpOtFHAXQeA/TnizXxpuIGjvOh9AMdEJK+gASifD3qCTg9cHgyNWZT/U
-vynm4hBfu2c0xXK5YFplpWTEtZ7YGp65V3BFahbOSlBCsGVXpuSvsGmZCH5a6kuu
-eonLW5Yed3zpfuz0swLwhjv+Kw/+I8vQWjPOqOi4O67DdLHaEXKzfRO/eRyV0iBP
-HeLIT9+GipxeFuXcYIhztGbvuUpUCUltGPvNWG4Vi3PedR5OK6L50aNbkHXc17yq
-JvVRrxg9toAd81VWqR0d152gr1IrpDTh8i3AwRr200o2eRA8FAv+C4psK2ASwPGQ
-t63SmRqCd8DI0V6dPoD+U6/AFIfH8fMhvSbA/pHpnP1SHNG0ozwAbD+xgn//+c/J
-W7GLaAq3jhoB/JfCJtRBS3j3HRAUJvI4Ao/l4mMlHoSCYsR2/o5ZcHeJClUP9ygH
-m/pnMRKKOylrDN+LzF9Ldh9ov3TyirKcaN/z4blzSxvfp9j4DhUZxohDN3cdepiL
-vk9u33kEa4EBBcpuOn8pvLv3pBzFfyk0mAt6OpCEjF3q7FEyXQO/rzl1qUaMuw5X
-bNjiaDIuelI5s/peuEuryIlZPPOIFSXDmOQyE0x0C4JRPAtpzC/ldzczobsfRdZH
-L4/H8n7pF7mm+OQGKfBg
-=u72x
------END PGP SIGNATURE-----
-
 ### Install Build Package ###
 
 #sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libmtp-dev libavcodec-dev libspeexdsp-dev libmpg123-dev libqtwebkit-dev libtag1c2a libtag-extras1 libmtp9 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
