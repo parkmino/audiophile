@@ -202,7 +202,10 @@ Secure Ripping S/W
 		#@audio - stack   unlimited
 	$ sudo adduser username audio
 
-3.15 Initialize and customize real-time priorities
+3.15 Disable irqbalance.service
+	$ sudo systemctl disable irqbalance
+
+3.16 Initialize and customize real-time priorities
 	Check real-time priorities
 	$ gedit pri
 		#!/bin/sh
@@ -233,7 +236,7 @@ Secure Ripping S/W
 		    renice 0 ${PID}
 		done	
 
-3.16 Options.
+3.17 Options.
 
 	-. Kernel Options
 		# sudo gedit /etc/default/grub
@@ -268,7 +271,7 @@ Secure Ripping S/W
 			#	echo b > /proc/irq/${IRQ}/smp_affinity
 			#done
 
-			IRQS=`cat /proc/interrupts | awk '$7 ~ /snd/ {print +$1}'`
+			IRQS=`cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}'`
 			for IRQ in ${IRQS}
 			do
 				echo 8 > /proc/irq/${IRQ}/smp_affinity
