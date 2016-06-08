@@ -1,5 +1,46 @@
 Download and Compile Cantata, MPD Client.
 
+https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/cantata-qt
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 3.0 (quilt)
+Source: cantata
+Binary: cantata
+Architecture: any
+Version: 2.0.1-0build1~ubuntu16.04
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Uploaders: Stuart Prescott <stuart@debian.org>
+Homepage: https://github.com/CDrummond/cantata
+Standards-Version: 3.9.8
+Vcs-Browser: https://anonscm.debian.org/gitweb/?p=pkg-multimedia/cantata.git
+Vcs-Git: https://anonscm.debian.org/git/pkg-multimedia/cantata.git
+Build-Depends: cmake, debhelper (>= 9), libavcodec-dev, libavformat-dev, libavutil-dev, libcddb2-dev, libcdparanoia-dev, libebur128-dev, libmusicbrainz5-dev (>= 5.1.0+git20150707), libmpg123-dev, libmtp-dev (>= 1.0.0), libphonon4qt5-dev, libqt5svg5-dev, libspeex-dev, libspeexdsp-dev, libtag-extras-dev, libtag1-dev, libudev-dev, libvlc-dev, libvlccore-dev, libx11-dev, pkg-config, pkg-kde-tools, qtbase5-dev, qttools5-dev-tools
+Package-List:
+ cantata deb sound optional arch=any
+Checksums-Sha1:
+ 90a80b412a21aed72d1b7cc578f0c2ffa62c243c 2151126 cantata_2.0.1.orig.tar.bz2
+ f580ee00f784b0ea72fced5a8bd88270e7557fd4 12456 cantata_2.0.1-0build1~ubuntu16.04.debian.tar.xz
+Checksums-Sha256:
+ 122bda13c0b4078b84640dabef444b37d705d71c6f95209a2d949acd28a0bbca 2151126 cantata_2.0.1.orig.tar.bz2
+ 06bfdd01c30a3b33407e74f106135dd00504da8505f266d7879a3bbb1d137b74 12456 cantata_2.0.1-0build1~ubuntu16.04.debian.tar.xz
+Files:
+ dacab1b6bf7639e3d46876db8883fbb2 2151126 cantata_2.0.1.orig.tar.bz2
+ 3c2e0fc8c64e1ad3daca9609c82534f4 12456 cantata_2.0.1-0build1~ubuntu16.04.debian.tar.xz
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXUwC+AAoJED9u2UR5k6Yp5UIH/0dbfcG9PfDyCuhOZw6vgBb1
+96tN2kkFpBI0uD5PbcZ7UkoNmuoJQBjbymnOUQmWa7YAtffKNiebKBTHgOkySg7C
+rQCt+cFe/MjF2N5F9GHkX67EaJca2aRkUrYXHzdPsHoRh1H+t6NpSEVTiHpY9kft
+oU13dIVZF71L6+t8X6qpNHqcdf/u+5+8Yaa80UxFAjzKlB0HpHLyXtTdV1UxcG4h
+f9xJCoM/C63QDUvxTX0H0o3Wunb4NU4ecH45cNrgH5oBAxX3xnpqNQsZHRyRJ0J5
+hRrfQK5WqzjEzbwovui3vGksP6R5s+7sj+DVWPLh1yMjw8UAMCM6OJuLKq7qQg0=
+=8BLR
+-----END PGP SIGNATURE-----
+
 https://launchpad.net/~bertrand-pietu/+archive/ubuntu/cantata-qt
 
 -----BEGIN PGP SIGNED MESSAGE-----
@@ -49,9 +90,9 @@ L4/H8n7pF7mm+OQGKfBg
 
 #sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libmtp-dev libavcodec-dev libspeexdsp-dev libmpg123-dev libqtwebkit-dev libtag1c2a libtag-extras1 libmtp9 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
 
-sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libtag1c2a libtag-extras1 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
+sudo apt-get install build-essential cmake qtbase5-dev libtag1-dev libtag1v5 libtag-extras1 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
 
-sudo apt-get install libvlc-dev libvlccore-dev
+sudo apt-get install libvlc-dev libvlccore-dev libmtp-dev libqt5svg5-dev libudev-dev qttools5-dev-tools
 
 ### 1. Git Clone ###
 
@@ -77,9 +118,9 @@ rm -rf ~/Downloads/mpd/cantata-master && unzip master.zip -d ~/Downloads/mpd && 
 
 ### Build ###
 
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_UDISKS2=OFF
 
-sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.0.50" --pkgrelease=$(date +"%Y.%m.%d") --requires=libc6,libcddb2,libcdparanoia0,libgcc1,libmusicbrainz5-0,libqjson0,libqt4-dbus,libqt4-network,libqtcore4,libqtgui4,libspeexdsp1,libstdc++6,libtag-extras1,libtag1c2a,libx11-6,phonon,zlib1g,libvlc5,libvlccore8 --backup=no --maintainer=parkmino@gmail.com
+sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.0.50" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
 
 ### Git Add ###
 
