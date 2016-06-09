@@ -44,20 +44,12 @@ do
     renice 0 ${PID}
 done
 
-IRQS=`cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}'`
-for IRQ in ${IRQS}
-do
-	echo 8 > /proc/irq/${IRQ}/smp_affinity
-	echo 8 > /proc/irq/${IRQ}/smp_affinity
-done
-
 systemctl start mpd
 
 sleep 10
 
 if [ "$(nproc --all)" = "4" ]; then
  sleep 5
- taskset -apc 0 `pgrep -n mpd`
  MPD_PID=`pgrep -F /run/mpd/pid`
   if [ "$(($(chrt -ap "$MPD_PID" | wc -l)/2))" != "5" ]; then
   sleep 5
@@ -68,6 +60,14 @@ if [ "$(nproc --all)" = "4" ]; then
  taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
  taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
  taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
+
+ IRQS=`cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}'`
+ for IRQ in ${IRQS}
+ do
+	echo 8 > /proc/irq/${IRQ}/smp_affinity
+	echo 8 > /proc/irq/${IRQ}/smp_affinity
+ done
+
 fi
 
 #MPD_PID=`pgrep -n mpd`
