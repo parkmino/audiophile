@@ -1,0 +1,84 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
+for PID in ${PIDS}
+do
+    chrt -op 0 ${PID}
+done
+
+PIDS=`ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'`
+for PID in ${PIDS}
+do
+    renice 0 ${PID}
+done
+
+#IRQS=`cat /proc/interrupts | awk '$7 ~ /usb/ {print +$1}'`
+#for IRQ in ${IRQS}
+#do
+#	echo 8 > /proc/irq/${IRQ}/smp_affinity
+#	echo 8 > /proc/irq/${IRQ}/smp_affinity
+#done
+
+if [ "$(nproc --all)" = "4" ]; then
+ sleep 5
+ MPD_PID=`pgrep -F /run/mpd/pid`
+  if [ "$(($(chrt -ap "$MPD_PID" | wc -l)/2))" != "5" ]; then
+  sleep 5
+  fi
+ chrt    -aop 0 "$MPD_PID"
+ taskset -acp 1 "$MPD_PID"
+ taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
+ taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
+ taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
+ taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
+
+ IRQS=`cat /proc/interrupts | awk '$7 ~ /usb/ {print +$1}'`
+ for IRQ in ${IRQS}
+ do
+        echo 8 > /proc/irq/${IRQ}/smp_affinity
+        echo 8 > /proc/irq/${IRQ}/smp_affinity
+ done
+
+fi
+
+chrt -aip 0 `pgrep upmpdcli`
+UPMPDCLI_PIDS=`chrt -ap $(pgrep upmpdcli) | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+for i in $UPMPDCLI_PIDS
+ do
+	ionice -c  3 -p $i
+	renice -n 19 -p $i
+ done
+
+### For Criterion from Reference Club
+#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
+#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
+#
+### Turn off LEDs
+echo none > /sys/class/leds/green_led/trigger
+echo    0 > /sys/class/leds/green_led/brightness
+echo    0 > /sys/class/leds/red_led/brightness
+
+if [ -f    /sys/bus/usb/devices/usb2/2-1/power/autosuspend ]; then
+ echo -1 > /sys/bus/usb/devices/usb2/2-1/power/autosuspend
+fi
+
+if [ -f    /sys/bus/usb/devices/usb3/3-1/power/autosuspend ]; then
+ echo -1 > /sys/bus/usb/devices/usb3/3-1/power/autosuspend
+fi
+
+if [ -f    /sys/bus/usb/devices/usb4/4-1/power/autosuspend ]; then
+ echo -1 > /sys/bus/usb/devices/usb4/4-1/power/autosuspend
+fi
+
+exit 0
