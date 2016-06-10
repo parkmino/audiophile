@@ -98,13 +98,16 @@ Audio Renderer for Orange Pi PC
 		net.core.netdev_max_backlog = 5000
 		#net.ipv6.conf.all.disable_ipv6 = 1
 
-8. USB Mount
+8. Disable serial console
+	# systemctl disable serial-getty@ttyS0.service
+
+9. USB Mount
 
 	# apt-get install usbmount
 	# nano /etc/usbmount/usbmount.conf
 		MOUNTPOINTS="/mnt/usb0-7"
 
-9. AirPlay
+10. AirPlay
 
 	# apt-get install shairport-sync
 	# wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_2.8.3-1_armhf.deb
@@ -139,7 +142,7 @@ Audio Renderer for Orange Pi PC
 	# ln -s /root/airplay /usr/bin/
 	# airplay
 
-10. Internet Radio
+11. Internet Radio
 
 	# nano ~/kbs1fm
 		#!/bin/sh
