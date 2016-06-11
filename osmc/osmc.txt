@@ -85,7 +85,7 @@ service	wpa_supplicant stop
 3. /etc/fstab
 
 tmpfs /tmp	 tmpfs nosuid,nodev,noatime,nodiratime 0 0
-tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
 tmpfs /var/log	 tmpfs nosuid,nodev,noatime,nodiratime 0 0
 
 4. cmdline.txt
