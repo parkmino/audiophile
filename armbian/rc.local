@@ -63,24 +63,34 @@ done
 #ionice -c 2 -n 7 -p `pgrep -n nfsd4`
 #ionice -c 0         `pgrep ata_sff`
 
+ sleep 5
+
+#chrt -aip 0 1
+#ionice -c -p 1
+#renice -n 19 -p 1
+
+ echo 2 > /proc/irq/28/smp_affinity
+
 #mediatomb -c /root/.mediatomb/config.xml -d
- rygel -c /etc/rygel.conf >/dev/null >2&1 &
- 
-sleep 5
 
-RYGEL_PID=`pgrep rygel`
-RYGEL_PIDS=`chrt -ap "$RYGEL_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-RYGEL1_PID=`echo "$RYGEL_PIDS" | awk 'NR == 1 {print}'`
-RYGEL2_PID=`echo "$RYGEL_PIDS" | awk 'NR == 2 {print}'`
-taskset -pc  0 "$RYGEL1_PID"
-taskset -pc  1 "$RYGEL2_PID"
+taskset -ac 1 rygel -c /etc/rygel.conf >/dev/null >2&1 &
 
-service systemd-journald stop
-service systemd-udevd    stop
-service systemd-logind   stop
-service dbus             stop
-service haveged          stop
-service sshd             stop
-#service getty@tty1	 stop
+#sleep 5
+#
+#RYGEL_PID=`pgrep rygel`
+#RYGEL_PIDS=`chrt -ap "$RYGEL_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
+#RYGEL1_PID=`echo "$RYGEL_PIDS" | awk 'NR == 1 {print}'`
+#RYGEL2_PID=`echo "$RYGEL_PIDS" | awk 'NR == 2 {print}'`
+#taskset -pc  0 "$RYGEL1_PID"
+#taskset -pc  1 "$RYGEL2_PID"
+
+service systemd-journald 	stop
+service systemd-udevd    	stop
+service systemd-logind   	stop
+service dbus             	stop
+service haveged          	stop
+service sshd             	stop
+service serial-getty@ttyS0	stop
+#service getty@tty1	 	stop
 
 exit 0
