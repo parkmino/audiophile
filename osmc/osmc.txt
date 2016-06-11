@@ -3,6 +3,8 @@
 sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.org
 sudo nano /usr/share/alsa/alsa.conf
 	pcm.sound.card 1
+sudo systemctl mask alsa-store.service
+sudo systemctl mask alsa-restore.service
 
 2. /etc/rc.local
 
@@ -56,14 +58,17 @@ done
 renice 0       `pgrep dwc_otg`
 #taskset -acp 3 `pgrep dwc_otg`
 #ionice -c 0 -p `pgrep dwc_otg`
-taskset -acp 3 `pgrep kodi.bin`
+#taskset -acp 3 `pgrep kodi.bin`
 #ionice -c 0 -p `pgrep kodi.bin`
 
-echo noop > /sys/block/mmcblk0/queue/scheduler
+#echo noop > /sys/block/mmcblk0/queue/scheduler
 
 echo none > /sys/class/leds/led0/trigger
 echo 0    > /sys/class/leds/led0/brightness
-#echo 0    > /sys/class/leds/led1/brightness
+if [ -f     /sys/class/leds/led1/brightness ]; then
+ echo 0   > /sys/class/leds/led1/brightness 
+fi
+
 /home/osmc/llctl f0 l0 d0
 
 service systemd-journald stop
@@ -79,8 +84,9 @@ service	wpa_supplicant stop
 
 3. /etc/fstab
 
-tmpfs /tmp	tmpfs nosuid,nodev,noatime,nodiratime 0 0
-tmpfs /var/log	tmpfs nosuid,nodev,noatime,nodiratime 0	0
+tmpfs /tmp	 tmpfs nosuid,nodev,noatime,nodiratime 0 0
+tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+tmpfs /var/log	 tmpfs nosuid,nodev,noatime,nodiratime 0 0
 
 4. cmdline.txt
 
@@ -105,6 +111,8 @@ blacklist snd_soc_wm8804_i2c
 blacklist i2c_bcm2708
 blacklist spi_bcm2708
 
+blacklist snd_bcm2835
+
 6. Disable systemctl
 
 sudo systemctl disable eventlircd
@@ -119,7 +127,7 @@ sudo nano /etc/rc.local
 sleep 7
 taskset -acp 0-1 `pgrep -x kodi.bin`
  FDE_PID=$(pstree -np `pgrep kodi.bin` | grep FDE      | grep -o '[0-9]*' | sed -n 2p)
- AAE_PID=$(pstree -np `pgrep kodi.bin` | grep ActiveAE | grep -o '[0-9]*')
+ AAE_PIDS=$(pstree -np `pgrep kodi.bin` | grep ActiveAE | grep -o '[0-9]*')
  AES_PID=$(pstree -np `pgrep kodi.bin` | grep AESink   | grep -o '[0-9]*')
  CEC_PID=$(pstree -np `pgrep kodi.bin` | grep CEC      | grep -o '[0-9]*')
  USB_PID=$(pstree -np `pgrep kodi.bin` | grep USB      | grep -o '[0-9]*')
@@ -131,6 +139,10 @@ taskset -acp 0-1 `pgrep -x kodi.bin`
 #DVD_PID=$(pstree -np `pgrep kodi.bin` | grep DVD      | grep -o '[0-9]*')
 #TIM_PID=$(pstree -np `pgrep kodi.bin` | grep Timer    | grep -o '[0-9]*')
 taskset -cp  2 "$AES_PID"
+for AAE_PID in ${AAE_PIDS}
+do
+ taskset -cp  3 "$AAE_PID"
+done
 taskset -cp  3 "$AAE_PID"
 for i in "$FDE_PID" "$CEC_PID" "$USB_PID" "$RC_PID" "$VCH_PID" "$Not_PID" "$ILC_PID" "$ker_PID" # "$DVD_PID" "$TIM_PID"
 do
@@ -145,6 +157,6 @@ cp hub-ctrl /home/osmc/
 sudo nano /etc/rc.local
 
 ### Turn off USBs
- /home/pi/hub-ctrl -h 0 -P 5 -p 0
- /home/pi/hub-ctrl -h 0 -P 4 -p 0
-#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off
+ /home/osmc/hub-ctrl -h 0 -P 5 -p 0
+ /home/osmc/hub-ctrl -h 0 -P 4 -p 0
+#/home/osmc/hub-ctrl -h 0 -P 2 -p 0 # Power off
