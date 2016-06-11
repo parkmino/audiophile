@@ -182,7 +182,9 @@ Raspbian Jessie Lite
 	### Turn off LEDs
 	echo none > /sys/class/leds/led0/trigger
 	echo 0    > /sys/class/leds/led0/brightness
-	echo 0    > /sys/class/leds/led1/brightness
+	if [ -f     /sys/class/leds/led1/brightness ]; then
+	 echo 0   > /sys/class/leds/led1/brightness 
+	fi
 	/home/pi/llctl f0 l0 d0
 	
 14. Sysctl Configuration
