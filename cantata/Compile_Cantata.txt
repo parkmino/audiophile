@@ -47,7 +47,7 @@ hRrfQK5WqzjEzbwovui3vGksP6R5s+7sj+DVWPLh1yMjw8UAMCM6OJuLKq7qQg0=
 
 sudo apt-get install build-essential cmake qtbase5-dev libtag1-dev libtag1v5 libtag-extras1 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
 
-sudo apt-get install libvlc-dev libvlccore-dev libmtp-dev libqt5svg5-dev libudev-dev qttools5-dev-tools
+sudo apt-get install libvlc-dev libvlccore-dev libmtp-dev libqt5svg5-dev libudev-dev qttools5-dev-tools media-player-info
 
 ### 1. Git Clone ###
 
@@ -73,14 +73,14 @@ rm -rf ~/Downloads/mpd/cantata-master && unzip master.zip -d ~/Downloads/mpd && 
 
 ### Build ###
 
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_UDISKS2=OFF
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF
 
 sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.0.50" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
 
 ### Git Add ###
 
-cd ~/git
-[ -f cantata/cantata-qt*.deb ] && git rm cantata/cantata-qt*.deb
+cd ~/git/audiophile
+[ -f cantata/cantata-qt*amd64.deb ] && git rm cantata/cantata-qt*amd64.deb
 cp $OLDPWD/cantata-qt*$(date +"%Y.%m.%d")*.deb cantata/
 git add cantata/cantata-qt*$(date +"%Y.%m.%d")*.deb
 git commit -m "Updated the latest Cantata build package"
