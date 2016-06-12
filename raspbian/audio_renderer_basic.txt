@@ -375,13 +375,19 @@ Raspbian Jessie Lite
 		http://37.130.228.60:8090/#Naim Radio
 		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
 
-21. Show release
+21. Turn off Monitor
+
+	$ sudo nano /etc/rc.local
+		#/opt/vc/bin/tvservice -o
+		#service getty@tty1 stop
+
+22. Show release
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.x.x.x basic" > release
 	$ sudo nano /etc/rc.local
 		cat /home/pi/release
 
-22. Make Image
+23. Make Image
 
 	$ nano ~/release
 	$ mpc clear
