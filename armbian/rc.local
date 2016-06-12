@@ -69,7 +69,7 @@ done
 #ionice -c -p 1
 #renice -n 19 -p 1
 
- echo 2 > /proc/irq/28/smp_affinity
+ echo 2 > /proc/irq/$(cat /proc/interrupts | grep sata | grep -o '[0-9]*' | head -1)/smp_affinity
 
 #mediatomb -c /root/.mediatomb/config.xml -d
 
