@@ -135,14 +135,33 @@ Orange Pi Mini
 		wpa_passphrase=********
 		
 11. Remove unnecessary services
-	systemctl disable rpcbind cron ntp rsyslog
-	service systemd-journald stop
-	service systemd-udevd stop
-	service systemd-logind stop
-	service dbus stop
-	service haveged stop
-	service	sshd stop
-	service getty@tty1 stop
+
+	# systemctl disable rpcbind cron ntp rsyslog
+	# nano /etc/rc.local
+		service systemd-journald stop
+		service systemd-udevd stop
+		service systemd-logind stop
+		service dbus stop
+		service haveged stop
+		service	sshd stop
+		service getty@tty1 stop
+
+12. Auto login and run scripts
+
+	# nano /lib/systemd/system/getty@.service
+		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
+	# nano ~/.bashrc
+		chrt -aip 0 	1
+		chrt -aip 0 	`pgrep login`
+		chrt -aip 0 	`pgrep -o bash`
+
+		ionice -c 3 -p 	1
+		ionice -c 3 -p 	`pgrep login`
+		ionice -c 3 -p 	`pgrep -o bash`
+
+		renice -n 19 -p 1
+		renice -n 19 -p `pgrep login`
+		renice -n 19 -p `pgrep -o bash`
 
 ==============
 Raspberry Pi 2
