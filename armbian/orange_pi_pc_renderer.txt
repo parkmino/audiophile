@@ -192,5 +192,5 @@ Audio Renderer for Orange Pi PC
 	# poweroff
 	Remove /root/.bash_history
 	$ sudo fdisk -l
-	$ sudo dd bs=4M count=500 if=/dev/sdb of=armbian_audio_renderer_basic_for_orange_pi_pc_v.0.9.6.img
+	$ sudo dd if=/dev/sdb of=armbian_audio_renderer_basic_for_orange_pi_pc_v.0.9.6.img
 	$ zip armbian_audio_renderer_basic_for_orange_pi_pc_v.0.9.6.zip armbian_audio_renderer_basic_for_orange_pi_pc_v.0.9.6.img
