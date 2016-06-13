@@ -27,6 +27,7 @@ Audio Renderer for Orange Pi PC
 	# (apt-get dist-upgrade)
 	# cd /boot
 	# cp boot.cmd boot.cmd.org
+	# cp boot.scr boot.scr.org
 	# nano boot.cmd
 		setenv bootargs "... elevator=noop selinux=0"
 	# mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
@@ -183,3 +184,13 @@ Audio Renderer for Orange Pi PC
 		http://89.16.185.174:8004/stream#Linn Classical
 		http://37.130.228.60:8090/#Naim Radio
 		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
+
+12. Make Image
+
+	# mpc clear
+	# history -c ; rm ~/.bash_history
+	# poweroff
+	Remove /root/.bash_history
+	$ sudo fdisk -l
+	$ sudo dd bs=4M count=500 if=/dev/sdb of=armbian_audio_renderer_basic_for_orange_pi_pc_v.0.9.6.img
+	$ zip armbian_audio_renderer_basic_for_orange_pi_pc_v.0.9.6.zip armbian_audio_renderer_basic_for_orange_pi_pc_v.0.9.6.img
