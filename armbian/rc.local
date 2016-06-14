@@ -63,13 +63,18 @@ done
 #ionice -c 2 -n 7 -p `pgrep -n nfsd4`
 #ionice -c 0         `pgrep ata_sff`
 
- sleep 5
+sleep 5
 
-#chrt -aip 0 1
-#ionice -c -p 1
-#renice -n 19 -p 1
+IRQS=`cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /rtc/ && $7 !~ /sata/ {print +$1}'`
+for IRQ in ${IRQS}
+do
+	echo 1 > /proc/irq/${IRQ}/smp_affinity
+done
 
- echo 2 > /proc/irq/$(cat /proc/interrupts | grep sata | grep -o '[0-9]*' | head -1)/smp_affinity
+IRQS=`cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc/ || $7 ~ /sata/ {print +$1}'`
+do
+	echo 2 > /proc/irq/${IRQ}/smp_affinity
+done
 
 #mediatomb -c /root/.mediatomb/config.xml -d
 
