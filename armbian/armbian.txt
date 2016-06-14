@@ -163,6 +163,10 @@ Orange Pi Mini
 		renice -n 19 -p `pgrep login`
 		renice -n 19 -p `pgrep -o bash`
 
+		taskset -acp 0 1
+		taskset -acp 0 `pgrep login`
+		taskset -acp 0 `pgrep -o bash`
+
 ==============
 Raspberry Pi 2
 ==============
