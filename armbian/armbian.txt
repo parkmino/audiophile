@@ -151,21 +151,21 @@ Orange Pi Mini
 	# nano /lib/systemd/system/getty@.service
 		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
 	# nano ~/.bashrc
-		chrt -aip 0 	1
-		chrt -aip 0 	`pgrep login`
-		chrt -aip 0 	`pgrep -o bash`
+		#chrt -aip 0 	 `pgrep -ox systemd`
+		 chrt -aip 0 	 `pgrep -ox login`
+		 chrt -aip 0 	 `pgrep -ox bash`
 
-		ionice -c 3 -p 	1
-		ionice -c 3 -p 	`pgrep login`
-		ionice -c 3 -p 	`pgrep -o bash`
+		#ionice -c 3 -p  `pgrep -ox systemd`
+		 ionice -c 3 -p  `pgrep -ox login`
+		 ionice -c 3 -p  `pgrep -ox bash`
 
-		renice -n 19 -p 1
-		renice -n 19 -p `pgrep login`
-		renice -n 19 -p `pgrep -o bash`
+		#renice -n 19 -p `pgrep -ox systemd`
+		 renice -n 19 -p `pgrep -ox login`
+		 renice -n 19 -p `pgrep -ox bash`
 
-		taskset -acp 0 1
-		taskset -acp 0 `pgrep login`
-		taskset -acp 0 `pgrep -o bash`
+		#taskset -acp 0  `pgrep -ox systemd`
+		 taskset -acp 0  `pgrep -ox login`
+		 taskset -acp 0  `pgrep -ox bash`
 
 ==============
 Raspberry Pi 2
