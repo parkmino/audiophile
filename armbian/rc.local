@@ -68,13 +68,13 @@ done
 
 sleep 5
 
-IRQS=`cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /rtc/ && $7 !~ /sata/ && $7 !~ /eth/ && $7 !~ /chip/ {print +$1}'`
+IRQS=`cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /eth/ && $7 !~ /chip/ {print +$1}'`
 for IRQ in ${IRQS}
 do
 	echo 1 > /proc/irq/${IRQ}/smp_affinity
 done
 
-IRQS=`cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc/ || $7 ~ /sata/ {print +$1}'`
+IRQS=`cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc/ || $7 ~ /sata/ || $7 ~ /timer0/ || $7 ~ /sunxi-mmc/ {print +$1}'`
 for IRQ in ${IRQS}
 do
 	echo 2 > /proc/irq/${IRQ}/smp_affinity
