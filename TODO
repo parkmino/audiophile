@@ -16,7 +16,7 @@
 
 2. sudo nano /etc/rc.local
 
-	chrt -aip 0     `pgrep -ox systemd`
-	ionice -c 3 -p  `pgrep -ox systemd`
-	renice -n 19 -p `pgrep -ox systemd`
-	taskset -acp 0  `pgrep -ox systemd`
+	#chrt -aip 0     `pgrep -ox systemd`
+	#ionice -c 3 -p  `pgrep -ox systemd`
+	#renice -n 19 -p `pgrep -ox systemd`
+	 taskset -acp 0  `pgrep -ox systemd`
