@@ -1,4 +1,5 @@
 1. sudo nano /etc/rc.local
+
 	if [ "$(nproc --all)" = "4" ]; then
 	 sleep 5
 	 taskset -apc 0 `pgrep upmpdcli`
@@ -12,3 +13,10 @@
 	 taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
+
+2. sudo nano /etc/rc.local
+
+	chrt -aip 0     `pgrep -ox systemd`
+	ionice -c 3 -p  `pgrep -ox systemd`
+	renice -n 19 -p `pgrep -ox systemd`
+	taskset -acp 0  `pgrep -ox systemd`
