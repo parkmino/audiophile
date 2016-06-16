@@ -47,7 +47,10 @@ Orange Pi Mini
 	# nano /etc/modprobe.d/opi-blacklist.conf
 		blacklist evbug
 		blacklist evdev
-		(blacklist sun4i_ts)
+		blacklist r8188eu
+		blacklist input_leds
+		blacklist sun4i_ts
+	# mv /etc/bash.bashrc.custom /etc/bash.bashrc.custom.org
 	# systemctl disable lirc.service
 	# (systemctl disable cron.service)	
 	# nano /etc/fstab
