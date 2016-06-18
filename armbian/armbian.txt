@@ -1,6 +1,6 @@
-==============
-Orange Pi Mini
-==============
+================
+Orange Pi Mini I
+================
 
 1. Orange Pi
 
@@ -74,6 +74,11 @@ Orange Pi Mini
 	# reboot (/etc/init.d/nfs-kernel-server restart)
 	# (/etc/init.d/portmap restart)
 	# rpcinfo -p
+
+	Raspberry Pi 2
+
+	$ sudo nano /etc/fstab
+		192.168.0.5:/mnt/Music /mnt/Music nfs ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 
 6. Hdparm
 
@@ -170,11 +175,153 @@ Orange Pi Mini
 		 taskset -acp 0  `pgrep -ox login`
 		 taskset -acp 0  `pgrep -ox bash`
 
-==============
-Raspberry Pi 2
-==============
+=================
+Orange Pi Mini II
+=================
 
-1. Raspberry Pi 2
+1. Orange Pi
+
+	http://www.orangepi.org/
+	http://www.orangepi.org/orangepimini/index.html
+	http://www.orangepi.org/downloadresources/
+
+2. Armbian
+
+	http://www.armbian.com/
+	http://www.armbian.com/orange-pi-mini/
+	http://www.armbian.com/documentation/
+	https://github.com/igorpecovnik/lib/blob/second/documentation/user-faq.md
+	$ cat /proc/partitions
+	$ sudo fdisk -l
+	$ sudo apt-get install p7zip
+	$ 7zr e Armbian_5.10_Orangepi_Debian_jessie_4.5.2.7z
+	$ sudo dd bs=2M if=Armbian_5.10_Orangepi_Debian_jessie_4.5.2.raw of=/dev/sdb
+	$ sync
+
+3. Initial Configuration
+
+	$ ssh root@192.168.0.x password:1234
+	Change password to "orangepi"
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# apt-get autoremove
+	# dpkg-reconfigure locales # Add ko_KR.UTF-8 UTF-8
+	# dpkg-reconfigure tzdata	
+	USB Tweak for Orange Pi Mini
+	# lsusb && cat /proc/interrupts | grep usb
+	# mv /boot/dtb/sun7i-a20-orangepi.dtb /boot/dtb/sun7i-a20-orangepi.dtb.org
+	# cp /boot/dtb/sun7i-a20-orangepi-mini.dtb /boot/dtb/sun7i-a20-orangepi.dtb
+
+4. Kernel Option
+
+	# cd /boot
+	# cp boot.cmd boot.cmd.org
+	# cp boot.scr boot.scr.org
+	# nano boot.cmd
+		... elevator=noop selinux=o
+	# mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
+
+5. Edit fstab
 
 	# nano /etc/fstab
-		192.168.0.5:/mnt/Music /mnt/Music nfs ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
+		/dev/sda1 /mnt ext4 ro 0 0
+		tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		tmpfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
+
+6. Rygel
+
+	# apt-get install rygel
+	# nano /etc/rygel.conf
+		uris=/mnt/Music
+
+7. MPD clients
+
+	# apt-get install mpc ncmpc fbterm unifont
+	# mkdir ~/.ncmpc
+	# nano  ~/.ncmpc/config
+		host = 192.168.0.3
+		enable-mouse = no
+		#display-time = yes
+		enable-colors = yes
+
+8. Remove modules
+
+	# lsmod
+	# nano /etc/modprobe.d/opi-blacklist.conf
+		blacklist r8188eu
+		blacklist cfg80211
+		blacklist input_leds
+		blacklist rfkill
+		blacklist evdev
+		blacklist sun4i_ts
+		blacklist nvmem_sunxi_sid
+		blacklist nvmem_core
+		blacklist sun4i_ss
+		blacklist cpufreq_dt
+		blacklist thermal_sys
+		blacklist bonding
+	# chmod -x /etc/update-motd.d/40-updates
+
+9. Remove services
+
+	# ps ax
+	# systemctl disable lirc cron ntp rsyslog
+	# systemctl mask alsa-store.service
+	# systemctl mask alsa-restore.service
+
+10. Static IP
+
+	# nano /etc/network/interfaces
+		auto  eth0
+		iface eth0 inet static
+			address		192.168.0.5
+			netmask		255.255.255.0
+			broadcast	192.168.0.255
+			network		192.168.0.0
+			gateway		192.168.0.1 
+			dns-nameservers 168.126.63.1
+	# systemctl disable dhcpcd
+
+11. Swap
+
+	# swapon -s
+	# nano /etc/fstab
+		/var/swap none swap sw 0 0
+	# nano /etc/sysctl.conf
+		#vm.swappiness=0
+
+12. Hdparm
+
+	# nano /etc/hdparm.conf
+		read_ahead_sect = 1664
+		lookahead = on
+		apm = 255
+	# hdparm -A -a -B /dev/sda
+		
+13. Edit rc.local
+
+14. Auto login and run scripts
+
+	# nano /lib/systemd/system/getty@.service
+		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
+	# nano ~/.bashrc
+
+		export MPD_HOST=192.168.0.3
+
+		#chrt -aip 0 	 `pgrep -ox systemd`
+		 chrt -aip 0 	 `pgrep -ox login`
+		 chrt -aip 0 	 `pgrep -ox bash`
+
+		#ionice -c 3 -p  `pgrep -ox systemd`
+		 ionice -c 3 -p  `pgrep -ox login`
+		 ionice -c 3 -p  `pgrep -ox bash`
+
+		#renice -n 19 -p `pgrep -ox systemd`
+		 renice -n 19 -p `pgrep -ox login`
+		 renice -n 19 -p `pgrep -ox bash`
+
+		#taskset -acp 0  `pgrep -ox systemd`
+		 taskset -acp 0  `pgrep -ox login`
+		 taskset -acp 0  `pgrep -ox bash`
