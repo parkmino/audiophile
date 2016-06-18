@@ -78,8 +78,8 @@ Orange Pi Mini
 6. Hdparm
 
 	# nano /etc/hdparm.conf
-		read_ahead_sect = 1024
-		lookahead = off
+		read_ahead_sect = 1664
+		lookahead = on
 		apm = 255
 	# hdparm -A -a -B /dev/sda
 
