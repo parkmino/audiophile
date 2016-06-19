@@ -37,6 +37,11 @@ sysctl -w net.ipv4.tcp_no_metrics_save=1
 sysctl -w net.core.netdev_max_backlog=5000
 #sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
+chrt -aip 0     `pgrep -ox systemd`
+ionice -c 3 -p  `pgrep -ox systemd`
+renice -n 19 -p `pgrep -ox systemd`
+taskset -acp 0  `pgrep -ox systemd`
+
 PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
 for PID in ${PIDS}
 do
@@ -128,7 +133,7 @@ sleep 7
 taskset -acp 0-1 `pgrep -x kodi.bin`
  FDE_PID=$(pstree -np `pgrep kodi.bin` | grep FDE      | grep -o '[0-9]*' | sed -n 2p)
  AAE_PIDS=$(pstree -np `pgrep kodi.bin` | grep ActiveAE | grep -o '[0-9]*')
- AES_PID=$(pstree -np `pgrep kodi.bin` | grep AESink   | grep -o '[0-9]*')
+ AES_PIDS=$(pstree -np `pgrep kodi.bin` | grep AESink   | grep -o '[0-9]*')
  CEC_PID=$(pstree -np `pgrep kodi.bin` | grep CEC      | grep -o '[0-9]*')
  USB_PID=$(pstree -np `pgrep kodi.bin` | grep USB      | grep -o '[0-9]*')
   RC_PID=$(pstree -np `pgrep kodi.bin` | grep Remote   | grep -o '[0-9]*')
@@ -138,12 +143,17 @@ taskset -acp 0-1 `pgrep -x kodi.bin`
  ker_PID=$(pstree -np `pgrep kodi.bin` | grep ker      | grep -o '[0-9]*')
 #DVD_PID=$(pstree -np `pgrep kodi.bin` | grep DVD      | grep -o '[0-9]*')
 #TIM_PID=$(pstree -np `pgrep kodi.bin` | grep Timer    | grep -o '[0-9]*')
-taskset -cp  2 "$AES_PID"
+
+for AES_PID in ${AES_PIDS}
+do
+ taskset -cp  2 "$AES_PID"
+done
+
 for AAE_PID in ${AAE_PIDS}
 do
  taskset -cp  3 "$AAE_PID"
 done
-taskset -cp  3 "$AAE_PID"
+
 for i in "$FDE_PID" "$CEC_PID" "$USB_PID" "$RC_PID" "$VCH_PID" "$Not_PID" "$ILC_PID" "$ker_PID" # "$DVD_PID" "$TIM_PID"
 do
  chrt   -ip 0    $i
