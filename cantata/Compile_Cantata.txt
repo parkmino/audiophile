@@ -88,8 +88,8 @@ git push origin master
 
 ### Korean Translation Inquiry ###
 
-svn log http://cantata.googlecode.com/svn/trunk/po/cantata.pot | head
-svn log http://cantata.googlecode.com/svn/trunk/po/ko.po | head
+svn log https://github.com/CDrummond/cantata/blob/master/po/cantata.pot | head -20
+svn log https://github.com/CDrummond/cantata/blob/master/po/ko.po | head -20
 CANTATA_LANG=ko cantata
 sudo cp /usr/share/cantata/translations/cantata_ko.qm /usr/share/cantata/translations/cantata_en.qm
 diff ~/Documents/ko.po ~/Downloads/cantata-read-only/po/ko.po
