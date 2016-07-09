@@ -1,0 +1,9 @@
+svn checkout https://github.com/CDrummond/madrigal/trunk ~/Downloads/madrigal/madrigal-svn
+
+svn update ~/Downloads/madrigal/madrigal-svn
+
+if [ -d ~/Downloads/madrigal/madrigal-svn/build ] ; then rm -f ~/Downloads/madrigal/madrigal-svn/build/*.deb ; else mkdir ~/Downloads/madrigal/madrigal-svn/build ; fi ; cd ~/Downloads/madrigal/madrigal-svn/build
+
+cmake .. -DCMAKE_BUILD_TYPE=Release
+
+sudo checkinstall -y --install=no --fstrans=no --pkgname=madrigal --pkgversion "0.0.1" --pkgrelease=$(date +"%Y.%m.%d") --backup=no
