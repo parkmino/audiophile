@@ -7,3 +7,10 @@ if [ -d ~/Downloads/madrigal/madrigal-svn/build ] ; then rm -f ~/Downloads/madri
 cmake .. -DCMAKE_BUILD_TYPE=Release
 
 sudo checkinstall -y --install=no --fstrans=no --pkgname=madrigal --pkgversion "0.0.1" --pkgrelease=$(date +"%Y.%m.%d") --backup=no
+
+cd ~/git/audiophile
+[ -f madrigal/madrigal*amd64.deb ] && git rm madrigal/madrigal*amd64.deb
+cp $OLDPWD/madrigal*$(date +"%Y.%m.%d")*.deb madrigal/
+git add madrigal/madrigal*$(date +"%Y.%m.%d")*.deb
+git commit -m "Updated the latest Madrigal build package"
+git push origin master
