@@ -163,6 +163,15 @@ Audio Renderer for Orange Pi PC
 			taskset -pc 2 `pgrep -o mplayer`
 			taskset -pc 3 `pgrep -n mplayer`
 		fi
+	# nano ~/kbs2radio
+		#!/bin/sh
+		mpc stop
+		mplayer --novideo --cache=192 http://juoradio.appspot.com/kbs2r </dev/null >/dev/null 2>&1 &
+		if [ "$(nproc --all)" = "4" ]; then
+			sleep 3
+			taskset -pc 2 `pgrep -o mplayer`
+			taskset -pc 3 `pgrep -n mplayer`
+		fi
 	# nano ~/cbsfm
 		#!/bin/sh
 		mpc stop
@@ -173,9 +182,10 @@ Audio Renderer for Orange Pi PC
 			taskset -pc 3 `pgrep -n mplayer`
 		fi
 	# chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
-	# ln -s /root/kbs1fm /root/kbs2fm /root/cbsfm /usr/bin/
+	# ln -s /root/kbs1fm /root/kbs2fm /root/kbs2radio /root/cbsfm /usr/bin/
 	# kbs1fm
 	# kbs2fm
+	# kbs2radio
 	# cbsfm
 	# nano /var/lib/mpd/playlists/Internet_Radios.m3u
 		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music

@@ -372,7 +372,7 @@ Raspbian Jessie Lite
 			taskset -pc 3 `pgrep -n mplayer`
 		fi
 	chmod +x ~/kbs1fm ~/kbs2fm ~/cbsfm
-	sudo ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/cbsfm /usr/bin/
+	sudo ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/kbs2radio /home/pi/cbsfm /usr/bin/
 	kbs1fm
 	kbs2fm
 	kbs2radio
