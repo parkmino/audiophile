@@ -14,9 +14,9 @@
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
 
-2. sudo nano /etc/rc.local
+2. sudo nano /etc/rc.local (at the end of rc.local)
 
-	#chrt -aip 0     `pgrep -ox systemd`
-	#ionice -c 3 -p  `pgrep -ox systemd`
-	#renice -n 19 -p `pgrep -ox systemd`
-	 taskset -acp 0  `pgrep -ox systemd`
+	 chrt -aip 0     1
+	 ionice -c 3 -p  1
+	 renice -n 19 -p 1
+	 taskset -acp 0  1
