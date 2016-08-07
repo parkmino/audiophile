@@ -27,9 +27,8 @@
 	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
 	echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
-4. Disable extended pcm definitions
+4. Disable ALSA configurations
 
-	cd /usr/share/alsa/pcm/
-	ls
-	sudo rename -v 's/\.conf$/\.conf.sav/' *.conf
-	ls
+	sudo rename -v 's/\.conf$/\.conf.sav/' /usr/share/alsa/*.conf /usr/share/alsa/cards/*.conf /usr/share/alsa/pcm/*.conf /usr/share/alsa/topology/broadwell/*.conf /usr/share/alsa/ucm/apq8064-tabla-snd-card/*.conf /usr/share/alsa/ucm/broadwell-rt286/*.conf /usr/share/alsa/ucm/chtrt5645/*.conf /usr/share/alsa/ucm/DAISY-I2S/*.conf /usr/share/alsa/ucm/GoogleNyan/*.conf /usr/share/alsa/ucm/Manta-I2S/*.conf /usr/share/alsa/ucm/Manta-SPDIF/*.conf /usr/share/alsa/ucm/msm8974-taiko-mtp-snd-card/*.conf /usr/share/alsa/ucm/PandaBoard/*.conf /usr/share/alsa/ucm/PandaBoardES/*.conf /usr/share/alsa/ucm/PAZ00/*.conf /usr/share/alsa/ucm/SDP4430/*.conf /usr/share/alsa/ucm/tegraalc5632/*.conf /usr/share/alsa/ucm/tegra-rt5640/*.conf /usr/share/alsa/ucm/Tuna/*.conf /usr/share/alsa/ucm/VEYRON-I2S/*.conf
+	sudo nano /usr/share/alsa/alsa.conf
+		...
