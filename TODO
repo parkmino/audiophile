@@ -37,5 +37,5 @@
 
 	sudo nano /etc/mpd.conf
 		audio_output {
-			replay_gain_handler	"mixer"
+			replay_gain_handler	"mixer" or "none"
 		}
