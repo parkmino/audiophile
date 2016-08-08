@@ -30,6 +30,7 @@
 4. Disable ALSA configurations
 
 	find /usr/share/alsa/ -name '*.conf' -exec sudo rename 's/\.conf$/.conf.sav/' '{}' \;
+	find /usr/share/alsa/ -name '*.conf'
 	sudo nano /usr/share/alsa/alsa.conf
 		...
 
