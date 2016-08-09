@@ -391,13 +391,21 @@ Raspbian Jessie Lite
 		#/opt/vc/bin/tvservice -o
 		#service getty@tty1 stop
 
-22. Show release
+22. Lower init priority
+
+	$ sudo nano /etc/rc.local # at the end of it
+	 chrt -aip 0     1
+	 ionice -c 3 -p  1
+	 renice -n 19 -p 1
+	 taskset -acp 0  1
+
+23. Show release
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.x.x.x basic" > release
 	$ sudo nano /etc/rc.local
 		cat /home/pi/release
 
-23. Make Image
+24. Make Image
 
 	$ nano ~/release
 	$ mpc clear
