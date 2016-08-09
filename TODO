@@ -14,9 +14,3 @@
 	 taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
 	fi
 
-2. Replaygain in mpd.conf
-
-	sudo nano /etc/mpd.conf
-		audio_output {
-			replay_gain_handler	"none"
-		}
