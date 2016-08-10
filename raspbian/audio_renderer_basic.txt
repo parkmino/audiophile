@@ -253,6 +253,7 @@ Raspbian Jessie Lite
 		#if lsusb -d 0424:9514; then
 		#/home/pi/hub-ctrl -h 0 -P 5 -p 0
 		#/home/pi/hub-ctrl -h 0 -P 4 -p 0
+		#/home/pi/hub-ctrl -h 0 -P 3 -p 0
 		#fi
 		#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off
 
