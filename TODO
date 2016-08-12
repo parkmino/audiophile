@@ -15,12 +15,10 @@
 	 taskset -pc  3 $(pstree -np "$pg_mpd" | grep output  | grep -o '[0-9]*')
 	fi
 (2)
-	ps_mpd=$(pstree -np "$pg_mpd")
-
 	chrt   -aop 0 $pg_mpd
 	taskset -pc 1 $pg_mpd
 
-	echo "$ps_mpd" | while read line
+	echo "$(pstree -np $pg_mpd)" | while read line
 	do 
 		proc=$(echo "$line" | cut -d "{" -f2 | cut -d ":" -f1 | cut -d "}" -f1)
 		proc_nr=$(echo "$line" | cut -d "(" -f2 | cut -d ")" -f1)
