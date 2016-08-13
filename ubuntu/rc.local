@@ -11,12 +11,14 @@
 #b
 # By default this script does nothing.
 
-echo 4032 > /sys/class/rtc/rtc0/max_user_freq
+ echo 4032 > /sys/class/rtc/rtc0/max_user_freq
 #sysctl -w dev.rtc.max-user-freq=4032
  sysctl -w dev.hpet.max-user-freq=2147483520
 
-ifconfig enp3s0 txqueuelen 10000
-ifconfig wlp2s0 txqueuelen 10000
+ ifconfig enp3s0 txqueuelen 10000
+ ifconfig wlp2s0 txqueuelen 10000
+
+ sysctl -w kernel.watchdog=0
 
  sysctl -w net.core.rmem_max=12582912
  sysctl -w net.core.wmem_max=12582912
@@ -30,7 +32,7 @@ ifconfig wlp2s0 txqueuelen 10000
  sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
-modprobe -r psmouse
+ modprobe -r psmouse
 
 PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
 for PID in ${PIDS}
@@ -50,45 +52,53 @@ sleep 10
 
 if [ "$(nproc --all)" = "4" ]; then
  sleep 5
- MPD_PID=`pgrep -F /run/mpd/pid`
-  if [ "$(($(chrt -ap "$MPD_PID" | wc -l)/2))" != "5" ]; then
+ pg_mpd=$(pgrep -F /run/mpd/pid)
+ if [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ]; then
   sleep 5
-  fi
- chrt    -aop 0 "$MPD_PID"
- taskset -acp 1 "$MPD_PID"
- taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
- taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
- taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
- taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
+ fi
 
- IRQS=`cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}'`
+ chrt   -aop 0 $pg_mpd
+ taskset -pc 1 $pg_mpd
+
+ echo "$(pstree -np $pg_mpd)" | while read line
+ do
+     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)
+	sudo taskset -pc 1 $proc_nr
+   ;;
+   io)
+	sudo taskset -pc 0 $proc_nr
+   ;;
+   player)
+	sudo taskset -pc 3 $proc_nr
+   ;;
+   decoder)
+	sudo taskset -pc 2 $proc_nr
+   ;;
+   output)
+	sudo taskset -pc 3 $proc_nr
+   ;;
+  esac
+ done
+
+ #chrt    -aop 0 "$MPD_PID"
+ #taskset -acp 1 "$MPD_PID"
+ #taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
+ #taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
+ #taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
+ #taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
+
+ IRQS=$(cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}')
  for IRQ in ${IRQS}
  do
 	echo 8 > /proc/irq/${IRQ}/smp_affinity
 	echo 8 > /proc/irq/${IRQ}/smp_affinity
  done
-
 fi
 
-#MPD_PID=`pgrep -n mpd`
-#
-#MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-#
-#     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-#   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-#   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-#  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-#   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-#
-# chrt    -apo 0 "$MPD_PID"
-# taskset -pc  1 "$MAIN_PID"
-# taskset -pc  0 "$UPDATE_PID"
-# taskset -pc  3 "$PLAYER_PID"
-# taskset -pc  2 "$DECODER_PID"
-# taskset -pc  3 "$OUTPUT_PID"
-
 #taskset -apc 3 `pgrep snd_hda`
-
 #hdparm -A1 -a1664 -B255 /dev/sda
 
 exit 0
