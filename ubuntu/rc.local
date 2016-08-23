@@ -8,7 +8,7 @@
 #
 # In order to enable or disable this script just change the execution
 # bits.
-#b
+#
 # By default this script does nothing.
 
  echo 4032 > /sys/class/rtc/rtc0/max_user_freq
@@ -34,67 +34,47 @@
 
  modprobe -r psmouse
 
-for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}')
-do
-    chrt -op 0 $pid
+for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
+ chrt -op 0 $pid
 done
 
-for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}')
-do
-    sudo renice 0 $pid
+for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
+ sudo renice 0 $pid
 done
 
 systemctl start mpd
 
-sleep 10
+until [ -f /run/mpd/pid ]; do
+ sleep 1
+done
 
-if [ "$(nproc --all)" = "4" ]; then
+#sleep 10
+
+pg_mpd=$(pgrep -F /run/mpd/pid)
+
+if [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ]; then
  sleep 5
- pg_mpd=$(pgrep -F /run/mpd/pid)
- if [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ]; then
-  sleep 5
- fi
-
- chrt   -aop 0 $pg_mpd
- taskset -pc 1 $pg_mpd
-
- echo "$(pstree -np $pg_mpd)" | while read line
- do
-     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
-  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-  case $proc in
-   mpd)
-	sudo taskset -pc 1 $proc_nr
-   ;;
-   io)
-	sudo taskset -pc 0 $proc_nr
-   ;;
-   player)
-	sudo taskset -pc 3 $proc_nr
-   ;;
-   decoder)
-	sudo taskset -pc 2 $proc_nr
-   ;;
-   output)
-	sudo taskset -pc 3 $proc_nr
-   ;;
-  esac
- done
-
- #chrt    -aop 0 "$MPD_PID"
- #taskset -acp 1 "$MPD_PID"
- #taskset -pc  0 $(pstree -np "$MPD_PID" | grep io      | grep -o '[0-9]*' | tail -n1)
- #taskset -pc  3 $(pstree -np "$MPD_PID" | grep player  | grep -o '[0-9]*')
- #taskset -pc  2 $(pstree -np "$MPD_PID" | grep decoder | grep -o '[0-9]*')
- #taskset -pc  3 $(pstree -np "$MPD_PID" | grep output  | grep -o '[0-9]*')
-
- IRQS=$(cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}')
- for IRQ in ${IRQS}
- do
-	echo 8 > /proc/irq/${IRQ}/smp_affinity
-	echo 8 > /proc/irq/${IRQ}/smp_affinity
- done
 fi
+
+chrt   -aop 0 $pg_mpd
+taskset -pc 1 $pg_mpd
+
+echo "$(pstree -np $pg_mpd)" | while read line ; do
+    proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ case $proc in
+  mpd)		sudo taskset -pc 1 $proc_nr ;;
+  io)		sudo taskset -pc 0 $proc_nr ;;
+  player)	sudo taskset -pc 3 $proc_nr ;;
+  decoder)	sudo taskset -pc 2 $proc_nr ;;
+  output)	sudo taskset -pc 3 $proc_nr ;;
+ esac
+done
+
+until [ -f /proc/irq/$(awk '$8 ~ /snd/ {print +$1}' /proc/interrupts)/smp_affinity ]; do
+ sleep 1
+done
+echo 8 > /proc/irq/$(awk '$8 ~ /snd/ {print +$1}' /proc/interrupts)/smp_affinity
 
 #taskset -apc 3 `pgrep snd_hda`
 #hdparm -A1 -a1664 -B255 /dev/sda
