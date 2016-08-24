@@ -2,16 +2,11 @@
 
 if [ "$(nproc --all)" = "4" ]; then
  sleep 5
- taskset -apc 0 `pgrep upmpdcli`
  pg_mpd=`pgrep -F /run/mpd/pid`
- if [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ]; then
-  sleep 5
- fi
+ [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ] && sleep 5
  chrt   -aop 0 $pg_mpd
  taskset -pc 1 $pg_mpd
-
- echo "$(pstree -np $pg_mpd)" | while read line
- do 
+ echo "$(pstree -np $pg_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
