@@ -7,18 +7,6 @@ if [ "$(nproc --all)" = "4" ]; then
  if [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ]; then
   sleep 5
  fi
-
-(1)
-
- taskset -acp 1 "$pg_mpd"
- taskset -pc  0 $(pstree -np "$pg_mpd" | grep io      | grep -o '[0-9]*' | tail -n1)
- taskset -pc  3 $(pstree -np "$pg_mpd" | grep player  | grep -o '[0-9]*')
- taskset -pc  2 $(pstree -np "$pg_mpd" | grep decoder | grep -o '[0-9]*')
- taskset -pc  3 $(pstree -np "$pg_mpd" | grep output  | grep -o '[0-9]*')
-fi
-
-(2)
-
  chrt   -aop 0 $pg_mpd
  taskset -pc 1 $pg_mpd
 
@@ -27,21 +15,11 @@ fi
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)
-	taskset -pc 1 $proc_nr
-   ;;
-   io)
-	taskset -pc 0 $proc_nr
-   ;;
-   player)
-	taskset -pc 3 $proc_nr
-   ;;
-   decoder)
-	taskset -pc 2 $proc_nr
-   ;;
-   output)
-	taskset -pc 3 $proc_nr
-   ;;
+   mpd)		taskset -pc 1 $proc_nr ;;
+   io)		taskset -pc 0 $proc_nr ;;
+   player)	taskset -pc 2 $proc_nr ;;
+   decoder)	taskset -pc 1 $proc_nr ;;
+   output)	taskset -pc 3 $proc_nr ;;
   esac
 done
 fi
