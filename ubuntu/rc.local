@@ -39,7 +39,7 @@ for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ 
 done
 
 for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
- sudo renice 0 $pid
+ renice 0 $pid
 done
 
 systemctl start mpd
@@ -63,11 +63,11 @@ echo "$(pstree -np $pg_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  mpd)		sudo taskset -pc 1 $proc_nr ;;
-  io)		sudo taskset -pc 0 $proc_nr ;;
-  player)	sudo taskset -pc 3 $proc_nr ;;
-  decoder)	sudo taskset -pc 2 $proc_nr ;;
-  output)	sudo taskset -pc 3 $proc_nr ;;
+  mpd)		taskset -pc 1 $proc_nr ;;
+  io)		taskset -pc 0 $proc_nr ;;
+  player)	taskset -pc 2 $proc_nr ;;
+  decoder)	taskset -pc 1 $proc_nr ;;
+  output)	taskset -pc 3 $proc_nr ;;
  esac
 done
 
