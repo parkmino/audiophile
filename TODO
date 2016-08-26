@@ -5,13 +5,15 @@ if [ "$(nproc --all)" = "4" ]; then
  pg_mpd=`pgrep -F /run/mpd/pid`
  [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ] && sleep 5
  chrt   -aop 0 $pg_mpd
- taskset -pc 1 $pg_mpd
+ taskset -pc 0 $pg_mpd
  echo "$(pstree -np $pg_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		taskset -pc 1 $proc_nr ;;
-   io)		taskset -pc 0 $proc_nr ;;
+   mpd)		taskset -pc 0 $proc_nr ;;
+   io)		taskset -pc 0 $proc_nr
+		chrt -v -ip 0 $proc_nr
+		renice  19 -p $proc_nr ;;
    player)	taskset -pc 2 $proc_nr ;;
    decoder)	taskset -pc 1 $proc_nr ;;
    output)	taskset -pc 3 $proc_nr ;;
