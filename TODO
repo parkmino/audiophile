@@ -13,7 +13,8 @@ if [ "$(nproc --all)" = "4" ]; then
    mpd)		taskset -pc 0 $proc_nr ;;
    io)		taskset -pc 0 $proc_nr
 		chrt -v -ip 0 $proc_nr
-		renice  19 -p $proc_nr ;;
+		renice  19 -p $proc_nr
+		ionice -c3 -p $proc_nr ;;
    player)	taskset -pc 2 $proc_nr ;;
    decoder)	taskset -pc 1 $proc_nr ;;
    output)	taskset -pc 3 $proc_nr ;;
