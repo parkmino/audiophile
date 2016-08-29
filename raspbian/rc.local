@@ -1,0 +1,111 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+echo noop > /sys/block/mmcblk0/queue/scheduler
+ifconfig eth0 txqueuelen 10000
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+ chrt -op 0 $i
+done
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice 0 $i
+done
+
+until [ -f /run/mpd/pid ]; do
+ sleep 1
+done
+pg_mpd=$(pgrep -F /run/mpd/pid)
+
+if [ "$(nproc --all)" = "4" ]; then
+ [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ] && sleep 5
+ chrt   -aop 0 $pg_mpd
+ taskset -pc 0 $pg_mpd
+ chrt -v -ip 0 $pg_mpd
+ renice  19 -p $pd_mpd
+ ionice -c3 -p $pg_mpd
+ echo "$(pstree -np $pg_mpd)" | while read line ; do
+     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd|io)	taskset -pc 0 $proc_nr
+		chrt -v -ip 0 $proc_nr
+		renice  19 -p $proc_nr
+		ionice -c3 -p $proc_nr ;;
+   player)	taskset -pc 2 $proc_nr ;;
+   decoder)	taskset -pc 1 $proc_nr ;;
+   output)	taskset -pc 3 $proc_nr ;;
+  esac
+ done
+else
+ chrt   -aop 0 $pg_mpd
+ chrt -v -ip 0 $pg_mpd
+ renice  19 -p $pd_mpd
+ ionice -c3 -p $pg_mpd
+ echo "$(pstree -np $pg_mpd)" | while read line ; do
+     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd|io)	chrt -v -ip 0 $proc_nr
+		renice  19 -p $proc_nr
+		ionice -c3 -p $proc_nr ;;
+  esac
+ done
+fi
+
+pg_upmpdcli=$(pgrep upmpdcli)
+chrt -aip 0 $pg_upmpdcli
+for i in $(chrt -ap $pg_upmpdcli | awk 'NR %2 == 0 {printf "%i\n",$2}'); do
+ renice  19 -p $i
+ ionice -c3 -p $i
+done
+
+### For Criterion from Reference Club
+#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
+#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
+### Unmute IQaudIO I2S
+#echo "22"  > /sys/class/gpio/export
+#echo "out" > /sys/class/gpio/gpio22/direction
+#echo "1"   > /sys/class/gpio/gpio22/value
+### Digital Volume
+#amixer -D control set 'Digital',0 67% || /bin/true # 40@67% 60@81%
+### Turn off USBs
+#if lsusb -d 0424:9514; then
+#/home/pi/hub-ctrl -h 0 -P 5 -p 0
+#/home/pi/hub-ctrl -h 0 -P 4 -p 0
+#fi
+#/home/pi/hub-ctrl -h 0 -P 3 -p 0
+#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # USB power  off
+#/home/pi/hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
+### Turn off HDMI
+#/opt/vc/bin/tvservice -o
+#service getty@tty1 stop
+### Lower init priority
+chrt     -aip 0 1
+ionice  -c 3 -p 1
+renice -n 19 -p 1
+taskset  -acp 0 1
+### Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+### Show release
+cat /home/pi/release
+### Turn off LEDs
+echo none > /sys/class/leds/led0/trigger
+echo 0    > /sys/class/leds/led0/brightness
+[ -f        /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+/home/pi/llctl f0 l0 d0
+
+exit 0
