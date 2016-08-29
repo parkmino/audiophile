@@ -42,47 +42,45 @@ for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
  renice 0 $pid
 done
 
+low_pri () {
+ chrt -v -ip 0 $1
+ renice  19 -p $1
+ ionice -c3 -p $1
+}
+
 systemctl start mpd
 
 until [ -f /run/mpd/pid ]; do
  sleep 1
 done
 
-#sleep 10
-
 pg_mpd=$(pgrep -F /run/mpd/pid)
 
-if [ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ]; then
- sleep 5
-fi
+[ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ] && sleep 5
 
-chrt   -aop 0 $pg_mpd
 taskset -pc 0 $pg_mpd
-sudo chrt -v -ip 0 $pg_mpd
-sudo renice  19 -p $pd_mpd
-sudo ionice -c3 -p $pg_mpd
+low_pri       $pg_mpd
 
 echo "$(pstree -np $pg_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  mpd|io)	taskset -pc 0 $proc_nr
-                chrt -v -ip 0 $proc_nr
-		renice  19 -p $proc_nr
-		ionice -c3 -p $proc_nr ;;
-  player)	taskset -pc 2 $proc_nr ;;
-  decoder)	taskset -pc 1 $proc_nr
-		chrt -v -ip 0 $proc_nr
-		renice  19 -p $proc_nr
-		ionice -c3 -p $proc_nr ;;
-  output)	taskset -pc 3 $proc_nr ;;
+  mpd|io)	taskset -cp 0 $proc_nr
+		low_pri       $proc_nr ;;
+  player)	taskset -cp 2 $proc_nr ;;
+  decoder)	taskset -cp 1 $proc_nr
+		low_pri       $proc_nr ;;
+  output)	taskset -cp 3 $proc_nr
+		chrt    -op 0 $proc_nr ;;
  esac
 done
 
-until [ -f /proc/irq/$(awk '$8 ~ /snd/ {print +$1}' /proc/interrupts)/smp_affinity ]; do
+snd=$(awk '$8 ~ /snd/ {print +$1}' /proc/interrupts)
+
+until [ -f /proc/irq/$snd/smp_affinity ]; do
  sleep 1
 done
-echo 8 > /proc/irq/$(awk '$8 ~ /snd/ {print +$1}' /proc/interrupts)/smp_affinity
+echo   8 > /proc/irq/$snd/smp_affinity
 
 #taskset -apc 3 `pgrep snd_hda`
 #hdparm -A1 -a1664 -B255 /dev/sda
