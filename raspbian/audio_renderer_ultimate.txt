@@ -62,13 +62,16 @@ Raspbian MPD Renderer
 	$ ps ax
 	$ sudo systemctl disable cron ntp rsyslog avahi-daemon
 	$ sudo nano /etc/rc.local
-		service systemd-journald stop
-		service systemd-udevd stop
-		service systemd-logind stop
-		service triggerhappy stop
-		service dbus stop
-		service	sshd stop
-		service getty@tty1 stop
+		for i in systemd-journald systemd-udevd systemd-logind triggerhappy getty@tty1; do # dbus sshd
+		 service $i stop
+		done
+		#service systemd-journald stop
+		#service systemd-udevd stop
+		#service systemd-logind stop
+		#service triggerhappy stop
+		#service dbus stop
+		#service sshd stop
+		#service getty@tty1 stop
 
 8. Turn off USB & HDMI
 
