@@ -64,6 +64,7 @@ Raspbian Jessie Lite
 	sudo nano /usr/share/alsa/alsa.conf
 		pcm.sound.card   1
 		ctl.control.card 1
+		#pcm.default pcm.sound
 	sudo systemctl mask alsa-store.service
 	sudo systemctl mask alsa-restore.service
 
