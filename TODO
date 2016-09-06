@@ -1,0 +1,6 @@
+1. sudo nano /etc/rc.local
+
+	  player) ...
+		  low_pri            $proc_nr ;;
+	  output) ...
+	 	  sudo chrt -v -op 0 $proc_nr ;;
