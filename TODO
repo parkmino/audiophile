@@ -1,6 +1,13 @@
 1. sudo nano /etc/rc.local
 
-	  player) ...
-		  low_pri            $proc_nr ;;
-	  output) ...
-	 	  sudo chrt -v -op 0 $proc_nr ;;
+	player) ...
+		low_pri       $proc_nr ;;
+	output) ...
+		chrt -v -op 0 $proc_nr ;;
+
+2. 
+
+
+	decoder) taskset -cp 1 $proc_nr ;;
+	player)	 taskset -cp 2 $proc_nr
+		 low_pri       $proc_nr ;;
