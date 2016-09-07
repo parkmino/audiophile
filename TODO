@@ -1,13 +1,15 @@
 1. sudo nano /etc/rc.local
 
-	player) ...
-		low_pri       $proc_nr ;;
-	output) ...
+taskset -pc 0 $pg_mpd
+renice   3 -p $pg_mpd
+
+...
+
+  mpd|io)	taskset -cp 0 $proc_nr
+		renice   4 -p $proc_nr ;;
+  player)	taskset -cp 1 $proc_nr
+		renice   2 -p $proc_nr ;;
+  decoder)	taskset -cp 2 $proc_nr
+		renice   1 -p $proc_nr ;;
+  output)	taskset -cp 3 $proc_nr
 		chrt -v -op 0 $proc_nr ;;
-
-2. 
-
-
-	decoder) taskset -cp 1 $proc_nr ;;
-	player)	 taskset -cp 2 $proc_nr
-		 low_pri       $proc_nr ;;
