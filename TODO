@@ -1,6 +1,6 @@
 1. sudo nano /etc/rc.local
 
-until [ $(pgrep -x mpd) -gt 0 ] && $(pstree -np $(pgrep -x mpd) | grep -q output); do
+until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
  sleep 1
 done
 
