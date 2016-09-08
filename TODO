@@ -1,10 +1,18 @@
 1. sudo nano /etc/rc.local
 
-taskset -pc 0 $pg_mpd
-renice   3 -p $pg_mpd
+until [ $(pgrep -x mpd) -gt 0 ] && $(pstree -np $(pgrep -x mpd) | grep -q output); do
+ sleep 1
+done
 
-...
+pgr_mpd=$(pgrep -x mpd)
 
+taskset -pc 0 $pgr_mpd
+renice   3 -p $pgr_mpd
+
+echo "$(pstree -np $pgr_mpd)" | while read line ; do
+    proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ case $proc in
   mpd|io)	taskset -cp 0 $proc_nr
 		renice   4 -p $proc_nr ;;
   player)	taskset -cp 1 $proc_nr
@@ -13,3 +21,5 @@ renice   3 -p $pg_mpd
 		renice   1 -p $proc_nr ;;
   output)	taskset -cp 3 $proc_nr
 		chrt -v -op 0 $proc_nr ;;
+ esac
+done
