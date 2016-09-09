@@ -15,15 +15,14 @@ pgr_mpd=$(pgrep -x mpd)
 taskset -pc 0 $pgr_mpd
 chrt -v -ip 0 $pgr_mpd
 renice  18 -p $pgr_mpd
+ionice -c3 -p $pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
   mpd|io)	taskset -cp 0 $proc_nr
-		chrt -v -ip 0 $proc_nr
-		renice  19 -p $proc_nr
-		ionice -c3 -p $proc_nr ;;
+		low_pri       $proc_nr ;;
   player)	taskset -cp 1 $proc_nr
 		chrt -v -ip 0 $proc_nr
 		renice  17 -p $proc_nr ;;
