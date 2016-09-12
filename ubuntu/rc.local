@@ -11,6 +11,12 @@
 #
 # By default this script does nothing.
 
+low_pri () {
+ chrt -v -ip 0 $1
+ renice  19 -p $1
+#ionice -c3 -p $1
+}
+
  echo 4032 > /sys/class/rtc/rtc0/max_user_freq
 #sysctl -w dev.rtc.max-user-freq=4032
  sysctl -w dev.hpet.max-user-freq=2147483520
@@ -32,8 +38,6 @@
  sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
- modprobe -r psmouse
-
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
  chrt -op 0 $pid
 done
@@ -42,36 +46,31 @@ for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
  renice 0 $pid
 done
 
-low_pri () {
- chrt -v -ip 0 $1
- renice  19 -p $1
- ionice -c3 -p $1
-}
-
 systemctl start mpd
 
-until [ -f /run/mpd/pid ]; do
+until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
  sleep 1
 done
 
-pg_mpd=$(pgrep -F /run/mpd/pid)
+pgr_mpd=$(pgrep -x mpd)
 
-[ "$(($(chrt -ap "$pg_mpd" | wc -l)/2))" != "5" ] && sleep 5
+ taskset -pc 0 $pgr_mpd
+#chrt -v -ip 0 $pgr_mpd
+ renice   3 -p $pgr_mpd
+#ionice -c3 -p $pgr_mpd
 
-taskset -pc 0 $pg_mpd
-low_pri       $pg_mpd
-
-echo "$(pstree -np $pg_mpd)" | while read line ; do
+echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
   mpd|io)	taskset -cp 0 $proc_nr
 		low_pri       $proc_nr ;;
-  player)	taskset -cp 2 $proc_nr ;;
-  decoder)	taskset -cp 1 $proc_nr
-		low_pri       $proc_nr ;;
+  player)	taskset -cp 1 $proc_nr
+		renice   2 -p $proc_nr ;;
+  decoder)	taskset -cp 2 $proc_nr
+		renice   1 -p $proc_nr ;;
   output)	taskset -cp 3 $proc_nr
-		chrt    -op 0 $proc_nr ;;
+		chrt -v -op 0 $proc_nr ;;
  esac
 done
 
@@ -84,5 +83,7 @@ echo   8 > /proc/irq/$snd/smp_affinity
 
 #taskset -apc 3 `pgrep snd_hda`
 #hdparm -A1 -a1664 -B255 /dev/sda
+
+modprobe -r psmouse
 
 exit 0
