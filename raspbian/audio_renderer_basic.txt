@@ -284,5 +284,5 @@ Raspbian Jessie Lite
 	$ sudo poweroff
 	$ Remove /home/pi/.bash_history
 	$ sudo fdisk -l
-	$ sudo dd bs=4M count=500 if=/dev/sdb of=raspbian_audio_renderer_basic_v.0.9.9.img
-	$ zip raspbian_audio_renderer_basic_v.0.9.9.zip raspbian_audio_renderer_basic_v.0.9.9.img
+	$ sudo dd bs=4M count=500 if=/dev/sdb of=raspbian_audio_renderer_basic_v.0.9.10.img
+	$ zip raspbian_audio_renderer_basic_v.0.9.10.zip raspbian_audio_renderer_basic_v.0.9.10.img
