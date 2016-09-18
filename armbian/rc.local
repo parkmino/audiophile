@@ -11,19 +11,6 @@
 #
 # By default this script does nothing.
 
-#sysctl -w kernel.sched_rt_runtime_us=-1
-#sysctl -w kernel.sched_rt_period_us=42700
-# sysctl -w kernel.printk='4 4 1 4'
-#sysctl -w vm.swappiness=0
-# sysctl -w vm.overcommit_memory=1
-#sysctl -w vm.overcommit_ratio=0
-# sysctl -w vm.dirty_writeback_centisecs=0
-# sysctl -w vm.oom_dump_tasks=0
-# sysctl -w vm.oom_kill_allocating_task=1
-# sysctl -w vm.panic_on_oom=2
-# sysctl -w vm.stat_interval=3
-#sysctl -w vm.user_reserve_kbytes=0
-
 ifconfig eth0  txqueuelen 10000
 #ifconfig wlan0 txqueuelen 10000
 
@@ -38,11 +25,6 @@ sysctl -w net.ipv4.tcp_sack=0
 sysctl -w net.ipv4.tcp_no_metrics_save=1
 sysctl -w net.core.netdev_max_backlog=5000
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
-
-chrt -aip 0     `pgrep -ox systemd`
-ionice -c 3 -p  `pgrep -ox systemd`
-renice -n 19 -p `pgrep -ox systemd`
-taskset -acp 0  `pgrep -ox systemd`
 
 PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
 for PID in ${PIDS}
@@ -61,10 +43,6 @@ done
 #do
 #    taskset -acp 1 ${PID}
 #done
-#
-#ionice -c 2 -n 7 -p `pgrep -o nfsd4`
-#ionice -c 2 -n 7 -p `pgrep -n nfsd4`
-#ionice -c 0         `pgrep ata_sff`
 
 sleep 5
 
@@ -103,5 +81,10 @@ service serial-getty@ttyS0	stop
 #service getty@tty1	 	stop
 
 echo none > /sys/class/leds/orangepi\:green\:usr/trigger
+
+ chrt -aip 0     `pgrep -ox systemd`
+#ionice -c 3 -p  `pgrep -ox systemd`
+ renice -n 19 -p `pgrep -ox systemd`
+ taskset -acp 0  `pgrep -ox systemd`
 
 exit 0
