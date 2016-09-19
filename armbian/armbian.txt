@@ -164,8 +164,8 @@ Orange Pi Mini I
 		 chrt -aip 0 	 `pgrep -ox bash`
 
 		#ionice -c 3 -p  `pgrep -ox systemd`
-		 ionice -c 3 -p  `pgrep -ox login`
-		 ionice -c 3 -p  `pgrep -ox bash`
+		#ionice -c 3 -p  `pgrep -ox login`
+		#ionice -c 3 -p  `pgrep -ox bash`
 
 		#renice -n 19 -p `pgrep -ox systemd`
 		 renice -n 19 -p `pgrep -ox login`
@@ -315,8 +315,8 @@ Orange Pi Mini II
 		 chrt -aip 0 	 `pgrep -ox bash`
 
 		#ionice -c 3 -p  `pgrep -ox systemd`
-		 ionice -c 3 -p  `pgrep -ox login`
-		 ionice -c 3 -p  `pgrep -ox bash`
+		#ionice -c 3 -p  `pgrep -ox login`
+		#ionice -c 3 -p  `pgrep -ox bash`
 
 		#renice -n 19 -p `pgrep -ox systemd`
 		 renice -n 19 -p `pgrep -ox login`
