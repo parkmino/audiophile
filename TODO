@@ -1,5 +1,6 @@
 1. HTTP Caching through Polipo
 
+$ sudo apt-get --no-install-recommends install polipo
 $ sudo nano /etc/polipo/config
 	#logSyslog = false
 	#logFile = /var/log/polipo/polipo.log
