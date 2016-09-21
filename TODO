@@ -27,4 +27,4 @@ $ sudo nano /etc/rc.local
 
 	pgr_polipo=$(pgrep -x polipo)
 	taskset -acp 0 $pgr_polipo
-	renice    3 -p $pgr_polipo
+	renice    4 -p $pgr_polipo
