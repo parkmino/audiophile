@@ -64,7 +64,8 @@ echo "$(pstree -np $pgr_mpd)" | while read line ; do
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
   mpd|io)	taskset -cp 0 $proc_nr
-		low_pri       $proc_nr ;;
+		chrt -v -ip 0 $proc_nr
+		renice   4 -p $proc_nr ;;
   player)	taskset -cp 1 $proc_nr
 		renice   2 -p $proc_nr ;;
   decoder)	taskset -cp 2 $proc_nr
@@ -85,5 +86,7 @@ echo   8 > /proc/irq/$snd/smp_affinity
 #hdparm -A1 -a1664 -B255 /dev/sda
 
 modprobe -r psmouse
+
+chrt -i 0 taskset -ac 0 nice -n 5 polipo >/dev/null 2>&1 &
 
 exit 0
