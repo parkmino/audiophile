@@ -60,7 +60,9 @@ done
 
 #mediatomb -c /root/.mediatomb/config.xml -d
 
-taskset -ac 1 rygel -c /etc/rygel.conf >/dev/null >2&1 &
+taskset -ac 0 nice -n 1 rygel -c /etc/rygel.conf >/dev/null >2&1 &
+
+taskset -ac 1 nice -n 0 polipo >/dev/null >2&1 &
 
 #sleep 5
 #
