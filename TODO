@@ -30,3 +30,9 @@ $ sudo nano /etc/rc.local
 $ sudo reboot
 $ export
 $ polipo -v
+
+2. sudo nano /etc/rc.local
+
+  mpd|io)	taskset -cp 0 $proc_nr
+	 	chrt -v -ip 0 $proc_nr
+	 	renice   5 -p $proc_nr ;;
