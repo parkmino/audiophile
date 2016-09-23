@@ -2,17 +2,4 @@
 
 sudo nano /etc/rc.local
 
- ionice -c0 -p $pgr_mpd
-...
-  mpd|io)	taskset -cp 0 $proc_nr
-		chrt -v -ip 0 $proc_nr
-		renice   4 -p $proc_nr ;;
-  player)	taskset -cp 1 $proc_nr
-		renice   2 -p $proc_nr
-		ionice -c0 -p $proc_nr ;;
-  decoder)	taskset -cp 2 $proc_nr
-		renice   1 -p $proc_nr
-		ionice -c0 -p $proc_nr ;;
-  output)	taskset -cp 3 $proc_nr
-		chrt -v -op 0 $proc_nr
-		ionice -c0 -p $proc_nr ;;
+ ionice -n4 -p $pgr_mpd
