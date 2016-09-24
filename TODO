@@ -1,5 +1,15 @@
-1. Initialize ionice
+1. Initialize Network Buffer
 
-sudo nano /etc/rc.local
+2. sudo nano /etc/rc.local
 
- ionice -n4 -p $pgr_mpd
+   mpd)		taskset -cp 0 $proc_nr
+		chrt -v -ip 0 $proc_nr
+		renice  18 -p $proc_nr ;;
+   io)		taskset -cp 0 $proc_nr
+		renice   4 -p $proc_nr ;;
+   player)	taskset -cp 1 $proc_nr
+		renice   2 -p $proc_nr ;;
+   decoder)	taskset -cp 2 $proc_nr
+		renice   1 -p $proc_nr ;;
+   output)	taskset -cp 3 $proc_nr
+		chrt -v -op 0 $proc_nr ;;
