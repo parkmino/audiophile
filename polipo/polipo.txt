@@ -12,7 +12,7 @@ $ sudo nano /etc/polipo/config
 
 	cacheIsShared = false
 	diskCacheRoot = ""
-	chunkHighMark = 512000000
+	chunkHighMark = 536870912
 $ sudo nano /etc/environment or ~/.profile
 	http_proxy="http://127.0.0.1:8123/"
 $ sudo nano /etc/rc.local
