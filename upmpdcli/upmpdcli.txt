@@ -1,6 +1,6 @@
-wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/libu/libupnpp2/libupnpp2_0.14.1-1_armhf.deb
-wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.1.3-1_armhf.deb
+wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/libu/libupnpp3/libupnpp3_0.15.0-1_armhf.deb
+wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.2.2-1_armhf.deb
 sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3
-sudo dpkg -i libupnpp2*.deb upmpdcli*.deb
+sudo dpkg -i libupnpp*.deb upmpdcli*.deb
 sudo mv ./icon.png /usr/share/upmpdcli/icon.png
 
