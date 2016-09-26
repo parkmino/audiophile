@@ -31,9 +31,15 @@
 	   output)	taskset -cp 3 $proc_nr
 			chrt -v -op 0 $proc_nr ;;
 
-	pgr_upmpdcli=$(pgrep upmpdcli)
-	taskset -acp 0 $pgr_upmpdcli
-	for i in $(pstree -np $pgr_upmpdcli | grep -o -E '[0-9]+'); do
-	 chrt   -ip 0 $i
-	 renice 18 -p $i
-	done
+3. Upmpdcli
+
+	sudo systemctl disable upmpdcli.service
+	sudo nano /etc/rc.local
+
+		#pgr_upmpdcli=$(pgrep upmpdcli)
+		#taskset -acp 0 $pgr_upmpdcli
+		#for i in $(pstree -np $pgr_upmpdcli | grep -o -E '[0-9]+'); do
+		# chrt   -ip 0 $i
+		# renice 18 -p $i
+		#done
+		chrt -i 0 taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
