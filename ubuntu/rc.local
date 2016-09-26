@@ -21,22 +21,24 @@ low_pri () {
 #sysctl -w dev.rtc.max-user-freq=4032
  sysctl -w dev.hpet.max-user-freq=2147483520
 
- ifconfig enp3s0 txqueuelen 10000
- ifconfig wlp2s0 txqueuelen 10000
+ ifconfig enp3s0 txqueuelen 1875
+ ifconfig wlp2s0 txqueuelen 1875
 
  sysctl -w kernel.watchdog=0
 
- sysctl -w net.core.rmem_max=12582912
- sysctl -w net.core.wmem_max=12582912
+#sysctl -w net.core.rmem_max=12582912
+#sysctl -w net.core.wmem_max=12582912
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'
- sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'
- sysctl -w net.ipv4.tcp_timestamps=0
+#sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'
+#sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'
+#sysctl -w net.ipv4.tcp_timestamps=0
 #sysctl -w net.ipv4.tcp_window_scaling=1
  sysctl -w net.ipv4.tcp_sack=0
  sysctl -w net.ipv4.tcp_no_metrics_save=1
- sysctl -w net.core.netdev_max_backlog=5000
+#sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
+
+ sysctl -w vm.swappiness=0
 
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
  chrt -op 0 $pid
@@ -55,22 +57,22 @@ done
 pgr_mpd=$(pgrep -x mpd)
 
  taskset -pc 0 $pgr_mpd
-#chrt -v -ip 0 $pgr_mpd
  renice   3 -p $pgr_mpd
-#ionice -c3 -p $pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  mpd|io)	taskset -cp 0 $proc_nr
+   mpd)		taskset -cp 0 $proc_nr
 		chrt -v -ip 0 $proc_nr
+		renice  18 -p $proc_nr ;;
+   io)		taskset -cp 0 $proc_nr
 		renice   4 -p $proc_nr ;;
-  player)	taskset -cp 1 $proc_nr
+   player)	taskset -cp 1 $proc_nr
 		renice   2 -p $proc_nr ;;
-  decoder)	taskset -cp 2 $proc_nr
+   decoder)	taskset -cp 2 $proc_nr
 		renice   1 -p $proc_nr ;;
-  output)	taskset -cp 3 $proc_nr
+   output)	taskset -cp 3 $proc_nr
 		chrt -v -op 0 $proc_nr ;;
  esac
 done
@@ -87,6 +89,6 @@ echo   8 > /proc/irq/$snd/smp_affinity
 
 modprobe -r psmouse
 
-chrt -i 0 taskset -ac 0 nice -n 5 polipo >/dev/null 2>&1 &
+chrt -i 0 taskset -ac 0 nice -n 19 polipo >/dev/null 2>&1 &
 
 exit 0
