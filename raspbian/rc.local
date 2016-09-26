@@ -35,43 +35,52 @@ sleep 1
 
 pgr_mpd=$(pgrep -x mpd)
 
-if [ "$(nproc --all)" = "4" ]; then
- [ "$(($(chrt -ap "$pgr_mpd" | wc -l)/2))" != "5" ] && sleep 5
+if [ "$(nproc --all)" -ge "4" ]; then
  taskset -cp 0 $pgr_mpd
  renice   3 -p $pgr_mpd
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd|io)	taskset -cp 0 $proc_nr
-		low_pri       $proc_nr ;;
+   mpd)		taskset -cp 0 $proc_nr
+		chrt -v -ip 0 $proc_nr
+		renice  18 -p $proc_nr ;;
+   io)		taskset -cp 0 $proc_nr
+		renice   4 -p $proc_nr ;;
    player)	taskset -cp 1 $proc_nr
 		renice   2 -p $proc_nr ;;
    decoder)	taskset -cp 2 $proc_nr
 		renice   1 -p $proc_nr ;;
    output)	taskset -cp 3 $proc_nr
-		chrt    -op 0 $proc_nr ;;
+		chrt -v -op 0 $proc_nr ;;
   esac
  done
 else
- low_pri $pgr_mpd
+ renice   3 -p $pgr_mpd
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd|io)	low_pri       $proc_nr ;;
-   player)	renice   2 -p $proc_nr ;;
-   decoder)	renice   1 -p $proc_nr ;;
-   output)	chrt    -op 0 $proc_nr ;;
+   mpd)         chrt -v -ip 0 $proc_nr
+                renice  18 -p $proc_nr ;;
+   io)          renice   4 -p $proc_nr ;;
+   player)      renice   2 -p $proc_nr ;;
+   decoder)     renice   1 -p $proc_nr ;;
+   output)      chrt -v -op 0 $proc_nr ;;
   esac
  done
 fi
 
-pgr_upmpdcli=$(pgrep upmpdcli)
-taskset -acp 0 $pgr_upmpdcli
-for i in $(pstree -np $pgr_upmpdcli | grep -o -E '[0-9]+'); do
- low_pri $i
-done
+#pgr_upmpdcli=$(pgrep upmpdcli)
+#taskset -acp 0 $pgr_upmpdcli
+#for i in $(pstree -np $pgr_upmpdcli | grep -o -E '[0-9]+'); do
+# chrt   -ip 0 $i
+# renice 18 -p $i
+#done
+
+chrt -i 0 taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
+
+chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 ### For Criterion from Reference Club
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
