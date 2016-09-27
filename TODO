@@ -21,6 +21,8 @@
 
 2. sudo nano /etc/rc.local
 
+	[ $(grep MemTotal /proc/meminfo | awk '{print $2}') -ge xxx ] && chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
+
 	   mpd)		taskset -cp 0 $proc_nr
 			chrt -v -ip 0 $proc_nr
 			renice  18 -p $proc_nr ;;
