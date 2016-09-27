@@ -35,9 +35,11 @@
 
 3. Polipo
 
-	sudo nano /etc/rc.local
+	sudo nano /etc/polipo/config
+		... # No chunkHighMark
 
-		sed -i "s/chunkHighMark = [0-9]\+/chunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))/" /etc/polipo/config
+	sudo nano /etc/rc.local
+		grep -qs chunkHighMark /etc/polipo/config || sed "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
 		chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 	nano /etc/environment
