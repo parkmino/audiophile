@@ -15,7 +15,9 @@
 	#sysctl -w net.core.netdev_max_backlog=5000
 	 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
-	 sysctl -w vm.swappiness=1
+	 sysctl -w vm.swappiness=0
+
+	 swapoff -a
 
 2. sudo nano /etc/rc.local
 
