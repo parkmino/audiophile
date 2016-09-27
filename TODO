@@ -37,8 +37,9 @@
 
 	sudo nano /etc/rc.local
 
-		[ $(grep MemTotal /proc/meminfo | awk '{print $2}') -ge 750000 ] && chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
+		sed -i "s/chunkHighMark = [0-9]\+/chunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))/" /etc/polipo/config
+		chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
-	nano /etc/profile
+	nano /etc/environment
 
-		[ $(grep MemTotal /proc/meminfo | awk '{print $2}') -ge 750000 ] && export http_proxy="http://127.0.0.1:8123/"
+		http_proxy="http://127.0.0.1:8123/"
