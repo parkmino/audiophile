@@ -39,9 +39,10 @@
 		... # No chunkHighMark
 
 	sudo nano /etc/rc.local
-		grep -qs chunkHighMark /etc/polipo/config || sed "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
+		grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
 		chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 	nano /etc/environment
-
 		http_proxy="http://127.0.0.1:8123/"
+
+	Remove 'chunkHighMark = ...' line in /etc/polipo/config before making image
