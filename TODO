@@ -17,7 +17,7 @@
 
 	 sysctl -w vm.swappiness=0
 
-	 swapoff -a or # ...swap... in /etc/fstab
+	 swapoff -a or # ...swap... in /etc/fstab or 'sudo systemctl disable  dphys-swapfile' in Raspbian
 
 2. sudo nano /etc/rc.local
 
