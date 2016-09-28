@@ -8,7 +8,8 @@ $ sudo nano /etc/polipo/config
 	disableLocalInterface = true 
 	disableConfiguration = true 
 	disableIndexing = true 
-	disableServersList = true 
+	disableServersList = true
+	dnsQueryIPv6 = false
 
 	cacheIsShared = false
 	diskCacheRoot = ""
