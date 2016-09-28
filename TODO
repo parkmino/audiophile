@@ -17,7 +17,7 @@
 
 	 sysctl -w vm.swappiness=0
 
-	 swapoff -a
+	 swapoff -a or # ...swap... in /etc/fstab
 
 2. sudo nano /etc/rc.local
 
