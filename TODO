@@ -46,3 +46,7 @@
 		http_proxy="http://127.0.0.1:8123/"
 
 	Remove 'chunkHighMark = ...' line in /etc/polipo/config before making image
+
+4. sudo nano /usr/share/alsa/alsa.conf
+
+	pcm.sound.subdevice 0
