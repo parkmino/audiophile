@@ -54,3 +54,7 @@
 5. sudo nano /etc/hdparm.conf
 
 	read_ahead_sect = 1664
+
+6. sudo nano /etc/fstab
+
+	... ramfs ...
