@@ -51,11 +51,7 @@
 
 	pcm.sound.subdevice 0
 
-5. sudo nano /etc/hdparm.conf
-
-	read_ahead_sect = 1664
-
-6. sudo nano /etc/fstab
+5. sudo nano /etc/fstab
 
 	 ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
@@ -73,7 +69,7 @@
 	sudo nano /etc/rc.local
 		mkdir -p /run/var/cache /run/var/log /run/tmp
 
-7. sudo nano /etc/mpd.conf
+6. sudo nano /etc/mpd.conf
 
 	device "pcm.sound"
 
