@@ -57,4 +57,23 @@
 
 6. sudo nano /etc/fstab
 
-	... ramfs ...
+	 ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+	#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+	 ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
+
+	or
+
+	rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
+	rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log   /var
+	rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
+	sudo nano /etc/fstab
+			 #ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+			#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+			#ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
+	sudo nano /etc/rc.local
+		mkdir -p /run/var/cache /run/var/log /run/tmp
+
+7. sudo nano /etc/mpd.conf
+
+	device "pcm.sound"
+
