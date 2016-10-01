@@ -73,3 +73,6 @@
 
 	device "pcm.sound"
 
+7. ALSA
+$ find /usr/lib/x86_64-linux-gnu/alsa-lib/ -name '*.so' -exec sudo rename -v 's/\.so$/.so.sav/' '{}' \;
+$ sudo mv /usr/share/alsa/sndo-mixer.alisp /usr/share/alsa/sndo-mixer.alisp.sav
