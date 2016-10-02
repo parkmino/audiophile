@@ -75,5 +75,5 @@
 
 7. ALSA
 
-$ find /usr/lib/x86_64-linux-gnu/alsa-lib/ -name '*.so' -exec sudo rename -v 's/\.so$/.so.sav/' '{}' \;
-$ find /usr/share/alsa/ -name '*.alisp' -exec sudo rename -v 's/\.alisp$/.alisp.sav/' '{}' \;
+$ sudo find /usr/lib/arm-linux-gnueabihf/alsa-lib/ -name '*.so' -exec sudo rename -v 's/\.so$/.so.sav/' '{}' \;
+$ sudo find /usr/share/alsa/ -name '*.alisp' -exec sudo rename -v 's/\.alisp$/.alisp.sav/' '{}' \;
