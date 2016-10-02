@@ -64,3 +64,7 @@
 			#ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	sudo nano /etc/rc.local
 		mkdir -p /run/var/cache /run/var/log /run/tmp
+
+5. sudo nano /etc/rc.local
+
+	sysctl -w kernel.sched_rt_runtime_us=500000
