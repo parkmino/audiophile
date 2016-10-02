@@ -47,11 +47,7 @@
 
 	Remove 'chunkHighMark = ...' line in /etc/polipo/config before making image
 
-4. sudo nano /usr/share/alsa/alsa.conf
-
-	pcm.sound.subdevice 0
-
-5. sudo nano /etc/fstab
+4. sudo nano /etc/fstab
 
 	 ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
@@ -69,11 +65,6 @@
 	sudo nano /etc/rc.local
 		mkdir -p /run/var/cache /run/var/log /run/tmp
 
-6. sudo nano /etc/mpd.conf
+5. sudo nano /etc/mpd.conf
 
 	device "pcm.sound"
-
-7. ALSA
-
-$ sudo find /usr/lib/arm-linux-gnueabihf/alsa-lib/ -name '*.so' -exec sudo rename -v 's/\.so$/.so.sav/' '{}' \;
-$ sudo find /usr/share/alsa/ -name '*.alisp' -exec sudo rename -v 's/\.alisp$/.alisp.sav/' '{}' \;
