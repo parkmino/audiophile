@@ -16,6 +16,7 @@
 	 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
 	 sysctl -w vm.swappiness=0
+	 sysctl -w kernel.sched_rt_runtime_us=500000 # Armbian is not applicable
 
 	 swapoff -a or # ...swap... in /etc/fstab or 'sudo systemctl disable  dphys-swapfile' in Raspbian
 
@@ -64,7 +65,3 @@
 			#ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	sudo nano /etc/rc.local
 		mkdir -p /run/var/cache /run/var/log /run/tmp
-
-5. sudo nano /etc/rc.local
-
-	sysctl -w kernel.sched_rt_runtime_us=500000
