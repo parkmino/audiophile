@@ -11,7 +11,18 @@
 #
 # By default this script does nothing.
 
-ln -s /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2 || true
+if [ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ]; then
+ if [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ]; then
+  mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+  elif [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 ]; then
+   ln -s /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
+   elif [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav ]; then
+    ln -s /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+   fi
+  fi
+ fi
+fi
+
 systemctl start mpd
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
@@ -83,7 +94,7 @@ chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
 #amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
 
-rm /usr/lib/arm-linux-gnueabihf/libasound.so.2
+[ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
 
 ### Unmute IQaudIO I2S
 #echo "22"  > /sys/class/gpio/export
