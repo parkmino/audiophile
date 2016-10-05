@@ -48,7 +48,7 @@
 
 	Remove 'chunkHighMark = ...' line in /etc/polipo/config before making image
 
-4. sudo nano /etc/fstab
+4. sudo nano /etc/fstab (Just of reference)
 
 	 ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
 	#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
@@ -69,3 +69,9 @@
 5. ALSA library
 
 	$ sudo find /usr/lib/arm-linux-gnueabihf/ -name 'libasound.so*' -exec sudo rename -v 's/$/.sav/' '{}' \;
+	$ sudo systemctl disable mpd.service
+	$ sudo nano /etc/rc.local
+		ln -s /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+		systemctl start mpd
+		...
+		rm /usr/lib/arm-linux-gnueabihf/libasound.so.2
