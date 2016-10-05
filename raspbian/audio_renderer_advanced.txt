@@ -189,6 +189,7 @@ Audio Render Advanced
 	$ history -c ; rm ~/.bash_history
 	$ sudo poweroff
 	$ Remove /home/pi/.bash_history
+	$ Remove 'chunkHighMark = ...' in /etc/polipo/config
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_advanced_v.0.9.10.img
 	$ zip raspbian_audio_renderer_advanced_v.0.9.10.zip raspbian_audio_renderer_advanced_v.0.9.10.img
