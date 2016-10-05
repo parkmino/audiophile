@@ -11,9 +11,13 @@
 #
 # By default this script does nothing.
 
+#rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
+#rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log   /var
+#rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
+
 low_pri () {
  chrt -v -ip 0 $1
- renice  19 -p $1
+ renice  18 -p $1
 #ionice -c3 -p $1
 }
 
@@ -39,6 +43,9 @@ low_pri () {
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
  sysctl -w vm.swappiness=0
+ sysctl -w kernel.sched_rt_runtime_us=500000
+
+#swapoff -a
 
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
  chrt -op 0 $pid
@@ -47,6 +54,8 @@ done
 for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
  renice 0 $pid
 done
+
+#ln -s /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so.2
 
 systemctl start mpd
 
@@ -85,9 +94,11 @@ done
 echo   8 > /proc/irq/$snd/smp_affinity
 
 #taskset -apc 3 `pgrep snd_hda`
-#hdparm -A1 -a1664 -B255 /dev/sda
+#hdparm -A1 -a1752 -B255 /dev/sda
 
 modprobe -r psmouse
+
+#rm /usr/lib/x86_64-linux-gnu/libasound.so.2
 
 chrt -i 0 taskset -ac 0 nice -n 19 polipo >/dev/null 2>&1 &
 
