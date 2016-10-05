@@ -187,6 +187,7 @@ Audio Render Advanced
 	$ nano ~/release
 	$ mpc clear
 	$ sudo sed -i '/chunkHighMark/d' /etc/polipo/config
+	$ cat /etc/polipo/config
 	$ history -c ; rm ~/.bash_history
 	$ sudo poweroff
 
