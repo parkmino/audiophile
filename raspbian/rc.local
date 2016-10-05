@@ -11,8 +11,11 @@
 #
 # By default this script does nothing.
 
+ln -s /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2 || true
+systemctl start mpd
+
 echo noop > /sys/block/mmcblk0/queue/scheduler
-ifconfig eth0 txqueuelen 10000
+ifconfig eth0 txqueuelen 1875
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
@@ -73,11 +76,15 @@ fi
 
 chrt -i 0 taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
 
+grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
 chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 ### For Criterion from Reference Club
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
 #amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
+
+rm /usr/lib/arm-linux-gnueabihf/libasound.so.2
+
 ### Unmute IQaudIO I2S
 #echo "22"  > /sys/class/gpio/export
 #echo "out" > /sys/class/gpio/gpio22/direction
@@ -93,8 +100,13 @@ chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 #/home/pi/hub-ctrl -h 0 -P 2 -p 0 # USB power  off
 #/home/pi/hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
 ### Turn off HDMI
-#/opt/vc/bin/tvservice -o
-#service getty@tty1 stop
+/opt/vc/bin/tvservice -o
+service getty@tty1 stop
+### Remove services
+for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-udevd systemd-logind triggerhappy # dbus sshd
+do
+ service $i stop
+done
 ### Lower init priority
 taskset -cp 0 1
 low_pri       1

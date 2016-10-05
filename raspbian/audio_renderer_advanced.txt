@@ -1,0 +1,194 @@
+Audio Render Advanced
+
+0. Flashing
+
+	$ sudo fdisk -l
+	$ sudo dd bs=2M if=2016-09-23-raspbian-jessie-lite.img of=/dev/sdb
+	$ sudo gparted
+	$ copy mpd.0.19.19.ffmpeg hub-ctrl llctl icon.png /home/pi
+	$ ssh pi@rpi_ip
+	  pi@rpi_ip's password: raspberry
+
+1. Update & upgrade
+
+	sudo apt-get update
+	sudo apt-get upgrade
+	sudo apt-get dist-upgrade
+
+2. Configuration file
+
+	sudo nano /boot/config.txt
+		#dtparam=audio=on
+
+		gpu_mem=16
+		disable_splash=1
+		disable_pvt=1
+
+		#dtoverlay=hifiberry-amp
+		#dtoverlay=hifiberry-dac
+		#dtoverlay=hifiberry-dacplus
+		#dtoverlay=hifiberry-digi
+		#dtoverlay=iqaudio-dac
+		#dtoverlay=iqaudio-dacplus
+	cat /proc/cpuinfo
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+
+3. Kernel option
+
+	sudo nano /boot/cmdline.txt
+		#console=serial0,115200 console=tty1
+		consoleblank=0
+		smsc95xx.turbo_mode=0
+		elevator=noop
+		selinux=0
+		#dwc_otg.fiq_split_enable=0 dwc_otg.fiq_fix_enable=0
+		#dwc_otg.fiq_fsm_enable=0
+		dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
+
+4. Localisation
+
+	#sudo dpkg-reconfigure locales
+	 sudo dpkg-reconfigure tzdata
+	
+5. Disable modules
+
+	lsmod
+	sudo nano /etc/modprobe.d/uio.conf
+		blacklist uio
+		blacklist uio-pdrv-genirq
+
+6. ALSA configuration
+
+	sudo nano /usr/share/alsa/alsa.conf
+		 pcm.sound.card   1
+		 ctl.control.card 1
+		#pcm.default pcm.sound
+	sudo systemctl mask alsa-store.service
+	sudo systemctl mask alsa-restore.service
+	sudo find /usr/lib/arm-linux-gnueabihf/ -name 'libasound.so*' -exec sudo rename -v 's/$/.sav/' '{}' \;
+
+7. MPD install & recompile
+
+	sudo apt-get install mpd mpc ncmpc
+	
+8. MPD Settings
+
+	sudo mv /usr/bin/mpd /usr/bin/mpd.org
+	sudo cp ~/mpd.0.19.19.ffmpeg /usr/bin/mpd
+	sudo nano /etc/mpd.conf
+	sudo nano /lib/systemd/system/mpd.service
+	sudo nano /etc/default/mpd
+	sudo systemctl disable mpd
+
+9. Upmpdcli Setup
+
+10. Polipo Setup
+
+	sudo nano /etc/polipo/config
+		... # No chunkHighMark
+
+	sudo nano /etc/rc.local
+		grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
+		chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
+
+	Remove 'chunkHighMark = ...' line in /etc/polipo/config before making image
+
+11. CIFS & NFS mounting
+
+	sudo apt-get install cifs-utils nfs-common
+	sudo mkdir /mnt/cifs /mnt/nfs
+	sudo ln -s /mnt/     /var/lib/mpd/music
+	sudo nano /etc/fstab
+		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
+		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
+		
+12. Ramdisk (Just for reference)
+
+	sudo nano /etc/fstab
+
+		#...swap...
+		 ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+		 ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
+
+	or
+
+	rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
+	rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log   /var
+	rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
+	sudo nano /etc/fstab
+			 #ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
+			#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
+			#ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
+	sudo nano /etc/rc.local
+		mkdir -p /run/var/cache /run/var/log /run/tmp
+
+13. Edit /etc/rc.local
+	
+14. Sysctl Configuration
+
+	sudo nano /etc/sysctl.conf
+		sysctl -w vm.swappiness=0
+		sysctl -w kernel.sched_rt_runtime_us=500000 # Armbian is not applicable
+		sysctl -w net.ipv4.tcp_sack=0
+		sysctl -w net.ipv4.tcp_no_metrics_save=1
+		sysctl -w net.ipv6.conf.all.disable_ipv6=1
+
+15. Disabel swap
+
+	sudo systemctl disable dphys-swapfile
+
+16. USB Mount
+
+	sudo apt-get install usbmount
+	sudo nano /etc/usbmount/usbmount.conf
+		MOUNTPOINTS="/mnt/usb0-7"
+	sudo reboot
+
+17. Internet Radio
+
+	sudo apt-get install vlc-nox # Optional
+	nano ~/.config/vlc/vlcrc
+		alsa-audio-device=pcm.sound
+		aout=alsa
+	nano ~/kbs1fm
+		#!/bin/sh
+		mpc stop
+		cvlc http://juoradio.appspot.com/kbs1 >/dev/null 2>&1 &
+	nano ~/kbs2fm
+		#!/bin/sh
+		mpc stop
+		cvlc http://juoradio.appspot.com/kbs2 >/dev/null 2>&1 &
+	nano ~/kbs2radio
+		#!/bin/sh
+		mpc stop
+		cvlc http://juoradio.appspot.com/kbs2r >/dev/null 2>&1 &
+	nano ~/cbsfm
+		#!/bin/sh
+		mpc stop
+		cvlc rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream >/dev/null 2>&1 &
+	chmod +x ~/kbs1fm ~/kbs2fm ~/kbs2radio ~/cbsfm
+	sudo ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/kbs2radio /home/pi/cbsfm /usr/bin/
+
+	sudo nano /var/lib/mpd/playlists/Internet_Radios.m3u
+		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
+		http://50.7.173.162:8010/#Audiophile Baroque
+		http://50.7.173.162:8012/#Audiophile Classical
+		http://89.16.185.174:8004/stream#Linn Classical
+		http://37.130.228.60:8090/#Naim Radio
+		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
+
+18. Show release
+
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.0.9.10 advanced" > release
+
+19. Make Image
+
+	$ nano ~/release
+	$ mpc clear
+	$ history -c ; rm ~/.bash_history
+	$ sudo poweroff
+	$ Remove /home/pi/.bash_history
+	$ sudo fdisk -l
+	$ sudo dd if=/dev/sdb of=raspbian_audio_renderer_advanced_v.0.9.10.img
+	$ zip raspbian_audio_renderer_advanced_v.0.9.10.zip raspbian_audio_renderer_advanced_v.0.9.10.img
