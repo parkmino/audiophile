@@ -68,4 +68,4 @@
 
 5. ALSA library
 
-	$ sudo find /usr/lib/arm-linux-gnueabihf/ -name 'libasound.so*' -exec sudo rename -v 's/$/\.sav/' '{}' \;
+	$ sudo find /usr/lib/arm-linux-gnueabihf/ -name 'libasound.so*' -exec sudo rename -v 's/$/.sav/' '{}' \;
