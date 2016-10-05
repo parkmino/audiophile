@@ -11,17 +11,7 @@
 #
 # By default this script does nothing.
 
-if [ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ]; then
- if [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ]; then
-  mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
-  elif [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 ]; then
-   ln -s /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
-   elif [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav ]; then
-    ln -s /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
-   fi
-  fi
- fi
-fi
+[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
 
 systemctl start mpd
 
