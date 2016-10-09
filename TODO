@@ -1,7 +1,7 @@
 1. sudo nano /usr/share/alsa/alsa.conf
 
-	 pcm.sound.nonblock 1
+	#pcm.sound.nonblock 1
 
-	#defaults.pcm.nonblock 1
+	 defaults.pcm.nonblock 1
 	#defaults.pcm.compat 0
 	#defaults.pcm.minperiodtime 1333 # 5000 # in us
