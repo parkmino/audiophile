@@ -1,0 +1,198 @@
+PC Audio Render from Voyage Linux
+
+0. USB Install
+
+	$ wget http://mirror.voyage.hk/download/voyage/voyage-current.tar.xz
+	$ sudo su
+	# tar --numeric-owner -Jxf voyage-current.tar.xz
+	# cd voyage-current
+	# mkdir /mnt/cf
+	# fdisk -l
+	# gparted or ./usr/local/sbin/format-cf.sh /dev/sdb # format USB drive with ext2
+	# ./usr/local/sbin/voyage.update
+	# cat .voyage-install.conf
+		#
+		# This file generated automatically by voyage-install.sh
+		# on Fri Oct 14 01:01:09 KST 2016
+		#
+
+		DISTDIR=/home/parkmino/Downloads/pc_audio_renderer/voyage-current
+		TARGET_DISK=/dev/sdb
+		TARGET_PART=1
+		TARGET_MOUNT=/mnt/cf
+		BOOTSTRAP_PART=1
+		SYSTEM_BOOTSTRAP=grub
+		MAKEFS=2
+		VOYAGE_PROFILE="Generic PC"
+		VOYAGE_SYSTEM_CONSOLE=standard
+	# sync
+	# exit
+	$ ssh root@usb_pc_ip
+	  root@usb_pc_ip's password: voyage
+
+1. System update & install MPD
+
+	apt-get update
+	apt-get upgrade
+	apt-get dist-upgrade
+	apt-get install nano wget ca-certificates
+	apt-get install ( alsa-base alsa-utils ) mpd mpc ncmpc
+
+2. Kernel option
+
+	nano /boot/grub/menu.lst
+
+		timeout 0
+		kernel /vmlinuz ... noapic apm=off consoleblank=0 elevator=noop selinux=0
+
+3. Localisation
+
+	#apt-get install locales
+	#dpkg-reconfigure locales
+	 dpkg-reconfigure tzdata
+
+4. Disable modules
+
+	lsmod
+	nano /etc/modprobe.d/uio.conf
+		blacklist ...
+
+5. ALSA configuration
+
+	nano /usr/share/alsa/alsa.conf
+		 pcm.sound.card   1
+		 ctl.control.card 1
+		#pcm.default pcm.sound
+	systemctl mask alsa-store.service
+	systemctl mask alsa-restore.service
+	
+6. MPD Settings
+
+	mv /usr/bin/mpd /usr/bin/mpd.org
+	cp ~/mpd.0.19.19.ffmpeg /usr/bin/mpd
+	nano /etc/mpd.conf
+	nano /lib/systemd/system/mpd.service
+	nano /etc/default/mpd
+	systemctl disable mpd
+
+7. Upmpdcli Setup
+
+	#Setup Upmpdcli
+	wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/libu/libupnpp3/libupnpp3_0.15.1-1_i386.deb
+	wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.2.6-1_i386.deb
+
+8. Polipo Setup
+
+	nano /etc/polipo/config
+		... # No chunkHighMark
+
+	nano /etc/rc.local
+		grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
+		chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
+
+	Remove 'chunkHighMark = ...' line in /etc/polipo/config before making image
+
+9. CIFS & NFS mounting
+
+	apt-get install cifs-utils nfs-common
+	mkdir /mnt/cifs /mnt/nfs
+	ln -s /mnt/     /var/lib/mpd/music
+	nano /etc/fstab
+		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
+		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
+		
+10. Remove swap
+
+	nano /etc/fstab
+		#...swap...
+
+11. Edit /etc/rc.local
+
+	nano /etc/rc.local
+	
+12. Sysctl Configuration
+
+	nano /etc/sysctl.conf
+		#...
+		#kernel.watchdog = 0
+		#vm.swappiness = 0
+		kernel.sched_rt_runtime_us = 500000 # Armbian is not applicable
+		net.ipv4.tcp_sack = 0
+		net.ipv4.tcp_no_metrics_save = 1
+		net.ipv6.conf.all.disable_ipv6 = 1
+		#dev.rtc.max-user-freq = 4032
+		#dev.hpet.max-user-freq = 2147483520
+
+13. Disable TTYs
+
+	#for Upstart
+	nano /etc/inittab
+		#... tty1-6
+
+14. Disable services
+
+	apt-get install sysv-rc-conf && sysv-rc-conf
+		#Remove alsa-utils
+	systemctl disable alsa-utils
+	nano /etc/rc.local
+		for i in watchdog rpcbind dnsmasq cron nfs-common wd_keepalive # dbus ssh
+		do
+		 service $i stop
+		done
+
+15. USB Mount (Optional?)
+
+	apt-get install usbmount
+	nano /etc/usbmount/usbmount.conf
+		MOUNTPOINTS="/mnt/usb0-7"
+	reboot
+
+16. Internet Radio
+
+	apt-get install vlc-nox # Optional
+	nano ~/.config/vlc/vlcrc
+		alsa-audio-device=pcm.sound
+		aout=alsa
+	nano ~/kbs1fm
+		#!/bin/sh
+		mpc stop
+		cvlc http://juoradio.appspot.com/kbs1 >/dev/null 2>&1 &
+	nano ~/kbs2fm
+		#!/bin/sh
+		mpc stop
+		cvlc http://juoradio.appspot.com/kbs2 >/dev/null 2>&1 &
+	nano ~/kbs2radio
+		#!/bin/sh
+		mpc stop
+		cvlc http://juoradio.appspot.com/kbs2r >/dev/null 2>&1 &
+	nano ~/cbsfm
+		#!/bin/sh
+		mpc stop
+		cvlc rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream >/dev/null 2>&1 &
+	chmod +x ~/kbs1fm ~/kbs2fm ~/kbs2radio ~/cbsfm
+	ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/kbs2radio /home/pi/cbsfm /usr/bin/
+
+	nano /var/lib/mpd/playlists/Internet_Radios.m3u
+		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
+		http://50.7.173.162:8010/#Audiophile Baroque
+		http://50.7.173.162:8012/#Audiophile Classical
+		http://89.16.185.174:8004/stream#Linn Classical
+		http://37.130.228.60:8090/#Naim Radio
+		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
+
+17. Show release
+
+	echo "* Mino's UPnP Audio Renderer for PC v.0.9.0 alpha" > release
+
+18. Make Image
+
+	nano ~/release
+	mpc clear
+	sed -i '/chunkHighMark/d' /etc/polipo/config
+	cat /etc/polipo/config
+	history -c ; rm ~/.bash_history
+	poweroff
+
+	$ sudo fdisk -l
+	$ sudo dd bs=4M if=/dev/sdb of=voyage_audio_renderer_v.0.9.0.img
+	$ zip voayge_audio_renderer_v.0.9.0.zip voyage_audio_renderer_v.0.9.0.img
