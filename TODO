@@ -5,3 +5,13 @@ if ! grep -qs chunkHighMark /etc/polipo/config; then
  [ $polipo_mem -ge 536870912 ] && polipo_mem=536870912
  sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
 fi
+
+2. Make voyage linux rw
+
+	# nano /etc/init.d/voyage-util
+		#echo -n "Remounting / as read-only ... "
+		#/usr/local/sbin/remountro
+		#echo "Done."
+	# nano /etc/rc.local
+		remountro
+		exit 0
