@@ -18,6 +18,6 @@ fi
 
 3. sudo nano /etc/mpd.conf
 
-	buffer_before_play      "13.9%"
+	buffer_before_play      "13.0445%"
 
 4. sudo rm -rf /usr/share/polipo/www
