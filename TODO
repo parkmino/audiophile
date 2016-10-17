@@ -2,7 +2,7 @@
 
 if ! grep -qs chunkHighMark /etc/polipo/config; then
  polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
- [ $polipo_mem -ge 536870912 ] && polipo_mem=536870912
+ [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
  sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
 fi
 
