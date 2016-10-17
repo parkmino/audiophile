@@ -21,3 +21,7 @@ fi
 	buffer_before_play      "13.0445%"
 
 4. sudo rm -rf /usr/share/polipo/www
+
+5. sudo nano /usr/share/alsa/alsa.conf
+
+	#pcm.sound.device 0
