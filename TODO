@@ -19,10 +19,3 @@ fi
 3. sudo nano /etc/mpd.conf
 
 	buffer_before_play      "12.0%"
-
-4. sudo rm -rf /usr/share/polipo/www
-
-5. sudo nano /usr/share/alsa/alsa.conf
-
-	#pcm.sound.device 0
-	#pcm.sound.subdevice 0

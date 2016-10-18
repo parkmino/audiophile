@@ -1,4 +1,5 @@
 $ sudo apt-get --no-install-recommends install polipo
+$ sudo rm -rf /usr/share/polipo/www # just in case
 $ sudo systemctl disable polipo.service
 $ sudo nano /etc/polipo/config
 	#logSyslog = false
