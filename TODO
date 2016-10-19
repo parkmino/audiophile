@@ -15,7 +15,3 @@ fi
 	# nano /etc/rc.local
 		remountro
 		exit 0
-
-3. sudo nano /etc/mpd.conf
-
-	buffer_before_play      "11.864355425%"
