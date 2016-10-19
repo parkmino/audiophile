@@ -79,7 +79,7 @@ PC Audio Render from Voyage Linux
 
 	#Setup Upmpdcli
 	wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/libu/libupnpp3/libupnpp3_0.15.1-1_i386.deb
-	wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.2.6-1_i386.deb
+	wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.2.9-1_i386.deb
 
 8. Polipo Setup
 
