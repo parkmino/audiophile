@@ -53,9 +53,15 @@ Audio Render Advanced
 5. Disable modules
 
 	lsmod
-	sudo nano /etc/modprobe.d/uio.conf
+	sudo nano /etc/modprobe.d/raspi-blacklist.conf
 		blacklist uio
 		blacklist uio-pdrv-genirq
+		#Disable RPi3 Wi-Fi
+		blacklist brcmfmac
+		blacklist brcmutil
+		#Disable RPi3 Bluetooth
+		blacklist btbcm
+		blacklist hci_uart
 
 6. ALSA configuration
 
