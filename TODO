@@ -15,3 +15,12 @@ fi
 	# nano /etc/rc.local
 		remountro
 		exit 0
+
+3. Ushare
+
+	wget https://launchpad.net/ubuntu/+archive/primary/+files/ushare_1.1a-0ubuntu10_armhf.deb
+	apt-get install libdlna0
+	dpkg -i ushare_1.1a-0ubuntu10_armhf.deb
+	systemctl disable ushare
+	nano /etc/ushare.conf
+		
