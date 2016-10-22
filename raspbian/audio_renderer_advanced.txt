@@ -186,7 +186,7 @@ Audio Render Advanced
 
 18. Show release
 
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.0.9.10 advanced" > release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.0.9.11 advanced" > release
 
 19. Make Image
 
