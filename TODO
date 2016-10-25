@@ -15,3 +15,7 @@ fi
 	# nano /etc/rc.local
 		remountro
 		exit 0
+
+3. sudo nano /boot/config.txt in Raspbian ultimate
+
+	isolcpus=0,1,2,3
