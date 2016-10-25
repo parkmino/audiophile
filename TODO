@@ -19,3 +19,10 @@ fi
 3. sudo nano /boot/config.txt in Raspbian ultimate
 
 	isolcpus=0,1,2,3
+
+4. sudo nano /etc/mpd.conf
+
+	decoder {
+		plugin  "pcm"
+		enabled "no"
+	}
