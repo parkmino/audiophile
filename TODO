@@ -26,3 +26,38 @@ fi
 		plugin  "pcm"
 		enabled "no"
 	}
+
+	playlist_plugin {
+		name    "extm3u"
+		enabled "no"
+	}
+
+	#playlist_plugin {
+	#	name	"m3u"
+	#	enabled	"no"
+	#}
+
+	playlist_plugin {
+		name    "xspf"
+		enabled "no"
+	}
+
+	playlist_plugin {
+		name    "asx"
+		enabled "no"
+	}
+
+	playlist_plugin {
+		name    "rss"
+		enabled "no"
+	}
+
+	#playlist_plugin {
+	#        name    "cue"
+	#        enabled "no"
+	#}
+
+	playlist_plugin {
+		name    "embcue"
+		enabled "no"
+	}
