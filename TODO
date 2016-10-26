@@ -16,11 +16,7 @@ fi
 		remountro
 		exit 0
 
-3. sudo nano /boot/config.txt in Raspbian ultimate
-
-	isolcpus=0,1,2,3
-
-4. sudo nano /etc/mpd.conf
+3. sudo nano /etc/mpd.conf
 
 	decoder {
 		plugin  "pcm"
@@ -62,12 +58,4 @@ fi
 		enabled "no"
 	}
 
-5. sudo nano /etc/rc.local
-
-	sudo ionice -c2 -n2 -p $pgr_mpd
-
-	mpd)
-	io)      sudo ionice -c2 -n3 -p $proc_nr ;;
-	player)	 sudo ionice -c2 -n1 -p $proc_nr ;;
-	decoder) sudo ionice -c2 -n0 -p $proc_nr ;;
-	output)	 sudo ionice -c1 -n7 -p $proc_nr ;;
+	buffer_before_play      "11.8643554229%"
