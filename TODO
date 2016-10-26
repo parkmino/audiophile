@@ -64,10 +64,10 @@ fi
 
 5. sudo nano /etc/rc.local
 
-	sudo ionice -c1 -n6 -p $pgr_mpd
+	sudo ionice -c2 -n2 -p $pgr_mpd
 
 	mpd)
-	io)      sudo ionice -c1 -n7 -p $proc_nr ;;
-	player)	 sudo ionice -c1 -n5 -p $proc_nr ;;
-	decoder) sudo ionice -c1 -n4 -p $proc_nr ;;
-	output)	 sudo ionice -c1 -n3 -p $proc_nr ;;
+	io)      sudo ionice -c2 -n3 -p $proc_nr ;;
+	player)	 sudo ionice -c2 -n1 -p $proc_nr ;;
+	decoder) sudo ionice -c2 -n0 -p $proc_nr ;;
+	output)	 sudo ionice -c1 -n7 -p $proc_nr ;;
