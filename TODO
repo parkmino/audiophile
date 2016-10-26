@@ -59,3 +59,7 @@ fi
 	}
 
 	buffer_before_play      "11.8643554229%"
+
+4. sudo nano /etc/mpd.conf
+
+	always_on               "yes" # in alsa
