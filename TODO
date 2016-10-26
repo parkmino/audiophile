@@ -62,8 +62,12 @@ fi
 		enabled "no"
 	}
 
-5. sudo nano /lib/systemd/system/mpd.service
+5. sudo nano /etc/rc.local
 
-	# allow MPD to use real-time priority 50
-	LimitRTPRIO=50
-	LimitRTTIME=infinity
+	sudo ionice -c1 -n6 -p $pgr_mpd
+
+	mpd)
+	io)      sudo ionice -c1 -n7 -p $proc_nr ;;
+	player)	 sudo ionice -c1 -n5 -p $proc_nr ;;
+	decoder) sudo ionice -c1 -n4 -p $proc_nr ;;
+	output)	 sudo ionice -c1 -n3 -p $proc_nr ;;
