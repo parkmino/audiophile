@@ -72,5 +72,5 @@ fi
 
 5. sudo nano /etc/sysctl.conf
 
-	kernel.sched_rt_runtime_us = 50500
+	kernel.sched_rt_runtime_us = 50450
 	kernel.sched_rt_period_us  = 100000
