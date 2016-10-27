@@ -66,11 +66,7 @@ fi
 
 	device			"sound" # in alsa
 
-4. sudo nano /etc/hdparm.conf
-
-	read_ahead_sect = 2048 # from 1752
-
-5. sudo nano /etc/sysctl.conf
+4. sudo nano /etc/sysctl.conf
 
 	kernel.sched_rt_runtime_us = 50450
 	kernel.sched_rt_period_us  = 100000
