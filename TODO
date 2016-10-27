@@ -64,6 +64,8 @@ fi
 
 	user			"root"
 
+	device			"sound" # in alsa
+
 4. sudo nano /etc/hdparm.conf
 
 	read_ahead_sect = 2048 # from 1752
