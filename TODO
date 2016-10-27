@@ -63,3 +63,7 @@ fi
 	always_on               "yes" # in alsa
 
 	user			"root"
+
+4. sudo nano /etc/hdparm.conf
+
+	read_ahead_sect = 2048 # from 1752
