@@ -18,6 +18,11 @@ fi
 
 3. sudo nano /etc/mpd.conf
 
+	user			"root"
+
+	device			"sound"
+	always_on               "yes"
+
 	decoder {
 		plugin  "pcm"
 		enabled "no"
@@ -60,13 +65,7 @@ fi
 
 	buffer_before_play      "11.8643554229%"
 
-	always_on               "yes" # in alsa
-
-	user			"root"
-
-	device			"sound" # in alsa
-
 4. sudo nano /etc/sysctl.conf
 
-	kernel.sched_rt_runtime_us = 50450
+	kernel.sched_rt_runtime_us = 50446
 	kernel.sched_rt_period_us  = 100000
