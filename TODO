@@ -21,7 +21,6 @@ fi
 	user			"root"
 
 	device			"sound"
-	always_on               "yes"
 
 	decoder {
 		plugin  "pcm"
