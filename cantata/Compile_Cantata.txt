@@ -1,7 +1,8 @@
 Download and Compile Cantata, MPD Client.
 
-https://packages.debian.org/stretch/amd64/cantata/download
+http://packages.ubuntu.com/yakkety/cantata
 https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/cantata-qt
+
 
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
