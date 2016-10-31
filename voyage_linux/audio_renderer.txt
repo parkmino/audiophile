@@ -176,11 +176,21 @@ PC Audio Render from Voyage Linux
 		http://37.130.228.60:8090/#Naim Radio
 		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
 
-17. Show release
+17. Make voyage linux rw
+
+	# nano /etc/init.d/voyage-util
+		#echo -n "Remounting / as read-only ... "
+		#/usr/local/sbin/remountro
+		#echo "Done."
+	# nano /etc/rc.local
+		remountro
+		exit 0
+
+18. Show release
 
 	echo "* Mino's UPnP Audio Renderer for PC v.0.9.0 alpha" > release
 
-18. Make Image
+19. Make Image
 
 	nano ~/release
 	mpc clear

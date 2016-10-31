@@ -6,17 +6,7 @@ if ! grep -qs chunkHighMark /etc/polipo/config; then
  sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
 fi
 
-2. Make voyage linux rw
-
-	# nano /etc/init.d/voyage-util
-		#echo -n "Remounting / as read-only ... "
-		#/usr/local/sbin/remountro
-		#echo "Done."
-	# nano /etc/rc.local
-		remountro
-		exit 0
-
-3. sudo nano /etc/mpd.conf
+2. sudo nano /etc/mpd.conf
 
 	user			"root"
 
@@ -64,7 +54,7 @@ fi
 
 	buffer_before_play      "11.8643554229%"
 
-4. sudo nano /etc/sysctl.conf
+3. sudo nano /etc/sysctl.conf
 
 	kernel.sched_rt_runtime_us = 50446
 	kernel.sched_rt_period_us  = 100000
