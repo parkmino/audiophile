@@ -1,44 +1,51 @@
 Download and Compile Cantata, MPD Client.
 
+https://packages.debian.org/stretch/amd64/cantata/download
 https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/cantata-qt
 
 -----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Hash: SHA256
 
 Format: 3.0 (quilt)
 Source: cantata
 Binary: cantata
 Architecture: any
-Version: 2.0.1-0build1~ubuntu16.04
+Version: 2.0.1.ds1-1
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Uploaders: Stuart Prescott <stuart@debian.org>
 Homepage: https://github.com/CDrummond/cantata
 Standards-Version: 3.9.8
 Vcs-Browser: https://anonscm.debian.org/gitweb/?p=pkg-multimedia/cantata.git
 Vcs-Git: https://anonscm.debian.org/git/pkg-multimedia/cantata.git
-Build-Depends: cmake, debhelper (>= 9), libavcodec-dev, libavformat-dev, libavutil-dev, libcddb2-dev, libcdparanoia-dev, libebur128-dev, libmusicbrainz5-dev (>= 5.1.0+git20150707), libmpg123-dev, libmtp-dev (>= 1.0.0), libphonon4qt5-dev, libqt5svg5-dev, libspeex-dev, libspeexdsp-dev, libtag-extras-dev, libtag1-dev, libudev-dev, libvlc-dev, libvlccore-dev, libx11-dev, pkg-config, pkg-kde-tools, qtbase5-dev, qttools5-dev-tools
+Build-Depends: cmake, debhelper (>= 9), libavcodec-dev, libavformat-dev, libavutil-dev, libcddb-dev, libcdparanoia-dev, libebur128-dev, libmusicbrainz5-dev (>= 5.1.0+git20150707), libmpg123-dev, libmtp-dev (>= 1.0.0), libphonon4qt5-dev, libqt5svg5-dev, libspeex-dev, libspeexdsp-dev, libtag-extras-dev, libtag1-dev, libudev-dev, libvlc-dev, libvlccore-dev, libx11-dev, pkg-config, pkg-kde-tools, qtbase5-dev, qttools5-dev-tools
 Package-List:
  cantata deb sound optional arch=any
 Checksums-Sha1:
- 90a80b412a21aed72d1b7cc578f0c2ffa62c243c 2151126 cantata_2.0.1.orig.tar.bz2
- f580ee00f784b0ea72fced5a8bd88270e7557fd4 12456 cantata_2.0.1-0build1~ubuntu16.04.debian.tar.xz
+ 729c95660debfbb91f3865c0d9e6bd9618abf1f2 2395155 cantata_2.0.1.ds1.orig.tar.gz
+ 6335c4569c7f57f90b46f46ae40c3c68b046e67d 12416 cantata_2.0.1.ds1-1.debian.tar.xz
 Checksums-Sha256:
- 122bda13c0b4078b84640dabef444b37d705d71c6f95209a2d949acd28a0bbca 2151126 cantata_2.0.1.orig.tar.bz2
- 06bfdd01c30a3b33407e74f106135dd00504da8505f266d7879a3bbb1d137b74 12456 cantata_2.0.1-0build1~ubuntu16.04.debian.tar.xz
+ 2c51de686712cb6a1b79a37854939005d792246a9cacb96acf1d008081952190 2395155 cantata_2.0.1.ds1.orig.tar.gz
+ c70aa1d8e5e3fde84ffd7fc0582c0ab4e2f7506cdef03d954b680e56c20f7e89 12416 cantata_2.0.1.ds1-1.debian.tar.xz
 Files:
- dacab1b6bf7639e3d46876db8883fbb2 2151126 cantata_2.0.1.orig.tar.bz2
- 3c2e0fc8c64e1ad3daca9609c82534f4 12456 cantata_2.0.1-0build1~ubuntu16.04.debian.tar.xz
+ 7f4f11bba0cdab84b39a9d88cf9d7264 2395155 cantata_2.0.1.ds1.orig.tar.gz
+ 9f8636d96cb2333a6be43099dc36378a 12416 cantata_2.0.1.ds1-1.debian.tar.xz
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQEcBAEBAgAGBQJXUwC+AAoJED9u2UR5k6Yp5UIH/0dbfcG9PfDyCuhOZw6vgBb1
-96tN2kkFpBI0uD5PbcZ7UkoNmuoJQBjbymnOUQmWa7YAtffKNiebKBTHgOkySg7C
-rQCt+cFe/MjF2N5F9GHkX67EaJca2aRkUrYXHzdPsHoRh1H+t6NpSEVTiHpY9kft
-oU13dIVZF71L6+t8X6qpNHqcdf/u+5+8Yaa80UxFAjzKlB0HpHLyXtTdV1UxcG4h
-f9xJCoM/C63QDUvxTX0H0o3Wunb4NU4ecH45cNrgH5oBAxX3xnpqNQsZHRyRJ0J5
-hRrfQK5WqzjEzbwovui3vGksP6R5s+7sj+DVWPLh1yMjw8UAMCM6OJuLKq7qQg0=
-=8BLR
+iQIcBAEBCAAGBQJXUmsnAAoJELvBfrsTlvL3hnAQALFFM4c7AXpmexJolkmMGMwL
+2tZICZvyjM4CX3Yljdiy0rnhmzvgD71Jpge+EFxS9ZiBsiIcQscqDa6NOMw+lrsY
+wDIctyxTWDu0MlDJ4Z5sA/fzshoJvKOk0xoqs6F8RCxOF/NebHJS3WxUY/4jfhcD
+CHUs8yLaQMZAgvaZ8jrqE7w4UGz9rXmaM8g+UNL0/drKSpSJ+Jm2LTqrqCeQRAua
+v5Dhsz7iQCcLsutw2adTl7XovYDken7e2IJWIedUSq+CtObmKi959NaeCboKDUaB
+a7ElpRQF5tvCF5Vgva7lg+6gVbbH9Fxd2F1FoOx6GMYsDu0HoaOsRxAuJoZue6Tf
+gwmdXq99RWA3Ih9zrTIV65zqP8LwQCrJbiptqdnQTPBHBadZpACLsSCtYQELxBqU
+esC/d11j+4zuO7T0TDQvE7atYQiLnj8YOCzJ164qXIOccA6AIyh22dXS4p+0moee
+APq+DtybZlq93/AxPvGLeuvdY1nf50C2yUjYS8f1EEnzq0Gn7x1DdymeIbQW3h7s
+5Smzs0UJFrNrxK66/5ayAmMQUTcqcZjvjFZEG8teL/w5b6AIoTDgKPRq6tGJITj4
+EKQSd8DNpntwo1HubM+gwWyZ0pEy2SM7IbOgjmP7cER3sCOAa33m/KCo3pCpQrOx
+TSMqYzqZevvK6Xx7/tEs
+=aeyP
 -----END PGP SIGNATURE-----
 
 ### Install Build Package ###
@@ -83,7 +90,7 @@ cd ~/git/audiophile
 [ -f cantata/cantata-qt*amd64.deb ] && git rm cantata/cantata-qt*amd64.deb
 cp $OLDPWD/cantata-qt*$(date +"%Y.%m.%d")*.deb cantata/
 git add cantata/cantata-qt*$(date +"%Y.%m.%d")*.deb
-git commit -m "Updated the latest Cantata build package"
+git commit -m "Update Cantata package"
 git push origin master
 
 ### Korean Translation Inquiry ###
