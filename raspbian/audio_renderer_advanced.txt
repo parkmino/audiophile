@@ -95,7 +95,11 @@ Audio Render Advanced
 		... # No chunkHighMark
 
 	sudo nano /etc/rc.local
-		grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
+		if ! grep -qs chunkHighMark /etc/polipo/config; then
+		 polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
+		 [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
+		 sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
+		fi
 		chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 	Remove 'chunkHighMark = ...' line in /etc/polipo/config before making image
@@ -136,7 +140,8 @@ Audio Render Advanced
 
 	sudo nano /etc/sysctl.conf
 		vm.swappiness = 0
-		kernel.sched_rt_runtime_us = 500000
+		kernel.sched_rt_runtime_us = 50446
+		kernel.sched_rt_period_us  = 100000
 		net.ipv4.tcp_sack = 0
 		net.ipv4.tcp_no_metrics_save = 1
 		net.ipv6.conf.all.disable_ipv6 = 1
@@ -156,7 +161,7 @@ Audio Render Advanced
 
 	sudo apt-get install vlc-nox # Optional
 	nano ~/.config/vlc/vlcrc
-		alsa-audio-device=pcm.sound
+		alsa-audio-device=sound
 		aout=alsa
 	nano ~/kbs1fm
 		#!/bin/sh

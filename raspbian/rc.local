@@ -77,7 +77,11 @@ fi
 
 chrt -i 0 taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
 
-grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
+if ! grep -qs chunkHighMark /etc/polipo/config; then
+ polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
+ [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
+ sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
+fi
 chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 ### For Criterion from Reference Club
