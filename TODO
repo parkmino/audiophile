@@ -1,2 +1,5 @@
 1. sudo nano /etc/rc.local
-	sysctl -w vm.swappiness=1
+	vm.swappiness = 1
+	kernel.sched_min_granularity_ns = 100000	# default  2250000
+	kernel.sched_wakeup_granularity_ns = 25000	# default  3000000
+	kernel.sched_latency_ns = 1000000		# default 18000000
