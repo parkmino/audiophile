@@ -1,0 +1,2 @@
+1. sudo nano /etc/rc.local
+	sysctl -w vm.swappiness=1
