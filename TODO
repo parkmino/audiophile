@@ -4,7 +4,7 @@
 	 vm.memory_failure_recovery = 0			# default        1
 	 vm.oom_dump_tasks = 0				# default        1
 	 vm.overcommit_memory = 1			# default        0
-	 vm.page-cluster = 2				# default        3
+	 vm.page-cluster = 0				# default        3
 	 vm.panic_on_oom = 2				# default        0
 	 vm.stat_interval = 3				# default        1
 	 vm.vfs_cache_pressure = 0			# default      100
