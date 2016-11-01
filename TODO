@@ -1,5 +1,11 @@
 1. sudo nano /etc/rc.local
-	vm.swappiness = 1
-	kernel.sched_min_granularity_ns = 100000	# default  2250000
-	kernel.sched_wakeup_granularity_ns = 25000	# default  3000000
-	kernel.sched_latency_ns = 1000000		# default 18000000
+	 vm.swappiness = 1				# default       60
+	 kernel.sched_min_granularity_ns = 800000	# default  2250000
+	#kernel.sched_wakeup_granularity_ns = 25000	# default  3000000
+	#kernel.sched_latency_ns = 1000000		# default 18000000
+	 kernel.sched_cfs_bandwidth_slice_us = 50	# default     5000
+	 kernel.sched_migration_cost_ns = 500		# default   500000
+	 kernel.sched_nr_migrate = 10			# default       32
+	 kernel.sched_rr_timeslice_ms = 1		# default	25
+	 kernel.sched_shares_window_ns = 1000		# default 10000000
+	 kernel.sched_tunable_scaling = 0		# default        1
