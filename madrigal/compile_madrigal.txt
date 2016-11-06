@@ -12,5 +12,5 @@ cd ~/git/audiophile
 [ -f madrigal/madrigal*amd64.deb ] && git rm madrigal/madrigal*amd64.deb
 cp $OLDPWD/madrigal*$(date +"%Y.%m.%d")*.deb madrigal/
 git add madrigal/madrigal*$(date +"%Y.%m.%d")*.deb
-git commit -m "Updated the latest Madrigal build package"
+git commit -m "Update Madrigal package"
 git push origin master
