@@ -1,12 +1,15 @@
 1. sudo nano /etc/rc.local
 
 	For Ubuntu
+
 	 vm.swappiness = 0				# default       60
+	#vm.dirty_background_ratio = 0			# default       10
+	#vm.dirty_ratio = 0				# default	20
 	 vm.dirty_writeback_centisecs = 0		# default      500
 	 vm.memory_failure_recovery = 0			# default        1
 	 vm.oom_dump_tasks = 0				# default        1
-	 vm.overcommit_memory = 1			# default        0
-	 vm.page-cluster = 0				# default        3
+	#vm.overcommit_memory = 1			# default        0
+	 vm.page-cluster = 2				# default        3
 	 vm.panic_on_oom = 2				# default        0
 	 vm.stat_interval = 3				# default        1
 	 vm.vfs_cache_pressure = 0			# default      100
@@ -22,12 +25,15 @@
 	 kernel.sched_tunable_scaling = 0		# default        1
 
 	For Raspbian
+
 	 vm.swappiness = 0				# default       60
+	#vm.dirty_background_ratio = 0			# default       10
+	#vm.dirty_ratio = 0				# default	20
 	 vm.dirty_writeback_centisecs = 0		# default      500
 	##vm.memory_failure_recovery = 0		# default        1
 	 vm.oom_dump_tasks = 0				# default        1
 	#vm.overcommit_memory = 1			# default        0
-	#vm.page-cluster = 0				# default        3
+	 vm.page-cluster = 2				# default        3
 	 vm.panic_on_oom = 2				# default        0
 	 vm.stat_interval = 5				# default        1
 	 vm.vfs_cache_pressure = 0			# default      100
@@ -41,6 +47,3 @@
 	 kernel.sched_rr_timeslice_ms = 1		# default	10
 	 kernel.sched_shares_window_ns = 1000		# default 10000000
 	 kernel.sched_tunable_scaling = 0		# default        1
-
-	 vm.dirty_ratio = 0				# default	20
-	 vm.dirty_background_ratio = 0			# default       10
