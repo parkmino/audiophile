@@ -192,7 +192,7 @@ Audio Render Advanced
 
 18. Show release
 
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi v.0.9.11 advanced" > release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.01 advanced" > release
 
 19. Make Image
 
@@ -204,5 +204,5 @@ Audio Render Advanced
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_advanced_v.0.9.11.img
-	$ zip raspbian_audio_renderer_advanced_v.0.9.11.zip raspbian_audio_renderer_advanced_v.0.9.11.img
+	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_advanced_17.01.img
+	$ zip raspbian_audio_renderer_advanced_17.01.zip raspbian_audio_renderer_advanced_17.01.img
