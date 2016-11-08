@@ -42,5 +42,5 @@
 	 kernel.sched_shares_window_ns = 1000		# default 10000000
 	 kernel.sched_tunable_scaling = 0		# default        1
 
-	 vm.dirty_ratio = 0				# default	
+	 vm.dirty_ratio = 0				# default	20
 	 vm.dirty_background_ratio = 0			# default       10
