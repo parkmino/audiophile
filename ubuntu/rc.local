@@ -21,7 +21,7 @@ low_pri () {
  sysctl -w kernel.sched_rt_runtime_us=50446
  sysctl -w kernel.sched_rt_period_us=100000
  sysctl -w kernel.sched_min_granularity_ns=750000
- sysctl -w kernel.sched_cfs_bandwidth_slice_us=50
+ sysctl -w kernel.sched_cfs_bandwidth_slice_us=100
  sysctl -w kernel.sched_migration_cost_ns=500
  sysctl -w kernel.sched_nr_migrate=16
  sysctl -w kernel.sched_rr_timeslice_ms=5
