@@ -36,7 +36,7 @@ mkdir -p /run/var/cache /run/var/log /run/tmp
  sysctl -w kernel.sched_min_granularity_ns=750000
 #sysctl -w kernel.sched_wakeup_granularity_ns=25000
 #sysctl -w kernel.sched_latency_ns=1000000
- sysctl -w kernel.sched_cfs_bandwidth_slice_us=50
+ sysctl -w kernel.sched_cfs_bandwidth_slice_us=100
  sysctl -w kernel.sched_migration_cost_ns=500
  sysctl -w kernel.sched_nr_migrate=16
  sysctl -w kernel.sched_rr_timeslice_ms=5
