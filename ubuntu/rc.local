@@ -11,24 +11,34 @@
 #
 # By default this script does nothing.
 
-#rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
-#rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log   /var
-#rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
-
 low_pri () {
  chrt -v -ip 0 $1
  renice  18 -p $1
 #ionice -c3 -p $1
 }
 
- echo 4032 > /sys/class/rtc/rtc0/max_user_freq
-#sysctl -w dev.rtc.max-user-freq=4032
- sysctl -w dev.hpet.max-user-freq=2147483520
-
- ifconfig enp3s0 txqueuelen 1875
- ifconfig wlp2s0 txqueuelen 1875
-
  sysctl -w kernel.watchdog=0
+ sysctl -w kernel.sched_rt_runtime_us=50446
+ sysctl -w kernel.sched_rt_period_us=100000
+ sysctl -w kernel.sched_min_granularity_ns=750000
+ sysctl -w kernel.sched_cfs_bandwidth_slice_us=50
+ sysctl -w kernel.sched_migration_cost_ns=500
+ sysctl -w kernel.sched_nr_migrate=16
+ sysctl -w kernel.sched_rr_timeslice_ms=5
+ sysctl -w kernel.sched_shares_window_ns=3500000
+ sysctl -w kernel.sched_tunable_scaling=0
+
+ sysctl -w vm.swappiness=0
+#sysctl -w vm.dirty_background_ratio=0
+#sysctl -w vm.dirty_ratio=0
+ sysctl -w vm.dirty_writeback_centisecs=0
+ sysctl -w vm.memory_failure_recovery=0
+ sysctl -w vm.oom_dump_tasks=0
+#sysctl -w vm.overcommit_memory=1
+ sysctl -w vm.page-cluster=2
+ sysctl -w vm.panic_on_oom=2
+ sysctl -w vm.stat_interval=5
+ sysctl -w vm.vfs_cache_pressure=0
 
 #sysctl -w net.core.rmem_max=12582912
 #sysctl -w net.core.wmem_max=12582912
@@ -42,8 +52,12 @@ low_pri () {
 #sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
- sysctl -w vm.swappiness=0
- sysctl -w kernel.sched_rt_runtime_us=500000
+ ifconfig enp3s0 txqueuelen 1875
+ ifconfig wlp2s0 txqueuelen 1875
+
+ echo 4032 > /sys/class/rtc/rtc0/max_user_freq
+#sysctl -w dev.rtc.max-user-freq=4032
+ sysctl -w dev.hpet.max-user-freq=2147483520
 
 #swapoff -a
 
