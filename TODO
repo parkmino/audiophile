@@ -1,0 +1,13 @@
+1. ALSA lib tweak
+
+
+	$ sudo find /usr/share/alsa/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
+
+	$ sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
+	$ sudo mv /usr/share/alsa /usr/share/alsa.org
+	$ sudo mkdir /usr/share/alsa
+	$ sudo cp /usr/share/alsa.org/alsa.conf /usr/share/alsa/
+
+	$ sudo find /usr/lib/*/alsa-lib/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
+	$ sudo mv /usr/share/alsa /usr/share/alsa.tweak
+	$ sudo mv /usr/share/alsa.org /usr/share/alsa
