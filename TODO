@@ -11,3 +11,7 @@
 	$ sudo find /usr/lib/*/alsa-lib/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
 	$ sudo mv /usr/share/alsa /usr/share/alsa.tweak
 	$ sudo mv /usr/share/alsa.org /usr/share/alsa
+
+2. sudo nano /etc/rc.local
+
+	io) taskset -cp 1 $proc_nr # from 0 to 1
