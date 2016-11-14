@@ -89,7 +89,7 @@ echo "$(pstree -np $pgr_mpd)" | while read line ; do
    mpd)		taskset -cp 0 $proc_nr
 		chrt -v -ip 0 $proc_nr
 		renice  18 -p $proc_nr ;;
-   io)		taskset -cp 0 $proc_nr
+   io)		taskset -cp 1 $proc_nr
 		renice   4 -p $proc_nr ;;
    player)	taskset -cp 1 $proc_nr
 		renice   2 -p $proc_nr ;;
