@@ -1,4 +1,0 @@
-1. sudo nano /etc/mpd.conf
-
-	buffer_time		"944676"		# in ALSA
-	buffer_before_play	"13.44153642036%"
