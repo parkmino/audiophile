@@ -12,3 +12,9 @@
 	taskset -pc 1 $pgr_mpd
 
 	io) taskset -cp 0 $proc_nr
+
+3. sudo nano /etc/mpd.conf
+
+	buffer_time		"944677"		# in ALSA
+	buffer_before_play	"13.36480595365%"
+
