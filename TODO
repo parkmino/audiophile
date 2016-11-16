@@ -1,4 +1,14 @@
 1. sudo nano /etc/sysctl.conf
 
-	 kernel.sched_rt_runtime_us = 504460 => 504485		# default  950000
-	#kernel.sched_rt_period_us  = 100000 => 1000000		# default 1000000
+	kernel.sched_rt_runtime_us = 252243	# default  950000
+	kernel.sched_rt_period_us  = 499897	# default 1000000
+
+	kernel.sched_rt_runtime_us = 504487	# default  950000
+	kernel.sched_rt_period_us  = 999796	# default 1000000
+
+2. sudo nano /etc/rc.local
+
+	pgr_mpd=$(pgrep -x mpd)
+	taskset -pc 1 $pgr_mpd
+
+	io) taskset -cp 0 $proc_nr
