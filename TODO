@@ -26,6 +26,6 @@
 
 3. sudo nano /etc/mpd.conf
 
-	 period_time		"0"
+	 period_time		"0"		# in ALSA
 	 buffer_time		"0"		# in ALSA
 	#buffer_before_play	"...%"
