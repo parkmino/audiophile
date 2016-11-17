@@ -10,7 +10,7 @@
 
 	pgr_mpd=$(pgrep -x mpd)
 
-	 taskset -pc 0 $pgr_mpd
+	 taskset -pc 1 $pgr_mpd
 	 renice   3 -p $pgr_mpd
 
 	...
@@ -18,11 +18,11 @@
 	mpd)		taskset -cp 0 $proc_nr
 			chrt -v -ip 0 $proc_nr
 			renice  18 -p $proc_nr ;;
-	io)		taskset -cp 0 $proc_nr
+	io)		taskset -cp 1 $proc_nr
 			renice   4 -p $proc_nr ;;
 	player)		taskset -cp 2 $proc_nr
 			renice   1 -p $proc_nr ;;
-	decoder)	taskset -cp 1 $proc_nr
+	decoder)	taskset -cp 2 $proc_nr
 			renice   2 -p $proc_nr ;;
 	output)		taskset -cp 3 $proc_nr
 			chrt -v -op 0 $proc_nr ;;
@@ -30,5 +30,5 @@
 3. sudo nano /etc/mpd.conf
 
 	buffer_time		"944676"		# in ALSA
-	buffer_before_play	"11.56488565556%"
+	buffer_before_play	"11.4%"
 
