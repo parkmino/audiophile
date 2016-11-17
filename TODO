@@ -17,10 +17,10 @@
 			renice  18 -p $proc_nr ;;
 	io)		taskset -cp 0 $proc_nr
 			renice   4 -p $proc_nr ;;
-	player)		taskset -cp 2 $proc_nr
-			renice   1 -p $proc_nr ;;
-	decoder)	taskset -cp 1 $proc_nr
+	player)		taskset -cp 1 $proc_nr
 			renice   2 -p $proc_nr ;;
+	decoder)	taskset -cp 2 $proc_nr
+			renice   1 -p $proc_nr ;;
 	output)		taskset -cp 3 $proc_nr
 			chrt -v -op 0 $proc_nr ;;
 
