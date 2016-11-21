@@ -1,7 +1,7 @@
 1. sudo nano /etc/mpd.conf
 
 	 device			"pcm.sound"
-	 buffer_time		"11000"		# range 10000~15000
+	 buffer_time		"10741"		# range 10000~15000
 	 period_time		"0"
 
 	 audio_buffer_size	"3065"
