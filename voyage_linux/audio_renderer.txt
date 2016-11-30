@@ -86,7 +86,7 @@ PC Audio Render from Voyage Linux
 	nano /etc/polipo/config
 		chunkHighMark = 268435456
 	nano /etc/rc.local
-		chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
+		taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 9. CIFS & NFS mounting
 
@@ -109,15 +109,6 @@ PC Audio Render from Voyage Linux
 12. Sysctl Configuration
 
 	nano /etc/sysctl.conf
-		#...
-		#kernel.watchdog = 0
-		#vm.swappiness = 0
-		kernel.sched_rt_runtime_us = 500000
-		net.ipv4.tcp_sack = 0
-		net.ipv4.tcp_no_metrics_save = 1
-		net.ipv6.conf.all.disable_ipv6 = 1
-		#dev.rtc.max-user-freq = 4032
-		#dev.hpet.max-user-freq = 2147483520
 
 13. Disable TTYs
 

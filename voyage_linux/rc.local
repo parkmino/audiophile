@@ -26,7 +26,7 @@ for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
 done
 
 low_pri () {
- chrt -v -ip 0 $1
+#chrt -v -ip 0 $1
  renice  19 -p $1
 #ionice -c3 -p $1
 }
@@ -46,8 +46,8 @@ if [ "$(nproc --all)" -ge "4" ]; then
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
    mpd)		taskset -cp 0 $proc_nr
-		chrt -v -ip 0 $proc_nr
-		renice  17 -p $proc_nr ;;
+		#chrt -v -ip 0 $proc_nr
+		renice  16 -p $proc_nr ;;
    io)		taskset -cp 1 $proc_nr
 		renice   4 -p $proc_nr ;;
    player)	taskset -cp 1 $proc_nr
@@ -64,8 +64,8 @@ else
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)         chrt -v -ip 0 $proc_nr
-                renice  17 -p $proc_nr ;;
+   mpd)         #chrt -v -ip 0 $proc_nr
+                renice  16 -p $proc_nr ;;
    io)          renice   4 -p $proc_nr ;;
    player)      renice   2 -p $proc_nr ;;
    decoder)     renice   1 -p $proc_nr ;;
@@ -74,10 +74,10 @@ else
  done
 fi
 
-chrt -i 0 taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
+taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
 
 grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
-chrt -i 0 taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
+taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
 
 ### For Criterion from Reference Club
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
