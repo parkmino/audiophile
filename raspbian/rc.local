@@ -75,7 +75,7 @@ else
  done
 fi
 
-chrt -i 0 taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
+taskset -ac 0 nice -n 17 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
 
 if ! grep -qs chunkHighMark /etc/polipo/config; then
  polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))

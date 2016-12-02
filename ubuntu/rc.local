@@ -79,24 +79,27 @@ done
 
 pgr_mpd=$(pgrep -x mpd)
 
- taskset -pc 0 $pgr_mpd
- renice   3 -p $pgr_mpd
+ taskset -pc 0     $pgr_mpd
+ renice   3 -p     $pgr_mpd
+ ionice -c2 -n4 -p $pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-   mpd)		taskset -cp 0 $proc_nr
-		#chrt -v -ip 0 $proc_nr
-		renice  18 -p $proc_nr ;;
-   io)		taskset -cp 0 $proc_nr
-		renice   4 -p $proc_nr ;;
-   player)	taskset -cp 1 $proc_nr
-		renice   2 -p $proc_nr ;;
-   decoder)	taskset -cp 2 $proc_nr
-		renice   1 -p $proc_nr ;;
-   output)	taskset -cp 3 $proc_nr
-		chrt -v -op 0 $proc_nr ;;
+   mpd)		taskset -cp 0     $proc_nr
+		renice  18 -p     $proc_nr ;;
+   io)		taskset -cp 0     $proc_nr
+		renice   4 -p     $proc_nr ;;
+   player)	taskset -cp 1     $proc_nr
+		ionice -c1 -n2 -p $proc_nr
+		renice   2 -p     $proc_nr ;;
+   decoder)	taskset -cp 2     $proc_nr
+		ionice -c1 -n1 -p $proc_nr
+		renice   1 -p     $proc_nr ;;
+   output)	taskset -cp 3     $proc_nr
+		ionice -c1 -n0 -p $proc_nr
+		chrt -v -op 0     $proc_nr ;;
  esac
 done
 
@@ -114,6 +117,6 @@ modprobe -r psmouse
 
 #rm /usr/lib/x86_64-linux-gnu/libasound.so.2
 
-taskset -ac 0 nice -n 19 polipo >/dev/null 2>&1 &
+chrt -i 0 taskset -ac 0 nice -n 19 polipo >/dev/null 2>&1 &
 
 exit 0
