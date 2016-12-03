@@ -7,4 +7,4 @@ sudo nano /etc/upmpdcli.conf
 	checkcontentformat = 0
 sudo systemctl disable upmpdcli.service
 sudo nano /etc/rc.local
-	taskset -ac 0 nice -n 16 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
+	taskset -ac 0 nice -n 2 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
