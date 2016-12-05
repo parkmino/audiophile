@@ -14,8 +14,8 @@
 #rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
 #rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log /var
 #rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
-#
-#mkdir -p /run/var/cache /run/var/log /run/tmp
+
+mkdir -p /run/var/cache /run/var/log /run/tmp
 
  ifconfig eth0  txqueuelen 1875
 #ifconfig wlan0 txqueuelen 1875
@@ -31,8 +31,8 @@
  sysctl -w vm.stat_interval=5
  sysctl -w vm.vfs_cache_pressure=0
 
-#sysctl -w kernel.sched_rt_runtime_us=845000
-#sysctl -w kernel.sched_rt_period_us=1000000
+#sysctl -w kernel.sched_rt_runtime_us=50446
+#sysctl -w kernel.sched_rt_period_us=100000
  sysctl -w kernel.sched_min_granularity_ns=750000
 #sysctl -w kernel.sched_wakeup_granularity_ns=25000
 #sysctl -w kernel.sched_latency_ns=1000000
@@ -91,9 +91,9 @@ done
 
 #mediatomb -c /root/.mediatomb/config.xml -d
 
-taskset -ac 0 nice -n 1 rygel -c /etc/rygel.conf >/dev/null >2&1 &
+taskset -ac 0 nice -n -19 rygel -c /etc/rygel.conf >/dev/null >2&1 &
 
-taskset -ac 1 nice -n 0 polipo >/dev/null >2&1 &
+taskset -ac 1 nice -n -20 polipo >/dev/null >2&1 &
 
 #sleep 5
 #
@@ -117,7 +117,7 @@ echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
 #chrt -aip 0     `pgrep -ox systemd`
 #ionice -c 3 -p  `pgrep -ox systemd`
- renice -n 19 -p `pgrep -ox systemd`
+#renice -n 19 -p `pgrep -ox systemd`
  taskset -acp 0  `pgrep -ox systemd`
 
 exit 0
