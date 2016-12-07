@@ -1,0 +1,20 @@
+1. sudo nano /etc/rc.local
+
+	for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $1 !~ /1/ {print $1}') ; do
+	 taskset -acp 0 $pid
+	done
+
+	taskset -pc 0	$pgr_mpd
+	renice -17 -p	$pgr_mpd
+
+	   mpd)		taskset -cp 0     $proc_nr
+			renice -1 -p      $proc_nr ;;
+	   io)		taskset -cp 0     $proc_nr
+			renice -2 -p      $proc_nr ;;
+	   player)	taskset -cp 1     $proc_nr
+			renice -18 -p     $proc_nr ;;
+	   decoder)	taskset -cp 2     $proc_nr
+			renice -19 -p     $proc_nr ;;
+	   output)	taskset -cp 3     $proc_nr
+			renice -20 -p     $proc_nr
+			chrt -v -op 0     $proc_nr ;;
