@@ -16,5 +16,5 @@
 	   decoder)	taskset -cp 2     $proc_nr
 			renice -3 -p      $proc_nr ;;
 	   output)	taskset -cp 3     $proc_nr
-			renice -20 -p     $proc_nr
+			renice -6 -p      $proc_nr
 			chrt -v -op 0     $proc_nr ;;
