@@ -1,7 +1,7 @@
 1. sudo nano /etc/rc.local
 
 	for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}') ; do
-	 taskset -acp 0 $pid
+	 taskset -acp 0 $pid | true
 	done
 
 	taskset -pc 0	$pgr_mpd
