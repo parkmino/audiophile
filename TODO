@@ -1,6 +1,6 @@
 1. sudo nano /etc/rc.local
 
-	for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $1 !~ /1/ {print $1}') ; do
+	for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}') ; do
 	 taskset -acp 0 $pid
 	done
 
