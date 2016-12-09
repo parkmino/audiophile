@@ -10,7 +10,8 @@
 	   mpd)		taskset -cp 0     $proc_nr
 			renice -1 -p      $proc_nr ;;
 	   io)		taskset -cp 0     $proc_nr
-			renice 19 -p      $proc_nr ;;
+			renice 19 -p      $proc_nr
+			chrt -ip 0        $proc_nr ;;
 	   player)	taskset -cp 2     $proc_nr
 			renice -2 -p      $proc_nr ;;
 	   decoder)	taskset -cp 1     $proc_nr
