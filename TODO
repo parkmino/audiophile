@@ -20,7 +20,6 @@
 			renice -4 -p	$proc_nr
 			chrt -op 0	$proc_nr ;;
 
-	chrt -ip 0 1
-	exit 0
+	sysctl -w kernel.sched_rt_runtime_us=825000
 
 	Remove + nice in /etc/rc.local
