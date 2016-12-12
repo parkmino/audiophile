@@ -12,7 +12,7 @@
 # By default this script does nothing.
 
  sysctl -w kernel.watchdog=0
- sysctl -w kernel.sched_rt_runtime_us=845000
+ sysctl -w kernel.sched_rt_runtime_us=825000
 #sysctl -w kernel.sched_rt_period_us=999796
  sysctl -w kernel.sched_min_granularity_ns=750000
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=95
@@ -59,8 +59,12 @@ for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ 
  chrt -op 0 $pid
 done
 
-for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
+for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}') ; do
  renice 0 $pid
+done
+
+for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ && $2 !~ /sawfish/ {print $1}') ; do
+ taskset -acp 0 $pid | true
 done
 
 #ln -s /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so.2
@@ -73,24 +77,25 @@ done
 
 pgr_mpd=$(pgrep -x mpd)
 
-taskset -pc 0     $pgr_mpd
-renice -17 -p     $pgr_mpd
+ taskset -pc 0	$pgr_mpd
+#renice -1 -p	$pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-   mpd)		taskset -cp 0     $proc_nr
-		renice -15 -p     $proc_nr ;;
-   io)		taskset -cp 0     $proc_nr
-		renice -16 -p     $proc_nr ;;
-   player)	taskset -cp 1     $proc_nr
-		renice -18 -p     $proc_nr ;;
-   decoder)	taskset -cp 2     $proc_nr
-		renice -19 -p     $proc_nr ;;
-   output)	taskset -cp 3     $proc_nr
-		renice -20 -p     $proc_nr
-		chrt -v -op 0     $proc_nr ;;
+   mpd)		taskset -cp 0	$proc_nr
+		renice -1 -p	$proc_nr ;;
+   io)		taskset -cp 0	$proc_nr
+		#renice 19 -p	$proc_nr
+		chrt -ip 0	$proc_nr ;;
+   player)	taskset -cp 2	$proc_nr
+		renice -2 -p	$proc_nr ;;
+   decoder)	taskset -cp 1	$proc_nr
+		renice -3 -p	$proc_nr ;;
+   output)	taskset -cp 3	$proc_nr
+		renice -4 -p	$proc_nr
+		chrt -op 0	$proc_nr ;;
  esac
 done
 
@@ -108,6 +113,6 @@ modprobe -r psmouse
 
 #rm /usr/lib/x86_64-linux-gnu/libasound.so.2
 
-chrt -i 0 taskset -ac 0 nice -n 19 polipo >/dev/null 2>&1 &
+chrt -i 0 taskset -ac 0 polipo >/dev/null 2>&1 &
 
 exit 0

@@ -1,5 +1,5 @@
 wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/libu/libupnpp3/libupnpp3_0.15.1-1_armhf.deb
-wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.2.9-1_armhf.deb
+wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.2.10-1_armhf.deb
 sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp0
 sudo dpkg -i libupnpp*.deb upmpdcli*.deb
 sudo mv ./icon.png /usr/share/upmpdcli/icon.png
@@ -7,4 +7,4 @@ sudo nano /etc/upmpdcli.conf
 	checkcontentformat = 0
 sudo systemctl disable upmpdcli.service
 sudo nano /etc/rc.local
-	taskset -ac 0 nice -n -15 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
+	taskset -ac 0 nice -n -1 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &

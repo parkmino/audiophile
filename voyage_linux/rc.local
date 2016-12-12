@@ -33,45 +33,48 @@ sleep 1
 pgr_mpd=$(pgrep -x mpd)
 
 if [ "$(nproc --all)" -ge "4" ]; then
+
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}') ; do
+  taskset -acp 0 $pid | true
+ done
+
  taskset -cp 0 $pgr_mpd
- renice -17 -p $pgr_mpd
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
    mpd)		taskset -cp 0 $proc_nr
-		renice -15 -p $proc_nr ;;
-   io)		taskset -cp 1 $proc_nr
-		renice -16 -p $proc_nr ;;
-   player)	taskset -cp 1 $proc_nr
-		renice -18 -p $proc_nr ;;
-   decoder)	taskset -cp 2 $proc_nr
-		renice -19 -p $proc_nr ;;
+		renice -1  -p $proc_nr ;;
+   io)		taskset -cp 0 $proc_nr
+		chrt -ip 0    $proc_nr ;;
+   player)	taskset -cp 2 $proc_nr
+		renice -2 -p  $proc_nr ;;
+   decoder)	taskset -cp 1 $proc_nr
+		renice -3 -p  $proc_nr ;;
    output)	taskset -cp 3 $proc_nr
-		renice -20 -p $proc_nr
-		chrt -v -op 0 $proc_nr ;;
+		renice -4 -p  $proc_nr
+		chrt -op 0    $proc_nr ;;
   esac
  done
 else
- renice -17 -p $pgr_mpd
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)         renice -15 -p $proc_nr ;;
-   io)          renice -16 -p $proc_nr ;;
-   player)      renice -18 -p $proc_nr ;;
-   decoder)     renice -19 -p $proc_nr ;;
-   output)      renice -20 -p $proc_nr
-		chrt -v -op 0 $proc_nr ;;
+   mpd)         renice -1 -p $proc_nr ;;
+   io)          chrt -ip 0   $proc_nr ;;
+   player)      renice -2 -p $proc_nr ;;
+   decoder)     renice -3 -p $proc_nr ;;
+   output)      renice -4 -p $proc_nr
+		chrt -op 0   $proc_nr ;;
   esac
  done
 fi
 
-taskset -ac 0 nice -n -15 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
+taskset -ac 0 nice -n -1 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
 
 grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
-chrt -i 0 taskset -ac 0 nice -n 19 polipo >/dev/null 2>&1 &
+chrt -i 0 taskset -ac 0 polipo >/dev/null 2>&1 &
 
 ### For Criterion from Reference Club
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
@@ -86,7 +89,6 @@ do
 done
 ### Lower init priority
 taskset -cp 0 1
-#renice 0 -p  1
 ### Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
