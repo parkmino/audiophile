@@ -22,3 +22,5 @@
 
 	chrt -ip 0 1
 	exit 0
+
+	Remove + nice in /etc/rc.local
