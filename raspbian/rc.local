@@ -109,6 +109,10 @@ for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-udevd systemd-lo
 do
  service $i stop
 done
+for i in $(pgrep sshd)
+do
+ chrt -ip 0 $i | true
+done
 ### Lower init priority
 taskset -cp 0 1
 ### Print the IP address
