@@ -1,2 +1,0 @@
-1. sudo nano /etc/rc.local
-	output) chrt -bp 0 $proc_nr ;;
