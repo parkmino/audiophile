@@ -7,7 +7,7 @@ Audio Player
  ──────┬──────────────┬─────────────
                           Disk                          File
  ───────────────────────────────────
- Type          LP, CD, DVD-A, SACD, Blu-ray  Data (Wav, DSD, Flac, MP3)
+ Type(*)       LP, CD, DVD-A, SACD, Blu-ray  Data (Wav, DSD, Flac, MP3)
  ───────────────────────────────────
  Location      Local                         Local, Network, Cloud
  ─────────────────────────────────── 
@@ -17,6 +17,8 @@ Audio Player
  ───────────────────────────────────
  Player DIY    X                             O (PC/SBC)
  ───────────────────────────────────
+
+ (*) CD to WAV, SACD to DSD
 
   cf) CD Rippers
    - Windows : dBPowerAMP, EAC, Cdex, Foobar
