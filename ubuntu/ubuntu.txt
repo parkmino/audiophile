@@ -7,13 +7,15 @@ Audio Player
  ──────┬──────────────┬─────────────
                           Disk                          File
  ───────────────────────────────────
- Type          LP, CD, DVD-A, SACD, Blu-ray  Data
+ Type          LP, CD, DVD-A, SACD, Blu-ray  Data (Wav, DSD, Flac, MP3)
  ───────────────────────────────────
  Location      Local                         Local, Network, Cloud
  ─────────────────────────────────── 
  Player        H/W only, H/W+F/W, H/W+S/W    H/W+F/W, H/W+S/W
  ───────────────────────────────────
  Player Size   > Disk                        As small as possible
+ ───────────────────────────────────
+ Player DIY    X                             O (PC/SBC)
  ───────────────────────────────────
 
   cf) CD Rippers
@@ -55,8 +57,8 @@ Linux
  Debian : Debian, Ubuntu, Mint, Elementary, Zorin, deepin, Armbian, Raspbian
 
  Linux GUI = XWindows(->Wayland) + Window Manager + Desktop Environment
-  WM : Compiz, DWM, Openbox, KWin, Metacity, MIWM, Sawfish, Xfwm
-  DE : Cinnamon, GNOME, LXDE, MATE, KDE, Unity, Xfce
+  WM     : DWM, Openbox, MIWM, Sawfish
+  DE(WM) : Cinnamon, GNOME(Metacity), LXDE(Openbox), MATE, KDE(KWin), Unity(Compiz), Xfce(Xfwm)
 
  Sound
   ─────────
