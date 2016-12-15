@@ -184,8 +184,8 @@ Audio Render Advanced
 
 	sudo nano /var/lib/mpd/playlists/Internet_Radios.m3u
 		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
-		http://50.7.173.162:8010/#Audiophile Baroque
-		http://50.7.173.162:8012/#Audiophile Classical
+		http://50.7.173.162:8045/#Audiophile Baroque
+		http://50.7.173.162:8093/#Audiophile Classical
 		http://89.16.185.174:8004/stream#Linn Classical
 		http://37.130.228.60:8090/#Naim Radio
 		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
