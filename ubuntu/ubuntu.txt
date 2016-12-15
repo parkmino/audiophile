@@ -1,21 +1,90 @@
 1.PC-Fi
 
-Hi-Fi
-	CDP (CDT+DAC) + Amplifier + Loud speakers.
-	Convenient, Dedicated, Optimized, Real-time.
-PC-Fi
-	CDT (PC/Read+Save+Play) + DAC (External Preferred) + Amplifier + Loud speakers.
-	More advanced digital technologies, Upgradable, Flexible, Versatile.
+Audio Player
 
-PC = H/W + BIOS + OS + S/W <- Multipurpose and multitasking.
+ Music Source : Disk to File
 
-H/W -> High Specs -> Speed Down -> Disable, Under-clocking, Under-voltaging for low power consumption and noise.
-S/W -> Low Specs -> Speed Up -> Preemptive Real-time Kernel, Prioritized Scheduling for low latency and jitter.
+ ──────┬──────────────┬─────────────
+                          Disk                          File
+ ───────────────────────────────────
+ Type          LP, CD, DVD-A, SACD, Blu-ray  Data
+ ───────────────────────────────────
+ Location      Local                         Local, Network, Cloud
+ ─────────────────────────────────── 
+ Player        H/W only, H/W+F/W, H/W+S/W    H/W+F/W, H/W+S/W
+ ───────────────────────────────────
+ Player Size   > Disk                        As small as possible
+ ───────────────────────────────────
 
-High Performance Audio Output
-	Windows XP:Kernel Streaming,ASIO=Windows7:WASAPI=Linux:OSS,ALSA=OS X:CoreAudio
-Secure Ripping S/W
-	Windows:dBPowerAMP,EAC,Cdex=Linux:Rubyripper=OS X:XLD,Max,xACT
+  cf) CD Rippers
+   - Windows : dBPowerAMP, EAC, Cdex, Foobar
+   - OS X    : XLD, Max, xACT
+   - Linux   : Morituri, Rubyripper
+
+Audio File Player
+
+ -> [Audio Data]+[Decoder]+[DSP]+[Audio Output]+[UI]
+ => [Local Storage|Network]+[Processor]+[Memory]+[Input Device]+[Display]+[Power]
+ => Dedicated or Multi-purpose H/W
+    ex) MP3, PMP, DivX, Network Audio Player, PC/SBC(DIY)
+
+PC/SBC
+
+ H/W+F/W|BIOS+S/W(=OS+Application)
+ CTQ : CPU & Power as small as possible (SBC > PC)
+       Speed Down, Disable Fucntions, Under-clocking, Under-voltaging for low power consumption and noise
+
+OS+Sound+Application
+
+ [Windows]+[Direct X]|[ASIO]|[Kernel Streaming]|[WASAPI]
+          +[Foobar]|[cPlay]|[JRiver MC]|[JPLAY]|[HQPlayer]
+         (+[AudiophileOptimzer]|[Fidelizer]|[Process Lasso])
+
+    [OS X]+[Sytem Sound]|[CoreAudio]
+          +[Amarra]|[Audirvana]|[Fidelia]|[JRiver MC]|[HQPlayer]
+
+   [Linux]+[ALSA]|[FFADO]|[OSS]|[PulseAudio]|[GStreamer]|[Xine]|[Phonon]
+          +[Audacious]|[Amarok]|[MPD]|[JRiver MC]|[HQPlayer]
+
+Linux
+
+ GNU/Linux=[Linux Kernel]+[GNU/Open Source Software]|[Application Packages]
+
+ Linux Distros : Debian, openSUSE, Arch, Fedora
+
+ Debian : Debian, Ubuntu, Mint, Elementary, Zorin, deepin, Armbian, Raspbian
+
+ Linux GUI = XWindows(->Wayland) + Window Manager + Desktop Environment
+  WM : Compiz, DWM, Openbox, KWin, Metacity, MIWM, Sawfish, Xfwm
+  DE : Cinnamon, GNOME, LXDE, MATE, KDE, Unity, Xfce
+
+ Sound
+  ─────────
+         Phonon
+        ──────
+         Xine
+        ──────
+         GStreamer
+        ──────
+   Jack  PulesAudio
+  ─────────
+   FFADO ALSA OSS
+  ─────────
+         H/W
+  ─────────
+
+ ALSA = [Control/Mixer]+[PCM]+[MIDI]+[Sequencer]
+  Drivers in Kernel, Library for Application, Tools for users
+
+ Linux Audio Player
+  - GUI library      : Amarok, Clementine, Exaile, Rhythmbox, Tomahawk
+  - GUI light-weight : Audacious, DeaDBeeF, MOC, Qmmp
+  - GUI commercial   : JRiver MC, HQPlayer
+  - CLI              : Cmus, MOC, MPD
+
+ MPD
+  Hard to mount local sotrage and show album covers -> UPnP (Upmpdcli)
+
 
 2. BIOS Setting (ASUS P5Q with E7300)
 
@@ -124,28 +193,7 @@ Secure Ripping S/W
 		$ startx /usr/bin/audacious(qmmp,deadbeef)
 			
 3.6 MPD priotiries
-	$ sudo gedit /etc/init.d/mpd
-		start-stop-daemon --start --quiet --oknodo --pidfile "$PIDFILE" \
-			--exec "$DAEMON" -- $MPD_OPTS "$MPDCONF"
-		MPD_PID=`pgrep -n mpd`
-		MPD_PIDS=`chrt -ap "$MPD_PID" | awk 'NR %2 == 0 {printf "%i\n",$2}'`
-		
-		     MAIN_PID=`echo "$MPD_PIDS" | awk 'NR == 1 {print}'`
-		   UPDATE_PID=`echo "$MPD_PIDS" | awk 'NR == 2 {print}'`
-		   PLAYER_PID=`echo "$MPD_PIDS" | awk 'NR == 3 {print}'`
-		  DECODER_PID=`echo "$MPD_PIDS" | awk 'NR == 4 {print}'`
-		   OUTPUT_PID=`echo "$MPD_PIDS" | awk 'NR == 5 {print}'`
-		     chrt    -apo 0 "$MPD_PID"
-		     taskset -pc  1 "$MAIN_PID"
-		     taskset -pc  0 "$UPDATE_PID"
-		     taskset -pc  3 "$PLAYER_PID"
-		     taskset -pc  2 "$DECODER_PID"
-		     taskset -pc  3 "$OUTPUT_PID"
 	$ sudo nano /etc/rc.local
-		 taskset -acp 3      `pgrep snd_hda`
-		#renice -n -2     -p `pgrep snd_hda`
-		#ionice -c 2 -n 2 -p `pgrep snd_hda`
-		#chrt -rp 2          `pgrep snd_hda`
 		
 3.7 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
 	$ sudo gedit /etc/default/grub
@@ -309,21 +357,7 @@ Secure Ripping S/W
 		$ reboot
 		$ mount
 	-. Swappiness Kernel Parameters
-		$ sudo gedit /etc/rc.local
-			# sysctl -w debug.exception-trace=0
-			# sysctl -w kernel.watchdog=0
-			#sysctl -w kernel.sched_rt_runtime_us=-1   # default 950000
-			#sysctl -w kernel.sched_rt_period_us=42700 # default 1000000
-			# sysctl -w kernel.printk='4 4 1 4'
-			#sysctl -w vm.swappiness=0
-			sysctl -w vm.overcommit_memory=1
-			#sysctl -w vm.overcommit_ratio=0
-			# sysctl -w vm.dirty_writeback_centisecs=0
-			# sysctl -w vm.oom_dump_tasks=0
-			# sysctl -w vm.oom_kill_allocating_task=1
-			# sysctl -w vm.panic_on_oom=2
-			# sysctl -w vm.stat_interval=3
-			#sysctl -w vm.user_reserve_kbytes=0
+		$ sudo gedit /etc/sysctl.conf or /etc/rc.local
 		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
 		$ sudo gedit /etc/fstab
 			.../swap.disk none swap sw 0 0
@@ -356,16 +390,7 @@ Secure Ripping S/W
 		$ sudo gedit /etc/rc.local
 			 ifconfig eth0  txqueuelen 10000 			# default: 1000
 			 ifconfig wlan0 txqueuelen 10000 			# default: 1000
-			 sysctl -w net.core.rmem_max=12582912			# default: 163840
-			 sysctl -w net.core.wmem_max=12582912			# default: 163840
-			#sysctl -w net.ipv4.conf.default.forwarding=1		# default: 0
-			 sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'	# default: 4096 16384 6151168
-			 sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'	# default: 4096 16384 4194304
-			 sysctl -w net.ipv4.tcp_timestamps=0			# default: 1
-			#sysctl -w net.ipv4.tcp_window_scaling=1		# default: 1
-			 sysctl -w net.ipv4.tcp_sack=0				# default: 1
-			 sysctl -w net.ipv4.tcp_no_metrics_save=1		# default: 0
-			 sysctl -w net.core.netdev_max_backlog=5000		# default: 1000
+		$ sudo gedit /etc/sysctl.conf
 
 4. References.
 
