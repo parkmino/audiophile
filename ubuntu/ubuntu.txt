@@ -1,22 +1,22 @@
-1.PC-Fi
+1. Linux Audio Player
 
 Audio Player
 
- Music Source : Disk to File
+ Music Source : Analog to Digital, Disk to File
 
- ──────┬──────────────┬─────────────
-                          Disk                          File
- ───────────────────────────────────
- Type(*)       LP, CD, DVD-A, SACD, Blu-ray  Data (Wav, DSD, Flac, MP3)
- ───────────────────────────────────
- Location      Local                         Local, Network, Cloud
- ─────────────────────────────────── 
- Player        H/W only, H/W+F/W, H/W+S/W    H/W+F/W, H/W+S/W
- ───────────────────────────────────
- Player Size   > Disk                        As small as possible
- ───────────────────────────────────
- Player DIY    X                             O (PC/SBC)
- ───────────────────────────────────
+┌─────┬──────────────┬─────────────┐
+                         Disk                          File
+  ─────┬──────────────┬─────────────
+  Type(*)     LP, CD, DVD-A, SACD, Blu-ray  Data (Wav, DSD, Flac, MP3)
+  ─────┬──────────────┬─────────────
+  Location    Local                         Local, Network, Cloud
+  ─────┬──────────────┬─────────────
+  Player      H/W only, H/W+F/W, H/W+S/W    H/W+F/W, H/W+S/W
+  ─────┬──────────────┬─────────────
+  Size        > Disk                        As small as possible
+  ─────┬──────────────┬─────────────
+  DIY         X                             O (PC/SBC)
+└──────────────────────────────────┘
 
  (*) CD to WAV, SACD to DSD
 
@@ -63,19 +63,19 @@ Linux
   DE(WM) : Cinnamon, GNOME(Metacity), LXDE(Openbox), MATE, KDE(KWin), Unity(Compiz), Xfce(Xfwm)
 
  Sound
-  ─────────
-         Phonon
-        ──────
-         Xine
-        ──────
-         GStreamer
-        ──────
-   Jack  PulesAudio
-  ─────────
-   FFADO ALSA OSS
-  ─────────
-         H/W
-  ─────────
+┌────────┐
+        Phonon
+       ──────
+        Xine
+       ──────
+        GStreamer
+       ──────
+  Jack  PulesAudio
+ ─────────
+  FFADO ALSA OSS
+ ─────────
+        H/W
+└────────┘
 
  ALSA = [Control/Mixer]+[PCM]+[MIDI]+[Sequencer]
   Drivers in Kernel, Library for Application, Tools for users
@@ -87,8 +87,51 @@ Linux
   - CLI              : Cmus, MOC, MPD
 
  MPD
+  [Server:music player daemon]+[Client:mpc,ncmpc,gmpc,sonata,mpdroid,mpod,mpad]
+  Process : [main]+[mpd/upmpdcli]+[io]+[player]+[decoder]+[output]
   Hard to mount local sotrage and show album covers -> UPnP (Upmpdcli)
 
+Tuning
+
+ - Original or Preferred Sound ?
+ - Do not know exactly the direction, what & how to do -> Clues from computer logic, Trial & Error, Convergence
+ - All is connected and complicated, circular reference -> Continuous Review
+
+ H/W Modules
+  Remove unnecessary H/W modules (/etc/modprobe.d/*.conf)
+
+ Kernel & Sysctl
+  Grub kernel option (Ubuntu:/etc/default/grub, Raspbian:/boot/config.txt)
+  Sysctl (/proc/sys/[kernel]|[net]|[vm]@/etc/sysctl.conf)
+
+ ALSA
+  Remove unnecessary ALSA libraries@[/usr/share/alsa/]
+  Slim down [PCM]
+  Disable [Control]|[MIDI]|[Sequencer] (No mixer)
+
+ Process & Processor
+
+  Process   : Priority(nice,rt)
+  Processor : SMP(CPU Affinity), Preference(0<2<1<3@quad)
+
+  Remove unnecessary services & processes (systemctl disable *, service * disable)
+  Allocate process priorities and cpu affinities
+
+  cf)
+┌─────┬──┬───────┬─┬───┬────┬───┐
+  MPD         main  mpd(upmpdcli)   io  player  decoder   output
+  ─────┬──┬───────┬─┬───┬────┬───
+  nice              -1                  -2      -3        -4
+  ─────┬──┬───────┬─┬───┬────┬───
+  ionice                                                   
+  ─────┬──┬───────┬─┬───┬────┬───
+  chrt                              ip                    op
+  ─────┬──┬───────┬─┬───┬────┬─── 
+  processor   0     0               0   2       1         3
+└───────────────────────────────┘
+
+ Memory Play
+  Local Storage < Network < HTTP Proxy Server's memory cache for UPnP (Polipo)
 
 2. BIOS Setting (ASUS P5Q with E7300)
 
