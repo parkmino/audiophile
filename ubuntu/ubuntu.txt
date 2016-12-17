@@ -93,45 +93,58 @@ Linux
 
 Tuning
 
- - Original or Preferred Sound ?
+ - Original or Personal Sound ?
  - Do not know exactly the direction, what & how to do -> Clues from computer logic, Trial & Error, Convergence
  - All is connected and complicated, circular reference -> Continuous Review
 
- H/W Modules
-  Remove unnecessary H/W modules (/etc/modprobe.d/*.conf)
+ CPU
+  SMP (CPU Affinity)
+  Better Processor ?
+  cf) Quad Core
+ ┌─────┬─┬─┬─┬─┐
+   Core         0   1   2   3
+ ┌─────┬─┬─┬─┬─┐
+   Preference   4   2   3   1
+ └─────────────┘
 
- Kernel & Sysctl
+ Memory
+  No SWAP
+  Memory Play
+   Large Audio Buffer
+   Local Storage < Network
+   HTTP Proxy Server's memory cache for UPnP (Polipo)
+
+ Kernel & System
   Grub kernel option (Ubuntu:/etc/default/grub, Raspbian:/boot/config.txt)
   Sysctl (/proc/sys/[kernel]|[net]|[vm]@/etc/sysctl.conf)
+
+ H/W Modules
+  Remove unnecessary H/W modules (blacklist in /etc/modprobe.d/*.conf)
 
  ALSA
   Remove unnecessary ALSA libraries@[/usr/share/alsa/]
   Slim down [PCM]
-  Disable [Control]|[MIDI]|[Sequencer] (No mixer)
+  Disable [Control/Mixer]|[MIDI]|[Sequencer]
 
- Process & Processor
+ Application
+  Application=[Process/Thread]+[Process/Thread]+...
+  - Remove unnecessary services & processes (systemctl disable *, service * disable)
+  - Prioritize Processes with nice,rt
 
-  Process   : Priority(nice,rt)
-  Processor : SMP(CPU Affinity), Preference(0<2<1<3@quad)
-
-  Remove unnecessary services & processes (systemctl disable *, service * disable)
-  Allocate process priorities and cpu affinities
-
+ MPD
+  process priorities and cpu affinities
   cf)
-┌─────┬──┬───────┬─┬───┬────┬───┐
-  MPD         main  mpd(upmpdcli)   io  player  decoder   output
-  ─────┬──┬───────┬─┬───┬────┬───
-  nice              -1                  -2      -3        -4
-  ─────┬──┬───────┬─┬───┬────┬───
-  ionice                                                   
-  ─────┬──┬───────┬─┬───┬────┬───
-  chrt                              ip                    op
-  ─────┬──┬───────┬─┬───┬────┬─── 
-  processor   0     0               0   2       1         3
-└───────────────────────────────┘
-
- Memory Play
-  Local Storage < Network < HTTP Proxy Server's memory cache for UPnP (Polipo)
+ ┌─────┬──┬───────┬─┬───┬────┬───┐
+   MPD         main  mpd(upmpdcli)   io  player  decoder   output
+   ─────┬──┬───────┬─┬───┬────┬───
+   nice                   -1               -2      -3       -4
+   ─────┬──┬───────┬─┬───┬────┬───
+   ionice                                                   
+   ─────┬──┬───────┬─┬───┬────┬───
+   chrt                              ip                      op
+   ─────┬──┬───────┬─┬───┬────┬─── 
+   processor    0          0         0      2       1        3
+ └───────────────────────────────┘
 
 2. BIOS Setting (ASUS P5Q with E7300)
 
