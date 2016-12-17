@@ -1,3 +1,10 @@
 1. sudo nano /etc/mpd.conf
 	audio_buffer_size       "100000"        # "4068"
 	buffer_before_play      "2%"            # "10%"
+
+2. sudo nano /etc/rc.local
+	#ifconfig eth0  txqueuelen 1875
+	#ifconfig wlan0 txqueuelen 1875
+
+3. sudo nano /etc/hdparm.conf
+	#read_ahead_sect = 1752
