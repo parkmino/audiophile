@@ -8,3 +8,6 @@
 
 3. sudo nano /etc/hdparm.conf
 	#read_ahead_sect = 1752
+
+4. sudo nano /etc/sysctl.conf
+	kernel.sched_rt_runtime_us = 820000
