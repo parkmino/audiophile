@@ -204,5 +204,5 @@ Audio Render Advanced
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_advanced_17.01.img
-	$ zip raspbian_audio_renderer_advanced_17.01.zip raspbian_audio_renderer_advanced_17.01.img
+	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_17.02.img
+	$ zip raspbian_audio_renderer_17.02.zip raspbian_audio_renderer_17.02.img
