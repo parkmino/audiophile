@@ -16,7 +16,7 @@
 systemctl start mpd
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
-ifconfig eth0 txqueuelen 1875
+#ifconfig eth0 txqueuelen 1875
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i

@@ -15,7 +15,7 @@
 
 /usr/bin/mpd --no-daemon /etc/mpd.conf >/dev/null 2>&1 &
 
-ifconfig eth0 txqueuelen 1875
+#ifconfig eth0 txqueuelen 1875
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
