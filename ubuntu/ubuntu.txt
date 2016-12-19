@@ -2,7 +2,7 @@
 
 Audio Player
 
- Music Source : Analog to Digital, Disk to File
+ Music Source : Disk(Analog to Digital) to File
 
 ┌─────┬──────────────┬─────────────┐
                          Disk                          File
@@ -20,21 +20,21 @@ Audio Player
 
  (*) CD to WAV, SACD to DSD
 
-  cf) CD Rippers
-   - Windows : dBPowerAMP, EAC, Cdex, Foobar
-   - OS X    : XLD, Max, xACT
-   - Linux   : Morituri, Rubyripper
+ cf) CD Rippers
+  - Windows : dBPowerAMP, EAC, Cdex, Foobar
+  - OS X    : XLD, Max, xACT
+  - Linux   : Morituri, Rubyripper
 
 Audio File Player
 
  -> [Audio Data]+[Decoder]+[DSP]+[Audio Output]+[UI]
- => [Local Storage|Network]+[Processor]+[Memory]+[Input Device]+[Display]+[Power]
- => Dedicated or Multi-purpose H/W
+ -> [Local Storage|Network]+[Processor]+[Memory]+[Input Device]+[Display]+[Power]
+ -> Dedicated or Multi-purpose H/W
     ex) MP3, PMP, DivX, Network Audio Player, PC/SBC(DIY)
 
 PC/SBC
 
- H/W+F/W|BIOS+S/W(=OS+Application)
+ H/W+F/W|BIOS+S/W|[[OS]+[Application]]
  CTQ : CPU & Power as small as possible (SBC > PC)
        Speed Down, Disable Fucntions, Under-clocking, Under-voltaging for low power consumption and noise
 
@@ -56,9 +56,10 @@ Linux
 
  Linux Distros : Debian, openSUSE, Arch, Fedora
 
- Debian : Debian, Ubuntu, Mint, Elementary, Zorin, deepin, Armbian, Raspbian
+ Debian : Debian, Ubuntu, Mint, Elementary, Zorin, deepin
+          Armbian, Raspbian for SBC
 
- Linux GUI = XWindows(->Wayland) + Window Manager + Desktop Environment
+ Linux GUI = XWindows(Wayland) + Window Manager + Desktop Environment
   WM     : DWM, Openbox, MIWM, Sawfish
   DE(WM) : Cinnamon, GNOME(Metacity), LXDE(Openbox), MATE, KDE(KWin), Unity(Compiz), Xfce(Xfwm)
 
@@ -82,7 +83,7 @@ Linux
 
  Linux Audio Player
   - GUI library      : Amarok, Clementine, Exaile, Rhythmbox, Tomahawk
-  - GUI light-weight : Audacious, DeaDBeeF, MOC, Qmmp
+  - GUI light-weight : Audacious, DeaDBeeF, Qmmp
   - GUI commercial   : JRiver MC, HQPlayer
   - CLI              : Cmus, MOC, MPD
 
@@ -94,8 +95,8 @@ Linux
 Tuning
 
  - Original or Personal Sound ?
- - Do not know exactly the direction, what & how to do -> Clues from computer logic, Trial & Error, Convergence
- - All is connected and complicated, circular reference -> Continuous Review
+ - Do not know exactly the direction, what & how to do <- Clues from computer logic, Trial & Error, Convergence
+ - All is connected and complicated, circular reference <- Continuous Review
 
  CPU
   SMP (CPU Affinity)
@@ -110,7 +111,7 @@ Tuning
  Memory
   No SWAP
   Memory Play
-   Large Audio Buffer
+   Large Audio Buffer|Cache
    Local Storage < Network
    HTTP Proxy Server's memory cache for UPnP (Polipo)
 
@@ -129,7 +130,7 @@ Tuning
  Application
   Application=[Process/Thread]+[Process/Thread]+...
   - Remove unnecessary services & processes (systemctl disable *, service * disable)
-  - Prioritize Processes with nice,rt
+  - Prioritize Processes with nice & rt
 
  MPD
   process priorities and cpu affinities
@@ -145,6 +146,9 @@ Tuning
    ─────┬──┬───────┬─┬───┬────┬─── 
    processor    0          0         0      2       1        3
  └───────────────────────────────┘
+
+ Tuning Procedure
+  Remove unnecessary H/W Modules and Processes -> ALSA -> MPD -> Others
 
 2. BIOS Setting (ASUS P5Q with E7300)
 
