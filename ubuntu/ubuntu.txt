@@ -77,6 +77,7 @@ Linux
  ─────────
         H/W
 └────────┘
+ * Audio and Multimedia needs Soft Real Time
 
  ALSA = [Control/Mixer]+[PCM]+[MIDI]+[Sequencer]
   Drivers in Kernel, Library for Application, Tools for users
