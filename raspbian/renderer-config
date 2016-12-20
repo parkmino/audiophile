@@ -111,9 +111,10 @@ echo -n "\
 read i
 case $i in
  1) sudo sed -i '/iface\ eth0/s/static/dhcp/' /etc/network/interfaces
-    sudo sed -i '/address/,$s/^/#/' /etc/network/interfaces
+    sudo sed -i '/address/,$d' /etc/network/interfaces
     cat /etc/network/interfaces ;;
- 2) sudo sed -i "\$aiface eth0 inet static\naddress\t\t\t$(hostname -I)\nnetmask\t\t\t255.255.255.0\nbroadcast\t\t192.168.0.255\nnetwork\t\t\t192.168.0.0\ngateway\t\t\t192.168.0.1\ndns-nameservers\t\t168.126.63.1" /etc/network/interfaces
+ 2) sudo sed -i '/iface\ eth0/s/dhcp/static/' /etc/network/interfaces
+    sudo sed -i "\$aaddress\t\t\t$(hostname -I)\nnetmask\t\t\t255.255.255.0\nbroadcast\t\t192.168.0.255\nnetwork\t\t\t192.168.0.0\ngateway\t\t\t192.168.0.1\ndns-nameservers\t\t168.126.63.1" /etc/network/interfaces
     cat /etc/network/interfaces
     echo
     echo -e "[!] My assumption might be wrong,\nplease edit with 'sudo nano /etc/network/interfaces'"
