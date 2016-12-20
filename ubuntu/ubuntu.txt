@@ -134,19 +134,26 @@ Tuning
   - Prioritize Processes with nice & rt
 
  MPD
-  process priorities and cpu affinities
+  Process Priorities and CPU Affinities
+   Processes : io < main(*) < mpd(upmpdcli) < player < decoder < output
+   Priorities
+    nice   : +19 < 0(*) < -20
+    ionice : -c3 < -c0 -n4(*) < -c2 < -c1
+    rt     : idle < batch < other(*) < rr(1~99) < fifo(1~99)
+   CPU Processors : 0 < 2 < 1 < 3
+   (*) Center
   cf)
- ┌─────┬──┬───────┬─┬───┬────┬───┐
-   MPD         main  mpd(upmpdcli)   io  player  decoder   output
-   ─────┬──┬───────┬─┬───┬────┬───
-   nice                   -1               -2      -3       -4
-   ─────┬──┬───────┬─┬───┬────┬───
+ ┌─────┬───┬───────┬──┬───┬────┬───┐
+   MPD         main    mpd(upmpdcli)   io    player  decoder   output
+   ─────┬───┬───────┬──┬───┬────┬───
+   nice         0           -1          0      -2      -3       -4
+   ─────┬───┬───────┬──┬───┬────┬───
    ionice                                                   
-   ─────┬──┬───────┬─┬───┬────┬───
-   chrt                              ip                      op
-   ─────┬──┬───────┬─┬───┬────┬─── 
-   processor    0          0         0      2       1        3
- └───────────────────────────────┘
+   ─────┬───┬───────┬──┬───┬────┬───
+   chrt        other       other       idle  other     other   other
+   ─────┬───┬───────┬──┬───┬────┬─── 
+   processor    0            0          0      2        1        3
+ └─────────────────────────────────┘
 
  Tuning Procedure
   Remove unnecessary H/W Modules and Processes -> ALSA -> MPD -> Others
