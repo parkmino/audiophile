@@ -93,10 +93,10 @@ echo -n "
 Choose/선택 (1-4,m,q) : "
 read i
 case $i in
- 1) sudo sed -i '/hub-ctrl/s/^/#/g'                 /etc/rc.local | grep hub-ctrl ;;
- 2) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/#*//g'   /etc/rc.local | grep hub-ctrl ;;
- 3) sudo sed -i '/hub-ctrl -h 0 -P [4-5]/s/#*//g'   /etc/rc.local | grep hub-ctrl ;;
- 4) sudo sed -i '/hub-ctrl -h 0 -P [2,4-5]/s/#*//g' /etc/rc.local | grep hub-ctrl ;;
+ 1) sudo sed -i '/hub-ctrl/s/^/#/g'                /etc/rc.local | grep hub-ctrl ;;
+ 2) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/#*//g'  /etc/rc.local | grep hub-ctrl ;;
+ 3) sudo sed -i '/hub-ctrl -h 0 -P [4-5]/s/#*//g'  /etc/rc.local | grep hub-ctrl ;;
+ 4) sudo sed -i '/hub-ctrl -h 0 -P [24-5]/s/#*//g' /etc/rc.local | grep hub-ctrl ;;
  m) return ;;
  q) exit ;;
 esac
@@ -161,8 +161,10 @@ Choose/선택 (0-9,u,q,r,p) : "
   5) sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local | grep dbus ;;
   6) sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf | grep dop  ;;
   7) sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf | grep dop  ;;
-  8) sudo sed -i '/^music_directory\|^playlist_directory\|^db_file/s/^/#/g'    /etc/mpd.conf | grep -e music_directory -e playlist_directory -e db_file ;;
-  9) sudo sed -i '/^#music_directory\|^#playlist_directory\|^#db_file/s/^#//g' /etc/mpd.conf | grep -e music_directory -e playlist_directory -e db_file ;;
+  8) sudo sed -i '/^music_directory\|^playlist_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
+     grep -e music_directory -e playlist_directory -e db_file /etc/mpd.conf ;;
+  9) sudo sed -i '/^#music_directory\|^#playlist_directory\|^#db_file/s/^#//' /etc/mpd.conf
+     grep -e music_directory -e playlist_directory -e db_file /etc/mpd.conf ;;
   0) sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
      sudo apt-get install --reinstall libasound2 libasound2-data
      sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
