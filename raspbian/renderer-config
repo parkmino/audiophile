@@ -14,24 +14,26 @@ sound_card_usbaudio () {
 
 sound_card () {
 echo -n "
-[Sound Card/사운드카드 설정]
+ ------------------------------
+  Sound Card / 사운드카드 설정
+ ------------------------------
 
 (1) USB Audio Class 2.0 (Default/기본값)
-(2) HiFiBerry AMP+
+(2) HiFiBerry Amp+
 (3) HiFiBerry DAC
 (4) HiFiBerry DAC+
-(5) HiFiBerry DIGI
-(6) HiFiBerry DIGI+
+(5) HiFiBerry Digi
+(6) HiFiBerry Digi+
 (7) IQaudIO DAC
 (8) IQaudIO DAC+
-(9) IQaudIO Digi WM8804
+(9) IQaudIO Digi+
 (u) Unmute IQaudIO
 (t) Mute   IQaudIO
 
 (m)ain/주메뉴
 (q)uit/나가기
 
-Choose/선택 (1-9,u,t,m,q) : "
+ * Choose/선택 (1-9,u,t,m,q) : "
 read i
 case $i in
  1) sound_card_initial
@@ -70,27 +72,25 @@ return
 
 usb_signal_power () {
 echo -n "
-[USB Power & Signal/USB 전원과 신호]
+ --------------------------------------
+  USB Signal & Power / USB 신호와 전원
+ --------------------------------------
 
         {USB } {USB4}
   {LAN} {USB3} {USB5}
- --------------------- (Raspberry Pi Back Port/라즈베리 파이 뒷면)
-  * USB3 is recommendable for USB DDC/DAC
-    USB3 포트를 사용하고 다른 신호나 전원은 끄는 것을 추천합니다.
+ =====================(Raspberry Pi Back Port / 라즈베리 파이 뒷면)
+  * USB3 is recommended for USB DAC / USB3 추천합니다.
 
-(1) Turn on  all USB Signal & Power (Default)
-    모든 USB 전원과 신호 켜기 (기본값)
-(2) Turn off all USB Signal & Power (I2S DDC/DAC such as HiFiBerry or IQaudIO)
-    모든 USB 전원과 신호 끄기 (HiFiBerry나 IQaudIO 같은 I2C DDC/DAC)
-(3) Turn off USB 4/5 Signal
-    USB 4/5 신호 끄기
-(4) Turn off USB 4/5 Signal & Power (Powered USB DDC/DAC)
-    USB 4/5 전원과 신호 끄기 (자체 전원 USB DDC/DAC)
+(1) Enable  All USB Signal & Power (Default) (1) 모든 USB 신호와 전원 켜기
+(2) Disable All USB Signal & Power (I2S DAC) (2) 모든 USB 신호와 전원 끄기
+(3) Disable USB 4/5 Signal                   (3) USB 4/5 신호만 끄기
+(4) Disable USB 4/5 Signal & Power           (4) USB 4/5 신호와 전원 끄기
+   (Powered USB DDC/DAC)                        (자체 전원 USB DDC/DAC)
 
 (m)ain/주메뉴
 (q)uit/나가기
 
-Choose/선택 (1-4,m,q) : "
+ * Choose/선택 (1-4,m,q) : "
 read i
 case $i in
  1) sudo sed -i '/hub-ctrl/s/^/#/g'                /etc/rc.local | grep hub-ctrl ;;
@@ -105,23 +105,24 @@ return
 
 static_ip () {
 echo -n "
-[Manual IP/수동 IP]
+ ---------------------
+  Manual IP / 수동 IP
+ ---------------------
 
-(1) Dynamic IP (DHCP 자동 IP, Default/기본값)
-(2) Static  IP (수동 IP)
+(1) Dynamic IP (DHCP, Default)   (1) 자동 IP (DHCP, 기본값)
+(2) Static  IP                   (2) 수동 IP    
 
 (m)ain/주메뉴
 (q)uit/나가기
 
-Choose/선택 (1-2,m,q) : "
+ * Choose/선택 (1-2,m,q) : "
 read i
 case $i in
  1) sudo sed -i '/iface eth0/s/static/dhcp/' /etc/network/interfaces
-    sudo sed -i '/address/,$d' /etc/network/interfaces
+    sudo sed -i '/iface eth0/,+6d'           /etc/network/interfaces
     cat /etc/network/interfaces ;;
  2) sudo sed -i '/iface eth0/s/dhcp/static/' /etc/network/interfaces
-    sudo sed -i "\$aaddress\t\t\t$(hostname -I)\nnetmask\t\t\t255.255.255.0\nbroadcast\t\t192.168.0.255\nnetwork\t\t\t192.168.0.0\ngateway\t\t\t192.168.0.1\ndns-nameservers\t\t168.126.63.1" /etc/network/interfaces
-    cat /etc/network/interfaces
+    sudo sed -i "/iface eth0/aaddress\t\t\t$(hostname -I)\nnetmask\t\t\t255.255.255.0\nbroadcast\t\t192.168.0.255\nnetwork\t\t\t192.168.0.0\ngateway\t\t\t192.168.0.1\ndns-nameservers\t\t168.126.63.1" /etc/network/interfaces
     echo
     echo -e "[!] My assumption might be wrong,\nplease edit with 'sudo nano /etc/network/interfaces'"
     echo -e "[!] 제 추정은 틀릴 수 있으므로, 아래 명령어로 직접 수정하시기 바랍니다.\n'sudo nano /etc/network/interfaces'" ;;
@@ -133,25 +134,27 @@ return
 
 until [ "$i" == "q" ] ; do
  echo -n "
-[Mino's Audio Renderer-Main/주메뉴]
+ --------------------------------------------
+  Audio Renderer Main / 오디오 렌더러 주메뉴
+ --------------------------------------------
 
-(1) Sound Card...            . 사운드카드 설정...
-(2) USB Power & Signal...    . USB 전원과 신호...
-(3) Static IP...             . 수동 IP...
-(4) Disable D-Bus            . 자동 인식 사용 (Plug & Play)
-(5) Enable  D-Bus            . 자동 인식 사용 안 함
-(6) Enable  DoP              . DoP 사용 (DSD over PCM)
-(7) Disable DoP              . DoP 사용 안 함
-(8) Disable MPD Folders      . MPD 폴더 사용
-(9) Enable  MPD Folders      . MPD 폴더 사용 안 함 (UPnP나 Stream만 사용)
-(0) Resolve ALSA Tweak Issue . ALSA 트윅의 출력 오류 수정 (Library 재설치)
-(u) Update Raspbian          . Raspbian OS 업데이트
+(1) Sound Card...             (1) 사운드카드 설정...
+(2) USB Signal & Power...     (2) USB 신호와 전원...
+(3) Static IP...              (3) 수동 IP...
+(4) Disable D-Bus             (4) 자동 인식 사용 (Plug & Play)
+(5) Enable  D-Bus             (5) 자동 인식 사용 안 함
+(6) Enable  DoP               (6) DoP 사용 (DSD over PCM)
+(7) Disable DoP               (7) DoP 사용 안 함
+(8) Disable MPD Folders       (8) MPD 폴더 사용
+(9) Enable  MPD Folders       (9) MPD 폴더 사용 안 함 (UPnP나 Stream만 사용)
+(0) Resolve ALSA Tweak Issue  (0) ALSA 트윅의 출력 오류 수정 (Library 재설치)
+(u) Update Raspbian           (u) Raspbian OS 업데이트
 
 (q)uit/나가기
 (r)eboot to take effect/재시작하여 적용
 (p)ower off/전원 끄기
 
-Choose/선택 (0-9,u,q,r,p) : "
+ * Choose/선택 (0-9,u,q,r,p) : "
  read i
  case $i in
   1) sound_card ;;
@@ -162,9 +165,9 @@ Choose/선택 (0-9,u,q,r,p) : "
   6) sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf | grep dop  ;;
   7) sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf | grep dop  ;;
   8) sudo sed -i '/^music_directory\|^playlist_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
-     grep -e music_directory -e playlist_directory -e db_file /etc/mpd.conf ;;
+     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf ;;
   9) sudo sed -i '/^#music_directory\|^#playlist_directory\|^#db_file/s/^#//' /etc/mpd.conf
-     grep -e music_directory -e playlist_directory -e db_file /etc/mpd.conf ;;
+     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf ;;
   0) sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
      sudo apt-get install --reinstall libasound2 libasound2-data
      sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
