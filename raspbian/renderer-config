@@ -1,9 +1,22 @@
 #!/bin/bash
 
+sound_card_intial () {
+ sudo sed -i '/dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
+}
+
+sound_card_intaudio () {
+ sudo sed -i '/card/s/[1-9]/0/g'  /usr/share/alsa/alsa.conf | grep card
+}
+
+sound_card_usbaudio () {
+ sudo sed -i '/card/s/[02-9]/1/g' /usr/share/alsa/alsa.conf | grep card
+}
+
 sound_card () {
-echo -n "\
+echo -n "
 [Sound Card/사운드카드 설정]
-(1) USB Audio Class 2.0 (Default)
+
+(1) USB Audio Class 2.0 (Default/기본값)
 (2) HiFiBerry AMP+
 (3) HiFiBerry DAC
 (4) HiFiBerry DAC+
@@ -17,46 +30,38 @@ echo -n "\
 
 (m)ain/주메뉴
 (q)uit/나가기
->"
+
+Choose/선택 (1-9,u,t,m,q) : "
 read i
 case $i in
- 1) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt | grep dtoverlay
-    sudo sed -i '/card/s/[0,2-9]/1/g'                   /usr/share/alsa/alsa.conf ;;
- 2) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=hifiberry-amp'             /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
- 3) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=hifiberry-dac'             /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
- 4) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=hifiberry-dacplus'         /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
- 5) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=hifiberry-digi'            /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
- 6) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=hifiberry-digi-pro'        /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
- 7) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=iqaudio-dac'               /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
- 8) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=iqaudio-dacplus'           /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
- 9) sudo sed -i '/^dtoverlay=hifiberry/s/^/#/g'         /boot/config.txt
-    sudo sed -i '/^dtoverlay=iqaudio/s/^/#/g'           /boot/config.txt
-    sudo sed -i '$adtoverlay=iqaudio-digi-wm8804-audio' /boot/config.txt | grep ^dtoverlay
-    sudo sed -i '/card/s/[1-9]/0/g'                     /usr/share/alsa/alsa.conf ;;
+ 1) sound_card_initial
+    sound_card_usbaudio ;;
+ 2) sound_card_initial
+    sudo sed -i '$adtoverlay=hifiberry-amp'             /boot/config.txt | grep dtoverlay
+    sound_card_intaudio ;;
+ 3) sound_card_initial
+    sudo sed -i '$adtoverlay=hifiberry-dac'             /boot/config.txt | grep dtoverlay
+    sound_card_intaudio ;;
+ 4) sound_card_initial
+    sudo sed -i '$adtoverlay=hifiberry-dacplus'         /boot/config.txt | grep dtoverlay
+    sound_card_intaudio ;;
+ 5) sound_card_initial
+    sudo sed -i '$adtoverlay=hifiberry-digi'            /boot/config.txt | grep dtoverlay
+    sound_card_intaudiof ;;
+ 6) sound_card_initial
+    sudo sed -i '$adtoverlay=hifiberry-digi-pro'        /boot/config.txt | grep dtoverlay
+    sound_card_intaudio ;;
+ 7) sound_card_initial
+    sudo sed -i '$adtoverlay=iqaudio-dac'               /boot/config.txt | grep dtoverlay
+    sound_card_intaudio ;;
+ 8) sound_card_initial
+    sudo sed -i '$adtoverlay=iqaudio-dacplus'           /boot/config.txt | grep dtoverlay
+    sound_card_intaudio ;;
+ 9) sound_card_initial
+    sudo sed -i '$adtoverlay=iqaudio-digi-wm8804-audio' /boot/config.txt | grep dtoverlay
+    sound_card_intaudio ;;
  u) sudo sed -i '/exit 0/iecho "22" > /sys/class/gpio/export\necho "out" > /sys/class/gpio/gpio22/direction\necho "1" > /sys/class/gpio/gpio22/value\n' /etc/rc.local ;;
- t) sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/' /etc/rc.local ;;
+ t) sudo sed -i '/\/sys\/class\/gpio/d' /etc/rc.local ;;
  m) return ;;
  q) exit ;;
 esac
@@ -64,35 +69,34 @@ return
 }
 
 usb_signal_power () {
-echo -n "\
+echo -n "
 [USB Power & Signal/USB 전원과 신호]
 
         {USB } {USB4}
   {LAN} {USB3} {USB5}
  --------------------- (Raspberry Pi Back Port/라즈베리 파이 뒷면)
   * USB3 is recommendable for USB DDC/DAC
-   /USB3 포트를 사용하고 다른 신호나 전원은 끄는 것을 추천합니다.
+    USB3 포트를 사용하고 다른 신호나 전원은 끄는 것을 추천합니다.
 
-(1) Turn on  all USB Signal & Power (Default/기본값)
+(1) Turn on  all USB Signal & Power (Default)
+    모든 USB 전원과 신호 켜기 (기본값)
 (2) Turn off all USB Signal & Power (I2S DDC/DAC such as HiFiBerry or IQaudIO)
+    모든 USB 전원과 신호 끄기 (HiFiBerry나 IQaudIO 같은 I2C DDC/DAC)
 (3) Turn off USB 4/5 Signal
+    USB 4/5 신호 끄기
 (4) Turn off USB 4/5 Signal & Power (Powered USB DDC/DAC)
+    USB 4/5 전원과 신호 끄기 (자체 전원 USB DDC/DAC)
 
 (m)ain/주메뉴
 (q)uit/나가기
->"
+
+Choose/선택 (1-4,m,q) : "
 read i
 case $i in
- 1) sudo sed -i '/hub-ctrl/s/^/#/g'              /etc/rc.local | grep hub-ctrl ;;
- 2) sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 5/s/#//g' /etc/rc.local
-    sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 4/s/#//g' /etc/rc.local
-    sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 3/s/#//g' /etc/rc.local
-    sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 2/s/#//g' /etc/rc.local | grep hub-ctrl ;;
- 3) sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 5/s/#//g' /etc/rc.local
-    sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 4/s/#//g' /etc/rc.local | grep hub-ctrl ;;
- 4) sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 5/s/#//g' /etc/rc.local
-    sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 4/s/#//g' /etc/rc.local
-    sudo sed -i '/hub-ctrl\ -h\ 0\ -P\ 2/s/#//g' /etc/rc.local | grep hub-ctrl ;;
+ 1) sudo sed -i '/hub-ctrl/s/^/#/g'                 /etc/rc.local | grep hub-ctrl ;;
+ 2) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/#*//g'   /etc/rc.local | grep hub-ctrl ;;
+ 3) sudo sed -i '/hub-ctrl -h 0 -P [4-5]/s/#*//g'   /etc/rc.local | grep hub-ctrl ;;
+ 4) sudo sed -i '/hub-ctrl -h 0 -P [2,4-5]/s/#*//g' /etc/rc.local | grep hub-ctrl ;;
  m) return ;;
  q) exit ;;
 esac
@@ -100,20 +104,22 @@ return
 }
 
 static_ip () {
-echo -n "\
+echo -n "
 [Manual IP/수동 IP]
-(1) Dynamic IP (DHCP, Default/기본값)
-(2) Static  IP
+
+(1) Dynamic IP (DHCP 자동 IP, Default/기본값)
+(2) Static  IP (수동 IP)
 
 (m)ain/주메뉴
 (q)uit/나가기
->"
+
+Choose/선택 (1-2,m,q) : "
 read i
 case $i in
- 1) sudo sed -i '/iface\ eth0/s/static/dhcp/' /etc/network/interfaces
+ 1) sudo sed -i '/iface eth0/s/static/dhcp/' /etc/network/interfaces
     sudo sed -i '/address/,$d' /etc/network/interfaces
     cat /etc/network/interfaces ;;
- 2) sudo sed -i '/iface\ eth0/s/dhcp/static/' /etc/network/interfaces
+ 2) sudo sed -i '/iface eth0/s/dhcp/static/' /etc/network/interfaces
     sudo sed -i "\$aaddress\t\t\t$(hostname -I)\nnetmask\t\t\t255.255.255.0\nbroadcast\t\t192.168.0.255\nnetwork\t\t\t192.168.0.0\ngateway\t\t\t192.168.0.1\ndns-nameservers\t\t168.126.63.1" /etc/network/interfaces
     cat /etc/network/interfaces
     echo
@@ -126,8 +132,9 @@ return
 }
 
 until [ "$i" == "q" ] ; do
- echo -n "\
+ echo -n "
 [Mino's Audio Renderer-Main/주메뉴]
+
 (1) Sound Card...            . 사운드카드 설정...
 (2) USB Power & Signal...    . USB 전원과 신호...
 (3) Static IP...             . 수동 IP...
@@ -138,11 +145,13 @@ until [ "$i" == "q" ] ; do
 (8) Disable MPD Folders      . MPD 폴더 사용
 (9) Enable  MPD Folders      . MPD 폴더 사용 안 함 (UPnP나 Stream만 사용)
 (0) Resolve ALSA Tweak Issue . ALSA 트윅의 출력 오류 수정 (Library 재설치)
+(u) Update Raspbian          . Raspbian OS 업데이트
 
 (q)uit/나가기
 (r)eboot to take effect/재시작하여 적용
 (p)ower off/전원 끄기
->"
+
+Choose/선택 (0-9,u,q,r,p) : "
  read i
  case $i in
   1) sound_card ;;
@@ -151,16 +160,15 @@ until [ "$i" == "q" ] ; do
   4) sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local | grep dbus ;;
   5) sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local | grep dbus ;;
   6) sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf | grep dop  ;;
-  7) sudo sed -i '/dop/s/#//g'   /etc/mpd.conf | grep dop  ;;
-  8) sudo sed -i '/^music_directory/s/^/#/g'     /etc/mpd.conf | grep ^#music_directory
-     sudo sed -i '/^playlist_directory/s/^/#/g'  /etc/mpd.conf | grep ^#playlist_directory
-     sudo sed -i '/^db_file/s/^/#/g'             /etc/mpd.conf | grep ^#db_file ;;
-  9) sudo sed -i '/^#music_directory/s/^#//g'    /etc/mpd.conf | grep ^music_directory
-     sudo sed -i '/^#playlist_directory/s/^#//g' /etc/mpd.conf | grep ^playlist_directory
-     sudo sed -i '/^#db_file/s/^#//g'            /etc/mpd.conf | grep ^db_file ;;
+  7) sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf | grep dop  ;;
+  8) sudo sed -i '/^music_directory\|^playlist_directory\|^db_file/s/^/#/g'    /etc/mpd.conf | grep -e music_directory -e playlist_directory -e db_file ;;
+  9) sudo sed -i '/^#music_directory\|^#playlist_directory\|^#db_file/s/^#//g' /etc/mpd.conf | grep -e music_directory -e playlist_directory -e db_file ;;
   0) sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
      sudo apt-get install --reinstall libasound2 libasound2-data
      sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
+  u) sudo apt-get update
+     sudo apt-get upgrade
+     sudo apt-get dist-upgrade ;;
   q) exit ;;
   r) sudo reboot ;;
   p) sudo poweroff ;;
