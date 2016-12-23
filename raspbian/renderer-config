@@ -1,5 +1,17 @@
 #!/bin/bash
 
+countdown_clear () {
+ echo
+ echo "Back to Main after 3 seconds / 3초후에 주메뉴로 갑니다."
+ for i in 3 2 1; do
+  echo -n "$i"
+  sleep 0.5
+  echo -n "."
+  sleep 0.5
+ done
+ clear
+}
+
 sound_card_intial () {
  sudo sed -i '/dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
 }
@@ -69,6 +81,7 @@ case $i in
  m) clear ; return ;;
  q) exit ;;
 esac
+countdown_clear
 return
 }
 
@@ -104,6 +117,7 @@ case $i in
  m) clear ; return ;;
  q) exit ;;
 esac
+countdown_clear
 return
 }
 
@@ -155,6 +169,7 @@ case $i in
  m) clear ; return ;;
  q) exit ;;
 esac
+countdown_clear
 return
 }
 
@@ -188,21 +203,28 @@ until [ "$i" == "q" ] ; do
   1) sound_card ;;
   2) usb_signal_power ;;
   3) static_ip ;;
-  4) sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local | grep dbus ;;
-  5) sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local | grep dbus ;;
-  6) sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf | grep dop  ;;
-  7) sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf | grep dop  ;;
+  4) sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local | grep dbus
+     countdown_clear ;;
+  5) sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local | grep dbus
+     countdown_clear ;;
+  6) sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf | grep dop
+     countdown_clear ;;
+  7) sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf | grep dop
+     countdown_clear ;;
   8) sudo sed -i '/^music_directory\|^playlist_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
-     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf ;;
+     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf
+     countdown_clear ;;
   9) sudo sed -i '/^#music_directory\|^#playlist_directory\|^#db_file/s/^#//' /etc/mpd.conf
-     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf ;;
+     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf
+     countdown_clear ;;
   0) sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
      sudo apt-get install --reinstall libasound2 libasound2-data
-     sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
+     sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf
+     countdown_clear ;;
   u) sudo apt-get update
      sudo apt-get upgrade
      sudo apt-get dist-upgrade
-     clear ;;
+     countdown_clear ;;
   q) exit ;;
   r) sudo reboot ;;
   p) sudo poweroff ;;
