@@ -2,7 +2,7 @@
 
 countdown_clear () {
  echo
- echo -en "  * Back to Main after 3 seconds / 3초후에 주메뉴로 갑니다\n    "
+ echo -en "  * Back to Main after 3 seconds/3초후에 주메뉴로 갑니다\n    "
  for i in 3 2 1; do
   echo -n "$i"
   sleep 0.3
@@ -42,7 +42,7 @@ echo -n "
   Sound Card / 사운드카드 설정
  ------------------------------
 
-(1) USB Audio Class 2.0 (Default / 기본값)
+(1) USB Audio Class 2.0 (Default/기본값)
 (2) HiFiBerry Amp+
 (3) HiFiBerry DAC
 (4) HiFiBerry DAC+
@@ -116,14 +116,14 @@ echo -n "
 
         {USB } {USB4}
   {LAN} {USB3} {USB5}
- =====================[Back Port / 뒷면]
-     USB3 is recommended for DAC / DAC은 USB3을 추천합니다
+ =====================[Back Port/뒷면]
+     USB3 is recommended for DAC/DAC은 USB3을 추천합니다
 
 (1) Enable  All USB Signal & Power  (1) 모든 USB 신호와 전원 켜기 (기본값)
 (2) Disable All USB Signal & Power  (2) 모든 USB 신호와 전원 끄기 (I2S DAC)
-(3) Disable USB 4/5 Signal          (3) USB 4/5 신호만 끄기
-(4) Disable USB 4/5 Signal & Power  (4) USB 4/5 신호와 전원 끄기
-   (Powered USB DDC/DAC)               (자체 전원 USB DDC/DAC)
+(3) Disable USB 4,5 Signal          (3) USB 4,5 신호만 끄기
+(4) Disable USB 4,5 Signal & Power  (4) USB 4,5 신호와 전원 끄기
+   (Powered USB DAC)                   (자체 전원 USB DAC)
 
 (m) Main                            (m) 주메뉴
 (q) Quit                            (q) 나가기
@@ -220,7 +220,7 @@ until [ "$i" == "q" ] ; do
 (6) Enable  DoP               (6) DoP 사용 (DSD over PCM)
 (7) Disable DoP               (7) DoP 사용 안 함
 (8) Enable  MPD Folders       (8) MPD 폴더 사용
-(9) Disable MPD Folders       (9) MPD 폴더 사용 안 함 (UPnP나 Stream)
+(9) Disable MPD Folders       (9) MPD 폴더 사용 안 함 (UPnP와 Stream)
 (0) Resolve ALSA Tweak Issue  (0) ALSA 트윅 오류 수정 (Library 재설치)
 (u) Update Raspbian OS        (u) Raspbian OS 업데이트
 
