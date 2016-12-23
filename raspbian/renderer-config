@@ -2,12 +2,14 @@
 
 countdown_clear () {
  echo
- echo "Back to Main after 3 seconds / 3초후에 주메뉴로 갑니다."
+ echo -en "  * Back to Main after 3 seconds / 3초후에 주메뉴로 갑니다\n    "
  for i in 3 2 1; do
   echo -n "$i"
-  sleep 0.5
+  sleep 0.3
   echo -n "."
-  sleep 0.5
+  sleep 0.3
+  echo -n "."
+  sleep 0.3
  done
  clear
 }
