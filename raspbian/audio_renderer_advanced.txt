@@ -190,11 +190,17 @@ Audio Render Advanced
 		http://37.130.228.60:8090/#Naim Radio
 		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
 
-18. Show release
+18. Renderer-config
+
+	cp render-config ~
+	sudo ln -s /home/pi/render-config /usr/bin/
+	render-config
+
+19. Show release
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.01 advanced" > release
 
-19. Make Image
+20. Make Image
 
 	$ nano ~/release
 	$ mpc clear
