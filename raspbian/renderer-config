@@ -1,15 +1,21 @@
 #!/bin/bash
 
 countdown_clear () {
+ if [ -z "$1" ]; then
+  sec=3
+ else
+  sec=$1
+ fi
  echo
- echo -en "* Back to Main after 3 seconds/3초후에 주메뉴로 갑니다\n  "
- for i in 3 2 1; do
-  echo -n "$i"
+ echo -en "* Back to Main after $sec seconds/$sec초후에 주메뉴로 갑니다\n  "
+ until [ $sec -eq 0 ]; do
+  echo -n $sec
   sleep 0.3
-  echo -n "."
+  echo -n .
   sleep 0.3
-  echo -n "."
+  echo -n .
   sleep 0.3
+  sec=$(($sec-1))
  done
  clear
 }
@@ -26,13 +32,11 @@ sound_card_show () {
 sound_card_intaudio () {
  sudo sed -i '/card/s/[1-9]/0/g'  /usr/share/alsa/alsa.conf
  grep card /usr/share/alsa/alsa.conf
- return
 }
 
 sound_card_usbaudio () {
  sudo sed -i '/card/s/[02-9]/1/g' /usr/share/alsa/alsa.conf
  grep card /usr/share/alsa/alsa.conf
- return
 }
 
 sound_card () {
@@ -201,7 +205,7 @@ case $i in
  m) clear ; return ;;
  q) exit ;;
 esac
-countdown_clear
+countdown_clear 5
 return
 }
 
