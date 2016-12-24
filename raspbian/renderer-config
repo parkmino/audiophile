@@ -7,13 +7,11 @@ countdown_clear () {
   sec=$1
  fi
  echo
- echo -en "* Back to Main after $sec seconds/$sec초후에 주메뉴로 갑니다\n  "
+ echo -en "* Back to Main after $sec seconds/$sec초 뒤에 주메뉴로 갑니다\n  "
  until [ $sec -eq 0 ]; do
   echo -n $sec
-  sleep 0.3
-  echo -n .
-  sleep 0.3
-  echo -n .
+  sleep 0.3; echo -n .
+  sleep 0.3; echo -n .
   sleep 0.3
   sec=$(($sec-1))
  done
