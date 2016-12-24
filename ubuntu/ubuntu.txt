@@ -7,11 +7,13 @@ Audio Player
 ┌─────┬──────────────┬─────────────┐
                          Disk                          File
   ─────┬──────────────┬─────────────
-  Type(*)     LP, CD, DVD-A, SACD, Blu-ray  Data (Wav, DSD, Flac, MP3)
+  Type(*)     LP, CD, DVD-A, SACD, Blu-ray  Data File (Wav, Flac, DSD)
   ─────┬──────────────┬─────────────
   Location    Local                         Local, Network, Cloud
   ─────┬──────────────┬─────────────
   Player      H/W only, H/W+F/W, H/W+S/W    H/W+F/W, H/W+S/W
+  ─────┬──────────────┬─────────────
+  Mechanism   O (Disk Spinning)             X (Flash Memory, Network)
   ─────┬──────────────┬─────────────
   Size        > Disk                        As small as possible
   ─────┬──────────────┬─────────────
