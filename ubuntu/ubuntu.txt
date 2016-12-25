@@ -46,7 +46,7 @@ OS+Sound+Application
           +[Foobar]|[cPlay]|[JRiver MC]|[JPLAY]|[HQPlayer]
          (+[AudiophileOptimzer]|[Fidelizer]|[Process Lasso])
 
-    [OS X]+[Sytem Sound]|[CoreAudio]
+    [OS X]+[CoreAudio]
           +[Amarra]|[Audirvana]|[Fidelia]|[JRiver MC]|[HQPlayer]
 
    [Linux]+[ALSA]|[FFADO]|[OSS]|[PulseAudio]|[GStreamer]|[Xine]|[Phonon]
