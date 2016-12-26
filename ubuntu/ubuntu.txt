@@ -23,7 +23,8 @@ Audio Player
  (*) CD to WAV, SACD to DSD
 
  cf) CD Rippers
-  - Windows : dBPowerAMP, EAC, Cdex, Foobar
+  - Windows : dBPowerAMP, EAC, Foobar, JRiver MC, Cdex
+   (Dark <- EAC - Foobar - dBPowerAMP - JRiver MC -> Bright)
   - OS X    : XLD, Max, xACT
   - Linux   : Morituri, Rubyripper
 
