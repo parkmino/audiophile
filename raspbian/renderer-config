@@ -221,8 +221,8 @@ until [ "$i" == "q" ] ; do
 (5) Disable D-Bus             (5) D-Bus 사용 안 함
 (6) Enable  DoP               (6) DoP 사용 (DSD over PCM)
 (7) Disable DoP               (7) DoP 사용 안 함
-(8) Enable  MPD Folders       (8) MPD 폴더 사용
-(9) Disable MPD Folders       (9) MPD 폴더 사용 안 함 (UPnP와 Stream)
+(8) Enable  Music Directory   (8) 음원 디렉토리 사용
+(9) Disable Music Directory   (9) 음원 디렉토리 사용 안 함 (UPnP와 Stream)
 (0) Resolve ALSA Tweak Issue  (0) ALSA 트윅 오류 수정 (Library 재설치)
 (u) Update Raspbian OS        (u) Raspbian OS 업데이트
 
@@ -249,11 +249,11 @@ until [ "$i" == "q" ] ; do
   7) sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf
      grep dop /etc/mpd.conf
      countdown_clear ;;
-  8) sudo sed -i '/^#music_directory\|^#playlist_directory\|^#db_file/s/^#//' /etc/mpd.conf
-     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf
+  8) sudo sed -i '/^#music_directory\|^#db_file/s/^#//' /etc/mpd.conf
+     grep -e ^#*music_directory -e ^#*db_file /etc/mpd.conf
      countdown_clear ;;
-  9) sudo sed -i '/^music_directory\|^playlist_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
-     grep -e ^#*music_directory -e ^#*playlist_directory -e ^#*db_file /etc/mpd.conf
+  9) sudo sed -i '/^music_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
+     grep -e ^#*music_directory -e ^#*db_file /etc/mpd.conf
      countdown_clear ;;
   0) sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
      sudo apt-get install --reinstall libasound2 libasound2-data
