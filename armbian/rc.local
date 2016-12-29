@@ -14,9 +14,9 @@
 #rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
 #rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log /var
 #rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
-
-mkdir -p /run/var/cache /run/var/log /run/tmp
-
+#
+#mkdir -p /run/var/cache /run/var/log /run/tmp
+#
 #ifconfig eth0  txqueuelen 1875
 #ifconfig wlan0 txqueuelen 1875
 
@@ -72,9 +72,9 @@ done
 #for pid in $(ps h -eo pid,class,comm | awk '$3 ~ /nfsd/ && $3 !~ /nfsd4/ {print $1}') ; do
 # taskset -acp 1 $pid
 #done
-
-sleep 5
-
+#
+#sleep 5
+#
 #for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /eth/ && $7 !~ /chip/ {print +$1}') ; do
 # echo 1 > /proc/irq/$irq/smp_affinity
 #done
