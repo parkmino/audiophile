@@ -86,7 +86,7 @@ done
 #mediatomb -c /root/.mediatomb/config.xml -d
 
 taskset -ac 0 rygel -c /etc/rygel.conf >/dev/null >2&1 &
-until $(pstree -np $(pgrep -x rygel) | grep -q gmain); do
+until pstree -np $(pgrep -x rygel) | grep -q gmain; do
  sleep 1
 done
 rygel_gmain=$(pstree -np $(pgrep -x rygel) | grep gmain | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
