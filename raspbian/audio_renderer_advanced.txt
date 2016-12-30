@@ -159,28 +159,13 @@ Audio Render Advanced
 
 17. Internet Radio
 
-	sudo apt-get install vlc-nox # Optional
-	nano ~/.config/vlc/vlcrc
-		alsa-audio-device=sound
-		aout=alsa
-	nano ~/kbs1fm
-		#!/bin/sh
-		mpc stop
-		cvlc http://juoradio.appspot.com/kbs1 >/dev/null 2>&1 &
-	nano ~/kbs2fm
-		#!/bin/sh
-		mpc stop
-		cvlc http://juoradio.appspot.com/kbs2 >/dev/null 2>&1 &
-	nano ~/kbs2radio
-		#!/bin/sh
-		mpc stop
-		cvlc http://juoradio.appspot.com/kbs2r >/dev/null 2>&1 &
-	nano ~/cbsfm
-		#!/bin/sh
-		mpc stop
-		cvlc rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream >/dev/null 2>&1 &
-	chmod +x ~/kbs1fm ~/kbs2fm ~/kbs2radio ~/cbsfm
-	sudo ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/kbs2radio /home/pi/cbsfm /usr/bin/
+	sudo apt-get install mplayer
+	nano ~/.mplayer/config
+		ao=alsa:device=sound
+		cache=102400
+		cache-min=0.05
+	cp ksound ~
+	sudo ln /home/pi/ksound /usr/bin/
 
 	sudo nano /var/lib/mpd/playlists/Internet_Radios.m3u
 		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
