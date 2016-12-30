@@ -1,13 +1,13 @@
 #!/bin/sh
 
-  kbs1=http://juoradio.appspot.com/kbs1
-  kbs2=http://juoradio.appspot.com/kbs2
- kbs1r=http://juoradio.appspot.com/kbs1r
- kbs2r=http://juoradio.appspot.com/kbs2r
- kbs3r=http://juoradio.appspot.com/kbs3r
-kbsscr=http://juoradio.appspot.com/kbsscr
-kbsrki=http://juoradio.appspot.com/kbsrki
- cbsfm=rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream
+  kbs1="http://juoradio.appspot.com/kbs1"
+  kbs2="http://juoradio.appspot.com/kbs2"
+ kbs1r="http://juoradio.appspot.com/kbs1r"
+ kbs2r="http://juoradio.appspot.com/kbs2r"
+ kbs3r="http://juoradio.appspot.com/kbs3r"
+kbsscr="http://juoradio.appspot.com/kbsscr"
+kbsrki="http://juoradio.appspot.com/kbsrki"
+ cbsfm="rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream"
 
 usage () {
  echo "$(basename "$0"): missing option"
@@ -24,7 +24,7 @@ fi
 
 case $1 in
  kbs1|kbs2|kbs1r|kbs2r|kbs3r|kbsscr|kbsrki|cbsfm)
-  mplayer -novideo $(eval echo \"\$$1\") >/dev/null 2>&1 & ;;
+  mplayer -novideo $(eval echo \"\$"$1"\") >/dev/null 2>&1 & ;;
  stop) pkill mplayer ; exit ;;
  *)    usage         ; exit ;;
 esac
