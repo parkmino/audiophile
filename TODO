@@ -1,5 +1,0 @@
-1. Disable
-	sudo nano /etc/sysctl.conf
-		kernel.ftrace_enabled = 0
-	sudo nano /etc/rc.local
-		sysctl -w kernel.ftrace_enabled=0
