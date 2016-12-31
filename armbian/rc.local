@@ -12,7 +12,7 @@
 # By default this script does nothing.
 #
 #rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
-#rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log /var
+#rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log   /var
 #rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
 #
 #mkdir -p /run/var/cache /run/var/log /run/tmp
@@ -31,6 +31,7 @@
  sysctl -w vm.stat_interval=5
  sysctl -w vm.vfs_cache_pressure=0
 
+ sysctl -w kernel.ftrace_enabled=0
 #sysctl -w kernel.sched_rt_runtime_us=845000
 #sysctl -w kernel.sched_rt_period_us=1000000
  sysctl -w kernel.sched_min_granularity_ns=750000
