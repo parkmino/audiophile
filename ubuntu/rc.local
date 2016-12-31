@@ -12,6 +12,7 @@
 # By default this script does nothing.
 
  sysctl -w kernel.watchdog=0
+ sysctl -w kernel.ftrace_enabled=0
  sysctl -w kernel.sched_rt_runtime_us=820000
 #sysctl -w kernel.sched_rt_period_us=999796
  sysctl -w kernel.sched_min_granularity_ns=750000
