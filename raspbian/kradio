@@ -14,16 +14,12 @@ usage () {
  echo "Usage: $(basename "$0") [kbs1/2|kbs1/2/3r|kbsscr|kbsrki|cbsfm|stop]"
 }
 
-if [ -z "$1" ]; then
- usage
- exit
-else
- http_proxy=""
- sudo sleep 0.1
-fi
+[ -z "$1" ] && usage && exit
 
 case $1 in
  kbs1|kbs2|kbs1r|kbs2r|kbs3r|kbsscr|kbsrki|cbsfm)
+  http_proxy=""
+  sudo sleep 0.1
   mplayer -novideo $(eval echo \"\$"$1"\") >/dev/null 2>&1 & ;;
  stop) pkill mplayer ; exit ;;
  *)    usage         ; exit ;;
