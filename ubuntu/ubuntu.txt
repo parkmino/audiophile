@@ -26,7 +26,7 @@ Audio Player
   - Windows : dBPowerAMP, EAC, Foobar, JRiver MC, Cdex
    (Dark <- EAC - Foobar - dBPowerAMP - JRiver MC -> Bright)
   - OS X    : XLD, Max, xACT
-  - Linux   : Morituri, Rubyripper
+  - Linux   : cdparanoia, icedax(cdda2wav) -> abcde, ripit, morituri, ripperx
 
 Audio File Player
 
