@@ -101,6 +101,7 @@ Tuning
  - Original or Personal Sound ?
  - Do not know exactly the direction, what & how to do <- Clues from computer logic, Trial & Error, Convergence
  - All is connected and complicated, circular reference <- Continuous Review
+ - Good Sound <- High Purity + Low Latency + Good System Resource Allocation
 
  CPU
   SMP (CPU Affinity)
