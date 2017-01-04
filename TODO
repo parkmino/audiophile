@@ -1,5 +1,5 @@
 1. sudo nano /etc/sysctl.conf
-	 kernel.sched_rt_runtime_us = -1
+	 kernel.sched_rt_runtime_us = 8116000
 	 kernel.sched_rt_period_us = 10000000
 	 kernel.sched_wakeup_granularity_ns = 30000000
 	 kernel.sched_latency_ns = 100000
