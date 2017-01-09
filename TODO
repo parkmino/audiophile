@@ -14,18 +14,23 @@
 	/usr/bin/mpd /etc/mpd.conf &
 
 3. sudo nano /etc/mpd.conf
+	 case $proc in
 	  mpd)		 sudo taskset -cp 0	$proc_nr
 			 sudo renice -1  -p	$proc_nr
-			 sudo ionice -c1 -n3 -p $proc_nr ;;
+			#sudo ionice -c2 -n3 -p $proc_nr
+			 ;;
 	  io)		 sudo taskset -cp 0	$proc_nr
 			 sudo chrt -v -ip 0	$proc_nr ;;
 	  player)	 sudo taskset -cp 2	$proc_nr
 			 sudo renice -2 -p	$proc_nr
-			 sudo ionice -c1 -n2 -p $proc_nr ;;
+			#sudo ionice -c2 -n2 -p $proc_nr
+			 ;;
 	  decoder)	 sudo taskset -cp 1	$proc_nr
 			 sudo renice -3 -p	$proc_nr
-			 sudo ionice -c1 -n2 -p $proc_nr ;;
+			#sudo ionice -c2 -n1 -p $proc_nr
+			 ;;
 	  output)	 sudo taskset -cp 3	$proc_nr
 			 sudo renice -4 -p	$proc_nr
 			 sudo chrt -v -op 0	$proc_nr
-			 sudo ionice -c1 -n2 -p $proc_nr ;;
+			 sudo ionice -c2 -n0 -p $proc_nr ;;
+	 esac
