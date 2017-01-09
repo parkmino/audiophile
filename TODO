@@ -1,12 +1,11 @@
 1. sudo nano /etc/sysctl.conf
-	kernel.sched_rt_runtime_us = 8116654
+	 kernel.sched_rt_runtime_us = 8116654
 	#kernel.sched_min_granularity_ns = 2250000
-	kernel.sched_wakeup_granularity_ns = 50000000
-	kernel.sched_latency_ns = 380000
-	kernel.sched_migration_cost_ns = 7000000
-	kernel.sched_rr_timeslice_ms = 5
+	 kernel.sched_wakeup_granularity_ns = 50000000
+	 kernel.sched_latency_ns = 380000
+	 kernel.sched_migration_cost_ns = 7000000
+	 kernel.sched_rr_timeslice_ms = 5
 	#kernel.sched_shares_window_ns = 10000000
-   cat /proc/sys/kernel/sched_rr_timeslice_ms
 
 2. ./configure ... --disable-daemon --disable-systemd-daemon
    sudo systemctl disable mpd
