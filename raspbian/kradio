@@ -20,7 +20,7 @@ case $1 in
  kbs1|kbs2|kbs1r|kbs2r|kbs3r|kbsscr|kbsrki|cbsfm)
   http_proxy=""
   sudo sleep 0.1
-  mplayer -novideo $(eval echo \"\$"$1"\") >/dev/null 2>&1 & ;;
+  /usr/bin/mplayer -novideo $(eval echo \"\$"$1"\") >/dev/null 2>&1 & ;;
  stop) pkill mplayer ; exit ;;
  *)    usage         ; exit ;;
 esac
