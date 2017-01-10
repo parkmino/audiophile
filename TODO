@@ -1,8 +1,8 @@
 1. sudo nano /etc/sysctl.conf
-	 kernel.sched_rt_runtime_us = 8116658
-	#kernel.sched_min_granularity_ns = 2250000
+	 kernel.sched_rt_runtime_us = 8116668
+	#kernel.sched_min_granularity_6789ns = 2250000
 	 kernel.sched_wakeup_granularity_ns = 50000000
-	 kernel.sched_latency_ns = 390000
+	 kernel.sched_latency_ns = 380000
 	 kernel.sched_migration_cost_ns = 7000000
 	 kernel.sched_rr_timeslice_ms = 5
 	#kernel.sched_shares_window_ns = 10000000
@@ -16,21 +16,15 @@
 3. sudo nano /etc/mpd.conf
 	 case $proc in
 	  mpd)		 sudo taskset -cp 0	$proc_nr
-			 sudo renice -1  -p	$proc_nr
-			#sudo ionice -c0 -p	$proc_nr
-			 ;;
+			 sudo renice -2  -p	$proc_nr ;;
 	  io)		 sudo taskset -cp 0	$proc_nr
+			 sudo renice +3  -p	$proc_nr
 			 sudo chrt -v -ip 0	$proc_nr ;;
 	  player)	 sudo taskset -cp 2	$proc_nr
-			 sudo renice -2 -p	$proc_nr
-			#sudo ionice -c0 -p	$proc_nr
-			 ;;
+			 sudo renice -3 -p	$proc_nr ;;
 	  decoder)	 sudo taskset -cp 1	$proc_nr
-			 sudo renice -3 -p	$proc_nr
-			#sudo ionice -c0 -p	$proc_nr
-			 ;;
+			 sudo renice -4 -p	$proc_nr ;;
 	  output)	 sudo taskset -cp 3	$proc_nr
-			 sudo renice -4 -p	$proc_nr
-			 sudo chrt -v -op 0	$proc_nr
-			 sudo ionice -c0 -p	$proc_nr ;;
+			 sudo renice -5 -p	$proc_nr
+			 sudo chrt -v -op 0	$proc_nr ;;
 	 esac
