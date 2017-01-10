@@ -34,4 +34,5 @@ npg_mplayer=$(pgrep -n mplayer)
 
 taskset -pc 1     $opg_mplayer
 taskset -pc 3     $npg_mplayer
-sudo renice -1 -p $npg_mplayer
+sudo renice -1 -p $opg_mplayer
+sudo renice -2 -p $npg_mplayer
