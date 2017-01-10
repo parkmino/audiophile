@@ -1,0 +1,3 @@
+1. sudo nano /etc/rc.local
+	taskset -pc 0	$pgr_mpd
+	renice +1 -p	$pgr_mpd
