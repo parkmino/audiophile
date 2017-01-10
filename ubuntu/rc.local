@@ -15,15 +15,15 @@
  sysctl -w kernel.ftrace_enabled=0
  sysctl -w kernel.sched_autogroup_enabled=0
  sysctl -w kernel.sched_rt_period_us=10000000
- sysctl -w kernel.sched_rt_runtime_us=8116658
- sysctl -w kernel.sched_min_granularity_ns=100000
- sysctl -w kernel.sched_wakeup_granularity_ns=30000000
- sysctl -w kernel.sched_latency_ns=120000
+ sysctl -w kernel.sched_rt_runtime_us=8116657
+#sysctl -w kernel.sched_min_granularity_ns=2250000
+ sysctl -w kernel.sched_wakeup_granularity_ns=50000000
+ sysctl -w kernel.sched_latency_ns=380000
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=5000
- sysctl -w kernel.sched_migration_cost_ns=5000000
+ sysctl -w kernel.sched_migration_cost_ns=7000000
  sysctl -w kernel.sched_nr_migrate=0
- sysctl -w kernel.sched_rr_timeslice_ms=40
- sysctl -w kernel.sched_shares_window_ns=3000000
+ sysctl -w kernel.sched_rr_timeslice_ms=5
+#sysctl -w kernel.sched_shares_window_ns=10000000
 #sysctl -w kernel.sched_tunable_scaling=1
 
  sysctl -w vm.swappiness=0
@@ -73,7 +73,8 @@ done
 
 #ln -s /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so.2
 
-systemctl start mpd
+#systemctl start mpd
+/usr/bin/mpd & # /usr/local/etc/mpd.conf &
 
 until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
  sleep 1
@@ -82,23 +83,22 @@ done
 pgr_mpd=$(pgrep -x mpd)
 
  taskset -pc 0	$pgr_mpd
-#renice -1 -p	$pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
    mpd)		taskset -cp 0	$proc_nr
-		renice -1 -p	$proc_nr ;;
+		renice -2 -p	$proc_nr ;;
    io)		taskset -cp 0	$proc_nr
-		#renice 19 -p	$proc_nr
+		renice +3 -p	$proc_nr
 		chrt -ip 0	$proc_nr ;;
    player)	taskset -cp 2	$proc_nr
-		renice -2 -p	$proc_nr ;;
-   decoder)	taskset -cp 1	$proc_nr
 		renice -3 -p	$proc_nr ;;
+   decoder)	taskset -cp 1	$proc_nr
+		renice -4 -p	$proc_nr ;;
    output)	taskset -cp 3	$proc_nr
-		renice -4 -p	$proc_nr
+		renice -5 -p	$proc_nr
 		chrt -op 0	$proc_nr ;;
  esac
 done
@@ -117,6 +117,6 @@ modprobe -r psmouse
 
 #rm /usr/lib/x86_64-linux-gnu/libasound.so.2
 
-chrt -i 0 taskset -ac 0 polipo >/dev/null 2>&1 &
+chrt -i 0 taskset -ac 0 polipo &
 
 exit 0

@@ -13,7 +13,7 @@
 
 #[ ! -e /usr/lib/i386-linux-gnu/libasound.so.2 ] && [ -e /usr/lib/i386-linux-gnu/libasound.so.2.sav ] && mv /usr/lib/i386-linux-gnu/libasound.so.2.sav /usr/lib/i386-linux-gnu/libasound.so.2
 
-/usr/bin/mpd --no-daemon /etc/mpd.conf >/dev/null 2>&1 &
+/usr/bin/mpd /etc/mpd.conf &
 
 #ifconfig eth0 txqueuelen 1875
 
@@ -44,15 +44,16 @@ if [ "$(nproc --all)" -ge "4" ]; then
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
    mpd)		taskset -cp 0 $proc_nr
-		renice -1  -p $proc_nr ;;
+		renice -2  -p $proc_nr ;;
    io)		taskset -cp 0 $proc_nr
+		renice +3  -p $proc_nr
 		chrt -ip 0    $proc_nr ;;
    player)	taskset -cp 2 $proc_nr
-		renice -2 -p  $proc_nr ;;
-   decoder)	taskset -cp 1 $proc_nr
 		renice -3 -p  $proc_nr ;;
+   decoder)	taskset -cp 1 $proc_nr
+		renice -4 -p  $proc_nr ;;
    output)	taskset -cp 3 $proc_nr
-		renice -4 -p  $proc_nr
+		renice -5 -p  $proc_nr
 		chrt -op 0    $proc_nr ;;
   esac
  done
@@ -61,20 +62,21 @@ else
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)         renice -1 -p $proc_nr ;;
-   io)          chrt -ip 0   $proc_nr ;;
-   player)      renice -2 -p $proc_nr ;;
-   decoder)     renice -3 -p $proc_nr ;;
-   output)      renice -4 -p $proc_nr
+   mpd)         renice -2 -p $proc_nr ;;
+   io)          chrt -ip 0   $proc_nr
+		renice +3 -p $proc_nr ;;
+   player)      renice -3 -p $proc_nr ;;
+   decoder)     renice -4 -p $proc_nr ;;
+   output)      renice -5 -p $proc_nr
 		chrt -op 0   $proc_nr ;;
   esac
  done
 fi
 
-taskset -ac 0 nice -n -1 upmpdcli -c /etc/upmpdcli.conf >/dev/null 2>&1 &
+taskset -ac 0 nice -n -1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 
 grep -qs chunkHighMark /etc/polipo/config || sed -i "\$achunkHighMark = $(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))" /etc/polipo/config
-chrt -i 0 taskset -ac 0 polipo >/dev/null 2>&1 &
+chrt -i 0 taskset -ac 0 /usr/bin/polipo &
 
 ### For Criterion from Reference Club
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
