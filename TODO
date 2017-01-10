@@ -1,3 +1,11 @@
 1. sudo nano /etc/rc.local
-	taskset -pc 0	$pgr_mpd
-	renice +1 -p	$pgr_mpd
+	 taskset -pc 0	$pgr_mpd
+	#renice +1 -p	$pgr_mpd
+
+	 renice +3 -p 1
+
+2. sudo nano /etc/sysctl.conf
+	kernel.sched_rt_runtime_us = 8116643
+	kernel.sched_wakeup_granularity_ns = 30000000
+	kernel.sched_latency_ns = 370000
+	kernel.sched_migration_cost_ns = 5500000
