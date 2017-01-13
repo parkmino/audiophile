@@ -19,7 +19,8 @@
 	chrt -i 0 nice -n +1 taskset -ac 0 /usr/bin/polipo &
 
 2. sudo nano /etc/sysctl.conf
-	 kernel.sched_rt_runtime_us = 8116658
+	 kernel.sched_rt_period_us = 2000000
+	 kernel.sched_rt_runtime_us = 1900000
 	#kernel.sched_wakeup_granularity_ns = 3000000
 	 kernel.sched_latency_ns = 1800000
 	#kernel.sched_migration_cost_ns = 500000
