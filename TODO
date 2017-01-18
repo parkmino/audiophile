@@ -22,6 +22,6 @@
 	 kernel.sched_rt_period_us = 2469529		# 2467733 for Armbian
 	 kernel.sched_rt_runtime_us = 2344346
 	#kernel.sched_wakeup_granularity_ns = 3000000
-	 kernel.sched_latency_ns = 1800000
+	#kernel.sched_latency_ns = 18000000
 	#kernel.sched_migration_cost_ns = 500000
-	 kernel.sched_rr_timeslice_ms = 75 		# for Ubuntu
+	#kernel.sched_rr_timeslice_ms = 0
