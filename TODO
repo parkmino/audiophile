@@ -1,0 +1,2 @@
+1. sudo nano /etc/rc.local
+	  io)	#renice +1  -p	$proc_nr
