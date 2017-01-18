@@ -32,12 +32,12 @@ done
 opg_mplayer=$(pgrep -o mplayer)
 npg_mplayer=$(pgrep -n mplayer)
 
-sudo renice -1 -p	$opg_mplayer
-sudo renice -2 -p	$npg_mplayer
+#sudo renice -1 -p	$opg_mplayer
+#sudo renice -1 -p	$npg_mplayer
 
 if [ "$(nproc --all)" -ge "4" ]; then
- taskset -pc 1		$opg_mplayer
- taskset -pc 3		$npg_mplayer
+ taskset -pc 3		$opg_mplayer
+ taskset -pc 1		$npg_mplayer
 elif [ "$(nproc --all)" -eq "2" ]; then
  taskset -pc 1		$opg_mplayer
  taskset -pc 1		$npg_mplayer
