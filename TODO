@@ -1,3 +1,5 @@
 1. sudo nano /etc/rc.local
 	  io)	#renice +1  -p	$proc_nr
 	taskset -ac 0 chrt -i 0 /usr/bin/polipo &
+2. sudo nano /etc/hdparm.conf
+	read_ahead_sect = 1088
