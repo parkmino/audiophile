@@ -7,3 +7,6 @@
 	#sysctl -w kernel.sched_rt_period_us=2469529
 	#sysctl -w kernel.sched_rt_runtime_us=2344346
 4. ddd=1344810;sudo sysctl -w kernel.sched_rt_runtime_us=-1;sudo sysctl -w kernel.sched_rt_period_us=$ddd;sudo sysctl -w kernel.sched_rt_runtime_us=$(echo "scale=2;$(cat /proc/sys/kernel/sched_rt_period_us)*0.95" | bc | cut -d "." -f1)
+   sudo nano /etc/sysctl.conf
+	sysctl -w kernel.sched_rt_period_us=1344810
+	sysctl -w kernel.sched_rt_runtime_us=1277569
