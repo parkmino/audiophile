@@ -1,9 +1,9 @@
 1. sudo nano /etc/rc.local
-	  io)	#renice +1  -p	$proc_nr
-	taskset -ac 0 chrt -i 0 /usr/bin/polipo &
+	  io)	#renice +1 -p	$proc_nr
+		#chrt -ip 0	$proc_nr
+	taskset -ac 0 /usr/bin/polipo &
 2. sudo nano /etc/hdparm.conf
 	read_ahead_sect = 1088
-3. int=1344810;sudo sysctl -w kernel.sched_rt_runtime_us=-1;sudo sysctl -w kernel.sched_rt_period_us=$int;sudo sysctl -w kernel.sched_rt_runtime_us=$(echo "($int*0.95)/1" | bc)
-   sudo nano /etc/sysctl.conf
-	sysctl -w kernel.sched_rt_period_us=1344810
-	sysctl -w kernel.sched_rt_runtime_us=1277569
+3. sudo nano /etc/sysctl.conf
+	#sysctl -w kernel.sched_rt_period_us=1344760
+	#sysctl -w kernel.sched_rt_runtime_us=1277522
