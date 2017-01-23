@@ -1,6 +1,8 @@
 1. sudo nano /etc/rc.local
 	#renice   ...
 	#chrt -ip ...
+	taskset -ac 2 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+	taskset -ac 2 /usr/bin/polipo &
 2. sudo nano /etc/hdparm.conf
 	read_ahead_sect = 1088
 3. sudo nano /etc/sysctl.conf
