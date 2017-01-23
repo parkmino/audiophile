@@ -1,7 +1,6 @@
 1. sudo nano /etc/rc.local
-	  io)	#renice +1 -p	$proc_nr
-		#chrt -ip 0	$proc_nr
-	taskset -ac 0 /usr/bin/polipo &
+	#renice   ...
+	#chrt -ip ...
 2. sudo nano /etc/hdparm.conf
 	read_ahead_sect = 1088
 3. sudo nano /etc/sysctl.conf
