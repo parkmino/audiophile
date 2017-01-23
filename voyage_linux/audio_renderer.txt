@@ -86,7 +86,7 @@ PC Audio Render from Voyage Linux
 	nano /etc/polipo/config
 		chunkHighMark = 268435456
 	nano /etc/rc.local
-		taskset -ac 0 nice -n 18 polipo >/dev/null 2>&1 &
+		taskset -ac 2 polipo &
 
 9. CIFS & NFS mounting
 

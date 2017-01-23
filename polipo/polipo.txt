@@ -18,7 +18,7 @@ $ sudo nano /etc/polipo/config
 $ sudo nano /etc/environment or ~/.profile
 	http_proxy="http://127.0.0.1:8123/"
 $ sudo nano /etc/rc.local
-	taskset -ac 0 nice -n +1 chrt -i 0 /usr/bin/polipo &
+	taskset -ac 2 /usr/bin/polipo &
 	#
 	#until [ $(pgrep -x polipo) -gt 0 ] 2>/dev/null; do
 	# sleep 1

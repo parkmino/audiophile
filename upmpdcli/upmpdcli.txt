@@ -9,4 +9,4 @@ sudo systemctl disable upmpdcli.service
 sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
 sudo nano /etc/rc.local
-	taskset -ac 2 nice -n -1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+	taskset -ac 2 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
