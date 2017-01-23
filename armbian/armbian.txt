@@ -83,7 +83,7 @@ Orange Pi Mini I
 6. Hdparm
 
 	# nano /etc/hdparm.conf
-		#read_ahead_sect = 1752
+		read_ahead_sect = 1088
 		lookahead = on
 		apm = 255
 	# hdparm -A -a -B /dev/sda
@@ -295,7 +295,7 @@ Orange Pi Mini II
 12. Hdparm
 
 	# nano /etc/hdparm.conf
-		#read_ahead_sect = 1752
+		read_ahead_sect = 1088
 		lookahead = on
 		apm = 255
 	# hdparm -A -a -B /dev/sda
