@@ -3,6 +3,3 @@
 	#chrt -ip ...
 	taskset -ac 2 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 	taskset -ac 2 /usr/bin/polipo &
-2. sudo nano /etc/sysctl.conf
-	#sysctl -w kernel.sched_rt_period_us=1344760
-	#sysctl -w kernel.sched_rt_runtime_us=1277522
