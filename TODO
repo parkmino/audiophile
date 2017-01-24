@@ -7,3 +7,6 @@
 
 	audio_buffer_size	"100000"
 	buffer_before_play	"0.1458%"
+
+	audio_buffer_size	"3065"
+	buffer_before_play	"4.7%"
