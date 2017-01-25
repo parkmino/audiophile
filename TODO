@@ -2,6 +2,8 @@
 
 	zeroconf_enabled	"no"
 
+	always_on		"yes"
+
 	#audio_buffer_size
 	#buffer_before_play
 
