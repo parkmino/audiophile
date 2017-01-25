@@ -1,4 +1,7 @@
 1. sudo nano /etc/mpd.conf
+
+	zeroconf_enabled	"no"
+
 	#audio_buffer_size
 	#buffer_before_play
 
