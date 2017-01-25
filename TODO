@@ -12,4 +12,4 @@
 	buffer_before_play	"4.7%"
 
 2. sudo nano /etc/rc.local
-	mpd taskset 2-1-0-1-3-3 1-2-0-1-3-3
+	mpd taskset 2-1-0-1-3-3 1-2-2-1-3-3
