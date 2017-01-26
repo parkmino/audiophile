@@ -6,8 +6,8 @@
 	#audio_buffer_size
 	#buffer_before_play
 
-	audio_buffer_size	"3065"
-	buffer_before_play	"4.7%"
+	audio_buffer_size	"3584"
+	buffer_before_play	"6%"
 
 2. sudo nano /etc/rc.local
 
