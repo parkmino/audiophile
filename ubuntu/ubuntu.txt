@@ -154,13 +154,21 @@ Tuning
    ─────┬───┬───────┬──┬───┬────┬───
    ionice                                                   
    ─────┬───┬───────┬──┬───┬────┬───
-   chrt        other       other       idle  other     other   other
+   chrt        other       other       other other     other   other
    ─────┬───┬───────┬──┬───┬────┬─── 
-   processor    0            0          0      2        1        3
+   processor    1            1          2      1        3        3
  └─────────────────────────────────┘
 
  Tuning Procedure
   Remove unnecessary H/W Modules and Processes -> ALSA -> MPD -> Others
+
+┌─────┬─────┬───────────────────┐
+   Module      H/W         (±)
+  ─────┬─────┬───────────────────
+   IRQ         H/W         (±), SMP_Affinity(↔)
+  ─────┬─────┬───────────────────
+   Process     H/W+S/W     (±), SMP_Affinity(↔), Priority(↕)
+└───────────────────────────────┘
 
 2. BIOS Setting (ASUS P5Q with E7300)
 
