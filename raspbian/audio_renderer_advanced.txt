@@ -84,7 +84,7 @@ Audio Render Advanced
 	sudo nano /etc/mpd.conf
 	sudo nano /lib/systemd/system/mpd.service
 	sudo nano /etc/default/mpd
-	sudo systemctl disable mpd
+	sudo systemctl disable mpd.service mpd.socket
 	sudo systemctl daemon-reload
 
 9. Upmpdcli Setup
