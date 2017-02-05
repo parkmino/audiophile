@@ -59,22 +59,22 @@
 
 #swapoff -a
 
-for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
+for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $pid
 done
 
-for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}') ; do
+for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
  renice 0 $pid
 done
 
-for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ && $2 !~ /sawfish/ && $2 !~ /lightdm/ {print $1}') ; do
+for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd/ && $2 !~ /lightdm/ && $2 !~ /sawfish/ && $2 !~ /mpd/ {print $1}'); do
  taskset -acp 0 $pid | true
 done
 
 #ln -s /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so.2
 
 #systemctl start mpd
-/usr/bin/mpd & # /usr/local/etc/mpd.conf &
+/usr/bin/mpd /etc/mpd.conf &
 
 until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
  sleep 1
@@ -82,17 +82,22 @@ done
 
 pgr_mpd=$(pgrep -x mpd)
 
- taskset -pc 2	$pgr_mpd
+taskset -pc 1 $pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-   mpd)		taskset -cp 2	$proc_nr ;;
+   mpd)		taskset -cp 1	$proc_nr
+		renice -1 -p	$proc_nr ;;
    io)		taskset -cp 2	$proc_nr ;;
-   player)	taskset -cp 2	$proc_nr ;;
-   decoder)	taskset -cp 1	$proc_nr ;;
+		#renice +1 -p	$proc_nr ;;
+   player)	taskset -cp 1	$proc_nr
+		renice -2 -p	$proc_nr ;;
+   decoder)	taskset -cp 3	$proc_nr
+		renice -3 -p	$proc_nr ;;
    output)	taskset -cp 3	$proc_nr
+		renice -4 -p	$proc_nr
 		chrt -op 0	$proc_nr ;;
  esac
 done
@@ -102,7 +107,7 @@ snd=$(awk '$8 ~ /snd/ {print +$1}' /proc/interrupts)
 until [ -f /proc/irq/$snd/smp_affinity ]; do
  sleep 1
 done
-echo   8 > /proc/irq/$snd/smp_affinity
+echo 8 > /proc/irq/$snd/smp_affinity
 
 #taskset -apc 3 `pgrep snd_hda`
 #hdparm -A1 -a1088 -B255 /dev/sda
@@ -111,6 +116,6 @@ modprobe -r psmouse
 
 #rm /usr/lib/x86_64-linux-gnu/libasound.so.2
 
-taskset -ac 2 polipo &
+taskset -ac 2 nice +1 polipo &
 
 exit 0

@@ -31,6 +31,12 @@ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | gr
 done
 sleep 1
 
+if ! grep -qs chunkHighMark /etc/polipo/config; then
+ polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
+ [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
+ sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
+fi
+
 pgr_mpd=$(pgrep -x mpd)
 
 if [ "$(nproc --all)" -ge "4" ]; then
@@ -39,37 +45,41 @@ if [ "$(nproc --all)" -ge "4" ]; then
   taskset -acp 0 $pid | true
  done
 
- taskset -cp 2 $pgr_mpd
+ taskset -cp 1 $pgr_mpd
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		taskset -cp 2 $proc_nr ;;
+   mpd)		taskset -cp 1 $proc_nr
+		renice -1 -p  $proc_nr ;;
    io)		taskset -cp 2 $proc_nr ;;
-   player)	taskset -cp 2 $proc_nr ;;
-   decoder)	taskset -cp 1 $proc_nr ;;
+   player)	taskset -cp 1 $proc_nr
+		renice -2 -p  $proc_nr ;;
+   decoder)	taskset -cp 3 $proc_nr
+		renice -3 -p  $proc_nr ;;
    output)	taskset -cp 3 $proc_nr
+		renice -4 -p  $proc_nr
 		chrt -op 0    $proc_nr ;;
   esac
  done
+ taskset -ac 1 nice -1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+ taskset -ac 2 nice +1 /usr/bin/polipo &
 else
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   output)      chrt -op 0   $proc_nr ;;
+   mpd)		renice -1 -p  $proc_nr ;;
+   io)		taskset -cp 2 $proc_nr ;;
+   player)	renice -2 -p  $proc_nr ;;
+   decoder)	renice -3 -p  $proc_nr ;;
+   output)	renice -4 -p  $proc_nr
+		chrt -op 0    $proc_nr ;;
   esac
  done
+ nice -1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+ nice +1 /usr/bin/polipo &
 fi
-
-taskset -ac 2 upmpdcli -c /etc/upmpdcli.conf &
-
-if ! grep -qs chunkHighMark /etc/polipo/config; then
- polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
- [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
- sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
-fi
-taskset -ac 2 /usr/bin/polipo &
 
 ### For Criterion from Reference Club
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
@@ -105,7 +115,7 @@ do
  renice +19 -p $i | true
  taskset -cp 0 $i | true
 done
-### Lower init priority
+### Init taskset
 taskset -cp 0 1
 ### Print the IP address
 _IP=$(hostname -I) || true
