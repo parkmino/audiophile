@@ -1,0 +1,2 @@
+1. sudo nano /etc/rc.local
+	player)	 sudo taskset -cp 3	$proc_nr
