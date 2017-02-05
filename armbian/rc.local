@@ -89,14 +89,14 @@ done
 #/usr/bin/mediatomb -c /root/.mediatomb/config.xml -d
 
 taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf &
-#until pstree -np $(pgrep -x rygel) | grep -q gmain; do
-# sleep 1
-#done
-#rygel_gmain=$(pstree -np $(pgrep -x rygel) | grep gmain | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+until pstree -np $(pgrep -x rygel) | grep -q gmain; do
+ sleep 1
+done
+rygel_gmain=$(pstree -np $(pgrep -x rygel) | grep gmain | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
 #taskset -cp 1 $rygel_gmain
-#renice -1 -p  $rygel_gmain
+ renice -1 -p  $rygel_gmain
 
-taskset -ac 1 /usr/bin/polipo &
+taskset -ac 1 nice +1 /usr/bin/polipo &
 
 for i in systemd-journald systemd-udevd systemd-logind dbus haveged sshd serial-getty@ttyS0 # getty@tty1
 do
