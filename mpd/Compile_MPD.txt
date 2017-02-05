@@ -32,22 +32,15 @@ sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-
 sudo apt-get install libexpat1-dev libupnp-dev
 
 ### Download & Compile
-wget http://www.musicpd.org/download/mpd/0.19/mpd-0.19.19.tar.xz
-tar xvf mpd-0.19.19.tar.xz
-cd mpd-0.19.19
-
+wget http://www.musicpd.org/download/mpd/0.20/mpd-0.20.4.tar.xz
+tar xvf mpd-0.20.4.tar.xz
+cd mpd-0.20.4
 #export CFLAGS="-march=native -O2"
 export CFLAGS="-O0"
 export CXXFLAGS="-O0"
 export CPPFLAGS="-O0"
 ./autogen.sh
 ./configure --help
-
-0.17.x
-./configure --disable-aac --enable-alsa --disable-ao --enable-audiofile --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-debug --disable-despotify --disable-documentation --disable-ffado --disable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-lastfm --disable-lame-encoder --disable-libwrap --disable-lsr --enable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --enable-mpg123 --disable-mvp --disable-openal --disable-oss --disable-pipe-output --disable-pulse --disable-recorder-output --disable-roar --disable-sidplay --disable-shout --enable-sndfile --disable-solaris-output --disable-soundcloud --disable-soup --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --with-zeroconf=no
-
-0.18.x
-./configure --enable-libmpdclient --disable-adplug --enable-alsa --disable-roar --disable-ao --enable-audiofile --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-debug --disable-documentation --disable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-soundcloud --disable-lame-encoder --disable-libwrap --disable-lsr --enable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --enable-mpg123 --disable-openal --disable-opus --disable-oss --disable-osx --disable-pipe-output --disable-pulse --disable-recorder-output --disable-sidplay --disable-shout --enable-sndfile --disable-solaris-output --disable-sqlite --disable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --disable-aac --with-zeroconf=no
 
 0.19.x
 ./configure --enable-database --enable-libmpdclient --enable-expat --enable-upnp --disable-adplug --enable-alsa --disable-roar --disable-ao --enable-audiofile --disable-zlib --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-smbclient --disable-nfs --disable-debug --disable-documentation --enable-dsd --disable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-soundcloud --disable-lame-encoder --disable-libwrap --disable-lsr --disable-soxr --enable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --disable-mpg123 --disable-openal --disable-opus --disable-oss --disable-osx --disable-pipe-output --disable-pulse --disable-recorder-output --disable-sidplay --disable-shine-encoder --disable-shout --disable-sndfile --disable-solaris-output --disable-sqlite --enable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --disable-icu --disable-glib --disable-neighbor-plugins --disable-aac --with-zeroconf=no
