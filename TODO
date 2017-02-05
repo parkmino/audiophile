@@ -25,5 +25,5 @@
 			renice -4 -p	$proc_nr
 			chrt -op 0	$proc_nr ;;
 
-	taskset -ac 1 nice -1 upmpdcli -c /etc/upmpdcli.conf &
-	taskset -ac 2 /usr/bin/polipo &
+	taskset -ac 1 nice -1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+	taskset -ac 2 nice +1 /usr/bin/polipo &
