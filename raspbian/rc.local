@@ -53,7 +53,7 @@ if [ "$(nproc --all)" -ge "4" ]; then
    mpd)		taskset -cp 1 $proc_nr
 		renice -1 -p  $proc_nr ;;
    io)		taskset -cp 2 $proc_nr ;;
-   player)	taskset -cp 1 $proc_nr
+   player)	taskset -cp 3 $proc_nr
 		renice -2 -p  $proc_nr ;;
    decoder)	taskset -cp 3 $proc_nr
 		renice -3 -p  $proc_nr ;;
