@@ -15,3 +15,5 @@
 	output)		taskset -cp 3	$proc_nr
 			renice -2 -p	$proc_nr
 			chrt -op 0	$proc_nr ;;
+4. sudo nano /var/lib/mpd/playlists/Internet_Radios.m3u
+	http://37.130.228.60:8090/#Naim Radio
