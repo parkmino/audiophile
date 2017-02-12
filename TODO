@@ -6,14 +6,17 @@
    sudo nano /etc/environment
 	#http_proxy="http://127.0.0.1:8123/"
 3. sudo nano /etc/rc.local
-	mpd)		taskset -cp 1	$proc_nr ;;
-	io)		taskset -cp 2	$proc_nr ;;
-	player)		taskset -cp 3	$proc_nr
-			renice -1 -p	$proc_nr ;;
-	decoder)	taskset -cp 3	$proc_nr
-			renice -1 -p	$proc_nr ;;
-	output)		taskset -cp 3	$proc_nr
-			renice -2 -p	$proc_nr
-			chrt -op 0	$proc_nr ;;
+	mpd)		taskset -cp 1	  $proc_nr ;;
+	io)		taskset -cp 2	  $proc_nr ;;
+	player)		taskset -cp 3	  $proc_nr
+			renice -1 -p	  $proc_nr
+			ionice -c2 -n6 -p $proc_nr ;;
+	decoder)	taskset -cp 3	  $proc_nr
+			renice -1 -p	  $proc_nr
+			ionice -c2 -n5 -p $proc_nr ;;
+	output)		taskset -cp 3	  $proc_nr
+			renice -1 -p	  $proc_nr
+			ionice -c2 -n4 -p $proc_nr
+			chrt -op 0	  $proc_nr ;;
 4. sudo nano /var/lib/mpd/playlists/Internet_Radios.m3u
 	http://37.130.228.60:8090/#Naim Radio
