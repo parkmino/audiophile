@@ -7,7 +7,7 @@
 	#http_proxy="http://127.0.0.1:8123/"
 3. sudo nano /etc/rc.local
 	mpd)		taskset -cp 1	  $proc_nr ;;
-	io)		taskset -cp 2	  $proc_nr
+	io)		taskset -cp 1	  $proc_nr
 			chrt -ip 0	  $proc_nr ;;
 	player)		taskset -cp 3	  $proc_nr
 			renice -1 -p	  $proc_nr
