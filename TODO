@@ -8,19 +8,12 @@
 3. sudo nano /etc/rc.local
 	mpd)		taskset -cp 1	  $proc_nr ;;
 	io)		taskset -cp 1	  $proc_nr ;;
-			#chrt -ip 0	  $proc_nr ;;
 	player)		taskset -cp 3	  $proc_nr
-			chrt -rp 48	  $proc_nr ;;
-			#renice -1 -p	  $proc_nr
-			#ionice -c2 -n7 -p $proc_nr ;;
+			chrt -rp 1	  $proc_nr ;;
 	decoder)	taskset -cp 3	  $proc_nr
-			chrt -rp 49	  $proc_nr ;;
-			#renice -2 -p	  $proc_nr
-			#ionice -c2 -n5 -p $proc_nr ;;
+			chrt -rp 2	  $proc_nr ;;
 	output)		taskset -cp 3	  $proc_nr
-			#renice -3 -p	  $proc_nr
-			#ionice -c2 -n4 -p $proc_nr
-			chrt -fp 50	  $proc_nr ;;
+			chrt -fp 3	  $proc_nr ;;
 4. sudo nano /etc/rc.local
 	taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf &
 	...
