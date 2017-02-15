@@ -30,3 +30,4 @@
 	http://37.130.228.60:8090/#Naim Radio
 6. sudo nano /etc/sysctl.conf
 	kernel.sched_rr_timeslice_ms = 1
+	kernel.sched_rt_runtime_us = -1
