@@ -17,9 +17,9 @@
 4. sudo nano /etc/rc.local
 	taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf &
 	...
-	chrt -fp 50 $rygel_gmain
+	chrt -fp 1 $rygel_gmain
 5. sudo nano /var/lib/mpd/playlists/Internet_Radios.m3u
 	http://37.130.228.60:8090/#Naim Radio
 6. sudo nano /etc/sysctl.conf
-	kernel.sched_rr_timeslice_ms = 1
-	kernel.sched_rt_runtime_us = -1
+	#kernel.sched_rr_timeslice_ms = 1
+	#kernel.sched_rt_runtime_us = -1
