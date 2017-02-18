@@ -126,11 +126,9 @@ Audio Render Advanced
 
 17. Internet Radio
 
-	sudo apt-get install mplayer
+	sudo apt-get install mplayer2
 	nano ~/.mplayer/config
 		ao=alsa:device=sound
-		cache=102400
-		cache-min=0.05
 	cp kradio ~
 	sudo ln -s /home/pi/kradio /usr/bin/
 
@@ -150,7 +148,7 @@ Audio Render Advanced
 
 19. Show release
 
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.02" > release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.03" > release
 
 20. Make Image
 
@@ -162,5 +160,5 @@ Audio Render Advanced
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_17.02.img
-	$ zip raspbian_audio_renderer_17.02.zip raspbian_audio_renderer_17.02.img
+	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_17.03.img
+	$ zip raspbian_audio_renderer_17.03.zip raspbian_audio_renderer_17.03.img
