@@ -1,0 +1,6 @@
+1. sudo nano /etc/mpd.conf
+	#always_on	"yes"
+   sudo nano /etc/rc.local
+	player)		#renice -1 -p	$proc_nr
+	decoder)	#renice -1 -p	$proc_nr
+	output)		#renice -3 -p	$proc_nr
