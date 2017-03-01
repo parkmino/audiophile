@@ -82,26 +82,31 @@ done
 
 pgr_mpd=$(pgrep -x mpd)
 
-taskset -pc 1 $pgr_mpd
+taskset -cp 1 $pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-   mpd)		taskset -cp 1	  $proc_nr ;;
-   io)		taskset -cp 1	  $proc_nr ;;
-   player)	taskset -cp 3	  $proc_nr
-		renice -1 -p	  $proc_nr
-		ionice -c2 -n7 -p $proc_nr
-		chrt -fp 6	  $proc_nr ;;
-   decoder)	taskset -cp 3	  $proc_nr
-		renice -2 -p	  $proc_nr
-		ionice -c2 -n5 -p $proc_nr
-		chrt -fp 8	  $proc_nr ;;
-   output)	taskset -cp 3	  $proc_nr
-		renice -3 -p	  $proc_nr
-		ionice -c2 -n3 -p $proc_nr
-		chrt -fp 11	  $proc_nr ;;
+   mpd)		 taskset -cp 1	   $proc_nr ;;
+   io)		 taskset -cp 1	   $proc_nr
+		#renice +1 -p	   $proc_nr
+		 chrt -bpv 0	   $proc_nr
+		 ;;
+   player)	 taskset -cp 3	   $proc_nr
+		#renice -1 -p	   $proc_nr
+		 ionice -c2 -n7 -p $proc_nr
+		 chrt -fp 1	   $proc_nr
+		 ;;
+   decoder)	 taskset -cp 3	   $proc_nr
+		#renice -1 -p	   $proc_nr
+		 ionice -c2 -n6 -p $proc_nr
+		 chrt -fp 2	   $proc_nr
+		 ;;
+   output)	 taskset -cp 3	   $proc_nr
+		#renice -2 -p	   $proc_nr
+		 ionice -c2 -n4 -p $proc_nr
+		 chrt -fp 4	   $proc_nr ;;
  esac
 done
 

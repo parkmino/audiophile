@@ -49,35 +49,46 @@ if [ "$(nproc --all)" -ge "4" ]; then
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		taskset -cp 1 $proc_nr
-		renice -1 -p  $proc_nr ;;
-   io)		taskset -cp 2 $proc_nr ;;
-   player)	taskset -cp 3 $proc_nr
-		renice -2 -p  $proc_nr ;;
-   decoder)	taskset -cp 3 $proc_nr
-		renice -3 -p  $proc_nr ;;
-   output)	taskset -cp 3 $proc_nr
-		renice -4 -p  $proc_nr
-		chrt -op 0    $proc_nr ;;
+   mpd)		 taskset -cp 1	   $proc_nr ;;
+   io)		 taskset -cp 1	   $proc_nr
+		#renice +1 -p	   $proc_nr
+		 chrt -bpv 0	   $proc_nr
+		 ;;
+   player)	 taskset -cp 3	   $proc_nr
+		 ionice -c2 -n7 -p $proc_nr
+		 chrt -fp 1	   $proc_nr
+		 ;;
+   decoder)	 taskset -cp 3	   $proc_nr
+		 ionice -c2 -n6 -p $proc_nr
+		 chrt -fp 2	   $proc_nr
+		 ;;
+   output)	 taskset -cp 3	   $proc_nr
+		 ionice -c2 -n4 -p $proc_nr
+		 chrt -fp 4	   $proc_nr ;;
   esac
  done
- taskset -ac 1 nice -1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
- taskset -ac 2 nice +1 /usr/bin/polipo &
+ taskset -ac 1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+#taskset -ac 2 nice -n +1 /usr/bin/polipo &
 else
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		renice -1 -p  $proc_nr ;;
-   io)		taskset -cp 2 $proc_nr ;;
-   player)	renice -2 -p  $proc_nr ;;
-   decoder)	renice -3 -p  $proc_nr ;;
-   output)	renice -4 -p  $proc_nr
-		chrt -op 0    $proc_nr ;;
+   io)		#renice +1 -p	   $proc_nr
+		 chrt -bpv 0	   $proc_nr
+		 ;;
+   player)	 ionice -c2 -n7 -p $proc_nr
+		 chrt -fp 1	   $proc_nr
+		 ;;
+   decoder)	 ionice -c2 -n6 -p $proc_nr
+		 chrt -fp 2	   $proc_nr
+		 ;;
+   output)	 ionice -c2 -n4 -p $proc_nr
+		 chrt -fp 4	   $proc_nr ;;
   esac
  done
- nice -1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
- nice +1 /usr/bin/polipo &
+ /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+#nice -n +1 /usr/bin/polipo &
 fi
 
 ### For Criterion from Reference Club

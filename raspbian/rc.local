@@ -50,20 +50,22 @@ if [ "$(nproc --all)" -ge "4" ]; then
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		taskset -cp 1     $proc_nr ;;
-   io)		taskset -cp 1     $proc_nr ;;
-   player)	taskset -cp 3     $proc_nr
-		renice -1 -p      $proc_nr
-		ionice -c2 -n7 -p $proc_nr
-		chrt -fp 6	  $proc_nr ;;
-   decoder)	taskset -cp 3     $proc_nr
-		renice -2 -p      $proc_nr
-		ionice -c2 -n5 -p $proc_nr
-		chrt -fp 8	  $proc_nr ;;
-   output)	taskset -cp 3     $proc_nr
-		renice -3 -p      $proc_nr
-		ionice -c2 -n3 -p $proc_nr
-		chrt -fp 11       $proc_nr ;;
+   mpd)		 taskset -cp 1	   $proc_nr ;;
+   io)		 taskset -cp 1	   $proc_nr
+		#renice +1 -p	   $proc_nr
+		 chrt -bpv 0	   $proc_nr
+		 ;;
+   player)	 taskset -cp 3	   $proc_nr
+		 ionice -c2 -n7 -p $proc_nr
+		 chrt -fp 1	   $proc_nr
+		 ;;
+   decoder)	 taskset -cp 3	   $proc_nr
+		 ionice -c2 -n6 -p $proc_nr
+		 chrt -fp 2	   $proc_nr
+		 ;;
+   output)	 taskset -cp 3	   $proc_nr
+		 ionice -c2 -n4 -p $proc_nr
+		 chrt -fp 4	   $proc_nr ;;
   esac
  done
  taskset -ac 1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
@@ -73,15 +75,17 @@ else
      proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   player)	renice -1 -p      $proc_nr
-		ionice -c2 -n7 -p $proc_nr
-		chrt -fp 6	  $proc_nr ;;
-   decoder)	renice -2 -p      $proc_nr
-		ionice -c2 -n5 -p $proc_nr
-		chrt -fp 8	  $proc_nr ;;
-   output)	renice -3 -p      $proc_nr
-		ionice -c2 -n3 -p $proc_nr
-		chrt -fp 11       $proc_nr ;;
+   io)		#renice +1 -p	   $proc_nr
+		 chrt -bpv 0	   $proc_nr
+		 ;;
+   player)	 ionice -c2 -n7 -p $proc_nr
+		 chrt -fp 1	   $proc_nr
+		 ;;
+   decoder)	 ionice -c2 -n6 -p $proc_nr
+		 chrt -fp 2	   $proc_nr
+		 ;;
+   output)	 ionice -c2 -n4 -p $proc_nr
+		 chrt -fp 4	   $proc_nr ;;
   esac
  done
  /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
