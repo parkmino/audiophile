@@ -1,7 +1,8 @@
 1. sudo nano /etc/mpd.conf
 
-	tags	"no"
-	mixer	"none" or "null" # outside alsa output
+	tags		"no"
+	metadata_to_use	"none"
+	mixer		"none" or "null" # outside alsa output
 
 2. sudo nano /etc/rc.local
 
@@ -22,5 +23,5 @@
 		 ;;
    output)	 taskset -cp 3	   $proc_nr
 		#renice -2 -p	   $proc_nr
-		 ionice -c1 -n4 -p $proc_nr
+		 ionice -c2 -n4 -p $proc_nr
 		 chrt -op 4	   $proc_nr ;;
