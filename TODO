@@ -2,26 +2,26 @@
 
 	tags		"no"
 	metadata_to_use	"none"
-	mixer		"none" or "null" # outside alsa output
+	mixer		"none"	# outside alsa output
 
 2. sudo nano /etc/rc.local
 
    mpd)		 taskset -cp 1	   $proc_nr ;;
    io)		 taskset -cp 1	   $proc_nr
-		#renice +1 -p	   $proc_nr
-		 chrt -bpv 0	   $proc_nr
+		 renice +1 -p	   $proc_nr
+		#chrt -bpv 0	   $proc_nr
 		 ;;
    player)	 taskset -cp 3	   $proc_nr
-		#renice -1 -p	   $proc_nr
+		 renice -1 -p	   $proc_nr
 		#ionice -c2 -n7 -p $proc_nr
 		#chrt -fp 1	   $proc_nr
 		 ;;
    decoder)	 taskset -cp 3	   $proc_nr
-		#renice -1 -p	   $proc_nr
+		 renice -2 -p	   $proc_nr
 		#ionice -c2 -n6 -p $proc_nr
 		#chrt -fp 2	   $proc_nr
 		 ;;
    output)	 taskset -cp 3	   $proc_nr
-		#renice -2 -p	   $proc_nr
-		 ionice -c2 -n4 -p $proc_nr
-		 chrt -op 4	   $proc_nr ;;
+		 renice -3 -p	   $proc_nr
+		#ionice -c2 -n4 -p $proc_nr
+		 chrt -op 0	   $proc_nr ;;
