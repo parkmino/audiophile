@@ -25,3 +25,7 @@
 		 renice -3 -p	   $proc_nr
 		#ionice -c2 -n4 -p $proc_nr
 		 chrt -op 0	   $proc_nr ;;
+
+3. sudo nano /etc/sysctl.conf
+
+	kernel.sched_rr_timeslice_ms = 1
