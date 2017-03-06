@@ -22,7 +22,7 @@
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=5000
 #sysctl -w kernel.sched_migration_cost_ns=500000
  sysctl -w kernel.sched_nr_migrate=0
- sysctl -w kernel.sched_rr_timeslice_ms=40
+ sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window_ns=10000000
 #sysctl -w kernel.sched_tunable_scaling=1
 
@@ -90,23 +90,23 @@ echo "$(pstree -np $pgr_mpd)" | while read line ; do
  case $proc in
    mpd)		 taskset -cp 1	   $proc_nr ;;
    io)		 taskset -cp 1	   $proc_nr
-		#renice +1 -p	   $proc_nr
-		 chrt -bpv 0	   $proc_nr
+		 renice +1 -p	   $proc_nr
+		#chrt -bpv 0	   $proc_nr
 		 ;;
    player)	 taskset -cp 3	   $proc_nr
-		#renice -1 -p	   $proc_nr
-		 ionice -c2 -n7 -p $proc_nr
-		 chrt -fp 1	   $proc_nr
+		 renice -1 -p	   $proc_nr
+		#ionice -c2 -n7 -p $proc_nr
+		#chrt -fp 1	   $proc_nr
 		 ;;
    decoder)	 taskset -cp 3	   $proc_nr
-		#renice -1 -p	   $proc_nr
-		 ionice -c2 -n6 -p $proc_nr
-		 chrt -fp 2	   $proc_nr
+		 renice -2 -p	   $proc_nr
+		#ionice -c2 -n6 -p $proc_nr
+		#chrt -fp 2	   $proc_nr
 		 ;;
    output)	 taskset -cp 3	   $proc_nr
-		#renice -2 -p	   $proc_nr
-		 ionice -c2 -n4 -p $proc_nr
-		 chrt -fp 4	   $proc_nr ;;
+		 renice -3 -p	   $proc_nr
+		#ionice -c2 -n4 -p $proc_nr
+		 chrt -op 4	   $proc_nr ;;
  esac
 done
 
