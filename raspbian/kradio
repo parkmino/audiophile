@@ -20,27 +20,27 @@ usage () {
 case $1 in
  kbs1|kbs2|kbs1r|kbs2r|kbs3r|kbsscr|kbsrki|cbsfm)
   http_proxy=""
-  #sudo sleep 0.1
+  sudo sleep 0.1
+  pkill mplayer
   /usr/bin/mplayer -novideo $(eval echo \"\$"$1"\") >/dev/null 2>&1 & ;;
  stop) pkill mplayer ; exit ;;
  *)    usage         ; exit ;;
 esac
 
-until [ $(pgrep mplayer | wc -l) -ge 2 ]; do
+until [ $(pgrep -x mplayer | wc -l) -ge 2 ]; do
  sleep 1
 done
 
-opg_mplayer=$(pgrep -o mplayer)
-npg_mplayer=$(pgrep -n mplayer)
+opg_mplayer=$(pgrep -ox mplayer)
+npg_mplayer=$(pgrep -nx mplayer)
 
 if   [ "$(nproc --all)" -ge "4" ]; then
- taskset -cp 3 $opg_mplayer
+ taskset -cp 1 $opg_mplayer
  taskset -cp 3 $npg_mplayer
 elif [ "$(nproc --all)" -eq "2" ]; then
  taskset -cp 1 $opg_mplayer
  taskset -cp 1 $npg_mplayer
 fi
 
+      renice +1 -p $opg_mplayer
  sudo renice -1 -p $npg_mplayer
- ionice -c2 -n3 -p $npg_mplayer
- sudo chrt -fpv 11 $npg_mplayer
