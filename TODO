@@ -1,5 +1,6 @@
 1. sudo nano /etc/sysctl.conf
 	kernel.sched_latency_ns = 1393264
-	kernel.sched_rt_runtime_us = 851457
-	kernel.sched_rr_timeslice_ms = 5	# for ubuntu
-	kernel.sched_rr_timeslice_ms = 11	# for armbian & raspbian
+	kernel.sched_rt_period_us = 999994
+	kernel.sched_rt_runtime_us = 851451
+	kernel.sched_rr_timeslice_ms = 1	# 5	# for ubuntu
+	kernel.sched_rr_timeslice_ms = 1	# 11	# for armbian & raspbian
