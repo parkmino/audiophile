@@ -1,6 +1,8 @@
 #!/bin/sh
 #complete -W 'kbs1 kbs2 kbs1r kbs2r kbs3r kbsscr kbsrki cbsfm' ./kradio \~/kradio
 
+[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+
   kbs1="http://juoradio.appspot.com/kbs1"
   kbs2="http://juoradio.appspot.com/kbs2"
  kbs1r="http://juoradio.appspot.com/kbs1r"
@@ -44,3 +46,5 @@ fi
 
       renice +1 -p $opg_mplayer
  sudo renice -1 -p $npg_mplayer
+
+[ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
