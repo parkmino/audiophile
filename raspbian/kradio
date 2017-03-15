@@ -1,8 +1,6 @@
 #!/bin/sh
 #complete -W 'kbs1 kbs2 kbs1r kbs2r kbs3r kbsscr kbsrki cbsfm' ./kradio \~/kradio
 
-[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
-
   kbs1="http://juoradio.appspot.com/kbs1"
   kbs2="http://juoradio.appspot.com/kbs2"
  kbs1r="http://juoradio.appspot.com/kbs1r"
@@ -24,6 +22,7 @@ case $1 in
   http_proxy=""
   sudo sleep 0.1
   pkill mplayer
+  [ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
   /usr/bin/mplayer -novideo $(eval echo \"\$"$1"\") >/dev/null 2>&1 & ;;
  stop) pkill mplayer ; exit ;;
  *)    usage         ; exit ;;
