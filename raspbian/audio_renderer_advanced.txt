@@ -156,7 +156,7 @@ Audio Render Advanced
 	$ mpc clear
 	$ sudo sed -i '/chunkHighMark/d' /etc/polipo/config
 	$ cat /etc/polipo/config
-	$ rm ~/.bash_history ; history -c ; sudo rm /root/.bash_history
+	$ sudo rm /root/.bash_history ~/.bash_history ; history -c
 	$ sudo poweroff
 
 	$ sudo fdisk -l
