@@ -10,4 +10,4 @@
 	kernel.sched_shares_window_ns = 346000
 
 2. sudo nano /etc/mpd.conf
-	period_time	"1050"	# 1026
+	period_time	"1095"
