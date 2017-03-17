@@ -15,3 +15,5 @@
 	elif [ "$(nproc --all)" -eq 2 ];then
 	 taskset -cp 1 1
 	fi						# 1 for armbian
+
+	|| true
