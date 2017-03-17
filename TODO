@@ -10,4 +10,8 @@
 	kernel.sched_shares_window_ns = 346000
 
 2. sudo nano /etc/rc.local
-	taskset -cp 2 1					# 1 for armbian
+	if   [ "$(nproc --all)" -ge 4 ];then
+	 taskset -cp 2 1
+	elif [ "$(nproc --all)" -eq 2 ];then
+	 taskset -cp 1 1
+	fi						# 1 for armbian
