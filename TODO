@@ -9,5 +9,5 @@
 	kernel.sched_migration_cost_ns = 5000000
 	kernel.sched_shares_window_ns = 346000
 
-2. sudo nano /etc/mpd.conf
-	period_time	"1095"	# "1096"
+2. sudo nano /etc/rc.local
+	taskset -cp 2 1					# 1 for armbian
