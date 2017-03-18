@@ -99,18 +99,12 @@ taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 service getty@tty1 stop
 
 ### Remove services
-for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-udevd systemd-logind triggerhappy # dbus sshd
+for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-udevd systemd-logind triggerhappy dbus # sshd
 do
  service $i stop
 done
-if [ "$(pgrep sshd)" -gt 0 ];then
- for i in $(pgrep -w sshd); do
-  chrt -ip 0    $i
-  renice +19 -p $i
-  taskset -cp 0 $i
- #ionice -c3 -p $i
- done
-fi
+#renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
+swapoff -a
 
 ### Init
 if   [ "$(nproc --all)" -ge 4 ];then
