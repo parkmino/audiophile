@@ -1,0 +1,2 @@
+1. sudo nano /usr/share/alsa/alsa.conf
+	#defaults.pcm.nonblock 1
