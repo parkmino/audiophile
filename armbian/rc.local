@@ -36,14 +36,14 @@
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
-#sysctl -w kernel.sched_min_granularity_ns=2250000
-#sysctl -w kernel.sched_wakeup_granularity_ns=3000000
- sysctl -w kernel.sched_latency_ns=1393300
-#sysctl -w kernel.sched_cfs_bandwidth_slice_us=5000
-#sysctl -w kernel.sched_migration_cost_ns=500000
+ sysctl -w kernel.sched_min_granularity_ns=230001
+ sysctl -w kernel.sched_wakeup_granularity_ns=388344
+ sysctl -w kernel.sched_latency_ns=1393264
+ sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
+ sysctl -w kernel.sched_migration_cost_ns=5000000
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
-#sysctl -w kernel.sched_shares_window_ns=10000000
+ sysctl -w kernel.sched_shares_window_ns=346000
 #sysctl -w kernel.sched_tunable_scaling=1
 
 #sysctl -w net.core.rmem_max=12582912
@@ -58,7 +58,7 @@
 #sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
-#swapoff -a
+swapoff -a
 
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
  chrt -op 0 $pid
@@ -69,22 +69,22 @@ for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
 done
 
 for pid in $(ps h -eo pid) ; do
- taskset -acp 0 $pid | true
+ taskset -acp 0 $pid || true
 done
 
 #for pid in $(ps h -eo pid,class,comm | awk '$3 ~ /nfsd/ && $3 !~ /nfsd4/ {print $1}') ; do
 # taskset -acp 1 $pid
 #done
 #
-#sleep 5
-#
-#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /eth/ && $7 !~ /chip/ {print +$1}') ; do
-# echo 1 > /proc/irq/$irq/smp_affinity
-#done
-#
-#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc/ || $7 ~ /sata/ || $7 ~ /timer0/ || $7 ~ /sunxi-mmc/ || $7 ~ /dma/ {print +$1}') ; do
-# echo 2 > /proc/irq/$irq/smp_affinity
-#done
+sleep 5
+
+for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /eth/ && $7 !~ /chip/ {print +$1}') ; do
+ echo 1 > /proc/irq/$irq/smp_affinity
+done
+
+for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc/ || $7 ~ /sata/ || $7 ~ /timer0/ || $7 ~ /sunxi-mmc/ || $7 ~ /dma/ {print +$1}') ; do
+ echo 2 > /proc/irq/$irq/smp_affinity
+done
 
 #/usr/bin/mediatomb -c /root/.mediatomb/config.xml -d
 
@@ -107,7 +107,7 @@ done
 
 echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
- taskset -acp 0 1
+ taskset -acp 1 1
 #renice +1 -p   1
 
 exit 0
