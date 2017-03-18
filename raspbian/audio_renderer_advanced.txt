@@ -148,7 +148,7 @@ Audio Render Advanced
 
 19. Show release
 
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.03" > release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.04" > release
 
 20. Make Image
 
@@ -156,9 +156,9 @@ Audio Render Advanced
 	$ mpc clear
 	$ sudo sed -i '/chunkHighMark/d' /etc/polipo/config
 	$ cat /etc/polipo/config
-	$ sudo rm /root/.bash_history ~/.bash_history ; history -c
+	$ sudo rm -f /root/.bash_history ~/.bash_history ; history -c
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_17.03.img
-	$ zip raspbian_audio_renderer_17.03.zip raspbian_audio_renderer_17.03.img
+	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_17.04.img
+	$ zip raspbian_audio_renderer_17.04.zip raspbian_audio_renderer_17.04.img
