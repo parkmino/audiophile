@@ -31,12 +31,6 @@ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | gr
 done
 sleep 1
 
-#if ! grep -qs chunkHighMark /etc/polipo/config; then
-# polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
-# [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
-# sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
-#fi
-
 m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
 pgr_mpd=$(pgrep -x mpd)
@@ -81,14 +75,16 @@ taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 #amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
 #amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
 
-[ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
-
 ### Unmute IQaudIO I2S
 #echo "22"  > /sys/class/gpio/export
 #echo "out" > /sys/class/gpio/gpio22/direction
 #echo "1"   > /sys/class/gpio/gpio22/value
+
 ### Digital Volume
 #amixer -D control set 'Digital',0 67% || true # 40@67% 60@81%
+
+[ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+
 ### Turn off USBs
 #if lsusb -d 0424:9514; then
 #/home/pi/hub-ctrl -h 0 -P 5 -p 0
@@ -97,9 +93,11 @@ taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 #/home/pi/hub-ctrl -h 0 -P 3 -p 0
 #/home/pi/hub-ctrl -h 0 -P 2 -p 0 # USB power  off
 #/home/pi/hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
+
 ### Turn off HDMI
 /opt/vc/bin/tvservice -o
 service getty@tty1 stop
+
 ### Remove services
 for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-udevd systemd-logind triggerhappy # dbus sshd
 do
@@ -113,23 +111,31 @@ if [ "$(pgrep sshd)" -gt 0 ];then
  #ionice -c3 -p $i
  done
 fi
-### Polipo & Init
+
+### Init
 if   [ "$(nproc --all)" -ge 4 ];then
-#taskset -ac 2 nice -n +1 /usr/bin/polipo &
  taskset -cp 2 1
 elif [ "$(nproc --all)" -eq 2 ];then
-#taskset -ac 1 nice -n +1 /usr/bin/polipo &
  taskset -cp 1 1
-elif [ "$(nproc --all)" -eq 1 ];then
-#taskset nice -n +1 /usr/bin/polipo &
 fi
+
+### Polipo
+#if ! grep -qs chunkHighMark /etc/polipo/config; then
+# polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
+# [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
+# sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
+#fi
+#taskset nice -n +1 /usr/bin/polipo &
+
 ### Print the IP address
 #_IP=$(hostname -I) || true
 #if [ "$_IP" ]; then
 #  printf "My IP address is %s\n" "$_IP"
 #fi
+
 ### Show release
-#cat /home/pi/release
+#[ -f /home/pi/release ] && cat /home/pi/release
+
 ### Turn off LEDs
 echo none > /sys/class/leds/led0/trigger
 echo 0    > /sys/class/leds/led0/brightness
