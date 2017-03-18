@@ -106,8 +106,7 @@ do
  service $i stop
 done
 if [ "$(pgrep sshd)" -gt 0 ];then
- for i in $(pgrep -w sshd)
- do
+ for i in $(pgrep -w sshd); do
   chrt -ip 0    $i
   renice +19 -p $i
   taskset -cp 0 $i
