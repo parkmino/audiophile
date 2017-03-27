@@ -1,0 +1,108 @@
+The latest U-Boot Bootloader
+U-Boot 2016.05-tld-1 (Jun 12 2016 ….)
+http://forum.doozan.com/read.php?3,12381
+
+Linux Kernel 4.10.0 Kirkwood package and Debian rootfs
+http://forum.doozan.com/read.php?2,12096
+Debian 4.4.0 kirkwood rootfs
+Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
+
+1. USB Install
+
+$ sudo gparted (a single ext2 partition with 'rootfs' label)
+$ sudo apt-get install u-boot-tools
+$ sudo su
+# fdisk -l
+# cd /media/parkmino/rootfs
+# tar -xjf '/home/parkmino/Downloads/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2'
+# nano /etc/fstab
+	/dev/root / ext3  noatime,errors=remount-ro 0 1
+# cd boot
+# cp -a zImage-4.4.0-kirkwood-tld-1  zImage.fdt
+# cat dts/kirkwood-pogo_e02.dtb >> zImage.fdt
+# mv uImage uImage.orig
+# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt  uImage
+# sync
+# exit
+
+2. USB Boot
+
+$ ssh root@192.168.0.x (password: root)
+# rm /etc/ssh/ssh_host*
+# ssh-keygen -A
+# apt-get update
+# apt-get upgrade
+# apt-get dist-upgrade
+# apt-get autoremove
+# apt-get clean
+# date
+# dpkg-reconfigure tzdata
+# date
+# lsmod
+# nano /etc/modprobe.d/blacklist
+
+3. ALSA & MPD
+
+# apt-get install alsa-base alsa-utils mpd mpc ncmpc ca-certificates psmisc # cifs-utils
+# nano /usr/share/alsa/alsa.conf
+	pcm.sound.card 1
+	ctl.control.card 1
+# nano /etc/mpd.conf
+# nano /var/lib/mpd/playlists/Internet_Radios.m3u
+
+4. Upmpdcli Build
+
+# apt-get install autoconf automake build-essential libtool pkg-config
+# apt-get install libupnp6-dev libexpat1-dev libmpdclient-dev libcurl4-gnutls-dev libmicrohttpd-dev libjsoncpp-dev
+# cd
+# wget https://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.15.1.tar.gz
+# tar -xvf libupnpp-0.15.1.tar.gz
+# cd libupnpp-0.15.1
+# ./configure
+# make
+# make install
+# cd
+# wget https://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.12.tar.gz
+# tar -xvf upmpdcli-1.2.12.tar.gz
+# cd upmpdcli-1.2.12
+# ./configure
+# make
+# make install
+# adduser upmpdcli
+# cp ~/icon.png /usr/local/share/upmpdcli/
+# cd
+# nano /usr/local/etc/upmpdcli.conf
+	checkcontentformat = 0
+
+5. Remove Services
+
+# nano /etc/inittab
+	#... ttyS0
+# apt-get install sysv-rc-conf
+# sysv-rc-conf
+	Remove alsa-utils(S) avahi-daemon(2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5)
+
+6. Fstab
+
+# nano /etc/fstab
+# mkdir /mnt/usb01 /mnt/usb02 /mnt/pc01 /mnt/pc02 /mnt/nas01 /mnt/nas02
+# ln -s /mnt /var/lib/mpd/music
+
+7. Rc.local
+
+8. Sysctl.conf
+
+# nano /etc/sysctl.conf
+
+9. Image Build
+
+# echo "* Mino's UPnP Audio Renderer for Pogoplug E02 17.03" > ~/release
+# nano ~/release
+# mpc clear
+# rm -f ~/.bash_history ; history -c
+# poweroff
+
+$ sudo gparted (shrink to 3072MB)
+$ sudo fdisk -l
+$ sudo dd bs=4M count=$((3072/4)) if=/dev/sdb of=pogo_e02_audio_renderer_17.03.img
+$ zip pogo_e02_audio_renderer_17.03.zip pogo_e02_audio_renderer_17.03.img
