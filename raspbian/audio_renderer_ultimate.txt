@@ -1,18 +1,13 @@
 Raspbian MPD Renderer
 
-1. Minimal MPD
-
-	cp mpd.0.19.12.minimal /home/pi
-	$ ssh pi@RPi_IP
-	$ sudo mv /usr/bin/mpd /usr/bin/mpd.0.19.12.ffmpeg
-	$ sudo mv ~/mpd.0.19.12.minimal /usr/bin/mpd
-
-2. Remove pcm.default
+1. Minimal ALSA configuration
 
 	$ sudo nano /usr/share/alsa/alsa.conf
 		#pcm.default pcm.sound
+		#ctl.control.type hw
+		#ctl.control.card 1
 
-3. UPnP
+2. Enable UPnP
 
 	$ sudo nano /etc/mpd.conf
 		#music_directory
@@ -24,13 +19,13 @@ Raspbian MPD Renderer
 		database {
 			plugin "upnp"
 		}
-	$ sudo service mpd restart
 
-4. Disable Upmpdcli
+3. Disable Upmpdcli
 
-	$ sudo systemctl disable upmpdcli
+	$ sudo nano /etc/rc.local
+		#... upmpdcli
 
-5. Static IP
+4. Static IP
 
 	$ sudo nano /etc/network/interfaces
 		auto  eth0
@@ -44,7 +39,7 @@ Raspbian MPD Renderer
 			dns-nameservers 168.126.63.1
 	$ sudo systemctl disable dhcpcd.service
 
-6. Remove unnecessay modules
+5. Remove unnecessay modules
 
 	$ lsmod
 	$ sudo nano /etc/modprobe.d/raspi-blacklist.conf
@@ -57,23 +52,16 @@ Raspbian MPD Renderer
 		#blacklist joydev
 		#blacklist evdev
 
-7. Remove unnecessay processes
+6. Remove unnecessay processes
 
 	$ ps ax
 	$ sudo systemctl disable cron ntp rsyslog avahi-daemon
 	$ sudo nano /etc/rc.local
-		for i in systemd-journald systemd-udevd systemd-logind triggerhappy getty@tty1; do # dbus sshd
+		for i in systemd-journald systemd-udevd systemd-logind triggerhappy getty@tty1 dbus sshd; do
 		 service $i stop
 		done
-		#service systemd-journald stop
-		#service systemd-udevd stop
-		#service systemd-logind stop
-		#service triggerhappy stop
-		#service dbus stop
-		#service sshd stop
-		#service getty@tty1 stop
 
-8. Turn off USB & HDMI
+7. USB Tweak
 
 	$ cp hub-ctrl /home/pi/
 	$ sudo nano /etc/rc.local
@@ -81,5 +69,3 @@ Raspbian MPD Renderer
 		/home/pi/hub-ctrl -h 0 -P 5 -p 0
 		/home/pi/hub-ctrl -h 0 -P 4 -p 0
 		/home/pi/hub-ctrl -h 0 -P 2 -p 0 # Power off
-		/opt/vc/bin/tvservice -o
-		service getty@tty1 stop
