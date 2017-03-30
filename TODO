@@ -4,7 +4,15 @@
 2. sudo nano /etc/rc.local
 
 m_task=$(($(nproc --all)-1))
-[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) && ss_task=$((m_task-1)) || s_task=0 || ss_task=0
+
+if [ "$m_task" -ge 3 ]; then
+ s_task=$((m_task-2))
+ ss_task=$((m_task-1))
+else
+ s_task=0
+ ss_task=0
+fi
+
 pgr_mpd=$(pgrep -x mpd)
 
  sudo taskset -pc $m_task	$pgr_mpd
