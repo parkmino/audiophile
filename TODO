@@ -2,4 +2,35 @@
 	#defaults.pcm.nonblock 1
 
 2. sudo nano /etc/rc.local
-	#renice
+
+m_task=$(($(nproc --all)-1))
+[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) && ss_task=$((m_task-1)) || s_task=0 || ss_task=0
+pgr_mpd=$(pgrep -x mpd)
+
+ sudo taskset -pc $m_task	$pgr_mpd
+
+echo "$(pstree -np $pgr_mpd)" | while read line ; do
+ proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1) # proc=$(echo "$line" | awk -F '[{,:,}]' '{ print $2 }')
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1) # proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
+ case $proc in
+  mpd)		 sudo taskset -cp $ss_task	$proc_nr ;;
+  io)		 sudo taskset -cp $ss_task	$proc_nr
+		#sudo renice +1 -p		$proc_nr
+		#sudo chrt -bpv 0		$proc_nr
+		 ;;
+  player)	 sudo taskset -cp $s_task	$proc_nr
+		#sudo renice -1 -p		$proc_nr
+		#sudo ionice -c2 -n7 -p 	$proc_nr
+		#sudo chrt -fpv 1		$proc_nr
+		 ;;
+  decoder)	 sudo taskset -cp $s_task	$proc_nr
+		#sudo renice -2 -p		$proc_nr
+		#sudo ionice -c2 -n6 -p 	$proc_nr
+		#sudo chrt -fpv 2		$proc_nr
+		 ;;
+  output)	 sudo taskset -cp $m_task	$proc_nr
+		#sudo renice -3 -p		$proc_nr
+		#sudo ionice -c2 -n4 -p 	$proc_nr
+		 sudo chrt -opv 0		$proc_nr ;;
+ esac
+done
