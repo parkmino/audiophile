@@ -16,7 +16,7 @@ $ sudo su
 # cd /media/parkmino/rootfs
 # tar -xjf '/home/parkmino/Downloads/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2'
 # nano /etc/fstab
-	/dev/root / ext3  noatime,errors=remount-ro 0 1
+	/dev/root / ext2  noatime,errors=remount-ro 0 1
 # cd boot
 # cp -a zImage-4.4.0-kirkwood-tld-1  zImage.fdt
 # cat dts/kirkwood-pogo_e02.dtb >> zImage.fdt
