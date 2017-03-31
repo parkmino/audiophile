@@ -41,6 +41,7 @@ if [ "$m_task" -ge 1 ];then
 fi
 
 taskset -cp $s_task $pgr_mpd
+renice -1 -p $pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
@@ -51,7 +52,7 @@ echo "$(pstree -np $pgr_mpd)" | while read line ; do
    player)	 taskset -cp $m_task	$proc_nr ;;
    decoder)	 taskset -cp $m_task	$proc_nr ;;
    output)	 taskset -cp $m_task	$proc_nr
-		 renice -1 -p	   	$proc_nr
+		 renice -2 -p	   	$proc_nr
 		 chrt -op 0	   	$proc_nr ;;
  esac
 done
