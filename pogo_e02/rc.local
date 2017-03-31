@@ -74,10 +74,6 @@ taskset -ac $s_task /usr/local/bin/upmpdcli -c /usr/local/etc/upmpdcli.conf || t
 swapoff -a
 
 ### Init
-if   [ "$(nproc --all)" -ge 4 ];then
- taskset -cp 2 1
-elif [ "$(nproc --all)" -eq 2 ];then
- taskset -cp 1 1
-fi
+taskset -cp $m_task 1
 
 exit 0
