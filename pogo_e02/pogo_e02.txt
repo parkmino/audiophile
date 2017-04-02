@@ -31,7 +31,7 @@ $ ssh root@192.168.0.x (password: root)
 # rm /etc/ssh/ssh_host*
 # ssh-keygen -A
 # apt-get update
-# apt-get upgrade
+# apt-get upgrade		# !!! Not for ext2 but only for ext3
 # apt-get dist-upgrade
 # apt-get autoremove
 # apt-get clean
@@ -44,9 +44,20 @@ $ ssh root@192.168.0.x (password: root)
 3. ALSA & MPD
 
 # apt-get install alsa-base alsa-utils mpd mpc ncmpc ca-certificates psmisc # cifs-utils
+# mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-ac97.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-ac97.so.sav
+# mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-sbase.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-sbase.so.sav
+# mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-hda.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-hda.so.sav
+# mv /usr/share/alsa /usr/share/alsa.org
+# mkdir /usr/share/alsa
 # nano /usr/share/alsa/alsa.conf
+	pcm.sound.type hw
 	pcm.sound.card 1
+	pcm.sound.device 0
+	pcm.sound.subdevice 0
+
+	ctl.control.type hw
 	ctl.control.card 1
+# truncate -s 0 /etc/mpd.conf
 # nano /etc/mpd.conf
 # nano /var/lib/mpd/playlists/Internet_Radios.m3u
 
@@ -90,13 +101,15 @@ $ ssh root@192.168.0.x (password: root)
 
 7. Rc.local
 
+# nano /etc/rc.local
+
 8. Sysctl.conf
 
 # nano /etc/sysctl.conf
 
 9. Image Build
 
-# echo "* Mino's UPnP Audio Renderer for Pogoplug E02 17.03" > ~/release
+# echo "* Mino's UPnP Audio Renderer for Pogoplug E02 17.04" > ~/release
 # nano ~/release
 # mpc clear
 # rm -f ~/.bash_history ; history -c
@@ -104,5 +117,5 @@ $ ssh root@192.168.0.x (password: root)
 
 $ sudo gparted (shrink to 3072MB)
 $ sudo fdisk -l
-$ sudo dd bs=4M count=$((3072/4)) if=/dev/sdb of=pogo_e02_audio_renderer_17.03.img
-$ zip pogo_e02_audio_renderer_17.03.zip pogo_e02_audio_renderer_17.03.img
+$ sudo dd bs=1M count=3072 if=/dev/sdb of=pogo_e02_audio_renderer_17.04.img
+$ zip pogo_e02_audio_renderer_17.04.zip pogo_e02_audio_renderer_17.04.img
