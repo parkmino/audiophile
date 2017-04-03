@@ -49,13 +49,11 @@ TSMqYzqZevvK6Xx7/tEs
 =aeyP
 -----END PGP SIGNATURE-----
 
-### Install Build Package ###
-
-#sudo apt-get install build-essential cmake libqt4-dev libtag1-dev libmtp-dev libavcodec-dev libspeexdsp-dev libmpg123-dev libqtwebkit-dev libtag1c2a libtag-extras1 libmtp9 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
+### Install Package Dependencies ###
 
 sudo apt-get install build-essential cmake qtbase5-dev libtag1-dev libtag1v5 libtag-extras1 libcdparanoia-dev libcddb2-dev libmusicbrainz5-dev libmp3lame-dev checkinstall
 
-sudo apt-get install libvlc-dev libvlccore-dev libmtp-dev libqt5svg5-dev libudev-dev qttools5-dev-tools media-player-info
+sudo apt-get install libvlc-dev libvlccore-dev libmtp-dev libqt5svg5-dev libudev-dev qtmultimedia5-dev qttools5-dev-tools media-player-info
 
 ### 1. Git Clone ###
 
