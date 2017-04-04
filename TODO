@@ -26,3 +26,5 @@ echo "$(pstree -np $pgr_mpd)" | while read line ; do
 done
 
 taskset -cp $m_task 1
+
+3. cp audio-config ~/
