@@ -120,13 +120,17 @@ Audio Render Advanced
 16. USB Mount
 
 	sudo apt-get install usbmount ntfs-3g
+	sudo ln -s /media /var/lib/mpd/music
 	sudo nano /etc/usbmount/usbmount.conf
-		MOUNTPOINTS="/mnt/usb0-7"
-		FILESYSTEMS="vfat ext2 ext3 ext4 hfsplus ntfs-3g fuseblk"
+		FILESYSTEMS="vfat ext2 ext3 ext4 hfsplus ntfs fuseblk"
 		MOUNTOPTIONS="sync,noexec,nodev,noatime,nodiratime,ro"
 	sudo nano /etc/rc.local
 		systemd-udevd
 	sudo reboot
+
+	sudo nano /etc/fstab
+		/dev/sda1 /mnt/usb ntfs-3g ro 0 0
+	sudo ln -s /mnt/usb /var/lib/mpd/music/
 
 17. Internet Radio
 
