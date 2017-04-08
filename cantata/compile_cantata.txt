@@ -94,15 +94,12 @@ git push origin master
 
 ### Korean Translation Inquiry ###
 
-svn log ~/Downloads/mpd/cantata-svn/po/cantata.pot | head -20
-svn log ~/Downloads/mpd/cantata-svn/po/ko.po       | head -20
-CANTATA_LANG=ko cantata
-sudo cp /usr/share/cantata/translations/cantata_ko.qm /usr/share/cantata/translations/cantata_en.qm
-diff ~/Documents/ko.po ~/Downloads/cantata-read-only/po/ko.po
+svn log ~/Downloads/mpd/cantata-svn/translations/blank.ts      | head -20
+svn log ~/Downloads/mpd/cantata-svn/translations/cantata_ko.ts | head -20
 
 ### Korean Translation Patch ###
 
-cp ~/Downloads/mpd/cantata-svn/po/ko.po ./
-cp ko.po ko.po.orig
-mousepad ko.po
-diff -uNr ko.po.orig ko.po > ko.po.patch
+cp ~/Downloads/mpd/cantata-svn/po/cantata_ko.ts ./
+cp cantata_ko.ts cantata_ko.ts.orig
+mousepad cantata_ko.ts
+diff -uNr cantata_ko.ts.orig cantata_ko.ts > cantata_ko.ts.patch
