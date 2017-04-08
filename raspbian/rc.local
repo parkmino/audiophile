@@ -41,31 +41,20 @@ if [ "$m_task" -ge 1 ];then
  done
 fi
 
-taskset -cp $s_task $pgr_mpd
+taskset -pc $m_task $pgr_mpd
+renice -1 -p $pgr_mpd
 
 echo "$(pstree -np $pgr_mpd)" | while read line ; do
-    proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
- proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1) # proc=$(echo "$line" | awk -F '[{,:,}]' '{ print $2 }')
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1) # proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
  case $proc in
-   mpd)		 taskset -cp $s_task	$proc_nr ;;
-   io)		 taskset -cp $s_task	$proc_nr
-		 renice +1 -p	   	$proc_nr
-		#chrt -bpv 0	   	$proc_nr
-		 ;;
-   player)	 taskset -cp $m_task	$proc_nr
-		 renice -1 -p	   	$proc_nr
-		#ionice -c2 -n7 -p 	$proc_nr
-		#chrt -fp 1	   	$proc_nr
-		 ;;
-   decoder)	 taskset -cp $m_task	$proc_nr
-		 renice -2 -p	   	$proc_nr
-		#ionice -c2 -n6 -p 	$proc_nr
-		#chrt -fp 2	   	$proc_nr
-		 ;;
-   output)	 taskset -cp $m_task	$proc_nr
-		 renice -3 -p	   	$proc_nr
-		#ionice -c2 -n4 -p 	$proc_nr
-		 chrt -op 0	   	$proc_nr ;;
+  mpd)		 taskset -cp $s_task	$proc_nr ;;
+  io)		 taskset -cp $s_task	$proc_nr ;;
+  player)	 taskset -cp $s_task	$proc_nr ;;
+  decoder)	 taskset -cp $s_task	$proc_nr ;;
+  output)	 taskset -cp $m_task	$proc_nr
+		 renice -2 -p		$proc_nr
+		 chrt -op 0		$proc_nr ;;
  esac
 done
 
@@ -99,7 +88,7 @@ taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 service getty@tty1 stop
 
 ### Remove services
-for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-udevd systemd-logind triggerhappy dbus # sshd
+for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-logind systemd-udevd triggerhappy dbus # sshd
 do
  service $i stop
 done
@@ -107,11 +96,7 @@ done
 swapoff -a
 
 ### Init
-if   [ "$(nproc --all)" -ge 4 ];then
- taskset -cp 2 1
-elif [ "$(nproc --all)" -eq 2 ];then
- taskset -cp 1 1
-fi
+taskset -cp $m_task 1
 
 ### Polipo
 #if ! grep -qs chunkHighMark /etc/polipo/config; then
