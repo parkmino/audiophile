@@ -119,9 +119,13 @@ Audio Render Advanced
 
 16. USB Mount
 
-	sudo apt-get install usbmount
+	sudo apt-get install usbmount ntfs-3g
 	sudo nano /etc/usbmount/usbmount.conf
 		MOUNTPOINTS="/mnt/usb0-7"
+		FILESYSTEMS="vfat ext2 ext3 ext4 hfsplus ntfs-3g fuseblk"
+		MOUNTOPTIONS="sync,noexec,nodev,noatime,nodiratime,ro"
+	sudo nano /etc/rc.local
+		systemd-udevd
 	sudo reboot
 
 17. Internet Radio
