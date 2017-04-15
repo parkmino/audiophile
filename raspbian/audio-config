@@ -46,14 +46,16 @@ echo -n "
 
 (0) USB Audio Class 2.0 (Default/기본값)
 (1) Allo Piano DAC
-(2) HiFiBerry Amp+
-(3) HiFiBerry DAC
-(4) HiFiBerry DAC+
-(5) HiFiBerry Digi
-(6) HiFiBerry Digi+
-(7) IQaudIO DAC
-(8) IQaudIO DAC+
-(9) IQaudIO Digi+
+(2) Allo Piano DAC (MCLK for Kali is used/Kali MCLK 사용)
+(3) HiFiBerry Amp/Amp+
+(4) HiFiBerry DAC
+(5) HiFiBerry DAC+
+(6) HiFiBerry DAC+ Pro in slave mode
+(7) HiFiBerry Digi/Digi+
+(8) HiFiBerry Digi+ Pro
+(9) IQaudIO DAC
+(a) IQaudIO DAC+
+(b) IQaudIO Digi+
 (u) Unmute IQaudIO (IQaudIO 음소거 제거)
 (t) Mute   IQaudIO (IQaudIO 음소거 제거 취소)
 
@@ -72,34 +74,42 @@ case $i in
     sound_card_show
     sound_card_intaudio ;;
  2) sound_card_initial
-    sudo sed -i '$adtoverlay=hifiberry-amp' /boot/config.txt
+    sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio,glb_mclk' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
  3) sound_card_initial
-    sudo sed -i '$adtoverlay=hifiberry-dac' /boot/config.txt
+    sudo sed -i '$adtoverlay=hifiberry-amp' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
  4) sound_card_initial
-    sudo sed -i '$adtoverlay=hifiberry-dacplus' /boot/config.txt
+    sudo sed -i '$adtoverlay=hifiberry-dac' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
  5) sound_card_initial
-    sudo sed -i '$adtoverlay=hifiberry-digi' /boot/config.txt
+    sudo sed -i '$adtoverlay=hifiberry-dacplus' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
  6) sound_card_initial
-    sudo sed -i '$adtoverlay=hifiberry-digi-pro' /boot/config.txt
+    sudo sed -i '$adtoverlay=hifiberry-dacplus,slave' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
  7) sound_card_initial
-    sudo sed -i '$adtoverlay=iqaudio-dac' /boot/config.txt
+    sudo sed -i '$adtoverlay=hifiberry-digi' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
  8) sound_card_initial
-    sudo sed -i '$adtoverlay=iqaudio-dacplus' /boot/config.txt
+    sudo sed -i '$adtoverlay=hifiberry-digi-pro' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
  9) sound_card_initial
+    sudo sed -i '$adtoverlay=iqaudio-dac' /boot/config.txt
+    sound_card_show
+    sound_card_intaudio ;;
+ a) sound_card_initial
+    sudo sed -i '$adtoverlay=iqaudio-dacplus' /boot/config.txt
+    sound_card_show
+    sound_card_intaudio ;;
+ b) sound_card_initial
     sudo sed -i '$adtoverlay=iqaudio-digi-wm8804-audio' /boot/config.txt
     sound_card_show
     sound_card_intaudio ;;
