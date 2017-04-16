@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/home/pi/musicpd_bg &
+/usr/bin/mpd /etc/mpd.conf
