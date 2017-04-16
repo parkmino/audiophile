@@ -32,7 +32,7 @@ echo "$(pstree -np $pgr_mpd)" | while read line ; do
  esac
 done
 
-taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 
 [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
 
