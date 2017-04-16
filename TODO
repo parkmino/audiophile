@@ -1,2 +1,3 @@
 1. sudo nano /etc/rc.local
 	/usr/bin/mpd --no-daemon /etc/mpd.conf
+	nohup /usr/bin/mpd /etc/mpd.conf
