@@ -1,0 +1,124 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+
+/usr/bin/mpd /etc/mpd.conf &
+
+echo noop > /sys/block/mmcblk0/queue/scheduler
+#ifconfig eth0 txqueuelen 1875
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+ chrt -op 0 $i
+done
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice 0 $i
+done
+
+until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
+ sleep 1
+done
+sleep 1
+
+m_task=$(($(nproc --all)-1))
+[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+pgr_mpd=$(pgrep -x mpd)
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'); do
+  taskset -acp 0 $pid || true
+ done
+fi
+
+taskset -pc $m_task $pgr_mpd
+renice -1 -p $pgr_mpd
+
+echo "$(pstree -np $pgr_mpd)" | while read line ; do
+ proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1) # proc=$(echo "$line" | awk -F '[{,:,}]' '{ print $2 }')
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1) # proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
+ case $proc in
+  mpd)		 taskset -cp $s_task	$proc_nr ;;
+  io)		 taskset -cp $s_task	$proc_nr ;;
+  player)	 taskset -cp $s_task	$proc_nr ;;
+  decoder)	 taskset -cp $s_task	$proc_nr ;;
+  output)	 taskset -cp $m_task	$proc_nr
+		 renice -2 -p		$proc_nr
+		 chrt -op 0		$proc_nr ;;
+ esac
+done
+
+taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+
+### For Criterion from Reference Club
+#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
+#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
+
+### Unmute IQaudIO I2S
+#echo "22"  > /sys/class/gpio/export
+#echo "out" > /sys/class/gpio/gpio22/direction
+#echo "1"   > /sys/class/gpio/gpio22/value
+
+### Digital Volume
+#amixer -D control set 'Digital',0 67% || true # 40@67% 60@81%
+
+[ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+
+### Turn off USBs
+#if lsusb -d 0424:9514; then
+#/home/pi/hub-ctrl -h 0 -P 5 -p 0
+#/home/pi/hub-ctrl -h 0 -P 4 -p 0
+#fi
+#/home/pi/hub-ctrl -h 0 -P 3 -p 0
+#/home/pi/hub-ctrl -h 0 -P 2 -p 0 # USB power  off
+#/home/pi/hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
+
+### Turn off HDMI
+/opt/vc/bin/tvservice -o
+service getty@tty1 stop
+
+### Remove services
+for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-logind systemd-udevd triggerhappy dbus # sshd
+do
+ service $i stop
+done
+#renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
+swapoff -a
+
+### Init
+taskset -cp $m_task 1
+
+### Polipo
+#if ! grep -qs chunkHighMark /etc/polipo/config; then
+# polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
+# [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
+# sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
+#fi
+#taskset nice -n +1 /usr/bin/polipo &
+
+### Print the IP address
+#_IP=$(hostname -I) || true
+#if [ "$_IP" ]; then
+#  printf "My IP address is %s\n" "$_IP"
+#fi
+
+### Show release
+#[ -f /home/pi/release ] && cat /home/pi/release
+
+### Turn off LEDs
+echo none > /sys/class/leds/led0/trigger
+echo 0    > /sys/class/leds/led0/brightness
+[ -f        /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+/home/pi/llctl f0 l0 d0
+
+exit 0
