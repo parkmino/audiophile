@@ -3,7 +3,7 @@
 	  ...
 	 #renice ...
 	 }
-	 /home/pi/musicpd_bg &
+	 musicpd_bg &
 	 /usr/bin/mpd /etc/mpd.conf
 
 	 nohup /usr/bin/upmpdcli ... &
