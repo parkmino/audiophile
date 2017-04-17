@@ -49,7 +49,7 @@ echo -n "
 (2) Allo Piano DAC (MCLK for Kali is used/Kali MCLK 사용)
 (3) HiFiBerry Amp/Amp+
 (4) HiFiBerry DAC
-(5) HiFiBerry DAC+
+(5) HiFiBerry DAC+/DAC+ Pro
 (6) HiFiBerry DAC+ Pro (Slave mode/종속 모드)
 (7) HiFiBerry Digi/Digi+
 (8) HiFiBerry Digi+ Pro
@@ -57,7 +57,7 @@ echo -n "
 (a) IQaudIO DAC+
 (b) IQaudIO Digi+
 (u) Unmute IQaudIO (IQaudIO 음소거 제거)
-(t) Mute   IQaudIO (IQaudIO 음소거 제거 취소)
+(t) Mute   IQaudIO (IQaudIO 음소거)
 
 (m) Main/주메뉴
 (q) Quit/나가기
