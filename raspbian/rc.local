@@ -11,6 +11,45 @@
 #
 # By default this script does nothing.
 
+musicpd_bg () {
+
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+
+ sleep 1
+
+ m_task=$(($(nproc --all)-1))
+ [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+
+ pgr_mpd=$(pgrep -x mpd)
+
+  taskset -pc $m_task $pgr_mpd
+ #renice -1 -p $pgr_mpd
+
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1) # proc=$(echo "$line" | awk -F '[{,:,}]' '{ print $2 }')
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1) # proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr 
+		#renice -2 -p	     $proc_nr
+		 chrt -opv 0	     $proc_nr ;;
+  esac
+ done
+ #nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+
+ [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+
+ echo none > /sys/class/leds/led0/trigger
+ echo 0    > /sys/class/leds/led0/brightness
+ [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+ /home/pi/llctl f0 l0 d0
+}
+
 [ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
@@ -94,12 +133,7 @@ taskset -cp $m_task 1
 ### Show release
 #[ -f /home/pi/release ] && cat /home/pi/release
 
-### Turn off LEDs
-#echo none > /sys/class/leds/led0/trigger
-#echo 0    > /sys/class/leds/led0/brightness
-#[ -f        /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
-#/home/pi/llctl f0 l0 d0
-
-/home/pi/musicpd
+/home/pi/musicpd_bg &
+/usr/bin/mpd /etc/mpd.conf
 
 exit 0
