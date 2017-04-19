@@ -1,9 +1,0 @@
-1. sudo nano /etc/rc.local
-	 musicpd_bg () {
-	  ...
-	 #renice ...
-	 }
-	 musicpd_bg &
-	 /usr/bin/mpd /etc/mpd.conf
-
-	 nohup /usr/bin/upmpdcli ... &
