@@ -19,17 +19,14 @@ musicpd_bg () {
 
  sleep 1
 
- m_task=$(($(nproc --all)-1))
- [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
-
  pgr_mpd=$(pgrep -x mpd)
 
   taskset -pc $m_task $pgr_mpd
  #renice -1 -p $pgr_mpd
 
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
-  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1) # proc=$(echo "$line" | awk -F '[{,:,}]' '{ print $2 }')
-  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1) # proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
    mpd)		 taskset -cp $s_task $proc_nr ;;
    io)		 taskset -cp $s_task $proc_nr ;;
@@ -120,8 +117,6 @@ fi
 #hdparm -A1 -a1088 -B255 /dev/sda
 
 modprobe -r psmouse
-
-#taskset -ac 0 nice -n +1 /usr/bin/polipo &
 
 musicpd_bg &
 /usr/bin/mpd /etc/mpd.conf
