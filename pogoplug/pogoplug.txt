@@ -23,6 +23,12 @@ $ sudo su
 # mv uImage uImage.orig
 # mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt  uImage
 # sync
+
+# cp -a zImage-4.4.0-kirkwood-tld-1  zImage.fdt
+# cat dts/kirkwood-pogoplug_v4.dtb >> zImage.fdt
+# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt  uImage-pogoplug_v4
+# sync
+
 # exit
 
 2. USB Boot
@@ -115,7 +121,9 @@ $ ssh root@192.168.0.x (password: root)
 # rm -f ~/.bash_history ; history -c
 # poweroff
 
-$ sudo gparted (shrink to 3072MB)
 $ sudo fdisk -l
-$ sudo dd bs=1M count=3072 if=/dev/sdb of=pogo_e02_audio_renderer_17.04.img
+$ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_17.04.img
 $ zip pogo_e02_audio_renderer_17.04.zip pogo_e02_audio_renderer_17.04.img
+
+$ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_17.04.img
+$ zip pogo_v4_audio_renderer_17.04.zip pogo_v4_audio_renderer_17.04.img
