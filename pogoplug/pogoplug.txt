@@ -67,6 +67,8 @@ $ ssh root@192.168.0.x (password: root)
 # nano /etc/mpd.conf
 # nano /var/lib/mpd/playlists/Internet_Radios.m3u
 
+https://packages.debian.org/search?keywords=mpd
+
 4. Upmpdcli Build
 
 # apt-get install autoconf automake build-essential libtool pkg-config
@@ -113,17 +115,24 @@ $ ssh root@192.168.0.x (password: root)
 
 # nano /etc/sysctl.conf
 
-9. Image Build
+9. USB Auto Mount
 
-# echo "* Mino's UPnP Audio Renderer for Pogoplug E02 17.04" > ~/release
+https://www.axllent.org/docs/view/auto-mounting-usb-storage/
+http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
+
+# nano /lib/udev/rules.d/11-my-media-automount.rules
+
+10. Image Build
+
+# echo "* Mino's UPnP Audio Renderer for Pogoplug E02 17.05" > ~/release
 # nano ~/release
 # mpc clear
 # rm -f ~/.bash_history ; history -c
 # poweroff
 
 $ sudo fdisk -l
-$ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_17.04.img
-$ zip pogo_e02_audio_renderer_17.04.zip pogo_e02_audio_renderer_17.04.img
+$ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_17.05.img
+$ zip pogo_e02_audio_renderer_17.05.zip pogo_e02_audio_renderer_17.05.img
 
-$ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_17.04.img
-$ zip pogo_v4_audio_renderer_17.04.zip pogo_v4_audio_renderer_17.04.img
+$ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_17.05.img
+$ zip pogo_v4_audio_renderer_17.05.zip pogo_v4_audio_renderer_17.05.img
