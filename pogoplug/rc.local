@@ -11,9 +11,99 @@
 #
 # By default this script does nothing.
 
-[ ! -e /usr/lib/arm-linux-gnueabi/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabi/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabi/libasound.so.2.sav /usr/lib/arm-linux-gnueabi/libasound.so.2
+musicpd_bg () {
 
-/usr/bin/mpd --no-daemon /etc/mpd.conf &
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+
+ sleep 1
+
+ pgr_mpd=$(pgrep -x mpd)
+
+ taskset -pc $m_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		 renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+
+ nohup taskset -ac $s_task /usr/local/bin/upmpdcli -c /usr/local/etc/upmpdcli.conf &
+
+ [ -e /usr/lib/arm-linux-gnueabi/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.sav
+
+# turn on LED
+
+if [ -d /sys/class/leds/status:green:health ]; then
+   echo default-on > /sys/class/leds/status:green:health/trigger
+   if [ -d /sys/class/leds/status:orange:fault ]; then
+      echo none > /sys/class/leds/status:orange:fault/trigger
+   fi
+   if [ -d /sys/class/leds/status:blue:health ]; then
+      echo none > /sys/class/leds/status:blue:health/trigger
+   fi
+fi
+if [ -d /sys/class/leds/dockstar:green:health ]; then
+   echo default-on > /sys/class/leds/dockstar:green:health/trigger
+   echo none > /sys/class/leds/dockstar:orange:misc/trigger
+fi
+
+if [ -d /sys/class/leds/plug:green:health ]; then
+   echo default-on > /sys/class/leds/plug:green:health/trigger
+   if [ -d /sys/class/leds/plug:red:misc ]; then
+      echo none  > /sys/class/leds/plug:red:misc/trigger
+   fi
+fi
+
+if [ -d /sys/class/leds/power:blue ]; then
+   echo default-on  > /sys/class/leds/power:blue/trigger
+   ### echo default-on  > /sys/class/leds/otb:blue/trigger
+   echo none        > /sys/class/leds/power:red/trigger
+fi
+
+if [ -d /sys/class/leds/usb1:blue ]; then
+   echo usb-host > /sys/class/leds/usb1\:blue/trigger
+fi
+if [ -d /sys/class/leds/usb2:blue ]; then
+   echo usb-host > /sys/class/leds/usb2\:blue/trigger
+fi
+if [ -d /sys/class/leds/usb3:blue ]; then
+   echo usb-host > /sys/class/leds/usb3\:blue/trigger
+fi
+if [ -d /sys/class/leds/usb4:blue ]; then
+   echo usb-host > /sys/class/leds/usb4\:blue/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:sys ]; then
+   echo default-on  > /sys/class/leds/nsa325:green:sys/trigger
+   echo none        > /sys/class/leds/nsa325:orange:sys/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:sata1 ]; then
+   echo ide-disk1  > /sys/class/leds/nsa325:green:sata1/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:sata2 ]; then
+   echo ide-disk2  > /sys/class/leds/nsa325:green:sata2/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:usb ]; then
+   echo usb-host > /sys/class/leds/nsa325\:green\:usb/trigger
+fi
+
+}
+
+[ ! -e /usr/lib/arm-linux-gnueabi/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabi/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabi/libasound.so.2.sav /usr/lib/arm-linux-gnueabi/libasound.so.2
 
 #ifconfig eth0 txqueuelen 1875
 
@@ -25,45 +115,14 @@ for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice 0 $i
 done
 
-until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
- sleep 1
-done
-sleep 1
-
 m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
-pgr_mpd=$(pgrep -x mpd)
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'); do
   taskset -acp 0 $pid || true
  done
 fi
-
-taskset -cp $s_task $pgr_mpd
-renice -1 -p $pgr_mpd
-
-echo "$(pstree -np $pgr_mpd)" | while read line ; do
-    proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
- proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
- case $proc in
-   mpd)		 taskset -cp $s_task	$proc_nr ;;
-   io)		 taskset -cp $s_task	$proc_nr ;;
-   player)	 taskset -cp $m_task	$proc_nr ;;
-   decoder)	 taskset -cp $m_task	$proc_nr ;;
-   output)	 taskset -cp $m_task	$proc_nr
-		 renice -2 -p	   	$proc_nr
-		 chrt -op 0	   	$proc_nr ;;
- esac
-done
-
-taskset -ac $s_task /usr/local/bin/upmpdcli -c /usr/local/etc/upmpdcli.conf || true &
-
-### For Criterion from Reference Club
-#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
-#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
-
-[ -e /usr/lib/arm-linux-gnueabi/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.sav
 
 ### Remove services
 #for i in dbus # sshd
@@ -75,5 +134,8 @@ swapoff -a
 
 ### Init
 taskset -cp $m_task 1
+
+musicpd_bg &
+/usr/bin/mpd --no-daemon /etc/mpd.conf
 
 exit 0
