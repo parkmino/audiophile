@@ -23,7 +23,7 @@ sound_card_initial () {
 }
 
 sound_card_show () {
- grep -e hifiberry -e iqaudio /boot/config.txt
+ grep -e allo -e hifiberry -e iqaudio /boot/config.txt
  echo
 }
 
@@ -67,47 +67,58 @@ echo
 case $i in
  0) sound_card_initial
     grep -e hifiberry -e iqaudio config.txt
-    sound_card_usbaudio ;;
+    #sound_card_usbaudio
+    ;;
  1) sound_card_initial
     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  2) sound_card_initial
     sudo sed -i '$adtoverlay=hifiberry-amp' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  3) sound_card_initial
     sudo sed -i '$adtoverlay=hifiberry-dac' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  4) sound_card_initial
     sudo sed -i '$adtoverlay=hifiberry-dacplus' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  5) sound_card_initial
     sudo sed -i '$adtoverlay=hifiberry-dacplus,slave' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  6) sound_card_initial
     sudo sed -i '$adtoverlay=hifiberry-digi' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  7) sound_card_initial
     sudo sed -i '$adtoverlay=hifiberry-digi-pro' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  8) sound_card_initial
     sudo sed -i '$adtoverlay=iqaudio-dac' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  9) sound_card_initial
     sudo sed -i '$adtoverlay=iqaudio-dacplus' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  a) sound_card_initial
     sudo sed -i '$adtoverlay=iqaudio-digi-wm8804-audio' /boot/config.txt
     sound_card_show
-    sound_card_intaudio ;;
+    #sound_card_intaudio
+    ;;
  u) sudo sed -i '/\/sys\/class\/gpio/s/^#*//g'        /etc/rc.local
     grep /sys/class/gpio /etc/rc.local ;;
  t) sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
