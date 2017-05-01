@@ -57,12 +57,14 @@ $ ssh root@192.168.0.x (password: root)
 # mkdir /usr/share/alsa
 # nano /usr/share/alsa/alsa.conf
 	pcm.sound.type hw
-	pcm.sound.card 1
+	pcm.sound.card 0
 	pcm.sound.device 0
 	pcm.sound.subdevice 0
 
 	ctl.control.type hw
-	ctl.control.card 1
+	ctl.control.card 0
+# nano /lib/modprobe.d/aliases.conf
+	#options snd-usb-audio index=-2
 # truncate -s 0 /etc/mpd.conf
 # nano /etc/mpd.conf
 # nano /var/lib/mpd/playlists/Internet_Radios.m3u

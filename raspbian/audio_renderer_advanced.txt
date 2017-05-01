@@ -58,6 +58,8 @@ Audio Render Advanced
 		#blacklist hci_uart
 
 6. ALSA configuration
+	sudo nano /lib/modprobe.d/aliases.conf
+		#options snd-usb-audio index=-2
 
 7. MPD install & recompile
 
