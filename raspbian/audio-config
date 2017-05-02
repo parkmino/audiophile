@@ -19,7 +19,7 @@ countdown_clear () {
 }
 
 sound_card_initial () {
- sudo sed -i '/dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
+ sudo sed -i '/dtoverlay=allo\|dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
 }
 
 sound_card_show () {
@@ -66,7 +66,7 @@ read i
 echo
 case $i in
  0) sound_card_initial
-    grep -e hifiberry -e iqaudio config.txt
+    sound_card_show
     #sound_card_usbaudio
     ;;
  1) sound_card_initial
