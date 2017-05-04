@@ -27,7 +27,7 @@ Files:
  561026bcbec8a1e081c7d4f6ffb24e3e 27424 mpd_0.19.1-1.1.debian.tar.xz
 
 ### Install build packages
-sudo apt-get install git autoconf automake build-essential
+sudo apt-get install autoconf automake build-essential
 sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev libboost-dev libsystemd-daemon-dev
 sudo apt-get install libexpat1-dev libupnp-dev
 
