@@ -325,3 +325,14 @@ Orange Pi Mini II
 		#taskset -acp 0  `pgrep -ox systemd`
 		#taskset -acp 0  `pgrep -ox login`
 		#taskset -acp 0  `pgrep -ox bash`
+
+
+14. Serial Console
+
+	# cp /boot/boot.cmd /boot/boot.cmd.org
+	# cp /boot/boot.scr /boot/boot.scr.org
+	# nano /boot/boot.cmd
+		setenv bootargs "console=ttyS0,115200 ..."
+	# mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
+	# nano /etc/rc.local
+		#service serial-getty@ttyS0 stop
