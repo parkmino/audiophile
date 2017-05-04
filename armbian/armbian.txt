@@ -336,3 +336,4 @@ Orange Pi Mini II
 	# mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
 	# nano /etc/rc.local
 		#service serial-getty@ttyS0 stop
+		service getty@tty1 stop
