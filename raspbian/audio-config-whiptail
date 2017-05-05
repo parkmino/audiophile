@@ -21,13 +21,13 @@ sound_card_usbaudio () {
 
 iqaudio () {
  i=$(whiptail --title "IQaudIO Mute / IQaudIO 음소거" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 67 2 \
-"u" "Unmute IQaudIO  IQaudIO 음소거 제거" \
-"m" "Mute   IQaudIO  IQaudIO 음소거" 3>&1 1>&2 2>&3)
+"1" "Unmute IQaudIO  IQaudIO 음소거 제거" \
+"2" "Mute   IQaudIO  IQaudIO 음소거" 3>&1 1>&2 2>&3)
 
 case $i in
- u) sudo sed -i '/\/sys\/class\/gpio/s/^#*//g'        /etc/rc.local
+ 1) sudo sed -i '/\/sys\/class\/gpio/s/^#*//g'        /etc/rc.local
     grep /sys/class/gpio /etc/rc.local ;;
- m) sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
+ 2) sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
     grep /sys/class/gpio /etc/rc.local ;;
 esac
 }
@@ -131,16 +131,16 @@ main
 }
 
 static_ip () {
-i=$(whiptail --title "Static IP / 수동 IP" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 45 2 \
-"d" "Dynamic IP (DHCP)   자동 IP (DHCP)" \
-"s" "Static  IP          수동 IP" 3>&1 1>&2 2>&3)
+i=$(whiptail --title "Static IP / 수동 IP" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 40 2 \
+"1" "Dynamic IP (DHCP)   자동 IP" \
+"2" "Static  IP          수동 IP" 3>&1 1>&2 2>&3)
 
 case $i in
- d) sudo sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
+ 1) sudo sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
     sudo sed -i '/iface eth0 inet static/,+6d'    /etc/network/interfaces
     cat /etc/network/interfaces
     sudo systemctl enable dhcpcd.service ;;
- s) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "Input Static IP address to use      사용할 수동 IP를 입력합니다.\nEnter will use the current IP       엔터는 현재 주소를 사용합니다.\nOtherwise 192.168.0.3 will be used  아니면 192.168.0.3으로 설정됩니다." --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 75 $(hostname -I) 3>&1 1>&2 2>&3)
+ 2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "Input Static IP address to use      사용할 수동 IP를 입력합니다.\nEnter will use the current IP       엔터는 현재 주소를 사용합니다.\nOtherwise 192.168.0.3 will be used  아니면 192.168.0.3으로 설정됩니다." --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     [ "$exitstatus" != 0 ] && exit
     if [ -z "$user_ip" ]; then
@@ -173,15 +173,15 @@ main
 }
 
 main () {
-i=$(whiptail --title "Audio Renderer Main / 오디오 렌더러 주메뉴" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 16 55 8 \
-"1"  "Audio Device            오디오 장치" \
-"2"  "USB Signal & Power      USB 신호와 전원" \
-"3"  "IP address              IP 설정" \
-"4"  "DBus/DoP/Music Folder   DBus/DoP/음원 폴더" \
-"5"  "ALSA Reinstall          ALSA 재설치" \
-"6"  "Raspbian Update         Raspbian 업데이트" \
-"7"  "Reboot                  재시작" \
-"8"  "Power off               전원 끄기" 3>&1 1>&2 2>&3)
+i=$(whiptail --title "Audio Renderer Main / 오디오 렌더러 주메뉴" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 16 60 8 \
+"1"  "Audio Device              오디오 장치" \
+"2"  "USB Signal & Power        USB 신호와 전원" \
+"3"  "IP address                IP 설정" \
+"4"  "DBus, DoP, Music Folder   DBus, DoP, 음원 폴더" \
+"5"  "ALSA Reinstall            ALSA 재설치" \
+"6"  "Raspbian Update           Raspbian 업데이트" \
+"7"  "Reboot                    재시작" \
+"8"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
  1)  sound_card ;;
