@@ -19,9 +19,22 @@ sound_card_usbaudio () {
  grep card /usr/share/alsa/alsa.conf
 }
 
+iqaudio () {
+ i=$(whiptail --title "IQaudIO Mute / IQaudIO 음소거" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 67 2 \
+"u" "Unmute IQaudIO  IQaudIO 음소거 제거" \
+"m" "Mute   IQaudIO  IQaudIO 음소거" 3>&1 1>&2 2>&3)
+
+case $i in
+ u) sudo sed -i '/\/sys\/class\/gpio/s/^#*//g'        /etc/rc.local
+    grep /sys/class/gpio /etc/rc.local ;;
+ m) sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
+    grep /sys/class/gpio /etc/rc.local ;;
+esac
+}
+
 sound_card () {
-i=$(whiptail --title "Sound Card / 사운드카드 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 18 55 10 \
-"1"  "USB Audio Class 2.0 (Default/기본값)" \
+i=$(whiptail --title "Sound Card / 사운드카드 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 19 55 11 \
+"1"  "USB Audio Class 2.0" \
 "2"  "Allo Piano DAC" \
 "3"  "HiFiBerry Amp/Amp+" \
 "4"  "HiFiBerry DAC" \
@@ -31,10 +44,7 @@ i=$(whiptail --title "Sound Card / 사운드카드 설정" --menu "Choose/선택
 "8"  "HiFiBerry Digi+ Pro" \
 "9"  "IQaudIO DAC" \
 "10" "IQaudIO DAC+" \
-"11" "IQaudIO Digi+" \
-"12" "Unmute IQaudIO (IQaudIO 음소거 제거)" \
-"13" "Mute   IQaudIO (IQaudIO 음소거)" \
-"q"  "Quit/나가기" 3>&1 1>&2 2>&3)
+"11" "IQaudIO Digi+" 3>&1 1>&2 2>&3)
 
 case $i in
  1)  sound_card_initial
@@ -80,33 +90,30 @@ case $i in
      sudo sed -i '$adtoverlay=iqaudio-dac' /boot/config.txt
      sound_card_show
      #sound_card_intaudio
+     iqaudio
      ;;
  10) sound_card_initial
      sudo sed -i '$adtoverlay=iqaudio-dacplus' /boot/config.txt
      sound_card_show
      #sound_card_intaudio
+     iqaudio
      ;;
  11) sound_card_initial
      sudo sed -i '$adtoverlay=iqaudio-digi-wm8804-audio' /boot/config.txt
      sound_card_show
      #sound_card_intaudio
+     iqaudio
      ;;
- 12) sudo sed -i '/\/sys\/class\/gpio/s/^#*//g'        /etc/rc.local
-     grep /sys/class/gpio /etc/rc.local ;;
- 13) sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
-     grep /sys/class/gpio /etc/rc.local ;;
- q)  exit ;;
 esac
 main
 }
 
 usb_signal_power () {
-i=$(whiptail --title "USB Signal & Power / USB 신호와 전원" --menu "Choose/선택 [USB#@Back-/3|4/5]" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 18 67 10 \
-"1" "Enable  All USB Signal & Power  모든 USB 신호와 전원 켜기" \
-"2" "Disable All USB Signal & Power  모든 USB 신호와 전원 끄기" \
-"3" "Disable USB 4/5 Signal          USB 4/5 신호만 끄기" \
-"4" "Disable USB 4/5 Signal & Power  USB 4/5 신호와 전원 끄기" \
-"q" "Quit                            나가기" 3>&1 1>&2 2>&3)
+i=$(whiptail --title "USB Signal & Power / USB 신호와 전원" --menu "Choose/선택\n             {USB } {USB4}\n       {LAN} {USB3} {USB5}\n      =====================[Back Port/뒷면]\n      USB3 is recommended for DAC/DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 16 67 4 \
+"1" "Enable  All USB Signal & Power   모든 USB 신호와 전원 켜기" \
+"2" "Disable All USB Signal & Power   모든 USB 신호와 전원 끄기" \
+"3" "Disable USB 4/5 Signal           USB 4/5 신호만 끄기" \
+"4" "Disable USB 4/5 Signal & Power   USB 4/5 신호와 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
  1) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/^/#/g'   /etc/rc.local
@@ -119,23 +126,21 @@ case $i in
  4) sudo sed -i '/hub-ctrl -h 0 -P [24-5]/s/^#*//g' /etc/rc.local
     sudo sed -i '/hub-ctrl -h 0 -P 3/s/^/#/g'       /etc/rc.local
     grep hub-ctrl /etc/rc.local ;;
- q) exit ;;
 esac
 main
 }
 
 static_ip () {
-i=$(whiptail --title "Static IP / 수동 IP" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 18 60 10 \
-"1" "Dynamic IP (DHCP, Default)  자동 IP (DHCP, 기본값)" \
-"2" "Static  IP                  수동 IP" \
-"q" "Quit                        나가기" 3>&1 1>&2 2>&3)
+i=$(whiptail --title "Static IP / 수동 IP" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 45 2 \
+"d" "Dynamic IP (DHCP)   자동 IP (DHCP)" \
+"s" "Static  IP          수동 IP" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
+ d) sudo sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
     sudo sed -i '/iface eth0 inet static/,+6d'    /etc/network/interfaces
     cat /etc/network/interfaces
     sudo systemctl enable dhcpcd.service ;;
- 2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "Input Static IP address to use      사용할 수동 IP를 입력합니다.\nEnter will use the current IP       엔터는 현재 주소를 사용합니다.\nOtherwise 192.168.0.3 will be used  아니면 192.168.0.3으로 설정됩니다." --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 18 75 $(hostname -I) 3>&1 1>&2 2>&3)
+ s) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "Input Static IP address to use      사용할 수동 IP를 입력합니다.\nEnter will use the current IP       엔터는 현재 주소를 사용합니다.\nOtherwise 192.168.0.3 will be used  아니면 192.168.0.3으로 설정됩니다." --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 10 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     [ "$exitstatus" != 0 ] && exit
     if [ -z "$user_ip" ]; then
@@ -163,51 +168,57 @@ case $i in
     echo "My assumption may be wrong, please edit with the following command.\n'sudo nano /etc/network/interfaces'\n제 추정은 틀릴 수 있으므로, 위 명령어로 직접 수정하시기 바랍니다.\n\n-----------------------\n/etc/network/interfaces\n-----------------------\n$(cat /etc/network/interfaces)" > ~/static_ip.txt
     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "Audio-config" 18 75
     ;;
- q) exit ;;
 esac
 main
 }
 
 main () {
-i=$(whiptail --title "Audio Renderer Main / 오디오 렌더러 주메뉴" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 18 75 10 \
-"1"  "Sound Card...             사운드카드 설정..." \
-"2"  "USB Signal & Power...     USB 신호와 전원..." \
-"3"  "Static IP...              수동 IP..." \
-"4"  "Enable  D-Bus             D-Bus 사용 (Plug & Play)" \
-"5"  "Disable D-Bus             D-Bus 사용 안 함" \
-"6"  "Enable  DoP               DoP 사용 (DSD over PCM)" \
-"7"  "Disable DoP               DoP 사용 안 함" \
-"8"  "Enable  Music Directory   음원 디렉토리 사용" \
-"9"  "Disable Music Directory   음원 디렉토리 사용 안 함 (UPnP와 Stream)" \
-"10" "Resolve ALSA Tweak Issue  ALSA 트윅 오류 수정 (Library 재설치)" \
-"u"  "Update Raspbian OS        Raspbian OS 업데이트" \
-"r"  "Reboot to take effect     재시작하여 적용" \
-"p"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
+i=$(whiptail --title "Audio Renderer Main / 오디오 렌더러 주메뉴" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 16 55 8 \
+"1"  "Audio Device            오디오 장치" \
+"2"  "USB Signal & Power      USB 신호와 전원" \
+"3"  "IP address              IP 설정" \
+"4"  "DBus/DoP/Music Folder   DBus/DoP/음원 폴더" \
+"5"  "ALSA Reinstall          ALSA 재설치" \
+"6"  "Raspbian Update         Raspbian 업데이트" \
+"7"  "Reboot                  재시작" \
+"8"  "Power off               전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
  1)  sound_card ;;
  2)  usb_signal_power ;;
  3)  static_ip ;;
- 4)  sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local
-     grep dbus /etc/rc.local ;;
- 5)  sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local
-     grep dbus /etc/rc.local ;;
- 6)  sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf
-     grep dop /etc/mpd.conf ;;
- 7)  sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf
-     grep dop /etc/mpd.conf ;;
- 8)  sudo sed -i '/^#music_directory\|^#db_file/s/^#//' /etc/mpd.conf
-     grep -e ^#*music_directory -e ^#*db_file /etc/mpd.conf ;;
- 9)  sudo sed -i '/^music_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
-     grep -e ^#*music_directory -e ^#*db_file /etc/mpd.conf ;;
- 10) sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
+ 4)  
+     i=$(whiptail --title "DBus/DoP/Music Folder / DBus/DoP/음원 폴더 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 11 57 3 \
+"D-Bus"  "Enable D-Bus         D-Bus 사용" OFF \
+"DoP"    "Enable DoP           DoP 사용" OFF \
+"Folder" "Enable Music Folder  음원 폴더 사용" ON 3>&1 1>&2 2>&3)
+
+     if [ "$D-Bus" == ON ]; then
+      sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local
+     else
+      sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local
+     fi
+
+     if [ "$DoP" == ON ]; then
+      sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf
+     else
+      sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf
+     fi
+
+     if [ "$Folder" == ON ]; then
+      sudo sed -i '/^#music_directory\|^#db_file/s/^#//' /etc/mpd.conf
+     else
+      sudo sed -i '/^music_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
+     fi
+     ;;
+ 5)  sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
      sudo apt-get install --reinstall libasound2 libasound2-data
      sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
- u)  sudo apt-get update
+ 6)  sudo apt-get update
      sudo apt-get upgrade
      sudo apt-get dist-upgrade ;;
- r)  sudo reboot ;;
- p)  sudo poweroff ;;
+ 7)  sudo reboot ;;
+ 8)  sudo poweroff ;;
 esac
 }
 
