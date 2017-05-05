@@ -109,7 +109,7 @@ main
 }
 
 usb_signal_power () {
-i=$(whiptail --title "USB Signal & Power / USB 신호와 전원" --menu "Choose/선택\n             {USB } {USB4}\n       {LAN} {USB3} {USB5}\n      =====================[Back Port/뒷면]\n      USB3 is recommended for DAC/DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 16 67 4 \
+i=$(whiptail --title "USB Signal & Power / USB 신호와 전원" --menu "Choose/선택\n             [USB ] [USB4]\n       [LAN] [USB3] [USB5]\n      =====================(Back Port/뒷면)\n      USB3 is recommended for DAC/DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/나가기" --backtitle "Audio-config" 16 67 4 \
 "1" "Enable  All USB Signal & Power   모든 USB 신호와 전원 켜기" \
 "2" "Disable All USB Signal & Power   모든 USB 신호와 전원 끄기" \
 "3" "Disable USB 4/5 Signal           USB 4/5 신호만 끄기" \
