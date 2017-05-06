@@ -89,37 +89,33 @@ esac
 }
 
 usb_signal_power () {
-i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "Choose/선택\n             [USB ] [USB4]\n       [LAN] [USB3] [USB5]\n      =====================(Back Port/뒷면)\n      USB3 is recommended for DAC/DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 16 67 4 \
-"1" "Enable  All USB signal & power   모든 USB 신호와 전원 켜기" \
-"2" "Disable All USB signal & power   모든 USB 신호와 전원 끄기" \
-"3" "Disable USB 4/5 signal           USB 4/5 신호만 끄기" \
-"4" "Disable USB 4/5 signal & power   USB 4/5 신호와 전원 끄기" 3>&1 1>&2 2>&3)
+i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "Choose/선택\n                [USB ] [USB4]\n          [LAN] [USB3] [USB5]\n         =====================(Back Port/뒷면)\n         USB3 is recommended for DAC./DAC은 USB3을 추천합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 16 75 4 \
+"1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
+"2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \
+"3" "Disable USB 4/5 signal              USB 4/5 신호만 끄기" \
+"4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/^/#/g'   /etc/rc.local
-    grep hub-ctrl /etc/rc.local ;;
- 2) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/^#*//g'  /etc/rc.local
-    grep hub-ctrl /etc/rc.local ;;
+ 1) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/^/#/g'   /etc/rc.local ;;
+ 2) sudo sed -i '/hub-ctrl -h 0 -P [2-5]/s/^#*//g'  /etc/rc.local ;;
  3) sudo sed -i '/hub-ctrl -h 0 -P [4-5]/s/^#*//g'  /etc/rc.local
-    sudo sed -i '/hub-ctrl -h 0 -P [2-3]/s/^/#/g'   /etc/rc.local
-    grep hub-ctrl /etc/rc.local ;;
+    sudo sed -i '/hub-ctrl -h 0 -P [2-3]/s/^/#/g'   /etc/rc.local ;;
  4) sudo sed -i '/hub-ctrl -h 0 -P [24-5]/s/^#*//g' /etc/rc.local
-    sudo sed -i '/hub-ctrl -h 0 -P 3/s/^/#/g'       /etc/rc.local
-    grep hub-ctrl /etc/rc.local ;;
+    sudo sed -i '/hub-ctrl -h 0 -P 3/s/^/#/g'       /etc/rc.local ;;
 esac
 }
 
 static_ip () {
-i=$(whiptail --title "IP address / IP 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 40 2 \
+i=$(whiptail --title "IP address / IP 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
 "1" "Dynamic IP (DHCP)   자동 IP" \
-"2" "Static  IP          수동 IP" 3>&1 1>&2 2>&3)
+"2" "Static  IP          수동 IP  >" 3>&1 1>&2 2>&3)
 
 case $i in
  1) sudo sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
     sudo sed -i '/iface eth0 inet static/,+6d'    /etc/network/interfaces
     cat /etc/network/interfaces
     sudo systemctl enable dhcpcd.service ;;
- 2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "Input Static IP address to use      사용할 수동 IP를 입력합니다.\nCurrent IP is listed below          아래는 현재 주소입니다.\nOtherwise 192.168.0.3 will be used  아니면 192.168.0.3으로 설정됩니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 75 $(hostname -I) 3>&1 1>&2 2>&3)
+ 2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "Input Static IP address to use.       사용할 수동 IP를 입력합니다.\nCurrent IP is listed below.           아래는 현재 주소입니다.\nOtherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -z "$user_ip" ]; then
@@ -138,7 +134,7 @@ case $i in
       ip_all=$ip_1st.$ip_2nd.$ip_3rd.$ip_4th
      else
       ip=192.168.0
-      ip_all=192.168.0.3
+      ip_all=192.168.0.9
      fi
      sudo sed -i '/iface eth0 inet manual/s/^/#/' /etc/network/interfaces
      sudo sed -i '/iface eth0 inet static/,$d'    /etc/network/interfaces
@@ -152,7 +148,7 @@ esac
 }
 
 dbus_dop_folder () {
-i=$(whiptail --title "DBus, DoP, Music Folder / DBus, DoP, 음원 폴더" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 58 3 \
+i=$(whiptail --title "DBus, DoP, Music Folder / 음원 폴더" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 58 3 \
 "dbus"   "Enable DBus           DBus 사용" OFF \
 "dop"    "Enable DoP            DoP 사용" OFF \
 "folder" "Enable Music Folder   음원 폴더 사용" ON 3>&1 1>&2 2>&3)
@@ -166,11 +162,11 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 16 60 8 \
- "1"  "Audio device              오디오 장치" \
- "2"  "USB signal & power        USB 신호와 전원" \
- "3"  "IP address                IP 설정" \
- "4"  "DBus, DoP, Music Folder   DBus, DoP, 음원 폴더" \
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 16 62 8 \
+ "1"  "Audio device              오디오 장치           >" \
+ "2"  "USB signal & power        USB 신호와 전원       >" \
+ "3"  "IP address                IP 설정               >" \
+ "4"  "DBus, DoP, Music Folder   DBus, DoP, 음원 폴더  >" \
  "5"  "ALSA reinstall            ALSA 재설치" \
  "6"  "Raspbian update           Raspbian 업데이트" \
  "7"  "Reboot                    재시작" \
