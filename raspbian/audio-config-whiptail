@@ -13,14 +13,11 @@ sound_card_usbaudio () {
 }
 
 iqaudio () {
- whiptail --title "Unmute IQaudIO / IQaudIO 음소거 제거" --yesno "   Unmute IQaudIO?   IQaudIO 음소거를 제거할까요?" --yes-button "Yes/예" --no-button "No/아니오" 8 56
-
-exitstatus=$?
-if [ "$exitstatus" = 0 ]; then
- sudo sed -i '/\/sys\/class\/gpio/s/^#*//g' /etc/rc.local
-else
- sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
-fi
+ if (whiptail --title "Unmute IQaudIO / IQaudIO 음소거 제거" --yesno "   Unmute IQaudIO?   IQaudIO 음소거를 제거할까요?" --yes-button "Yes/예" --no-button "No/아니오" 8 56) then
+  sudo sed -i '/\/sys\/class\/gpio/s/^#*//g' /etc/rc.local
+ else
+  sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
+ fi
 }
 
 sound_card () {
