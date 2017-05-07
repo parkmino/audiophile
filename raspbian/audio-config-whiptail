@@ -6,12 +6,10 @@ sound_card_initial () {
 
 sound_card_intaudio () {
  sudo sed -i '/card/s/[1-9]/0/g'  /usr/share/alsa/alsa.conf
- grep card /usr/share/alsa/alsa.conf
 }
 
 sound_card_usbaudio () {
  sudo sed -i '/card/s/[02-9]/1/g' /usr/share/alsa/alsa.conf
- grep card /usr/share/alsa/alsa.conf
 }
 
 iqaudio () {
@@ -89,7 +87,12 @@ esac
 }
 
 usb_signal_power () {
-i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "Choose/선택\n                [USB ] [USB4]\n          [LAN] [USB3] [USB5]\n         =====================(Back Port/뒷면)\n         USB3 is recommended for DAC./DAC은 USB3을 추천합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 16 75 4 \
+i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
+Choose/선택
+                [USB ] [USB4]
+          [LAN] [USB3] [USB5]
+         =====================(Back Port/뒷면)
+         USB3 is recommended for DAC./DAC은 USB3을 추천합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 16 75 4 \
 "1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
 "2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \
 "3" "Disable USB 4/5 signal              USB 4/5 신호만 끄기" \
@@ -115,7 +118,10 @@ case $i in
     sudo sed -i '/iface eth0 inet static/,+6d'    /etc/network/interfaces
     cat /etc/network/interfaces
     sudo systemctl enable dhcpcd.service ;;
- 2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "Input Static IP address to use.       사용할 수동 IP를 입력합니다.\nCurrent IP is listed below.           아래는 현재 주소입니다.\nOtherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 75 $(hostname -I) 3>&1 1>&2 2>&3)
+ 2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "\
+Input Static IP address to use.       사용할 수동 IP를 입력합니다.
+Current IP is listed below.           아래는 현재 주소입니다.
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -z "$user_ip" ]; then
@@ -140,7 +146,16 @@ case $i in
      sudo sed -i '/iface eth0 inet static/,$d'    /etc/network/interfaces
      sudo sed -i "\$aiface eth0 inet static\n address\t\t$ip_all\n netmask\t\t255.255.255.0\n broadcast\t\t$ip.255\n network\t\t$ip.0\n gateway\t\t$ip.1\n#dns-nameservers\t168.126.63.1" /etc/network/interfaces
      sudo systemctl disable dhcpcd.service
-     echo "My assumption may be wrong, please edit with the following command.\n'sudo nano /etc/network/interfaces'\n제 추정은 틀릴 수 있으므로, 위 명령어로 직접 수정하시기 바랍니다.\n\n-----------------------\n/etc/network/interfaces\n-----------------------\n$(cat /etc/network/interfaces)" > ~/static_ip.txt
+     echo "\
+My assumption may be wrong, please edit with the following command.
+'sudo nano /etc/network/interfaces'
+제 추정은 틀릴 수 있으므로, 위 명령어로 직접 수정하시기 바랍니다.
+
+-----------------------
+/etc/network/interfaces
+-----------------------
+
+$(cat /etc/network/interfaces)" > ~/static_ip.txt
      whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "Audio-config" 18 75
     fi
     ;;
