@@ -1,0 +1,98 @@
+==============
+Orange Pi Zero
+==============
+
+1. Orange Pi
+
+	http://www.orangepi.org/
+	http://www.orangepi.org/orangepizero/
+	http://linux-sunxi.org/Xunlong_Orange_Pi_Zero
+
+2. Armbian
+
+	https://www.armbian.com/
+	https://www.armbian.com/orange-pi-zero/
+	https://docs.armbian.com
+	$ sudo fdisk -l
+	$ sudo dd bs=4M if='Armbian_5.25_Orangepizero_Ubuntu_xenial_default_3.4.113.img' of=/dev/sdb
+	$ sync
+
+3. Initial Configuration
+
+	$ ssh root@192.168.0.x password:1234
+	Change password to "orangepi"
+	# reboot
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# apt-get autoremove
+	# dpkg-reconfigure tzdata	
+
+4. Kernel Option
+
+	# cd /boot
+	# cat boot.cmd
+	# nano armbianEnv.txt
+		console=
+		extraargs="elevator=noop selinux=0"
+
+5. Edit fstab
+
+	# nano /etc/fstab
+		/dev/sda1 /mnt ext4 ro 0 0
+		#tmpfs /tmp tmpfs defaults,nosuid 0 0
+		#/var/swap none swap sw 0 0
+	# swapon -s
+
+6. Remove modules
+
+	# lsmod
+	# nano /etc/modprobe.d/orangepizero.conf
+		blacklist pcf8591
+		blacklist bmp085
+		blacklist xradio_wlan
+		blacklist g_serial
+		#blacklist btrfs
+
+7. /etc/sysctl.conf
+
+8. /etc/rc.local
+
+9. Copy MPD
+
+	$ sudo cp mpd /usr/bin
+	$ sudo cp hub-ctrl llctl icon.png /root
+	# nano /etc/mpd.conf
+	# apt-get install mpc ncmpc
+	# apt-get install libglib2.0 libcue libcurl4-gnutls libaudiofile libasound2 libflac libmad0 libid3tag0 libavformat libmpdclient libboost libexpat1 libupnp
+
+10. USB auto mount
+
+	https://wiki.archlinux.org/index.php/Fstab#External_devices
+
+	# mkdir /mnt/usb
+	# ln -s /mnt /var/lib/mpd/music
+	# nano /etc/fstab
+		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
+		#/dev/sda1 /mnt/usb vfat    ro 0 0
+		#/dev/sda1 /mnt/usb ntfs-3g ro 0 0
+	# nano /etc/rc.local
+		systemd-udevd
+	# systemctl daemon-reload
+	# systemctl restart remote-fs.target
+	# systemctl restart local-fs.target
+
+11. Show release
+
+	# echo "* Mino's UPnP Audio Renderer for Orang Pi Zero 17.06" > release
+
+12. Make Image
+
+	# nano ~/release
+	# mpc clear
+	# rm -f ~/.bash_history ; history -c
+	# poweroff
+
+	$ sudo fdisk -l
+	$ sudo dd bs=4M if=/dev/sdb of=orange_pi_zero_audio_renderer_17.05.img
+	$ zip orange_pi_zero_audio_renderer_17.06.zip orange_pi_zero_audio_renderer_17.06.img
