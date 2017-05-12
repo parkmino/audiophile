@@ -1,12 +1,15 @@
-wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/main/libu/libupnpp3/libupnpp3_0.15.1-1_armhf.deb
-wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/main/u/upmpdcli/upmpdcli_1.2.12-1_armhf.deb
-sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp0
-sudo dpkg -i libupnpp*.deb upmpdcli*.deb
-sudo mv ./icon.png /usr/share/upmpdcli/icon.png
-sudo nano /etc/upmpdcli.conf
+$ wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/main/libu/libupnpp3/libupnpp3_0.15.1-1_armhf.deb
+$ wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/main/u/upmpdcli/upmpdcli_1.2.12-1_armhf.deb
+$ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp0
+$ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
+$ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
+$ sudo nano /etc/upmpdcli.conf
 	checkcontentformat = 0
-sudo systemctl disable upmpdcli.service
-sudo nano /etc/environment
+$ sudo systemctl disable upmpdcli.service
+$ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
-sudo nano /etc/rc.local
+$ sudo nano /etc/rc.local
 	taskset -ac 1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+$ sudo nano /usr/share/upmpdcli/protocolinfo.txt
+	http-get:*:audio/ape:*,
+	http-get:*:audio/x-ape:*,
