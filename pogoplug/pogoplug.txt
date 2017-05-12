@@ -138,3 +138,6 @@ $ zip pogo_e02_audio_renderer_17.05.zip pogo_e02_audio_renderer_17.05.img
 
 $ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_17.05.img
 $ zip pogo_v4_audio_renderer_17.05.zip pogo_v4_audio_renderer_17.05.img
+
+$ sudo dd bs=4M if=/dev/sdb of=kirkwood_audio_renderer_17.05.img
+$ zip kirkwood_audio_renderer_17.05.zip kirkwood_audio_renderer_17.05.img
