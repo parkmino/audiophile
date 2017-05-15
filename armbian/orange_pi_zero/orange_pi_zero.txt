@@ -2,13 +2,13 @@
 Orange Pi Zero
 ==============
 
-1. Orange Pi
+01. Orange Pi
 
 	http://www.orangepi.org/
 	http://www.orangepi.org/orangepizero/
 	http://linux-sunxi.org/Xunlong_Orange_Pi_Zero
 
-2. Armbian
+02. Armbian
 
 	https://www.armbian.com/
 	https://www.armbian.com/orange-pi-zero/
@@ -17,7 +17,7 @@ Orange Pi Zero
 	$ sudo dd bs=4M if='Armbian_5.25_Orangepizero_Ubuntu_xenial_default_3.4.113.img' of=/dev/sdb
 	$ sync
 
-3. Initial Configuration
+03. Initial Configuration
 
 	$ ssh root@192.168.0.x password:1234
 	Change password to "orangepi"
@@ -28,7 +28,7 @@ Orange Pi Zero
 	# apt-get autoremove
 	# dpkg-reconfigure tzdata	
 
-4. Kernel Option
+04. Kernel Option
 
 	# cd /boot
 	# cat boot.cmd
@@ -36,7 +36,7 @@ Orange Pi Zero
 		console=
 		extraargs="elevator=noop selinux=0"
 
-5. Edit fstab
+05. Edit fstab
 
 	# nano /etc/fstab
 		/dev/sda1 /mnt ext4 ro 0 0
@@ -44,7 +44,7 @@ Orange Pi Zero
 		#/var/swap none swap sw 0 0
 	# swapon -s
 
-6. Remove modules
+06. Remove modules
 
 	# lsmod
 	# nano /etc/modprobe.d/orangepizero.conf
@@ -54,19 +54,38 @@ Orange Pi Zero
 		blacklist g_serial
 		#blacklist btrfs
 
-7. /etc/sysctl.conf
+07. /etc/sysctl.conf
 
-8. /etc/rc.local
+08. /etc/rc.local
 
-9. Copy MPD
+09. ALSA
+
+10. MPD
 
 	$ sudo cp mpd /usr/bin
-	$ sudo cp hub-ctrl llctl icon.png /root
-	# nano /etc/mpd.conf
-	# apt-get install mpc ncmpc
-	# apt-get install libglib2.0 libcue libcurl4-gnutls libaudiofile libasound2 libflac libmad0 libid3tag0 libavformat libmpdclient libboost libexpat1 libupnp
+	$ sudo cp icon.png /root
 
-10. USB auto mount
+	# apt-get install mpd mpc ncmpc
+	# nano /etc/mpd.conf
+
+	# apt-get install libcue1 libaudiofile1 libavformat-dev libflac8 libmad0 libid3tag0 libmpdclient2 libupnp6
+
+11. Upmpdcli
+
+12. USB IRQ
+
+	# cat /proc/interrupts
+	# nano /etc/rc.local
+		 until $(grep -q usb1 /proc/interrupts); do
+		  sleep 1
+		 done
+		 sleep 1
+
+		 for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
+		  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
+		 done
+
+12. USB auto mount
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -82,11 +101,26 @@ Orange Pi Zero
 	# systemctl restart remote-fs.target
 	# systemctl restart local-fs.target
 
-11. Show release
+13. Static IP
+
+	# cp /etc/network/interfaces.default /etc/network/interfaces
+	# nano /etc/network/interfaces
+		auto  eth0
+		#iface eth0 inet manual
+		iface eth0 inet static
+			address		192.168.0.3
+			netmask		255.255.255.0
+			broadcast	192.168.0.255
+			network		192.168.0.0
+			gateway		192.168.0.1 
+			dns-nameservers 168.126.63.1
+	# systemctl disable network-manager.service
+
+14. Show release
 
 	# echo "* Mino's UPnP Audio Renderer for Orang Pi Zero 17.06" > release
 
-12. Make Image
+15. Make Image
 
 	# nano ~/release
 	# mpc clear
