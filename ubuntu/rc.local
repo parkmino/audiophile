@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-musicpd_bg () {
+mpd_bg () {
 
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
@@ -46,14 +46,14 @@ musicpd_bg () {
  sysctl -w kernel.sched_autogroup_enabled=0
  sysctl -w kernel.sched_rt_period_us=999999
  sysctl -w kernel.sched_rt_runtime_us=851456
- sysctl -w kernel.sched_min_granularity_ns=230001
- sysctl -w kernel.sched_wakeup_granularity_ns=388344
- sysctl -w kernel.sched_latency_ns=1393264
+ sysctl -w kernel.sched_min_granularity_ns=230002
+ sysctl -w kernel.sched_wakeup_granularity_ns=388346
+ sysctl -w kernel.sched_latency_ns=1393266
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost_ns=5000000
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window_ns=346000
+ sysctl -w kernel.sched_shares_window_ns=346002
 #sysctl -w kernel.sched_tunable_scaling=1
 
  sysctl -w vm.swappiness=0
@@ -105,12 +105,18 @@ if [ "$m_task" -ge 1 ];then
   taskset -acp 0 $pid || true
  done
 
- snd=$(awk '$8 ~ /snd/ {print +$1}' /proc/interrupts)
-
- until [ -f /proc/irq/$snd/smp_affinity ]; do
+ until $(grep -q snd /proc/interrupts); do
   sleep 1
  done
- echo $(echo "2^$m_task" | bc) > /proc/irq/$snd/smp_affinity
+
+ sleep 1
+
+ for i in $(awk '/snd/{print +$1}' /proc/interrupts); do
+  proc_snd="/proc/irq/$i/smp_affinity"
+  echo $(echo "2^$m_task" | bc) > $proc_snd
+  echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+  echo " $(cat $proc_snd)" 
+ done
  #taskset -apc $m_task `pgrep snd_hda`
 fi
 
@@ -118,7 +124,7 @@ fi
 
 modprobe -r psmouse
 
-musicpd_bg &
-/usr/bin/mpd /etc/mpd.conf
+#mpd_bg &
+#/usr/bin/mpd /etc/mpd.conf
 
 exit 0
