@@ -14,14 +14,14 @@ Orange Pi Zero
 	https://www.armbian.com/orange-pi-zero/
 	https://docs.armbian.com
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if='Armbian_5.25_Orangepizero_Ubuntu_xenial_default_3.4.113.img' of=/dev/sdb
+	$ sudo dd if='Armbian_5.25_Orangepizero_Ubuntu_xenial_default_3.4.113.img' of=/dev/sdb
 	$ sync
 
 03. Initial Configuration
 
 	$ ssh root@192.168.0.x password:1234
 	Change password to "orangepi"
-	# reboot
+	# apt-get purge unattended-upgrades
 	# apt-get update
 	# apt-get upgrade
 	# apt-get dist-upgrade
@@ -30,11 +30,17 @@ Orange Pi Zero
 
 04. Kernel Option
 
+	# cd /boot/bin
+	# cp orangepizero.bin orangepizero.bin.orig
+	# bin2fex orangepizero.bin orangepizero.fex
+	# nano orangepizero.fex
+	# fex2bin orangepizero.fex orangepizero.bin
 	# cd /boot
 	# cat boot.cmd
 	# nano armbianEnv.txt
-		console=
+		console=none
 		extraargs="elevator=noop selinux=0"
+	# reboot
 
 05. Edit fstab
 
@@ -60,6 +66,10 @@ Orange Pi Zero
 
 09. ALSA
 
+	# nano /usr/share/alsa/alsa.conf
+		pcm.sound.card 1
+		ctl.control.card 1
+
 10. MPD
 
 	$ sudo cp mpd /usr/bin
@@ -67,6 +77,7 @@ Orange Pi Zero
 
 	# apt-get install mpd mpc ncmpc
 	# nano /etc/mpd.conf
+	# systemctl disable mpd.service mpd.socket
 
 	# apt-get install libcue1 libaudiofile1 libavformat-dev libflac8 libmad0 libid3tag0 libmpdclient2 libupnp6
 
@@ -85,7 +96,7 @@ Orange Pi Zero
 		  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
 		 done
 
-12. USB auto mount
+13. USB auto mount
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -101,7 +112,7 @@ Orange Pi Zero
 	# systemctl restart remote-fs.target
 	# systemctl restart local-fs.target
 
-13. Static IP
+14. Static IP
 
 	# cp /etc/network/interfaces.default /etc/network/interfaces
 	# nano /etc/network/interfaces
@@ -116,11 +127,11 @@ Orange Pi Zero
 			dns-nameservers 168.126.63.1
 	# systemctl disable network-manager.service
 
-14. Show release
+15. Show release
 
 	# echo "* Mino's UPnP Audio Renderer for Orang Pi Zero 17.06" > release
 
-15. Make Image
+16. Make Image
 
 	# nano ~/release
 	# mpc clear
@@ -128,5 +139,5 @@ Orange Pi Zero
 	# poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=orange_pi_zero_audio_renderer_17.05.img
+	$ sudo dd bs=4M if=/dev/sdb of=orange_pi_zero_audio_renderer_17.06.img
 	$ zip orange_pi_zero_audio_renderer_17.06.zip orange_pi_zero_audio_renderer_17.06.img

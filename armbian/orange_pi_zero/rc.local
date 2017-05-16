@@ -32,12 +32,12 @@ mpd_bg () {
    io)		 taskset -cp $s_task $proc_nr ;;
    player)	 taskset -cp $s_task $proc_nr ;;
    decoder)	 taskset -cp $s_task $proc_nr ;;
-   output)	 taskset -cp $m_task $proc_nr 
+   output)	 taskset -cp $m_task $proc_nr
 		 renice -1 -p	     $proc_nr
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
- 
+
  nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 
  [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
@@ -68,17 +68,27 @@ if [ "$m_task" -ge 1 ];then
 fi
 
 ### Remove services
-for i in cron haveged ntp rsyslog haveged polkitd systemd-journald systemd-logind getty@tty1 serial-getty@ttyS0 dbus # systemd-udevd sshd
+for i in cron haveged ntp rsyslog systemd-journald systemd-logind dbus getty@tty1 serial-getty@ttyS0 systemd-udevd # sshd
 do
  service $i stop
 done
+pkill dbus-daemon
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
+
+#USB1 Affinity
+until $(grep -q usb1 /proc/interrupts); do
+ sleep 1
+done
+sleep 1
+for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
+done
 
 ### Init
 taskset -cp $m_task 1
 
 mpd_bg &
-/usr/bin/mpd /etc/mpd.conf
+/usr/bin/mpd --no-daemon /etc/mpd.conf
 
 exit 0
