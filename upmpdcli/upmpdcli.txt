@@ -2,6 +2,7 @@ $ wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/mai
 $ wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/main/u/upmpdcli/upmpdcli_1.2.12-1_armhf.deb
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp0
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
+$ wget http://blogattach.naver.com/7eeb62d2c39b9a466885e9d5e3007e0dadf401ed83/20160224_148_blogfile/parkmino45_1456295331298_5OCqhS_png/icon.png
 $ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
 $ sudo nano /etc/upmpdcli.conf
 	checkcontentformat = 0
