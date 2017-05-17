@@ -219,7 +219,7 @@ Orange Pi Mini II
 	# cp boot.cmd boot.cmd.org
 	# cp boot.scr boot.scr.org
 	# nano boot.cmd
-		... elevator=noop selinux=o
+		... elevator=noop selinux=0
 	# mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
 
 5. Edit fstab
@@ -262,6 +262,14 @@ Orange Pi Mini II
 		blacklist cpufreq_dt
 		blacklist thermal_sys
 		blacklist bonding
+	# nano /etc/modprobe.d/opi-blacklist.conf
+		blacklist a20_tp
+		blacklist 8021q
+		blacklist sunxi_ir
+		blacklist hidp
+		blacklist rfcomm
+		blacklist hci_uart
+		blacklist cpufreq_userspace
 	# chmod -x /etc/update-motd.d/40-updates
 
 9. Remove services
