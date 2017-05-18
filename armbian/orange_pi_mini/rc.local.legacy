@@ -1,0 +1,105 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+ sysctl -w vm.swappiness=0
+#sysctl -w vm.dirty_background_ratio=0
+#sysctl -w vm.dirty_ratio=0
+ sysctl -w vm.dirty_writeback_centisecs=0
+ sysctl -w vm.oom_dump_tasks=0
+#sysctl -w vm.overcommit_memory=1
+ sysctl -w vm.page-cluster=2
+ sysctl -w vm.panic_on_oom=2
+ sysctl -w vm.stat_interval=5
+ sysctl -w vm.vfs_cache_pressure=0
+
+#sysctl -w kernel.ftrace_enabled=0
+#sysctl -w kernel.sched_autogroup_enabled=0
+#sysctl -w kernel.sched_rt_runtime_us=-1
+#sysctl -w kernel.sched_rt_period_us=1344760
+#sysctl -w kernel.sched_rt_runtime_us=1277522
+ sysctl -w kernel.sched_min_granularity_ns=230003
+ sysctl -w kernel.sched_wakeup_granularity_ns=388346
+ sysctl -w kernel.sched_latency_ns=1393266
+ sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
+ sysctl -w kernel.sched_migration_cost=5000000
+ sysctl -w kernel.sched_nr_migrate=0
+#sysctl -w kernel.sched_rr_timeslice_ms=1
+ sysctl -w kernel.sched_shares_window=346002
+#sysctl -w kernel.sched_tunable_scaling=1
+
+#sysctl -w net.core.rmem_max=12582912
+#sysctl -w net.core.wmem_max=12582912
+#sysctl -w net.ipv4.conf.default.forwarding=1
+#sysctl -w net.ipv4.tcp_rmem='10240 87380 12582912'
+#sysctl -w net.ipv4.tcp_wmem='10240 87380 12582912'
+#sysctl -w net.ipv4.tcp_timestamps=0
+#sysctl -w net.ipv4.tcp_window_scaling=1
+ sysctl -w net.ipv4.tcp_sack=0
+ sysctl -w net.ipv4.tcp_no_metrics_save=1
+#sysctl -w net.core.netdev_max_backlog=5000
+ sysctl -w net.ipv6.conf.all.disable_ipv6=1
+
+swapoff -a
+
+for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
+ chrt -op 0 $pid
+done
+
+for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
+ renice 0 $pid
+done
+
+for pid in $(ps h -eo pid) ; do
+ taskset -acp 0 $pid || true
+done
+
+#for pid in $(ps h -eo pid,class,comm | awk '$3 ~ /nfsd/ && $3 !~ /nfsd4/ {print $1}') ; do
+# taskset -acp 1 $pid
+#done
+#
+#sleep 5
+#
+#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /eth/ && $7 !~ /chip/ {print +$1}') ; do
+# echo 1 > /proc/irq/$irq/smp_affinity
+#done
+#
+#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc/ || $7 ~ /sata/ || $7 ~ /timer0/ || $7 ~ /sunxi-mmc/ || $7 ~ /dma/ {print +$1}') ; do
+# echo 2 > /proc/irq/$irq/smp_affinity
+#done
+
+for i in cron ntp lirc rsyslog systemd-journald systemd-udevd systemd-logind dbus haveged sshd getty@tty1 # serial-getty@ttyS0
+do
+ service $i stop
+done
+
+#echo none > /sys/class/leds/orangepi\:green\:usr/trigger
+
+ nohup taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf &
+#until pstree -np $(pgrep -x rygel) | grep -q gmain; do
+# sleep 1
+#done
+#rygel_gmain=$(pstree -np $(pgrep -x rygel) | grep gmain | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+#taskset -cp 1     $rygel_gmain
+#renice -1 -p	   $(pgrep -x rygel)
+#renice -1 -p	   $rygel_gmain
+#ionice -c2 -n4 -p $rygel_gmain
+#chrt -fp 11	   $rygel_gmain
+#
+#/usr/bin/mediatomb -c /root/.mediatomb/config.xml -d
+#
+#taskset -ac 1 nice -n +1 /usr/bin/polipo &
+
+ taskset -acp 1 1
+#renice +1 -p   1
+
+exit 0
