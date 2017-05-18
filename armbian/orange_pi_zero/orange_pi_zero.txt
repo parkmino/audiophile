@@ -39,6 +39,7 @@ Orange Pi Zero
 	# cd /boot
 	# cat boot.cmd
 	# nano armbianEnv.txt
+		verbosity=1
 		console=none
 		extraargs="elevator=noop selinux=0"
 	# reboot
