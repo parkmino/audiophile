@@ -63,6 +63,7 @@ cd mpd
 patch -p1 < ./mpd-0.17.6-rtopt20140327.patch
 patch -p1 < ./mpd-0.18.9-rtopt20140327.patch
 patch -p1 < ./mpd-0.19git-rtopt20150428.patch
+patch -p1 < ./mpd-0.20git-rtopt20170112.patch
 #patch -p1 < ./buffer.c.diff
 ./autogen.sh
 ./configure ... --enable-rtopt --enable-glib
