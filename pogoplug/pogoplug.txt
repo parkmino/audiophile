@@ -26,7 +26,7 @@ $ sudo su
 
 # cp -a zImage-4.4.0-kirkwood-tld-1  zImage.fdt
 # cat dts/kirkwood-pogoplug_v4.dtb >> zImage.fdt
-# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt  uImage-pogoplug_v4
+# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt  uImage.v4
 # sync
 
 # exit
@@ -136,8 +136,18 @@ $ sudo fdisk -l
 $ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_17.05.img
 $ zip pogo_e02_audio_renderer_17.05.zip pogo_e02_audio_renderer_17.05.img
 
+$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.e02
+$ sudo mv /media/parkmino/rootfs/boot/uImage.v4 /media/parkmino/rootfs/boot/uImage
+$ ls -al /media/parkmino/rootfs/boot
 $ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_17.05.img
 $ zip pogo_v4_audio_renderer_17.05.zip pogo_v4_audio_renderer_17.05.img
 
+$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.v4
+$ sudo mv /media/parkmino/rootfs/boot/uImage.orig /media/parkmino/rootfs/boot/uImage
+$ ls -al /media/parkmino/rootfs/boot
 $ sudo dd bs=4M if=/dev/sdb of=kirkwood_audio_renderer_17.05.img
 $ zip kirkwood_audio_renderer_17.05.zip kirkwood_audio_renderer_17.05.img
+
+$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.orig
+$ sudo mv /media/parkmino/rootfs/boot/uImage.e02 /media/parkmino/rootfs/boot/uImage
+$ ls -al /media/parkmino/rootfs/boot
