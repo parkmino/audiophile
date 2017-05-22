@@ -9,14 +9,31 @@ Orange Pi Zero
 	http://linux-sunxi.org/Xunlong_Orange_Pi_Zero
 	http://linux-sunxi.org/Fex_Guide
 
-02. Armbian
+02. Armbian or DietPi
 
 	https://www.armbian.com/
 	https://www.armbian.com/orange-pi-zero/
 	https://docs.armbian.com
 	$ sudo fdisk -l
-	$ sudo dd if='Armbian_5.25_Orangepizero_Ubuntu_xenial_default_3.4.113.img' of=/dev/sdb
+	$ sudo dd if=Armbian_5.25_Orangepizero_Ubuntu_xenial_default_3.4.113.img of=/dev/sdb
 	$ sync
+	$ ssh root@192.168.0.x password:1234
+	Change password to "orangepi"
+	# apt-get purge unattended-upgrades
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# apt-get autoremove
+
+03. DietPi
+
+	http://www.dietpi.com
+	http://dietpi.com/phpbb/viewtopic.php?f=8&t=9#p9
+	http://dietpi.com/downloads/images/DietPi_OrangePiZero-armv7-(Jessie).7z
+	$ sudo fdisk -l
+	$ sudo dd if=DietPi_v145_OrangePiZero-armv7-(Jessie).img of=/dev/sdb
+	$ sync
+	$ ssh root@192.168.0.x password:dietpi
 
 03. Initial Configuration
 
@@ -31,12 +48,24 @@ Orange Pi Zero
 
 04. Kernel Option
 
+	# ls /boot/script.bin
+
+	Armbian
 	# cd /boot/bin
-	# cp orangepizero.bin orangepizero.bin.orig
-	# bin2fex orangepizero.bin orangepizero.fex
-	# nano orangepizero.fex
-	# fex2bin orangepizero.fex orangepizero.bin
+	# cp orangepizero.bin custom.bin
+	# bin2fex custom.bin custom.fex
+	# nano custom.fex
+	# fex2bin custom.fex custom.bin
 	# cd /boot
+	# ln -sf /boot/bin/custom.bin /boot/script.bin
+
+	DiePi
+	# cd /boot
+	# bin2fex script.bin script.fex
+	# mv script.bin script.orig
+	# nano script.fex
+	# fex2bin script.fex script.bin
+
 	# cat boot.cmd
 	# nano armbianEnv.txt
 		verbosity=1
@@ -77,9 +106,9 @@ Orange Pi Zero
 	$ sudo cp mpd /usr/bin
 	$ sudo cp icon.png /root
 
-	# apt-get install mpd mpc ncmpc
+	# apt-get install mpc ncmpc
+	# mv mpd /usr/bin/ && mv mpd.conf /etc/
 	# nano /etc/mpd.conf
-	# systemctl disable mpd.service mpd.socket
 
 	# apt-get install libcue1 libaudiofile1 libavformat-dev libflac8 libmad0 libid3tag0 libmpdclient2 libupnp6
 
