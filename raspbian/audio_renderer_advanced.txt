@@ -41,8 +41,8 @@ Audio Render Advanced
 
 4. Localisation
 
-	#sudo dpkg-reconfigure locales
-	 sudo dpkg-reconfigure tzdata
+	sudo dpkg-reconfigure locales
+	sudo dpkg-reconfigure tzdata
 	
 5. Disable modules
 
