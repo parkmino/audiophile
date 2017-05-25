@@ -16,7 +16,6 @@ musicpd_bg () {
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
  done
-
  sleep 1
 
  pgr_mpd=$(pgrep -x mpd)
@@ -32,12 +31,12 @@ musicpd_bg () {
    io)		 taskset -cp $s_task $proc_nr ;;
    player)	 taskset -cp $s_task $proc_nr ;;
    decoder)	 taskset -cp $s_task $proc_nr ;;
-   output)	 taskset -cp $m_task $proc_nr 
+   output)	 taskset -cp $m_task $proc_nr
 		 renice -1 -p	     $proc_nr
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
- 
+
  nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 
  [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
@@ -50,6 +49,7 @@ musicpd_bg () {
 
 [ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
 
+echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 echo noop > /sys/block/mmcblk0/queue/scheduler
 #ifconfig eth0 txqueuelen 1875
 
@@ -96,32 +96,16 @@ fi
 service getty@tty1 stop
 
 ### Remove services
-for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-logind triggerhappy dbus # systemd-udevd sshd
+for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-logind triggerhappy dbus # systemd-udevd
 do
  service $i stop
 done
+[ -f /boot/nossh ] && service sshd stop
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
 
 ### Init
 taskset -cp $m_task 1
-
-### Polipo
-#if ! grep -qs chunkHighMark /etc/polipo/config; then
-# polipo_mem=$(($(grep MemTotal /proc/meminfo | awk '{print $2}')*256))
-# [ $polipo_mem -gt 536870912 ] && polipo_mem=536870912
-# sed -i "\$achunkHighMark = $polipo_mem" /etc/polipo/config
-#fi
-#taskset nice -n +1 /usr/bin/polipo &
-
-### Print the IP address
-#_IP=$(hostname -I) || true
-#if [ "$_IP" ]; then
-#  printf "My IP address is %s\n" "$_IP"
-#fi
-
-### Show release
-#[ -f /home/pi/release ] && cat /home/pi/release
 
 musicpd_bg &
 /usr/bin/mpd /etc/mpd.conf
