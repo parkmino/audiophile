@@ -21,62 +21,82 @@ iqaudio () {
 }
 
 sound_card () {
-i=$(whiptail --title "Audio device / 오디오 장치" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 19 55 11 \
+i=$(whiptail --title "Audio device / 오디오 장치" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 20 55 12 \
 "1"  "USB Audio Class 2.0" \
-"2"  "Allo Piano DAC" \
-"3"  "HiFiBerry Amp/Amp+" \
-"4"  "HiFiBerry DAC" \
-"5"  "HiFiBerry DAC+/DAC+ Pro" \
-"6"  "HiFiBerry DAC+ Pro (Slave mode/종속 모드)" \
-"7"  "HiFiBerry Digi/Digi+" \
-"8"  "HiFiBerry Digi+ Pro" \
-"9"  "IQaudIO DAC" \
-"10" "IQaudIO DAC+" \
-"11" "IQaudIO Digi+" 3>&1 1>&2 2>&3)
+"2"  "Allo Boss DAC" \
+"3"  "Allo Boss DAC (Slave mode/종속 모드)" \
+"4"  "Allo Piano DAC" \
+"5"  "Allo Piano DAC+" \
+"6"  "Allo Piano DAC+ (+Kali board)" \
+"7"  "HiFiBerry Amp/Amp+" \
+"8"  "HiFiBerry DAC" \
+"9"  "HiFiBerry DAC+/DAC+ Pro" \
+"10" "HiFiBerry DAC+ Pro (Slave mode/종속 모드)" \
+"11" "HiFiBerry Digi/Digi+" \
+"12" "HiFiBerry Digi+ Pro" \
+"13" "IQaudIO DAC" \
+"14" "IQaudIO DAC+" \
+"15" "IQaudIO Digi+" 3>&1 1>&2 2>&3)
 
 case $i in
  1)  sound_card_initial
      #sound_card_usbaudio
      ;;
  2)  sound_card_initial
-     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio' /boot/config.txt
+     sudo sed -i '$adtoverlay=allo-boss-dac-pcm512x-audio' /boot/config.txt
      #sound_card_intaudio
      ;;
  3)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-amp' /boot/config.txt
+     sudo sed -i '$adtoverlay=allo-boss-dac-pcm512x-audio,slave' /boot/config.txt
      #sound_card_intaudio
      ;;
  4)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-dac' /boot/config.txt
+     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio' /boot/config.txt
      #sound_card_intaudio
      ;;
  5)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-dacplus' /boot/config.txt
+     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio' /boot/config.txt
      #sound_card_intaudio
      ;;
  6)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-dacplus,slave' /boot/config.txt
+     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio,glb_mclk' /boot/config.txt
      #sound_card_intaudio
      ;;
  7)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-digi' /boot/config.txt
+     sudo sed -i '$adtoverlay=hifiberry-amp' /boot/config.txt
      #sound_card_intaudio
      ;;
  8)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-digi-pro' /boot/config.txt
+     sudo sed -i '$adtoverlay=hifiberry-dac' /boot/config.txt
      #sound_card_intaudio
      ;;
  9)  sound_card_initial
+     sudo sed -i '$adtoverlay=hifiberry-dacplus' /boot/config.txt
+     #sound_card_intaudio
+     ;;
+ 10) sound_card_initial
+     sudo sed -i '$adtoverlay=hifiberry-dacplus,slave' /boot/config.txt
+     #sound_card_intaudio
+     ;;
+ 11) sound_card_initial
+     sudo sed -i '$adtoverlay=hifiberry-digi' /boot/config.txt
+     #sound_card_intaudio
+     ;;
+ 12) sound_card_initial
+     sudo sed -i '$adtoverlay=hifiberry-digi-pro' /boot/config.txt
+     #sound_card_intaudio
+     ;;
+ 13) sound_card_initial
      sudo sed -i '$adtoverlay=iqaudio-dac' /boot/config.txt
      #sound_card_intaudio
      iqaudio
      ;;
- 10) sound_card_initial
+ 14) sound_card_initial
      sudo sed -i '$adtoverlay=iqaudio-dacplus' /boot/config.txt
      #sound_card_intaudio
      iqaudio
      ;;
- 11) sound_card_initial
+ 15) sound_card_initial
      sudo sed -i '$adtoverlay=iqaudio-digi-wm8804-audio' /boot/config.txt
      #sound_card_intaudio
      iqaudio
@@ -184,16 +204,17 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 }
 
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 17 62 9 \
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 18 62 10 \
  "1"  "Audio device              오디오 장치           >" \
  "2"  "USB signal & power        USB 신호와 전원       >" \
  "3"  "IP address                IP 설정               >" \
  "4"  "DBus, DoP, Music Folder   DBus, DoP, 음원 폴더  >" \
  "5"  "Change renderer name      렌더러 이름 바꾸기    >" \
- "6"  "ALSA reinstall            ALSA 재설치" \
- "7"  "Raspbian update           Raspbian 업데이트" \
- "8"  "Reboot                    재시작" \
- "9"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
+ "6"  "Disable SSH               SSH 사용 안 함" \
+ "7"  "ALSA reinstall            ALSA 재설치" \
+ "8"  "Raspbian update           Raspbian 업데이트" \
+ "9"  "Reboot                    재시작" \
+"10"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
@@ -204,13 +225,14 @@ while true; do
   3)  static_ip ;;
   4)  dbus_dop_folder ;;
   5)  renderer_name ;;
-  6)  sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
+  6)  sudo touch /boot/nossh ;;
+  7)  sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
       sudo apt-get install --reinstall libasound2 libasound2-data
       sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
-  7)  sudo apt-get update
+  8)  sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
-  8)  sudo reboot ;;
-  9)  sudo poweroff ;;
+  9)  sudo reboot ;;
+  10) sudo poweroff ;;
  esac
 done
