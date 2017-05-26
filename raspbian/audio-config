@@ -225,7 +225,7 @@ while true; do
   3)  static_ip ;;
   4)  dbus_dop_folder ;;
   5)  renderer_name ;;
-  6)  sudo touch /boot/nossh ;;
+  6)  sudo touch /boot/.nossh ;;
   7)  sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
       sudo apt-get install --reinstall libasound2 libasound2-data
       sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
