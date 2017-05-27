@@ -13,15 +13,20 @@
 
 kodi_bg () {
 
- until [ $(pgrep -x kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q Timer); do
+ until [ $(pgrep -x kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x kodi.bin) 2>/dev/null | grep -q Timer); do
   sleep 1
  done
  sleep 1
 
  pgr_kodi=$(pgrep -x kodi.bin)
+ ppid=$pgr_kodi
+
+ until [ $ppid -eq 1 ]; do
+  ppid=$(ps -o ppid= -p $ppid)
+  taskset -cp $m_task $ppid
+ done
 
  taskset -pc $m_task $pgr_kodi
- #renice -1 -p       $pgr_kodi
 
  echo "$(pstree -np $pgr_kodi)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
@@ -30,11 +35,14 @@ kodi_bg () {
    ActiveAE)	taskset -cp $m_task $proc_nr
 		renice -1 -p	    $proc_nr ;;
    AESink)	taskset -cp $s_task $proc_nr ;;
-  #*)	 	taskset -cp 0-2     $proc_nr ;;
+   kodi.bin) 	taskset -cp 0,2     $proc_nr ;;
+   *)	 	taskset -cp $s_task $proc_nr ;;
   esac
  done
 
- [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+service ntp stop
+
+[ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
 
  /home/osmc/llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
@@ -87,15 +95,12 @@ fi
 modprobe -r 8021q
 
 ### Remove services
-for i in avahi-daemon eventlircd irqbalance polkitd systemd-journald systemd-logind systemd-udevd udisks udisks-glue wpa_supplicant # avahi-daemon connman dbus rpcbind
+for i in eventlircd irqbalance systemd-journald systemd-udevd udisks udisks-glue wpa_supplicant
 do
  service $i stop
 done
 [ -f /boot/.nossh ] && service sshd stop
 swapoff -a
-
-### Init
-taskset -cp $m_task 1
 
 kodi_bg &
 

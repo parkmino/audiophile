@@ -50,3 +50,4 @@ Open Source Media Center
 	$ wget http://blogattach.naver.com/be2ba2196c5b318ea944291a27c6b9c46c3f6f/20150925_7_blogfile/parkmino45_1443186583271_8MB8E9_/llctl http://blogattach.naver.com/1a8f06b5a0fdfe220ce18cb081651f65c29a658b00/20160514_277_blogfile/parkmino45_1463226759161_0kMrxO_/hub-ctrl
 	$ sudo chmod +x llctl hub-ctrl
 	$ sudo nano /etc/rc.local
+	$ sudo systemctl disable http-time
