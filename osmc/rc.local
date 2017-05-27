@@ -1,0 +1,102 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+kodi_bg () {
+
+ until [ $(pgrep -x kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q Timer); do
+  sleep 1
+ done
+ sleep 1
+
+ pgr_kodi=$(pgrep -x kodi.bin)
+
+ taskset -pc $m_task $pgr_kodi
+ #renice -1 -p       $pgr_kodi
+
+ echo "$(pstree -np $pgr_kodi)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   ActiveAE)	taskset -cp $m_task $proc_nr
+		renice -1 -p	    $proc_nr ;;
+   AESink)	taskset -cp $s_task $proc_nr ;;
+  #*)	 	taskset -cp 0-2     $proc_nr ;;
+  esac
+ done
+
+ [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+
+ /home/osmc/llctl f0 l0 d0
+ echo none > /sys/class/leds/led0/trigger
+ echo 0    > /sys/class/leds/led0/brightness
+ [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+}
+
+[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+
+echo noop > /sys/block/mmcblk0/queue/scheduler
+
+#avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
+#$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
+#$(echo $avail_gov | grep -q conservative) && gov=conservative
+#$(echo $avail_gov | grep -q powersave)    && gov=powersave
+#[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+ chrt -op 0 $i
+done
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice 0 $i
+done
+
+m_task=$(($(nproc --all)-1))
+[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ && $2 !~ /kodi/ && $2 !~ /kodi.bin/ {print $1}'); do
+  taskset -acp 0 $pid || true
+ done
+fi
+
+### Unmute IQaudIO I2S
+#echo "22"  > /sys/class/gpio/export
+#echo "out" > /sys/class/gpio/gpio22/direction
+#echo "1"   > /sys/class/gpio/gpio22/value
+
+### Turn off USBs
+#if lsusb -d 0424:9514; then
+/home/osmc/hub-ctrl -h 0 -P 5 -p 0
+/home/osmc/hub-ctrl -h 0 -P 4 -p 0
+#fi
+#/home/osmc/hub-ctrl -h 0 -P 3 -p 0
+#/home/osmc/hub-ctrl -h 0 -P 2 -p 0 # USB power  off
+#/home/osmc/hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
+
+### Remove modules
+modprobe -r 8021q
+
+### Remove services
+for i in avahi-daemon eventlircd irqbalance polkitd systemd-journald systemd-logind systemd-udevd udisks udisks-glue wpa_supplicant # avahi-daemon connman dbus rpcbind
+do
+ service $i stop
+done
+[ -f /boot/.nossh ] && service sshd stop
+swapoff -a
+
+### Init
+taskset -cp $m_task 1
+
+kodi_bg &
+
+exit 0
