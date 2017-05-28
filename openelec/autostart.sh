@@ -1,38 +1,7 @@
 #!/bin/sh
 
-kodi_bg () {
-
- until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p 2>/dev/null | grep -q complet); do
-  sleep 1
- done
- sleep 1
-
- pgr_kodi=$(pgrep kodi.bin)
- ppid=$pgr_kodi
-
- until [ $ppid -eq 1 ]; do
-  ppid=$(ps -o ppid= -p $ppid)
-  taskset -cp $m_task $ppid
- done
-
- taskset -cp $m_task $pgr_kodi
-
-systemctl stop eventlircd irqbalance pulseaudio systemd-journald systemd-udevd  wpa_supplicant
-[ -f /flash/.nossh ] && systemctl stop sshd
-
- llctl f0 l0 d0
- echo none > /sys/class/leds/led0/trigger
- echo 0    > /sys/class/leds/led0/brightness
- [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
-}
-
-#echo noop > /sys/block/mmcblk0/queue/scheduler
-#
-avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
-$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
-$(echo $avail_gov | grep -q conservative) && gov=conservative
-$(echo $avail_gov | grep -q powersave)    && gov=powersave
-[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+#export LD_LIBRARY_PATH_ORIG=$LD_LIBRARY_PATH
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/storage/.config/
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
@@ -51,10 +20,11 @@ if [ "$m_task" -ge 1 ];then
  done
 fi
 
-### Unmute IQaudIO I2S
-#echo "22"  > /sys/class/gpio/export
-#echo "out" > /sys/class/gpio/gpio22/direction
-#echo "1"   > /sys/class/gpio/gpio22/value
+avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
+$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
+$(echo $avail_gov | grep -q conservative) && gov=conservative
+$(echo $avail_gov | grep -q powersave)    && gov=powersave
+[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 ### Turn off USBs
 #if lsusb -d 0424:9514; then
@@ -70,4 +40,28 @@ modprobe -r 8021q
 
 swapoff -a
 
-kodi_bg &
+(
+ until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p 2>/dev/null | grep -q complet); do
+  sleep 1
+ done
+ sleep 1
+
+ pgr_kodi=$(pgrep kodi.bin)
+ ppid=$pgr_kodi
+
+ until [ $ppid -eq 1 ]; do
+  ppid=$(ps -o ppid= -p $ppid)
+  taskset -cp $m_task $ppid
+ done
+
+ taskset -cp $m_task $pgr_kodi
+
+ systemctl stop eventlircd irqbalance pulseaudio systemd-journald systemd-udevd  wpa_supplicant
+
+ #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH_ORIG
+
+ llctl f0 l0 d0
+ echo none > /sys/class/leds/led0/trigger
+ echo 0    > /sys/class/leds/led0/brightness
+ [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+) &
