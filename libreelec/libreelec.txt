@@ -1,12 +1,8 @@
-OpenELEC (Open Embedded Linux Entertainment Center)
+LibreELEC (Libre Embedded Linux Entertainment Center)
 
 1. Unsquashfs & mksquashfs
 
 	$ unsquashfs SYSTEM
-	  ALSA
-	$ cp ps /bin/
-	$ cp libprocps.so.3.0.0 /lib/libprocps.so.3
-	$ cp chrt taskset hub-ctrl llctl /usr/bin/
 	$ nano /usr/share/alsa/alsa.conf
 		pcm.default.type hw
 		pcm.default.card 0
@@ -14,11 +10,14 @@ OpenELEC (Open Embedded Linux Entertainment Center)
 		pcm.default.subdevice 0
 	$ nano /usr/lib/modprobe.d/alsa-base.conf
 		#options snd-usb-audio index=-2
+	$ cp /bin/ps /usr/bin/
+	$ cp /lib/arm-linux-gnueabihf/libprocps.so.3.0.0 /usr/lib/libprocps.so.3
+	$ cp chrt taskset hub-ctrl llctl /usr/bin/
 	$ sudo mksquashfs ... SYSTEM
 
 	$ mount
 	$ sudo umount /dev/sdc1 /dev/sdc2
-	$ sudo dd if=OpenELEC-RPi2.arm-8.0.3.img of=/dev/sdc
+	$ sudo dd if=LibreELEC-RPi2.arm-8.0.2.img of=/dev/sdc
 	$ mv SYSTEM SYSTEM.orig
 	$ cp .../SYSTEM SYSTEM
 
@@ -31,13 +30,14 @@ OpenELEC (Open Embedded Linux Entertainment Center)
 
 3. SSH login
 
-	$ ssh root@192.168.0.x (password: openelec)
+	$ ssh root@192.168.0.x (password: libreelec)
 
 4. Disable modules
 
 	# lsmod
-	# nano ~/.config/modprobe.d/openelec-blacklist.conf
+	# nano ~/.config/modprobe.d/libreelec-blacklist.conf
 		blacklist bcm2835_gpiomem
+		blacklist fixed
 
 5. Sysctl.conf
 
