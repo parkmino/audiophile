@@ -20,3 +20,10 @@
 		[ -f /boot/.nossh ] && service sshd stop
 	$ nano ~/audio-config
 		6) sudo touch /boot/.nossh ;;
+
+3. Sysctl.conf
+
+	$ sudo nano /etc/sysctl.conf
+		kernel.sched_wakeup_granularity_ns = 388346
+		kernel.sched_latency_ns = 1393266
+		kernel.sched_shares_window_ns = 346002
