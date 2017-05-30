@@ -1,7 +1,6 @@
 #!/bin/sh
 
-#export LD_LIBRARY_PATH_ORIG=$LD_LIBRARY_PATH
-#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/storage/.config/
+[ ! -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 ] && [ -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav ] && mv /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav /storage/.kodi/addons/script.module.requests/lib/libasound.so.2
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
@@ -41,7 +40,7 @@ modprobe -r 8021q
 swapoff -a
 
 (
- until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p 2>/dev/null | grep -q complet); do
+ until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q complet); do
   sleep 1
  done
  sleep 1
@@ -56,9 +55,9 @@ swapoff -a
 
  taskset -cp $m_task $pgr_kodi
 
- systemctl stop eventlircd irqbalance pulseaudio systemd-journald systemd-udevd  wpa_supplicant
+ systemctl stop eventlircd irqbalance pulseaudio wpa_supplicant
 
- #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH_ORIG
+[ -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 ] && mv /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger

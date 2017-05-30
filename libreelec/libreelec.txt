@@ -43,7 +43,20 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 
 	# nano ~/.config/sysctl.d/sysctl.conf
 
-6. Autostart.sh
+6. libasound
+
+	$ cd /usr/lib
+	$ mv libasound.so libasound.so.orig
+	$ mv libasound.so.2 libasound.so.2.orig
+	Copy /usr/bin/libasound.so.2.0.0 to /storage/.config/ via samba
+	# export
+	# cp /storage/.config/libasound.so.2.0.0 /storage/.kodi/addons/script.module.requests/lib
+	# cd /storage/.kodi/addons/script.module.requests/lib
+	# ln -s libasound.so.2.0.0 libasound.so
+	# ln -s libasound.so.2.0.0 libasound.so.2
+	# ls -al libasound*
+
+7. Autostart.sh
 
 	# nano /storage/.config/autostart.sh
 	# chmod +x /storage/.config/autostart.sh
