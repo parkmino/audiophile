@@ -52,9 +52,11 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 6. libasound
 
 	# export
-	# ln -s /usr/lib/libasound.so.2.0.0 /storage/.kodi/addons/script.module.requests/lib/libasound.so
-	# ln -s /usr/lib/libasound.so.2.0.0 /storage/.kodi/addons/script.module.requests/lib/libasound.so.2
-	# ls -al /storage/.kodi/addons/script.module.requests/lib/libasound*
+	# cd /storage/.kodi/addons/script.module.requests/lib/
+	# cp /usr/lib/libasound.so.2 ./
+	# ln -s libasound.so.2.0.0 libasound.so
+	# ln -s libasound.so.2.0.0 libasound.so.2
+	# ls -al libasound*
 
 7. Autostart.sh
 
