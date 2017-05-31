@@ -2,7 +2,10 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 
 1. Unsquashfs & mksquashfs
 
-	$ unsquashfs SYSTEM
+	$ mv SYSTEM SYSTEM.orig
+	$ unsquashfs SYSTEM.orig
+	$ cd squashfs-root
+	  ALSA tweak
 	$ nano /usr/share/alsa/alsa.conf
 		pcm.default.type hw
 		pcm.default.card 0
@@ -11,15 +14,18 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ nano /usr/lib/modprobe.d/alsa-base.conf
 		#options snd-usb-audio index=-2
 	$ cp /bin/ps /usr/bin/
-	$ cp /lib/arm-linux-gnueabihf/libprocps.so.3.0.0 /usr/lib/libprocps.so.3
+	$ cp /lib/arm-linux-gnueabihf/libprocps.so.3.0.0 /usr/lib/
 	$ cp chrt taskset hub-ctrl llctl /usr/bin/
-	$ sudo mksquashfs ... SYSTEM
+	$ mv /usr/lib/libasound.so   /usr/lib/libasound.so.orig
+	$ mv /usr/lib/libasound.so.2 /usr/lib/libasound.so.2.orig
+	$ cd ..
+	$ sudo mksquashfs squashfs-root SYSTEM
 
 	$ mount
 	$ sudo umount /dev/sdc1 /dev/sdc2
 	$ sudo dd if=LibreELEC-RPi2.arm-8.0.2.img of=/dev/sdc
 	$ mv SYSTEM SYSTEM.orig
-	$ cp .../SYSTEM SYSTEM
+	$ cp SYSTEM SYSTEM
 
 2. Boot configuration
 
@@ -45,13 +51,9 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 
 6. libasound
 
-	$ cd /usr/lib
-	$ mv libasound.so libasound.so.orig
-	$ mv libasound.so.2 libasound.so.2.orig
-	Copy /usr/bin/libasound.so.2.0.0 to /storage/.config/ via samba
 	# export
-	# cp /storage/.config/libasound.so.2.0.0 /storage/.kodi/addons/script.module.requests/lib
-	# cd /storage/.kodi/addons/script.module.requests/lib
+	# cp /usr/lib/libasound.so.2.0.0 /storage/.kodi/addons/script.module.requests/lib/
+	# cd /storage/.kodi/addons/script.module.requests/lib/
 	# ln -s libasound.so.2.0.0 libasound.so
 	# ln -s libasound.so.2.0.0 libasound.so.2
 	# ls -al libasound*
