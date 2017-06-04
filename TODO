@@ -31,3 +31,9 @@
 		kernel.sched_wakeup_granularity_ns = 388346
 		kernel.sched_latency_ns = 1393266
 		kernel.sched_shares_window_ns = 346002
+
+4. mpd.conf
+
+	$ sudo /etc/mpd.conf
+		audio_buffer_size       "3082"
+		buffer_before_play      "10.957627697%"
