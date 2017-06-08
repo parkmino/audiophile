@@ -25,13 +25,24 @@
 	$ nano ~/audio-config
 		6) sudo touch /boot/.nossh ;;
 
-3. Sysctl.conf
+3. sysctl.conf
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_wakeup_granularity_ns = 388346
-		kernel.sched_latency_ns = 1393266
+		kernel.sched_wakeup_granularity_ns = 388347
+		kernel.sched_latency_ns = 1393267
 		kernel.sched_shares_window_ns = 346002
 
 4. mpd.conf
 	$ sudo /etc/mpd.conf
+		device			"sound"
 		audio_buffer_size       "3082"
 		buffer_before_play      "10.9576276975657058378565%"
+
+5. alsa.conf
+	$ sudo /usr/share/alsa/alsa.conf
+		pcm.!sound{type=hw,card=0,device=0,subdevice=0}
+		!cards ""
+		pcm.!cards ""
+
+6. rc.local
+	$ sudo nano /etc/rc.local
+		#renice ...
