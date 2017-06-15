@@ -39,7 +39,7 @@
 
 5. alsa.conf
 	$ sudo /usr/share/alsa/alsa.conf
-		!pcm.phoneline={type=hw card=0 device=0 subdevice=0}
+		!pcm.phoneline={type=hw,card=0,device=0,subdevice=0}
 		defaults.pcm.minperiodtime 0
 
 6. rc.local
