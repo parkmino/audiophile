@@ -33,7 +33,8 @@ kodi_bg () {
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
    ActiveAE)	taskset -cp $m_task $proc_nr
-		renice -1 -p	    $proc_nr ;;
+		#renice -1 -p	    $proc_nr
+		;;
    AESink)	taskset -cp $s_task $proc_nr ;;
    kodi.bin) 	taskset -cp 0,2     $proc_nr ;;
    *)	 	taskset -cp $s_task $proc_nr ;;

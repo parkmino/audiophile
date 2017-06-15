@@ -30,7 +30,3 @@
 		kernel.sched_wakeup_granularity_ns = 388347
 		kernel.sched_latency_ns = 1393267
 		kernel.sched_shares_window_ns = 346002
-
-4. rc.local
-	$ sudo nano /etc/rc.local
-		#renice ...
