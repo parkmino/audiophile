@@ -6,6 +6,33 @@ $ wget http://blogattach.naver.com/7eeb62d2c39b9a466885e9d5e3007e0dadf401ed83/20
 $ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
 $ sudo nano /etc/upmpdcli.conf
 	checkcontentformat = 0
+	...
+	[radio KBS클래식FM]
+	url = http://juoradio.appspot.com/kbs1
+
+	[radio KBS쿨FM]
+	url = http://juoradio.appspot.com/kbs2
+
+	[radio KBS1Radio]
+	url = http://juoradio.appspot.com/kbs1r
+
+	[radio KBS해피FM]
+	url = http://juoradio.appspot.com/kbs2r
+
+	[radio KBS3Radio]
+	url = http://juoradio.appspot.com/kbs3r
+
+	[radio KBS한민족방송]
+	url = http://juoradio.appspot.com/kbsscr
+
+	[radio KBS월드라디오]
+	url = http://juoradio.appspot.com/kbsrki
+
+	[radio CBS음악FM]
+	url = http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
+
+	[radio tbsFM]
+	url = http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8
 $ sudo systemctl disable upmpdcli.service
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
