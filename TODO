@@ -31,12 +31,6 @@
 		kernel.sched_latency_ns = 1393267
 		kernel.sched_shares_window_ns = 346002
 
-4. mpd.conf
-	$ sudo /etc/mpd.conf
-		device			"pcm.phoneline"
-		audio_buffer_size       "3082"
-		buffer_before_play      "10.9576276975657058378565%"
-
-5. rc.local
+4. rc.local
 	$ sudo nano /etc/rc.local
 		#renice ...
