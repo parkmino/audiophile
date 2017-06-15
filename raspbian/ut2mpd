@@ -1,0 +1,13 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") youtube_url"
+}
+
+[ -z "$1" ] && usage && exit
+
+if youtube-dl -qs "$1" ; then
+ mpc add  $(youtube-dl -f bestaudio/best -g $1) && mpc play $(mpc playlist | wc -l)
+else
+ exit
+fi

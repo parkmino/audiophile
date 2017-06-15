@@ -1,0 +1,20 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") 1(클래식FM)|2(쿨FM)|1r|2r(해피FM)|3r|h(한민족방송)|w(월드라디오)"
+}
+
+case $1 in
+ 1)  url=http://juoradio.appspot.com/kbs1   ;;
+ 2)  url=http://juoradio.appspot.com/kbs2   ;;
+ 1r) url=http://juoradio.appspot.com/kbs1r  ;;
+ 2r) url=http://juoradio.appspot.com/kbs2r  ;;
+ 3r) url=http://juoradio.appspot.com/kbs3r  ;;
+ h)  url=http://juoradio.appspot.com/kbsscr ;;
+ w)  url=http://juoradio.appspot.com/kbsrki ;;
+ *)  usage && exit ;;
+esac
+
+url=$(curl -X GET -I $url | grep -i '^Location:' | cut -d ' ' -f2)
+
+mpc add $url && mpc play $(mpc playlist | wc -l)
