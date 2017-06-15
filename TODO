@@ -37,11 +37,6 @@
 		audio_buffer_size       "3082"
 		buffer_before_play      "10.9576276975657058378565%"
 
-5. alsa.conf
-	$ sudo /usr/share/alsa/alsa.conf
-		!pcm.phoneline={type=hw,card=0,device=0,subdevice=0}
-		defaults.pcm.minperiodtime 0
-
-6. rc.local
+5. rc.local
 	$ sudo nano /etc/rc.local
 		#renice ...
