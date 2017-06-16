@@ -1,0 +1,25 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") k1(KBS클래식FM)|k2(KBS쿨FM)|k1r|k2r(해피FM)|k3r|kh(한민족방송)|kw(월드라디오)|c(CBS음악FM)|t(tbsFM)"
+}
+
+kbsr () {
+ url=$(youtube-dl --no-warnings -g $url 2>&1 | cut -d "'" -f2 | cut -d "'" -f1)
+#url=$(curl -X GET -I $url | grep -i '^Location:' | cut -d ' ' -f2)
+}
+
+case $1 in
+ k1)  url=http://juoradio.appspot.com/kbs1	; kbsr ;;
+ k2)  url=http://juoradio.appspot.com/kbs2	; kbsr ;;
+ k1r) url=http://juoradio.appspot.com/kbs1r	; kbsr ;;
+ k2r) url=http://juoradio.appspot.com/kbs2r	; kbsr ;;
+ k3r) url=http://juoradio.appspot.com/kbs3r	; kbsr ;;
+ kh)  url=http://juoradio.appspot.com/kbsscr	; kbsr ;;
+ kw)  url=http://juoradio.appspot.com/kbsrki	; kbsr ;;
+ c)   url=http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8 ;;
+ t)   url=http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8 ;;
+ *)   usage && exit ;;
+esac
+
+mpc add $url && mpc play $(mpc playlist | wc -l)
