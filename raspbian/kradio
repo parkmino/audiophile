@@ -5,7 +5,7 @@ usage () {
 }
 
 kbsr () {
- url=$(youtube-dl --no-warnings -g $url 2>&1 | cut -d "'" -f2 | cut -d "'" -f1)
+ url=$(youtube-dl --no-warnings -g $url 2>&1 | cut -d "'" -f2)
 #url=$(curl -X GET -I $url | grep -i '^Location:' | cut -d ' ' -f2)
 }
 
