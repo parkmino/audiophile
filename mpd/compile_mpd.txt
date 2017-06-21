@@ -3,38 +3,37 @@ Hash: SHA256
 
 Format: 3.0 (quilt)
 Source: mpd
-Binary: mpd, mpd-dbg
+Binary: mpd
 Architecture: any
-Version: 0.19.1-1.1
+Version: 0.20.9-2
 Maintainer: mpd maintainers <pkg-mpd-maintainers@lists.alioth.debian.org>
 Uploaders: Florian Schlichting <fsfs@debian.org>
-Homepage: http://www.musicpd.org/
-Standards-Version: 3.9.6
-Vcs-Browser: http://anonscm.debian.org/gitweb?p=pkg-mpd/pkg-mpd.git
-Vcs-Git: git://anonscm.debian.org/pkg-mpd/pkg-mpd.git
-Build-Depends: debhelper (>= 9), dh-autoreconf, dh-systemd, dpkg-dev (>= 1.16.1~), libadplug-dev, libao-dev, libasound2-dev [linux-any], libaudiofile-dev (>= 0.3), libavahi-client-dev, libavahi-glib-dev, libavcodec-dev, libavformat-dev, libboost-dev, libbz2-dev, libcdio-paranoia-dev, libcppunit-dev, libcurl4-gnutls-dev | libcurl-dev, libexpat1-dev, libfaad-dev, libflac-dev, libfluidsynth-dev, libglib2.0-dev, libgme-dev, libicu-dev, libid3tag0-dev, libiso9660-dev, libjack-jackd2-dev, libmad0-dev, libmikmod-dev, libmms-dev, libmodplug-dev, libmp3lame-dev, libmpcdec-dev, libmpdclient-dev, libmpg123-dev, libnfs-dev, libogg-dev, libopenal-dev, libopus-dev, libpulse-dev, libresid-builder-dev, libroar-dev (>= 0.4), libsamplerate0-dev, libshine-dev [arm armel armeb], libshout3-dev, libsidplay2-dev, libsidutils-dev, libsmbclient-dev, libsndfile1-dev, libsoxr-dev, libsqlite3-dev, libsystemd-daemon-dev [linux-any], libupnp-dev, libvorbis-dev [!arm !armel !armeb], libvorbisidec-dev [arm armel armeb], libwavpack-dev, libwildmidi-dev, libwrap0-dev, libyajl-dev, libzzip-dev, xmlto
+Homepage: https://www.musicpd.org/
+Standards-Version: 4.0.0
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-mpd/pkg-mpd.git
+Vcs-Git: https://anonscm.debian.org/git/pkg-mpd/pkg-mpd.git
+Build-Depends: debhelper (>= 10), libadplug-dev, libao-dev, libasound2-dev [linux-any], libaudiofile-dev, libavahi-client-dev, libavcodec-dev, libavformat-dev, libboost-dev, libbz2-dev, libcdio-paranoia-dev, libcppunit-dev, libcurl4-gnutls-dev | libcurl-dev, libexpat1-dev, libfaad-dev, libflac-dev, libfluidsynth-dev, libgme-dev, libicu-dev, libid3tag0-dev, libiso9660-dev, libjack-jackd2-dev, libmad0-dev, libmikmod-dev, libmms-dev, libmodplug-dev, libmp3lame-dev, libmpcdec-dev, libmpdclient-dev, libmpg123-dev, libnfs-dev, libogg-dev, libopenal-dev, libopus-dev, libpulse-dev, libresid-builder-dev, libroar-dev, libsamplerate0-dev, libshine-dev [arm armel armeb], libshout3-dev, libsidplayfp-dev, libsidutils-dev, libsmbclient-dev [!hurd-i386], libsndfile1-dev, libsoxr-dev, libsqlite3-dev, libsystemd-dev [linux-any], libupnp-dev, libvorbis-dev [!arm !armel !armeb], libvorbisidec-dev [arm armel armeb], libwavpack-dev, libwildmidi-dev, libwrap0-dev, libyajl-dev, libzzip-dev, xmlto
 Package-List:
  mpd deb sound optional arch=any
- mpd-dbg deb debug extra arch=any
 Checksums-Sha1:
- 68f1ff43a2dd4de913d6c979db504dc2955f5737 701192 mpd_0.19.1.orig.tar.xz
- 2c1e82e5c357e62552787904bc873a60badb30ea 27424 mpd_0.19.1-1.1.debian.tar.xz
+ 3d6ee5a903ce2c4925ee954543f37abbe977d20e 773404 mpd_0.20.9.orig.tar.xz
+ 4693d8688df72d75b0c262e5935a54c59df0aa84 29364 mpd_0.20.9-2.debian.tar.xz
 Checksums-Sha256:
- 8b3afcd440181c9bd18b229b5974e529d59648344dd371370d6f7d62ec2847c5 701192 mpd_0.19.1.orig.tar.xz
- cee4b33941c15c88671620f60652570798d0c975d0fccff6bd4047e0282f304c 27424 mpd_0.19.1-1.1.debian.tar.xz
+ cd77a2869e32354b004cc6b34fcb0bee56114caa2d9ed862aaa8071441e34eb7 773404 mpd_0.20.9.orig.tar.xz
+ 952714d88df0de9d81822ed940c83d6547accb201d1dd5ff7f705a629a44da8b 29364 mpd_0.20.9-2.debian.tar.xz
 Files:
- d235f6e53e5442b6926c49946a303f8d 701192 mpd_0.19.1.orig.tar.xz
- 561026bcbec8a1e081c7d4f6ffb24e3e 27424 mpd_0.19.1-1.1.debian.tar.xz
+ 3eeb559a856d2b5de468a8b713967202 773404 mpd_0.20.9.orig.tar.xz
+ 3fd9909dd9f798408d8668661dec7284 29364 mpd_0.20.9-2.debian.tar.xz
 
 ### Install build packages
 sudo apt-get install autoconf automake build-essential
-sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev libboost-dev libsystemd-daemon-dev
+sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev libboost-dev libsystemd-daemon-dev libmms-dev
 sudo apt-get install libexpat1-dev libupnp-dev
 
 ### Download & Compile
-wget http://www.musicpd.org/download/mpd/0.20/mpd-0.20.4.tar.xz
-tar xvf mpd-0.20.4.tar.xz
-cd mpd-0.20.4
+wget http://www.musicpd.org/download/mpd/0.20/mpd-0.20.9.tar.xz
+tar xvf mpd-0.20.9.tar.xz
+cd mpd-0.20.9
 #export CFLAGS="-march=native -O2"
 export CFLAGS="-O0"
 export CXXFLAGS="-O0"
@@ -43,10 +42,10 @@ export CPPFLAGS="-O0"
 ./configure --help
 
 0.19.x
-./configure --enable-database --enable-libmpdclient --enable-expat --enable-upnp --disable-adplug --enable-alsa --disable-roar --disable-ao --enable-audiofile --disable-zlib --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-smbclient --disable-nfs --disable-debug --disable-documentation --enable-dsd --disable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-soundcloud --disable-lame-encoder --disable-libwrap --disable-lsr --disable-soxr --enable-mad --disable-mikmod --disable-mms --disable-modplug --disable-mpc --disable-mpg123 --disable-openal --disable-opus --disable-oss --disable-osx --disable-pipe-output --disable-pulse --disable-recorder-output --disable-sidplay --disable-shine-encoder --disable-shout --disable-sndfile --disable-solaris-output --disable-sqlite --enable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --disable-icu --disable-glib --disable-neighbor-plugins --disable-aac --with-zeroconf=no
+./configure --enable-database --enable-libmpdclient --enable-expat --enable-upnp --disable-adplug --enable-alsa --disable-roar --disable-ao --enable-audiofile --disable-zlib --disable-bzip2 --disable-cdio-paranoia --enable-curl --disable-smbclient --disable-nfs --disable-debug --disable-documentation --enable-dsd --disable-ffmpeg --disable-fifo --enable-flac --disable-fluidsynth --disable-gme --disable-httpd-output --enable-id3 --disable-inotify --disable-ipv6 --disable-iso9660 --disable-jack --disable-largefile --disable-soundcloud --disable-lame-encoder --disable-libwrap --disable-lsr --disable-soxr --enable-mad --disable-mikmod --enable-mms --disable-modplug --disable-mpc --disable-mpg123 --disable-openal --disable-opus --disable-oss --disable-osx --disable-pipe-output --disable-pulse --disable-recorder-output --disable-sidplay --disable-shine-encoder --disable-shout --disable-sndfile --disable-solaris-output --disable-sqlite --enable-systemd-daemon --enable-tcp --disable-test --disable-twolame-encoder --disable-un --disable-vorbis --disable-vorbis-encoder --disable-wave-encoder --disable-wavpack --disable-werror --disable-wildmidi --disable-zzip --disable-icu --disable-glib --disable-neighbor-plugins --disable-aac --with-zeroconf=no
 
 0.20.x
-./configure --enable-database --disable-daemon --disable-debug --disable-documentation --enable-dsd --disable-fifo --disable-httpd-output --disable-inotify --disable-ipv6 --disable-largefile --disable-soundcloud --disable-libwrap --disable-mikmod --disable-openal --disable-oss --disable-osx --disable-pipe-output --disable-recorder-output --disable-sidplay --disable-shout --disable-solaris-output --enable-tcp --disable-test --disable-un --disable-vorbis --disable-wave-encoder --disable-werror --disable-icu --disable-iconv --disable-systemd-daemon --enable-libmpdclient --enable-expat  --enable-id3 --disable-sqlite --disable-lsr --disable-soxr --enable-curl --disable-smbclient --disable-nfs --disable-cdio-paranoia --disable-mms --disable-webdav --enable-cue --disable-neighbor-plugins --disable-iso9660 --disable-zlib --disable-bzip2 --enable-upnp --disable-zzip --disable-adplug --enable-audiofile --disable-aac --enable-ffmpeg --enable-flac --disable-fluidsynth --disable-gme --enable-mad --disable-mpg123 --disable-modplug --disable-opus --disable-sndfile --disable-mpc --disable-wavpack --disable-wildmidi --disable-shine-encoder --disable-vorbis-encoder --disable-lame-encoder --disable-twolame-encoder --enable-alsa --disable-roar --disable-sndio --disable-haiku --disable-jack --disable-ao --disable-pulse --with-zeroconf=no
+./configure --enable-database --disable-daemon --disable-debug --disable-documentation --enable-dsd --disable-fifo --disable-httpd-output --disable-inotify --disable-ipv6 --disable-largefile --disable-soundcloud --disable-libwrap --disable-mikmod --disable-openal --disable-oss --disable-osx --disable-pipe-output --disable-recorder-output --disable-sidplay --disable-shout --disable-solaris-output --enable-tcp --disable-test --disable-un --disable-vorbis --disable-wave-encoder --disable-werror --disable-icu --disable-iconv --disable-systemd-daemon --enable-libmpdclient --enable-expat  --enable-id3 --disable-sqlite --disable-lsr --disable-soxr --enable-curl --disable-smbclient --disable-nfs --disable-cdio-paranoia --enable-mms --disable-webdav --enable-cue --disable-neighbor-plugins --disable-iso9660 --disable-zlib --disable-bzip2 --enable-upnp --disable-zzip --disable-adplug --enable-audiofile --disable-aac --enable-ffmpeg --enable-flac --disable-fluidsynth --disable-gme --enable-mad --disable-mpg123 --disable-modplug --disable-opus --disable-sndfile --disable-mpc --disable-wavpack --disable-wildmidi --disable-shine-encoder --disable-vorbis-encoder --disable-lame-encoder --disable-twolame-encoder --enable-alsa --disable-roar --disable-sndio --disable-haiku --disable-jack --disable-ao --disable-pulse --with-zeroconf=no
 
 make
 sudo make install
