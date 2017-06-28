@@ -33,7 +33,7 @@ $ sudo nano /etc/upmpdcli.conf
 
 	[radio KBS월드라디오]
 	url = http://juoradio.appspot.com/kbsrki
-	artUrl = http://worldimg.kbs.co.kr/src/images/oth_banner/1496387577170516_20thlogo.jpg
+	artUrl = http://img.kbs.co.kr/cms/image/main_img16/gnb-more-world.png
 
 	[radio CBS음악FM]
 	url = http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
