@@ -9,31 +9,31 @@ $ sudo nano /etc/upmpdcli.conf
 	...
 	[radio KBS클래식FM]
 	url = http://juoradio.appspot.com/kbs1
-	artUrl = http://img.kbs.co.kr/cms/image/main_img15/menu_logo_classicfm.png
+	artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_24.png
 
 	[radio KBS쿨FM]
 	url = http://juoradio.appspot.com/kbs2
-	artUrl = http://img.kbs.co.kr/cms/image/main_img15/menu_logo_coolfm.png
+	artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_25.png
 
 	[radio KBS1Radio]
 	url = http://juoradio.appspot.com/kbs1r
-	artUrl = http://img.kbs.co.kr/cms/image/main_img15/menu_logo_radio1.png
+	artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_21.png
 
 	[radio KBS해피FM]
 	url = http://juoradio.appspot.com/kbs2r
-	artUrl = http://img.kbs.co.kr/cms/image/main_img15/menu_logo_radio2.png
+	artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_22.png
 
 	[radio KBS3Radio]
 	url = http://juoradio.appspot.com/kbs3r
-	artUrl = http://img.kbs.co.kr/cms/image/main_img15/menu_logo_radio3.png
+	artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_23.png
 
 	[radio KBS한민족방송]
 	url = http://juoradio.appspot.com/kbsscr
-	artUrl = http://img.kbs.co.kr/cms/image/main_img15/menu_logo_han.png
+	artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_26.png
 
 	[radio KBS월드라디오]
 	url = http://juoradio.appspot.com/kbsrki
-	artUrl = http://img.kbs.co.kr/cms/image/main_img16/gnb-more-world.png
+	artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_I92.png
 
 	[radio CBS음악FM]
 	url = http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
