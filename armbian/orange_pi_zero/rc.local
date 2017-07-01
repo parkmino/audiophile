@@ -77,12 +77,12 @@ for i in cron haveged ntp rsyslog systemd-journald systemd-logind dbus getty@tty
 do
  service $i stop
 done
-[ -f /boot/.nossh ] && service sshd stop
+[ -f /boot/.nossh ] && service dropbear stop && pkill dropbear
 pkill dbus-daemon
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
 
-#USB1 Affinity
+### USB1 Affinity
 until $(grep -q usb1 /proc/interrupts); do
  sleep 1
 done
