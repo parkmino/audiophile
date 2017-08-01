@@ -27,5 +27,4 @@
 
 3. ALSA
 	$ sudo nano /usr/share/alsa/alsa.conf
-		pcm.shm=...
-		defaults.pcm.minperiodtime=0
+		pcm.shm=pcm.shm={type=hw,card=0,device=0,subdevice=0}
