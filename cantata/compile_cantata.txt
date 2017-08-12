@@ -81,14 +81,14 @@ rm -rf ~/Downloads/mpd/cantata-master && unzip master.zip -d ~/Downloads/mpd && 
 
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_REMOTE_DEVICES=ON
 
-sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.1.0" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
+sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.1.50" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
 
 ### Git Add ###
 
 cd ~/git/audiophile
-[ -f cantata/cantata-qt*amd64.deb ] && git rm cantata/cantata-qt*amd64.deb
-cp ~/Downloads/mpd/cantata-svn/build/cantata-qt*$(date +"%Y.%m.%d")*.deb  cantata/
-git add cantata/cantata-qt*$(date +"%Y.%m.%d")*.deb
+[ -f cantata/cantata-qt*.deb ] && git rm cantata/cantata-qt*.deb
+cp ~/Downloads/mpd/cantata-svn/build/cantata-qt*.deb  cantata/
+git add cantata/cantata-qt*.deb
 git commit -m "Update Cantata package"
 git push origin master
 
