@@ -7,17 +7,17 @@
 	# echo /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
 
 	$ sudo nano /etc/rc.local
-		echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
-		avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
-		$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
-		$(echo $avail_gov | grep -q conservative) && gov=conservative
-		$(echo $avail_gov | grep -q powersave)    && gov=powersave
-		[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	 or
+	for i in $(seq 0 $(($(nproc --all)-1))); do
+	 echo powersave > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor
+	done
 
-		for i in $(seq 0 $(($(nproc --all)-1))); do
-		 echo $gov > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor
-		done
+	for i in ondemand conservative powersave; do
+	 grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+	done
+	[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 2. SSH
 	$ sudo nano /etc/rc.local
