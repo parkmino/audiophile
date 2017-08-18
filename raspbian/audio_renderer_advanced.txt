@@ -137,8 +137,8 @@ Audio Render Advanced
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
-	cp kbsr ut2mpd /home/pi
-	sudo ln -s /home/pi/kbsr /home/pi/ut2mpd /usr/bin/
+	cp kr2mpd ut2mpd /home/pi
+	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /usr/bin/
 	sudo cp internet\ radio.m3u /var/lib/mpd/playlists/
 
 18. audio-config
