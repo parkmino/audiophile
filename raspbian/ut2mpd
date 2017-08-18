@@ -1,13 +1,14 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") youtube_url"
+ echo "Usage: $(basename "$0") YouTube_URL"
 }
 
 [ -z "$1" ] && usage && exit
 
 if youtube-dl -qs "$1" ; then
- mpc add  $(youtube-dl -f bestaudio/best -g $1) && mpc play $(mpc playlist | wc -l)
+ next=$(($(mpc playlist | wc -l)+1))
+ mpc add  $(youtube-dl -f bestaudio/best -g "$1") && mpc play $next
 else
- exit
+ echo "* The requested YouTube URL is not correct or supported!"
 fi
