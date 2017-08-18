@@ -35,7 +35,7 @@ Audio Render Advanced
 		selinux=0
 		#dwc_otg.fiq_split_enable=0 dwc_otg.fiq_fix_enable=0
 		#dwc_otg.fiq_fsm_enable=0
-		dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
+		#dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
 
 4. Localisation
 
