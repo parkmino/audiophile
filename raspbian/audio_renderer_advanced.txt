@@ -19,10 +19,8 @@ Audio Render Advanced
 
 	sudo nano /boot/config.txt
 		#dtparam=audio=on
-
 		gpu_mem=16
 		disable_splash=1
-		disable_pvt=1
 
 	cat /proc/cpuinfo
 	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
