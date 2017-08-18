@@ -1,0 +1,30 @@
+#!/bin/sh
+#complete -W '1fm 2fm 1r 2r 3r dmb scr rki cbs tbs stop' kr2mpd ./kr2mpd \~/kr2mpd
+
+usage () {
+ echo "Usage: $(basename "$0") 1fm|2fm|1r|2r|3r|dmb|scr|rki(KBS라디오)"
+ echo "   or: $(basename "$0") cbs(CBS음악FM)|tbs(tbsFM)"
+ echo "   or: $(basename "$0") stop(정지)"
+ echo "Play Korean radio with MPD"
+}
+
+kbsr () {
+ url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$ch" | tail -1)
+}
+
+case $1 in
+ 1fm)  ch=1 ; kbsr ;;
+ 2fm)  ch=2 ; kbsr ;;
+ 1r)   ch=3 ; kbsr ;;
+ 2r)   ch=4 ; kbsr ;;
+ 3r)   ch=5 ; kbsr ;;
+ dmb)  ch=6 ; kbsr ;;
+ scr)  ch=7 ; kbsr ;;
+ rki)  ch=8 ; kbsr ;;
+ cbs)  url="http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8" ;;
+ tbs)  url="http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8" ;;
+ stop) mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
+ *)    usage ; exit ;;
+esac
+
+mpc add $url && mpc play $(mpc playlist | wc -l)
