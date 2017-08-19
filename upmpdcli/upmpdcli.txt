@@ -5,6 +5,9 @@ $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
 
 
 $ sudo nano /etc/apt/sources.list.d/upmpdcli.list
+	deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian/ stretch main
+	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian/ stretch main
+	 or
 	deb http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/ unstable main
 	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/ unstable main
 $ sudo apt-get update
