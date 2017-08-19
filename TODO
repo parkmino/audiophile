@@ -24,7 +24,3 @@
 		[ -f /boot/.nossh ] && service sshd stop
 	$ nano ~/audio-config
 		6) sudo touch /boot/.nossh ;;
-
-3. MPD
-	$ sudo nano /etc/mpd.conf
-		buffer_before_play      "10.957627697565705837856564%"
