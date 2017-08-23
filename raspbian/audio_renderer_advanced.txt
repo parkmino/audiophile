@@ -3,9 +3,12 @@ Audio Render Advanced
 0. Flashing
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=2016-09-23-raspbian-jessie-lite.img of=/dev/sdb
-	$ sudo gparted
-	$ copy mpd hub-ctrl llctl icon.png /home/pi
+	$ sudo dd bs=4M if=2017-08-16-raspbian-stretch-lite.img of=/dev/sdc
+	$ copy mpd mpd.conf hub-ctrl llctl icon.png /home/pi
+
+	$ sudo raspi-config
+		5 Interfacing Options > P2 SSH
+
 	$ ssh pi@rpi_ip
 	  password: raspberry
 
@@ -28,6 +31,7 @@ Audio Render Advanced
 3. Kernel option
 
 	sudo nano /boot/cmdline.txt
+		root=/dev/mmcblk0p2
 		#console=serial0,115200 console=tty1
 		consoleblank=0
 		smsc95xx.turbo_mode=0
@@ -59,25 +63,17 @@ Audio Render Advanced
 	sudo nano /lib/modprobe.d/aliases.conf
 		#options snd-usb-audio index=-2
 
-7. MPD install & recompile
+7. MPD Setup
 
-	sudo apt-get install mpd mpc ncmpc
-	
-8. MPD Settings
+	apt-get install libcue1 libaudiofile1 libavformat libflac8 libmad0 libid3tag0 libmpdclient2 libupnp6
+	sudo cp mpd mpd.conf /usr/bin/
+	sudo apt-get install mpc ncmpc
 
-	sudo mv /usr/bin/mpd /usr/bin/mpd.org
-	sudo cp ~/mpd.0.19.19.ffmpeg /usr/bin/mpd
-	sudo nano /etc/mpd.conf
-	sudo nano /lib/systemd/system/mpd.service
-	sudo nano /etc/default/mpd
-	sudo systemctl disable mpd.service mpd.socket
-	sudo systemctl daemon-reload
+8. Upmpdcli Setup
 
-9. Upmpdcli Setup
+9. Polipo Setup
 
-10. Polipo Setup
-
-11. CIFS & NFS mounting
+10. CIFS & NFS mounting
 
 	sudo apt-get install cifs-utils nfs-common
 	sudo mkdir /mnt/cifs /mnt/nfs
@@ -86,7 +82,7 @@ Audio Render Advanced
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 		
-12. Ramdisk (Just for reference)
+11. Ramdisk (Just for reference)
 
 	sudo nano /etc/fstab
 
@@ -107,17 +103,18 @@ Audio Render Advanced
 	sudo nano /etc/rc.local
 		mkdir -p /run/var/cache /run/var/log /run/tmp
 
-13. Edit /etc/rc.local
+12. Edit /etc/rc.local
 	
-14. Sysctl Configuration
+13. Sysctl Configuration
 
 	sudo nano /etc/sysctl.conf
 
-15. Disabel swap
+14. Disabel swap
 
+	cat /proc/swaps
 	sudo systemctl disable dphys-swapfile
 
-16. USB Mount
+15. USB Mount
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -131,7 +128,7 @@ Audio Render Advanced
 	sudo systemctl restart remote-fs.target
 	sudo systemctl restart local-fs.target
 
-17. Internet Radio
+16. Internet Radio
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
@@ -139,17 +136,17 @@ Audio Render Advanced
 	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /usr/bin/
 	sudo cp internet\ radio.m3u /var/lib/mpd/playlists/
 
-18. audio-config
+17. audio-config
 
 	cp audio-config /home/pi
 	sudo ln -s /home/pi/audio-config /usr/bin/
 	audio-config
 
-19. Show release
+18. Show release
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.04" > release
 
-20. Make Image
+19. Make Image
 
 	$ nano ~/release
 	$ mpc clear
