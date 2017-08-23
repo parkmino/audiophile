@@ -56,13 +56,6 @@ $ ssh root@192.168.0.x (password: root)
 # mv /usr/share/alsa /usr/share/alsa.org
 # mkdir /usr/share/alsa
 # nano /usr/share/alsa/alsa.conf
-	pcm.sound.type hw
-	pcm.sound.card 0
-	pcm.sound.device 0
-	pcm.sound.subdevice 0
-
-	ctl.control.type hw
-	ctl.control.card 0
 # nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 # truncate -s 0 /etc/mpd.conf
@@ -124,7 +117,21 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 
 # nano /lib/udev/rules.d/11-my-media-automount.rules
 
-10. Image Build
+10. ut2mpd
+
+# curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+# chmod a+rx /usr/local/bin/youtube-dl
+# cp ut2mpd /root/
+# chmod +x /root/ut2mpd
+# ln -sf /root/ut2mpd /usr/bin/
+
+11. kr2mpd
+
+# cp kr2mpd /root/
+# chmod +x /root/kr2mpd
+# ln -sf /root/kr2mpd /usr/bin/
+
+12. Image Build
 
 # echo "* Mino's UPnP Audio Renderer for Pogoplug E02 17.05" > ~/release
 # nano ~/release
