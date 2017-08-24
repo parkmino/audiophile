@@ -1,14 +1,14 @@
 #!/bin/sh
 
-# Pogo Audio Renderer 17.08 Patch
+### Pogo Audio Renderer 17.09 Patch
 
 echo 'pcm.shm={type=hw,card=0,device=0,subdevice=0}' > /usr/share/alsa/alsa.conf
 sed -i 's/pcm.sound/pcm.shm/' /etc/mpd.conf
 
-sed -i '36s/ren/#ren/' /etc/rc.local
+sed -i '36s/renice/#renice/' /etc/rc.local
 
-sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.957627697565705837856564%"/' /etc/mpd.conf
 sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3082"/' /etc/mpd.conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.957627697565705837856564%"/' /etc/mpd.conf
 
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
@@ -70,4 +70,4 @@ sed -i '/shares_window_ns/s/ = .*$/ = 346002/'      /etc/sysctl.conf
 sed -i '/Audio Output/i\\tmixer_type\t"none"' /etc/mpd.conf
 
 read -p "Reboot? (y/n)" answer
-[ "$answer" = y ] && sync && reboot
+[ "$answer" = y ] && reboot
