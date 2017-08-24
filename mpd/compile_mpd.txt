@@ -31,7 +31,7 @@ sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-
 sudo apt-get install libexpat1-dev libupnp-dev
 
 ### Download & Compile
-wget http://www.musicpd.org/download/mpd/0.20/mpd-0.20.10.tar.xz
+curl -L http://www.musicpd.org/download/mpd/0.20/mpd-0.20.10.tar.xz -o mpd-0.20.10.tar.xz
 tar xvf mpd-0.20.10.tar.xz
 cd mpd-0.20.10
 #export CFLAGS="-march=native -O2"
