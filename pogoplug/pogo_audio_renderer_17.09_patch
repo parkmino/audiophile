@@ -62,6 +62,7 @@ esac
 mpc add $url && mpc play $(mpc playlist | wc -l)' > /root/kr2mpd
 chmod +x /root/kr2mpd
 ln -sf /root/kr2mpd /usr/bin/
+sed -i '/plugin.*mms/!b;n;s/".*"/"yes"/' /etc/mpd.conf
 
 sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388347/' /etc/sysctl.conf
 sed -i '/latency_ns/s/ = .*$/ = 1393267/'           /etc/sysctl.conf
