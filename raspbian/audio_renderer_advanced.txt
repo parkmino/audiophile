@@ -4,7 +4,7 @@ Audio Render Advanced
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2017-08-16-raspbian-stretch-lite.img of=/dev/sdc
-	$ copy mpd mpd.conf hub-ctrl llctl icon.png /home/pi
+	$ cp mpd mpd.conf hub-ctrl llctl icon.png kr2mpd ut2mpd /home/pi
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
@@ -132,7 +132,6 @@ Audio Render Advanced
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
-	cp kr2mpd ut2mpd /home/pi
 	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /usr/bin/
 	sudo cp internet\ radio.m3u /var/lib/mpd/playlists/
 
