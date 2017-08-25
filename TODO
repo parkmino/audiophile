@@ -1,6 +1,2 @@
 1. sudo nano /etc/sysctl.conf
 	kernel.sched_time_avg_ms = 6250		# default 1000
-
-2. sudo nano /etc/mpd.conf
-	mixer_type	"disabled"		# in MPD
-	mixer_device	"ctl.shm"		# in ALSA
