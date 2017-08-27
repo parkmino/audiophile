@@ -1,2 +1,12 @@
 1. sudo nano /etc/sysctl.conf
 	kernel.sched_time_avg_ms = 6250		# default 1000
+
+2. ALSA & MPD
+	sudo nano /usr/share/alsa/alsa.conf
+		pcm.null={type=hw,card=0,device=0,subdevice=0}
+	sudo nano /etc/mpd.conf
+		mixer			"disabled"	# in MPD
+		device			"pcm.null"
+		mixer			"none"
+		mixer_device		"ctl.shm"
+		buffer_before_play      "10.95762769756570583785656334616%"
