@@ -75,7 +75,7 @@ sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388347/' /etc/sysctl.conf
 sed -i '/latency_ns/s/ = .*$/ = 1393267/'           /etc/sysctl.conf
 sed -i '/shares_window_ns/s/ = .*$/ = 346002/'      /etc/sysctl.conf
 
-grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"none"' /etc/mpd.conf
+grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf
 
 #read -p "Reboot? (y/n)" answer
 #[ "$answer" = y ] && reboot
