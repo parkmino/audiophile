@@ -8,14 +8,14 @@
 # chmod +x pogo_audio_renderer_17.09_patch
 # ./pogo_audio_renderer_17.09_patch
 
-echo 'pcm.shm={type=hw,card=0,device=0,subdevice=0}' > /usr/share/alsa/alsa.conf
-sed -i 's/pcm.sound/pcm.shm/' /etc/mpd.conf
-sed -i '/dop/i\\tmixer_device\t\t"ctl.shm"' /etc/mpd.conf
+sed -i '36s/renice/#renice/' /etc/rc.local
 
-#sed -i '36s/renice/#renice/' /etc/rc.local
+echo 'pcm.null={type=hw,card=0,device=0,subdevice=0}' > /usr/share/alsa/alsa.conf
+sed -i 's/pcm\.[a-z]*/pcm.null/' /etc/mpd.conf
+grep -qs ctl.shm /etc/mpd.conf || sed -i '/dop/i\\tmixer_device\t\t"ctl.shm"' /etc/mpd.conf
 
 sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3082"/' /etc/mpd.conf
-sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.9576276975657058378565633459%"/' /etc/mpd.conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.95762769756570583785656334616%"/' /etc/mpd.conf
 
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
@@ -75,7 +75,7 @@ sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388347/' /etc/sysctl.conf
 sed -i '/latency_ns/s/ = .*$/ = 1393267/'           /etc/sysctl.conf
 sed -i '/shares_window_ns/s/ = .*$/ = 346002/'      /etc/sysctl.conf
 
-sed -i '/Audio Output/i\\tmixer_type\t"none"' /etc/mpd.conf
+grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"none"' /etc/mpd.conf
 
-read -p "Reboot? (y/n)" answer
-[ "$answer" = y ] && reboot
+#read -p "Reboot? (y/n)" answer
+#[ "$answer" = y ] && reboot
