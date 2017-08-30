@@ -1,2 +1,0 @@
-1. sudo nano /etc/sysctl.conf
-	kernel.sched_time_avg_ms = 6287		# default 1000
