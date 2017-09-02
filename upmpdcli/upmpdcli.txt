@@ -8,7 +8,7 @@ $ sudo nano /etc/apt/sources.list.d/upmpdcli.list
 	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian/ stretch main
 	 or
 	deb http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/ unstable main
-	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/ unstable main
+	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/ unstable main
 $ sudo apt-get update
 $ sudo apt-get install upmpdcli
 
