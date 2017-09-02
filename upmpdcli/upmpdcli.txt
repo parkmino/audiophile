@@ -1,14 +1,13 @@
-$ wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/main/libu/libupnpp3/libupnpp3_0.15.2-1_armhf.deb
-$ wget http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/pool/main/u/upmpdcli/upmpdcli_1.2.14-1_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp3/libupnpp3_0.15.3-1~ppa1~stretch_armhf.deb
+$ wget  https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.2.15-1~ppa1~stretch_armhf.deb
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp0
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
-
 
 $ sudo nano /etc/apt/sources.list.d/upmpdcli.list
 	deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian/ stretch main
 	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian/ stretch main
 	 or
-	deb http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/ unstable main
+	deb http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/ unstable main
 	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-jessie/ unstable main
 $ sudo apt-get update
 $ sudo apt-get install upmpdcli
