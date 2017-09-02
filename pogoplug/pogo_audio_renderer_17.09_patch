@@ -15,7 +15,7 @@ sed -i 's/pcm\.[a-z]*/pcm.null/' /etc/mpd.conf
 grep -qs ctl.shm /etc/mpd.conf || sed -i '/dop/i\\tmixer_device\t\t"ctl.shm"' /etc/mpd.conf
 
 sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3082"/' /etc/mpd.conf
-sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.95762769756570583785656334616%"/' /etc/mpd.conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.95762769756570583785656334616753%"/' /etc/mpd.conf
 
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
