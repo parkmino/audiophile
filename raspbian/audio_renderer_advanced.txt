@@ -4,7 +4,7 @@ Audio Render Advanced
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2017-08-16-raspbian-stretch-lite.img of=/dev/sdc
-	$ cp mpd mpd.conf hub-ctrl llctl icon.png kr2mpd ut2mpd /home/pi
+	$ cp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd ut2mpd /home/pi
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
@@ -71,9 +71,7 @@ Audio Render Advanced
 
 8. Upmpdcli Setup
 
-9. Polipo Setup
-
-10. CIFS & NFS mounting
+9. CIFS & NFS mounting
 
 	sudo apt-get install cifs-utils nfs-common
 	sudo mkdir /mnt/cifs /mnt/nfs
@@ -81,40 +79,19 @@ Audio Render Advanced
 	sudo nano /etc/fstab
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
-		
-11. Ramdisk (Just for reference)
 
-	sudo nano /etc/fstab
-
-		#...swap...
-		 ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		 ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
-
-	or
-
-	rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
-	rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log   /var
-	rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
-	sudo nano /etc/fstab
-			#ramfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
-			#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
-			#ramfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
-	sudo nano /etc/rc.local
-		mkdir -p /run/var/cache /run/var/log /run/tmp
-
-12. Edit /etc/rc.local
+10. Edit /etc/rc.local
 	
-13. Sysctl Configuration
+11. Sysctl Configuration
 
 	sudo nano /etc/sysctl.conf
 
-14. Disabel swap
+12. Disabel swap
 
 	cat /proc/swaps
 	sudo systemctl disable dphys-swapfile
 
-15. USB Mount
+13. USB Mount
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -128,32 +105,26 @@ Audio Render Advanced
 	sudo systemctl restart remote-fs.target
 	sudo systemctl restart local-fs.target
 
-16. Internet Radio
+14. Internet Radio
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
 	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /usr/bin/
 	sudo cp internet\ radio.m3u /var/lib/mpd/playlists/
 
-17. audio-config
+15. audio-config
 
 	cp audio-config /home/pi
 	sudo ln -s /home/pi/audio-config /usr/bin/
 	audio-config
 
-18. Show release
+16. Make Image
 
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.04" > release
-
-19. Make Image
-
-	$ nano ~/release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.09" > ~/release
 	$ mpc clear
-	$ sudo sed -i '/chunkHighMark/d' /etc/polipo/config
-	$ cat /etc/polipo/config
 	$ sudo rm -f /root/.bash_history ~/.bash_history ; history -c
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=raspbian_audio_renderer_17.05.img
-	$ zip raspbian_audio_renderer_17.05.zip raspbian_audio_renderer_17.05.img
+	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_17.09.img
+	$ zip raspbian_audio_renderer_17.09.zip raspbian_audio_renderer_17.09.img
