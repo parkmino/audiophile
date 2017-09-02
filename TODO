@@ -1,0 +1,2 @@
+1. sudo nano /etc/mpd.conf
+	buffer_before_play      "10.95762769756570583785656334616753%"
