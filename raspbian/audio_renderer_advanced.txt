@@ -31,7 +31,7 @@ Audio Render Advanced
 3. Kernel option
 
 	sudo nano /boot/cmdline.txt
-		root=/dev/mmcblk0p2
+		root=
 		#console=serial0,115200 console=tty1
 		consoleblank=0
 		smsc95xx.turbo_mode=0
@@ -52,6 +52,10 @@ Audio Render Advanced
 	sudo nano /etc/modprobe.d/raspi-blacklist.conf
 		blacklist uio
 		blacklist uio-pdrv-genirq
+		#blacklist cfg80211
+		#blacklist bcm2835_gpiomem
+		#blacklist fixed
+		#blacklist ip_tables
 		###Disable RPi3 Wi-Fi
 		#blacklist brcmfmac
 		#blacklist brcmutil
@@ -65,8 +69,10 @@ Audio Render Advanced
 
 7. MPD Setup
 
-	apt-get install libcue1 libaudiofile1 libavformat libflac8 libmad0 libid3tag0 libmpdclient2 libupnp6
-	sudo cp mpd mpd.conf /usr/bin/
+	sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libmad0 libid3tag0 libmpdclient2 libmms0 libupnp6
+	sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
+	sudo cp mpd /usr/bin/
+	sudo cp mpd.conf /etc/
 	sudo apt-get install mpc ncmpc
 
 8. Upmpdcli Setup
@@ -80,9 +86,14 @@ Audio Render Advanced
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 
-10. Edit /etc/rc.local
+10. Edit /etc/fstab
+
+	/dev/mmcblk0p1  /boot           vfat    defaults          0       2
+	/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
+
+11. Edit /etc/rc.local
 	
-11. Sysctl Configuration
+12. Sysctl Configuration
 
 	sudo nano /etc/sysctl.conf
 
@@ -110,7 +121,7 @@ Audio Render Advanced
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
 	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /usr/bin/
-	sudo cp internet\ radio.m3u /var/lib/mpd/playlists/
+	sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
 
 15. audio-config
 

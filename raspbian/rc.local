@@ -37,7 +37,7 @@ musicpd_bg () {
   esac
  done
 
- nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+ taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 
  [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
 
@@ -99,10 +99,11 @@ fi
 service getty@tty1 stop
 
 ### Remove services
-for i in cron ntp rsyslog avahi-daemon systemd-journald systemd-logind triggerhappy dbus # systemd-udevd
+for i in cron rsyslog avahi-daemon systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
 do
  service $i stop
 done
+pkill plymouthd
 [ -f /boot/.nossh ] && service sshd stop
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
