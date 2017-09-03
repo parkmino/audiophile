@@ -96,6 +96,7 @@ git push origin master
 
 svn log ~/Downloads/mpd/cantata-svn/translations/blank.ts      | head -20
 svn log ~/Downloads/mpd/cantata-svn/translations/cantata_ko.ts | head -20
+grep -n '></translation>' ~/Downloads/mpd/cantata-svn/translations/cantata_ko.ts
 
 ### Korean Translation Patch ###
 
