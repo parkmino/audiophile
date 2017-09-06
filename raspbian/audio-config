@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
+
 sound_card_initial () {
  sudo sed -i '/dtoverlay=allo\|dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
 }
@@ -195,8 +197,8 @@ i=$(whiptail --title "DBus, DoP, Music Folder / 음원 폴더" --checklist "Chec
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dbus ]] && sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local || sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local
- [[ $i =~ dop ]] && sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf || sudo sed -i '/dop/s/^/#/g' /etc/mpd.conf
- [[ $i =~ folder ]] && sudo sed -i '/^#music_directory\|^#db_file/s/^#//' /etc/mpd.conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g'   /etc/mpd.conf
+ [[ $i =~ dop ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ folder ]] && sudo sed -i '/^#music_directory\|^#db_file/s/^#//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
 fi
 }
 
