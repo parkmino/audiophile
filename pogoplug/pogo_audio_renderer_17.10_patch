@@ -1,0 +1,89 @@
+#!/bin/sh
+
+### Pogo Audio Renderer 17.10 Patch
+
+# apt-get update
+# apt-get -y install curl ca-certificates
+# curl -L https://goo.gl/... -o pogo_audio_renderer_17.10_patch
+# chmod +x pogo_audio_renderer_17.10_patch
+# ./pogo_audio_renderer_17.10_patch
+
+[ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
+
+sed -i 's/\[ ! -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/for i in \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \/usr\/bin\/mpd \/etc\/mpd.conf \/usr\/bin\/upmpdcli \/etc\/upmpdcli.conf\; do\n \[ ! -e $i \] \&\& \[ -e $i.sav \] \&\& mv $i.sav $i\ndone/' /etc/rc.local
+
+sed -i 's/ \[ -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/ sleep 3\n for i in \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \/usr\/bin\/mpd \/etc\/mpd.conf \/usr\/bin\/upmpdcli \/etc\/upmpdcli.conf; do\n  \[ -e $i ] \&\& mv $i $i.sav\n done/' '/etc/rc.local
+
+sed -i '36s/renice/#renice/' /etc/rc.local
+
+echo 'pcm.null={type=hw,card=0,device=0,subdevice=0}' > /usr/share/alsa/alsa.conf
+sed -i 's/pcm\.[a-z]*/pcm.null/' $mpd_conf
+grep -qs ctl.shm $mpd_conf || sed -i '/dop/i\\tmixer_device\t\t"ctl.shm"' $mpd_conf
+
+sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3082"/' $mpd_conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.95762769756570583785656334616753165624%"/' $mpd_conf
+
+curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+chmod a+rx /usr/local/bin/youtube-dl
+
+echo '#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") YouTube_URL"
+}
+
+[ -z "$1" ] && usage && exit
+
+if youtube-dl -qs "$1" ; then
+ next=$(($(mpc playlist | wc -l)+1))
+ mpc add  $(youtube-dl -f bestaudio/best -g "$1") && mpc play $next
+else
+ echo "* The requested YouTube URL is not correct or supported!"
+fi' > /root/ut2mpd
+chmod +x /root/ut2mpd
+ln -sf /root/ut2mpd /usr/bin/
+
+echo '#!/bin/sh
+#complete -W '1fm 2fm 1r 2r 3r dmb scr rki cbs tbs stop' kr2mpd ./kr2mpd \~/kr2mpd
+
+usage () {
+ echo "Usage: $(basename "$0") 1fm|2fm|1r|2r|3r|dmb|scr|rki(KBS라디오)"
+ echo "   or: $(basename "$0") cbs(CBS음악FM)|tbs(tbsFM)"
+ echo "   or: $(basename "$0") stop(정지)"
+ echo "Play Korean radio with MPD"
+}
+
+kbsr () {
+ url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$ch" | tail -1)
+}
+
+case $1 in
+ 1fm)  ch=1 ; kbsr ;;
+ 2fm)  ch=2 ; kbsr ;;
+ 1r)   ch=3 ; kbsr ;;
+ 2r)   ch=4 ; kbsr ;;
+ 3r)   ch=5 ; kbsr ;;
+ dmb)  ch=6 ; kbsr ;;
+ scr)  ch=7 ; kbsr ;;
+ rki)  ch=8 ; kbsr ;;
+ cbs)  url="http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8" ;;
+ tbs)  url="http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8" ;;
+ stop) mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
+ *)    usage ; exit ;;
+esac
+
+mpc add $url && mpc play $(mpc playlist | wc -l)' > /root/kr2mpd
+chmod +x /root/kr2mpd
+ln -sf /root/kr2mpd /usr/bin/
+sed -i '/plugin.*mms/!b;n;s/".*"/"yes"/' $mpd_conf
+
+sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388347/'    /etc/sysctl.conf
+sed -i '/latency_ns/s/ = .*$/ = 1393267/'              /etc/sysctl.conf
+sed -i '/shares_window_ns/s/ = .*$/ = 346002/'         /etc/sysctl.conf
+sed -i '/sched_rt_period_us/s/ = .*$/ = 1000001/'      /etc/sysctl.conf
+sed -i '/sched_min_granularity_ns/s/ = .*$/ = 229999/' /etc/sysctl.conf
+
+grep 'Audio Output' -C3 $mpd_conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' $mpd_conf || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' $mpd_conf
+
+#read -p "Reboot? (y/n)" answer
+#[ "$answer" = y ] && reboot
