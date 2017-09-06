@@ -1,0 +1,32 @@
+1. sudo nano /etc/rc.local
+
+[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+
+=>
+
+for i in /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf; do
+ [ ! -e $i ] && [ -e $i.sav ] && mv $i.sav $i
+done
+
+ [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+
+=>
+
+sleep 3 # for Upmpdcli
+for i in /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf; do
+ [ -e $i ] && mv $i $i.sav
+done
+
+for Pogoplug
+
+# sed -i 's/\[ ! -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/for i in \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \/usr\/bin\/mpd \/etc\/mpd.conf \/usr\/bin\/upmpdcli \/etc\/upmpdcli.conf\; do\n \[ ! -e $i \] \&\& \[ -e $i.sav \] \&\& mv $i.sav $i\ndone/' /etc/rc.local
+
+# sed -i 's/ \[ -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/ sleep 3\n for i in \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \/usr\/bin\/mpd \/etc\/mpd.conf \/usr\/bin\/upmpdcli \/etc\/upmpdcli.conf; do\n  \[ -e $i ] \&\& mv $i $i.sav\n done/' '/etc/rc.local
+
+2. sudo nano /etc/mpd.conf.sav
+	buffer_before_play	"10.95762769756570583785656334616753165624%"
+
+3. sudo nano /etc/sysctl.conf
+
+	sysctl -w kernel.sched_rt_period_us=1000001
+	sysctl -w kernel.sched_min_granularity_ns=229999
