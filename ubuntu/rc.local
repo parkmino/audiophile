@@ -121,7 +121,7 @@ if [ "$m_task" -ge 1 ];then
  #taskset -apc $m_task `pgrep snd_hda`
 fi
 
-#hdparm -A1 -a1088 -B255 /dev/sda
+#hdparm -A1 -a1096 -B255 /dev/sda
 
 modprobe -r psmouse
 
