@@ -5,10 +5,8 @@ $ cd /usr/lib/arm-linux-gnueabihf
 $ #cd /usr/lib/arm-linux-gnueabi
 $ #cd /usr/lib/x86_64-linux-gnu
 $ ls -al libasound.so*
-$ [ -e libasound.so ] && [ ! -e libasound.so.sav ] && sudo mv libasound.so libasound.so.sav
 $ [ -e libasound.so.2 ] && [ ! -e libasound.so.2.sav ] && sudo mv libasound.so.2 libasound.so.2.sav
 $ [ -e libasound.so.2.0.0 ] && [ ! -e libasound.so.2.0.0.sav ] && sudo mv libasound.so.2.0.0 libasound.so.2.0.0.sav
-$ sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so
 $ sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 $ sudo nano /etc/rc.local
 	taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf
@@ -29,13 +27,11 @@ cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 
 for Pogoplug
 
-# mount | grep tmpfs; ls -al /usr/lib/arm-linux-gnueabi/libasound*
+# mount | grep tmpfs
 
-# [ -e /usr/lib/arm-linux-gnueabi/libasound.so ] && [ ! -e /usr/lib/arm-linux-gnueabi/libasound.so.sav ] && sudo mv /usr/lib/arm-linux-gnueabi/libasound.so /usr/lib/arm-linux-gnueabi/libasound.so.sav
 # [ -e /usr/lib/arm-linux-gnueabi/libasound.so.2 ] && [ ! -e /usr/lib/arm-linux-gnueabi/libasound.so.2.sav ] && sudo mv /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.sav
 # [ -e /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 ] && [ ! -e /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav ] && sudo mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav
 
-# sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
 # sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
 
 # sed -i 's/\[ ! -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/cp \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2.0.0.sav \/dev\/shm\/libasound.so.2.0.0\ncp \/usr\/bin\/mpd \/etc\/mpd.conf \/usr\/bin\/upmpdcli \/etc\/upmpdcli.conf \/dev\/shm\//' /etc/rc.local
