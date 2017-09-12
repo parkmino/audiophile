@@ -47,3 +47,8 @@ for Pogoplug
 
 	sysctl -w kernel.sched_rt_period_us=1000001
 	sysctl -w kernel.sched_min_granularity_ns=229999
+
+4. CPU Affinity for USB (Raspbian)
+
+	cat /proc/interrupts
+	sudo sh -c "echo 8 > /proc/irq/xx/smp_affinity"
