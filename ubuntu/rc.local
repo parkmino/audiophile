@@ -10,43 +10,43 @@
 # bits.
 #
 # By default this script does nothing.
-
-mpd_bg () {
-
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
-  sleep 1
- done
-
- sleep 1
-
- pgr_mpd=$(pgrep -x mpd)
-
-  taskset -pc $m_task $pgr_mpd
- #renice -1 -p $pgr_mpd
-
- echo "$(pstree -np $pgr_mpd)" | while read line ; do
-  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
-  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-  case $proc in
-   mpd)		 taskset -cp $s_task $proc_nr ;;
-   io)		 taskset -cp $s_task $proc_nr ;;
-   player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $s_task $proc_nr ;;
-   output)	 taskset -cp $m_task $proc_nr
-		#renice -1 -p	     $proc_nr
-		 chrt -op 0	     $proc_nr ;;
-  esac
- done
- #
- #nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
-}
+#
+#mpd_bg () {
+#
+# until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+#  sleep 1
+# done
+#
+# sleep 1
+#
+# pgr_mpd=$(pgrep -x mpd)
+#
+#  taskset -pc $m_task $pgr_mpd
+# #renice -1 -p $pgr_mpd
+#
+# echo "$(pstree -np $pgr_mpd)" | while read line ; do
+#  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+#  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+#  case $proc in
+#   mpd)		 taskset -cp $s_task $proc_nr ;;
+#   io)		 taskset -cp $s_task $proc_nr ;;
+#   player)	 taskset -cp $s_task $proc_nr ;;
+#   decoder)	 taskset -cp $s_task $proc_nr ;;
+#   output)	 taskset -cp $m_task $proc_nr
+#		#renice -1 -p	     $proc_nr
+#		 chrt -op 0	     $proc_nr ;;
+#  esac
+# done
+# #
+# #nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+#}
 
  sysctl -w kernel.watchdog=0
  sysctl -w kernel.ftrace_enabled=0
  sysctl -w kernel.sched_autogroup_enabled=0
- sysctl -w kernel.sched_rt_period_us=999999
+ sysctl -w kernel.sched_rt_period_us=1000001
  sysctl -w kernel.sched_rt_runtime_us=851456
- sysctl -w kernel.sched_min_granularity_ns=230002
+ sysctl -w kernel.sched_min_granularity_ns=229999
  sysctl -w kernel.sched_wakeup_granularity_ns=388347
  sysctl -w kernel.sched_latency_ns=1393267
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
@@ -90,6 +90,9 @@ mpd_bg () {
 
 swapoff -a
 
+cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+cp /usr/bin/mpd /etc/mpd.conf /dev/shm/
+
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $pid
 done
@@ -116,14 +119,14 @@ if [ "$m_task" -ge 1 ];then
   proc_snd="/proc/irq/$i/smp_affinity"
   echo $(echo "2^$m_task" | bc) > $proc_snd
   echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
-  echo " $(cat $proc_snd)" 
+  echo " $(cat $proc_snd)"
  done
  #taskset -apc $m_task `pgrep snd_hda`
 fi
 
-#hdparm -A1 -a1096 -B255 /dev/sda
-
 modprobe -r psmouse
+
+#hdparm -A1 -a1096 -B255 /dev/sda
 
 #mpd_bg &
 #/usr/bin/mpd /etc/mpd.conf
