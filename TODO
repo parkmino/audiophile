@@ -40,7 +40,7 @@ for Pogoplug
 
 # sed -i 's/\/usr\/local\/bin\/upmpdcli /\/dev\/shm\/upmpdcli /; s/\/usr\/local\/etc\/upmpdcli.conf/\/dev\/shm\/upmpdcli.conf/; s/\/usr\/bin\/mpd /\/dev\/shm\/mpd /; s/\/etc\/mpd.conf/\/dev\/shm\/mpd.conf/' /etc/rc.local
 
-2. sudo nano /etc/mpd.conf.sav
+2. sudo nano /etc/mpd.conf
 	buffer_before_play	"10.95762769756570583785656334616753165624269802%"
 
 3. sudo nano /etc/sysctl.conf
