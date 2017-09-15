@@ -38,14 +38,13 @@ mpd_bg () {
   esac
  done
 
- nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
-
- [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+#nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf &
 
  echo none > /sys/class/leds/green_led/trigger
 }
 
-[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+cp /usr/bin/mpd /etc/mpd.conf /dev/shm/
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 
@@ -95,6 +94,6 @@ done
 taskset -cp $m_task 1
 
 mpd_bg &
-/usr/bin/mpd --no-daemon /etc/mpd.conf
+/dev/shm/mpd --no-daemon /dev/shm/mpd.conf
 
 exit 0
