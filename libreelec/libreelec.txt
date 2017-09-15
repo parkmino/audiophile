@@ -16,6 +16,9 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ cp chrt taskset hub-ctrl llctl /usr/bin/
 	$ mv /usr/lib/libasound.so   /usr/lib/libasound.so.orig
 	$ mv /usr/lib/libasound.so.2 /usr/lib/libasound.so.2.orig
+	$ ln -s /dev/shm/libasound.so.2.0.0 ./libasound.so.2
+	$ ln -s /dev/shm/libasound.so.2.0.0 ./libasound.so
+	$ mv ./libasound.so.2 ./libasound.so /usr/lib/
 	$ cd ..
 	$ sudo mksquashfs squashfs-root SYSTEM
 
@@ -47,16 +50,7 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 
 	# nano ~/.config/sysctl.d/sysctl.conf
 
-6. libasound
-
-	# export
-	# cd /storage/.kodi/addons/script.module.requests/lib/
-	# cp /usr/lib/libasound.so.2 ./
-	# ln -s libasound.so.2.0.0 libasound.so
-	# ln -s libasound.so.2.0.0 libasound.so.2
-	# ls -al libasound*
-
-7. Autostart.sh
+6. Autostart.sh
 
 	# nano /storage/.config/autostart.sh
 	# chmod +x /storage/.config/autostart.sh

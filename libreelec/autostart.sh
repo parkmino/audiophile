@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ ! -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 ] && [ -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav ] && mv /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav /storage/.kodi/addons/script.module.requests/lib/libasound.so.2
+cp /usr/lib/libasound.so.2.0.0 /dev/shm/
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
@@ -56,8 +56,6 @@ swapoff -a
  taskset -cp $m_task $pgr_kodi
 
  systemctl stop eventlircd irqbalance pulseaudio wpa_supplicant
-
-[ -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 ] && mv /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger

@@ -42,31 +42,6 @@ cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 # sed -i '/ \[ -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/,+1d' /etc/rc.local
 # sed -i 's/\/usr\/local\/bin\/upmpdcli /\/dev\/shm\/upmpdcli /; s/\/usr\/local\/etc\/upmpdcli.conf/\/dev\/shm\/upmpdcli.conf/; s/\/usr\/bin\/mpd /\/dev\/shm\/mpd /; s/\/etc\/mpd.conf/\/dev\/shm\/mpd.conf/' /etc/rc.local
 
-1.3 LibreELEC
-
-$ ln -s /dev/shm/libasound.so.2.0.0 ./libasound.so.2
-$ ln -s /dev/shm/libasound.so.2.0.0 ./libasound.so
-$ mv ./libasound.so.2 ./libasound.so /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/
-$ ssh root@192.168.0.x (password: libreelec)
-
-# rm -i /storage/.kodi/addons/script.module.requests/lib/libasound*
-# nano /storage/.config/autostart.sh
-
-[ ! -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 ] && [ -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav ] && mv /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav /storage/.kodi/addons/script.module.requests/lib/libasound.so.2
-
-=>
-
-cp /usr/lib/libasound.so.2.0.0 /dev/shm/
-
-[ -e /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 ] && mv /storage/.kodi/addons/script.module.requests/lib/libasound.so.2 /storage/.kodi/addons/script.module.requests/lib/libasound.so.2.sav
-
-=> Remove!
-
-# nano ~/.config/sysctl.d/sysctl.conf
-# poweroff
-
-* Lastly, Copy new SYSTEM to LibreELEC
-
 2. sudo nano /etc/mpd.conf
 	audio_buffer_size	"3084"
 	buffer_before_play	"10.9576276975657058378565633461675316562426980178311%"
