@@ -61,6 +61,8 @@
 
 swapoff -a
 
+cp /usr/bin/rygel /etc/rygel.conf /dev/shm/
+
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
  chrt -op 0 $pid
 done
@@ -94,7 +96,7 @@ done
 
 echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
- nohup taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf &
+ nohup taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf &
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
 #done
