@@ -26,7 +26,7 @@ sed -i 's/pcm\.[a-z]*/pcm.null/' /etc/mpd.conf
 grep -qs ctl.shm /etc/mpd.conf || sed -i '/dop/i\\tmixer_device\t\t"ctl.shm"' /etc/mpd.conf
 
 sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3084"/' /etc/mpd.conf
-sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.9576276975657058378565633461675316562426980178311%"/' /etc/mpd.conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.9576276975657058378565633461675316562426980178311001%"/' /etc/mpd.conf
 
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
@@ -86,7 +86,7 @@ sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388348/'    /etc/sysctl.conf
 sed -i '/latency_ns/s/ = .*$/ = 1393267/'              /etc/sysctl.conf
 sed -i '/shares_window_ns/s/ = .*$/ = 346000/'         /etc/sysctl.conf
 sed -i '/sched_rt_period_us/s/ = .*$/ = 1000001/'      /etc/sysctl.conf
-sed -i '/sched_min_granularity_ns/s/ = .*$/ = 229999/' /etc/sysctl.conf
+sed -i '/sched_min_granularity_ns/s/ = .*$/ = 230000/' /etc/sysctl.conf
 
 grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf
 
