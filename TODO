@@ -44,7 +44,7 @@ cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 
 2. sudo nano /etc/mpd.conf
 	audio_buffer_size	"3084"
-	buffer_before_play	"10.9576276975657058378565633461675316562426980178311001%"
+	buffer_before_play	"10.9576276975657058378565633461675316562426980178311002724112%"
 
 3. sudo nano /etc/sysctl.conf
 
@@ -52,3 +52,7 @@ cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 	sysctl -w kernel.sched_min_granularity_ns=230000
 	sysctl -w kernel.sched_wakeup_granularity_ns=388348
 	sysctl -w kernel.sched_shares_window_ns=346000
+
+4. sudo nano /etc/rc.local
+	nohup ... >/dev/null 2>&1 &
+	nohup /dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
