@@ -55,4 +55,4 @@ cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 
 4. sudo nano /etc/rc.local
 	nohup ... >/dev/null 2>&1 &
-	nohup /dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
+	/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
