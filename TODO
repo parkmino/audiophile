@@ -43,8 +43,14 @@ cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 # sed -i 's/\/usr\/local\/bin\/upmpdcli /\/dev\/shm\/upmpdcli /; s/\/usr\/local\/etc\/upmpdcli.conf/\/dev\/shm\/upmpdcli.conf/; s/\/usr\/bin\/mpd /\/dev\/shm\/mpd /; s/\/etc\/mpd.conf/\/dev\/shm\/mpd.conf/' /etc/rc.local
 
 2. sudo nano /etc/mpd.conf
-	audio_buffer_size	"3084"
-	buffer_before_play	"10.9576276975657058378565633461675316562426980178311002724112%"
+	mixer_type		"ctl.shm"
+	sudo nano /usr/share/alsa/alsa.conf
+		ctl.shm={type=null}
+
+	audio_buffer_size	"3085"
+	buffer_before_play	"10.95762769756570583785656334616753165624269801783110027241120019606514009970834945002442343285553655815438223079334344453778443945348999774474898478889111140732604091269501909494005620033552%"
+
+	sudo sed -i 's/%/'"$(printf '0%.s' $(seq 1 $((4409-188))))"'%/' /etc/mpd.conf
 
 3. sudo nano /etc/sysctl.conf
 
