@@ -18,6 +18,8 @@ Audio Render Advanced
 	sudo apt-get upgrade
 	sudo apt-get dist-upgrade
 
+	sudo apt-get install ntpdate
+
 2. Configuration file
 
 	sudo nano /boot/config.txt
@@ -131,11 +133,11 @@ Audio Render Advanced
 
 16. Make Image
 
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.09" > ~/release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.10" > ~/release
 	$ mpc clear
 	$ sudo rm -f /root/.bash_history ~/.bash_history ; history -c
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_17.09.img
-	$ zip raspbian_audio_renderer_17.09.zip raspbian_audio_renderer_17.09.img
+	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_17.10.img
+	$ zip raspbian_audio_renderer_17.10.zip raspbian_audio_renderer_17.10.img
