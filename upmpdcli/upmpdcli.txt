@@ -1,5 +1,5 @@
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp3/libupnpp3_0.15.3-1~ppa1~stretch_armhf.deb
-$ wget  https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.2.15-1~ppa1~stretch_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp4/libupnpp4_0.16.0-1~ppa1~stretch_armhf.deb
+$ wget  https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.2.15-2~ppa1~stretch_armhf.deb
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd12 libjsoncpp1
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
 
