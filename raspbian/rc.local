@@ -11,6 +11,8 @@
 #
 # By default this script does nothing.
 
+# Print the IP address
+
 musicpd_bg () {
 
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
@@ -37,9 +39,9 @@ musicpd_bg () {
   esac
  done
 
- taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+ nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
 
- [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2 /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav
+ sleep 3
 
  /home/pi/llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
@@ -47,7 +49,8 @@ musicpd_bg () {
  [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
 }
 
-[ ! -e /usr/lib/arm-linux-gnueabihf/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2
+cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 
@@ -112,6 +115,6 @@ swapoff -a
 taskset -cp $m_task 1
 
 musicpd_bg &
-/usr/bin/mpd /etc/mpd.conf
+/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
 
 exit 0
