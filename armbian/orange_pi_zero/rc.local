@@ -1,15 +1,21 @@
-#!/bin/sh -e
-#
-# rc.local
-#
-# This script is executed at the end of each multiuser runlevel.
-# Make sure that the script will "exit 0" on success or any other
-# value on error.
-#
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
+#!/bin/bash
+#Precaution: Wait for DietPi Ramdisk to finish
+while [ ! -f /DietPi/.ramdisk ]
+do
+
+    /DietPi/dietpi/func/dietpi-notify 2 "Waiting for DietPi-RAMDISK to finish mounting DietPi to RAM..."
+    sleep 1
+
+done
+
+echo -e "$(cat /proc/uptime | awk '{print $1}') Seconds" > /var/log/boottime
+if (( $(cat /DietPi/dietpi/.install_stage) == 1 )); then
+
+    /DietPi/dietpi/dietpi-services start
+
+fi
+/DietPi/dietpi/dietpi-banner 0
+echo -e " Default Login:\n Username = root\n Password = dietpi\n"
 
 mpd_bg () {
 
@@ -38,21 +44,18 @@ mpd_bg () {
   esac
  done
 
-#nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf &
+#nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 
  echo none > /sys/class/leds/green_led/trigger
 }
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-cp /usr/bin/mpd /etc/mpd.conf /dev/shm/
+#cp /usr/bin/mpd /etc/mpd.conf /dev/shm/
+for i in /usr/bin/mpd /etc/mpd.conf; do
+ [ -e $i ] && cp $i /dev/shm
+done
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
-
-avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
-$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
-$(echo $avail_gov | grep -q conservative) && gov=conservative
-$(echo $avail_gov | grep -q powersave)    && gov=powersave
-[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
@@ -72,12 +75,14 @@ if [ "$m_task" -ge 1 ];then
 fi
 
 ### Remove services
-for i in cron haveged ntp rsyslog systemd-journald systemd-logind dbus getty@tty1 serial-getty@ttyS0 systemd-udevd
+for i in cron systemd-journald systemd-logind dbus getty@tty1 serial-getty@ttyS0 systemd-udevd
 do
  service $i stop
 done
 [ -f /boot/.nossh ] && service dropbear stop && pkill dropbear
-pkill dbus-daemon
+for i in dbus-daemon ntpd; do
+ pkill $i
+done
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
 
@@ -94,6 +99,7 @@ done
 taskset -cp $m_task 1
 
 mpd_bg &
-/dev/shm/mpd --no-daemon /dev/shm/mpd.conf
+/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
+#/usr/bin/mpd /etc/mpd.conf >/dev/null 2>&1
 
 exit 0

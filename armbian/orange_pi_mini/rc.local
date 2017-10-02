@@ -10,15 +10,6 @@
 # bits.
 #
 # By default this script does nothing.
-#
-#rm -rf /var/cache && mkdir -p /run/var/cache && ln -s /run/var/cache /var
-#rm -rf /var/log   && mkdir -p /run/var/log   && ln -s /run/var/log   /var
-#rm -rf /tmp       && mkdir -p /run/tmp       && ln -s /run/tmp       /
-#
-#mkdir -p /run/var/cache /run/var/log /run/tmp
-#
-#ifconfig eth0  txqueuelen 1875
-#ifconfig wlan0 txqueuelen 1875
 
  sysctl -w vm.swappiness=0
 #sysctl -w vm.dirty_background_ratio=0
@@ -31,21 +22,21 @@
  sysctl -w vm.stat_interval=5
  sysctl -w vm.vfs_cache_pressure=0
 
- sysctl -w kernel.ftrace_enabled=0
+#sysctl -w kernel.ftrace_enabled=0
 #sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
- sysctl -w kernel.sched_min_granularity_ns=230003
- sysctl -w kernel.sched_wakeup_granularity_ns=388346
- sysctl -w kernel.sched_latency_ns=1393266
+ sysctl -w kernel.sched_min_granularity_ns=229999
+ sysctl -w kernel.sched_wakeup_granularity_ns=388348
+ sysctl -w kernel.sched_latency_ns=1393267
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=5000000
+ sysctl -w kernel.sched_migration_cost=5000000
  sysctl -w kernel.sched_nr_migrate=0
- sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window_ns=346002
- sysctl -w kernel.sched_time_avg=6287
+#sysctl -w kernel.sched_rr_timeslice_ms=1
+ sysctl -w kernel.sched_shares_window=346000
 #sysctl -w kernel.sched_tunable_scaling=1
+ sysctl -w kernel.sched_time_avg=6287
 
 #sysctl -w net.core.rmem_max=12582912
 #sysctl -w net.core.wmem_max=12582912
@@ -61,7 +52,9 @@
 
 swapoff -a
 
-cp /usr/bin/rygel /etc/rygel.conf /dev/shm/
+for i in /usr/bin/rygel /etc/rygel.conf; do
+ [ -e $i ] && cp $i /dev/shm/
+done
 
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
  chrt -op 0 $pid
@@ -89,16 +82,24 @@ done
 # echo 2 > /proc/irq/$irq/smp_affinity
 #done
 
-for i in systemd-journald systemd-udevd systemd-logind dbus haveged sshd getty@tty1 # serial-getty@ttyS0 # getty@tty1
+for i in cron ntp lirc rsyslog systemd-journald systemd-udevd systemd-logind dbus haveged sshd getty@tty1 # serial-getty@ttyS0
 do
  service $i stop
 done
 
-echo none > /sys/class/leds/orangepi\:green\:usr/trigger
+#echo ondemand | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+#echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
- nohup taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf &
+ nohup taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
+#nohup taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf >/dev/null 2>&1 &
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
+#done
+#sleep 10
+#for i in /usr/bin/rygel /etc/rygel.conf; do
+# [ -e $i ] && mv $i $i.sav
 #done
 #rygel_gmain=$(pstree -np $(pgrep -x rygel) | grep gmain | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
 #taskset -cp 1     $rygel_gmain
