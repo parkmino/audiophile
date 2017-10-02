@@ -23,12 +23,13 @@ sed -i 's/upmpdcli.conf/upmpdcli.conf >\/dev\/null 2>\&1/; s/mpd.conf/mpd.conf >
 
 sed -i '36s/renice/#renice/' /etc/rc.local
 
-echo 'pcm.null={type=hw,card=0,device=0,subdevice=0}' > /usr/share/alsa/alsa.conf
+printf 'pcm.null={type=hw,card=0,device=0,subdevice=0}\nctl.shm={type=null}' > /usr/share/alsa/alsa.conf
 sed -i 's/pcm\.[a-z]*/pcm.null/' /etc/mpd.conf
 grep -qs ctl.shm /etc/mpd.conf || sed -i '/dop/i\\tmixer_device\t\t"ctl.shm"' /etc/mpd.conf
 
-sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3084"/' /etc/mpd.conf
-sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.9576276975657058378565633461675316562426980178311002724112%"/' /etc/mpd.conf
+sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3085"/' /etc/mpd.conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.957627697565705837856563346167531656242698017831100272411200196065140099708349450024423432855536558154382230793343444537784439453489997744748984788891111407326040912695019094940056200335523522363317439609406420665787760565949985597819576822776962605334508403%"/' /etc/mpd.conf
+sed -i 's/%/'"$(printf '0%.s' $(seq 1 $((4409-258))))"'%/' /etc/mpd.conf
 
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
@@ -90,7 +91,7 @@ sed -i '/shares_window_ns/s/ = .*$/ = 346000/'         /etc/sysctl.conf
 sed -i '/sched_rt_period_us/s/ = .*$/ = 1000001/'      /etc/sysctl.conf
 sed -i '/sched_min_granularity_ns/s/ = .*$/ = 230000/' /etc/sysctl.conf
 
-grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf
+grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"none"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"none"' /etc/mpd.conf
 
 #read -p "Reboot? (y/n)" answer
 #[ "$answer" = y ] && reboot
