@@ -1,5 +1,19 @@
 -. 바뀐 점
 
+17.10 (17-10-19)
+  1. Raspbian 업데이트.
+  2. Upmpdcli 1.2.15-2 업데이트.
+  3. youtube-dl 2017.09.24 업데이트.
+  4. ALSA 라이브러리, MPD, Upmpdcli 메모리 재생.
+  5. ALSA 널 믹서 적용.
+  6. MPD none 믹서 적용.
+  7. MPD, Upmpdcli 터미널 출력 방지.
+  8. Upmpdcli nohup 재 적용. (호환성 해결)
+  9. MPD 버퍼 상세 설정.
+10. 커널 스케줄러 일부 설정 변경.
+11. DoP 기본 지원.
+12. ntpdate 패키지 설치.
+
 17.09 (17-09-14)
   1. Raspbian Stretch Lite 설치.
   2. ALSA 출력 재 설정.
