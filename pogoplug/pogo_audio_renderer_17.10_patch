@@ -27,6 +27,7 @@ printf 'pcm.null={type=hw,card=0,device=0,subdevice=0}\nctl.shm={type=null}' > /
 sed -i 's/pcm\.[a-z]*/pcm.null/' /etc/mpd.conf
 grep -qs ctl.shm /etc/mpd.conf || sed -i '/dop/i\\tmixer_device\t\t"ctl.shm"' /etc/mpd.conf
 
+sed -i '/buffer_time/s/^#*//; /buffer_time/s/".*"/"392568"/' /etc/mpd.conf
 sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3085"/' /etc/mpd.conf
 sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10\.957627697565705837856563346167531656242698017831100272411200196065140099708349450024423432855536558154382230793343444537784439453489997744748984788891111407326040912695019094940056200335523522363317439609406420665787760565949985597819576822776962605334508403%"/' /etc/mpd.conf
 sed -i 's/%/'"$(printf '0%.s' $(seq 1 $((4409-258))))"'%/' /etc/mpd.conf
