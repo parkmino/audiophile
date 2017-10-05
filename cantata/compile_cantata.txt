@@ -11,42 +11,41 @@ Format: 3.0 (quilt)
 Source: cantata
 Binary: cantata
 Architecture: any
-Version: 2.0.1.ds1-1
+Version: 2.1.0.ds1-1
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
-Uploaders: Stuart Prescott <stuart@debian.org>
+Uploaders:  Stuart Prescott <stuart@debian.org>
 Homepage: https://github.com/CDrummond/cantata
-Standards-Version: 3.9.8
+Standards-Version: 4.0.0
 Vcs-Browser: https://anonscm.debian.org/gitweb/?p=pkg-multimedia/cantata.git
 Vcs-Git: https://anonscm.debian.org/git/pkg-multimedia/cantata.git
-Build-Depends: cmake, debhelper (>= 9), libavcodec-dev, libavformat-dev, libavutil-dev, libcddb-dev, libcdparanoia-dev, libebur128-dev, libmusicbrainz5-dev (>= 5.1.0+git20150707), libmpg123-dev, libmtp-dev (>= 1.0.0), libphonon4qt5-dev, libqt5svg5-dev, libspeex-dev, libspeexdsp-dev, libtag-extras-dev, libtag1-dev, libudev-dev, libvlc-dev, libvlccore-dev, libx11-dev, pkg-config, pkg-kde-tools, qtbase5-dev, qttools5-dev-tools
+Build-Depends: cmake, debhelper (>= 9), libavcodec-dev, libavformat-dev, libavutil-dev, libcddb-dev, libcdparanoia-dev, libebur128-dev, libmpg123-dev, libmtp-dev (>= 1.0.0), libmusicbrainz5-dev (>= 5.1.0+git20150707), libphonon4qt5-dev, libqt5svg5-dev, libspeex-dev, libspeexdsp-dev, libtag-extras-dev, libtag1-dev, libudev-dev, libvlc-dev, libvlccore-dev, libx11-dev, pkg-config, pkg-kde-tools, qtbase5-dev, qtmultimedia5-dev, qttools5-dev-tools
 Package-List:
  cantata deb sound optional arch=any
 Checksums-Sha1:
- 729c95660debfbb91f3865c0d9e6bd9618abf1f2 2395155 cantata_2.0.1.ds1.orig.tar.gz
- 6335c4569c7f57f90b46f46ae40c3c68b046e67d 12416 cantata_2.0.1.ds1-1.debian.tar.xz
+ f68cc667471fd7470e254bb3171a80d35ad52211 2669394 cantata_2.1.0.ds1.orig.tar.gz
+ ecf9265a5bc1ce87a77a72bcc5694c0100be8c96 12876 cantata_2.1.0.ds1-1.debian.tar.xz
 Checksums-Sha256:
- 2c51de686712cb6a1b79a37854939005d792246a9cacb96acf1d008081952190 2395155 cantata_2.0.1.ds1.orig.tar.gz
- c70aa1d8e5e3fde84ffd7fc0582c0ab4e2f7506cdef03d954b680e56c20f7e89 12416 cantata_2.0.1.ds1-1.debian.tar.xz
+ 985293253edd4db8c6948425b43006c970c34b4004e34ea2f3aa296a45f3a6d4 2669394 cantata_2.1.0.ds1.orig.tar.gz
+ fbe91a96ce8cad023825edf620d1e7521ef0e771bc481c01137c852ca7414657 12876 cantata_2.1.0.ds1-1.debian.tar.xz
 Files:
- 7f4f11bba0cdab84b39a9d88cf9d7264 2395155 cantata_2.0.1.ds1.orig.tar.gz
- 9f8636d96cb2333a6be43099dc36378a 12416 cantata_2.0.1.ds1-1.debian.tar.xz
+ f401ee1cc793f6d50348ea7eef04b34d 2669394 cantata_2.1.0.ds1.orig.tar.gz
+ e1ee252d46be568e9365565418c044c6 12876 cantata_2.1.0.ds1-1.debian.tar.xz
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
 
-iQIcBAEBCAAGBQJXUmsnAAoJELvBfrsTlvL3hnAQALFFM4c7AXpmexJolkmMGMwL
-2tZICZvyjM4CX3Yljdiy0rnhmzvgD71Jpge+EFxS9ZiBsiIcQscqDa6NOMw+lrsY
-wDIctyxTWDu0MlDJ4Z5sA/fzshoJvKOk0xoqs6F8RCxOF/NebHJS3WxUY/4jfhcD
-CHUs8yLaQMZAgvaZ8jrqE7w4UGz9rXmaM8g+UNL0/drKSpSJ+Jm2LTqrqCeQRAua
-v5Dhsz7iQCcLsutw2adTl7XovYDken7e2IJWIedUSq+CtObmKi959NaeCboKDUaB
-a7ElpRQF5tvCF5Vgva7lg+6gVbbH9Fxd2F1FoOx6GMYsDu0HoaOsRxAuJoZue6Tf
-gwmdXq99RWA3Ih9zrTIV65zqP8LwQCrJbiptqdnQTPBHBadZpACLsSCtYQELxBqU
-esC/d11j+4zuO7T0TDQvE7atYQiLnj8YOCzJ164qXIOccA6AIyh22dXS4p+0moee
-APq+DtybZlq93/AxPvGLeuvdY1nf50C2yUjYS8f1EEnzq0Gn7x1DdymeIbQW3h7s
-5Smzs0UJFrNrxK66/5ayAmMQUTcqcZjvjFZEG8teL/w5b6AIoTDgKPRq6tGJITj4
-EKQSd8DNpntwo1HubM+gwWyZ0pEy2SM7IbOgjmP7cER3sCOAa33m/KCo3pCpQrOx
-TSMqYzqZevvK6Xx7/tEs
-=aeyP
+iQIzBAEBCAAdFiEEkOLSwa0Uaht+u4kdu8F+uxOW8vcFAlmBXcoACgkQu8F+uxOW
+8ve6Ug/7BXsxp/JjsS2Nw5v9u3FJVs0az3/whCM7+4DszdtZfZEIZvw41xF5Xr1e
+ZyEcluPxPEz/vDPHLqdZoqXMGcD5/3idOdlcyi2pm/bxGTz1SWaGdh2Aqw/YpvRD
+r/dGPkv12ruxP1Cf7x4RE5mQ7wXk0H8VowbxDoC61E0Q4KhnXy+c2WvDV4OSMq6V
+KjlKVBlYES1Fjt+6zaBBCxsANeky88fNS78itekpIC74k9DMcf8TwDic2Pvs82D3
+w6mpVmBc8pkQIJwfP9k/09iKxlsbOlkxLBshVjfIdC8AkTp7Xbkt3ItXZfjknvQo
+nwIXmus0dfxgpk09bOjo9py8E4GHJ5c8OmWQsw3HQq71NDiEP/XJZhTZ9IjhNN72
+rNRZtv1paPETIGzGoB3bDoy1q4kPKcYk9j8gE8UqogrQrh2Jak3YRAIecHPGPPDW
+gSvrHpZqP+Vgs+ykLtgZUZurDwydJpBpl3c5he2m+mv5elFryu8is/aJOmZyzpMO
+r6h/nwBqnKSFnnSJb9lX7WkeqGDLlQ7OUBOisAZAsnB7J7luoyes6gOoF4N/KC7v
+0uA0y/SXr1y+uYHx1pWTifLwgcZXKkulS2tbDjYFN4VOEccpQuVwdapw35ngL3Cd
+oBKg0WPqIs8S5pjnQ9JiBQJWulzTUTKsk5j+6nLoPIFsQNgZTg4=
+=4zNV
 -----END PGP SIGNATURE-----
 
 ### Install Package Dependencies ###
@@ -81,7 +80,7 @@ rm -rf ~/Downloads/mpd/cantata-master && unzip master.zip -d ~/Downloads/mpd && 
 
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_REMOTE_DEVICES=ON
 
-sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.2.0" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
+sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.2.1" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
 
 ### Git Add ###
 
