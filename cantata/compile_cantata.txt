@@ -86,7 +86,7 @@ sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion
 
 cd ~/git/audiophile
 [ -f cantata/cantata-qt*.deb ] && git rm cantata/cantata-qt*.deb
-cp ~/Downloads/mpd/cantata-svn/build/cantata-qt*.deb  cantata/
+cp ~/Downloads/mpd/cantata-svn/build/cantata-qt*.deb cantata/
 git add cantata/cantata-qt*.deb
 git commit -m "Update Cantata package"
 git push origin master
