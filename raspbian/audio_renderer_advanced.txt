@@ -74,7 +74,7 @@ Audio Render Advanced
 	sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libmad0 libid3tag0 libmpdclient2 libmms0 libupnp6
 	sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
 	sudo cp mpd /usr/bin/
-	sudo cp mpd.conf /etc/
+	sudo cp mpd.conf /etc/mpd.conf.sav
 	sudo apt-get install mpc ncmpc
 
 8. Upmpdcli Setup

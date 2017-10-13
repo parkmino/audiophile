@@ -50,7 +50,8 @@ musicpd_bg () {
 }
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-cp /usr/bin/mpd /etc/mpd.conf /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 

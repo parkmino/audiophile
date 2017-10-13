@@ -58,8 +58,9 @@ $ ssh root@192.168.0.x (password: root)
 # nano /usr/share/alsa/alsa.conf
 # nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
-# truncate -s 0 /etc/mpd.conf
-# nano /etc/mpd.conf
+# mv /etc/mpd.conf /etc/mpd.conf.sav
+# truncate -s 0 /etc/mpd.conf.sav
+# nano /etc/mpd.conf.sav
 # nano /var/lib/mpd/playlists/Internet_Radios.m3u
 
 https://packages.debian.org/search?keywords=mpd
