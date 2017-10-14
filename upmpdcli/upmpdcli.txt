@@ -58,4 +58,4 @@ $ sudo systemctl disable upmpdcli.service
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
 $ sudo nano /etc/rc.local
-	nohup taskset -ac 1 /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
+	nohup taskset -ac 1 /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
