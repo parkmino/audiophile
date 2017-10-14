@@ -7,7 +7,7 @@
   4. ALSA 라이브러리, MPD, Upmpdcli 메모리 재생.
   5. ALSA 널 믹서 적용.
   6. MPD none 믹서 적용.
-  7. MPD 설정 파일 트윅.
+  7. MPD 설정 파일 트윅. (/etc/mpd.conf.sav)
   8. MPD, Upmpdcli 터미널 출력 방지.
   9. Upmpdcli nohup 재 적용. (호환성 해결)
 10. MPD 버퍼 상세 설정.
