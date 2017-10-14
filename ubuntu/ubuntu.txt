@@ -264,7 +264,8 @@ Tuning
 	Music Player Daemon
 		$ sudo add-apt-repository ppa:gmpc-trunk/mpd-trunk
 		$ sudo apt-get update && sudo apt-get install mpd ncmpc
-		$ sudo gedit /etc/mpd.conf
+		$ sudo mv /etc/mpd.conf /etc/mpd.conf.sav
+		$ sudo gedit /etc/mpd.conf.sav
 		$ sudo /etc/init.d/mpd restart
 		$ sudo ln -s /media/music /var/lib/mpd/music/mpd
 		$ mpc update

@@ -46,14 +46,14 @@
  sysctl -w kernel.sched_autogroup_enabled=0
  sysctl -w kernel.sched_rt_period_us=1000001
  sysctl -w kernel.sched_rt_runtime_us=851456
- sysctl -w kernel.sched_min_granularity_ns=229999
- sysctl -w kernel.sched_wakeup_granularity_ns=388347
+ sysctl -w kernel.sched_min_granularity_ns=230000
+ sysctl -w kernel.sched_wakeup_granularity_ns=388348
  sysctl -w kernel.sched_latency_ns=1393267
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost_ns=5000000
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window_ns=346002
+ sysctl -w kernel.sched_shares_window_ns=346000
 #sysctl -w kernel.sched_tunable_scaling=1
  sysctl -w kernel.sched_time_avg_ms=6287
 
@@ -91,7 +91,8 @@
 swapoff -a
 
 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-cp /usr/bin/mpd /etc/mpd.conf /dev/shm/
+cp /usr/bin/mpd      /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $pid
@@ -126,7 +127,7 @@ fi
 
 modprobe -r psmouse
 
-#hdparm -A1 -a1096 -B255 /dev/sda
+#hdparm -A1 -a1104 -B255 -X64 /dev/sda # -r1
 
 #mpd_bg &
 #/usr/bin/mpd /etc/mpd.conf
