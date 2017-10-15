@@ -80,7 +80,7 @@ rm -rf ~/Downloads/mpd/cantata-master && unzip master.zip -d ~/Downloads/mpd && 
 
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG=OFF -DENABLE_MPG123=OFF -DENABLE_REMOTE_DEVICES=ON
 
-sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.2.1" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
+sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.2.50" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
 
 ### Git Add ###
 
