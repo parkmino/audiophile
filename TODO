@@ -1,0 +1,20 @@
+1. sudo nano /usr/share/alsa/alsa.conf
+	pcm.0={type=hw,card=0,device=0,subdevice=0,nonblock=1}
+	#ctl.shm={type=null}
+
+2. sudo nano /etc/mpd.conf.sav
+	mixer_type		"disabled"	# Outside ALSA
+	device			"pcm.0"
+	mixer_device		"pcm.0"
+	#buffer_time		"392568"
+	#period_time		"1333"
+	always_on		"yes"
+	audio_buffer_size	"3429"
+	buffer_before_play	"10.90571%"
+
+3. sudo nano /etc/sysctl.conf
+	kernel.sched_wakeup_granularity_ns = 388349
+	kernel.sched_latency_ns = 1393268
+	kernel.sched_migration_cost = 4900000
+	kernel.sched_shares_window = 345999
+	kernel.sched_time_avg = 6288
