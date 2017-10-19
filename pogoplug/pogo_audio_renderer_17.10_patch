@@ -18,9 +18,10 @@ sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.
 
 ### rc.local
 
-sed -i '14,$d' /etc/rc.local
+sed -i '/^$/,$d' /etc/rc.local
 
-echo 'musicpd_bg () {
+echo '
+musicpd_bg () {
 
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
