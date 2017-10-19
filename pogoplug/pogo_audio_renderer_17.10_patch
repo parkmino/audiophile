@@ -175,6 +175,7 @@ sed -i '/sched_min_granularity_ns/s/ = .*$/ = 230000/' /etc/sysctl.conf
 
 ### kr2mpd
 
+if [ ! -e /root/kr2mpd ]; then
 echo '#!/bin/sh
 #complete -W '1fm 2fm 1r 2r 3r dmb scr rki cbs tbs stop' kr2mpd ./kr2mpd \~/kr2mpd
 
@@ -207,10 +208,13 @@ esac
 mpc add $url && mpc play $(mpc playlist | wc -l)' > /root/kr2mpd
 chmod +x /root/kr2mpd
 ln -sf /root/kr2mpd /usr/bin/
+fi
+
 sed -i '/plugin.*mms/!b;n;s/".*"/"yes"/' /etc/mpd.conf.sav
 
 ### ut2mpd
 
+if [ ! -e /root/ut2mpd ]; then
 echo '#!/bin/sh
 
 usage () {
@@ -227,6 +231,8 @@ else
 fi' > /root/ut2mpd
 chmod +x /root/ut2mpd
 ln -sf /root/ut2mpd /usr/bin/
+fi
+
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
 
