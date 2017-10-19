@@ -8,23 +8,153 @@
 # chmod +x pogo_audio_renderer_17.10_patch
 # ./pogo_audio_renderer_17.10_patch
 
+### tweaks
+
 for i in /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/mpd.conf; do
  [ -e $i ] && [ ! -e $i.sav ] && sudo mv $i $i.sav
 done
 
 sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
 
-sed -i 's/\[ ! -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/cp \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2.0.0.sav \/dev\/shm\/libasound.so.2.0.0\ncp \/usr\/bin\/mpd \/usr\/bin\/upmpdcli \/etc\/upmpdcli.conf \/dev\/shm\/\ncp \/etc\/mpd.conf.sav \/dev\/shm\/mpd.conf/' /etc/rc.local
+### rc.local
 
-sed -i '/ \[ -e \/usr\/lib\/arm-linux-gnueabi\/libasound.so.2 \].*/,+1d' /etc/rc.local
+sed -i '14,$d' /etc/rc.local
 
-sed -i 's/\/usr\/local\/bin\/upmpdcli /\/dev\/shm\/upmpdcli /; s/\/usr\/local\/etc\/upmpdcli.conf/\/dev\/shm\/upmpdcli.conf/; s/\/usr\/bin\/mpd /\/dev\/shm\/mpd /; s/\/etc\/mpd.conf/\/dev\/shm\/mpd.conf/' /etc/rc.local
+echo 'musicpd_bg () {
 
-sed -i 's/upmpdcli.conf/upmpdcli.conf >\/dev\/null 2>\&1/; s/mpd.conf/mpd.conf >\/dev\/null 2>\&1/' /etc/rc.local
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
 
-sed -i '36s/renice/#renice/' /etc/rc.local
+ sleep 1
+
+ pgr_mpd=$(pgrep -x mpd)
+
+ taskset -pc $m_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+
+ nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
+
+# turn on LED
+
+if [ -d /sys/class/leds/status:green:health ]; then
+   echo default-on > /sys/class/leds/status:green:health/trigger
+   if [ -d /sys/class/leds/status:orange:fault ]; then
+      echo none > /sys/class/leds/status:orange:fault/trigger
+   fi
+   if [ -d /sys/class/leds/status:blue:health ]; then
+      echo none > /sys/class/leds/status:blue:health/trigger
+   fi
+fi
+if [ -d /sys/class/leds/dockstar:green:health ]; then
+   echo default-on > /sys/class/leds/dockstar:green:health/trigger
+   echo none > /sys/class/leds/dockstar:orange:misc/trigger
+fi
+
+if [ -d /sys/class/leds/plug:green:health ]; then
+   echo default-on > /sys/class/leds/plug:green:health/trigger
+   if [ -d /sys/class/leds/plug:red:misc ]; then
+      echo none  > /sys/class/leds/plug:red:misc/trigger
+   fi
+fi
+
+if [ -d /sys/class/leds/power:blue ]; then
+   echo default-on  > /sys/class/leds/power:blue/trigger
+   ### echo default-on  > /sys/class/leds/otb:blue/trigger
+   echo none        > /sys/class/leds/power:red/trigger
+fi
+
+if [ -d /sys/class/leds/usb1:blue ]; then
+   echo usb-host > /sys/class/leds/usb1\:blue/trigger
+fi
+if [ -d /sys/class/leds/usb2:blue ]; then
+   echo usb-host > /sys/class/leds/usb2\:blue/trigger
+fi
+if [ -d /sys/class/leds/usb3:blue ]; then
+   echo usb-host > /sys/class/leds/usb3\:blue/trigger
+fi
+if [ -d /sys/class/leds/usb4:blue ]; then
+   echo usb-host > /sys/class/leds/usb4\:blue/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:sys ]; then
+   echo default-on  > /sys/class/leds/nsa325:green:sys/trigger
+   echo none        > /sys/class/leds/nsa325:orange:sys/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:sata1 ]; then
+   echo ide-disk1  > /sys/class/leds/nsa325:green:sata1/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:sata2 ]; then
+   echo ide-disk2  > /sys/class/leds/nsa325:green:sata2/trigger
+fi
+
+if [ -d /sys/class/leds/nsa325:green:usb ]; then
+   echo usb-host > /sys/class/leds/nsa325\:green\:usb/trigger
+fi
+
+}
+
+cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
+cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+
+#ifconfig eth0 txqueuelen 1875
+
+for i in $(ps -eo pid,class,comm | grep -E '"'"'(FF|RR)'"'"' | awk '"'"'$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'"'"'); do
+ chrt -op 0 $i
+done
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '"'"'$3 < 0 {print $1}'"'"'); do
+ renice 0 $i
+done
+
+m_task=$(($(nproc --all)-1))
+[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '"'"'$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'"'"'); do
+  taskset -acp 0 $pid || true
+ done
+fi
+
+### Remove services
+#for i in dbus # sshd
+#do
+# service $i stop
+#done
+#renice +1 -p $(pgrep -w ssh) $(pgrep -w dbus) $(pgrep -w dh) $(pgrep -w rpc)
+swapoff -a
+
+### Init
+taskset -cp $m_task 1
+
+musicpd_bg &
+/dev/shm/mpd --no-daemon /dev/shm/mpd.conf >/dev/null 2>&1
+
+exit 0' >> /etc/rc.local
+
+### alsa.conf
 
 printf 'pcm.0={type=hw,card=0,device=0,subdevice=0,nonblock=1}' > /usr/share/alsa/alsa.conf
+
+### mpd.conf.sav
+
 sed -i '/^\tdevice/s/".*"/"pcm.0"/' /etc/mpd.conf.sav
 grep -qs '^\tmixer_device' /etc/mpd.conf.sav && sed -i '/^\tmixer_device/s/".*"/"pcm.0"/' /etc/mpd.conf.sav || sed -i '/dop/i\\tmixer_device\t\t"pcm.0"' /etc/mpd.conf.sav
 
@@ -32,25 +162,17 @@ sed -i '/always_on/s/^#*//' /etc/mpd.conf.sav
 sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3429"/' /etc/mpd.conf.sav
 sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"10.90571%"/' /etc/mpd.conf.sav
 
-curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-chmod a+rx /usr/local/bin/youtube-dl
+grep 'Audio Output' -C3 /etc/mpd.conf.sav | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf.sav || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf.sav
 
-echo '#!/bin/sh
+### sysctl.conf
 
-usage () {
- echo "Usage: $(basename "$0") YouTube_URL"
-}
+sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388349/'    /etc/sysctl.conf
+sed -i '/latency_ns/s/ = .*$/ = 1393268/'              /etc/sysctl.conf
+sed -i '/shares_window_ns/s/ = .*$/ = 346000/'         /etc/sysctl.conf
+sed -i '/sched_rt_period_us/s/ = .*$/ = 1000001/'      /etc/sysctl.conf
+sed -i '/sched_min_granularity_ns/s/ = .*$/ = 230000/' /etc/sysctl.conf
 
-[ -z "$1" ] && usage && exit
-
-if youtube-dl -qs "$1" ; then
- next=$(($(mpc playlist | wc -l)+1))
- mpc add  $(youtube-dl -f bestaudio/best -g "$1") && mpc play $next
-else
- echo "* The requested YouTube URL is not correct or supported!"
-fi' > /root/ut2mpd
-chmod +x /root/ut2mpd
-ln -sf /root/ut2mpd /usr/bin/
+### kr2mpd
 
 echo '#!/bin/sh
 #complete -W '1fm 2fm 1r 2r 3r dmb scr rki cbs tbs stop' kr2mpd ./kr2mpd \~/kr2mpd
@@ -86,13 +208,28 @@ chmod +x /root/kr2mpd
 ln -sf /root/kr2mpd /usr/bin/
 sed -i '/plugin.*mms/!b;n;s/".*"/"yes"/' /etc/mpd.conf.sav
 
-sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388349/'    /etc/sysctl.conf
-sed -i '/latency_ns/s/ = .*$/ = 1393268/'              /etc/sysctl.conf
-sed -i '/shares_window_ns/s/ = .*$/ = 346000/'         /etc/sysctl.conf
-sed -i '/sched_rt_period_us/s/ = .*$/ = 1000001/'      /etc/sysctl.conf
-sed -i '/sched_min_granularity_ns/s/ = .*$/ = 230000/' /etc/sysctl.conf
+### ut2mpd
 
-grep 'Audio Output' -C3 /etc/mpd.conf.sav | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf.sav || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf.sav
+echo '#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") YouTube_URL"
+}
+
+[ -z "$1" ] && usage && exit
+
+if youtube-dl -qs "$1" ; then
+ next=$(($(mpc playlist | wc -l)+1))
+ mpc add  $(youtube-dl -f bestaudio/best -g "$1") && mpc play $next
+else
+ echo "* The requested YouTube URL is not correct or supported!"
+fi' > /root/ut2mpd
+chmod +x /root/ut2mpd
+ln -sf /root/ut2mpd /usr/bin/
+curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+chmod a+rx /usr/local/bin/youtube-dl
+
+### reboot
 
 #read -p "Reboot? (y/n)" answer
 #[ "$answer" = y ] && reboot
