@@ -102,7 +102,7 @@ fi
 }
 
 cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
-cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
 #ifconfig eth0 txqueuelen 1875
