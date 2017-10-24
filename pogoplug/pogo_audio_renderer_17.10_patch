@@ -10,11 +10,15 @@
 
 ### tweaks
 
-for i in /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/mpd.conf; do
+for i in /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0; do
+ [ -e $i.sav ] && [ ! -e $i ] && mv $i.sav $i
+done
+
+for i in /etc/mpd.conf; do
  [ -e $i ] && [ ! -e $i.sav ] && mv $i $i.sav
 done
 
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
+#ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
 
 ### rc.local
 
@@ -111,7 +115,7 @@ fi
 
 }
 
-cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+#cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
