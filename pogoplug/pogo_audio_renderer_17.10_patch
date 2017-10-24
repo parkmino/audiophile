@@ -19,6 +19,7 @@ for i in /etc/mpd.conf; do
 done
 
 #ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
+ln -sf /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
 
 ### rc.local
 
