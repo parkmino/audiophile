@@ -28,17 +28,19 @@ musicpd_bg () {
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)     taskset -cp $s_task $proc_nr ;;
-   io)      taskset -cp $s_task $proc_nr ;;
-   player)  taskset -cp $s_task $proc_nr ;;
-   decoder) taskset -cp $s_task $proc_nr ;;
-   output)  taskset -cp $m_task $proc_nr
-           #renice -1 -p        $proc_nr
-            chrt -op 0          $proc_nr ;;
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
   esac
  done
 
- nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
+ nohup taskset -ac $s_task /usr/local/bin/upmpdcli -c /usr/local/etc/upmpdcli.conf  >/dev/null 2>&1 &
+
+ [ -e /usr/lib/arm-linux-gnueabi/libasound.so.2 ] && mv /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.sav
 
 # turn on LED
 
@@ -101,9 +103,7 @@ fi
 
 }
 
-cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /dev/shm/
-cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+[ ! -e /usr/lib/arm-linux-gnueabi/libasound.so.2 ] && [ -e /usr/lib/arm-linux-gnueabi/libasound.so.2.sav ] && mv /usr/lib/arm-linux-gnueabi/libasound.so.2.sav /usr/lib/arm-linux-gnueabi/libasound.so.2
 
 #ifconfig eth0 txqueuelen 1875
 
@@ -136,6 +136,6 @@ swapoff -a
 taskset -cp $m_task 1
 
 musicpd_bg &
-/dev/shm/mpd --no-daemon /dev/shm/mpd.conf >/dev/null 2>&1
+/usr/bin/mpd --no-daemon /etc/mpd.conf >/dev/null 2>&1
 
 exit 0
