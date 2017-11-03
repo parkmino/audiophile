@@ -11,4 +11,6 @@
 
 1. 에피소드를 읽은 > 에피소드를 들은
 2. %artist%은 > %artist%는
-3. 
+3. Play Queue > 연주순서
+4. Playlist > 연주목록
+5. 
