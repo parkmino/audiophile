@@ -1,11 +1,7 @@
-$ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf
-$ pkill mpd && sleep 1 && mpd-bg
+$ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd && sleep 1 && mpd-bg
 $ mpc listall | grep -m1 노력 | mpc add && mpc play
-$ !-3
 
 1. sudo nano /etc/mpd.conf.sav
 	audio_buffer_size	"3429"
-	buffer_before_play	"9.980977266877889145986446658442188355564634%"
-	buffer_before_play      "9.98466%"
-
-	$ sudo sed -i '/audio_buffer_size/s/^#*//; /audio_buffer_size/s/".*"/"3429"/; /buffer_before_play/s/^#*//; /buffer_before_play/s/".*"/"9.980977266877889145986446658442188355564634%"/' /etc/mpd.conf.sav
+	buffer_before_play      "9.984666155424555554655121443342874554345554354%"
+   sudo sed -i '/audio_buffer_size/s/^#*//; /audio_buffer_size/s/".*"/"3429"/; /buffer_before_play/s/^#*//; /buffer_before_play/s/".*"/"9.984666155424555554655121443342874554345554354%"/' /etc/mpd.conf.sav
