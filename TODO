@@ -3,5 +3,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 
 1. sudo nano /etc/mpd.conf.sav
 	audio_buffer_size	"3429"
-	buffer_before_play      "9.98466615542455555465512144334287455434555435313555677542256535583566724647951%"
-   sudo sed -i '/audio_buffer_size/s/^#*//; /audio_buffer_size/s/".*"/"3429"/; /buffer_before_play/s/^#*//; /buffer_before_play/s/".*"/"9.98466615542455555465512144334287455434555435313555677542256535583566724647951%"/' /etc/mpd.conf.sav
+	buffer_before_play      "9.98466615542455555465512144334287455434555435313555677542256535583566724647954%"
+   sudo sed -i '/audio_buffer_size/s/^#*//; /audio_buffer_size/s/".*"/"3429"/; /buffer_before_play/s/^#*//; /buffer_before_play/s/".*"/"9.98466615542455555465512144334287455434555435313555677542256535583566724647954%"/' /etc/mpd.conf.sav
+
+2. sudo nano /etc/sysctl.conf
+	kernel.sched_migration_cost = 4899001
+	kernel.sched_shares_window = 346000
+
