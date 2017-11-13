@@ -31,11 +31,11 @@ grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_
 
 ### sysctl.conf
 
-sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388349/'    /etc/sysctl.conf
-sed -i '/latency_ns/s/ = .*$/ = 1393268/'              /etc/sysctl.conf
-sed -i '/shares_window_ns/s/ = .*$/ = 346000/'         /etc/sysctl.conf
-sed -i '/sched_rt_period_us/s/ = .*$/ = 1000001/'      /etc/sysctl.conf
-sed -i '/sched_min_granularity_ns/s/ = .*$/ = 230000/' /etc/sysctl.conf
+sed -i '/wakeup_granularity/s/= .*$/= 388349/'    /etc/sysctl.conf
+sed -i '/latency/s/= .*$/= 1393268/'              /etc/sysctl.conf
+sed -i '/shares_window/s/= .*$/= 346000/'         /etc/sysctl.conf
+sed -i '/sched_rt_period/s/= .*$/= 1000001/'      /etc/sysctl.conf
+sed -i '/sched_min_granularity/s/= .*$/= 230000/' /etc/sysctl.conf
 
 ### kr2mpd
 

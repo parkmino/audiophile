@@ -71,9 +71,9 @@ chmod +x /root/kr2mpd
 ln -sf /root/kr2mpd /usr/bin/
 sed -i '/plugin.*mms/!b;n;s/".*"/"yes"/' /etc/mpd.conf
 
-sed -i '/wakeup_granularity_ns/s/ = .*$/ = 388347/' /etc/sysctl.conf
-sed -i '/latency_ns/s/ = .*$/ = 1393267/'           /etc/sysctl.conf
-sed -i '/shares_window_ns/s/ = .*$/ = 346002/'      /etc/sysctl.conf
+sed -i '/wakeup_granularity/s/= .*$/= 388347/' /etc/sysctl.conf
+sed -i '/latency/s/= .*$/= 1393267/'           /etc/sysctl.conf
+sed -i '/shares_window/s/= .*$/= 346002/'      /etc/sysctl.conf
 
 grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf
 
