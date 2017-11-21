@@ -1,0 +1,21 @@
+### Download & Compile
+curl -L ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.5.tar.bz2 -o alsa-lib-1.1.5.tar.bz2
+tar xvjf alsa-lib-1.1.5.tar.bz2
+cd alsa-lib-1.1.5
+#export CFLAGS="-march=native -O2"
+export CFLAGS="-O0" ; export CXXFLAGS="-O0" ; export CPPFLAGS="-O0"
+
+./configure --help
+
+./configure --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --disable-thread-safety --with-pcm-plugins=hw --with-ctl-plugins=hw
+
+### Minimal
+./configure --disable-pcm --disable-mixer --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --disable-thread-safety # --prefix=$HOME
+
+sudo make install
+
+### Ubuntu System
+
+$ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav && sudo cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0 && sudo rm /usr/lib/libasound.*
+$ sudo rm -rf /usr/share/alsa && sudo mkdir /usr/share/alsa && sudo nano /usr/share/alsa/alsa.conf
+	pcm.0={type=hw,card=0;device=0;subdevice=0;nonblock=1}
