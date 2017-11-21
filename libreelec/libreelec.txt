@@ -7,8 +7,7 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ cd squashfs-root
 	  ALSA tweak
 	$ nano /usr/share/alsa/alsa.conf
-		pcm.0={type=hw,card=0,device=0,subdevice=0,nonblock=1},pcm.default=pcm.0
-		ctl.default=pcm.0
+		pcm.0={type=hw,card=0;device=0;subdevice=0;nonblock=1},pcm.default=pcm.0,ctl.default=pcm.0
 	$ nano /usr/lib/modprobe.d/alsa-base.conf
 		#options snd-usb-audio index=-2
 	$ cp /bin/ps /usr/bin/
