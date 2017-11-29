@@ -1,6 +1,6 @@
 #!/bin/sh
 
-### Pogo Audio Renderer 17.2 Patch
+### Pogo Audio Renderer 17.12 Patch
 
 # apt-get update
 # apt-get -y install curl ca-certificates
