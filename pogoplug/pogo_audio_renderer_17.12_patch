@@ -25,7 +25,7 @@ grep -qsP '^\tmixer_device' /etc/mpd.conf && sed -i '/^\tmixer_device/s/".*"/"pc
 
 sed -i '/always_on/s/^#*//' /etc/mpd.conf
 sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3429"/' /etc/mpd.conf
-sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"9.98097726687788914598%"/' /etc/mpd.conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"9.98466615542455555465512144334287455434555435313555677542256535583566724647953987861444%"/' /etc/mpd.conf
 
 grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf
 
