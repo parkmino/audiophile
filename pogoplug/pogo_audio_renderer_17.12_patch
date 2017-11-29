@@ -1,12 +1,12 @@
 #!/bin/sh
 
-### Pogo Audio Renderer 17.10 Patch
+### Pogo Audio Renderer 17.2 Patch
 
 # apt-get update
 # apt-get -y install curl ca-certificates
-# curl -L https://goo.gl/P8zmhv -o pogo_audio_renderer_17.10_patch
-# chmod +x pogo_audio_renderer_17.10_patch
-# ./pogo_audio_renderer_17.10_patch
+# curl -L https://goo.gl/81JALG -o pogo_audio_renderer_17.12_patch
+# chmod +x pogo_audio_renderer_17.12_patch
+# ./pogo_audio_renderer_17.12_patch
 
 ### rc.local
 
