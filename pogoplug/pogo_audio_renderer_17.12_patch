@@ -10,8 +10,8 @@
 
 ### rc.local
 
-sed -i 's/mpd.conf/mpd.conf >\/dev\/null 2>\&1/' /etc/rc.local
-sed -i 's/upmpdcli.conf \&/upmpdcli.conf >\/dev\/null 2>\&1 \&/' /etc/rc.local
+sed -i 's/mpd.conf.*/mpd.conf >\/dev\/null 2>\&1/' /etc/rc.local
+sed -i 's/upmpdcli.conf.*/upmpdcli.conf >\/dev\/null 2>\&1 \&/' /etc/rc.local
 sed -i 's/\t\trenice/\t\t#renice/' /etc/rc.local
 
 ### alsa.conf
