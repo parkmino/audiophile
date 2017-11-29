@@ -133,11 +133,11 @@ Audio Render Advanced
 
 16. Make Image
 
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 17.10" > ~/release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 18.03" > ~/release
 	$ mpc clear
 	$ sudo rm -f /root/.bash_history ~/.bash_history ; history -c
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_17.10.img
-	$ zip raspbian_audio_renderer_17.10.zip raspbian_audio_renderer_17.10.img
+	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_18.03.img
+	$ zip raspbian_audio_renderer_18.03.zip raspbian_audio_renderer_18.03.img
