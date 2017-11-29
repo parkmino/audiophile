@@ -14,9 +14,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	kernel.sched_shares_window = 345999		# 346000
 
 2. sudo nano /etc/mpd.conf.sav
-	buffer_before_play	"9.9985967986999%"
+	buffer_before_play	"9.9985967986995619345437558093733132000409892%"
    sudo nano /etc/sysctl.conf
 	kernel.sched_migration_cost = 4899001		# 4899001
 	kernel.sched_time_avg_ms = 6289			# 6288
 	kernel.sched_wakeup_granularity_ns = 388351	# 388349
-	kernel.sched_shares_window = 345998		# 345999
