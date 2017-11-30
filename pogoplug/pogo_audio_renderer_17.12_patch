@@ -10,7 +10,7 @@
 
 ### libasound tweak
 
-for i in /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/mpd.conf; do
+for i in /usr/lib/arm-linux-gnueabi/libasound.so.2 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0; do
  [ -e $i ] && [ ! -e $i.sav ] && mv $i $i.sav
 done
 
@@ -42,7 +42,7 @@ musicpd_bg () {
             chrt -op 0          $proc_nr ;;
   esac
  done
- nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
+ nohup taskset -ac $s_task /usr/local/bin/upmpdcli -c /usr/local/etc/upmpdcli.conf >/dev/null 2>&1 &
 # turn on LED
 if [ -d /sys/class/leds/status:green:health ]; then
    echo default-on > /sys/class/leds/status:green:health/trigger
@@ -95,8 +95,6 @@ if [ -d /sys/class/leds/nsa325:green:usb ]; then
 fi
 }
 cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /dev/shm/
-cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 #ifconfig eth0 txqueuelen 1875
 for i in $(ps -eo pid,class,comm | grep -E '"'"'(FF|RR)'"'"' | awk '"'"'$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'"'"'); do
  chrt -op 0 $i
@@ -121,7 +119,7 @@ swapoff -a
 ### Init
 taskset -cp $m_task 1
 musicpd_bg &
-/dev/shm/mpd --no-daemon /dev/shm/mpd.conf >/dev/null 2>&1
+/usr/bin/mpd --no-daemon /etc/mpd.conf >/dev/null 2>&1
 
 exit 0' >> /etc/rc.local
 
@@ -129,16 +127,16 @@ exit 0' >> /etc/rc.local
 
 printf 'pcm.0={type=hw,card=0,device=0,subdevice=0,nonblock=1}' > /usr/share/alsa/alsa.conf
 
-### mpd.conf.sav
+### mpd.conf
 
-sed -i '/^\tdevice/s/".*"/"pcm.0"/' /etc/mpd.conf.sav
-grep -qsP '^\tmixer_device' /etc/mpd.conf.sav && sed -i '/^\tmixer_device/s/".*"/"pcm.0"/' /etc/mpd.conf.sav || sed -i '/dop/i\\tmixer_device\t\t"pcm.0"' /etc/mpd.conf.sav
+sed -i '/^\tdevice/s/".*"/"pcm.0"/' /etc/mpd.conf
+grep -qsP '^\tmixer_device' /etc/mpd.conf && sed -i '/^\tmixer_device/s/".*"/"pcm.0"/' /etc/mpd.conf || sed -i '/dop/i\\tmixer_device\t\t"pcm.0"' /etc/mpd.conf
 
-sed -i '/always_on/s/^#*//' /etc/mpd.conf.sav
-sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3429"/' /etc/mpd.conf.sav
-sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"9.98466615542455555465512144334287455434555435313555677542256535583566724647953987861444%"/' /etc/mpd.conf.sav
+sed -i '/always_on/s/^#*//' /etc/mpd.conf
+sed -i '/audio_buffer/s/^#*//; /audio_buffer/s/".*"/"3429"/' /etc/mpd.conf
+sed -i '/buffer_before/s/^#*//; /buffer_before/s/".*"/"9.98466615542455555465512144334287455434555435313555677542256535583566724647953987861444%"/' /etc/mpd.conf
 
-grep 'Audio Output' -C3 /etc/mpd.conf.sav | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf.sav || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf.sav
+grep 'Audio Output' -C3 /etc/mpd.conf | grep -qs mixer_type && sed -i '0,/mixer_type/s/mixer_type.*/mixer_type\t"disabled"/' /etc/mpd.conf || sed -i '/Audio Output/i\\tmixer_type\t"disabled"' /etc/mpd.conf
 
 ### sysctl.conf
 
@@ -186,7 +184,7 @@ chmod +x /root/kr2mpd
 ln -sf /root/kr2mpd /usr/bin/
 fi
 
-sed -i '/plugin.*mms/!b;n;s/".*"/"yes"/' /etc/mpd.conf.sav
+sed -i '/plugin.*mms/!b;n;s/".*"/"yes"/' /etc/mpd.conf
 
 ### ut2mpd
 
