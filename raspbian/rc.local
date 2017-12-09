@@ -115,6 +115,9 @@ swapoff -a
 ### Init
 taskset -cp $m_task 1
 
+### Text to Speech
+#tts
+
 musicpd_bg &
 /dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
 

@@ -211,18 +211,35 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
  [ "$i" != $current_name ] && [ "$i" != "" ] && sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
 }
 
+tts_metadata () {
+i=$(whiptail --title "IP TTS, Metadata / IP 확인과 메타데이터" --menu "\
+Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 75 4 \
+"1" "Enable  IP Text to Speech at boot   부팅 시 IP 음성 확인함" \
+"2" "Disable IP Text to Speech at boot   부팅 시 IP 음성 확인 안 함" \
+"3" "Enable  Metadata in MPD             음원의 태그를 사용 함" \
+"4" "Disable Metadata in MPD             음원의 태그를 사용 안 함" 3>&1 1>&2 2>&3)
+
+case $i in
+ 1) sudo sed -i '/tts/s/^#*//'            /etc/rc.local ;;
+ 2) sudo sed -i '/tts/s/^/#/'             /etc/rc.local ;;
+ 3) sudo sed -i '/metadata.*none/s/^/#/'  $mpd_conf ;;
+ 4) sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf ;;
+esac
+}
+
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 18 62 10 \
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 18 62 11 \
  "1"  "Audio device              오디오 장치           >" \
  "2"  "USB signal & power        USB 신호와 전원       >" \
- "3"  "IP address                IP 설정               >" \
- "4"  "DBus, DoP, Music Folder   DBus, DoP, 음원 폴더  >" \
- "5"  "Change renderer name      렌더러 이름 바꾸기    >" \
- "6"  "Disable SSH               SSH 사용 안 함" \
- "7"  "ALSA reinstall            ALSA 재설치" \
- "8"  "Raspbian update           Raspbian 업데이트" \
- "9"  "Reboot                    재시작" \
-"10"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
+ "3"  "DBus, DoP, Music Folder   DBus, DoP, 음원 폴더  >" \
+ "4"  "IP address                IP 설정               >" \
+ "5"  "IP TTS, Metadata          IP 확인, 태그         >" \
+ "6"  "Change renderer name      렌더러 이름 바꾸기    >" \
+ "7"  "Disable SSH               SSH 사용 안 함" \
+ "8"  "ALSA reinstall            ALSA 재설치" \
+ "9"  "Raspbian update           Raspbian 업데이트" \
+"10"  "Reboot                    재시작" \
+"11"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
@@ -230,17 +247,18 @@ while true; do
  case $i in
   1)  sound_card ;;
   2)  usb_signal_power ;;
-  3)  static_ip ;;
-  4)  dbus_dop_folder ;;
-  5)  renderer_name ;;
-  6)  sudo touch /boot/.nossh ;;
-  7)  sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
+  3)  dbus_dop_folder ;;
+  4)  static_ip ;;
+  5)  tts_metadata ;;
+  6)  renderer_name ;;
+  7)  sudo touch /boot/.nossh ;;
+  8)  sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
       sudo apt-get install --reinstall libasound2 libasound2-data
       sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
-  8)  sudo apt-get update
+  9)  sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
-  9)  sudo reboot ;;
-  10) sudo poweroff ;;
+  10) sudo reboot ;;
+  11) sudo poweroff ;;
  esac
 done

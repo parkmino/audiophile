@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#sudo apt-get install mpg123 sox libttspico-utils
+
+alsa=$(head -1 /usr/share/alsa/alsa.conf | cut -d'=' -f1)
+pico_wav="/home/parkmino/Downloads/tts.wav"
+ping -c1 google.com >/dev/null 2>&1 && tts_eng=google || tts_eng=pico
+
+case $tts_eng in
+ google)
+  if [ -z "$1" ]; then
+  #url="http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=지금 시각은 $(date +"%p %-I:%M") 입니다&tl=ko"
+   url="http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=저의 IP는 $(hostname -I) 입니다&tl=ko"
+  else
+   url="http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=$*&tl=ko"
+  fi
+  mpc stop >/dev/null 2>&1
+  mpg123 -b 512 -q -o alsa -a $alsa "$url" & >/dev/null 2>&1 ;;
+ pico)
+  if [ -z "$1" ]; then
+  #pico2wave -w $pico_wav "Now the time is $(date +"%-I %-M")"
+   pico2wave -w $pico_wav "My IP is $(hostname -I)"
+  else
+   pico2wave -w $pico_wav "$*"
+  fi
+  mpc stop >/dev/null 2>&1
+  AUDIODEV=$alsa play -q -V0 $pico_wav & ;;
+esac
