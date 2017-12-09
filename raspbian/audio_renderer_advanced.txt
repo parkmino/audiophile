@@ -4,7 +4,7 @@ Audio Render Advanced
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2017-08-16-raspbian-stretch-lite.img of=/dev/sdc
-	$ cp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd ut2mpd /home/pi
+	$ cp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd ut2mpd tts /home/pi
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
@@ -118,11 +118,11 @@ Audio Render Advanced
 	sudo systemctl restart remote-fs.target
 	sudo systemctl restart local-fs.target
 
-14. Internet Radio
+14. Internet Radio & TTS (Text to Speech)
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
-	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /usr/bin/
+	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /home/pi/tts /usr/bin/
 	sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
 
 15. audio-config
