@@ -15,7 +15,7 @@ case $tts_eng in
    url="http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=$*&tl=ko"
   fi
   mpc stop >/dev/null 2>&1
-  mpg123 -b 512 -q -o alsa -a $alsa "$url" & >/dev/null 2>&1 ;;
+  mpg123 -b 2048 -q -o alsa -a $alsa "$url" & >/dev/null 2>&1 ;;
  pico)
   if [ -z "$1" ]; then
   #pico2wave -w $pico_wav "Now the time is $(date +"%-I %-M")"
