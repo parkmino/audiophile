@@ -1,21 +1,28 @@
 #!/bin/sh
 
-#sudo apt-get install mpg123 sox libttspico-utils
+# sudo apt-get install mpg123 sox libttspico-utils
+# https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+# Chinese - zh, English - en, Finnish - fi, French - fr, German - de, Japanese - ja, ...
 
 alsa=$(head -1 /usr/share/alsa/alsa.conf | cut -d'=' -f1)
-pico_wav="/home/parkmino/Downloads/tts.wav"
-ping -c1 google.com >/dev/null 2>&1 && tts_eng=google || tts_eng=pico
+pico_wav="/home/pi/tts.wav"
 
-case $tts_eng in
+ping -c1 google.com >/dev/null 2>&1 && tts_svc=google || tts_svc=pico
+
+case $tts_svc in
  google)
-  if [ -z "$1" ]; then
-  #url="http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=지금 시각은 $(date +"%p %-I:%M") 입니다&tl=ko"
-   url="http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=저의 IP는 $(hostname -I) 입니다&tl=ko"
+  if [ $# -eq 0 ]; then
+  #queue="tl=ko&q=지금 시각은 $(date +"%p %-I:%M") 입니다"
+   queue="tl=ko&q=저의 IP는 $(hostname -I) 입니다"
+  elif [ $# -ge 2 ] && [ ${#1} -eq 2 ] && [ $(expr "$1" : "[a-z]*") -eq 2 ]; then
+   tl=$1
+   shift
+   queue="tl=$tl&q=$*"
   else
-   url="http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=$*&tl=ko"
+   queue="tl=ko&q=$*"
   fi
   mpc stop >/dev/null 2>&1
-  mpg123 -b 2048 -q -o alsa -a $alsa "$url" & >/dev/null 2>&1 ;;
+  mpg123 -b 2048 -q -o alsa -a $alsa "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&$queue" & >/dev/null 2>&1 ;;
  pico)
   if [ -z "$1" ]; then
   #pico2wave -w $pico_wav "Now the time is $(date +"%-I %-M")"
@@ -26,3 +33,5 @@ case $tts_eng in
   mpc stop >/dev/null 2>&1
   AUDIODEV=$alsa play -q -V0 $pico_wav & ;;
 esac
+
+exit

@@ -213,17 +213,19 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 
 tts_metadata () {
 i=$(whiptail --title "IP TTS, Metadata / IP 확인과 메타데이터" --menu "\
-Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 75 4 \
-"1" "Enable  IP Text to Speech at boot   부팅 시 IP 음성 확인함" \
-"2" "Disable IP Text to Speech at boot   부팅 시 IP 음성 확인 안 함" \
-"3" "Enable  Metadata in MPD             음원의 태그를 사용 함" \
-"4" "Disable Metadata in MPD             음원의 태그를 사용 안 함" 3>&1 1>&2 2>&3)
+Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 13 75 5 \
+"1" "(TTS in Korean)                     부팅 시 IP 음성 확인함 (한글)" \
+"2" "Enable  IP Text to Speech at boot   부팅 시 IP 음성 확인함 (영어)" \
+"3" "Disable IP Text to Speech at boot   부팅 시 IP 음성 확인 안 함" \
+"4" "Enable  Metadata in MPD             음원의 태그를 사용 함" \
+"5" "Disable Metadata in MPD             음원의 태그를 사용 안 함" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/tts/s/^#*//'            /etc/rc.local ;;
- 2) sudo sed -i '/tts/s/^/#/'             /etc/rc.local ;;
- 3) sudo sed -i '/metadata.*none/s/^/#/'  $mpd_conf ;;
- 4) sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf ;;
+ 1) sudo sed -i '/tts/s/.*/tts/'                             /etc/rc.local ;;
+ 2) sudo sed -i '/tts/s/.*/tts en My I P is $(hostname -I)/' /etc/rc.local ;;
+ 3) sudo sed -i '/tts/s/^/#/'                                /etc/rc.local ;;
+ 4) sudo sed -i '/metadata.*none/s/^/#/'                     $mpd_conf ;;
+ 5) sudo sed -i '/metadata.*none/s/^#*//'                    $mpd_conf ;;
 esac
 }
 
