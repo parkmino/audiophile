@@ -7,7 +7,7 @@
 alsa=$(head -1 /usr/share/alsa/alsa.conf | cut -d'=' -f1)
 pico_wav="/home/pi/tts.wav"
 
-ping -c1 google.com >/dev/null 2>&1 && tts_svc=google || tts_svc=pico
+wget -q --spider -T1 http://google.com && tts_svc=google || tts_svc=pico
 
 case $tts_svc in
  google)
