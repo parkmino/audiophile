@@ -120,6 +120,7 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 
 10. ut2mpd
 
+# apt-get install curl ca-certificates
 # curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 # chmod a+rx /usr/local/bin/youtube-dl
 # cp ut2mpd /root/
