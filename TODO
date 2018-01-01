@@ -5,13 +5,30 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	buffer_before_play	"9.99859679869956193454375580937331320004098924264544549%"
 
 2. sudo nano /etc/mpd.conf.sav
-	buffer_before_play	"9.998596798699561934543755809373313200040989242645445496721281932352316443094530294384549529463961086013908994609489452509%"
+	buffer_before_play	"9.998596798699561934543755809373313200040989242645445496721281932352316443094530294384549529463961086013908994609489452508888889009119044083741%"
    sudo nano /etc/sysctl.conf
-	kernel.sched_min_granularity_ns = 229996	# 230000
-	kernel.sched_wakeup_granularity_ns = 388358	# 388351
-	kernel.sched_latency_ns = 1393272		# 1393268
+	kernel.sched_min_granularity_ns = 229995	# 230000
+	kernel.sched_wakeup_granularity_ns = 388360	# 388351
+	kernel.sched_latency_ns = 1393273		# 1393268
 	kernel.sched_migration_cost = 4899000		# 4899001
-	kernel.sched_shares_window = 346000		# 345999
+	kernel.sched_shares_window = 346001		# 345999
 	kernel.sched_time_avg = 6287			# 6289
+
+	kernel.sched_rt_period_us = 999996		# 999999
+	kernel.sched_rt_runtime_us = 857418		# 851456
+
    sudo nano /etc/hdparm.conf
 	 read_ahead_sect = 1240
+   sudo nano /etc/mpd.conf.sav
+	input {
+	 plugin  "file"
+	 enabled "no"
+	}
+	Replace blank lines with #
+	Replace tab with minimized space(s)
+
+3. sudo nano /etc/mpd.conf.sav
+	device "pcm.null"
+	mixer_device "ctl.shm"
+   sudo nano /usr/share/alsa/alsa.conf
+	pcm.null={type=hw;card=0;device=0;subdevice=0;nonblock=1}
