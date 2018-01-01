@@ -24,7 +24,7 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 $ sudo mkdir /usr/share/alsa
 $ sudo nano /usr/share/alsa/alsa.conf
 
-pcm.0={type=hw;card=0;device=0,subdevice=0;nonblock=1}#,pcm.default=pcm.0
+pcm.null={type=hw;card=0;device=0;subdevice=0;nonblock=1}#,pcm.default=pcm.null,ctl.default=ctl.shm
 #ctl.default=pcm.0
 #
 #ctl.control={type=hw,card=0}	# Comment out this line if possible !
