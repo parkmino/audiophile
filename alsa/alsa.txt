@@ -10,11 +10,11 @@ $ ./configure --disable-ucm --disable-topology --disable-alisp --disable-old-sym
 $ sudo make install
 
 $ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
-$ sudo cp libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
+$ sudo cp /usr/lib/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
 
 ### ALSA.CONF
 
-$ sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
+$ sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so/.so.sav/' '{}' \;
 $ sudo mv /usr/share/alsa /usr/share/alsa.org
 $ sudo systemctl mask alsa-store.service
 $ sudo systemctl mask alsa-restore.service
