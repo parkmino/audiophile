@@ -32,3 +32,6 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	mixer_device "ctl.shm"
    sudo nano /usr/share/alsa/alsa.conf
 	pcm.null={type=hw;card=0;device=0;subdevice=0;nonblock=1}
+
+4. Compile libasound and mpd
+	export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
