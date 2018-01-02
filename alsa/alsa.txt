@@ -3,8 +3,8 @@
 $ curl -L ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.5.tar.bz2 -o alsa-lib-1.1.5.tar.bz2
 $ tar xvjf alsa-lib-1.1.5.tar.bz2
 $ cd alsa-lib-1.1.5
-$ #export CFLAGS="-march=native -O2"
-$ export CFLAGS="-O0" ; export CXXFLAGS="-O0" ; export CPPFLAGS="-O0"
+$ #export CFLAGS="-march=native -O2" ; export CXXFLAGS="-march=native -O2" ; export CPPFLAGS="-march=native -O2"
+$ xport CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 $ ./configure --help
 $ ./configure --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --disable-thread-safety --with-pcm-plugins=hw --with-ctl-plugins=hw
 $ sudo make install
