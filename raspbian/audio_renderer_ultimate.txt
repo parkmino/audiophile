@@ -1,15 +1,8 @@
 Raspbian MPD Renderer
 
-1. Minimal ALSA configuration
+1. Enable UPnP
 
-	$ sudo nano /usr/share/alsa/alsa.conf
-		#pcm.default pcm.sound
-		#ctl.control.type hw
-		#ctl.control.card 1
-
-2. Enable UPnP
-
-	$ sudo nano /etc/mpd.conf
+	$ sudo nano /etc/mpd.conf.sav
 		#music_directory
 		#playlist_directory
 		#db_file
@@ -17,15 +10,19 @@ Raspbian MPD Renderer
 		#state_file
 		#sticker_file
 		database {
-			plugin "upnp"
+		plugin "upnp"
+		}
+		input {
+		plugin "file"
+		enabled "no"
 		}
 
-3. Disable Upmpdcli
+2. Disable Upmpdcli
 
 	$ sudo nano /etc/rc.local
 		#... upmpdcli
 
-4. Static IP
+3. Static IP
 
 	$ sudo nano /etc/network/interfaces
 		auto  eth0
@@ -39,7 +36,7 @@ Raspbian MPD Renderer
 			dns-nameservers 168.126.63.1
 	$ sudo systemctl disable dhcpcd.service
 
-5. Remove unnecessay modules
+4. Remove unnecessay modules
 
 	$ lsmod
 	$ sudo nano /etc/modprobe.d/raspi-blacklist.conf
@@ -52,7 +49,7 @@ Raspbian MPD Renderer
 		#blacklist joydev
 		#blacklist evdev
 
-6. Remove unnecessay processes
+5. Remove unnecessay processes
 
 	$ ps ax
 	$ sudo systemctl disable cron ntp rsyslog avahi-daemon
@@ -61,7 +58,7 @@ Raspbian MPD Renderer
 		 service $i stop
 		done
 
-7. USB Tweak
+6. USB Tweak
 
 	$ cp hub-ctrl /home/pi/
 	$ sudo nano /etc/rc.local
