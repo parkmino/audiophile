@@ -31,9 +31,10 @@ sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-
 sudo apt-get install libexpat1-dev libupnp-dev
 
 ### Download & Compile
-curl -L http://www.musicpd.org/download/mpd/0.20/mpd-0.20.12.tar.xz -o mpd-0.20.12.tar.xz
-tar xvf mpd-0.20.12.tar.xz
-cd mpd-0.20.12
+cd ~/Downloads/mpd/
+curl -L http://www.musicpd.org/download/mpd/0.20/mpd-0.20.16.tar.xz -o mpd-0.20.16.tar.xz
+tar xvf mpd-0.20.16.tar.xz
+cd ~/Downloads/mpd/mpd-0.20.16
 #export CFLAGS="-march=native -O2" ; export CXXFLAGS="-march=native -O2" ; export CPPFLAGS="-march=native -O2"
 export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 ./autogen.sh
@@ -48,16 +49,18 @@ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 make
 sudo make install
 
+ls -al /usr/bin/mpd* /usr/local/bin/mpd*
 /usr/local/bin/mpd -V
 #sudo strip --strip-unneeded /usr/local/bin/mpd
-sudo /etc/init.d/mpd stop
-ls -al /usr/bin/mpd*
-sudo mv /usr/bin/mpd /usr/bin/mpd.org && sudo cp /usr/local/bin/mpd /usr/bin
-sudo /etc/init.d/mpd start
-tar -zcvf ~/mpd.tar.gz -C /usr/local/bin/ mpd
-ls -al /usr/local/bin/mpd*
-sudo mv /usr/local/bin/mpd /usr/local/bin/mpd.0.20.12
-ls -al /usr/bin/mpd*
+#sudo /etc/init.d/mpd stop
+pkill mpd
+#sudo mv /usr/bin/mpd /usr/bin/mpd.org
+#sudo cp /usr/local/bin/mpd /usr/bin && sudo cp /usr/local/bin/mpd /usr/bin/mpd.0.20.16 && sudo cp /usr/local/bin/mpd /dev/shm/
+echo /usr/bin/ /usr/bin/mpd.0.20.16 /dev/shm/ | xargs -n 1 sudo cp /usr/local/bin/mpd
+#sudo /etc/init.d/mpd start
+mpd-bg
+tar -zcvf ~/Downloads/mpd.tar.gz -C /usr/local/bin/ mpd
+sudo mv /usr/local/bin/mpd /usr/local/bin/mpd.0.20.16
 
 ### Yan's patch
 https://skydrive.live.com/?cid=CE384832F08DA832&id=CE384832F08DA832%21105
