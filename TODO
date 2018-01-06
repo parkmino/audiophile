@@ -20,8 +20,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	Replace tab with minimized space(s)
 
 2. sudo nano /etc/mpd.conf.sav
-	device "pcm.simple"
-	mixer_device "ctl.symbols"
+	device "pcm.simple"		# "pcm.empty"
+	mixer_device "ctl.symbols"	# "ctl.symbols"
    sudo nano /usr/share/alsa/alsa.conf
 	pcm.simple={type=hw,card=0,device=0,subdevice=0,nonblock=1}
 
