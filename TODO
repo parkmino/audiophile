@@ -5,8 +5,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	buffer_before_play	"9.99859679869956193454375580937331320004098924264544549%"
 	buffer_before_play	"9.998596798699561934543755809373313200040989242645445496721281932352316443094530294384549529463961086013908994609489452508888889009119044083741039087888806109198%"
    sudo nano /etc/sysctl.conf
-	kernel.sched_rt_period_us = 999995		# 999999
-	kernel.sched_rt_runtime_us = 857417		# 851456
+	#kernel.sched_rt_period_us = 999995		# 999999
+	#kernel.sched_rt_runtime_us = 857417		# 851456
 	kernel.sched_min_granularity_ns = 229995	# 230000
 	kernel.sched_wakeup_granularity_ns = 388364	# 388351
 	kernel.sched_latency_ns = 1393275		# 1393268
