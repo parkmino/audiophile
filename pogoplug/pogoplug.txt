@@ -103,6 +103,11 @@ https://packages.debian.org/search?keywords=mpd
 # mkdir /mnt/usb01 /mnt/usb02 /mnt/pc01 /mnt/pc02 /mnt/nas01 /mnt/nas02
 # ln -s /mnt /var/lib/mpd/music
 
+### /etc/fstab from Voyage MPD
+/dev/hda1 / ext2 defaults,noatime,rw 0 0
+proc /proc proc defaults 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+
 7. Rc.local
 
 # nano /etc/rc.local
