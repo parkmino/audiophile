@@ -46,7 +46,7 @@ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 0.20.x
 ./configure --enable-database --disable-daemon --disable-debug --disable-documentation --enable-dsd --disable-fifo --disable-httpd-output --disable-inotify --disable-ipv6 --disable-largefile --disable-soundcloud --disable-libwrap --disable-mikmod --disable-openal --disable-oss --disable-osx --disable-pipe-output --disable-recorder-output --disable-sidplay --disable-shout --disable-solaris-output --enable-tcp --disable-test --disable-un --disable-vorbis --disable-wave-encoder --disable-werror --disable-icu --disable-iconv --disable-systemd-daemon --enable-libmpdclient --enable-expat  --enable-id3 --disable-sqlite --disable-lsr --disable-soxr --enable-curl --disable-smbclient --disable-nfs --disable-cdio-paranoia --enable-mms --disable-webdav --enable-cue --disable-neighbor-plugins --disable-iso9660 --disable-zlib --disable-bzip2 --enable-upnp --disable-zzip --disable-adplug --enable-audiofile --disable-aac --enable-ffmpeg --enable-flac --disable-fluidsynth --disable-gme --enable-mad --disable-mpg123 --disable-modplug --disable-opus --disable-sndfile --disable-mpc --disable-wavpack --disable-wildmidi --disable-shine-encoder --disable-vorbis-encoder --disable-lame-encoder --disable-twolame-encoder --enable-alsa --disable-roar --disable-sndio --disable-haiku --disable-jack --disable-ao --disable-pulse --with-zeroconf=no
 
-make
+make -j4
 sudo make install
 
 ls -al /usr/bin/mpd* /usr/local/bin/mpd*
