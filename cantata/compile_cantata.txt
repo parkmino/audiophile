@@ -1,8 +1,6 @@
 Download and Compile Cantata, MPD Client.
 
-http://packages.ubuntu.com/yakkety/cantata
 https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/cantata-qt
-
 
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
@@ -11,41 +9,41 @@ Format: 3.0 (quilt)
 Source: cantata
 Binary: cantata
 Architecture: any
-Version: 2.1.0.ds1-1
+Version: 2.2.0.ds1-1
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Uploaders:  Stuart Prescott <stuart@debian.org>
 Homepage: https://github.com/CDrummond/cantata
-Standards-Version: 4.0.0
+Standards-Version: 4.1.2
 Vcs-Browser: https://anonscm.debian.org/gitweb/?p=pkg-multimedia/cantata.git
 Vcs-Git: https://anonscm.debian.org/git/pkg-multimedia/cantata.git
 Build-Depends: cmake, debhelper (>= 9), libavcodec-dev, libavformat-dev, libavutil-dev, libcddb-dev, libcdparanoia-dev, libebur128-dev, libmpg123-dev, libmtp-dev (>= 1.0.0), libmusicbrainz5-dev (>= 5.1.0+git20150707), libphonon4qt5-dev, libqt5svg5-dev, libspeex-dev, libspeexdsp-dev, libtag-extras-dev, libtag1-dev, libudev-dev, libvlc-dev, libvlccore-dev, libx11-dev, pkg-config, pkg-kde-tools, qtbase5-dev, qtmultimedia5-dev, qttools5-dev-tools
 Package-List:
  cantata deb sound optional arch=any
 Checksums-Sha1:
- f68cc667471fd7470e254bb3171a80d35ad52211 2669394 cantata_2.1.0.ds1.orig.tar.gz
- ecf9265a5bc1ce87a77a72bcc5694c0100be8c96 12876 cantata_2.1.0.ds1-1.debian.tar.xz
+ 009a75c4d8e032f3be331bc63ec004f916d179e0 2598409 cantata_2.2.0.ds1.orig.tar.gz
+ cab26f4b92440108e6012c9baad8928613492610 12516 cantata_2.2.0.ds1-1.debian.tar.xz
 Checksums-Sha256:
- 985293253edd4db8c6948425b43006c970c34b4004e34ea2f3aa296a45f3a6d4 2669394 cantata_2.1.0.ds1.orig.tar.gz
- fbe91a96ce8cad023825edf620d1e7521ef0e771bc481c01137c852ca7414657 12876 cantata_2.1.0.ds1-1.debian.tar.xz
+ 9d3b7fb518b5ae68ee8091b44d2531e84a36d42f1814c7c0ab6ab03d504c3507 2598409 cantata_2.2.0.ds1.orig.tar.gz
+ 7cc89d6a82ab29539de30fb3db042db5abca51f8d31c7c99c06dc1bf1ed81211 12516 cantata_2.2.0.ds1-1.debian.tar.xz
 Files:
- f401ee1cc793f6d50348ea7eef04b34d 2669394 cantata_2.1.0.ds1.orig.tar.gz
- e1ee252d46be568e9365565418c044c6 12876 cantata_2.1.0.ds1-1.debian.tar.xz
+ 3f162802f1ed2af54cbfe91b5a75800e 2598409 cantata_2.2.0.ds1.orig.tar.gz
+ 1a0436bf939ad45238a790409aa5a7e7 12516 cantata_2.2.0.ds1-1.debian.tar.xz
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEkOLSwa0Uaht+u4kdu8F+uxOW8vcFAlmBXcoACgkQu8F+uxOW
-8ve6Ug/7BXsxp/JjsS2Nw5v9u3FJVs0az3/whCM7+4DszdtZfZEIZvw41xF5Xr1e
-ZyEcluPxPEz/vDPHLqdZoqXMGcD5/3idOdlcyi2pm/bxGTz1SWaGdh2Aqw/YpvRD
-r/dGPkv12ruxP1Cf7x4RE5mQ7wXk0H8VowbxDoC61E0Q4KhnXy+c2WvDV4OSMq6V
-KjlKVBlYES1Fjt+6zaBBCxsANeky88fNS78itekpIC74k9DMcf8TwDic2Pvs82D3
-w6mpVmBc8pkQIJwfP9k/09iKxlsbOlkxLBshVjfIdC8AkTp7Xbkt3ItXZfjknvQo
-nwIXmus0dfxgpk09bOjo9py8E4GHJ5c8OmWQsw3HQq71NDiEP/XJZhTZ9IjhNN72
-rNRZtv1paPETIGzGoB3bDoy1q4kPKcYk9j8gE8UqogrQrh2Jak3YRAIecHPGPPDW
-gSvrHpZqP+Vgs+ykLtgZUZurDwydJpBpl3c5he2m+mv5elFryu8is/aJOmZyzpMO
-r6h/nwBqnKSFnnSJb9lX7WkeqGDLlQ7OUBOisAZAsnB7J7luoyes6gOoF4N/KC7v
-0uA0y/SXr1y+uYHx1pWTifLwgcZXKkulS2tbDjYFN4VOEccpQuVwdapw35ngL3Cd
-oBKg0WPqIs8S5pjnQ9JiBQJWulzTUTKsk5j+6nLoPIFsQNgZTg4=
-=4zNV
+iQIzBAEBCAAdFiEEkOLSwa0Uaht+u4kdu8F+uxOW8vcFAlo/YbMACgkQu8F+uxOW
+8vdmOg//elidV9uWRybwE91VN4dykBTu6IDAu1IYCY4WH7tSM4zfkbOQ5e6LFURa
+cDtkulGHLFdxlFHFN70CyC/Af0uVYsk1GAcyQu156XiOw22JkBfrrIdUWFa6+fZg
+8k9mncMDrlDZ+8B+6FFyPdowsNO6xseR/HzyazgQ2XLO8k3QRWaiaucKuWI19Fd8
+UE1gYC2BfjB9ofNvYd3UsQ2jo6j7b9EK2jjIkQiH3Yuwvur4HLoCJ6sS90DgOkm2
+ZRbdX/LEFfgI82L+YMEBFCk1u1iu5ZUZITX4uODTT1LpqF7fQGzWzdlzlVLM2sXN
+0/mqY/q9DVU3fdO/heDX/8py0WnZNMPnwFFY7zLiEFXJW/X7JIWmmaNY8YYzVzt5
+iTnyVyLWW/7QHJbychmgebHLOgKF+H1pZEyDVNsCa4CckzxjN5qKongxQnfROv1C
+AHQ25DjqHR195oIvKSNe3AE1LGphvrx+xWYCSkvTr9y0yvyYykMHCodnDPf2TvEf
+tWW5lkiTh/sjl+3ONKIi+Qbmvc70ynolnsEKp4zOadVdMdjHJ0mX8CeoaXNlukXN
+cjifSzhfS5l+IdT2p01MFBYLyn8r41eDjCsAYvNOFtpdJU1OUxLM0lgODrf8eJE+
+bpvAX5Qknd1ruazFp+t4F5RPNRsXJ5oEdDLMTcc2+xaB4D2yibQ=
+=mnbY
 -----END PGP SIGNATURE-----
 
 ### Install Package Dependencies ###
@@ -90,7 +88,7 @@ cd ~/git/audiophile
 [ -f cantata/cantata-qt*.deb ] && git rm cantata/cantata-qt*.deb
 cp ~/Downloads/mpd/cantata-svn/build/cantata-qt*.deb cantata/
 git add cantata/cantata-qt*.deb
-git commit -m "Update Cantata package"
+git commit -m "Update Cantata build"
 git push origin master
 
 ### Korean Translation Inquiry ###
