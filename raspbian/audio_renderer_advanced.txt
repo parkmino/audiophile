@@ -99,12 +99,12 @@ Audio Render Advanced
 
 	sudo nano /etc/sysctl.conf
 
-12. Disabel swap
+13. Disabel swap
 
 	cat /proc/swaps
 	sudo systemctl disable dphys-swapfile
 
-13. USB Mount
+14. USB Mount
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -118,20 +118,20 @@ Audio Render Advanced
 	sudo systemctl restart remote-fs.target
 	sudo systemctl restart local-fs.target
 
-14. Internet Radio & TTS (Text to Speech)
+15. Internet Radio & TTS (Text to Speech)
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
 	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /home/pi/tts /usr/bin/
 	sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
 
-15. audio-config
+16. audio-config
 
 	cp audio-config /home/pi
 	sudo ln -s /home/pi/audio-config /usr/bin/
 	audio-config
 
-16. Make Image
+17. Make Image
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 18.03" > ~/release
 	$ mpc clear
