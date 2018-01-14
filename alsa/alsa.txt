@@ -24,28 +24,7 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 $ sudo mkdir /usr/share/alsa
 $ sudo nano /usr/share/alsa/alsa.conf
 
-pcm.null={type=hw;card=0;device=0;subdevice=0;nonblock=1}#,pcm.default=pcm.null,ctl.default=ctl.shm
-#ctl.default=pcm.0
-#
-#ctl.control={type=hw,card=0}	# Comment out this line if possible !
-#
-#pcm.hw.type hw
-#pcm.hw.card 0
-#pcm.hw.device 0
-#pcm.hw.subdevice -1
-#pcm.hw.sync_ptr_ioctl 0
-#pcm.hw.nonblock 0
-#pcm.hw.@args.0 CARD
-##pcm.hw.@args.1 DEV
-##pcm.hw.@args.2 SUBDEV
-#pcm.hw.@args.CARD.type string
-##pcm.hw.@args.DEV.type integer
-##pcm.hw.@args.SUBDEV.type integer
-#
-#ctl.hw.type hw
-#ctl.hw.card 0
-#ctl.hw.@args.0 CARD
-#ctl.hw.@args.CARD.type string
+pcm.empty={type=hw,card=0,device=0,subdevice=0,nonblock=1}#,pcm.default=pcm.empty,ctl.default=ctl.symbols
 
 $ sudo find /usr/lib/*/alsa-lib/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
 $ sudo mv /usr/share/alsa /usr/share/alsa.tweak
