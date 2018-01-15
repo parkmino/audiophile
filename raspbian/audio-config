@@ -4,15 +4,20 @@
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
 
 sound_card_initial () {
- sudo sed -i '/dtoverlay=allo\|dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
+ sudo sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
+}
+
+sound_card_selector () {
+ sound_card_initial
+ sudo sed -i '$adtoverlay='"$1"'' /boot/config.txt
 }
 
 sound_card_intaudio () {
- sudo sed -i '/card/s/[1-9]/0/g'  /usr/share/alsa/alsa.conf
+ sudo sed -i 's/card=[1-9]/card=0/g'  /usr/share/alsa/alsa.conf
 }
 
 sound_card_usbaudio () {
- sudo sed -i '/card/s/[02-9]/1/g' /usr/share/alsa/alsa.conf
+ sudo sed -i 's/card=[02-9]/card=1/g' /usr/share/alsa/alsa.conf
 }
 
 iqaudio () {
@@ -32,83 +37,39 @@ i=$(whiptail --title "Audio device / 오디오 장치" --menu "Choose/선택" --
 "5"  "Allo Piano DAC+" \
 "6"  "Allo Piano DAC+ (+Kali board)" \
 "7"  "Allo DigiOne" \
-"8"  "HiFiBerry Amp/Amp+" \
-"9"  "HiFiBerry DAC" \
-"10" "HiFiBerry DAC+/DAC+ Pro" \
-"11" "HiFiBerry DAC+ Pro (Slave mode/종속 모드)" \
-"12" "HiFiBerry Digi/Digi+" \
-"13" "HiFiBerry Digi+ Pro" \
-"14" "IQaudIO DAC" \
-"15" "IQaudIO DAC+" \
-"16" "IQaudIO Digi+" 3>&1 1>&2 2>&3)
+"8"  "ApplePi DAC" \
+"9"  "Dion Audio LOCO DAC-AMP" \
+"10" "Dion Audio LOCO-V2 DAC-AMP" \
+"11" "HiFiBerry Amp/Amp+" \
+"12" "HiFiBerry DAC" \
+"13" "HiFiBerry DAC+/DAC+ Pro" \
+"14" "HiFiBerry DAC+ Pro (Slave mode/종속 모드)" \
+"15" "HiFiBerry Digi/Digi+" \
+"16" "HiFiBerry Digi+ Pro" \
+"17" "IQaudIO DAC" \
+"18" "IQaudIO DAC+" \
+"19" "IQaudIO Digi+" 3>&1 1>&2 2>&3)
 
 case $i in
- 1)  sound_card_initial
-     #sound_card_usbaudio
-     ;;
- 2)  sound_card_initial
-     sudo sed -i '$adtoverlay=allo-boss-dac-pcm512x-audio' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 3)  sound_card_initial
-     sudo sed -i '$adtoverlay=allo-boss-dac-pcm512x-audio,slave' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 4)  sound_card_initial
-     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 5)  sound_card_initial
-     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 6)  sound_card_initial
-     sudo sed -i '$adtoverlay=allo-piano-dac-pcm512x-audio,glb_mclk' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 7)  sound_card_initial
-     sudo sed -i '$adtoverlay=allo-digione' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 8)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-amp' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 9)  sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-dac' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 10) sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-dacplus' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 11) sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-dacplus,slave' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 12) sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-digi' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 13) sound_card_initial
-     sudo sed -i '$adtoverlay=hifiberry-digi-pro' /boot/config.txt
-     #sound_card_intaudio
-     ;;
- 14) sound_card_initial
-     sudo sed -i '$adtoverlay=iqaudio-dac' /boot/config.txt
-     #sound_card_intaudio
-     iqaudio
-     ;;
- 15) sound_card_initial
-     sudo sed -i '$adtoverlay=iqaudio-dacplus' /boot/config.txt
-     #sound_card_intaudio
-     iqaudio
-     ;;
- 16) sound_card_initial
-     sudo sed -i '$adtoverlay=iqaudio-digi-wm8804-audio' /boot/config.txt
-     #sound_card_intaudio
-     iqaudio
-     ;;
+ 1)  sound_card_initial ;;
+ 2)  sound_card_selector allo-boss-dac-pcm512x-audio			;;
+ 3)  sound_card_selector allo-boss-dac-pcm512x-audio,slave		;;
+ 4)  sound_card_selector allo-piano-dac-pcm512x-audio			;;
+ 5)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
+ 6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
+ 7)  sound_card_selector allo-digione					;;
+ 8)  sound_card_selector applepi-dac					;;
+ 9)  sound_card_selector dionaudio-loco					;;
+ 10) sound_card_selector dionaudio-loco-v2				;;
+ 11) sound_card_selector hifiberry-amp					;;
+ 12) sound_card_selector hifiberry-dac					;;
+ 13) sound_card_selector hifiberry-dacplus				;;
+ 14) sound_card_selector hifiberry-dacplus,slave			;;
+ 15) sound_card_selector hifiberry-digi					;;
+ 16) sound_card_selector hifiberry-digi-pro				;;
+ 17) sound_card_selector iqaudio-dac			; iqaudio	;;
+ 18) sound_card_selector iqaudio-dacplus		; iqaudio	;;
+ 19) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
 esac
 }
 
