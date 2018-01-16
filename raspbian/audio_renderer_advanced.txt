@@ -4,7 +4,7 @@ Audio Render Advanced
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2017-08-16-raspbian-stretch-lite.img of=/dev/sdc
-	$ cp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd ut2mpd tts /home/pi
+	$ scp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd ut2mpd tts pi@192.168.0.3:/home/pi/
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
