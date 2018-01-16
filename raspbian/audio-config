@@ -97,8 +97,8 @@ esac
 
 static_ip () {
 i=$(whiptail --title "IP address / IP 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
-"1" "Dynamic IP (DHCP)   자동 IP" \
-"2" "Static  IP          수동 IP  >" 3>&1 1>&2 2>&3)
+"1" "Dynamic IP (DHCP)     자동 IP" \
+"2" "Static  IP            수동 IP   >" 3>&1 1>&2 2>&3)
 
 case $i in
  1) sudo sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
@@ -187,18 +187,17 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 18 62 11 \
- "1"  "Audio device              오디오 장치           >" \
- "2"  "USB signal & power        USB 신호와 전원       >" \
- "3"  "MPD settings              MPD 설정              >" \
- "4"  "Renderer name             렌더러 이름 바꾸기    >" \
- "5"  "IP address                IP 설정               >" \
- "6"  "IP TTS, DBus              IP TTS와 DBus         >" \
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 18 61 10 \
+ "1"  "Audio device              오디오 장치          >" \
+ "2"  "USB signal & power        USB 신호와 전원      >" \
+ "3"  "MPD settings              MPD 설정             >" \
+ "4"  "Renderer name             렌더러 이름 바꾸기   >" \
+ "5"  "IP address                IP 설정              >" \
+ "6"  "IP TTS, DBus              IP TTS와 DBus        >" \
  "7"  "SSH turn-off              SSH 사용 안 함" \
- "8"  "ALSA reinstall            ALSA 재설치" \
- "9"  "Raspbian update           Raspbian 업데이트" \
-"10"  "Reboot                    재시작" \
-"11"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
+ "8"  "Raspbian update           Raspbian 업데이트" \
+ "9"  "Reboot                    재시작" \
+"10"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
@@ -211,13 +210,10 @@ while true; do
   5)  static_ip ;;
   6)  dbus_tts ;;
   7)  sudo touch /boot/.nossh ;;
-  8)  sudo cp /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.bak
-      sudo apt-get install --reinstall libasound2 libasound2-data
-      sudo cp /usr/share/alsa/alsa.conf.bak /usr/share/alsa/alsa.conf ;;
-  9)  sudo apt-get update
+  8)  sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
-  10) sudo reboot ;;
-  11) sudo poweroff ;;
+  9)  sudo reboot ;;
+  10) sudo poweroff ;;
  esac
 done
