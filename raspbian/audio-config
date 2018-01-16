@@ -97,8 +97,8 @@ esac
 
 static_ip () {
 i=$(whiptail --title "IP address / IP 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
-"1" "Dynamic IP (DHCP)     자동 IP" \
-"2" "Static  IP            수동 IP   >" 3>&1 1>&2 2>&3)
+"1" "Dynamic IP (DHCP)       자동 IP" \
+"2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
 case $i in
  1) sudo sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
