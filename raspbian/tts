@@ -33,5 +33,3 @@ case $tts_svc in
   mpc stop >/dev/null 2>&1
   AUDIODEV=$alsa play -q -V0 $pico_wav & ;;
 esac
-
-exit
