@@ -1,29 +1,38 @@
 $ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd && sleep 1 && mpd-bg
 $ mpc listall | grep -m1 노력 | mpc add && mpc play
 
-1. sudo nano /etc/mpd.conf.sav
+1. sudo nano /usr/share/alsa/alsa.conf
+	pcm.empty={type=hw,card=0,device=0,subdevice=0,nonblock=1}
+
+2. Compile option for libasound and mpd
+	export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
+
+3. sudo nano /etc/mpd.conf.sav
+	Replace blank lines with #
+	Replace tab with minimized space(s)
+	device "pcm.empty"
+	mixer_device "ctl.symbols"
 	buffer_before_play	"9.99859679869956193454375580937331320004098924264544549%"
-	buffer_before_play	"9.9985967986995619345437558093733132000409892426454454967212819323523164430945302943845495294639610860139089946094894525088888890091190440837410390878888061091979011200992010911110812011110999121008901199000089099189919899989991999000949999299899609989999%"
-   sudo nano /etc/sysctl.conf
+	buffer_before_play	"9.998596798699561934543755809373313200040989242645445496721281932352316443094530294384549529463961086013908994609489452508888889009119044083741039087888806109197901120099201091111081201111099912100890119900008909918991989998999199900094999929989960998999912900%"
+
+4. sudo nano /etc/sysctl.conf
 	#kernel.sched_rt_period_us = 1000000		# 999999
 	#kernel.sched_rt_runtime_us = 857422		# 851456
-	kernel.sched_min_granularity_ns = 229994	# 230000
-	kernel.sched_wakeup_granularity_ns = 388369	# 388351
-	kernel.sched_latency_ns = 1393287		# 1393268
+	kernel.sched_min_granularity_ns = 229993	# 230000
+	kernel.sched_wakeup_granularity_ns = 388367	# 388351
+	kernel.sched_latency_ns = 1393288		# 1393268
 	kernel.sched_migration_cost = 4899000		# 4899001
 	kernel.sched_shares_window = 346007		# 345999
 	kernel.sched_time_avg = 6286			# 6289
-   sudo nano /etc/hdparm.conf
+
+5. sudo nano /etc/hdparm.conf
 	read_ahead_sect = 1288
-   sudo nano /etc/mpd.conf.sav
-	Replace blank lines with #
-	Replace tab with minimized space(s)
 
-2. sudo nano /etc/mpd.conf.sav
-	device "pcm.empty"
-	mixer_device "ctl.symbols"
-   sudo nano /usr/share/alsa/alsa.conf
-	pcm.empty={type=hw,card=0,device=0,subdevice=0,nonblock=1}
-
-3. Compile option for libasound and mpd
-	export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
+6. sudo nano /etc/rc.local
+	for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
+	 renice  -2 $pid
+	done
+	for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+	 chrt -op 0 $pid
+	 renice  -3 $pid
+	done
