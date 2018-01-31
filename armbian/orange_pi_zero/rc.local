@@ -39,7 +39,7 @@ mpd_bg () {
    player)	 taskset -cp $s_task $proc_nr ;;
    decoder)	 taskset -cp $s_task $proc_nr ;;
    output)	 taskset -cp $m_task $proc_nr
-		#renice -1 -p	     $proc_nr
+		 renice -1 -p	     $proc_nr
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
@@ -57,12 +57,13 @@ done
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 
-for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
- chrt -op 0 $i
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
 done
 
-for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
- renice 0 $i
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
 done
 
 m_task=$(($(nproc --all)-1))

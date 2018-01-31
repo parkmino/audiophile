@@ -36,3 +36,6 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	 chrt -op 0 $pid
 	 renice  -3 $pid
 	done
+
+7. sudo nano /etc/rc.local
+	output) renice -1 -p $proc_nr

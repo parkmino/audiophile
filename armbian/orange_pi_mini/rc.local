@@ -27,16 +27,16 @@
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
- sysctl -w kernel.sched_min_granularity_ns=230000
- sysctl -w kernel.sched_wakeup_granularity_ns=388348
- sysctl -w kernel.sched_latency_ns=1393267
+ sysctl -w kernel.sched_min_granularity_ns=229993
+ sysctl -w kernel.sched_wakeup_granularity_ns=388367
+ sysctl -w kernel.sched_latency_ns=1393288
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost=5000000
+ sysctl -w kernel.sched_migration_cost=4899000
  sysctl -w kernel.sched_nr_migrate=0
 #sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window=346000
+ sysctl -w kernel.sched_shares_window=346007
 #sysctl -w kernel.sched_tunable_scaling=1
- sysctl -w kernel.sched_time_avg=6287
+ sysctl -w kernel.sched_time_avg=6286
 
 #sysctl -w net.core.rmem_max=12582912
 #sysctl -w net.core.wmem_max=12582912
@@ -56,12 +56,13 @@ for i in /usr/bin/rygel /etc/rygel.conf; do
  [ -e $i ] && cp $i /dev/shm/
 done
 
-for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
- chrt -op 0 $pid
+for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
+ renice  -2 $pid
 done
 
-for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
- renice 0 $pid
+for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
+ chrt -op 0 $pid
+ renice  -3 $pid
 done
 
 for pid in $(ps h -eo pid) ; do
@@ -92,7 +93,7 @@ echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
- nohup taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
+ nohup nice -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
 #nohup taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf >/dev/null 2>&1 &
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
