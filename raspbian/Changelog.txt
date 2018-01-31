@@ -7,13 +7,14 @@
   4. MPD의 ALSA 출력과 믹서 재 설정.
   5. MPD 버퍼 상세 설정.
   6. MPD 설정 파일 간략화.
-  7. MPD 인터넷 라디오 추가 (1.fm Baroque/Blues/Jazz/New Age, Audiophile Jazz, Linn Jazz/Radio, 국악방송)
-  8. 시스템 우선권 반영.
-  9. 부팅 시 ALSA 라이브러리 메모리 링크 갱신.
-10. 커널 스케줄러 일부 변경.
-11. TTS(Text to Speech) 쉘 스크립트 추가.
-12. 메타데이터 선택 메뉴 추가.
-13. ApplePi DAC, Dion Audio LOCO(-V2) DAC-AMP 추가 (audio-config)
+  7. MPD 출력 nice 레벨 조정.
+  8. MPD 인터넷 라디오 추가 (1.fm Baroque/Blues/Jazz/New Age, Audiophile Jazz, Linn Jazz/Radio, 국악방송)
+  9. 시스템 우선권 반영.
+10. 부팅 시 ALSA 라이브러리 메모리 링크 갱신.
+11. 커널 스케줄러 일부 변경.
+12. TTS(Text to Speech) 쉘 스크립트 추가.
+13. 메타데이터 선택 메뉴 추가.
+14. ApplePi DAC, Dion Audio LOCO(-V2) DAC-AMP 추가 (audio-config)
 
 17.12 (17-12-7)
   1. ALSA 라이브러리 컴파일.
