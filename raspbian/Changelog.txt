@@ -1,6 +1,6 @@
 -. 바뀐 점
 
-18.02 (18-02-01)
+18.02 (18-02-06)
   1. Raspbian 업데이트.
   2. MPD 0.20.15 업데이트.
   3. MPD와 ALSA 컴파일 옵션 최적화.
@@ -8,7 +8,7 @@
   5. MPD 버퍼 상세 설정.
   6. MPD 설정 파일 간략화.
   7. MPD 출력 nice 레벨 조정.
-  8. MPD 인터넷 라디오 추가 (1.fm Baroque/Blues/Jazz/New Age, Audiophile Jazz, Linn Jazz/Radio, 국악방송)
+  8. MPD 인터넷 라디오 추가 (MBC, 국악방송, 1.fm Baroque/Blues/Jazz/New Age, Audiophile Jazz, Linn Jazz/Radio)
   9. 시스템 우선권 반영.
 10. 부팅 시 ALSA 라이브러리 메모리 링크 갱신.
 11. 커널 스케줄러 일부 변경.
