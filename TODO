@@ -18,8 +18,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 4. sudo nano /etc/sysctl.conf
 	#kernel.sched_rt_period_us = 1000000		# 999999
 	#kernel.sched_rt_runtime_us = 857422		# 851456
-	kernel.sched_min_granularity_ns = 229994	# 230000
-	kernel.sched_wakeup_granularity_ns = 388370	# 388351
+	kernel.sched_min_granularity_ns = 229993	# 230000
+	kernel.sched_wakeup_granularity_ns = 388369	# 388351
 	kernel.sched_latency_ns = 1393295		# 1393268
 	kernel.sched_migration_cost = 4899002		# 4899001
 	kernel.sched_shares_window = 346005		# 345999
