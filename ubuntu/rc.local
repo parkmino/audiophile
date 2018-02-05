@@ -33,7 +33,7 @@
 #   player)	 taskset -cp $s_task $proc_nr ;;
 #   decoder)	 taskset -cp $s_task $proc_nr ;;
 #   output)	 taskset -cp $m_task $proc_nr
-#		#renice -1 -p	     $proc_nr
+#		 renice -1 -p	     $proc_nr
 #		 chrt -op 0	     $proc_nr ;;
 #  esac
 # done
@@ -47,15 +47,15 @@
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
  sysctl -w kernel.sched_min_granularity_ns=229993
- sysctl -w kernel.sched_wakeup_granularity_ns=388367
- sysctl -w kernel.sched_latency_ns=1393288
+ sysctl -w kernel.sched_wakeup_granularity_ns=388369
+ sysctl -w kernel.sched_latency_ns=1393295
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899000
+ sysctl -w kernel.sched_migration_cost_ns=4899002
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window_ns=346007
+ sysctl -w kernel.sched_shares_window_ns=346005
 #sysctl -w kernel.sched_tunable_scaling=1
- sysctl -w kernel.sched_time_avg_ms=6286
+ sysctl -w kernel.sched_time_avg_ms=6288
 
  sysctl -w vm.swappiness=0
 #sysctl -w vm.dirty_background_ratio=0
