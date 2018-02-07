@@ -105,3 +105,15 @@ mousepad cantata_ko.ts
 diff -uNr cantata_ko.ts.orig cantata_ko.ts > cantata_ko.ts.patch
 
 linguist ~/Downloads/mpd/cantata-svn/translations/cantata_ko.ts
+
+### Compile taglib ###
+
+https://github.com/taglib/taglib
+$ wget https://github.com/taglib/taglib/archive/master.zip
+$ unzip master.zip
+$ cd taglib-master
+$ cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON .
+$ make
+$ sudo make install
+$ sudo mv /usr/lib/x86_64-linux-gnu/libtag.so.1.17.0 /usr/lib/x86_64-linux-gnu/libtag.so.1.17.0.orig
+$ sudo ln -s /usr/local/lib/libtag.so.1.17.0 /usr/lib/x86_64-linux-gnu/libtag.so.1.17.0
