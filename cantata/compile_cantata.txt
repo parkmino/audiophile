@@ -112,6 +112,7 @@ https://github.com/taglib/taglib
 $ wget https://github.com/taglib/taglib/archive/master.zip
 $ unzip master.zip
 $ cd taglib-master
+$ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 $ cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON .
 $ make
 $ sudo make install
