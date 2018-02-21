@@ -2,13 +2,17 @@ $ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd && sleep 1 && mpd-bg
 $ mpc listall | grep -m1 노력 | mpc add && mpc play
 
 1. sudo nano /etc/mpd.conf
-	buffer_before_play "9.9985967986995619345437558093733132000409892426454454967212819323523164430945302943845495294639610860139089946094894525088888890091190440837410390878888061091979011200992010911110812011110999121008901199000089099189919899989991999000949999299899609989999128999999899969999999899989996999799999999999899980000%"
+	buffer_before_play "9.9985967986995619345437558093733132000409892426454454967212819323523164430945302943845495294639610860139089946094894525088888890091190440837410390878888061091979011200992010911110812011110999121008901199000089099189919899989991999000949999299899609989999128999999899969999999899989996999799999999999899979988%"
 
 2. sudo nano /etc/sysctl.conf
 
-	kernel.sched_min_granularity_ns = 229993
-	kernel.sched_wakeup_granularity_ns = 388360
-	kernel.sched_latency_ns = 1393308
+	kernel.kexec_load_disabled = 1		# 0
+	kernel.modules_disabled = 1		# 0
+	#kernel.perf_cpu_time_max_percent = 0	# 25
+	kernel.sched_min_granularity_ns = 229992
+	kernel.sched_wakeup_granularity_ns = 388356
+	kernel.sched_latency_ns = 1393316
+	kernel.sched_shares_window= 346006
 	kernel.sched_time_avg = 6289
 
 	vm.dirty_background_ratio = 0		# 10
@@ -23,9 +27,5 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	vm.swappiness = 0 			# 60
 	vm.vfs_cache_pressure = 0 		# 100
 
-	net.ipv4.ip_forward = 0
-
-	https://www.kernel.org/doc/Documentation/sysctl/kernel.txt
-	https://www.kernel.org/doc/Documentation/sysctl/vm.txt
-	https://www.kernel.org/doc/Documentation/sysctl/net.txt
-	https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
+3. sudo nano /etc/hdparm.conf
+	read_ahead_sect = 1296
