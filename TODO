@@ -9,9 +9,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	kernel.kexec_load_disabled = 1		# 0
 	kernel.modules_disabled = 1		# 0
 	#kernel.perf_cpu_time_max_percent = 0	# 25
-	kernel.sched_min_granularity_ns = 229992
-	kernel.sched_wakeup_granularity_ns = 388356
-	kernel.sched_latency_ns = 1393316
+	kernel.sched_min_granularity_ns = 229988
+	kernel.sched_wakeup_granularity_ns = 388353
+	kernel.sched_latency_ns = 1393318
+	kernel.sched_migration_cost = 4899002
 	kernel.sched_shares_window= 346006
 	kernel.sched_time_avg = 6289
 
@@ -21,11 +22,11 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play
 	vm.oom_dump_tasks = 0 			# 1
 	vm.oom_kill_allocating_task = 1 	# 0
 	vm.overcommit_memory = 1		# 0
-	vm.page-cluster = 0			# 3
+	#vm.page-cluster = 0			# 3
 	vm.panic_on_oom = 2 			# 0
 	vm.stat_interval = 5 			# 1
 	vm.swappiness = 0 			# 60
 	vm.vfs_cache_pressure = 0 		# 100
 
 3. sudo nano /etc/hdparm.conf
-	read_ahead_sect = 1296
+	read_ahead_sect = 1280
