@@ -152,9 +152,9 @@ esac
 
 dbus_tts () {
 i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 63 3 \
-"tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" OFF \
-"eng"    "Enable English IP TTS   영어 IP TTS 사용" OFF \
-"dbus"   "Enable DBus             DBus 사용" OFF 3>&1 1>&2 2>&3)
+"tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q '^#.*tts' /etc/rc.local && echo OFF || echo ON) \
+"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts en' /etc/rc.local && echo ON || echo OFF) \
+"dbus"   "Enable DBus             DBus 사용" $(grep -q '# dbus' /etc/rc.local && echo OFF || echo ON) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -174,9 +174,9 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 
 mpd_settings () {
 i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 64 3 \
-"dop"      "Enable DoP (DSD over PCM)   DoP 사용" ON \
-"folder"   "Enable Music Folder         음악 폴더 사용" ON \
-"tag"      "Enable Metadata             태그 사용" OFF 3>&1 1>&2 2>&3)
+"dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^#.*dop' $mpd_conf && echo OFF || echo ON) \
+"folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^#music_directory' $mpd_conf && echo OFF || echo ON) \
+"tag"      "Enable Metadata             태그 사용" $(grep -q '^#.*metadata.*none' $mpd_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
