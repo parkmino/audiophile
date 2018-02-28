@@ -153,7 +153,7 @@ esac
 dbus_tts () {
 i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 63 3 \
 "tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q '^#.*tts' /etc/rc.local && echo OFF || echo ON) \
-"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts en' /etc/rc.local && echo ON || echo OFF) \
+"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q '^tts en' /etc/rc.local && echo ON || echo OFF) \
 "dbus"   "Enable DBus             DBus 사용" $(grep -q '# dbus' /etc/rc.local && echo OFF || echo ON) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
