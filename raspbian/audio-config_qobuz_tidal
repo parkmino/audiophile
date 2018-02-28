@@ -187,6 +187,9 @@ fi
 }
 
 qobuz_tidal () {
+
+while true; do
+
 i=$(whiptail --title "Qobuz & Tidal / Qobuz와 Tidal 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 17 59 9 \
 "1" "Qobuz app_id              Qobuz 앱_id         >" \
 "2" "Qobuz app_secret          Qobuz 앱_secret     >" \
@@ -197,6 +200,9 @@ i=$(whiptail --title "Qobuz & Tidal / Qobuz와 Tidal 설정" --menu "Select/선�
 "7" "Tidal username            Tidal 사용자        >" \
 "8" "Tidal password            Tidal 비밀번호      >" \
 "9" "Tidal audioquality        Tidal 오디오 품질   >" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+[ "$exitstatus" != 0 ] && return
 
 case $i in
  1) qobuz_id=$(grep -A1 qobuz $mpd_conf | tail -1 | cut -d\" -f2)
@@ -256,17 +262,19 @@ Input Qobuz app_password.   Qobuz 비밀번호를 입력합니다." --ok-button 
      fi
     fi ;;
  5) i=$(whiptail --title "Qobuz format_id / Qobuz 포맷" --radiolist "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 57 4 \
-" 5"   "MP3 320" OFF \
-" 6"   "FLAC Lossless" OFF \
-" 7"   "FLAC Hi-Res 24 bit =< 96kHz" OFF \
+"5"    "MP3 320" OFF \
+"6"    "FLAC Lossless" OFF \
+"7"    "FLAC Hi-Res 24 bit =< 96kHz" OFF \
 "27"   "FLAC Hi-Res 24 bit >96 kHz & =< 192 kHz" OFF 3>&1 1>&2 2>&3)
 
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
-     [[ $i =~ 5 ]]  && sudo sed -i '/format_id/s/".*"/"5"/'  $mpd_conf
-     [[ $i =~ 6 ]]  && sudo sed -i '/format_id/s/".*"/"6"/'  $mpd_conf
-     [[ $i =~ 7 ]]  && sudo sed -i '/format_id/s/".*"/"7"/'  $mpd_conf
-     [[ $i =~ 27 ]] && sudo sed -i '/format_id/s/".*"/"27"/' $mpd_conf
+     case $i in
+      5)  sudo sed -i '/format_id/s/".*"/"5"/'  $mpd_conf ;;
+      6)  sudo sed -i '/format_id/s/".*"/"6"/'  $mpd_conf ;;
+      7)  sudo sed -i '/format_id/s/".*"/"7"/'  $mpd_conf ;;
+      27) sudo sed -i '/format_id/s/".*"/"27"/' $mpd_conf ;;
+     esac
     fi ;;
  6) tidal_token=$(grep -A1 tidal $mpd_conf | tail -1 | cut -d\" -f2)
     input_token=$(whiptail --title "Tidal token / Tidal 토큰" --inputbox "\
@@ -318,12 +326,17 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
 
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
-     [[ $i =~ 1 ]] && sudo sed -i '/audioquality/s/".*"/"HI_RES"/'   $mpd_conf
-     [[ $i =~ 2 ]] && sudo sed -i '/audioquality/s/".*"/"LOSELESS"/' $mpd_conf
-     [[ $i =~ 3 ]] && sudo sed -i '/audioquality/s/".*"/"HIGH"/'     $mpd_conf
-     [[ $i =~ 4 ]] && sudo sed -i '/audioquality/s/".*"/"LOW"/'      $mpd_conf
+     case $i in
+      1) sudo sed -i '/audioquality/s/".*"/"HI_RES"/'   $mpd_conf ;;
+      2) sudo sed -i '/audioquality/s/".*"/"LOSELESS"/' $mpd_conf ;;
+      3) sudo sed -i '/audioquality/s/".*"/"HIGH"/'     $mpd_conf ;;
+      4) sudo sed -i '/audioquality/s/".*"/"LOW"/'      $mpd_conf ;;
+     esac
     fi ;;
 esac
+
+done
+
 }
 
 while true; do
@@ -356,6 +369,6 @@ while true; do
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
   10) sudo reboot ;;
-  10) sudo poweroff ;;
+  11) sudo poweroff ;;
  esac
 done
