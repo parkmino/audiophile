@@ -11,32 +11,34 @@
 #
 # By default this script does nothing.
 
- sysctl -w vm.swappiness=0
-#sysctl -w vm.dirty_background_ratio=0
-#sysctl -w vm.dirty_ratio=0
+ sysctl -w vm.dirty_background_ratio=0
+ sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
  sysctl -w vm.oom_dump_tasks=0
-#sysctl -w vm.overcommit_memory=1
- sysctl -w vm.page-cluster=2
+ sysctl -w vm.oom_kill_allocating_task=1
+ sysctl -w vm.overcommit_memory=2
+#sysctl -w vm.page-cluster=0
  sysctl -w vm.panic_on_oom=2
  sysctl -w vm.stat_interval=5
+ sysctl -w vm.swappiness=0
  sysctl -w vm.vfs_cache_pressure=0
 
 #sysctl -w kernel.ftrace_enabled=0
+#sysctl -w kernel.modules_disabled=1
 #sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_runtime_us=-1
-#sysctl -w kernel.sched_rt_period_us=1000000
-#sysctl -w kernel.sched_rt_runtime_us=950000
- sysctl -w kernel.sched_min_granularity_ns=229993
- sysctl -w kernel.sched_wakeup_granularity_ns=388369
- sysctl -w kernel.sched_latency_ns=1393295
+#sysctl -w kernel.sched_rt_period_us=1344760
+#sysctl -w kernel.sched_rt_runtime_us=1277522
+ sysctl -w kernel.sched_min_granularity_ns=229984
+ sysctl -w kernel.sched_wakeup_granularity_ns=388341
+ sysctl -w kernel.sched_latency_ns=1393330
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost=4899002
  sysctl -w kernel.sched_nr_migrate=0
 #sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window=346005
+ sysctl -w kernel.sched_shares_window=346003
 #sysctl -w kernel.sched_tunable_scaling=1
- sysctl -w kernel.sched_time_avg=6288
+ sysctl -w kernel.sched_time_avg=6287
 
 #sysctl -w net.core.rmem_max=12582912
 #sysctl -w net.core.wmem_max=12582912
@@ -93,8 +95,14 @@ echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
- nohup nice -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
-#nohup taskset -ac 1 /usr/bin/rygel -c /etc/rygel.conf >/dev/null 2>&1 &
+#for i in ondemand conservative powersave; do
+# grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+#done
+#[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+#nohup ionice -c 2 -n 7 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
+#nohup nice -n -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
+nohup taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
 #done
