@@ -6,18 +6,19 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ unsquashfs SYSTEM.orig
 	$ cd squashfs-root
 	  ALSA tweak
-	$ nano /usr/share/alsa/alsa.conf
-		pcm.null={type=hw;card=0;device=0;subdevice=0;nonblock=1},pcm.default=pcm.null,ctl.default=ctl.shm
-	$ nano /usr/lib/modprobe.d/alsa-base.conf
+	$ nano usr/share/alsa/alsa.conf
+		pcm.empty={type=hw;card=0;device=0;subdevice=0;nonblock=1},pcm.default=pcm.empty
+	$ nano usr/lib/modprobe.d/alsa-base.conf
 		#options snd-usb-audio index=-2
-	$ cp /bin/ps /usr/bin/
-	$ cp /lib/arm-linux-gnueabihf/libprocps.so.3.0.0 /usr/lib/
-	$ cp chrt taskset hub-ctrl llctl /usr/bin/
-	$ mv /usr/lib/libasound.so   /usr/lib/libasound.so.orig
-	$ mv /usr/lib/libasound.so.2 /usr/lib/libasound.so.2.orig
-	$ ln -s /dev/shm/libasound.so.2.0.0 ./libasound.so.2
-	$ ln -s /dev/shm/libasound.so.2.0.0 ./libasound.so
-	$ mv ./libasound.so.2 ./libasound.so /usr/lib/
+	$ cp bin/ps usr/bin/
+	$ cp lib/arm-linux-gnueabihf/libprocps.so.3.0.0 usr/lib/
+	$ cp chrt taskset hub-ctrl llctl usr/bin/
+	$ mv usr/lib/libasound.so   usr/lib/libasound.so.orig
+	$ mv usr/lib/libasound.so.2 usr/lib/libasound.so.2.orig
+	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
+	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
+	$ mv usr/share/alsa/alsa.conf usr/share/alsa/alsa.conf.sav
+	$ ln -s /dev/shm/alsa.conf usr/share/alsa/alsa.conf
 	$ cd ..
 	$ sudo mksquashfs squashfs-root SYSTEM
 
