@@ -22,9 +22,13 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 
 $ sudo mkdir /usr/share/alsa
-$ sudo nano /usr/share/alsa/alsa.conf
+$ sudo nano /usr/share/alsa/alsa.conf.sav
 
 pcm.empty={type=hw,card=0,device=0,subdevice=0,nonblock=1}#,pcm.default=pcm.empty
+
+$ sudo nano /etc/rc.local
+	cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+	ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
 $ sudo find /usr/lib/*/alsa-lib/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
 $ sudo mv /usr/share/alsa /usr/share/alsa.tweak
