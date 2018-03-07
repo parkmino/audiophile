@@ -54,6 +54,9 @@ mpd_bg () {
 #sysctl -w kernel.modules_disabled=1
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd      /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
