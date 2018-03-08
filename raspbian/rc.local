@@ -34,7 +34,7 @@ musicpd_bg () {
    player)	 taskset -cp $s_task $proc_nr ;;
    decoder)	 taskset -cp $s_task $proc_nr ;;
    output)	 taskset -cp $m_task $proc_nr
-		 renice -1 -p	     $proc_nr
+		#renice -1 -p	     $proc_nr
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
@@ -51,6 +51,8 @@ musicpd_bg () {
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
