@@ -124,7 +124,9 @@ Audio Render Advanced
 	sudo chmod a+rx /usr/local/bin/youtube-dl
 	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /home/pi/tts /usr/bin/
 	sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
-	sudo cp *.pls /var/lib/mpd/playlists
+	sudo mkdir /var/lib/mpd/music/webradio
+	sudo mv *.pls /var/lib/mpd/music/webradio
+	mpc update
 
 16. audio-config
 
