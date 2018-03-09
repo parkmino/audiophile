@@ -4,21 +4,21 @@ Audio Player
 
  Music Source : Disk(Analog to Digital) to File
 
-┌─────┬──────────────┬─────────────┐
-                         Disk                          File
-  ─────┬──────────────┬─────────────
-  Type(*)     LP, CD, DVD-A, SACD, Blu-ray  Data File (Wav, Flac, DSD)
-  ─────┬──────────────┬─────────────
-  Location    Local                         Local, Network, Cloud
-  ─────┬──────────────┬─────────────
-  Player      H/W only, H/W+F/W, H/W+S/W    H/W+F/W, H/W+S/W
-  ─────┬──────────────┬─────────────
-  Mechanism   O (Disk Spinning)             X (Flash Memory, Network)
-  ─────┬──────────────┬─────────────
-  Size        > Disk                        As small as possible
-  ─────┬──────────────┬─────────────
-  DIY         X                             O (PC/SBC)
-└──────────────────────────────────┘
+ -------------------------------------------------------------------------
+                          Disk                          File
+ ------------+------------------------------+-----------------------------
+   Type(*)     LP, CD, DVD-A, SACD, Blu-ray   Data File (Wav, Flac, DSD)
+ ------------+------------------------------+-----------------------------
+   Location    Local                          Local, Network, Cloud
+ ------------+------------------------------+-----------------------------
+   Player      H/W only, H/W+F/W, H/W+S/W     H/W+F/W, H/W+S/W
+ ------------+------------------------------+-----------------------------
+   Mechanism   O (Disk Spinning)              X (Flash Memory, Network)
+ ------------+------------------------------+-----------------------------
+   Size        > Disk                         As small as possible
+ ------------+------------------------------+-----------------------------
+   DIY         X                              O (PC/SBC)
+ -------------------------------------------------------------------------
 
  (*) CD to WAV, SACD to DSD
 
@@ -67,19 +67,19 @@ Linux
   DE(WM) : Cinnamon, GNOME(Metacity), LXDE(Openbox), MATE, KDE(KWin), Unity(Compiz), Xfce(Xfwm)
 
  Sound
-┌────────┐
+ -----------------
         Phonon
-       ──────
+       +----------
         Xine
-       ──────
+       +----------
         GStreamer
-       ──────
+       +----------
   Jack  PulesAudio
- ─────────
+ ------+----------
   FFADO ALSA OSS
- ─────────
+ -----------------
         H/W
-└────────┘
+ -----------------
  * Audio and Multimedia needs Soft Real Time
 
  ALSA = [Control/Mixer]+[PCM]+[MIDI]+[Sequencer]
@@ -107,11 +107,11 @@ Tuning
   SMP (CPU Affinity)
   Better Processor ?
   cf) Quad Core
- ┌─────┬─┬─┬─┬─┐
+  -----------------------------
    Core         0   1   2   3
- ┌─────┬─┬─┬─┬─┐
+  ------------+---+---+---+----
    Preference   4   2   3   1
- └─────────────┘
+  -----------------------------
 
  Memory
   No SWAP
@@ -139,7 +139,7 @@ Tuning
 
  MPD
   Process Priorities and CPU Affinities
-   Processes : io < main(*) < mpd(upmpdcli) < player < decoder < output
+   Processes : io < mpd(upmpdcli) < decoder < player < main(*) < output
    Priorities
     nice   : +19 < 0(*) < -20
     ionice : -c3 < -c0 -n4(*) < -c2 < -c1
@@ -147,28 +147,28 @@ Tuning
    CPU Processors : 0 < 2 < 1 < 3
    (*) Center
   cf)
- ┌─────┬───┬───────┬──┬───┬────┬───┐
-   MPD         main    mpd(upmpdcli)   io    player  decoder   output
-   ─────┬───┬───────┬──┬───┬────┬───
-   nice         0           -1          0      -2      -3       -4
-   ─────┬───┬───────┬──┬───┬────┬───
-   ionice                                                   
-   ─────┬───┬───────┬──┬───┬────┬───
-   chrt        other       other       other other     other   other
-   ─────┬───┬───────┬──┬───┬────┬─── 
-   processor    1            1          2      1        3        3
- └─────────────────────────────────┘
+  ---------------------------------------------------------------------
+   MPD         main    mpd(upmpdcli)   io    player   decoder   output
+  -----------+-------+---------------+-----+--------+---------+--------
+   nice          0           0          0       0        0        0
+  -----------+-------+---------------+-----+--------+---------+--------
+   ionice
+  -----------+-------+---------------+-----+--------+---------+--------
+   chrt        other       other      other   other    other    other
+  -----------+-------+---------------+-----+--------+---------+--------
+   processor     3           1          1       1        1        3
+  ---------------------------------------------------------------------
 
  Tuning Procedure
   Remove unnecessary H/W Modules and Processes -> ALSA -> MPD -> Others
 
-┌─────┬─────┬───────────────────┐
+ ---------------------------------------------------------------
    Module      H/W         (±)
-  ─────┬─────┬───────────────────
+ -----------+----------+----------------------------------------
    IRQ         H/W         (±), SMP_Affinity(↔)
-  ─────┬─────┬───────────────────
+ -----------+----------+----------------------------------------
    Process     H/W+S/W     (±), SMP_Affinity(↔), Priority(↕)
-└───────────────────────────────┘
+ ---------------------------------------------------------------
 
 2. BIOS Setting (ASUS P5Q with E7300)
 
@@ -189,30 +189,27 @@ Tuning
 	CPU Voltage -> 0.85v (min) ...
 	CPU GTL Voltage -> 0.61x (%)
 
-3. Linux Install and Configuration.
+3. Ubuntu Install and Configuration.
 
 3.1 Install the command line system from Ubuntu Alternate CD/Server or GUI all at once.
+	https://www.ubuntu.com/download/desktop
 	https://help.ubuntu.com/community/Installation/LowMemorySystems
-3.2 Install Alternative Kernels (Obsolete)
-	https://launchpad.net/~abogani/+archive/ppa
-		$ sudo add-apt-repository ppa:abogani/ppa
-		$ sudo apt-get update
-		$ sudo apt-get install linux-lowlatency
+	$ sudo apt-get update
+	$ sudo apt-get upgrade
+	$ sudo apt-get dist-upgrade
+3.2 Install Alternative Kernels
 	Liquorix Kernel
 		http://liquorix.net/
-		http://www.webupd8.org/2011/03/how-to-install-liquorix-kernel-in.html
-		$ sudo apt-get install linux-image-liquorix-686
-	AV Linux Kernels with IRQ Threading
-		http://www.bandshed.net/kernels/
+		$ sudo apt-get install linux-image-liquorix-amd64 linux-headers-liquorix-amd64
 3.3 Install GUI with Window Manager and Desktop Environments.
 	Minimal Window Managers.
 		$ sudo apt-get install miwm dwm sawfish openbox ...
 		$ startx /usr/bin/miwm dwm sawfish
-			MIWM : Microscopic Window Manager
+		    MIWM : Microscopic Window Manager
 			Button 1/2/3=raise/drag/hide window, Button 1=shell command menu(~/.miwm/miwm.usermenu), Ctrl-Button 1/2/3=lower window/change windows workspace/window manager operaions
-			DWM  : Dynamic Windows Manager
+		    DWM  : Dynamic Windows Manager
 			Alt+P=dmenu, Alt+Shift+Enter=terminal, Alt+Shift+C=Close, Alt+Shift+Q=Quit
-			Sawfish
+		    Sawfish
 			Button 2=Popup root menu
 	Lightweight X11 Desktop Environment.
 		$ sudo apt-get install lxde-core or lxde
@@ -222,18 +219,10 @@ Tuning
 		$ sudo apt-get install linux-sound-base alsa-base alsa-utils
 		$ speaker-test -c 2 -D plug:iec958 -t sine -r 44100(/48000/96000/192000)
 		$ aplay -D iec958:CARD=ICE1724,DEV=0 *.wav
-		$ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.org
-		$ sudo gedit /usr/share/alsa/alsa.conf
-		$ sudo gedit /etc/modprobe.d/alsa-base.conf
-		Comment out optional modules
-			#options snd-usb-audio nrpacks=8
-		$ sudo reboot
 		$ lsmod | grep snd
 		$ cat /sys/module/snd_usb_audio/parameters/nrpacks
-		Masking store restore alsa mixer
-		$ sudo systemctl mask alsa-store.service
-		$ sudo systemctl mask alsa-restore.service
 	Open Sound System - will not be supported any more
+		http://www.opensound.com/oss.html
 		https://help.ubuntu.com/community/OpenSound
 		http://www.4front-tech.com/wiki/index.php/Configuring_Applications_for_OSSv4
 		$ ossinfo -v3 && sudo gedit /etc/rc.local
@@ -244,7 +233,7 @@ Tuning
 		$ sudo dpkg -i oss-linux*.deb
 		OSS Configuration
 		$ sudo gedit /usr/lib/oss/conf/osscore.conf
-			dma_buffsize=56 ;16 to 128(KB)
+			dma_buffsize=56 # 16 to 128(KB)
 			max_intrate=400
 			#cooked_enable=0
 			vmix_disabled=1
@@ -262,33 +251,16 @@ Tuning
 		$ sox *.* -t raw - rate -v 96k > /dev/dsp1
 		$ cat output.raw > /dev/dsp1 or dd if=output.raw of=/dev/dsp1
 	Music Player Daemon
-		$ sudo add-apt-repository ppa:gmpc-trunk/mpd-trunk
-		$ sudo apt-get update && sudo apt-get install mpd ncmpc
-		$ sudo mv /etc/mpd.conf /etc/mpd.conf.sav
-		$ sudo gedit /etc/mpd.conf.sav
-		$ sudo /etc/init.d/mpd restart
-		$ sudo ln -s /media/music /var/lib/mpd/music/mpd
-		$ mpc update
-		$ mpc listall | mpc add && mpc play
-	GUI Player, i.e. Audacious, Qmmp or DeaDBeeF.
-		$ sudo apt-get install audacious(qmmp) or
-		$ sudo add-apt-repository ppa:alexey-smirnov/deadbeef && sudo apt-get update
-		$ sudo apt-get install deadbeef
-		Move and disable plugins in /usr/lib/audacious(qmmp,deadbeef)/*.so not is use.
-		$ startx /usr/bin/audacious(qmmp,deadbeef)
 			
-3.6 MPD priotiries
-	$ sudo nano /etc/rc.local
-		
-3.7 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
+3.6 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
 	$ sudo gedit /etc/default/grub
 		GRUB_CMDLINE_LINUX_DEFAULT="... text ..." or "... s ..."
 	$ sudo update-grub2
 	$ gedit ~/.xinitrc
 		exec startlxde or gnome-session
 	$ startx
-3.8 Disable unneeded TTYs
-	Upstart
+3.7 Disable unneeded TTYs
+	SystemV
 	$ sudo gedit /etc/default/console-setup
 		ACTIVE_CONSOLES="/dev/tty[1]"
 	$ sudo gedit /etc/init/tty2~6.conf
@@ -299,77 +271,33 @@ Tuning
 		NAutoVTs=0
 		ReserveVT=0
 	$ ps -e | grep -e login -e tty
-3.9 Disable Networking, Network Manager or Wicd
+3.8 Disable Networking, Network Manager or Wicd
 	$ sudo apt-get remove network-manager wicd
 	$ sudo gedit /etc/network/interfaces
 		#auto eth0
 	$ ps -e | grep -e dhclient -e NetworkManager -e wicd
-3.10 Diasble APIC, APM, Consoleblank.
+3.9 Diasble APIC, APM, Consoleblank.
 	$ sudo gedit /etc/default/grub
 		GRUB_CMDLINE_LINUX_DEFAULT="... noapic apm=off consoleblank=0 elevator=noop selinux=0"
 	$ sudo update-grub2
 	$ ps -e | grep acpi
-3.11 Disable CPU Multi-core and Hyper-threading
-	$ cat /proc/cpuinfo && sudo gedit /etc/default/grub
-		#GRUB_CMDLINE_LINUX_DEFAULT="... nosmp noht"
-	$ sudo update-grub2
 
-3.12 Disable unneeded modules.
+3.10 Disable unneeded modules.
 	$ lsmod && sudo gedit /etc/modprobe.d/blacklist.conf
 		blacklist module
-3.13 Disable unneeded Services at your own risk.
-	Consider disabling acpid, anacron, apport, atd, avahi-daemon, bluetooth, brltty, console-kit-daemon, cron, cups, dns-clean, pcmcia/pcmciautils, ppp/pppd-dns, rsync, rsyslogd, samba, saned, speech-dispatcher, windbind, ...
-		Edit shell scripts at /etc/init.d/ and /etc/rc*.d/ or
+3.11 Disable unneeded Services at your own risk.
+	Consider disabling acpid, anacron, apport, atd, avahi-daemon, bluetooth, brltty, console-kit-daemon, cron, cups, dns-clean, irqbalance, pcmcia/pcmciautils, ppp/pppd-dns, rsync, rsyslogd, samba, saned, speech-dispatcher, windbind, ...
+		SystemV - Edit shell scripts at /etc/init.d/ and /etc/rc*.d/ or
 		$ sudo apt-get install sysv-rc-conf && sudo sysv-rc-conf or
 		$ ps aux && cd /usr/sbin && sudo chmod -x -v acpid anacron atd ...
-3.16 Unmount and Shut down data HDD during Playback
+		Systemd
+		$ sudo systemctl disable ...
+3.12 Unmount and Shut down data HDD during Playback
 	$ df -hT && sudo umount /dev/sdb1 && sudo hdparm -Y /dev/sdb
 	$ play *.wav
-	$ sudo mount /dev/sdb1
+	$ sudo mount /dev/sdb1	
 
-3.14 Disable Pluggable Authentication Modules.
-	$ sudo gedit /etc/security/limits.conf
-		#@audio - rtprio  99
-		#@audio - nice    -19
-		#@audio - memlock unlimited
-		#@audio - stack   unlimited
-	$ sudo adduser username audio
-
-3.15 Disable irqbalance.service
-	$ sudo systemctl disable irqbalance
-
-3.16 Initialize and customize real-time priorities
-	Check real-time priorities
-	$ gedit pri
-		#!/bin/sh
-		PIDS=`ps -e --no-headers | awk '{print $1}'`
-		for PID in ${PIDS}
-		do
-		    ps -p ${PID} -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
-		done
-		echo " --- Inquiry Priorities --- "
-		PIDS=`ps -eo pid,pri --no-headers | awk '$2 != 19 {print $1}'`
-		for PID in ${PIDS}
-		do
-		    ps -p ${PID} -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
-		done
-	$ sudo chmod +x pri
-	$ ./pri
-	Intialize
-	$ cat /proc/interrupts && ps -e | grep -i irq/
-	$ sudo gedit /etc/rc.local
-		PIDS=`ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'`
-		for PID in ${PIDS}
-		do
-		    chrt -op 0 ${PID}
-		done
-		PIDS=`ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}'`
-		for PID in ${PIDS}
-		do
-		    renice 0 ${PID}
-		done	
-
-3.17 Options.
+3.13 Options.
 
 	-. Kernel Options
 		# sudo gedit /etc/default/grub
@@ -393,69 +321,24 @@ Tuning
 			sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
 			#chrt -rp 2 `pgrep irq/x-rtc`
 			taskset -apc 1 `pgrep rtc`
-	-. SMP Affinity
-		$ ps aux
-		$ cat /proc/interrupts
-		$ sudo nano /etc/rc.local
-			#IRQS=`cat /proc/interrupts | awk '$6 ~ /PCI-MSI-edge/ {print +$1}'`
-			#for IRQ in ${IRQS}
-			#do
-			#	echo b > /proc/irq/${IRQ}/smp_affinity
-			#	echo b > /proc/irq/${IRQ}/smp_affinity
-			#done
-
-			IRQS=`cat /proc/interrupts | awk '$8 ~ /snd/ {print +$1}'`
-			for IRQ in ${IRQS}
-			do
-				echo 8 > /proc/irq/${IRQ}/smp_affinity
-				echo 8 > /proc/irq/${IRQ}/smp_affinity
-			done
-
-			#echo b > /proc/irq/default_smp_affinity
-			#echo b > /proc/irq/default_smp_affinity
-			
-			#PIDS=`ps h -eo pid,class,comm | awk '$3 !~ /mpd/ && $3 !~ /snd/ && $3 !~ /irq/ {print $1}'`
-			#for PID in ${PIDS}
-			#do
-			#    taskset -acp 0-1 ${PID} || /bin/true
-			#done
-		$ systemctl mask irqbalance.service
 	-. PCI Latency Timer
 		$ lspci -nn
 		$ sudo gedit /etc/rc.local
 			setpci -v -d 1412:1724 latency_timer=ff
 		$ lspci -v -d 1412:1724
-	-. Tmpfs in /etc/fstab
-		$ sudo nano /etc/fstab
-			tmpfs 	/tmp		tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/backups	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/cache	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/crash	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/local	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/log	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/mail	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/metrics	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/opt	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/spool	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/tmp	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-			tmpfs	/var/www	tmpfs	nosuid,nodev,noatime,nodiratime	0	0
-		$ reboot
-		$ mount
 	-. Swappiness Kernel Parameters
 		$ sudo gedit /etc/sysctl.conf or /etc/rc.local
 		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
 		$ sudo gedit /etc/fstab
 			.../swap.disk none swap sw 0 0
 	-. HDD configuration
-		# sudo hdparm -A -a -B -M /dev/sda
-		# cat /sys/block/sd*/queue/scheduler
-		# sudo gedit /etc/rc.local
-			hdparm -A1 -a1096 -B255 -M0 /dev/sda
+		$ sudo hdparm -A -a -B -M /dev/sda
+		$ cat /sys/block/sd*/queue/scheduler
+		$ sudo gedit /etc/rc.local
+			hdparm -A1 -a1280 -B255 -M0 /dev/sda
 			echo noop > /sys/block/sda/queue/scheduler
-			#chrt -rp 1 `pgrep irq/x-ata` or `pgrep ahci`
-			#renice  -1 `pgrep ata_sff`
-		# sudo gedit /etc/hdparm.conf
-			read_ahead_sect = 1096
+		$ sudo gedit /etc/hdparm.conf
+			read_ahead_sect = 1280
 			lookahead = on
 			apm = 255
 	-. NTFS format & mount
@@ -471,11 +354,6 @@ Tuning
 		$ #ls /sys/block && cat /proc/swaps
 		$ #sudo service zram-config stop  # stop zram
 		$ #sudo service zram-config start # start zram
-	-. Network Tweak
-		$ sudo gedit /etc/rc.local
-			 ifconfig eth0  txqueuelen 10000 			# default: 1000
-			 ifconfig wlan0 txqueuelen 10000 			# default: 1000
-		$ sudo gedit /etc/sysctl.conf
 
 4. References.
 
