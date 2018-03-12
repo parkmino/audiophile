@@ -11,3 +11,19 @@ input {
 plugin "nfs"
 enabled "no"
 }
+decoder {
+plugin "vorbis"
+enabled "no"
+}
+decoder {
+plugin "oggflac"
+enabled "no"
+}
+decoder {
+plugin "opus"
+enabled "no"
+}
+decoder {
+plugin "pcm"
+enabled "no"
+}
