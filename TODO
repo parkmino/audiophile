@@ -1,45 +1,19 @@
 $ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd && sleep 1 && mpd-bg
-$ mpc listall | grep -m1 노력 | mpc add && mpc play
+$ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
-1. sudo nano /etc/mpd.conf
-	#mixer_device "ctl.symbols"
-	buffer_before_play "9.99859679869956193454375580937331320004098924264544549672128193235231644309453029438454952946396108601390899460948945250888888900911904408374103908788880610919790112009920109111108120111109991210089011990000890991899198999899919990009499992998996099899991289999998999699999998999899969997999999999998999799859997999699969994999799939995998899979988999399949999%"
+1. sudo nano /usr/share/alsa/alsa.conf.sav
+	!pcm.0.type=hw,pcm.0.card=0,pcm.0.device=0,pcm.0.subdevice=0,pcm.0.nonblock=1,!ctl.default=ctl.0
+	!pcm.0.type=hw,pcm.0.card=0,pcm.0.device=0,pcm.0.subdevice=0,pcm.0.nonblock=1,!ctl.default=ctl.0,!rawmidi=0,!seq=0,!hwdep=0,!timer_query=0,!timer=0
+	!pcm.0.type=hw,pcm.0.card=0,pcm.0.device=0,pcm.0.subdevice=0,pcm.0.nonblock=1,pcm.default=pcm.0,!ctl.default=ctl.0,!rawmidi=0,!seq=0,!hwdep=0,!timer_query=0,!timer=0	# LibreELEC
+   sudo nano /etc/mpd.conf.sav
+	 device "pcm.0"
+	#mixer_device "ctl.0"	# "ctl.shm"
+	 buffer_before_play "9.99859679869956193454375580937331320004098924264544549672128193235231644309453029438454952946396108601390899460948945250888888900911904408374103908788880610919790112009920109111108120111109991210089011990000890991899198999899919990009499992998996099899991289999998999699999998999899976999799999999999899979985999799969996999499979993999599889997998899939994999629990%"
 
 2. sudo nano /etc/sysctl.conf
 
-	#kernel.kexec_load_disabled = 1		# 0
-	#kernel.modules_disabled = 1		# 0
-	#kernel.perf_cpu_time_max_percent = 0	# 25
-	kernel.sched_min_granularity_ns = 229982
-	kernel.sched_wakeup_granularity_ns = 388324
-	kernel.sched_latency_ns = 1393333
-	kernel.sched_migration_cost = 4899002
-	kernel.sched_shares_window= 346002
-	kernel.sched_time_avg = 6286
+	 kernel.sched_wakeup_granularity_ns = 388323	# 388324
+	#kernel.sched_latency_ns = 1393333		# 1393333
+	#kernel.sched_migration_cost_ns = 4899002	# 4899002
 
-	vm.dirty_background_ratio = 0		# 10
-	vm.dirty_ratio = 0			# 20
-	vm.dirty_writeback_centisecs = 0 	# 500
-	vm.oom_dump_tasks = 0 			# 1
-	vm.oom_kill_allocating_task = 1 	# 0
-	vm.overcommit_memory = 1		# 0
-	#vm.page-cluster = 0			# 3
-	vm.panic_on_oom = 2 			# 0
-	vm.stat_interval = 5 			# 1
-	vm.swappiness = 0 			# 60
-	vm.vfs_cache_pressure = 0 		# 100
 
-3. sudo nano /etc/rc.local
-	output) #renice -1 -p        $proc_nr
-                #ionice -c 2 -n 7 -p $proc_nr
-	#sysctl -w kernel.kexec_load_disabled=1
-	#sysctl -w kernel.modules_disabled=1
-
-4. sudo nano /etc/hdparm.conf
-	read_ahead_sect = 1280
-
-5. alsa.conf in /dev/shm
-	sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.sav
-   sudo nano /etc/rc.local
-	cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
-	ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
