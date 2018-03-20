@@ -29,19 +29,19 @@ PC Audio Render from Voyage Linux
 	# exit
 	$ ssh root@usb_pc_ip
 	  root@usb_pc_ip's password: voyage
+	$ scp mpd.conf icon.png kr2mpd ut2mpd Internet_Radios.m3u *.pls root@192.168.0.x:/root/
 
-1. System update & install MPD
+1. System update & install MPD clients
 
 	apt-get update
 	apt-get upgrade
 	apt-get dist-upgrade
-	apt-get install nano wget ca-certificates
-	apt-get install ( alsa-base alsa-utils ) mpd mpc ncmpc
+	apt-get install nano wget ca-certificates sysv-rc-conf
+	apt-get install mpc ncmpc
 
 2. Kernel option
 
 	nano /boot/grub/menu.lst
-
 		timeout 0
 		kernel /vmlinuz ... noapic apm=off consoleblank=0 elevator=noop selinux=0
 
@@ -58,37 +58,26 @@ PC Audio Render from Voyage Linux
 		blacklist ...
 
 5. ALSA configuration
-
-	nano /usr/share/alsa/alsa.conf
-		 pcm.sound.card   1
-		 ctl.control.card 1
-		#pcm.default pcm.sound
-	systemctl mask alsa-store.service
-	systemctl mask alsa-restore.service
 	
 6. MPD Settings
 
-	mv /usr/bin/mpd /usr/bin/mpd.org
-	cp ~/mpd.0.19.19.ffmpeg /usr/bin/mpd
-	nano /etc/mpd.conf
-	nano /lib/systemd/system/mpd.service
-	nano /etc/default/mpd
-	systemctl disable mpd
+	Compile MPD
+	sysv-rc-conf
+		Disable mpd service
 
-7. Upmpdcli Setup
+7. Upmpdcli
 
-	#Setup Upmpdcli
-	wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/libu/libupnpp3/libupnpp3_0.15.1-1_i386.deb
-	wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli_1.2.9-1_i386.deb
+	nano /etc/apt/sources.list.d/upmpdcli.list
+		deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main
+		deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main
+	apt-get update
+	apt-get install upmpdcli
 
-8. Polipo Setup
+	wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/pool/main/libu/libupnpp4/libupnpp4_0.16.0-1~ppa1~unstable_i386.deb
+	wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/pool/main/u/upmpdcli/upmpdcli_1.2.15-2~ppa1~unstable_i386.deb
+	dpkg -i *.deb
 
-	nano /etc/polipo/config
-		chunkHighMark = 268435456
-	nano /etc/rc.local
-		taskset -ac 2 polipo &
-
-9. CIFS & NFS mounting
+8. CIFS & NFS mounting
 
 	apt-get install cifs-utils nfs-common
 	mkdir /mnt/cifs /mnt/nfs
@@ -97,28 +86,28 @@ PC Audio Render from Voyage Linux
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 		
-10. Remove swap (Not applicable)
+9. Remove swap (Not applicable)
 
 	nano /etc/fstab
 		#...swap...
 
-11. Edit /etc/rc.local
+10. Edit /etc/rc.local
 
 	nano /etc/rc.local
 	
-12. Sysctl Configuration
+11. Sysctl Configuration
 
 	nano /etc/sysctl.conf
 
-13. Disable TTYs
+12. Disable TTYs
 
 	#for Upstart
 	nano /etc/inittab
 		#... tty1-6
 
-14. Disable services
+13. Disable services
 
-	apt-get install sysv-rc-conf && sysv-rc-conf
+	sysv-rc-conf
 		Remove alsa-utils
 	systemctl disable alsa-utils
 	nano /etc/rc.local
@@ -127,47 +116,18 @@ PC Audio Render from Voyage Linux
 		 service $i stop
 		done
 
-15. USB Mount (Optional?)
+14. USB Mount
 
-	apt-get install usbmount
-	nano /etc/usbmount/usbmount.conf
-		MOUNTPOINTS="/mnt/usb0-7"
-	reboot
+	nano /lib/udev/rules.d/11-my-media-automount.rules
 
-16. Internet Radio
+15. Internet Radio
 
-	apt-get install vlc-nox # Optional
-	nano ~/.config/vlc/vlcrc
-		alsa-audio-device=pcm.sound
-		aout=alsa
-	nano ~/kbs1fm
-		#!/bin/sh
-		mpc stop
-		cvlc http://juoradio.appspot.com/kbs1 >/dev/null 2>&1 &
-	nano ~/kbs2fm
-		#!/bin/sh
-		mpc stop
-		cvlc http://juoradio.appspot.com/kbs2 >/dev/null 2>&1 &
-	nano ~/kbs2radio
-		#!/bin/sh
-		mpc stop
-		cvlc http://juoradio.appspot.com/kbs2r >/dev/null 2>&1 &
-	nano ~/cbsfm
-		#!/bin/sh
-		mpc stop
-		cvlc rtmp://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream >/dev/null 2>&1 &
-	chmod +x ~/kbs1fm ~/kbs2fm ~/kbs2radio ~/cbsfm
-	ln -s /home/pi/kbs1fm /home/pi/kbs2fm /home/pi/kbs2radio /home/pi/cbsfm /usr/bin/
+	ln -s /root/kr2mpd /root/ut2mpd /usr/bin/
+	mv Internet_Radios.m3u /var/lib/mpd/playlists/
+	mkdir /var/lib/mpd/music/webradio
+	cp *.pls /var/lib/mpd/music/webradio/
 
-	nano /var/lib/mpd/playlists/Internet_Radios.m3u
-		http://sc-classical.1.fm:8047#1.fm Otto's Classical Music
-		http://8.38.78.173:8045/#Audiophile Baroque
-		http://8.38.78.173:8093/#Audiophile Classical
-		http://89.16.185.174:8004/stream#Linn Classical
-		http://37.130.228.60:8090/#Naim Radio
-		http://stream.iradio.fi:8000/klasu-hi.mp3#Rondo Classic - Klasu
-
-17. Make voyage linux rw
+16. Make voyage linux rw
 
 	# nano /etc/init.d/voyage-util
 		#echo -n "Remounting / as read-only ... "
@@ -177,19 +137,13 @@ PC Audio Render from Voyage Linux
 		remountro
 		exit 0
 
-18. Show release
+17. Make Image
 
-	echo "* Mino's UPnP Audio Renderer for PC v.0.9.0 alpha" > release
-
-19. Make Image
-
-	nano ~/release
+	echo "* Mino's UPnP Audio Renderer for Alix 18.04" > ~/release
 	mpc clear
-	#sed -i '/chunkHighMark/d' /etc/polipo/config
-	#cat /etc/polipo/config
-	history -c ; rm ~/.bash_history
+	rm -f /root/.bash_history ~/.bash_history ; history -c
 	poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=voyage_pc_audio_renderer_v.0.9.0.img
-	$ zip voyage_pc_audio_renderer_v.0.9.0.zip voyage_pc_audio_renderer_v.0.9.0.img
+	$ sudo dd bs=4M if=/dev/sdb of=alix_audio_renderer_18.04.img
+	$ zip alix_audio_renderer_18.04.zip alix_audio_renderer_18.04.img
