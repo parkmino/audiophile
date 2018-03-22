@@ -4,9 +4,9 @@ $ curl -L ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.5.tar.bz2 -o alsa-lib-
 $ tar xvjf alsa-lib-1.1.5.tar.bz2
 $ cd alsa-lib-1.1.5
 $ #export CFLAGS="-march=native -O2" ; export CXXFLAGS="-march=native -O2" ; export CPPFLAGS="-march=native -O2"
-$ xport CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
+$ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 $ ./configure --help
-$ ./configure --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --disable-thread-safety --with-pcm-plugins=hw --with-ctl-plugins=hw
+$ ./configure --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python (--disable-thread-safety) --with-pcm-plugins=hw --with-ctl-plugins=hw
 $ sudo make install
 
 $ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
@@ -24,7 +24,7 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 $ sudo mkdir /usr/share/alsa
 $ sudo nano /usr/share/alsa/alsa.conf.sav
 
-pcm.empty={type=hw,card=0,device=0,subdevice=0,nonblock=1}#,pcm.default=pcm.empty
+pcm.0.type=hw,pcm.0.card=0,pcm.0.device=0,pcm.0.subdevice=0#,pcm.default=pcm.0
 
 $ sudo nano /etc/rc.local
 	cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
