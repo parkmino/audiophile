@@ -11,7 +11,6 @@
 #
 # By default this script does nothing.
 
-
 musicpd_bg () {
 
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
@@ -63,6 +62,12 @@ done
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
  renice  -3 $i
+done
+
+### Remove services
+for i in watchdog rpcbind dnsmasq cron nfs-common wd_keepalive # dbus ssh
+do
+ service $i stop
 done
 
 swapoff -a
