@@ -37,23 +37,18 @@ musicpd_bg () {
   esac
  done
 
- nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
+ nohup taskset -ac $s_task /var/tmp/upmpdcli -c /var/tmp/upmpdcli.conf >/dev/null 2>&1 &
 
 }
 
-cp /usr/lib/i386-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-#ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/i386-linux-gnu/libasound.so.2
-cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
-#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
-cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/i386-linux-gnu/libasound.so.2.0.0.sav /var/tmp/libasound.so.2.0.0
+#ln -sf /var/tmp/libasound.so.2.0.0 /usr/lib/i386-linux-gnu/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /var/tmp/alsa.conf
+#ln -sf /var/tmp/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /var/tmp/
+cp /etc/mpd.conf.sav /var/tmp/mpd.conf
 
-echo noop > /sys/block/mmcblk0/queue/scheduler
-
-for i in ondemand conservative powersave; do
- grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
-done
-[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+echo noop > /sys/block/sda/queue/scheduler
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
@@ -76,6 +71,6 @@ m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
 
 musicpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
+/var/tmp/mpd /var/tmp/mpd.conf >/dev/null 2>&1
 
 exit 0

@@ -35,7 +35,7 @@ PC Audio Render from Voyage Linux
 1. System update & install MPD clients
 
 	# remountrw
-	# ntpdate pool.ntp.org || date -s '2018-3-21 09:00:00'
+	# ntpdate -b pool.ntp.org || date -s '2018-3-21 09:00:00'
 	# #sed -i 's/www.voyage.hk/mirror.voyage.hk/' /etc/apt/sources.list.d/voyage.list
 	# mv /etc/apt/sources.list.d/voyage.list /etc/apt/sources.list.d/voyage.list.orig
 	# apt-get update
@@ -116,11 +116,12 @@ PC Audio Render from Voyage Linux
 
 	# nano /etc/inittab
 		#... tty1-6
+		#T0:23:respawn:/sbin/getty -L ttyS0 38400
 
 13. Disable services
 
 	# sysv-rc-conf
-		Uncheck alsa-utils upmpdcli
+		Uncheck alsa-utils bootlogs(1-2-3-4-5) cron(2-3-4-5) upmpdcli(2-3-4-5) watchdog(2-3-4-5) wd-keepalive(2-3-4-5)
 	# systemctl disable alsa-utils
 	# nano /etc/rc.local
 		for i in watchdog rpcbind dnsmasq cron nfs-common wd_keepalive # dbus ssh
@@ -134,7 +135,6 @@ PC Audio Render from Voyage Linux
 
 15. Internet Radio
 
-	# ln -s /root/kr2mpd /root/ut2mpd /usr/bin/
 	# mv Internet_Radios.m3u /var/lib/mpd/playlists/
 	# mkdir /var/lib/mpd/music/webradio
 	# mv *.pls /var/lib/mpd/music/webradio/
