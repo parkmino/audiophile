@@ -11,11 +11,50 @@
 #
 # By default this script does nothing.
 
-#[ ! -e /usr/lib/i386-linux-gnu/libasound.so.2 ] && [ -e /usr/lib/i386-linux-gnu/libasound.so.2.sav ] && mv /usr/lib/i386-linux-gnu/libasound.so.2.sav /usr/lib/i386-linux-gnu/libasound.so.2
 
-/usr/bin/mpd --no-daemon /etc/mpd.conf &
+musicpd_bg () {
 
-#ifconfig eth0 txqueuelen 1875
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+ sleep 1
+
+ pgr_mpd=$(pgrep -x mpd)
+
+ taskset -pc $m_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+
+ nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
+
+}
+
+cp /usr/lib/i386-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+#ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/i386-linux-gnu/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+
+echo noop > /sys/block/mmcblk0/queue/scheduler
+
+for i in ondemand conservative powersave; do
+ grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+done
+[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
@@ -26,59 +65,12 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ &&
  renice  -3 $i
 done
 
-until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
- sleep 1
-done
-sleep 1
+swapoff -a
 
 m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
-pgr_mpd=$(pgrep -x mpd)
 
-if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'); do
-  taskset -acp 0 $pid || true
- done
-fi
-
-taskset -pc $m_task $pgr_mpd
-#renice -1 -p $pgr_mpd
-
-echo "$(pstree -np $pgr_mpd)" | while read line ; do
- proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
- proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
- case $proc in
-  mpd)		 taskset -cp $s_task	$proc_nr ;;
-  io)		 taskset -cp $s_task	$proc_nr ;;
-  player)	 taskset -cp $s_task	$proc_nr ;;
-  decoder)	 taskset -cp $s_task	$proc_nr ;;
-  output)	 taskset -cp $m_task	$proc_nr
-		 renice -1 -p		$proc_nr
-		 chrt -op 0		$proc_nr ;;
- esac
-done
-
-taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
-
-### For Criterion from Reference Club
-#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
-#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
-
-#[ -e /usr/lib/i386-linux-gnu/libasound.so.2 ] && mv /usr/lib/i386-linux-gnu/libasound.so.2 /usr/lib/i386-linux-gnu/libasound.so.2.sav
-
-### Remove services
-for i in watchdog rpcbind dnsmasq cron nfs-common wd_keepalive # dbus ssh
-do
- service $i stop
-done
-### Init
-taskset -cp $m_task 1
-### Print the IP address
-_IP=$(hostname -I) || true
-if [ "$_IP" ]; then
-  printf "My IP address is %s\n" "$_IP"
-fi
-### Show release
-cat /root/release
+musicpd_bg &
+/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
 
 exit 0

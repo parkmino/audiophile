@@ -34,92 +34,95 @@ PC Audio Render from Voyage Linux
 
 1. System update & install MPD clients
 
-	remountrw
-	ntpdate pool.ntp.org || date -s '2018-3-21 09:00:00'
-	#sed -i 's/www.voyage.hk/mirror.voyage.hk/' /etc/apt/sources.list.d/voyage.list
-	mv /etc/apt/sources.list.d/voyage.list /etc/apt/sources.list.d/voyage.list.orig
-	apt-get update
-	apt-get upgrade
-	apt-get dist-upgrade
-	apt-get install nano wget ca-certificates sysv-rc-conf
-	apt-get install mpc ncmpc
+	# remountrw
+	# ntpdate pool.ntp.org || date -s '2018-3-21 09:00:00'
+	# #sed -i 's/www.voyage.hk/mirror.voyage.hk/' /etc/apt/sources.list.d/voyage.list
+	# mv /etc/apt/sources.list.d/voyage.list /etc/apt/sources.list.d/voyage.list.orig
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# apt-get install nano wget ca-certificates sysv-rc-conf
+	# apt-get install mpc ncmpc
 
 2. Kernel option
 
-	nano /boot/grub/menu.lst
+	# nano /boot/grub/menu.lst
 		timeout 0
 		kernel /vmlinuz ... noapic apm=off consoleblank=0 elevator=noop selinux=0
 
 3. Localisation
 
-	#apt-get install locales
-	#dpkg-reconfigure locales
-	 dpkg-reconfigure tzdata
+	# #apt-get install locales
+	# #dpkg-reconfigure locales
+	# dpkg-reconfigure tzdata
 
 4. Disable modules
 
-	lsmod
-	nano /etc/modprobe.d/voyage.conf
+	# lsmod
+	# nano /etc/modprobe.d/voyage.conf
 		blacklist ...
 
 5. ALSA configuration
-	
+
+	# nano /usr/share/alsa/alsa.conf
+		card=1
+
 6. MPD Settings
 
-	  Compile MPD
+	Compile MPD
 	$ scp root@192.168.0.x:/usr/local/bin/mpd ./
-	cp /usr/local/bin/mpd /usr/bin/
-	mv /usr/local/bin/mpd /usr/local/bin/mpd.0.20.18
-	cp mpd.conf /etc/mpd.conf.sav
-	mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
-	mpd /etc/mpd.conf.sav
-	#sysv-rc-conf
+	# cp /usr/local/bin/mpd /usr/bin/
+	# mv /usr/local/bin/mpd /usr/local/bin/mpd.0.20.18
+	# cp mpd.conf /etc/mpd.conf.sav
+	# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
+	# mpd /etc/mpd.conf.sav
+	# #sysv-rc-conf
 		Disable mpd service
 
 7. Upmpdcli
 
-	printf "deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main\ndeb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main" > /etc/apt/sources.list.d/upmpdcli.list		
-	apt-get update
-	apt-get install upmpdcli
+	# printf "deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main\ndeb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main" > /etc/apt/sources.list.d/upmpdcli.list		
+	# apt-get update
+	# apt-get install upmpdcli
 
-	wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/pool/main/libu/libupnpp4/libupnpp4_0.16.0-1~ppa1~unstable_i386.deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/pool/main/u/upmpdcli/upmpdcli_1.2.15-2~ppa1~unstable_i386.deb
-	apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp0
-	dpkg -i libupnpp*.deb upmpdcli*.deb
+	# wget http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/pool/main/libu/libupnpp4/libupnpp4_0.16.0-1~ppa1~unstable_i386.deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/pool/main/u/upmpdcli/upmpdcli_1.2.15-2~ppa1~unstable_i386.deb
+	# apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp0
+	# dpkg -i libupnpp*.deb upmpdcli*.deb
 
 8. CIFS & NFS mounting
 
-	apt-get install cifs-utils nfs-common
-	mkdir /mnt/cifs /mnt/nfs
-	ln -s /mnt/     /var/lib/mpd/music
-	nano /etc/fstab
+	# apt-get install cifs-utils nfs-common
+	# mkdir /mnt/cifs /mnt/nfs
+	# ln -s /mnt/ /var/lib/mpd/music
+	# nano /etc/fstab
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 		
-9. Remove swap (Not applicable)
+9. Edit /etc/fstab
 
-	nano /etc/fstab
+	# cat /proc/swaps
+	# nano /etc/fstab
 		#...swap...
 
 10. Edit /etc/rc.local
 
-	nano /etc/rc.local
+	# nano /etc/rc.local
 	
 11. Sysctl Configuration
 
-	nano /etc/sysctl.conf
+	# nano /etc/sysctl.conf
 
 12. Disable TTYs
 
-	#for Upstart
-	nano /etc/inittab
+	# nano /etc/inittab
 		#... tty1-6
 
 13. Disable services
 
-	sysv-rc-conf
-		Remove alsa-utils
-	systemctl disable alsa-utils
-	nano /etc/rc.local
+	# sysv-rc-conf
+		Uncheck alsa-utils upmpdcli
+	# systemctl disable alsa-utils
+	# nano /etc/rc.local
 		for i in watchdog rpcbind dnsmasq cron nfs-common wd_keepalive # dbus ssh
 		do
 		 service $i stop
@@ -127,31 +130,45 @@ PC Audio Render from Voyage Linux
 
 14. USB Mount
 
-	nano /lib/udev/rules.d/11-my-media-automount.rules
+	# nano /lib/udev/rules.d/11-my-media-automount.rules
 
 15. Internet Radio
 
-	ln -s /root/kr2mpd /root/ut2mpd /usr/bin/
-	mv Internet_Radios.m3u /var/lib/mpd/playlists/
-	mkdir /var/lib/mpd/music/webradio
-	cp *.pls /var/lib/mpd/music/webradio/
+	# ln -s /root/kr2mpd /root/ut2mpd /usr/bin/
+	# mv Internet_Radios.m3u /var/lib/mpd/playlists/
+	# mkdir /var/lib/mpd/music/webradio
+	# mv *.pls /var/lib/mpd/music/webradio/
+	# mpc update
 
 16. Make voyage linux rw
 
-	# nano /etc/init.d/voyage-util
+	# #nano /etc/init.d/voyage-util
 		#echo -n "Remounting / as read-only ... "
 		#/usr/local/sbin/remountro
 		#echo "Done."
-	# nano /etc/rc.local
+	# #nano /etc/rc.local
 		remountro
 		exit 0
 
-17. Make Image
+17. kr2mpd & ut2mpd
 
-	echo "* Mino's UPnP Audio Renderer for Alix 18.04" > ~/release
-	mpc clear
-	rm -f /root/.bash_history ~/.bash_history ; history -c
-	poweroff
+	# apt-get install curl
+	# curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+	# chmod a+rx /usr/local/bin/youtube-dl
+	# cp ut2mpd /root/
+	# chmod +x /root/ut2mpd
+	# ln -sf /root/ut2mpd /usr/bin/
+
+	# cp kr2mpd /root/
+	# chmod +x /root/kr2mpd
+	# ln -sf /root/kr2mpd /usr/bin/
+
+18. Make Image
+
+	# echo "* Mino's UPnP Audio Renderer for Alix 18.04" > ~/release
+	# mpc clear
+	# rm -f /root/.bash_history ~/.bash_history ; history -c
+	# poweroff
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=/dev/sdb of=alix_audio_renderer_18.04.img
