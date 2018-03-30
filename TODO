@@ -18,7 +18,13 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	#kernel.sched_time_avg = 6286				# 6286
 
 2. sudo nano /usr/shar/alsa/alsa.conf.sav
-	pcm.0{type=hw,card=0,device=0,subdevice=0,nonblock=1},ctl.1{type=hw,card=9}
-	pcm.default=pcm.0,pcm.0{type=hw,card=0,device=0,subdevice=0,nonblock=1},ctl.1{type=hw,card=9},ctl.default=ctl.1 # LibreELEC
+	pcm.0{type hw,card 0,device 0,subdevice 0,nonblock 1}ctl{type hw,card 9}
+	pcm{default pcm.0}pcm.0{type hw,card 0,device 0,subdevice 0,nonblock 1}ctl{type hw,card 9}ctl{default ctl.1} # LibreELEC
    sudo nano /etc/mpd.conf.sav
-	9987% > 9986%
+	 buffer_before_play "9.998596798699561934543755809373313200040989242645445496721281932352316443094530294384549529463961086013908994609489452508888889009119044083741039087888806109197901120099201091111081201111099912100890119900008909918991989998999199900094999929989960998999912899999989996999999989998999769997999999999998999799859997999699969994999799939995998899979988999399949996299859994998399669977%"
+   sudo nano /etc/sysctl.conf
+	#kernel.sched_min_granularity_ns = 229982		# 229982
+	 kernel.sched_wakeup_granularity_ns = 388313		# 388324
+	 kernel.sched_latency_ns = 1393337			# 1393333
+	#kernel.sched_migration_cost_ns = 4899002		# 4899002
+	#kernel.sched_time_avg = 6286				# 6286
