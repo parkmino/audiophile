@@ -28,3 +28,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	 kernel.sched_latency_ns = 1393337			# 1393333
 	#kernel.sched_migration_cost_ns = 4899002		# 4899002
 	#kernel.sched_time_avg = 6286				# 6286
+
+3. sudo nano /etc/rc.local
+
+	sync
+	sleep 1
+	mount -o remount,ro /
+	#mount -o remount,rw,noatime /
