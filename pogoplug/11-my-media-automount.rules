@@ -15,7 +15,8 @@ ACTION=="add", RUN+="/bin/mkdir -p '/mnt/%E{dir_name}'"
 # global mount options
 ACTION=="add", ENV{mount_options}="ro"
 # filesystem-specific mount options (777/666 dir/file perms for ntfs/vfat) 
-#ACTION=="add", ENV{ID_FS_TYPE}=="vfat|ntfs", ENV{mount_options}="$env{mount_options},gid=100,dmask=000,fmask=111,utf8"
+#ACTION=="add", ENV{ID_FS_TYPE}=="ntfs", ENV{mount_options}="$env{mount_options},nls=utf8,utf8"
+#ACTION=="add", ENV{ID_FS_TYPE}=="vfat", ENV{mount_options}="$env{mount_options},codepage=949,iocharset=cp949"
 
 # automount ntfs filesystems using ntfs-3g driver
 ACTION=="add", ENV{ID_FS_TYPE}=="ntfs", RUN+="/bin/mount -t auto -o %E{mount_options} /dev/%k '/mnt/%E{dir_name}'"
