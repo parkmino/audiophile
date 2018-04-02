@@ -1,0 +1,20 @@
+#!/bin/sh
+
+### Alix renderer patch 18.04.1
+
+remountrw
+
+### ALSA
+
+### MPD
+
+### Sysctl
+
+### Split Mounting Options for NTFS & VFAT
+#sed -i '/ENV.*ro/s/ro.*/ro"/' /lib/udev/rules.d/11-my-media-automount.rules
+ sed -i '/vfat|ntfs/a#ACTION=="add", ENV{ID_FS_TYPE}=="vfat", ENV{mount_options}="$env{mount_options},codepage=949,iocharset=cp949"' /lib/udev/rules.d/11-my-media-automount.rules
+ sed -i 's/vfat|ntfs/ntfs/' /lib/udev/rules.d/11-my-media-automount.rules
+ sed -i '/ntfs.*ENV/s/},.*/},nls=utf8,utf8"/' /lib/udev/rules.d/11-my-media-automount.rules
+#sed -i 's/, RUN+="\/bin\/mkdir.*/, RUN+="\/usr\/local\/sbin\/remountrw", RUN+="\/bin\/mkdir -p '"'"'\/mnt\/%E{dir_name}'"'"'", RUN+="\/usr\/local\/sbin\/remountro"/' /lib/udev/rules.d/11-my-media-automount.rules
+#sed -i 's/, RUN+="\/bin\/rmdir/#, RUN+="\/bin\/rmdir/' /lib/udev/rules.d/11-my-media-automount.rules
+#sed -i '/vfat.*ENV/s/^#*//' /lib/udev/rules.d/11-my-media-automount.rules
