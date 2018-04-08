@@ -81,7 +81,9 @@ PC Audio Render from Voyage Linux
 
 7. Upmpdcli
 
-	# printf "deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main\ndeb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main" > /etc/apt/sources.list.d/upmpdcli.list		
+	# printf "deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main\ndeb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian-jessie/ unstable main" > /etc/apt/sources.list.d/upmpdcli.list
+	# gpg --keyserver pool.sks-keyservers.net --recv-key F8E3347256922A8AE767605B7808CE96D38B9201
+	# gpg --export '7808CE96D38B9201' | sudo apt-key add -	
 	# apt-get update
 	# apt-get install upmpdcli
 
