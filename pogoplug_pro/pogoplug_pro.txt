@@ -1,0 +1,140 @@
+MAC: 00:25:31:01:27:81
+ ID: D7LWW4-6PB44X-X7-9XXDVA-SDJ4TN
+
+1. SSH
+
+https://pogoplug.com/activate/
+https://my.pogoplug.com/ko/settings
+http://blog.qnology.com/2015/04/hacking-pogoplug-v3oxnas-proclassic.html
+
+2. U-Boot
+
+https://forum.doozan.com/read.php?3,16017
+http://blog.muka.kr/80?category=709560
+
+# cd /tmp
+# wget -O linux-tools-installation-bodhi.tar.gz http://notme.tistory.com/attachment/cfile3.uf@99C2AA33598B25352DAF6D.gz
+# tar -xvf linux-tools-installation-bodhi.tar
+# cd tools
+# ln -s fw_printenv fw_setenv
+# wget -O uboot.2015.10-tld-1.ox820.bodhi.tar http://notme.tistory.com/attachment/cfile30.uf@99535C33598B10AD242FB7.tar
+# tar -xvzf uboot.2015.10-tld-1.ox820.bodhi.tar
+
+# cat /etc/fw_env.config
+# echo -e '# pogoplug v3\n  /dev/mtd0               0x00100000      0x20000         0x20000' > /etc/fw_env.config
+# cat /etc/fw_env.config
+# cat /proc/mtd
+	dev:    size   erasesize  name
+	mtd0: 08000000 00020000 "NAND 128MiB 3,3V 8-bit"
+	mtd1: 00e00000 00020000 "boot"
+	mtd2: 07200000 00020000 "rootfs"
+# cd /
+# /tmp/tools/nanddump --noecc --omitoob -f mtd1.orig /dev/mtd1
+# /usr/local/cloudengines/bin/blparam > orig_envs.txt
+# dmesg | grep -i 'bad'
+	<6>[    5.250000] Scanning device for bad blocks
+	<4>[    5.260000] Bad eraseblock 166 at 0x0000014c0000
+	<5>[    5.800000] UBI: number of bad PEBs:         1
+	<5>[    5.830000] UBI: number of PEBs reserved for bad PEB handling: 9
+	166 > 15
+# /usr/sbin/flash_erase /dev/mtd1 0x0 6
+	Erase Total 6 Units
+	Performing Flash Erase of length 131072 at offset 0xa0000 done
+# /usr/sbin/nandwrite /dev/mtd1 /tmp/uboot.spl.2013.10.ox820.850mhz.mtd0.img
+	Writing data to block 0 at offset 0x0
+# /usr/sbin/nandwrite -s 262144 /dev/mtd1 /tmp/uboot.2015.10-tld-1.ox820.mtd0.
+img
+	Writing data to block 2 at offset 0x40000
+	Writing data to block 3 at offset 0x60000
+	Writing data to block 4 at offset 0x80000
+	Writing data to block 5 at offset 0xa0000
+# /usr/sbin/flash_erase /dev/mtd1 0x00100000 1
+	Erase Total 1 Units
+	Performing Flash Erase of length 131072 at offset 0x100000 done
+# /usr/sbin/nandwrite -s 1048576 /dev/mtd1 /tmp/uboot.2013.10-tld-5.ox820.envi
+ronment.img
+	Writing data to block 8 at offset 0x100000
+# #/tmp/tools/fw_setenv dtb_file '/boot/dts/ox820-pogoplug-pro.dtb'
+# /tmp/tools/fw_setenv ethaddr '00:25:31:01:27:81'
+# /tmp/tools/fw_printenv > /new_envs.txt
+# sync
+# reboot
+	U-Boot SPL 2013.10-tld-4 (Sep 07 2014 - 14:10:12)
+	  Boot device: NAND
+	...
+	U-Boot 2015.10-tld-1 (Nov 21 2015 - 01:17:59 -0800)
+	OXNAS OX820
+	...
+
+3. Debian rootfs
+
+https://forum.doozan.com/read.php?2,16044
+http://blog.muka.kr/81?category=709560
+
+$ sudo apt-get install u-boot-tools
+$ sudo gparted (a single ext3 partition with 'rootfs' label)
+$ sudo su
+# fdisk -l
+# cd /media/parkmino/rootfs
+# tar -xjf '/home/parkmino/Downloads/pogoplug_pro/Debian-4.4.54-oxnas-tld-1-rootfs-bodhi.tar.bz2'
+# sync
+# nano /media/parkmino/rootfs/etc/fstab
+	LABEL=rootfs / ext3  noatime,errors=remount-ro 0 1
+# exit
+
+$ ssh root@192.168.x.x (password: root)
+# rm /etc/ssh/ssh_host*
+# ssh-keygen -A
+# nano /etc/rc.local
+	ethtool -A eth0 rx off tx off
+# apt-get update
+# apt-get upgrade
+# apt-get dist-upgrade
+  ...
+  update-initramfs: Generating /boot/initrd.img-4.4.54-oxnas-tld-1
+# cd /boot
+# cp -a uInitrd uInitrd.bak
+# mkimage -A arm -O linux -T ramdisk -C gzip -a 0x60000000 -e 0x60000000 -n initramfs-4.4.54-oxnas-tld-1 -d initrd.img-4.4.54-oxnas-tld-1 uInitrd
+# sync
+# reboot
+
+4. Audio Renderer
+
+# #sed sed 's/\.us\./\.ko\./g' /etc/apt/sources.list
+# apt-get autoremove
+# apt-get clean
+# apt-get install ca-certificates curl psmisc # cifs-utils locales
+# #dpkg-reconfigure locales
+# date
+# dpkg-reconfigure tzdata
+# date
+# lsmod
+# #nano /etc/modprobe.d/blacklist
+# nano /etc/inittab
+	#... ttyS0
+# apt-get install sysv-rc-conf
+# sysv-rc-conf
+	Remove alsa-utils(S) avahi-daemon(2-3-4-5) bootlogs(1-2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5) ntp(2-3-4-5-S)
+# make -j2
+# nano /etc/network/interfaces
+	auto lo eth0
+	iface lo inet loopback
+	#iface eth0 inet dhcp
+	iface eth0 inet static
+	address 192.168.0.13
+	netmask 255.255.255.0
+	gateway 192.168.0.1
+	dns-nameservers 210.220.163.82
+
+### ALSA
+### MPD
+### Upmpdcli
+# cp /usr/local/lib/libupnpp.* /usr/lib/arm-linux-gnueabi/
+# cd /usr/lib/arm-linux-gnueabi
+# ln -s libmicrohttpd.so.12.39.0 libmicrohttpd.so.10
+# ln -s libjsoncpp.so.1.7.4 libjsoncpp.so.0
+# adduser upmpdcli
+### rc.local
+### /etc/sysctl.conf
+### kr2mpd & ut2mpd
+### Internet Radio

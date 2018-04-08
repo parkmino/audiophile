@@ -1,0 +1,111 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+#ethtool -A eth0 rx off tx off
+
+# turn on LED
+if [ -d /sys/class/leds/pogoplug:green:usr ]; then
+   echo default-on > /sys/class/leds/pogoplug:green:usr/trigger
+   if [ -d /sys/class/leds/pogoplug:orange:usr ]; then
+      echo none > /sys/class/leds/pogoplug:orange:usr/trigger
+   fi
+   if [ -d /sys/class/leds/pogoplug:blue:usr ]; then
+      echo none > /sys/class/leds/pogoplug:blue:usr/trigger
+   fi
+fi
+
+musicpd_bg () {
+
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+ sleep 1
+
+ pgr_mpd=$(pgrep -x mpd)
+
+ taskset -pc $m_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+
+ nohup taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null 2>&1 &
+
+ sleep 3
+
+}
+
+cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /tmp/libasound.so.2.0.0
+ln -sf /tmp/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
+ln -sf /tmp/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
+cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
+ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /tmp/
+cp /etc/mpd.conf.sav /tmp/mpd.conf
+
+echo noop > /sys/block/sda/queue/scheduler
+
+for i in ondemand conservative powersave; do
+ grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+done
+[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
+done
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
+done
+
+m_task=$(($(nproc --all)-1))
+[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'); do
+  taskset -acp 0 $pid || true
+ done
+fi
+
+### Remove services
+#for i in cron rsyslog avahi-daemon systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
+#do
+# service $i stop
+#done
+
+swapoff -a
+
+### Init
+taskset -cp $m_task 1
+
+### Remountro
+sync
+sleep 1
+mount -o remount,ro /
+
+musicpd_bg &
+/tmp/mpd /tmp/mpd.conf >/dev/null 2>&1
+
+exit 0
