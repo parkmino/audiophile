@@ -1,5 +1,5 @@
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp4/libupnpp4_0.16.0-1~ppa1~stretch_armhf.deb
-$ wget  https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.2.15-2~ppa1~stretch_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp4/libupnpp4_0.16.1-1~ppa1~stretch_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.2.16-1~ppa1~stretch_armhf.deb
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd12 libjsoncpp1
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
 
@@ -9,6 +9,8 @@ $ sudo nano /etc/apt/sources.list.d/upmpdcli.list
 	 or
 	deb http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/ unstable main
 	deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/ unstable main
+$ gpg --keyserver pool.sks-keyservers.net --recv-key F8E3347256922A8AE767605B7808CE96D38B9201
+$ gpg --export '7808CE96D38B9201' | sudo apt-key add -
 $ sudo apt-get update
 $ sudo apt-get install upmpdcli
 
