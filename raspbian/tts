@@ -4,7 +4,7 @@
 # https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 # Chinese - zh, English - en, Finnish - fi, French - fr, German - de, Japanese - ja, ...
 
-alsa=$(head -1 /usr/share/alsa/alsa.conf | cut -d'=' -f1)
+alsa=$(head -1 /usr/share/alsa/alsa.conf | cut -d' ' -f1)
 pico_wav="/home/pi/tts.wav"
 
 wget -q --spider -T1 http://google.com && tts_svc=google || tts_svc=pico
