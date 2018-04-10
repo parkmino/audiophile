@@ -186,18 +186,30 @@ if [ "$exitstatus" = 0 ]; then
 fi
 }
 
+read_only () {
+i=$(whiptail --title "MicroSD Read-only / MicroSD 읽기 전용" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 72 2 \
+"1" "MicroSD Read-only                 MicroSD 읽기 전용" \
+"2" "MicroSD Read-Write (Default)      MicroSD 읽고 쓰기 (기본값)" 3>&1 1>&2 2>&3)
+
+case $i in
+ 1) sudo sed -i '/remountro/s/^#*//' /etc/rc.local ;;
+ 2) sudo sed -i '/remountro/s/^/#/'  /etc/rc.local ;;
+esac
+}
+
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 18 61 10 \
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 19 61 11 \
  "1"  "Audio device              오디오 장치          >" \
  "2"  "USB signal & power        USB 신호와 전원      >" \
  "3"  "MPD settings              MPD 설정             >" \
  "4"  "Renderer name             렌더러 이름 바꾸기   >" \
  "5"  "IP address                IP 설정              >" \
  "6"  "IP TTS, DBus              IP TTS와 DBus        >" \
- "7"  "SSH turn-off              SSH 사용 안 함" \
- "8"  "Raspbian update           Raspbian 업데이트" \
- "9"  "Reboot                    재시작" \
-"10"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
+ "7"  "MicroSD Read-only         MicroSD 읽기 전용    >" \
+ "8"  "SSH turn-off              SSH 사용 안 함" \
+ "9"  "Update Raspbian           Raspbian 업데이트" \
+"10"  "Reboot                    재시작" \
+"11"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
@@ -209,11 +221,12 @@ while true; do
   4)  renderer_name ;;
   5)  static_ip ;;
   6)  dbus_tts ;;
-  7)  sudo touch /boot/.nossh ;;
-  8)  sudo apt-get update
+  7)  read_only ;;
+  8)  sudo touch /boot/.nossh ;;
+  9)  sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
-  9)  sudo reboot ;;
-  10) sudo poweroff ;;
+  10) sudo reboot ;;
+  11) sudo poweroff ;;
  esac
 done
