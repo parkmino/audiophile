@@ -3,7 +3,7 @@
 cp /usr/lib/libasound.so.2.0.0 /dev/shm/
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
-chmod -w /dev/shm/libasound.so.2.0.0 /dev/shm/alsa.conf
+chmod -w /usr/lib/systemd/systemd /usr/lib/kodi/kodi.bin /dev/shm/libasound.so.2.0.0 /dev/shm/alsa.conf
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i

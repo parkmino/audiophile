@@ -104,7 +104,7 @@ ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd      /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
-chmod -w /dev/shm/alsa.conf /dev/shm/libasound.so.2.0.0 /dev/shm/mpd /dev/shm/mpd.conf
+chmod -w /lib/systemd/systemd /dev/shm/alsa.conf /dev/shm/libasound.so.2.0.0 /dev/shm/mpd /dev/shm/mpd.conf
 
 for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
  renice  -2 $pid # || true

@@ -33,7 +33,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 3. sudo nano /etc/rc.local
 
-	chmod -w /dev/shm/alsa.conf /dev/shm/libasound.so.2.0.0 /dev/shm/mpd /dev/shm/mpd.conf /dev/shm/upmpdcli /dev/shm/upmpdcli.conf
+	chmod -w /lib/systemd/systemd /dev/shm/alsa.conf /dev/shm/libasound.so.2.0.0 /dev/shm/mpd /dev/shm/mpd.conf /dev/shm/upmpdcli /dev/shm/upmpdcli.conf
 
 	sync
 	sleep 1
