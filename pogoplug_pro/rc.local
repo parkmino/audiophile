@@ -65,6 +65,7 @@ cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /tmp/
 cp /etc/mpd.conf.sav /tmp/mpd.conf
 
 chmod -w /sbin/init /tmp/alsa.conf /tmp/libasound.so.2.0.0 /tmp/mpd /tmp/mpd.conf /tmp/upmpdcli /tmp/upmpdcli.conf
+chmod -R -w /usr/lib/arm-linux-gnueabi/
 
 echo noop > /sys/block/sda/queue/scheduler
 
