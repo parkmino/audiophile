@@ -56,6 +56,9 @@ musicpd_bg () {
 
 }
 
+#chmod -w /sbin/init /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf
+#chmod -R -w /usr/lib/arm-linux-gnueabi/
+
 cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /tmp/libasound.so.2.0.0
 ln -sf /tmp/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
 ln -sf /tmp/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
@@ -63,9 +66,6 @@ cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
 ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /tmp/
 cp /etc/mpd.conf.sav /tmp/mpd.conf
-
-chmod -w /sbin/init /tmp/alsa.conf /tmp/libasound.so.2.0.0 /tmp/mpd /tmp/mpd.conf /tmp/upmpdcli /tmp/upmpdcli.conf
-chmod -R -w /usr/lib/arm-linux-gnueabi/
 
 echo noop > /sys/block/sda/queue/scheduler
 
