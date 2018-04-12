@@ -8,7 +8,7 @@ $ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 $ ./configure --help
 
 ### Normal
-$ ./configure --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
+$ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
 
 ### Minmal with mixer
 $ ./configure --disable-aload --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
@@ -36,6 +36,7 @@ $ sudo mkdir /usr/share/alsa
 $ sudo nano /usr/share/alsa/alsa.conf.sav
 	pcm.0 { type hw card 0 device 0 subdevice 0 nonblock 1 }
 $ sudo chmod -w /usr/share/alsa/alsa.conf.sav
+$ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 $ sudo nano /etc/rc.local
 	cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
