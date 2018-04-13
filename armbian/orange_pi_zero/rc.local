@@ -53,6 +53,9 @@ mpd_bg () {
 
 #sysctl -w kernel.modules_disabled=1
 
+#chmod -w /lib/systemd/systemd /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav
+#chmod -R -w /usr/lib/arm-linux-gnueabihf/
+
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
@@ -60,7 +63,7 @@ ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd      /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 
-chmod -w /dev/shm/alsa.conf /dev/shm/libasound.so.2.0.0 /dev/shm/mpd /dev/shm/mpd.conf
+chmod -w /dev/shm/mpd.conf
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 
