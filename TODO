@@ -4,21 +4,21 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 1. sudo nano /usr/shar/alsa/alsa.conf.sav
 
-	pcm.0 {
-	type hw
-	card 0
-	device 0
-	subdevice 0
-	nonblock 1
+	pcm {
+	0.type=hw,
+	0.card=0,
+	0.device=0,
+	0.subdevice=0,
+	0.nonblock=1,
 	}
 
-	pcm.default pcm.0
-	pcm.0 {
-	type hw
-	card 0
-	device 0
-	subdevice 0
-	nonblock 1
+	pcm {
+	default=pcm.0,
+	0.type=hw,
+	0.card=0,
+	0.device=0,
+	0.subdevice=0,
+	0.nonblock=1,
 	} # LibreELEC
 
    sudo nano /etc/mpd.conf.sav
