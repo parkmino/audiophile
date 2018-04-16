@@ -106,8 +106,13 @@ for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
 done
 
+### Taskset
+for pid in 1 $(pgrep -x rc.local); do
+ taskset -acp $m_task $pid || true
+done
+
 ### Init
-taskset -cp $m_task 1
+#taskset -cp $m_task 1
 
 ### MicroSD Read-only
 sync
