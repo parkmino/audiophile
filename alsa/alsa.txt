@@ -34,7 +34,13 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 $ sudo mkdir /usr/share/alsa
 $ sudo nano /usr/share/alsa/alsa.conf.sav
-	pcm.0 { type hw card 0 device 0 subdevice 0 nonblock 1 }
+	pcm {
+	0.type=hw,
+	0.card=0,
+	0.device=0,
+	0.subdevice=0,
+	0.nonblock=1,
+	}
 $ sudo chmod -w /usr/share/alsa/alsa.conf.sav
 $ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
