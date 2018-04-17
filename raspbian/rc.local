@@ -116,11 +116,16 @@ pkill plymouthd
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
 
-### Init
-taskset -cp $m_task 1
+### Taskset
+for pid in 1 $(pgrep -x rc.local); do
+ taskset -acp $m_task $pid || true
+done
 
 ### Text to Speech
 #tts
+
+### Read-only
+#remountro
 
 musicpd_bg &
 /dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
