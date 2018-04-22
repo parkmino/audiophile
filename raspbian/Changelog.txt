@@ -6,7 +6,7 @@
   3. MPD ALSA 출력 항상 켜기 끔.
   4. MPD 버퍼 상세 설정.
   5. 커널 스케줄러 조정.
-  6. Raspbian 업데이트 (신형 라즈베리 파이 3B+ 호환, Hiface 지원)
+  6. Raspbian 업데이트 (신형 라즈베리 파이 3B+ 호환, M2Tech hiFace 지원)
   7. Upmpdcli 1.2.16 업데이트.
   8. 오디오 관련 파일 읽기 전용 설정.
   9. MicroSD 읽기 전용 지원 (remountro, remountrw)
