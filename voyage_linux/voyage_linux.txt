@@ -165,13 +165,40 @@ PC Audio Render from Voyage Linux
 	# chmod +x /root/kr2mpd
 	# ln -sf /root/kr2mpd /usr/bin/
 
-18. Make Image
+18. Read-only
 
-	# echo "* Mino's UPnP Audio Renderer for Alix 18.04" > ~/release
+	# chmod -w /sbin/init /etc/init.d/rc /lib/startpar/startpar /etc/rc.local /bin/bash /usr/share/alsa/alsa.conf.sav /usr/lib/i386-linux-gnu/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
+	# chmod -R -w /usr/lib/i386-linux-gnu/
+
+19. Wi-Fi
+
+	# lsusb
+	# ifconfig -a
+	# nano /etc/apt/sources.list
+		deb http://http.us.debian.org/debian jessie main contrib non-free
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# apt-get install firware-realtek wireless-tools
+	# ifconfig -a
+	# mv /etc/network/interfaces.d/wlan0.conf /etc/network/interfaces.d/wlan0.conf.orig
+	# nano /etc/network/interfaces.d/wlan0.conf
+		#auto wlan0
+		#allow-hotplug wlan0
+		iface wlan0 inet dhcp
+		wpa-ssid wifi
+		wpa-psk password
+
+	# sed -i '/auto wlan0/s/^#*//; s/wpa-ssid.*/wpa-ssid wifi/; s/wpa-psk.*/wpa-psk password/' /etc/network/interfaces.d/wlan0.conf
+	# sed -i '/auto wlan0/s/^/#/' /etc/network/interfaces.d/wlan0.conf
+
+20. Make Image
+
+	# echo "* Mino's UPnP Audio Renderer for Alix 18.05" > ~/release
 	# mpc clear
 	# rm -f /root/.bash_history ~/.bash_history ; history -c
 	# poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=alix_audio_renderer_18.04.img
-	$ zip alix_audio_renderer_18.04.zip alix_audio_renderer_18.04.img
+	$ sudo dd bs=4M if=/dev/sdb of=alix_audio_renderer_18.05.img
+	$ zip alix_audio_renderer_18.05.zip alix_audio_renderer_18.05.img
