@@ -1,5 +1,5 @@
 The latest U-Boot Bootloader
-U-Boot 2016.05-tld-1 (Jun 12 2016 ….)
+U-Boot 2016.05-tld-1
 http://forum.doozan.com/read.php?3,12381
 
 Linux Kernel 4.10.0 Kirkwood package and Debian rootfs
@@ -17,6 +17,7 @@ $ sudo su
 # tar -xjf '/home/parkmino/Downloads/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2'
 # nano /media/parkmino/rootfs/etc/fstab
 	/dev/root / ext2  noatime,errors=remount-ro 0 1
+
 # cd boot
 # cp -a zImage-4.4.0-kirkwood-tld-1  zImage.fdt
 # cat dts/kirkwood-pogo_e02.dtb >> zImage.fdt
@@ -37,7 +38,11 @@ $ ssh root@192.168.0.x (password: root)
 # rm /etc/ssh/ssh_host*
 # ssh-keygen -A
 # apt-get update
-# apt-get upgrade		# !!! Not for ext2 but only for ext3
+# apt-get upgrade	# CAUTION : It may not reboot for some reason !
+  ...
+  update-initramfs: Generating /boot/initrd.img-4.4.0-kirkwood-tld-1
+# cd /boot
+# mkimage -A arm -O linux -T ramdisk -C gzip -a 0x00000000 -e 0x00000000 -n initramfs-4.4.0-kirkwood-tld-1 -d initrd.img-4.4.0-kirkwood-tld-1 uInitrd
 # apt-get dist-upgrade
 # apt-get autoremove
 # apt-get clean
@@ -49,37 +54,33 @@ $ ssh root@192.168.0.x (password: root)
 
 3. ALSA & MPD
 
-# apt-get install alsa-base alsa-utils mpd mpc ncmpc ca-certificates psmisc # cifs-utils
+# apt-get install alsa-base alsa-utils mpd mpc ncmpc ca-certificates curl psmisc # cifs-utils
 # mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-ac97.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-ac97.so.sav
 # mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-sbase.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-sbase.so.sav
 # mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-hda.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-hda.so.sav
-# mv /usr/share/alsa /usr/share/alsa.org
-# mkdir /usr/share/alsa
-# nano /usr/share/alsa/alsa.conf
-# nano /lib/modprobe.d/aliases.conf
-	#options snd-usb-audio index=-2
-# mv /etc/mpd.conf /etc/mpd.conf.sav
-# truncate -s 0 /etc/mpd.conf.sav
-# nano /etc/mpd.conf.sav
-# nano /var/lib/mpd/playlists/Internet_Radios.m3u
 
 https://packages.debian.org/search?keywords=mpd
+# wget http://ftp.us.debian.org/debian/pool/main/m/mpd/mpd_0.19.12-1~bpo8+1_armel.deb
+# dpkg -i mpd*.deb
+
+# mv /etc/mpd.conf /etc/mpd.conf.orig
+# nano /etc/mpd.conf
 
 4. Upmpdcli Build
 
 # apt-get install autoconf automake build-essential libtool pkg-config
 # apt-get install libupnp6-dev libexpat1-dev libmpdclient-dev libcurl4-gnutls-dev libmicrohttpd-dev libjsoncpp-dev
 # cd
-# wget https://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.15.1.tar.gz
-# tar -xvf libupnpp-0.15.1.tar.gz
-# cd libupnpp-0.15.1
+# wget https://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.16.1.tar.gz
+# tar -xvf libupnpp-0.16.1.tar.gz
+# cd libupnpp-0.16.1
 # ./configure
 # make
 # make install
 # cd
-# wget https://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.12.tar.gz
-# tar -xvf upmpdcli-1.2.12.tar.gz
-# cd upmpdcli-1.2.12
+# wget https://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.16.tar.gz
+# tar -xvf upmpdcli-1.2.16.tar.gz
+# cd upmpdcli-1.2.16
 # ./configure
 # make
 # make install
@@ -110,6 +111,10 @@ tmpfs /tmp tmpfs nosuid,nodev 0 0
 
 7. Rc.local
 
+# mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav
+# mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.sav
+# mv /etc/mpd.conf /etc/mpd.conf.sav
+
 # nano /etc/rc.local
 
 8. Sysctl.conf
@@ -125,7 +130,6 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 
 10. ut2mpd
 
-# apt-get install curl ca-certificates
 # curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 # chmod a+rx /usr/local/bin/youtube-dl
 # cp ut2mpd /root/
@@ -138,29 +142,41 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # chmod +x /root/kr2mpd
 # ln -sf /root/kr2mpd /usr/bin/
 
-12. Image Build
+12. Internet Radio
 
-# echo "* Mino's UPnP Audio Renderer for Pogoplug E02 17.05" > ~/release
+# mv internet\ radios.m3u /var/lib/mpd/playlists/
+# mkdir /var/lib/mpd/music/webradio
+# mv *.pls /var/lib/mpd/music/webradio/
+# mpc update
+
+13. Read-only
+
+# chmod -w /sbin/init /etc/init.d/rc /lib/startpar/startpar /etc/rc.local /bin/bash /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf
+# chmod -R -w /usr/lib/arm-linux-gnueabi/ /lib/modules/*/kernel/sound/
+
+14. Image Build
+
+# echo "* Mino's UPnP Audio Renderer for Pogoplug 18.05" > ~/release
 # nano ~/release
 # mpc clear
 # rm -f ~/.bash_history ; history -c
 # poweroff
 
 $ sudo fdisk -l
-$ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_17.05.img
-$ zip pogo_e02_audio_renderer_17.05.zip pogo_e02_audio_renderer_17.05.img
+$ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_18.05.img
+$ zip pogo_e02_audio_renderer_18.05.zip pogo_e02_audio_renderer_18.05.img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.e02
 $ sudo mv /media/parkmino/rootfs/boot/uImage.v4 /media/parkmino/rootfs/boot/uImage
 $ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_17.05.img
-$ zip pogo_v4_audio_renderer_17.05.zip pogo_v4_audio_renderer_17.05.img
+$ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_18.05.img
+$ zip pogo_v4_audio_renderer_18.05.zip pogo_v4_audio_renderer_18.05.img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.v4
 $ sudo mv /media/parkmino/rootfs/boot/uImage.orig /media/parkmino/rootfs/boot/uImage
 $ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M if=/dev/sdb of=kirkwood_audio_renderer_17.05.img
-$ zip kirkwood_audio_renderer_17.05.zip kirkwood_audio_renderer_17.05.img
+$ sudo dd bs=4M if=/dev/sdb of=kirkwood_audio_renderer_18.05.img
+$ zip kirkwood_audio_renderer_18.05.zip kirkwood_audio_renderer_18.05.img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.orig
 $ sudo mv /media/parkmino/rootfs/boot/uImage.e02 /media/parkmino/rootfs/boot/uImage
