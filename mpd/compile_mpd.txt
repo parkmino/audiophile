@@ -32,9 +32,9 @@ sudo apt-get install libexpat1-dev libupnp-dev
 
 ### Download & Compile
 cd ~/Downloads/mpd/
-curl -L http://www.musicpd.org/download/mpd/0.20/mpd-0.20.16.tar.xz -o mpd-0.20.16.tar.xz
-tar xvf mpd-0.20.16.tar.xz
-cd ~/Downloads/mpd/mpd-0.20.16
+curl -L http://www.musicpd.org/download/mpd/0.20/mpd-0.20.19.tar.xz -o mpd-0.20.19.tar.xz
+tar xvf mpd-0.20.19.tar.xz
+cd ~/Downloads/mpd/mpd-0.20.19
 #export CFLAGS="-march=native -O2" ; export CXXFLAGS="-march=native -O2" ; export CPPFLAGS="-march=native -O2"
 export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 ./autogen.sh
@@ -55,12 +55,12 @@ ls -al /usr/bin/mpd* /usr/local/bin/mpd*
 #sudo /etc/init.d/mpd stop
 pkill mpd
 #sudo mv /usr/bin/mpd /usr/bin/mpd.org
-#sudo cp /usr/local/bin/mpd /usr/bin && sudo cp /usr/local/bin/mpd /usr/bin/mpd.0.20.16 && sudo cp /usr/local/bin/mpd /dev/shm/
-echo /usr/bin/ /usr/bin/mpd.0.20.16 /dev/shm/ | xargs -n 1 sudo cp /usr/local/bin/mpd
+#sudo cp /usr/local/bin/mpd /usr/bin && sudo cp /usr/local/bin/mpd /usr/bin/mpd.0.20.19 && sudo cp /usr/local/bin/mpd /dev/shm/
+echo /usr/bin/ /usr/bin/mpd.0.20.19 /dev/shm/ | xargs -n 1 sudo cp /usr/local/bin/mpd
 #sudo /etc/init.d/mpd start
 mpd-bg
 tar -zcvf ~/Downloads/mpd.tar.gz -C /usr/local/bin/ mpd
-sudo mv /usr/local/bin/mpd /usr/local/bin/mpd.0.20.16
+sudo mv /usr/local/bin/mpd /usr/local/bin/mpd.0.20.19
 
 ### Yan's patch
 https://skydrive.live.com/?cid=CE384832F08DA832&id=CE384832F08DA832%21105
