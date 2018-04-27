@@ -34,7 +34,7 @@ sudo apt-get install libexpat1-dev libupnp-dev
 cd ~/Downloads/mpd/
 curl -L http://www.musicpd.org/download/mpd/0.20/mpd-0.20.19.tar.xz -o mpd-0.20.19.tar.xz
 tar xvf mpd-0.20.19.tar.xz
-cd ~/Downloads/mpd/mpd-0.20.19
+cd mpd-0.20.19
 #export CFLAGS="-march=native -O2" ; export CXXFLAGS="-march=native -O2" ; export CPPFLAGS="-march=native -O2"
 export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 ./autogen.sh
