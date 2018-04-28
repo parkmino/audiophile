@@ -1,0 +1,3 @@
+#!/bin/sh
+sed -i 's/9995%/9992799689968994%/' /etc/mpd.conf.sav
+sed -i '/wakeup_granularity_ns/s/= .*/= 388306/; /sched_latency_ns/s/= .*/= 1394017/' /etc/sysctl.conf
