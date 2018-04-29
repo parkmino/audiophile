@@ -1,11 +1,11 @@
-$ sudo nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+$ nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
 $ rm -f /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/SYSTEM.prev
 $ mv /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/SYSTEM /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/SYSTEM.prev
 
-$ chmod -R +w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib
-$ chmod -w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/systemd/systemd /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/bin/busybox /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/*.* /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
-$ chmod -R -w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/kodi chmod -R -w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/modules/*/kernel/sound/
+$ #chmod -R +w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib
+$ #chmod -w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/systemd/systemd /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/bin/busybox /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/*.* /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+$ #chmod -R -w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/kodi chmod -R -w /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/modules/*/kernel/sound/
 
 $ sudo mksquashfs /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/ /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/SYSTEM
 
