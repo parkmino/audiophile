@@ -1,0 +1,98 @@
+MAC: 00:25:31:01:27:81
+ ID: D7LWW4-6PB44X-X7-9XXDVA-SDJ4TN
+
+1. SSH
+
+https://pogoplug.com/activate/
+https://my.pogoplug.com/ko/settings
+http://blog.qnology.com/2015/04/hacking-pogoplug-v3oxnas-proclassic.html
+
+2. U-Boot
+
+https://forum.doozan.com/read.php?3,12381
+http://blog.muka.kr/73?category=709560
+
+# cd /tmp
+# wget -O linux-tools-installation-bodhi.tar.gz http://notme.tistory.com/attachment/cfile3.uf@99C2AA33598B25352DAF6D.gz
+# tar -xvf linux-tools-installation-bodhi.tar
+# cd tools
+# ln -s fw_printenv fw_setenv
+
+# cd /
+# wget -O uboot.2016.05-tld-1.pogo_v4.bodhi.tar http://cfile29.uf.tistory.com/attach/cfile29.uf@9999CC335983114D050663.tar
+# tar -xvzf uboot.2016.05-tld-1.pogo_v4.bodhi.tar
+# wget -O uboot.2016.05-tld-1.environment.bodhi.tar http://blog.muka.kr/attachment/cfile22.uf@99986D335983115127E74C.tar
+# tar -xvzf uboot.2016.05-tld-1.environment.bodhi.tar
+
+# cat /etc/fw_env.config
+# echo -e '# pogoplug v3\n  /dev/mtd0               0x00100000      0x20000         0x20000' > /etc/fw_env.config
+# cat /etc/fw_env.config
+# cat /proc/mtd
+	dev:    size   erasesize  name
+	mtd0: 00200000 00020000 "u-boot"
+	mtd1: 00300000 00020000 "uImage"
+	mtd2: 00300000 00020000 "uImage2"
+	mtd3: 00800000 00020000 "failsafe"
+	mtd4: 07000000 00020000 "root"
+# cd /
+# chmod +x flash_erase nanddump nandwrite
+# /nanddump --noecc --omitoob -l 0x80000 -f mtd0.orig /dev/mtd0
+# /usr/local/cloudengines/bin/blparam > orig_envs.txt
+# dmesg | grep -i 'bad'
+	<6>[    1.010000] Scanning device for bad blocks
+	<5>[    1.370000] UBI: number of bad PEBs:         0
+	<5>[    1.400000] UBI: number of PEBs reserved for bad PEB handling: 8
+# /flash_erase /dev/mtd0 0 4
+	Erase Total 4 Units
+	Performing Flash Erase of length 131072 at offset 0x60000 done
+# /nandwrite /dev/mtd0 uboot.2016.05-tld-1.pogo_v4.mtd0.kwb
+	Writing data to block 0 at offset 0x0
+	Writing data to block 1 at offset 0x20000
+	Writing data to block 2 at offset 0x40000
+	Writing data to block 3 at offset 0x60000
+# /flash_erase /dev/mtd0 0xc0000 1
+	Erase Total 1 Units
+	Performing Flash Erase of length 131072 at offset 0xc0000 done
+# /nandwrite -s 786432 /dev/mtd0 uboot.2016.05-tld-1.environment.img
+	Writing data to block 6 at offset 0xc0000
+# fw_setenv arcNumber 3960
+# fw_setenv machid f78
+# fw_setenv mtdparts 'mtdparts=orion_nand:2M(u-boot),3M(uImage),3M(uImage2),8M(failsafe),112M(root)'
+# fw_setenv ethaddr '00:25:31:04:F8:2A'
+# fw_setenv dtb_file '/boot/dts/kirkwood-pogoplug_v4.dtb'
+# fw_printenv > /new_envs.txt
+# sync
+# reboot
+
+3. Debian rootfs
+
+https://forum.doozan.com/read.php?2,12096
+
+$ sudo apt-get install u-boot-tools
+$ sudo gparted (a single ext3 partition with 'rootfs' label)
+$ sudo su
+# fdisk -l
+# cd /media/parkmino/rootfs
+# tar -xjf '/home/parkmino/Downloads/pogoplug/Debian-4.12.1-kirkwood-tld-1-rootfs-bodhi.tar.bz2'
+# sync
+# nano /media/parkmino/rootfs/etc/fstab
+	LABEL=rootfs / ext2  noatime,errors=remount-ro 0 1
+# exit
+
+$ ssh root@192.168.x.x (password: root)
+# rm /etc/ssh/ssh_host*
+# ssh-keygen -A
+# #nano /etc/rc.local
+	ethtool -A eth0 rx off tx off
+# apt-get update
+# apt-get upgrade
+# apt-get dist-upgrade
+  ...
+  update-initramfs: Generating /boot/initrd.img-4.12.1-kirkwood-tld-1
+# cd /boot
+# cp -a uInitrd uInitrd.bak
+# mkimage -A arm -O linux -T ramdisk -C gzip -a 0x00000000 -e 0x00000000 -n initramfs-4.12.1-kirkwood-tld-1 -d initrd.img-4.12.1-kirkwood-tld-1 uInitrd
+# sync
+# reboot
+
+4. Audio Renderer
