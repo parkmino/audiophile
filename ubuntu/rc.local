@@ -62,8 +62,8 @@ modprobe -r psmouse
 #sysctl -w kernel.sched_tunable_scaling=1
  sysctl -w kernel.sched_time_avg_ms=6287
 
- sysctl -w vm.dirty_background_ratio=0
- sysctl -w vm.dirty_ratio=0
+#sysctl -w vm.dirty_background_ratio=0
+#sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
  sysctl -w vm.memory_failure_recovery=0
  sysctl -w vm.oom_dump_tasks=0
