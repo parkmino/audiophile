@@ -6,18 +6,7 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ unsquashfs SYSTEM.orig
 	$ cd squashfs-root
 	  ALSA tweak
-	$ nano usr/share/alsa/alsa.conf
-
-		pcm.default
-		pcm.0
-		pcm {
-		0.type=hw,
-		0.card=0,
-		0.device=0,
-		0.subdevice=0,
-		0.nonblock=1, 
-		}
-
+	$ printf 'pcm.default pcm.0\npcm.0{type hw card 0 device 0 subdevice 0 nonblock 1}' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 	$ nano usr/lib/modprobe.d/alsa-base.conf
 		#options snd-usb-audio index=-2
 	$ cp bin/ps usr/bin/
