@@ -4,4 +4,4 @@ sudo sed -i 's/9995%/9992799689968994%/' /etc/mpd.conf.sav
 sudo sed -i '/wakeup_granularity_ns/s/= .*/= 388306/; /sched_latency_ns/s/= .*/= 1394017/' /etc/sysctl.conf
 sudo chmod +w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 sudo chmod -R +w /usr/lib/arm-linux-gnueabihf/ /lib/modules/*/kernel/sound/
-sudo sh -c "printf 'pcm.0\n{\ntype hw,\ncard 0,\ndevice 0,\nsubdevice 0,\nnonblock 0,\n}' > /usr/share/alsa/alsa.conf.sav"
+sudo sh -c "printf 'pcm.0\n{\ntype hw,\ncard 0,\ndevice 0,\nsubdevice 0,\nnonblock 1,\n}\n' > /usr/share/alsa/alsa.conf.sav"
