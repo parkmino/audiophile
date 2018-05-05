@@ -235,6 +235,8 @@ Orange Pi Mini II
 	# apt-get install rygel
 	# nano /etc/rygel.conf
 		uris=/mnt/Music
+		interface=eth0
+		monitor-changes=false
 
 7. MPD clients
 
