@@ -25,12 +25,12 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	0 subdevice
 	0
 	}
-   printf 'pcm={\ndefault\npcm.0\n}\npcm.0={\ntype\nhw card\n0 device\n0 subdevice\n0\n}\n' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+   printf 'pcm.default=pcm0 pcm.0={\ntype\nhw card\n0 device\n0 subdevice\n0\n}\n' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
-   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0\n' > /usr/share/alsa/alsa.conf.sav"
+   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
    sudo nano /usr/share/alsa/alsa.conf.sav
 	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0\n' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
 4. nano /etc/rygel.conf
 	interface=eth0
