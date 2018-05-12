@@ -114,7 +114,7 @@ $ ssh root@192.168.x.x (password: root)
 	#... ttyS0
 # apt-get install sysv-rc-conf
 # sysv-rc-conf
-	Remove alsa-utils(S) avahi-daemon(2-3-4-5) bootlogs(1-2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5) ntp(2-3-4-5-S)
+	Remove alsa-utils(S) avahi-daemon(2-3-4-5) bootlogs(1-2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) dbus(2-3-4-5) mpd(2-3-4-5) ntp(2-3-4-5-S)
 # make -j2
 # nano /etc/network/interfaces
 	auto lo eth0
