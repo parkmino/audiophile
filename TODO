@@ -5,38 +5,33 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 1. sudo nano /etc/mpd.conf.sav
 	buffer_before_play "9.998596798699561934543755809373313200040989242645445496721281932352316443094530294384549529463961086013908994609489452508888889009119044083741039087888806109197901120099201091111081201111099912100890119900008909918991989998999199900094999929989960998999912899999989996999999989998999769997999999999998999799859997999699969994999799939995998899979988999399949996299859994998489972996199689919995%"
-	9995% > 99927999% > 999279968999% > 9992799689968994%
-	8994% > 89868987%
+	9995% > 9992799689968994%
+	8994% > 89868982998969987999%
    sudo nano /etc/sysctl.conf
 	#kernel.sched_min_granularity_ns = 229982
-	 kernel.sched_wakeup_granularity_ns = 388306 > 5
-	 kernel.sched_latency_ns = 1394017
+	 kernel.sched_wakeup_granularity_ns = 388306 > 4
+	 kernel.sched_latency_ns = 1394017 > 9
    #sudo truncate -s -1 /etc/mpd.conf.sav
    #tail /etc/mpd.conf.sav
 
 2. #sudo chmod (-R) -w...
 
-3. sudo sh -c "printf 'pcm.0={\ntype\nhw card\n0 device\n0 subdevice\n0\n}\n' > /usr/share/alsa/alsa.conf.sav"
-   sudo nano /usr/share/alsa/alsa.conf.sav
-	pcm.0={
-	type
-	hw card
-	0 device
-	0 subdevice
-	0
-	}
-   printf 'pcm.default=pcm0 pcm.0={\ntype\nhw card\n0 device\n0 subdevice\n0\n}\n' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
-
-   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
-   sudo nano /usr/share/alsa/alsa.conf.sav
-	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
-
-   sudo sh -c "printf 'pcm.0.type hw,pcm.0.card 0,pcm.0.device 0,pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
+3. sudo sh -c "printf 'pcm.0.type hw,pcm.0.card 0,pcm.0.device 0,pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
    sudo nano /usr/share/alsa/alsa.conf.sav
 	pcm.0.type hw,pcm.0.card 0,pcm.0.device 0,pcm.0.subdevice 0
    printf 'pcm.default pcm.0,pcm.0.type hw,pcm.0.card 0,pcm.0.device 0,pcm.0.subdevice 0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
-4. nano /etc/rygel.conf
+4. sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
+   sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
+
+   sudo nano /etc/rc.local
+	cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+	ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
+	ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so
+	cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+	ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
+	ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so
+
+5. nano /etc/rygel.conf
 	interface=eth0
 	monitor-changes=false
