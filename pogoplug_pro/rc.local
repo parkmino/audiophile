@@ -50,13 +50,29 @@ musicpd_bg () {
   esac
  done
 
- nohup taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null 2>&1 &
+#nohup taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null 2>&1
 
- sleep 3
+ echo none > /sys/class/leds/pogoplug:green:usr/trigger
+
+ sleep 1
+ pkill rc.local
 
 }
 
-#chmod -w /sbin/init /etc/init.d/rc /bin/dash /lib/startpar/startpar /etc/init.d/rc.local /etc/rc.local /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf
+eol () {
+
+ until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+  sleep 1
+ done
+
+ echo none > /sys/class/leds/pogoplug:green:usr/trigger
+
+ sleep 1
+ pkill rc.local
+
+}
+
+#chmod -w /sbin/init /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf
 #chmod -R -w /usr/lib/arm-linux-gnueabi/
 
 cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /tmp/libasound.so.2.0.0
@@ -66,6 +82,12 @@ cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
 ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /tmp/
 cp /etc/mpd.conf.sav /tmp/mpd.conf
+cp /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0.sav /tmp/libaudiofile.so.1.0.0
+ln -sf /tmp/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1
+ln -sf /tmp/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so
+cp /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.sav /tmp/libFLAC.so.8.3.0
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so
 
 echo noop > /sys/block/sda/queue/scheduler
 
@@ -93,17 +115,23 @@ if [ "$m_task" -ge 1 ];then
 fi
 
 ### Remove services
-#for i in cron rsyslog avahi-daemon systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
-#do
-# service $i stop
-#done
+for i in systemd-udevd
+do
+ pkill $i
+done
 
 swapoff -a
 
 ### Taskset
-for pid in 1 $(pgrep -x rc) $(pgrep -x startpar) $(pgrep -x rc.local); do
- taskset -acp 1 $pid || true
-done
+#for pid in 1 $(pgrep -x rc) $(pgrep -x startpar) $(pgrep -x rc.local) $(pgrep -x mpd4renderer); do
+# taskset -acp 1 $pid || true
+#done
+
+### sshd
+#for pid in $(pgrep sshd); do
+##chrt -ip 0 $pid || true
+# renice   2 $pid || true
+#done
 
 ### Remountro
 sync
@@ -111,6 +139,7 @@ sleep 1
 mount -o remount,ro /
 
 musicpd_bg &
+eol &
 /tmp/mpd /tmp/mpd.conf >/dev/null 2>&1
 
 exit 0

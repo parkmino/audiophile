@@ -49,6 +49,9 @@ mpd_bg () {
 #nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf &
 
  echo none > /sys/class/leds/green_led/trigger
+
+ pkill rc.local
+
 }
 
 #sysctl -w kernel.modules_disabled=1
@@ -62,6 +65,10 @@ cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd      /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
+cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
 
 #chmod -w /dev/shm/mpd.conf
 
@@ -107,9 +114,9 @@ for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
 done
 
 ### Taskset
-for pid in 1 $(pgrep -x rc.local); do
- taskset -acp $m_task $pid || true
-done
+#for pid in 1 $(pgrep -x rc.local); do
+# taskset -acp $m_task $pid || true
+#done
 
 ### Init
 #taskset -cp $m_task 1
