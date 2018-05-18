@@ -38,7 +38,11 @@ musicpd_bg () {
   esac
  done
 
- nohup taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null 2>&1 &
+ nohup taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null 2>&1
+
+}
+
+eol () {
 
 # turn on LED
 
@@ -99,6 +103,12 @@ if [ -d /sys/class/leds/nsa325:green:usb ]; then
    echo usb-host > /sys/class/leds/nsa325\:green\:usb/trigger
 fi
 
+until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+ sleep 1
+done
+sleep 1
+pkill rc.local
+
 }
 
 cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /tmp/libasound.so.2.0.0
@@ -108,6 +118,12 @@ cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
 ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /tmp/
 cp /etc/mpd.conf.sav /tmp/mpd.conf
+cp /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0.sav /tmp/libaudiofile.so.1.0.0
+ln -sf /tmp/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1
+ln -sf /tmp/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so
+cp /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.sav /tmp/libFLAC.so.8.3.0
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so
 
 echo noop > /sys/block/sda/queue/scheduler
 
@@ -141,6 +157,7 @@ swapoff -a
 #taskset -cp $m_task 1
 
 musicpd_bg &
+eol &
 /tmp/mpd --no-daemon /tmp/mpd.conf >/dev/null 2>&1
 
 exit 0
