@@ -7,6 +7,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	buffer_before_play "9.998596798699561934543755809373313200040989242645445496721281932352316443094530294384549529463961086013908994609489452508888889009119044083741039087888806109197901120099201091111081201111099912100890119900008909918991989998999199900094999929989960998999912899999989996999999989998999769997999999999998999799859997999699969994999799939995998899979988999399949996299859994998489972996199689919995%"
 	9995% > 9992799689968994%
+	9995% > 9992799689968986898299896998799589878996798829947001%
 	8994% > 89868982998969987999%
 	8994% > 8986898299896998799589878996798829947001%
 	7999% > 799589878996798829947001%
@@ -16,18 +17,18 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
    sudo nano /etc/sysctl.conf
 	 kernel.sched_min_granularity_ns = 229982 > 77
-	 kernel.sched_wakeup_granularity_ns = 388306 > 299
-	 kernel.sched_latency_ns = 1394017 > 32
-	 kernel.sched_migration_cost_ns = 4899002 > 9000
-	 kernel.sched_shares_window = 346002 > 5997
-	 kernel.sched_time_avg = 6287 > 5
+	 kernel.sched_wakeup_granularity_ns = 388306 > 298
+	 kernel.sched_latency_ns = 1394017 > 34
+	 kernel.sched_migration_cost_ns = 4899002 > 9002
+	 kernel.sched_shares_window = 346002 > 5998
+	 kernel.sched_time_avg = 6287 > 6
 
 2. #sudo chmod (-R) -w...
 
-3. sudo sh -c "printf 'pcm.0.type=hw pcm.0.card=0 pcm.0.device=0,pcm.0.subdevice=0' > /usr/share/alsa/alsa.conf.sav"
+3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0,pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
    sudo nano /usr/share/alsa/alsa.conf.sav
-	pcm.0.type=hw pcm.0.card=0 pcm.0.device=0,pcm.0.subdevice=0
-   printf 'pcm.default=pcm.0 pcm.0.type=hw pcm.0.card=0 pcm.0.device=0,pcm.0.subdevice=0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+	pcm.0.type hw pcm.0.card 0 pcm.0.device 0,pcm.0.subdevice 0
+   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0,pcm.0.subdevice 0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
 4. sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
    sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
@@ -64,3 +65,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 		#chrt -ip 0 $pid
 		 renice   2 $pid
 	done
+
+6. cat ~/.config/user-dirs.dirs /etc/xdg/user-dirs.defaults
+   mkdir /root/music
+   nano ~/.config/user-dirs.dirs
+	XDG_MUSIC_DIR="/root/music"
+   sudo nano /etc/mpd.conf.sav
+	#music_directory ...
