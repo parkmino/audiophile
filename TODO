@@ -25,10 +25,13 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 2. #sudo chmod (-R) -w...
 
-3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0,pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
-   sudo nano /usr/share/alsa/alsa.conf.sav
-	pcm.0.type hw pcm.0.card 0 pcm.0.device 0,pcm.0.subdevice 0
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0,pcm.0.subdevice 0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,' > /usr/share/alsa/alsa.conf.sav"
+	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,
+   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+
+   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device=0 pcm.0.subdevice=0' > /usr/share/alsa/alsa.conf.sav"
+	pcm.0.type hw pcm.0.card 0 pcm.0.device=0 pcm.0.subdevice=0
+   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device=0 pcm.0.subdevice=0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
 4. sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
    sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
