@@ -12,14 +12,16 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	8994% > 8986898299896998799589878996798829947001%
 	7999% > 799589878996798829947001%
 
+	7001% > 699789868990%
+
    #sudo truncate -s -1 /etc/mpd.conf.sav
    #tail /etc/mpd.conf.sav
 
    sudo nano /etc/sysctl.conf
-	 kernel.sched_min_granularity_ns = 229982 > 77
+	 kernel.sched_min_granularity_ns = 229982 > 76
 	 kernel.sched_wakeup_granularity_ns = 388306 > 298
-	 kernel.sched_latency_ns = 1394017 > 34
-	 kernel.sched_migration_cost_ns = 4899002 > 9002
+	 kernel.sched_latency_ns = 1394017 > 35
+	 kernel.sched_migration_cost_ns = 4899002 > 9003
 	 kernel.sched_shares_window = 346002 > 5998
 	 kernel.sched_time_avg = 6287 > 6
 
@@ -28,10 +30,6 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,' > /usr/share/alsa/alsa.conf.sav"
 	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,
    printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
-
-   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device=0 pcm.0.subdevice=0' > /usr/share/alsa/alsa.conf.sav"
-	pcm.0.type hw pcm.0.card 0 pcm.0.device=0 pcm.0.subdevice=0
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device=0 pcm.0.subdevice=0' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
 4. sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
    sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
@@ -47,7 +45,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 5. sudo nano /etc/rc.local
 
 	musicpd_bg () {
-	nohup taskset ... >/dev/null 2>&1
+	nohup taskset ... >/dev/null
 	pkill rc.local
 	}
 	eol () {
@@ -55,19 +53,13 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	  sleep 1
 	 done
 	 sleep 1
+	 pkill startpar
+	 sleep 1
 	 pkill rc.local		
 	}
 	musicpd_bg &
 	eol &
 	/dev/shm/mpd ...
-
-	### Taskset
-	#
-
-	for pid in $(sshd) ... ; do
-		#chrt -ip 0 $pid
-		 renice   2 $pid
-	done
 
 6. cat ~/.config/user-dirs.dirs /etc/xdg/user-dirs.defaults
    mkdir /root/music
@@ -75,3 +67,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	XDG_MUSIC_DIR="/root/music"
    sudo nano /etc/mpd.conf.sav
 	#music_directory ...
+
+7. sudo nano /etc/rc.local
+	nohup ... => ...
+	... >/dev/null 2>&1 => ... >/dev/null
