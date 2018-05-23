@@ -29,14 +29,14 @@
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
- sysctl -w kernel.sched_min_granularity_ns=229982
- sysctl -w kernel.sched_wakeup_granularity_ns=388303
- sysctl -w kernel.sched_latency_ns=1394021
+ sysctl -w kernel.sched_min_granularity_ns=229976
+ sysctl -w kernel.sched_wakeup_granularity_ns=388298
+ sysctl -w kernel.sched_latency_ns=1394035
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost=4899002
+ sysctl -w kernel.sched_migration_cost=4899003
  sysctl -w kernel.sched_nr_migrate=0
 #sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window=346001
+ sysctl -w kernel.sched_shares_window=345998
 #sysctl -w kernel.sched_tunable_scaling=1
  sysctl -w kernel.sched_time_avg=6286
 
@@ -114,9 +114,9 @@ echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
  pkill rc.local
 ) &
 
-#nohup ionice -c 2 -n 7 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
-#nohup nice -n -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1 &
- nohup taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null 2>&1
+#ionice -c 2 -n 7 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null &
+#nice -n -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null &
+ taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf >/dev/null
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
 #done

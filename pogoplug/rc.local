@@ -38,7 +38,7 @@ musicpd_bg () {
   esac
  done
 
- nohup taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null 2>&1
+ taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null
 
 }
 
@@ -107,6 +107,8 @@ until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
  sleep 1
 done
 sleep 1
+pkill startpar
+sleep 1
 pkill rc.local
 
 }
@@ -158,6 +160,6 @@ swapoff -a
 
 musicpd_bg &
 eol &
-/tmp/mpd --no-daemon /tmp/mpd.conf >/dev/null 2>&1
+/tmp/mpd --no-daemon /tmp/mpd.conf >/dev/null
 
 exit 0
