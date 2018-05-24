@@ -128,13 +128,47 @@ Audio Render Advanced
 	sudo mv *.pls /var/lib/mpd/music/webradio
 	mpc update
 
-16. audio-config
+16. Spotifyd
+
+	https://github.com/Spotifyd/spotifyd
+	https://github.com/Spotifyd/spotifyd/releases/latest
+
+	wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-7cf7ff718c3f15a28c1e/spotifyd-2018-05-03-armv6.zip
+	unzip spotifyd-2018-05-03-armv6.zip -d /home/pi
+	sudo nano /etc/rc.local
+
+	spotifyd () {
+	cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+	cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
+	sleep 1
+	nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf >/dev/null 2>&1
+	}
+	...
+	#spotifyd &
+
+	nano /home/pi/spotifyd.conf
+
+	[global]
+	username = USER
+	password = PASS
+	backend = alsa
+	device = pcm.0
+	device_name = Spotifyd
+	#bitrate = 320
+
+	nano audio-config
+
+	sudo sed -i '/spotifyd &/s/^#*//' /etc/rc.local
+	sudo sed -i '/spotifyd &/s/^/#/'  /etc/rc.local
+	sed -i '/username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' /home/pi/spotifyd.conf
+
+17. audio-config
 
 	cp audio-config /home/pi
 	sudo ln -s /home/pi/audio-config /usr/bin/
 	audio-config
 
-17. Read-only
+18. Read-only
 	cp remountro remountrw /home/pi
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
@@ -144,7 +178,7 @@ Audio Render Advanced
 	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
 
-18. Make Image
+19. Make Image
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 18.05" > ~/release
 	$ mpc clear
