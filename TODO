@@ -78,4 +78,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 8. sudo nano /etc/mpd.conf.sav
 	device "pcm.0"
 	mixer_device "pcm.0"
-   sudo sed -i '/^device/s/".*"/"pcm.0"/; /mixer_device/s/".*"/"pcm.0"/' /etc/mpd.conf.sav	
+   sudo sed -i '/^device/s/".*"/"pcm.0"/; /mixer_device/s/".*"/"pcm.0"/' /etc/mpd.conf.sav
+
+9. sudo nano /etc/mpd.conf.sav
+	mixer_device "null"
+   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
+	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
+   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
