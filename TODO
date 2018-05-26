@@ -24,13 +24,11 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 2. #sudo chmod (-R) -w...
 
-3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,' > /usr/share/alsa/alsa.conf.sav"
-	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0,' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
-
-   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.1.type null' > /usr/share/alsa/alsa.conf.sav"
-	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.1.type null
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default pcm.1 pcm.1.type null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
+	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
+   sudo nano /etc/mpd.conf.sav
+	mixer_device "null"
+   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
 4. sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
    sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
@@ -62,26 +60,6 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	eol &
 	/dev/shm/mpd ...
 
-6. cat ~/.config/user-dirs.dirs /etc/xdg/user-dirs.defaults
-   mkdir /root/Music
-   nano /etc/xdg/user-dirs.defaults
-	MUSIC=Music
-   nano ~/.config/user-dirs.dirs
-	XDG_MUSIC_DIR="/root/Music"
-   sudo nano /etc/mpd.conf.sav
-	#music_directory ...
-
-7. sudo nano /etc/rc.local
+6. sudo nano /etc/rc.local
 	nohup ... => ...
 	... >/dev/null 2>&1 => ... >/dev/null
-
-8. sudo nano /etc/mpd.conf.sav
-	device "pcm.0"
-	mixer_device "pcm.0"
-   sudo sed -i '/^device/s/".*"/"pcm.0"/; /mixer_device/s/".*"/"pcm.0"/' /etc/mpd.conf.sav
-
-9. sudo nano /etc/mpd.conf.sav
-	mixer_device "null"
-   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
-	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
