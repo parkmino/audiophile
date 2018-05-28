@@ -1,6 +1,6 @@
 $ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-$ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd && sleep 1 && mpd-bg
+$ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd ; sleep 1 ; mpd-bg
 $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 1. sudo nano /etc/mpd.conf.sav
@@ -13,15 +13,16 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	7999% > 799589878996798829947001%
 
 	7001% > 699789868990%
-	7001% > 6997898689869003%
+	7001% > 69978986898689997998%
 	8990% > 89869003%
+	8990% > 898689997998%
 
    sudo nano /etc/sysctl.conf
-	 kernel.sched_min_granularity_ns = 229982 > 76
-	 kernel.sched_wakeup_granularity_ns = 388306 > 297
-	 kernel.sched_latency_ns = 1394017 > 36
+	 kernel.sched_min_granularity_ns = 229982 > 77
+	 kernel.sched_wakeup_granularity_ns = 388306 > 296
+	 kernel.sched_latency_ns = 1394017 > 38
 	 kernel.sched_migration_cost_ns = 4899002 > 3
-	 kernel.sched_shares_window = 346002 > 5998
+	 kernel.sched_shares_window = 346002 > 5999
 	 kernel.sched_time_avg = 6287 > 6
 
 2. #sudo chmod (-R) -w...
@@ -60,6 +61,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	  sleep 1
 	 done
 	 sleep 1
+	 taskset -acp $s_task $(pgrep -x upmpdcli) || true
 	 pkill startpar
 	 sleep 1
 	 pkill rc.local		
@@ -70,5 +72,11 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 6. sudo nano /etc/rc.local
 
-	nohup ... => ...
-	... >/dev/null 2>&1 => ... >/dev/null
+	 nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 & => /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf> /dev/null
+	/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1 => /dev/shm/mpd /dev/shm/mpd.conf> /dev/null
+
+7. Rygel Server
+
+	nano ~/.bashrc
+		taskset -acp 0 $(pgrep -x login)
+		taskset -acp 0 $(pgrep -x sh)
