@@ -14,17 +14,13 @@
 # Print the IP address
 
 musicpd_bg () {
-
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
  done
  sleep 1
-
  pgr_mpd=$(pgrep -x mpd)
-
  taskset -pc $m_task $pgr_mpd
  #renice -1 -p       $pgr_mpd
-
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
@@ -38,15 +34,27 @@ musicpd_bg () {
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
+/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&> /dev/null
+}
 
- nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
-
- sleep 3
-
+eol () {
+ until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+  sleep 1
+ done
+ sleep 1
+ taskset -acp $s_task $(pgrep -x upmpdcli) || true
  /home/pi/llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
  echo 0    > /sys/class/leds/led0/brightness
  [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+ pkill rc.local
+}
+
+spotifyd () {
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+ cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
+ sleep 1
+/dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf&> /dev/null
 }
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
@@ -55,13 +63,17 @@ cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
+cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
 
-for i in ondemand conservative powersave; do
- grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
-done
-[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+#for i in ondemand conservative powersave; do
+# grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+#done
+#[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
@@ -116,6 +128,9 @@ pkill plymouthd
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
 
+### Spotify
+#spotifyd &
+
 ### Taskset
 for pid in 1 $(pgrep -x rc.local); do
  taskset -acp $m_task $pid || true
@@ -128,6 +143,7 @@ done
 #remountro
 
 musicpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1
+eol &
+/dev/shm/mpd /dev/shm/mpd.conf&> /dev/null
 
 exit 0
