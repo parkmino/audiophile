@@ -133,15 +133,15 @@ Audio Render Advanced
 	https://github.com/Spotifyd/spotifyd
 	https://github.com/Spotifyd/spotifyd/releases/latest
 
-	wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-7cf7ff718c3f15a28c1e/spotifyd-2018-05-03-armv6.zip
-	unzip spotifyd-2018-05-03-armv6.zip -d /home/pi
+	wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
+	unzip spotifyd-*.zip -d /home/pi
 	sudo nano /etc/rc.local
 
 	spotifyd () {
 	cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
 	cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
 	sleep 1
-	nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf >/dev/null 2>&1
+	/dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf&> /dev/null
 	}
 	...
 	#spotifyd &
