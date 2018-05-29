@@ -333,8 +333,8 @@ Orange Pi Mini II
 		#renice -n 19 -p `pgrep -ox bash`
 
 		#taskset -acp 0  `pgrep -ox systemd`
-		#taskset -acp 0  `pgrep -ox login`
-		#taskset -acp 0  `pgrep -ox bash`
+		 taskset -acp 0  `pgrep -ox login`
+		 taskset -acp 0  `pgrep -ox bash`
 
 
 14. Serial Console
