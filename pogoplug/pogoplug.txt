@@ -154,14 +154,31 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # #chmod -w /sbin/init /etc/init.d/rc /lib/startpar/startpar /etc/rc.local /bin/bash /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf
 # #chmod -R -w /usr/lib/arm-linux-gnueabi/ /lib/modules/*/kernel/sound/
 
-14. Copy to another disk with ext3
+14. Wi-Fi
+
+# wget http://ftp.us.debian.org/debian/pool/non-free/f/firmware-nonfree/firmware-misc-nonfree_20161130-3~bpo8+1_all.deb
+# dpkg -i firmware-misc*.deb
+# reboot
+# lsmod
+# ifconfig -a
+# apt-get install wpasupplicant
+# nano /etc/network/interfaces
+	#auto wlan0
+	#allow-hotplug wlan0
+	iface wlan0 inet dhcp
+	wpa-ssid wifi
+	wpa-psk password
+# sed -i '/auto wlan0/s/^#*//; s/wpa-ssid.*/wpa-ssid wifi/; s/wpa-psk.*/wpa-psk password/' /etc/network/interfaces
+# sed -i '/auto wlan0/s/^/#/' /etc/network/interfaces
+
+15. Copy to another disk with ext3
 
 https://www.tldp.org/HOWTO/Hard-Disk-Upgrade/copy.html
 $ sudo cp -av /source/. /dest/
 $ sudo nano /dest/etc/fstab
 	LABEL=rootfs / ext3  noatime,errors=remount-ro 0 1
 
-15. Image Build
+16. Image Build
 
 # echo "* Mino's UPnP Audio Renderer for Pogoplug 18.05" > ~/release
 # nano ~/release
