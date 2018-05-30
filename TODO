@@ -72,11 +72,12 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 6. sudo nano /etc/rc.local
 
-	 nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 & => /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&> /dev/null
-	/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1 => /dev/shm/mpd /dev/shm/mpd.conf&> /dev/null
+	 nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 & => /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null </dev/null
+	/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1 => /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
 
 	nano /usr/lib/kodi/kodi.sh
-		/usr/lib/kodi/kodi.bin => /usr/lib/kodi/kodi.bin&> /dev/null
+		/usr/lib/kodi/kodi.bin => /usr/lib/kodi/kodi.bin&>/dev/null </dev/null
 
-	...&>/dev/null
-	...>/dev/null 2>/dev/null
+	...&>/dev/null </dev/null
+	...>/dev/null 2>/dev/null </dev/null
+	...>&- 2>&- <&-

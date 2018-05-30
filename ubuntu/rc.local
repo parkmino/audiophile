@@ -148,6 +148,6 @@ fi
 #hdparm -A1 -a1280 -B255 -X64 /dev/sda # -r1
 
 #mpd_bg &
-#/dev/shm/mpd /dev/shm/mpd.conf&> /dev/null
+#/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
 
 exit 0

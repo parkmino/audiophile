@@ -127,7 +127,7 @@ sleep 1
 mount -o remount,ro /
 
 mpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf&> /dev/null
-#/usr/bin/mpd /etc/mpd.conf&> /dev/null
+/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
+#/usr/bin/mpd /etc/mpd.conf&>/dev/null </dev/null
 
 exit 0

@@ -34,7 +34,7 @@ musicpd_bg () {
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
-/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&> /dev/null
+/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null </dev/null
 }
 
 eol () {
@@ -54,7 +54,7 @@ spotifyd () {
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
  cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
  sleep 1
-/dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf&> /dev/null
+/dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf&>/dev/null </dev/null
 }
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
@@ -129,7 +129,7 @@ pkill plymouthd
 swapoff -a
 
 ### Spotify
-#spotifyd &
+#(spotifyd &) && sleep 3
 
 ### Taskset
 for pid in 1 $(pgrep -x rc.local); do
@@ -144,6 +144,6 @@ done
 
 musicpd_bg &
 eol &
-/dev/shm/mpd /dev/shm/mpd.conf&> /dev/null
+/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
 
 exit 0
