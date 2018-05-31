@@ -11,6 +11,8 @@
 #
 # By default this script does nothing.
 
+# turn on LED
+
 musicpd_bg () {
 
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
@@ -38,7 +40,7 @@ musicpd_bg () {
   esac
  done
 
- taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null
+/tmp/upmpdcli -c /tmp/upmpdcli.conf&>/dev/null< /dev/null
 
 }
 
@@ -107,6 +109,7 @@ until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
  sleep 1
 done
 sleep 1
+taskset -acp $s_task $(pgrep -x upmpdcli) || true
 pkill startpar
 sleep 1
 pkill rc.local
@@ -158,8 +161,15 @@ swapoff -a
 ### Init
 #taskset -cp $m_task 1
 
+### Unmounted NFS
+if [ -z "$(mount | grep 'type nfs')" ]; then
+ for i in rpcbind rpc.statd rpc.idmapd; do
+  pkill $i
+ done
+fi
+
 musicpd_bg &
 eol &
-/tmp/mpd --no-daemon /tmp/mpd.conf >/dev/null
+/tmp/mpd --no-daemon /tmp/mpd.conf&>/dev/null< /dev/null
 
 exit 0
