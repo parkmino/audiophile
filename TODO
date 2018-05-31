@@ -17,13 +17,15 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	8990% > 89869003%
 	8990% > 89868999799399916986%
 
+	6986% > 6985%
+
    sudo nano /etc/sysctl.conf
 	 kernel.sched_min_granularity_ns = 229982 > 77
-	 kernel.sched_wakeup_granularity_ns = 388306 > 296
-	 kernel.sched_latency_ns = 1394017 > 38
+	 kernel.sched_wakeup_granularity_ns = 388306 > 297
+	 kernel.sched_latency_ns = 1394017 > 40
 	 kernel.sched_migration_cost_ns = 4899002 > 3
 	 kernel.sched_shares_window = 346002 > 5998
-	 kernel.sched_time_avg = 6287 > 6
+	#kernel.sched_time_avg = 6287 > 7
 
 2. #sudo chmod (-R) -w...
 
@@ -72,12 +74,16 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 6. sudo nano /etc/rc.local
 
-	 nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 & => /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null </dev/null
-	/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1 => /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
+	 nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 & => /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null< /dev/null
+	/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1 => /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null< /dev/null
 
 	nano /usr/lib/kodi/kodi.sh
-		/usr/lib/kodi/kodi.bin => /usr/lib/kodi/kodi.bin&>/dev/null </dev/null
+		/usr/lib/kodi/kodi.bin => /usr/lib/kodi/kodi.bin&>/dev/null< /dev/null
 
-	...&>/dev/null </dev/null
-	...>/dev/null 2>/dev/null </dev/null
-	...>&- 2>&- <&-
+7. Remove nfs not in use
+
+	if [ -z "$(mount | grep 'type nfs')" ]; then
+	 for i in rpc...; do
+	  pkill $i
+	 done
+	fi
