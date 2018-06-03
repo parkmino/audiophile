@@ -50,11 +50,14 @@ musicpd_bg () {
   esac
  done
 
-#nohup taskset -ac $s_task /tmp/upmpdcli -c /tmp/upmpdcli.conf >/dev/null 2>&1
+#nohup /tmp/upmpdcli -c /tmp/upmpdcli.conf&>/dev/null</dev/null
+
+ ### Remountro
+ sync
+ sleep 1
+ mount -o remount,ro /
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
-
- sleep 1
  pkill rc.local
 
 }
@@ -64,10 +67,15 @@ eol () {
  until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
   sleep 1
  done
+ sleep 1
+ taskset -acp $s_task $(pgrep -x upmpdcli) || true
+
+ ### Remountro
+ sync
+ sleep 1
+ mount -o remount,ro /
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
-
- sleep 1
  pkill rc.local
 
 }
@@ -134,12 +142,12 @@ swapoff -a
 #done
 
 ### Remountro
-sync
-sleep 1
-mount -o remount,ro /
+#sync
+#sleep 1
+#mount -o remount,ro /
 
 musicpd_bg &
 eol &
-/tmp/mpd /tmp/mpd.conf >/dev/null 2>&1
+nohup /tmp/mpd /tmp/mpd.conf&>/dev/null</dev/null
 
 exit 0
