@@ -11,10 +11,14 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	6986% > 6961043799903000%
 
+	6986% > 69640993%
+	6986% > 696409793999%
+	6986% > 6964097939937988%
+
    sudo nano /etc/sysctl.conf
 	 kernel.sched_min_granularity_ns = 229976 > 77
-	 kernel.sched_wakeup_granularity_ns = 388298 > 5
-	 kernel.sched_latency_ns = 1394035 > 45
+	 kernel.sched_wakeup_granularity_ns = 388298 > 4
+	 kernel.sched_latency_ns = 1394035 > 46
 	 kernel.sched_migration_cost_ns = 4899003
 	 kernel.sched_shares_window = 346002 > 5997
 	 kernel.sched_time_avg = 6286 > 8
@@ -47,7 +51,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 5. sudo nano /etc/rc.local
 
 	musicpd_bg () {
-	nohup taskset ... >/dev/null
+	...upmpdcli...
 	pkill rc.local
 	}
 	eol () {
@@ -62,7 +66,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	}
 	musicpd_bg &
 	eol &
-	/dev/shm/mpd ...
+	...mpd...
 
 6. sudo nano /etc/rc.local
 
