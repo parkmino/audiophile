@@ -121,7 +121,7 @@ echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #ionice -c 2 -n 7 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null &
 #nice -n -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null &
 #taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null
-/dev/shm/rygel -c /dev/shm/rygel.conf&>/dev/null< /dev/null
+nohup /dev/shm/rygel -c /dev/shm/rygel.conf&>/dev/null</dev/null
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
 #done
@@ -141,4 +141,3 @@ echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #taskset -ac 1 nice -n +1 /usr/bin/polipo &
 
 exit 0
-6~

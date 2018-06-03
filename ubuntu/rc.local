@@ -39,7 +39,7 @@
 #  esac
 # done
 # #
-##taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf&
+##nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf&>/dev/null</dev/null&
 #}
 
 modprobe -r psmouse
@@ -52,15 +52,15 @@ modprobe -r psmouse
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
  sysctl -w kernel.sched_min_granularity_ns=229977
- sysctl -w kernel.sched_wakeup_granularity_ns=388297
- sysctl -w kernel.sched_latency_ns=1394040
+ sysctl -w kernel.sched_wakeup_granularity_ns=388294
+ sysctl -w kernel.sched_latency_ns=1394046
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost_ns=4899003
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window_ns=345998
+ sysctl -w kernel.sched_shares_window_ns=345997
 #sysctl -w kernel.sched_tunable_scaling=1
- sysctl -w kernel.sched_time_avg_ms=6287
+ sysctl -w kernel.sched_time_avg_ms=6288
 
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
@@ -145,9 +145,11 @@ if [ "$m_task" -ge 1 ];then
  #taskset -apc $m_task `pgrep snd_hda`
 fi
 
+numlockx off
+
 #hdparm -A1 -a1280 -B255 -X64 /dev/sda # -r1
 
 #mpd_bg &
-#/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null< /dev/null
+#nphup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
 
 exit 0
