@@ -10,17 +10,16 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	8990% > 89868999799399916986%
 
 	6986% > 6961043799903000%
-
-	6986% > 69640993%
-	6986% > 696409793999%
 	6986% > 6964097939937988%
 
+	9991% > 99908990799449907945299529837995%              
+
    sudo nano /etc/sysctl.conf
-	 kernel.sched_min_granularity_ns = 229976 > 77
-	 kernel.sched_wakeup_granularity_ns = 388298 > 4
-	 kernel.sched_latency_ns = 1394035 > 46
-	 kernel.sched_migration_cost_ns = 4899003
-	 kernel.sched_shares_window = 346002 > 5997
+	 kernel.sched_min_granularity_ns = 229976 > 8
+	 kernel.sched_wakeup_granularity_ns = 388298 > 3
+	 kernel.sched_latency_ns = 1394035 > 50
+	 kernel.sched_migration_cost_ns = 4899003 > 4
+	 kernel.sched_shares_window = 346002 > 5996
 	 kernel.sched_time_avg = 6286 > 8
 
 2. #sudo chmod (-R) -w...
