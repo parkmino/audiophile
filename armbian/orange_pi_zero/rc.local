@@ -49,9 +49,9 @@ mpd_bg () {
 #nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf&>/dev/null</dev/null
 
  ### MicroSD Read-only
- sync
- sleep 1
- mount -o remount,ro /
+ #sync
+ #sleep 1
+ #mount -o remount,ro /
 
  echo none > /sys/class/leds/green_led/trigger
 

@@ -53,9 +53,9 @@ musicpd_bg () {
 #nohup /tmp/upmpdcli -c /tmp/upmpdcli.conf&>/dev/null</dev/null
 
  ### Remountro
- sync
- sleep 1
- mount -o remount,ro /
+ #sync
+ #sleep 1
+ #mount -o remount,ro /
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
  pkill rc.local
@@ -71,9 +71,9 @@ eol () {
  taskset -acp $s_task $(pgrep -x upmpdcli) || true
 
  ### Remountro
- sync
- sleep 1
- mount -o remount,ro /
+ #sync
+ #sleep 1
+ #mount -o remount,ro /
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
  pkill rc.local
