@@ -40,7 +40,7 @@ musicpd_bg () {
   esac
  done
 
-/tmp/upmpdcli -c /tmp/upmpdcli.conf&>/dev/null< /dev/null
+nohup /tmp/upmpdcli -c /tmp/upmpdcli.conf&>/dev/null</dev/null
 
 }
 
@@ -170,6 +170,6 @@ fi
 
 musicpd_bg &
 eol &
-/tmp/mpd --no-daemon /tmp/mpd.conf&>/dev/null< /dev/null
+nohup /tmp/mpd --no-daemon /tmp/mpd.conf&>/dev/null</dev/null
 
 exit 0
