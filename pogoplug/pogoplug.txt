@@ -54,7 +54,7 @@ $ ssh root@192.168.0.x (password: root)
 
 3. ALSA & MPD
 
-# apt-get install alsa-base alsa-utils mpd mpc ncmpc ca-certificates curl psmisc # cifs-utils
+# apt-get install alsa-base alsa-utils mpd mpc ncmpc ca-certificates curl psmisc cifs-utils
 # mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-ac97.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-ac97.so.sav
 # mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-sbase.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-sbase.so.sav
 # mv /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-hda.so /usr/lib/arm-linux-gnueabi/alsa-lib/smixer/smixer-hda.so.sav
@@ -180,27 +180,27 @@ $ sudo nano /dest/etc/fstab
 
 16. Image Build
 
-# echo "* Mino's UPnP Audio Renderer for Pogoplug 18.05" > ~/release
+# echo "* Mino's UPnP Audio Renderer for Pogoplug 18.06" > ~/release
 # nano ~/release
 # mpc clear
 # rm -f ~/.bash_history ; history -c
 # poweroff
 
 $ sudo fdisk -l
-$ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_18.05.img
-$ zip pogo_e02_audio_renderer_18.05.zip pogo_e02_audio_renderer_18.05.img
+$ sudo dd bs=4M if=/dev/sdb of=pogo_e02_audio_renderer_18.06.img
+$ zip pogo_e02_audio_renderer_18.06.zip pogo_e02_audio_renderer_18.06.img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.e02
 $ sudo mv /media/parkmino/rootfs/boot/uImage.v4 /media/parkmino/rootfs/boot/uImage
 $ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_18.05.img
-$ zip pogo_v4_audio_renderer_18.05.zip pogo_v4_audio_renderer_18.05.img
+$ sudo dd bs=4M if=/dev/sdb of=pogo_v4_audio_renderer_18.06.img
+$ zip pogo_v4_audio_renderer_18.06.zip pogo_v4_audio_renderer_18.06.img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.v4
 $ sudo mv /media/parkmino/rootfs/boot/uImage.orig /media/parkmino/rootfs/boot/uImage
 $ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M if=/dev/sdb of=kirkwood_audio_renderer_18.05.img
-$ zip kirkwood_audio_renderer_18.05.zip kirkwood_audio_renderer_18.05.img
+$ sudo dd bs=4M if=/dev/sdb of=kirkwood_audio_renderer_18.06.img
+$ zip kirkwood_audio_renderer_18.06.zip kirkwood_audio_renderer_18.06.img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.orig
 $ sudo mv /media/parkmino/rootfs/boot/uImage.e02 /media/parkmino/rootfs/boot/uImage
