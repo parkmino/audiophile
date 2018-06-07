@@ -25,12 +25,6 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
 	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
    sudo nano /etc/mpd.conf.sav
-	mixer_device "null"
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
-
-   sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
-	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
-   sudo nano /etc/mpd.conf.sav
 	mixer_device "/dev/null"
    printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default /dev/null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 
@@ -67,9 +61,9 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 6. sudo nano /etc/rc.local
 
-	 nohup taskset -ac $s_task /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 & => /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null< /dev/null
-	/dev/shm/mpd /dev/shm/mpd.conf >/dev/null 2>&1 => /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null< /dev/null
+	nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null</dev/null
+	nohup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
 	nano /usr/lib/kodi/kodi.sh
-		/usr/lib/kodi/kodi.bin => /usr/lib/kodi/kodi.bin&>/dev/null< /dev/null
+		/usr/lib/kodi/kodi.bin => nohup /usr/lib/kodi/kodi.bin&>/dev/null</dev/null
 
 	...&>/dev/null< /dev/null => nohup ...&>/dev/null</dev/null
