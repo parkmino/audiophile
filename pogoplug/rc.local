@@ -164,7 +164,7 @@ swapoff -a
 ### Unmounted NFS
 if [ -z "$(mount | grep 'type nfs')" ]; then
  for i in rpcbind rpc.statd rpc.idmapd; do
-  pkill $i
+  pkill $i || true
  done
 fi
 
