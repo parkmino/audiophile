@@ -114,6 +114,9 @@ until $(grep -q usb1 /proc/interrupts); do
  sleep 1
 done
 sleep 1
+for i in $(awk '/gmac/{print +$1}' /proc/interrupts) $(awk '/mmc/{print +$1}' /proc/interrupts) $(awk '/usb2/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$$(($m_task-1))" | bc) > /proc/irq/$i/smp_affinity
+done
 for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
 done
@@ -124,7 +127,7 @@ done
 #done
 
 ### Init
-#taskset -cp $m_task 1
+taskset -cp $m_task 1
 
 ### MicroSD Read-only
 #sync
