@@ -65,7 +65,7 @@ for pid in $(ps -eo pid,class,ni | grep -i TS | awk '$3 < 0 {print $1}') ; do
  renice  -2 $pid
 done
 
-for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}') ; do
+for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}') ; do
  chrt -op 0 $pid
  renice  -3 $pid
 done
@@ -74,17 +74,17 @@ for pid in $(ps h -eo pid) ; do
  taskset -acp 0 $pid || true
 done
 
-#for pid in $(ps h -eo pid,class,comm | awk '$3 ~ /nfsd/ && $3 !~ /nfsd4/ {print $1}') ; do
+#for pid in $(ps h -eo pid,class,comm | awk '$3 ~ /nfsd|nfsd4/ {print $1}') ; do
 # taskset -acp 1 $pid
 #done
 #
 #sleep 5
 #
-#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /eth/ && $7 !~ /chip/ {print +$1}') ; do
+#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 !~ /eth|chip/ {print +$1}') ; do
 # echo 1 > /proc/irq/$irq/smp_affinity
 #done
 #
-#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc/ || $7 ~ /sata/ || $7 ~ /timer0/ || $7 ~ /sunxi-mmc/ || $7 ~ /dma/ {print +$1}') ; do
+#for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc|sata|timer0|sunxi-mmc|dma/ {print +$1}') ; do
 # echo 2 > /proc/irq/$irq/smp_affinity
 #done
 
@@ -107,7 +107,7 @@ echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #renice +1 -p   1
 
 (
- for i in $(awk '/eth/{print +$1}' /proc/interrupts) $(awk '/mmc/{print +$1}' /proc/interrupts) $(awk '/ahci/{print +$1}' /proc/interrupts); do
+ for i in $(awk '/eth|mmc|ahci/{print +$1}' /proc/interrupts); do
   echo 1 > /proc/irq/$i/smp_affinity
  done
 

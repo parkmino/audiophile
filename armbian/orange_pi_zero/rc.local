@@ -83,7 +83,7 @@ for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice  -2 $i
 done
 
-for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
  chrt -op 0 $i
  renice  -3 $i
 done
@@ -92,7 +92,7 @@ m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'); do
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd|mpd/ {print $1}'); do
   taskset -acp 0 $pid || true
  done
 fi
@@ -114,8 +114,8 @@ until $(grep -q usb1 /proc/interrupts); do
  sleep 1
 done
 sleep 1
-for i in $(awk '/gmac/{print +$1}' /proc/interrupts) $(awk '/mmc/{print +$1}' /proc/interrupts) $(awk '/usb2/{print +$1}' /proc/interrupts); do
- echo $(echo "2^$$(($m_task-1))" | bc) > /proc/irq/$i/smp_affinity
+for i in $(awk '/gmac|mmc|usb2/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$(($m_task-1))" | bc) > /proc/irq/$i/smp_affinity
 done
 for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
