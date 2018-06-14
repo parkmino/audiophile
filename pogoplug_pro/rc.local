@@ -65,6 +65,9 @@ musicpd_bg () {
  for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
   echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
  done
+ for i in $(awk '/sata/{print +$1}' /proc/interrupts) $(awk '/eth0/{print +$1}' /proc/interrupts); do
+  echo $(echo "2^$s_task" | bc) > /proc/irq/$i/smp_affinity
+ done
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
  pkill rc.local
@@ -91,6 +94,9 @@ eol () {
  sleep 1
  for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
   echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
+ done
+ for i in $(awk '/sata/{print +$1}' /proc/interrupts) $(awk '/eth0/{print +$1}' /proc/interrupts); do
+  echo $(echo "2^$s_task" | bc) > /proc/irq/$i/smp_affinity
  done
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
