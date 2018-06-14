@@ -42,8 +42,6 @@
 ##nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf&>/dev/null</dev/null&
 #}
 
-modprobe -r psmouse
-
  sysctl -w kernel.watchdog=0
  sysctl -w kernel.ftrace_enabled=0
 #sysctl -w kernel.kexec_load_disabled=1
@@ -51,16 +49,16 @@ modprobe -r psmouse
  sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
- sysctl -w kernel.sched_min_granularity_ns=229977
- sysctl -w kernel.sched_wakeup_granularity_ns=388294
- sysctl -w kernel.sched_latency_ns=1394046
+ sysctl -w kernel.sched_min_granularity_ns=229978
+ sysctl -w kernel.sched_wakeup_granularity_ns=388291
+ sysctl -w kernel.sched_latency_ns=1394053
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899003
+ sysctl -w kernel.sched_migration_cost_ns=4899004
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window_ns=345997
+ sysctl -w kernel.sched_shares_window_ns=345996
 #sysctl -w kernel.sched_tunable_scaling=1
- sysctl -w kernel.sched_time_avg_ms=6288
+ sysctl -w kernel.sched_time_avg_ms=6289
 
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
@@ -142,14 +140,20 @@ if [ "$m_task" -ge 1 ];then
   echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
   echo " $(cat $proc_snd)"
  done
+ for i in $(awk '/enp3s0/{print +$1}' /proc/interrupts) $(awk '/iwlwifi/{print +$1}' /proc/interrupts); do
+  proc_lan="/proc/irq/$i/smp_affinity"
+  echo $(echo "2^$m_task" | bc) > $proc_lan
+  echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+  echo " $(cat $proc_snd)"
+ done
  #taskset -apc $m_task `pgrep snd_hda`
 fi
 
-numlockx off
-
 #hdparm -A1 -a1280 -B255 -X64 /dev/sda # -r1
-
+#
 #mpd_bg &
 #nphup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
+
+modprobe -r psmouse
 
 exit 0
