@@ -57,6 +57,15 @@ musicpd_bg () {
  #sleep 1
  #mount -o remount,ro /
 
+ ### USB1 Affinity
+ until $(grep -q usb1 /proc/interrupts); do
+  sleep 1
+ done
+ sleep 1
+ for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
+  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
+ done
+
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
  pkill rc.local
 
@@ -74,6 +83,15 @@ eol () {
  #sync
  #sleep 1
  #mount -o remount,ro /
+
+ ### USB1 Affinity
+ until $(grep -q usb1 /proc/interrupts); do
+  sleep 1
+ done
+ sleep 1
+ for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
+  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
+ done
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
  pkill rc.local
