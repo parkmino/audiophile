@@ -142,7 +142,7 @@ if [ "$m_task" -ge 1 ];then
  done
  for i in $(awk '/enp3s0/{print +$1}' /proc/interrupts) $(awk '/iwlwifi/{print +$1}' /proc/interrupts); do
   proc_lan="/proc/irq/$i/smp_affinity"
-  echo $(echo "2^$m_task" | bc) > $proc_lan
+  echo $(echo "2^$(($m_task-2))" | bc) > $proc_lan
   echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
   echo " $(cat $proc_snd)"
  done
