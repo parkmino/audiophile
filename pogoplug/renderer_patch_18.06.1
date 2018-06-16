@@ -14,10 +14,10 @@ not_found () {
 pogo="Audio Renderer for Pogoplug 18.06"
 raspbian="Audio Renderer for Raspberry Pi 18.06"
 
-if grep -qs ${pogo}$ ~/release; then
+if grep -qs "${pogo}"'$' ~/release; then
  version=$pogo
  prefix=""
-elif grep -qs ${raspbian}$ ~/release; then
+elif grep -qs "${raspbian}"'$' ~/release; then
  version=$raspbian
  prefix="sudo"
 else
