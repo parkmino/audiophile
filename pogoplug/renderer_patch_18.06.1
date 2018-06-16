@@ -1,0 +1,39 @@
+#!/bin/sh
+
+echo "────────────────────────────────────────────────────"
+echo "  Patch for Pogo and Raspbian Audio Renderer 18.06"
+echo "────────────────────────────────────────────────────"
+
+not_found () {
+ echo " [!] No relevant renderer was found"
+ exit
+}
+
+[ -f ~/release ] || not_found
+
+pogo="Audio Renderer for Pogoplug 18.06"
+raspbian="Audio Renderer for Raspberry Pi 18.06"
+
+if grep -qs ${pogo}$ ~/release; then
+ version=$pogo
+ prefix=""
+elif grep -qs ${raspbian}$ ~/release; then
+ version=$raspbian
+ prefix="sudo"
+else
+ not_found
+fi
+
+echo " [OK] $version was found"
+
+$prefix sed -i '/tags /d; s/8993%/898970006000%/' /etc/mpd.conf.sav
+[ $? -eq 0 ] && echo " [OK] MPD configuration was patched" || echo " [!] Error on MPD configuration patch"
+
+$prefix sed -i '/wakeup_granularity/s/=.*/= 388289/; /latency/s/=.*/= 1394055/; /migration_cost/s/=.*/= 4899003/' /etc/sysctl.conf
+[ $? -eq 0 ] && echo " [OK] Kernel schedulers were patched" || echo " [!] Error on Kernel scheduler patch"
+
+sed -i 's/18.06$/18.06.1/' ~/release
+
+echo
+echo "Please restart the system to take effect and"
+echo "report any error to http://parkmino45.blog.me"
