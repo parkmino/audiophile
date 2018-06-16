@@ -68,6 +68,7 @@ musicpd_bg () {
  for i in $(awk '/sata|eth0|55 Level/{print +$1}' /proc/interrupts); do
   echo $(echo "2^$s_task" | bc) > /proc/irq/$i/smp_affinity
  done
+ echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
  pkill rc.local
@@ -98,6 +99,7 @@ eol () {
  for i in $(awk '/sata|eth0|55 Level/{print +$1}' /proc/interrupts); do
   echo $(echo "2^$s_task" | bc) > /proc/irq/$i/smp_affinity
  done
+ echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
 
  echo none > /sys/class/leds/pogoplug:green:usr/trigger
  pkill rc.local

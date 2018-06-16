@@ -50,10 +50,10 @@
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
  sysctl -w kernel.sched_min_granularity_ns=229978
- sysctl -w kernel.sched_wakeup_granularity_ns=388290
- sysctl -w kernel.sched_latency_ns=1394054
+ sysctl -w kernel.sched_wakeup_granularity_ns=388289
+ sysctl -w kernel.sched_latency_ns=1394055
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899004
+ sysctl -w kernel.sched_migration_cost_ns=4899003
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
  sysctl -w kernel.sched_shares_window_ns=345996
@@ -146,6 +146,7 @@ if [ "$m_task" -ge 1 ];then
   echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
   echo " $(cat $proc_snd)"
  done
+ echo $(echo "2^$(($m_task-1))" | bc) > /proc/irq/default_smp_affinity
  #taskset -apc $m_task `pgrep snd_hda`
 fi
 
