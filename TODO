@@ -1,6 +1,6 @@
 $ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-$ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd ; sleep 1 ; mpd-bg
+$ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd; sleep 1; mpd-bg
 $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 1. sudo nano /etc/mpd.conf.sav
@@ -77,3 +77,9 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
 	echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
+
+8. sudo nano /etc/mpd.conf.sav
+
+	mixer_type "none"
+
+	(sudo) sed -i '/^mixer_type/s/".*"/"none"/' /etc/mpd.conf.sav
