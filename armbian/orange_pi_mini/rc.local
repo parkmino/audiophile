@@ -115,6 +115,8 @@ echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
   echo 2 > /proc/irq/$i/smp_affinity
  done
 
+ echo 1 > /proc/irq/default_smp_affinity
+
  #until [ $(pgrep -x rygel) -gt 0 ] 2>/dev/null; do
   until pstree -np $(pgrep -x rygel) | grep -q gmain; do
   sleep 1

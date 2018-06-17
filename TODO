@@ -15,11 +15,11 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	8993% > 898970006000%
 
    sudo nano /etc/sysctl.conf
-	 kernel.sched_min_granularity_ns = 229976 > 8
+	 kernel.sched_min_granularity_ns = 229976 >> 9
 	 kernel.sched_wakeup_granularity_ns = 388298 >> 89
-	 kernel.sched_latency_ns = 1394035 >> 55
-	 kernel.sched_migration_cost_ns = 4899003 >> 3
-	 kernel.sched_shares_window = 346002 > 5996
+	 kernel.sched_latency_ns = 1394035 >> 56
+	 kernel.sched_migration_cost_ns = 4899003 >> 4
+	 kernel.sched_shares_window = 346002 >> 5995
 	 kernel.sched_time_avg = 6286 > 9
 
 2. #sudo chmod (-R) -w...
@@ -70,3 +70,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 		/usr/lib/kodi/kodi.bin => nohup /usr/lib/kodi/kodi.bin&>/dev/null</dev/null
 
 	...&>/dev/null< /dev/null => nohup ...&>/dev/null</dev/null
+
+7. sudo nano /etc/rc.local
+
+	m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+	[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
+	echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
