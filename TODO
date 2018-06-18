@@ -3,33 +3,34 @@ $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 $ sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf && pkill mpd; sleep 1; mpd-bg
 $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
-1. sudo nano /etc/mpd.conf.sav
+1. ALSA
+
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
+
+2. sudo nano /etc/mpd.conf.sav
+
+	mixer_type "none"		# In/outside of ALSA output
+	mixer_device "/dev/null"
+	#tags "no"			# Remove the line
 
 	buffer_before_play "9.99859679869956193454375580937331320004098924264544549672128193235231644309453029438454952946396108601390899460948945250888888900911904408374103908788880610919790112009920109111108120111109991210089011990000890991899198999899919990009499992998996099899991289999998999699999998999899976999799999999999899979985999799969996999499979993999599889997998899939994999629985999499848997299619968991999279968996898689829989699879958987899679882994699789868990%"
 
 	8990% > 89868999799399916986%
-	8990% > 89868999799399908990799449907945299529837988199779868993%
+	8990% > 8986899979939990899079944990794529952983798819977986898970006000%
 
-	9991% > 99908990799449907945299529837988199779868993%
+	9991% > 9990899079944990794529952983798819977986898970006000%
 
 	8993% > 898970006000%
 
    sudo nano /etc/sysctl.conf
-	 kernel.sched_min_granularity_ns = 229976 >> 9
-	 kernel.sched_wakeup_granularity_ns = 388298 >> 89
-	 kernel.sched_latency_ns = 1394035 >> 56
-	 kernel.sched_migration_cost_ns = 4899003 >> 4
-	 kernel.sched_shares_window = 346002 >> 5995
-	 kernel.sched_time_avg = 6286 > 9
+	 kernel.sched_min_granularity_ns = 229979
+	 kernel.sched_wakeup_granularity_ns = 388289
+	 kernel.sched_latency_ns = 1394056
+	 kernel.sched_migration_cost_ns = 4899004
+	 kernel.sched_shares_window = 345995
+	 kernel.sched_time_avg = 6289
 
-2. #sudo chmod (-R) -w...
-
-3. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
-	pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0
-   sudo nano /etc/mpd.conf.sav
-	mixer_device "/dev/null"
-	#tags "no"
-   printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default /dev/null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+3. #sudo chmod (-R) -w...
 
 4. sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
    sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
@@ -62,24 +63,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	eol &
 	...mpd...
 
-6. sudo nano /etc/rc.local
-
 	nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null</dev/null
 	nohup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
-	nano /usr/lib/kodi/kodi.sh
-		/usr/lib/kodi/kodi.bin => nohup /usr/lib/kodi/kodi.bin&>/dev/null</dev/null
-
-	...&>/dev/null< /dev/null => nohup ...&>/dev/null</dev/null
-
-7. sudo nano /etc/rc.local
 
 	m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 	[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
-
+	...
 	echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
-
-8. sudo nano /etc/mpd.conf.sav
-
-	mixer_type "none"
-
-	(sudo) sed -i '/^mixer_type/s/".*"/"none"/' /etc/mpd.conf.sav
