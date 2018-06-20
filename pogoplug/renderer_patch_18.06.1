@@ -30,10 +30,10 @@ fi
 
 echo " [OK] $version was found"
 
-$prefix sed -i '/tags /d; /^mixer_type/s/".*"/"none"/; s/8993%/8989700059956000%/' /etc/mpd.conf.sav
+$prefix sed -i '/tags |buffer_/d; /^mixer_type/s/".*"/"none"/' /etc/mpd.conf.sav
 [ $? -eq 0 ] && echo " [OK] MPD configuration was patched" || echo " [!] Error on MPD configuration patch"
 
-$prefix sed -i '/min_granularity/s/=.*/= 229980/; /wakeup_granularity/s/=.*/= 388289/; /latency/s/=.*/= 1394057/; /migration_cost/s/=.*/= 4899004/; /shares_window/s/=.*/= 345995/' /etc/sysctl.conf
+$prefix sed -i '/min_granularity/s/=.*/= 229980/; /wakeup_granularity/s/=.*/= 388287/; /latency/s/=.*/= 1394057/; /migration_cost/s/=.*/= 4899005/; /shares_window/s/=.*/= 345995/' /etc/sysctl.conf
 [ $? -eq 0 ] && echo " [OK] Kernel schedulers were patched" || echo " [!] Error on Kernel scheduler patch"
 
 sed -i 's/18.06$/18.06.1/' ~/release
