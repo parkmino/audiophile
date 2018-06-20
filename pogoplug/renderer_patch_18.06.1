@@ -30,7 +30,7 @@ fi
 
 echo " [OK] $version was found"
 
-$prefix sed -i '/tags /d; /buffer_/d; /^mixer_type/s/".*"/"none"/' /etc/mpd.conf.sav
+$prefix sed -i '/tags /d; /buffer_before/d; /buffer_size/s/".*"/"3683"/; /^mixer_type/s/".*"/"none"/' /etc/mpd.conf.sav
 [ $? -eq 0 ] && echo " [OK] MPD configuration was patched" || echo " [!] Error on MPD configuration patch"
 
 $prefix sed -i '/min_granularity/s/=.*/= 229980/; /wakeup_granularity/s/=.*/= 388287/; /latency/s/=.*/= 1394057/; /migration_cost/s/=.*/= 4899005/; /shares_window/s/=.*/= 345995/' /etc/sysctl.conf
