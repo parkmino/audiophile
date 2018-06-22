@@ -69,3 +69,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 	...
 	echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
+
+6. nano audio-config
+
+	sudo sed -i '0,/libasound.so.2.0.0_old/s/cp \/usr\/lib\/arm-linux-gnueabihf\/libasound.so.2.0.0_old/#cp \/usr\/lib\/arm-linux-gnueabihf\/libasound.so.2.0.0_old/' /etc/rc.local
+	sudo sed -i '/roon_bridge ()/!b;n;s/^ / #/' /etc/rc.local
