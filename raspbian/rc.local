@@ -135,7 +135,7 @@ pkill plymouthd
 swapoff -a
 
 ### Roon Bridge
-(roon_bridge &) && sleep 3
+#(roon_bridge &) && sleep 3
 
 ### Spotify
 #(spotifyd &) && sleep 3
