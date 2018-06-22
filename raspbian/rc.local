@@ -50,6 +50,12 @@ eol () {
  pkill rc.local
 }
 
+roon_bridge () {
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+ sleep 1
+nohup /opt/RoonBridge/Bridge/RoonBridge>/dev/null&>/dev/null</dev/null
+}
+
 spotifyd () {
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
  cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
@@ -84,8 +90,8 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ &&
  renice  -3 $i
 done
 
-m_task=$(($(nproc --all)-1))
-[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'); do
@@ -127,6 +133,9 @@ pkill plymouthd
 [ -f /boot/.nossh ] && service sshd stop
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
+
+### Roon Bridge
+(roon_bridge &) && sleep 3
 
 ### Spotify
 #(spotifyd &) && sleep 3
