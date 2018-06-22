@@ -162,13 +162,50 @@ Audio Render Advanced
 	sudo sed -i '/spotifyd &/s/^/#/'  /etc/rc.local
 	sed -i '/username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' /home/pi/spotifyd.conf
 
-17. audio-config
+17. Roon Bridge
+
+	https://kb.roonlabs.com/LinuxInstall
+
+	# default - Default PCM device (?)
+
+	$ sudo ntpdate pool.ntp.org
+	$ sudo apt update
+	$ sudo apt upgrade
+	$ sudo apt dist-upgrade
+	#$ sudo apt install ffmpeg
+
+	$ curl -O http://download.roonlabs.com/builds/RoonBridge_linuxarmv7hf.tar.bz2
+	$ sudo tar -xjf RoonBridge_linuxarmv7hf.tar.bz2 -C /opt/
+	$ cd /opt/RoonBridge
+	$ ./check.sh
+	$ ./start.sh
+
+	$ sudo nano /etc/rc.local
+
+	roon_bridge () {
+	 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+	 sleep 1
+	nohup /opt/RoonBridge/Bridge/RoonBridge>/dev/null&>/dev/null</dev/null
+	}
+	...
+	### Roon Bridge
+	#(roon_bridge &) && sleep 3
+
+	$ nano ~/audio-config
+
+	sudo sed -i '1s/^/pcm.default pcm.0 /' /usr/share/alsa/alsa.conf.sav
+	sudo sed -i '/roon_bridge/s/^#*//' /etc/rc.local
+
+	sudo sed -i '1s/^pcm.default pcm.0 //' /usr/share/alsa/alsa.conf.sav
+	sudo sed -i '/roon_bridge/s/^/#/' /etc/rc.local
+
+18. audio-config
 
 	cp audio-config /home/pi
 	sudo ln -s /home/pi/audio-config /usr/bin/
 	audio-config
 
-18. Read-only
+19. Read-only
 	cp remountro remountrw /home/pi
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
@@ -178,7 +215,7 @@ Audio Render Advanced
 	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
 
-19. Make Image
+20. Make Image
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 18.05" > ~/release
 	$ mpc clear
