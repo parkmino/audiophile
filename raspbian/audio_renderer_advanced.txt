@@ -18,7 +18,7 @@ Audio Render Advanced
 	sudo apt-get upgrade
 	sudo apt-get dist-upgrade
 
-	sudo apt-get install ntpdate bc
+	sudo apt-get install ntpdate bc exfat-fuse exfat-utils
 
 2. Configuration file
 
