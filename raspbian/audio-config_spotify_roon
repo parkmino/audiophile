@@ -381,10 +381,8 @@ i=$(whiptail --title "Roon Bridge / 룬 브리지" --checklist "Check/확인" --
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  if [[ $i =~ roon ]]; then
-  sudo sed -i '1s/^/pcm.default pcm.0 /' /usr/share/alsa/alsa.conf.sav
   sudo sed -i '/(roon_bridge/s/^#*//' /etc/rc.local
  else
-  sudo sed -i '1s/^pcm.default pcm.0 //' /usr/share/alsa/alsa.conf.sav
   sudo sed -i '/(roon_bridge/s/^/#/' /etc/rc.local
  fi
 fi

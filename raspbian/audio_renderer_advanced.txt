@@ -18,7 +18,7 @@ Audio Render Advanced
 	sudo apt-get upgrade
 	sudo apt-get dist-upgrade
 
-	sudo apt-get install ntpdate
+	sudo apt-get install ntpdate bc
 
 2. Configuration file
 
@@ -172,20 +172,30 @@ Audio Render Advanced
 	$ sudo apt update
 	$ sudo apt upgrade
 	$ sudo apt dist-upgrade
-	#$ sudo apt install ffmpeg
 
-	$ curl -O http://download.roonlabs.com/builds/RoonBridge_linuxarmv7hf.tar.bz2
-	$ sudo tar -xjf RoonBridge_linuxarmv7hf.tar.bz2 -C /opt/
-	$ cd /opt/RoonBridge
-	$ ./check.sh
-	$ ./start.sh
+	$ curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv7hf.sh
+	$ chmod +x roonbridge-installer-linuxarmv7hf.sh
+	$ sudo ./roonbridge-installer-linuxarmv7hf.sh
+
+	$ sudo nano /etc/systemd/system/roonbridge.service
+		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
+	$ sudo systemctl daemon-reload
+	$ sudo systemctl disable roonbridge
+
+	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.sav > /usr/share/alsa/alsa.conf.roon"
+	$ sudo sh -c "printf '\n' >> /usr/share/alsa/alsa.conf.roon"
+	$ sudo sh -c "cat /usr/share/alsa.org/alsa.conf >> /usr/share/alsa/alsa.conf.roon"
+	$ sudo sed -i 's/^[ \t]*//; /^$/d' /usr/share/alsa/alsa.conf.roon
+	$ head -20 /usr/share/alsa/alsa.conf.roon
+	$ sudo nano /usr/share/alsa/alsa.conf.roon
 
 	$ sudo nano /etc/rc.local
 
 	roon_bridge () {
+	 cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
 	 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
 	 sleep 1
-	nohup /opt/RoonBridge/Bridge/RoonBridge>/dev/null&>/dev/null</dev/null
+	 systemctl start roonbridge
 	}
 	...
 	### Roon Bridge
@@ -193,11 +203,9 @@ Audio Render Advanced
 
 	$ nano ~/audio-config
 
-	sudo sed -i '1s/^/pcm.default pcm.0 /' /usr/share/alsa/alsa.conf.sav
-	sudo sed -i '/roon_bridge/s/^#*//' /etc/rc.local
+	sudo sed -i '/roon_bridge &/s/^#*//' /etc/rc.local
 
-	sudo sed -i '1s/^pcm.default pcm.0 //' /usr/share/alsa/alsa.conf.sav
-	sudo sed -i '/roon_bridge/s/^/#/' /etc/rc.local
+	sudo sed -i '/roon_bridge &/s/^/#/' /etc/rc.local
 
 18. audio-config
 
@@ -219,9 +227,10 @@ Audio Render Advanced
 
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 18.05" > ~/release
 	$ mpc clear
+	$ sudo rm -rf /var/roon/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history ; history -c
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_18.05.img
-	$ zip raspbian_audio_renderer_18.05.zip raspbian_audio_renderer_18.05.img
+	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_18.07.img
+	$ zip raspbian_audio_renderer_18.07.zip raspbian_audio_renderer_18.07.img

@@ -51,9 +51,10 @@ eol () {
 }
 
 roon_bridge () {
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
  sleep 1
-nohup /opt/RoonBridge/Bridge/RoonBridge>/dev/null&>/dev/null</dev/null
+ systemctl start roonbridge
 }
 
 spotifyd () {
@@ -141,6 +142,7 @@ swapoff -a
 #(spotifyd &) && sleep 3
 
 ### Taskset
+echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
 for pid in 1 $(pgrep -x rc.local); do
  taskset -acp $m_task $pid || true
 done
