@@ -38,7 +38,7 @@ i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --
 "5"  "Allo Piano DAC+" \
 "6"  "Allo Piano DAC+ (+Kali board)" \
 "7"  "Allo DigiOne" \
-"8"  "Allo Kantata DAC" \
+"8"  "Allo Katana DAC" \
 "9"  "ApplePi DAC" \
 "10" "Dion Audio LOCO DAC-AMP" \
 "11" "Dion Audio LOCO-V2 DAC-AMP" \
