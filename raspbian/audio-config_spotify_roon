@@ -38,18 +38,19 @@ i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --
 "5"  "Allo Piano DAC+" \
 "6"  "Allo Piano DAC+ (+Kali board)" \
 "7"  "Allo DigiOne" \
-"8"  "ApplePi DAC" \
-"9"  "Dion Audio LOCO DAC-AMP" \
-"10" "Dion Audio LOCO-V2 DAC-AMP" \
-"11" "HiFiBerry Amp/Amp+" \
-"12" "HiFiBerry DAC" \
-"13" "HiFiBerry DAC+/DAC+ Pro" \
-"14" "HiFiBerry DAC+ Pro (Slave mode/종속 모드)" \
-"15" "HiFiBerry Digi/Digi+" \
-"16" "HiFiBerry Digi+ Pro" \
-"17" "IQaudIO DAC" \
-"18" "IQaudIO DAC+" \
-"19" "IQaudIO Digi+" 3>&1 1>&2 2>&3)
+"8"  "Allo Kantata DAC" \
+"9"  "ApplePi DAC" \
+"10" "Dion Audio LOCO DAC-AMP" \
+"11" "Dion Audio LOCO-V2 DAC-AMP" \
+"12" "HiFiBerry Amp/Amp+" \
+"13" "HiFiBerry DAC" \
+"14" "HiFiBerry DAC+/DAC+ Pro" \
+"15" "HiFiBerry DAC+ Pro (Slave mode/종속 모드)" \
+"16" "HiFiBerry Digi/Digi+" \
+"17" "HiFiBerry Digi+ Pro" \
+"18" "IQaudIO DAC" \
+"19" "IQaudIO DAC+" \
+"20" "IQaudIO Digi+" 3>&1 1>&2 2>&3)
 
 case $i in
  1)  sound_card_initial ;;
@@ -59,18 +60,19 @@ case $i in
  5)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
  6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
  7)  sound_card_selector allo-digione					;;
- 8)  sound_card_selector applepi-dac					;;
- 9)  sound_card_selector dionaudio-loco					;;
- 10) sound_card_selector dionaudio-loco-v2				;;
- 11) sound_card_selector hifiberry-amp					;;
- 12) sound_card_selector hifiberry-dac					;;
- 13) sound_card_selector hifiberry-dacplus				;;
- 14) sound_card_selector hifiberry-dacplus,slave			;;
- 15) sound_card_selector hifiberry-digi					;;
- 16) sound_card_selector hifiberry-digi-pro				;;
- 17) sound_card_selector iqaudio-dac			; iqaudio	;;
- 18) sound_card_selector iqaudio-dacplus		; iqaudio	;;
- 19) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
+ 8)  sound_card_selector allo-katana-dac-audio				;;
+ 9)  sound_card_selector applepi-dac					;;
+ 10) sound_card_selector dionaudio-loco					;;
+ 11) sound_card_selector dionaudio-loco-v2				;;
+ 12) sound_card_selector hifiberry-amp					;;
+ 13) sound_card_selector hifiberry-dac					;;
+ 14) sound_card_selector hifiberry-dacplus				;;
+ 15) sound_card_selector hifiberry-dacplus,slave			;;
+ 16) sound_card_selector hifiberry-digi					;;
+ 17) sound_card_selector hifiberry-digi-pro				;;
+ 18) sound_card_selector iqaudio-dac			; iqaudio	;;
+ 19) sound_card_selector iqaudio-dacplus		; iqaudio	;;
+ 20) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
 esac
 }
 
