@@ -209,8 +209,8 @@ Audio Render Advanced
 18. AirPlay (Optional)
 
 	$ sudo apt install shairport-sync
-	$ sudo sed -i '/output_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/^\/*//; /mixer_device =/s/".*";/"\/dev\/null";/' /etc/shairport-sync.conf
-	$ sudo sed -i '/output_format/s/^\/*//; /output_format/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
+	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' /etc/shairport-sync.conf
+	$ sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
 
 18. audio-config
 
