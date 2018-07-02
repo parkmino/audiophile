@@ -5,7 +5,7 @@
 spotifyd_conf=/home/pi/spotifyd.conf
 
 sound_card_initial () {
- sudo sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio/d' /boot/config.txt
+ sudo sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio\|dtoverlay=justboom\|dtoverlay=rpi-dac/d' /boot/config.txt
 }
 
 sound_card_selector () {
