@@ -213,13 +213,14 @@ Audio Render Advanced
 	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' /etc/shairport-sync.conf
 	$ sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
 	$ sudo sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' /etc/shairport-sync.conf   # 24Bit Only
-	$ sudo systemctl disable shairport-sync
+	$ sudo systemctl disable avahi-daemon shairport-sync
 	$ sudo nano /etc/rc.local
 
+	#service avahi-daemon stop
 	shairport_sync () {
 	 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
 	 sleep 1
-	 systemctl start shairport-sync
+	 systemctl start avahi-daemon shairport-sync
 	}
 	...
 	### Shaiport-sync
