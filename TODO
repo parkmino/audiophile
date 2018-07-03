@@ -22,3 +22,5 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	kernel.sched_migration_cost_ns = 4899005
 	kernel.sched_shares_window = 345995
 	kernel.sched_time_avg = 6289
+
+4. dpkg -i gmediaserver_0.13.0-8_armhf.deb # For Orange Pi Mini
