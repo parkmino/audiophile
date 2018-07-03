@@ -212,7 +212,8 @@ Audio Render Advanced
 	$ sudo apt install shairport-sync
 	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' /etc/shairport-sync.conf
 	$ sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
-	$ sudo sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' /etc/shairport-sync.conf   # 24Bit Only
+	$ sudo sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' /etc/shairport-sync.conf
+	$ sudo sed -i '/convolution =\|loudness =/s/^\/*//; /convolution =\|loudness =/s/".*"/"no"/' /etc/shairport-sync.conf
 	$ sudo systemctl disable avahi-daemon shairport-sync
 	$ sudo nano /etc/rc.local
 
