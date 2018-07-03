@@ -13,14 +13,6 @@ sound_card_selector () {
  sudo sed -i '$adtoverlay='"$1"'' /boot/config.txt
 }
 
-sound_card_intaudio () {
- sudo sed -i 's/card=[1-9]/card=0/g'  /usr/share/alsa/alsa.conf
-}
-
-sound_card_usbaudio () {
- sudo sed -i 's/card=[02-9]/card=1/g' /usr/share/alsa/alsa.conf
-}
-
 iqaudio () {
  if (whiptail --title "Unmute IQaudIO / IQaudIO 음소거 제거" --yesno "   Unmute IQaudIO?   IQaudIO 음소거를 제거할까요?" --yes-button "Yes/예" --no-button "No/아니오" 8 56) then
   sudo sed -i '/\/sys\/class\/gpio/s/^#*//g' /etc/rc.local
