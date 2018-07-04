@@ -1,11 +1,14 @@
 -. 바뀐 점
 
 18.07 (18-07-05)
-  1. MPD 재생 전 버퍼 설정.
-  2. 커널 스케줄러 재 설정.
-  3. 기본 CPU Affinity 설정.
-  4. exfat 패키지 설치 (exfat-fuse, exfat-utils)
-  5. 룬 브리지 추가.
+ 1. MPD 재생 전 버퍼 설정.
+ 2. 커널 스케줄러 재 설정.
+ 3. 기본 CPU Affinity 설정.
+ 4. exfat 패키지 설치 (exfat-fuse, exfat-utils)
+ 5. 룬 브리지 추가.
+ 6. 에어플레이 추가 (Shairport-sync)
+ 7. Allo Katana DAC(ess9038q2m), JustBoom DAC/Digi, RPi DAC 하드웨어 추가.
+ 8. Raspbian 업데이트.
 
 18.06 (18-06-14) 
   1. 명령어 실행 널 입출력과 nohup 적용.
