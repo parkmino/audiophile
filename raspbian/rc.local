@@ -64,6 +64,12 @@ spotifyd () {
 nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null&>/dev/null</dev/null
 }
 
+shairport_sync () {
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+ sleep 1
+ systemctl start avahi-daemon shairport-sync
+}
+
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
@@ -126,7 +132,7 @@ fi
 service getty@tty1 stop
 
 ### Remove services
-for i in cron rsyslog avahi-daemon systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
+for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
 do
  service $i stop
 done
@@ -136,10 +142,13 @@ pkill plymouthd
 swapoff -a
 
 ### Roon Bridge
-#(roon_bridge &) && sleep 3
+####(roon_bridge &) && sleep 3
 
 ### Spotify
 #(spotifyd &) && sleep 3
+
+### Shaiport-sync
+#(shairport_sync &) && sleep 3
 
 ### Taskset
 echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
