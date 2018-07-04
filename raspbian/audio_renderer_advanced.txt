@@ -247,6 +247,7 @@ Audio Render Advanced
 
 20. Make Image
 
+	$ sudo ntpdate pool.ntp.org
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 18.05" > ~/release
 	$ mpc clear
 	$ sudo rm -rf /var/roon/*
@@ -256,3 +257,8 @@ Audio Render Advanced
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_18.07.img
 	$ zip raspbian_audio_renderer_18.07.zip raspbian_audio_renderer_18.07.img
+
+cf)
+sudo sysctl -w vm.dirty_background_ratio=10
+sudo sysctl -w vm.dirty_ratio=20
+sudo sed -i 's/http:\/\/raspbian.raspberrypi.org/ftp:\/\/ftp.neowiz.com\/raspbian/' /etc/apt/sources.list
