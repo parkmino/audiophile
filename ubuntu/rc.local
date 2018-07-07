@@ -112,12 +112,12 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 
 for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
- renice  -2 $pid # || true
+ renice  -2 $pid || true
 done
 
 for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
- chrt -op 0 $pid # || true
- renice  -3 $pid # || true
+ chrt -op 0 $pid || true
+ renice  -3 $pid || true
 done
 
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
