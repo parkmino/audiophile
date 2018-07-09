@@ -14,7 +14,7 @@ $ gpg --export '7808CE96D38B9201' | sudo apt-key add -
 $ sudo apt-get update
 $ sudo apt-get install upmpdcli
 
-$ wget http://blogattach.naver.com/7eeb62d2c39b9a466885e9d5e3007e0dadf401ed83/20160224_148_blogfile/parkmino45_1456295331298_5OCqhS_png/icon.png
+$ wget -O icon.png https://github.com/openwrt/packages/blob/master/sound/upmpdcli/files/upmpdcli.png
 $ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
 
 $ sudo nano /etc/upmpdcli.conf
