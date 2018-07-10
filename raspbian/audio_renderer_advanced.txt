@@ -248,6 +248,11 @@ Audio Render Advanced
 20. Make Image
 
 	$ sudo ntpdate pool.ntp.org
+	$ sudo apt-get update
+	$ sudo apt-get upgrade
+	$ sudo apt-get dist-upgrade
+	$ sudo systemctl daemon-reload
+	$ youtube-dl --update
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi 18.05" > ~/release
 	$ mpc clear
 	$ sudo rm -rf /var/roon/*
