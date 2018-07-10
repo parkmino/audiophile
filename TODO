@@ -24,3 +24,14 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	kernel.sched_time_avg = 6289
 
 4. dpkg -i gmediaserver_0.13.0-8_armhf.deb # For Orange Pi Mini
+
+5. Raspbian
+
+	5.1 eth instead of etx
+		sudo raspi-config
+
+	5.2 sudo systemctl status rc.local
+	    sudo systemctl daemon-reload
+
+	5.3 exit instead of pkill in rc.local
+
