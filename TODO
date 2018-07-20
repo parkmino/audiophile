@@ -6,6 +6,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 1. ALSA
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
+	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 2. sudo nano /etc/mpd.conf.sav
 
@@ -35,3 +36,17 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	5.3 exit instead of pkill in rc.local
 
+	5.4 wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.1.7-1%2bb4_armhf.deb
+	    sudo dpkg -i shairport*.deb
+
+	5.5 Wireless AP (X)
+
+	5.6 git clone https://github.com/oblique/create_ap
+	    cd create_ap
+	    sudo make install
+
+	5.7 sudo nano /etc/mpd.conf.sav
+		#gapless_mp3_playback "no"
+
+6. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 0 pcm.0.nonblock 1 pcm.0.mmap_emulation 1 defaults.pcm.minperiodtime 6' > /usr/share/alsa/alsa.conf.sav"
+   sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
