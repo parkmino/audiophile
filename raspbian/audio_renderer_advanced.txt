@@ -264,8 +264,12 @@ Audio Render Advanced
 	$ zip raspbian_audio_renderer_18.07.zip raspbian_audio_renderer_18.07.img
 
 cf)
+
 sudo sysctl -w vm.dirty_background_ratio=10
 sudo sysctl -w vm.dirty_ratio=20
+
 sudo sed -i 's/raspbian.raspberrypi.org/mirrordirector.raspberrypi.org/' /etc/apt/sources.list
 sudo sed -i 's/http:\/\/raspbian.raspberrypi.org/ftp:\/\/ftp.neowiz.com\/raspbian/' /etc/apt/sources.list
 sudo sed -i 's/archive.raspberrypi.org/.../' /etc/apt/sources.list.d/raspi.list
+
+https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
