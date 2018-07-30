@@ -6,6 +6,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 1. ALSA
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
+
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 2. sudo nano /etc/mpd.conf.sav
@@ -47,6 +49,3 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	5.7 sudo nano /etc/mpd.conf.sav
 		#gapless_mp3_playback "no"
-
-6. sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 0 pcm.0.nonblock 1 pcm.0.mmap_emulation 1 defaults.pcm.minperiodtime 6' > /usr/share/alsa/alsa.conf.sav"
-   sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
