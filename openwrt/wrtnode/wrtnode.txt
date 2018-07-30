@@ -1,0 +1,165 @@
+WRTnode
+
+45mm*50mm
+MTK MT7620N 580MHz MIPS CPU (MIPS24KEc)
+64MB DDR2 RAM
+16MB SPI Flash ROM
+300Mbps Wi-Fi 2T2R 802.11n 2.4 GHz
+23GPIOs
+JTAG
+SPI
+UART Lite
+USB2.0 host
+
+OpenWrt
+
+0.9   Whiterussian
+08.09 Kamikaze
+10.03 backfire
+12.09 Attitude Adjustment 
+14.07 Barrier Breaker
+15.05 Chaos Calmer
+17.01
+18.06 RC2
+
+https://www.tp-link.com/kr/products/list-9.html
+http://zio.co.kr/home/m_view.php?ps_db=router&ps_boid=19&ps_category=0&ps_mode=
+
+https://www.seeedstudio.com/WRTnode-Open-Source-and-Mini-OpenWRT-Dev-Board-p-1980.html
+http://wiki.wrtnode.com/
+http://wiki.wrtnode.com/index.php?title=Starting
+http://wiki.wrtnode.com/index.php?title=Package_resources
+http://wiki.wrtnode.com/index.php?title=WRTnode_connect_to_the_network_through_the_wan_port
+
+https://openwrt.org/
+https://openwrt.org/docs/guide-quick-start/walkthrough_login
+https://downloads.openwrt.org/releases/17.01.5/targets/ramips/mt7620/
+https://downloads.openwrt.org/releases/18.06.0-rc2/targets/ramips/mt7620/
+https://downloads.openwrt.org/snapshots/targets/ramips/mt7620/
+https://wiki.openwrt.org/doc/recipes/relayclient
+https://openwrt.org/docs/guide-user/additional-software/opkg
+https://openwrt.org/docs/guide-user/hardware/audio/usb.audio
+https://openwrt.org/docs/guide-user/network/switch_router_gateway_and_nat
+https://openwrt.org/docs/guide-user/network/wifi/dumbap
+https://openwrt.org/docs/guide-user/network/vlan/switch
+https://openwrt.org/docs/guide-quick-start/factory_installation
+https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset
+
+1. 14.07 Barrier Breaker
+
+$ telnet 192.168.8.1
+	#passwd
+  #ssh root@192.168.8.1
+  LuCi http://192.168.8.1
+
+# cp /etc/config/wireless /etc/config/wireless.orig
+# cp /etc/config/network /etc/config/network.orig
+# aps
+# vi /etc/config/wireless
+	config wifi-device 'ra0'
+		option channel '*'
+	config wifi-iface
+		option ApCliSsid '*****'
+		option ApCliAuthMode 'WPA2PSK'
+		option ApCliEncrypType 'AES'
+		option ApCliPassWord '*****'
+# cat /etc/config/wireless
+# /etc/init.d/network restart
+# ifconfig apcli0
+# ping www.google.com
+
+# free; df -h; ifconfig
+
+# opkg update
+# opkg install kmod-usb-core kmod-usb-audio
+## insmod usbcore
+# opkg install alsa-lib mpd-full mpc nano
+# nano /etc/mpd.conf
+	audio_output {
+		type            "alsa"
+		name            "My ALSA Device"
+		device          "hw:0,0"
+	}
+# mpd /etc/mpd.conf
+# nano /etc/init.d/mpd
+	/usr/bin/mpd /etc/mpd.conf
+
+# nano /etc/config/network
+# nano /etc/config/wireless
+LuCi System > Startup > Enable mpd
+# /etc/init.d/network restart
+
+2. 18.06 RC2
+
+$ scp ./openwrt-18.06.0-rc2-ramips-mt7620-wrtnode-squashfs-sysupgrade.bin root@ 192.168.0.9:/tmp/
+# mtd write -r /tmp/openwrt-18.06.0-rc2-ramips-mt7620-wrtnode-squashfs-sysupgrade.bin firmware
+  Rebooting ...
+
+LuCi http://192.168.1.1
+$ ssh root@192.168.1.1
+
+# vi /etc/config/network
+  config 'interface' 'wwan'
+	option 'proto' 'dhcp'
+# vi /etc/config/wireless
+  config 'wifi-device' 'radio0'
+	option 'type'       'mac80211'
+	…
+	option 'channel'    '*'
+
+  config 'wifi-iface'
+	option 'device'     'radio0'
+	option 'network'    'wwan'
+	option 'mode'       'sta'
+	option 'ssid'       '*****'
+	option 'encryption' 'psk2'
+	option 'key'        '*****'
+# /etc/init.d/network restart
+# opkg update
+## opkg list
+## opkg list | grep -e kmod -e alsa -e mpd -e mpc -e upmpdcli -e shairport
+# opkg install kmod-usb-core kmod-usb-audio kmod-usb-uhci kmod-usb-ohci kmod-usb2 # kmod-usb3
+# opkg install kmod-usb-ohci-pci kmod-usb2-pci
+# opkg install alsa-lib mpd-full mpc nano curl
+## opkg install upmpdcli shairport-sync-mbedtls # After Chaos Calmer 15.05
+
+$ scp rc.local pri mpd.conf kr2mpd root@192.168.0.9:/root/
+
+# nano /etc/rc.local
+# nano /etc/sysctl.conf
+
+ALSA
+
+# mv /etc/mpd.conf /etc/mpd.conf.orig
+# mv /root/mpd.conf /etc/mpd.conf
+# ln -s /root/kr2mpd /usr/bin/
+
+# chrt -aop 0 $(pgrep -x mpd)
+# which awk nohup
+
+Disable log dnsmasq firewall odhcpd cron sysntpd
+
+cf)
+
+* Pogoplug
+https://openwrt.org/toh/hwdata/pogoplug/start
+https://archive.openwrt.org/snapshots/trunk/kirkwood/generic/ (E02/Mobile)
+https://downloads.openwrt.org/releases/18.06.0-rc2/targets/oxnas/ox820/ (Pro)
+http://blog.qnology.com/2015/04/openwrt-on-pogoplug-v3oxnas-proclassic.html
+
+* Alix
+https://wiki.openwrt.org/toh/pcengines/alix
+
+* Orange Pi Zero
+https://mega.nz/#F!bpcngYxL!Dfqczf4BpDjtanPMbBv4Kg
+
+* Raspberry Pi 2
+https://wiki.openwrt.org/toh/raspberry_pi_foundation/raspberry_pi
+https://downloads.openwrt.org/releases/18.06.0-rc2/targets/brcm2708/bcm2709/openwrt-18.06.0-rc2-brcm2708-bcm2709-rpi-2-ext4-sdcard.img.gz
+https://github.com/Hexxeh/rpi-update
+
+$ telnet 192.168.1.1
+
+# uci set network.lan.proto=dhcp
+# uci commit
+# /etc/init.d/network restart
