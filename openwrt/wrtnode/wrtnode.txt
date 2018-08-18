@@ -19,8 +19,8 @@ OpenWrt
 12.09 Attitude Adjustment 
 14.07 Barrier Breaker
 15.05 Chaos Calmer
-17.01
-18.06 RC2
+17.01 LEDE
+18.06
 
 https://www.tp-link.com/kr/products/list-9.html
 http://zio.co.kr/home/m_view.php?ps_db=router&ps_boid=19&ps_category=0&ps_mode=
@@ -52,8 +52,8 @@ $ telnet 192.168.8.1
   #ssh root@192.168.8.1
   LuCi http://192.168.8.1
 
-# cp /etc/config/wireless /etc/config/wireless.orig
 # cp /etc/config/network /etc/config/network.orig
+# cp /etc/config/wireless /etc/config/wireless.orig
 # aps
 # vi /etc/config/wireless
 	config wifi-device 'ra0'
@@ -98,6 +98,11 @@ $ scp ./openwrt-18.06.0-rc2-ramips-mt7620-wrtnode-squashfs-sysupgrade.bin root@ 
 LuCi http://192.168.1.1
 $ ssh root@192.168.1.1
 
+# umount /overlay && jffs2reset && reboot
+## rm -rf /overlay/*
+
+# cp /etc/config/network /etc/config/network.orig
+# cp /etc/config/wireless /etc/config/wireless.orig
 # vi /etc/config/network
   config 'interface' 'wwan'
 	option 'proto' 'dhcp'
@@ -106,6 +111,7 @@ $ ssh root@192.168.1.1
 	option 'type'       'mac80211'
 	…
 	option 'channel'    '*'
+	option 'disabled' 0
 
   config 'wifi-iface'
 	option 'device'     'radio0'
@@ -120,24 +126,38 @@ $ ssh root@192.168.1.1
 ## opkg list | grep -e kmod -e alsa -e mpd -e mpc -e upmpdcli -e shairport
 # opkg install kmod-usb-core kmod-usb-audio kmod-usb-uhci kmod-usb-ohci kmod-usb2 # kmod-usb3
 # opkg install kmod-usb-ohci-pci kmod-usb2-pci
-# opkg install alsa-lib mpd-full mpc nano curl
-## opkg install upmpdcli shairport-sync-mbedtls # After Chaos Calmer 15.05
+# opkg install curl nano # mpc mpd-full
 
-$ scp rc.local pri mpd.conf kr2mpd root@192.168.0.9:/root/
+$ scp libffmpeg-mini_3.2.2-1_mipsel_24kc.ipk libmpdclient_2.14-1_mipsel_24kc.ipk mpc_0.30-1_mipsel_24kc.ipk mpd-full_0.20.20-1_mipsel_24kc.ipk root@192.168.0.9:/tmp/
 
-# nano /etc/rc.local
+# opkg install /tmp/libffmpeg-mini_3.2.2-1_mipsel_24kc.ipk
+# opkg install /tmp/libmpdclient_2.14-1_mipsel_24kc.ipk
+# opkg install /tmp/mpc_0.30-1_mipsel_24kc.ipk
+# opkg install /tmp/mpd-full_0.20.20-1_mipsel_24kc.ipk
+
+## opkg install upmpdcli shairport-sync-mbedtls
+
+$ scp mpd.conf kr2mpd root@192.168.0.9:/tmp/
+
 # nano /etc/sysctl.conf
 
 ALSA
 
+## /etc/init.d/mpd stop
 # mv /etc/mpd.conf /etc/mpd.conf.orig
-# mv /root/mpd.conf /etc/mpd.conf
-# ln -s /root/kr2mpd /usr/bin/
+# mv /tmp/mpd.conf /etc/mpd.conf
+# nano /etc/init.d/mpd
+	procd_set_param command "$PROG" --no-daemon "$CONFIGFILE"&>/dev/null</dev/null
+	#procd_set_param nice "$NICEPRIO"
+# /etc/init.d/mpd start
+# mv /tmp/kr2mpd /usr/bin/
 
+### TODO
+# nano /etc/rc.local
 # chrt -aop 0 $(pgrep -x mpd)
-# which awk nohup
+# nohup mpd ...
 
-Disable log dnsmasq firewall odhcpd cron sysntpd
+Disable log dnsmasq firewall nptd odhcpd cron sysntpd uhttpd
 
 cf)
 
