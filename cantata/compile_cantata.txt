@@ -81,7 +81,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_AVAHI=O
 
 make -j4 && sudo make install
 
-make -j4 && sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.3.2" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
+make -j4 && sudo checkinstall -y --install=no --fstrans=no --pkgname=cantata-qt --pkgversion "2.3.3" --pkgrelease=$(date +"%Y.%m.%d") --backup=no --maintainer=parkmino@gmail.com
 
 ### Git Add ###
 
