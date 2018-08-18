@@ -49,3 +49,5 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	5.7 sudo nano /etc/mpd.conf.sav
 		#gapless_mp3_playback "no"
+
+	5.8 Update kr2mpd for kbs radios
