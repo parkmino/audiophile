@@ -11,7 +11,8 @@ usage () {
 }
 
 kbsr () {
- url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
+#url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
+ url="$(curl -s http://pwwwapi.kbs.co.kr/api/v1/landing/live/$1 | cut -d\" -f16)"
 }
 
 mbcr () {
@@ -23,14 +24,22 @@ sbsr () {
 }
 
 case $1 in
- 1fm)   kbsr 1 ;;
- 2fm)   kbsr 2 ;;
- 1r)    kbsr 3 ;;
- 2r)    kbsr 4 ;;
- 3r)    kbsr 5 ;;
- dmb)   kbsr 6 ;;
- scr)   kbsr 7 ;;
- rki)   kbsr 8 ;;
+ 1fm)   #kbsr 1
+	kbsr 24  ;;
+ 2fm)   #kbsr 2
+	kbsr 25  ;;
+ 1r)    #kbsr 3
+	kbsr 21  ;;
+ 2r)    #kbsr 4
+	kbsr 22  ;;
+ 3r)    #kbsr 5
+	kbsr 23  ;;
+ dmb)   #kbsr 6
+	url="http://112.175.138.137:1935/dmb/dmb.stream/playlist.m3u8" ;;
+ scr)   #kbsr 7
+	kbsr I26 ;;
+ rki)   #kbsr 8
+	kbsr I92 ;;
  mbcm)  mbcr chm ;;
  mbc4u) mbcr mfm ;;
  mbcfm) mbcr sfm ;;
