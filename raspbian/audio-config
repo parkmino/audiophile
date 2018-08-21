@@ -96,8 +96,8 @@ case $i in
 esac
 }
 
-static_ip () {
-i=$(whiptail --title "IP address / IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
+ethernet_ip () {
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
@@ -394,7 +394,7 @@ while true; do
  "2"  "USB signal & power     USB 신호와 전원        >" \
  "3"  "MPD settings           MPD 설정               >" \
  "4"  "Renderer name          렌더러 이름 바꾸기     >" \
- "5"  "IP address             IP 설정                >" \
+ "5"  "Ethernet IP            유선 IP 설정           >" \
  "6"  "IP TTS, DBus           IP TTS와 DBus          >" \
  "7"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
  "8"  "Spotify                Spotify 설정           >" \
@@ -411,7 +411,7 @@ while true; do
   2)  usb_signal_power ;;
   3)  mpd_settings ;;
   4)  renderer_name ;;
-  5)  static_ip ;;
+  5)  ethernet_ip ;;
   6)  dbus_tts ;;
   7)  roon_airplay ;;
   8)  spotify_qobuz_tidal ;;
