@@ -51,3 +51,12 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 		#gapless_mp3_playback "no"
 
 	5.8 Update kr2mpd for kbs radios
+
+	5.9 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
+
+	5.10 pcm.o -> pcm.0 (alsa.conf)
+
+	5.11 powersave cpu governor
+
+	5.12 alsa.conf.roon fix
+
