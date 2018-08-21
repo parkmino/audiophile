@@ -166,8 +166,6 @@ Audio Render Advanced
 
 	https://kb.roonlabs.com/LinuxInstall
 
-	# default - Default PCM device (?)
-
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt update
 	$ sudo apt upgrade
@@ -176,6 +174,10 @@ Audio Render Advanced
 	$ curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv7hf.sh
 	$ chmod +x roonbridge-installer-linuxarmv7hf.sh
 	$ sudo ./roonbridge-installer-linuxarmv7hf.sh
+
+	$ #curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv8.sh
+	$ #chmod +x roonbridge-installer-linuxarmv8.sh
+	$ #sudo ./roonbridge-installer-linuxarmv8.sh	
 
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
