@@ -1,0 +1,114 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+musicpd_bg () {
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+ sleep 1
+ pgr_mpd=$(pgrep -x mpd)
+ taskset -pc $m_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null</dev/null
+}
+
+eol () {
+ until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+  sleep 1
+ done
+ sleep 1
+ taskset -acp $s_task $(pgrep -x upmpdcli) || true
+ pkill rc.local
+}
+
+roon_bridge () {
+#cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+#cp /usr/lib/libasound.so.2.0.0_full /dev/shm/libasound.so.2.0.0
+#sleep 1
+ systemctl start roonbridge
+}
+
+cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so.1
+cp /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8
+
+echo noop | tee /sys/block/mmcblk0*/queue/scheduler
+
+for i in ondemand conservative powersave; do
+ grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+done
+[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
+done
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
+done
+
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd|init/ {print $1}'); do
+  taskset -acp $o_task $pid || true
+ done
+fi
+
+### Remove services
+for i in zigbeed # bluetoothd
+do
+ service $i stop
+done
+
+### Roon Bridge
+(roon_bridge &) && sleep 3
+
+### Taskset
+for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
+ echo "80" > /proc/irq/$i/smp_affinity
+done
+echo "0f" > /proc/irq/default_smp_affinity
+for pid in 1 $(pgrep -x rc.local); do
+ taskset -cp $m_task $pid || true
+done
+
+musicpd_bg &
+eol &
+nohup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
+
+exit 0

@@ -1,0 +1,131 @@
+#!/bin/bash
+
+[ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
+[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
+spotifyd_conf=/home/pi/spotifyd.conf
+
+ethernet_ip () {
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
+"1" "Dynamic IP (DHCP)       자동 IP" \
+"2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
+
+[ -n "$(which connmanctl)" ] && eth=$(connmanctl services | grep -om1 ethernet.*)
+
+case $i in
+ 1) connmanctl config $eth --ipv4 dhcp ;;
+ 2) user_ip=$(whiptail --title "Ethernet IP / 유선 IP 설정" --inputbox "\
+
+Input Static IP address to use.       사용할 수동 IP를 입력합니다.
+Current IP is listed below.           아래는 현재 주소입니다.
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -z "$user_ip" ]; then
+      ip_1st=$(echo "$(hostname -I)" | cut -d "." -f1)
+      ip_2nd=$(echo "$(hostname -I)" | cut -d "." -f2)
+      ip_3rd=$(echo "$(hostname -I)" | cut -d "." -f3)
+      ip_4th=$(echo "$(hostname -I)" | cut -d "." -f4)
+     else
+      ip_1st=$(echo "$user_ip" | cut -d "." -f1)
+      ip_2nd=$(echo "$user_ip" | cut -d "." -f2)
+      ip_3rd=$(echo "$user_ip" | cut -d "." -f3)
+      ip_4th=$(echo "$user_ip" | cut -d "." -f4)
+     fi
+     if [ "$ip_1st" -ge "1" ] 2>/dev/null && [ "$ip_1st" -le "254" ] 2>/dev/null && [ "$ip_1st" -ne "127" ] 2>/dev/null && [ "$ip_2nd" -ge "0" ] 2>/dev/null && [ "$ip_2nd" -le "255" ] 2>/dev/null && [ "$ip_3rd" -ge "0" ] 2>/dev/null && [ "$ip_3rd" -le "255" ] 2>/dev/null && [ "$ip_4th" -ge "2" ] 2>/dev/null && [ "$ip_4th" -le "254" ] 2>/dev/null ; then
+      ip=$ip_1st.$ip_2nd.$ip_3rd
+      ip_all=$ip_1st.$ip_2nd.$ip_3rd.$ip_4th
+     else
+      ip=192.168.0
+      ip_all=192.168.0.9
+     fi
+     connmanctl config $eth --ipv4 manual $ip_all 255.255.255.0 $ip.1
+     systemctl disable dhcpcd.service
+    fi ;;
+esac
+}
+
+wifi_client () {
+i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 50 2 \
+"1" "Enable  Wi-Fi       무선 연결        >" \
+"2" "Disable Wi-Fi       무선 연결 안 함" 3>&1 1>&2 2>&3)
+
+[ -n "$(which connmanctl)" ] && eth=$(connmanctl services | grep -om1 ethernet.*)
+
+case $i in
+ 1) wifi=$(whiptail --title "Wi-Fi Client / 무선 연결" --inputbox "\
+
+Input AP and password to use.       공유기와 비밀번호를 입력합니다.
+Use space in between.               사이에 빈 칸을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 75 "AP password" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     ap=$(echo "$wifi" | cut -d " " -f1)
+     pass=$(echo "$wifi" | rev | cut -d " " -f1 | rev)
+    fi
+    if [ -n "$ap" ] && [ -n "$pass" ]; then
+     wpa_passphrase MyAP abcd1234 >> /etc/wpa_supplicant/wpa_supplicant.conf
+    fi ;;
+ 2) systemctl disable wlan_dhcp ;;
+esac
+}
+
+mpd_settings () {
+i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 64 3 \
+"dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
+"folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^music_directory' $mpd_conf && echo ON || echo OFF) \
+"tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ folder ]] && sudo sed -i '/^#music_directory\|^#db_file/s/^#//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
+ [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
+fi
+}
+
+mpd_roon () {
+i=$(whiptail --title "MPD & Roon Bridge / MPD 룬 브리지" --radiolist "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 62 3 \
+"mpd"   "Enable MPD only         MPD만 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) \
+"roon"   "Enable Roon only        룬만 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) \
+"mpd+roon"   "Enable MPD & Roon       MPD와 룬 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ mpd ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
+ [[ $i =~ roon ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
+ [[ $i =~ mpd+roon ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
+fi
+}
+
+airplay () {
+i=$(whiptail --title "AirPlay / 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 9 59 1 \
+"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ airplay ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
+fi
+}
+
+while true; do
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 15 61 7 \
+"1"  "Ethernet IP             유선 IP 설정          >" \
+"2"  "Wi-Fi client            무선 연결             >" \
+"3"  "MPD & Roon Bridge       MPD 룬 브리지         >" \
+"4"  "MPD settings            MPD 설정              >" \
+"5"  "Airplay                 Airplay 설정          >" \
+"6"  "Reboot                  재시작" \
+"7"  "Power off               전원 끄기" 3>&1 1>&2 2>&3)
+
+ exitstatus=$?
+ [ "$exitstatus" != 0 ] && exit
+
+ case $i in
+  1) ethernet_ip ;;
+  2) wifi_client ;;
+  3) mpd_roon ;;
+  4) mpd_settings ;;
+  5) airplay ;;
+  6) reboot ;;
+  7) poweroff ;;
+ esac
+done

@@ -1,0 +1,98 @@
+https://developer.artik.io/documentation/artik/getting-started/
+https://developer.artik.io/downloads/37339dc3-5909-4500-8506-25af16b022b9/download
+
+$ ssh root@192.168.0.x
+	password : root
+
+# uname -a; cat /etc/os-release
+	Ubuntu 16.04.3 LTS (Linux artix 4.4.71)
+# apt-get update
+	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710s
+# apt-get upgrade
+# apt-get dist-upgrade
+# apt-get autoremove
+# dpkg-reconfigre tzdata
+# reboot
+
+### Wired
+# connmanctl services
+# connmanctl config $eth --ipv4 manual 192.168.0.9 255.255.255.0 192.168.0.1
+# connmanctl config $eth --ipv4 dhcp
+### Wireless
+# wpa_cli -iwlan0 scan && wpa_cli scan_results
+# wpa_passphrase MyAP abcd1234 >> /etc/wpa_supplicant/wpa_supplicant.conf
+# systemctl restart wpa_supplicant
+# dhclient wlan0
+
+# echo '[Unit]
+Description=Run dhcp service for wifi interface
+After=wpa_supplicant.service
+Requires=wpa_supplicant.service
+[Service]
+ExecStart=/sbin/dhclient wlan0
+StandardOutput=syslog
+StandardError=syslog
+[Install]
+WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
+# systemctl enable wlan_dhcp
+# systemctl start  wlan_dhcp
+
+### Remove services - agetty avahi-daemon bluetoothd dnsmasq hciattach mosquitto pulseaudio tzdaemon zigbeed
+# systemctl stop    pulseaudio
+# systemctl disable pulseaudio
+
+# cat /etc/os-release
+	Ubuntu 16.04.5 LTS
+
+### Kernel option
+
+## apt-get install update-manager-core
+## do-release-upgrade
+
+# apt-get install bc nano psmisc software-properties-common # ffmpeg libav-tools
+# apt-get install mpd mpc ncmpc
+# nano /etc/mpd.conf
+	#bind_to_address "localhost"
+	device		 "hw:1,0"
+	dop		 "yes"
+# systemctl restart mpd
+
+# add-apt-repository ppa:jean-francois-dockes/upnpp1
+# apt-get update
+# apt-get install upmpdcli
+	checkcontentformat = 0
+	friendlyname = Bann Audio
+
+### Install Roon Bridge
+### ALSA
+# mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.orig
+### MPD & mpd.conf
+#### Airplay & Spotifyd
+### rc.local
+### sysctl.conf
+### USB mount
+### Internet radio (kr2mpd, ut2mpd)
+### audio-config
+
+### Back up
+https://davidgs.com/2017/how-to-save-your-artik-520-backup/
+https://github.com/davidgs/ARTIK-5-backup
+
+# apt-get update
+# apt-get upgrade
+# apt-get dist-upgrade
+# systemctl daemon-reload
+# youtube-dl --update
+# echo "* Bann Audio Renderer 18.08" > ~/release
+# mpc clear
+# rm -rf /var/roon/*
+# rm -f /root/.bash_history ~/.bash_history ; history -c
+
+
+### Checklist
+-. GUI
+-. NDA
+-. Reward
+
+1. cpufrqutils for cpu governor
+
