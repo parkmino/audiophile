@@ -7,6 +7,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
@@ -30,33 +31,25 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 5. Raspbian
 
-	5.1 eth instead of etx
-		sudo raspi-config
-
-	5.2 sudo systemctl status rc.local
+	5.1 sudo systemctl status rc.local
 	    sudo systemctl daemon-reload
 
-	5.3 exit instead of pkill in rc.local
+	5.2 exit instead of pkill in rc.local
 
-	5.4 wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.1.7-1%2bb4_armhf.deb
+	5.3 wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.1.7-1%2bb4_armhf.deb
 	    sudo dpkg -i shairport*.deb
 
-	5.5 Wireless AP (X)
-
-	5.6 git clone https://github.com/oblique/create_ap
-	    cd create_ap
-	    sudo make install
-
-	5.7 sudo nano /etc/mpd.conf.sav
+	5.4 sudo nano /etc/mpd.conf.sav
 		#gapless_mp3_playback "no"
 
-	5.8 Update kr2mpd for kbs radios
+	5.5 Update kr2mpd for kbs radios
 
-	5.9 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
+	5.6 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
 
-	5.10 pcm.o -> pcm.0 (alsa.conf)
+	5.7 Typo pcm.o -> pcm.0, sudevice -> subdevice (alsa.conf.roon)
 
-	5.11 powersave cpu governor
+	5.8 taskset !~ /systemd$/ (rc.local)
 
-	5.12 alsa.conf.roon fix
+	5.9 comment out vm.dirty_background_ratio & vm.dirty_ratio (sysctl.conf)
 
+	5.10 #conservative (cpu governor)
