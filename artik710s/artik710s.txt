@@ -11,7 +11,8 @@ $ ssh root@192.168.0.x
 # apt-get upgrade
 # apt-get dist-upgrade
 # apt-get autoremove
-# dpkg-reconfigre tzdata
+# dpkg-reconfigure locales
+# dpkg-reconfigure tzdata
 # reboot
 
 ### Wired
@@ -37,9 +38,26 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # systemctl enable wlan_dhcp
 # systemctl start  wlan_dhcp
 
+### Hostname & Domain name
+# hostname -f
+# nano /etc/hostname
+# nano /etc/hosts
+# hostname $(cat /etc/hostname)
+# /etc/resolvconf/resolv.conf.d/head
+	domain your.domain.name
+# resolvconf -u
+# hostnamectl (Ubuntu 18.04)
+
 ### Remove services - agetty avahi-daemon bluetoothd dnsmasq hciattach mosquitto pulseaudio tzdaemon zigbeed
-# systemctl stop    pulseaudio
-# systemctl disable pulseaudio
+# apt-get remove zigbeed
+# systemctl stop    avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
+# systemctl disable avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
+# systemctl mask wpa_supplicant
+# pkill hciattach zigbeed
+
+# nano /etc/systemd/logind.conf
+	NAutoVTs=0
+	ReserveVT=0
 
 # cat /etc/os-release
 	Ubuntu 16.04.5 LTS
@@ -65,6 +83,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 
 ### Install Roon Bridge
 ### ALSA
+	pcm.0.card 1
 # mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.orig
 ### MPD & mpd.conf
 #### Airplay & Spotifyd

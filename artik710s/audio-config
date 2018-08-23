@@ -2,7 +2,7 @@
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-spotifyd_conf=/home/pi/spotifyd.conf
+#spotifyd_conf=/root/spotifyd.conf
 
 ethernet_ip () {
 i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
@@ -48,14 +48,17 @@ wifi_client () {
 i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 50 2 \
 "1" "Enable  Wi-Fi       무선 연결        >" \
 "2" "Disable Wi-Fi       무선 연결 안 함" 3>&1 1>&2 2>&3)
+#"0" "Scan    Wi-Fi       무선 검색" \
 
 [ -n "$(which connmanctl)" ] && eth=$(connmanctl services | grep -om1 ethernet.*)
 
 case $i in
+ 0) wpa_cli -iwlan0 scan && echo "$(wpa_cli scan_results)" > ~/scan_wifi.txt
+    whiptail --title "Scan Wi-Fi / 무선 검색" --scrolltext --textbox ~/scan_wifi.txt --ok-button "OK/확인" --backtitle "Audio-config" 18 75 ;;
  1) wifi=$(whiptail --title "Wi-Fi Client / 무선 연결" --inputbox "\
 
-Input AP and password to use.       공유기와 비밀번호를 입력합니다.
-Use space in between.               사이에 빈 칸을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 75 "AP password" 3>&1 1>&2 2>&3)
+Input AP and password to use.   공유기와 비밀번호를 입력합니다.
+Use space in between.           사이에 빈 칸을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 67 "AP password" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      ap=$(echo "$wifi" | cut -d " " -f1)
@@ -63,58 +66,53 @@ Use space in between.               사이에 빈 칸을 입력합니다." --ok-
     fi
     if [ -n "$ap" ] && [ -n "$pass" ]; then
      wpa_passphrase MyAP abcd1234 >> /etc/wpa_supplicant/wpa_supplicant.conf
+     systemctl unmask wpa_supplicant
+     systemctl start  wpa_supplicant
+     dhclient wlan0
+     systemctl enable wpa_supplicant
     fi ;;
- 2) systemctl disable wlan_dhcp ;;
+ 2) systemctl stop    wpa_supplicant wlan_dhcp
+    systemctl disable wpa_supplicant wlan_dhcp
+    systemctl mask    wpa_supplicant ;;
 esac
 }
 
 mpd_settings () {
-i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 64 3 \
+i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 3 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^music_directory' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ folder ]] && sudo sed -i '/^#music_directory\|^#db_file/s/^#//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
- [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ dop    ]] && sed -i '/dop/s/^#*//g' $mpd_conf || sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ folder ]] && sed -i '/^#music_directory\|^#db_file/s/^#//' $mpd_conf || sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
+ [[ $i =~ tag    ]] && sed -i '/metadata.*none/s/^/#/' $mpd_conf || sed -i '/metadata.*none/s/^#*//' $mpd_conf
 fi
 }
 
-mpd_roon () {
-i=$(whiptail --title "MPD & Roon Bridge / MPD 룬 브리지" --radiolist "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 62 3 \
-"mpd"   "Enable MPD only         MPD만 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) \
-"roon"   "Enable Roon only        룬만 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) \
-"mpd+roon"   "Enable MPD & Roon       MPD와 룬 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
-
-exitstatus=$?
-if [ "$exitstatus" = 0 ]; then
- [[ $i =~ mpd ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
- [[ $i =~ roon ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
- [[ $i =~ mpd+roon ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
-fi
-}
-
-airplay () {
-i=$(whiptail --title "AirPlay / 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 9 59 1 \
+mpd_roon_air () {
+i=$(whiptail --title "MPD, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 59 3 \
+"mpd"       "Enable MPD           MPD 사용" $(grep -q '^musicpd_bg &' /etc/rc.local && echo ON || echo OFF) \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q '^(roon_bridge' /etc/rc.local && echo ON || echo OFF) \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ airplay ]] && sudo sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sudo sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
+ [[ $i =~ mpd ]] && sed -i '/musicpd_bg &/,+2s/^#*//' /etc/rc.local || sed -i '/musicpd_bg &/,+2s/^/#/' /etc/rc.local
+ [[ $i =~ roon ]] && sed -i '/(roon_bridge/s/^#*//' /etc/rc.local || sed -i '/(roon_bridge/s/^/#/' /etc/rc.local
+ [[ $i =~ airplay ]] && sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
 fi
 }
 
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 15 61 7 \
-"1"  "Ethernet IP             유선 IP 설정          >" \
-"2"  "Wi-Fi client            무선 연결             >" \
-"3"  "MPD & Roon Bridge       MPD 룬 브리지         >" \
-"4"  "MPD settings            MPD 설정              >" \
-"5"  "Airplay                 Airplay 설정          >" \
-"6"  "Reboot                  재시작" \
-"7"  "Power off               전원 끄기" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 14 70 6 \
+"1"  "Ethernet IP                   유선 IP 설정                 >" \
+"2"  "Wi-Fi client                  무선 연결                    >" \
+"3"  "MPD, Roon Bridge, Airplay     MPD, 룬 브리지, 에어플레이   >" \
+"4"  "MPD settings                  MPD 설정                     >" \
+"5"  "Reboot                        재시작" \
+"6"  "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
@@ -122,10 +120,9 @@ while true; do
  case $i in
   1) ethernet_ip ;;
   2) wifi_client ;;
-  3) mpd_roon ;;
+  3) mpd_roon_air ;;
   4) mpd_settings ;;
-  5) airplay ;;
-  6) reboot ;;
-  7) poweroff ;;
+  5) reboot ;;
+  6) poweroff ;;
  esac
 done

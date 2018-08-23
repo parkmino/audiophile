@@ -51,6 +51,12 @@ roon_bridge () {
  systemctl start roonbridge
 }
 
+shairport_sync () {
+#cp /usr/lib/libasound.so.2.0.0_full /dev/shm/libasound.so.2.0.0
+#sleep 1
+ systemctl start avahi-daemon shairport-sync
+}
+
 cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
@@ -64,12 +70,11 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8
 
 echo noop | tee /sys/block/mmcblk0*/queue/scheduler
 
-for i in ondemand conservative powersave; do
- grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
-done
-[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-
-echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+#for i in ondemand conservative powersave; do
+# grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+#done
+#[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+#echo conservative | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
@@ -84,19 +89,28 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd|init/ {print $1}'); do
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
   taskset -acp $o_task $pid || true
  done
 fi
 
+swapoff -a
+
 ### Remove services
-for i in zigbeed # bluetoothd
+for i in getty@tty1 serial-getty@ttySAC3
 do
  service $i stop
+done
+for i in hciattach tzdaemon # bluetoothd
+do
+ pkill $i
 done
 
 ### Roon Bridge
 (roon_bridge &) && sleep 3
+
+### Shaiport-sync
+#(shairport_sync &) && sleep 3
 
 ### Taskset
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
