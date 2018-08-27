@@ -175,8 +175,8 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
  [ "$i" != $current_name ] && [ "$i" != "" ] && sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
 }
 
-mpd_settings () {
-i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 3 \
+mpd_options () {
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 3 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^music_directory' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
@@ -184,7 +184,7 @@ i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ folder ]] && sudo sed -i '/^#music_directory\|^#db_file/s/^#//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
+ [[ $i =~ folder ]] && sudo sed -i '/^#*music_directory\|^#*db_file/s/^#*//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
  [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
 fi
 }
@@ -392,7 +392,7 @@ while true; do
  i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 20 61 12 \
  "1"  "Audio device           오디오 장치            >" \
  "2"  "USB signal & power     USB 신호와 전원        >" \
- "3"  "MPD settings           MPD 설정               >" \
+ "3"  "MPD options            MPD 옵션               >" \
  "4"  "Renderer name          렌더러 이름 바꾸기     >" \
  "5"  "Ethernet IP            유선 IP 설정           >" \
  "6"  "IP TTS, DBus           IP TTS와 DBus          >" \
@@ -409,7 +409,7 @@ while true; do
  case $i in
   1)  sound_card ;;
   2)  usb_signal_power ;;
-  3)  mpd_settings ;;
+  3)  mpd_options ;;
   4)  renderer_name ;;
   5)  ethernet_ip ;;
   6)  dbus_tts ;;
