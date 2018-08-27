@@ -13,17 +13,25 @@ $ ssh root@192.168.0.x
 # apt-get autoremove
 # dpkg-reconfigure locales
 # dpkg-reconfigure tzdata
+## apt-get install update-manager-core
+## do-release-upgrade
 # reboot
+# uname -a; cat /etc/os-release
 
 ### Wired
 # connmanctl services
-# connmanctl config $eth --ipv4 manual 192.168.0.9 255.255.255.0 192.168.0.1
+# connmanctl config $eth --ipv4 manual 192.168.0.x 255.255.255.0 192.168.0.1
 # connmanctl config $eth --ipv4 dhcp
 ### Wireless
 # wpa_cli -iwlan0 scan && wpa_cli scan_results
 # wpa_passphrase MyAP abcd1234 >> /etc/wpa_supplicant/wpa_supplicant.conf
 # systemctl restart wpa_supplicant
 # dhclient wlan0
+
+# nano /etc/wpa_supplicant/wpa_supplicant.conf
+	#psk
+	key_mgmt=NONE
+	auth_alg=OPEN
 
 # echo '[Unit]
 Description=Run dhcp service for wifi interface
@@ -46,26 +54,22 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # /etc/resolvconf/resolv.conf.d/head
 	domain your.domain.name
 # resolvconf -u
-# hostnamectl (Ubuntu 18.04)
+# hostnamectl (in Ubuntu 18.04)
 
-### Remove services - agetty avahi-daemon bluetoothd dnsmasq hciattach mosquitto pulseaudio tzdaemon zigbeed
+### SSH message
+# ls /etc/update-motd.d/*
+
+### Remove services
 # apt-get remove zigbeed
+# apt-get autoremove
 # systemctl stop    avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
 # systemctl disable avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
 # systemctl mask wpa_supplicant
-# pkill hciattach zigbeed
-
-# nano /etc/systemd/logind.conf
-	NAutoVTs=0
-	ReserveVT=0
-
-# cat /etc/os-release
-	Ubuntu 16.04.5 LTS
+# service getty@tty1 stop; service serial-getty@ttySAC3 stop
+# pkill hciattach; pkill tzdaemon
 
 ### Kernel option
-
-## apt-get install update-manager-core
-## do-release-upgrade
+# cat /boot/cmdline.txt /boot/config.txt (???)
 
 # apt-get install bc nano psmisc software-properties-common # ffmpeg libav-tools
 # apt-get install mpd mpc ncmpc
@@ -74,23 +78,26 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	device		 "hw:1,0"
 	dop		 "yes"
 # systemctl restart mpd
+# systemctl disable mpd
 
 # add-apt-repository ppa:jean-francois-dockes/upnpp1
 # apt-get update
 # apt-get install upmpdcli
 	checkcontentformat = 0
-	friendlyname = Bann Audio
+	friendlyname = Somewhere over the rainbow
+# systemctl restart upmpdcli
+# systemctl disable upmpdcli
 
-### Install Roon Bridge
 ### ALSA
 	pcm.0.card 1
 # mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.orig
-### MPD & mpd.conf
+### MPD binary & mpd.conf
+### Roon Bridge
 #### Airplay & Spotifyd
 ### rc.local
 ### sysctl.conf
 ### USB mount
-### Internet radio (kr2mpd, ut2mpd)
+### Internet radio (kr2mpd, ut2mpd, *.m3u8/pls)
 ### audio-config
 
 ### Back up
@@ -102,16 +109,8 @@ https://github.com/davidgs/ARTIK-5-backup
 # apt-get dist-upgrade
 # systemctl daemon-reload
 # youtube-dl --update
-# echo "* Bann Audio Renderer 18.08" > ~/release
+# echo "* Audio Renderer 18.08" > ~/release
 # mpc clear
 # rm -rf /var/roon/*
 # rm -f /root/.bash_history ~/.bash_history ; history -c
-
-
-### Checklist
--. GUI
--. NDA
--. Reward
-
-1. cpufrqutils for cpu governor
-
+# tar cf renderer.tar --no-recursion renderer

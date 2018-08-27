@@ -2,7 +2,7 @@
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-#spotifyd_conf=/root/spotifyd.conf
+spotifyd_conf=/root/spotifyd.conf
 
 ethernet_ip () {
 i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
@@ -65,28 +65,31 @@ Use space in between.           사이에 빈 칸을 입력합니다." --ok-butt
      pass=$(echo "$wifi" | rev | cut -d " " -f1 | rev)
     fi
     if [ -n "$ap" ] && [ -n "$pass" ]; then
-     wpa_passphrase MyAP abcd1234 >> /etc/wpa_supplicant/wpa_supplicant.conf
+     wpa_passphrase $ap $pass >> /etc/wpa_supplicant/wpa_supplicant.conf
      systemctl unmask wpa_supplicant
+     systemctl start  wlan_dhcp
      systemctl start  wpa_supplicant
-     dhclient wlan0
+     systemctl enable wlan_dhcp
      systemctl enable wpa_supplicant
+     dhclient wlan0
     fi ;;
- 2) systemctl stop    wpa_supplicant wlan_dhcp
-    systemctl disable wpa_supplicant wlan_dhcp
+ 2) sed -i '/^network={/,$d' /etc/wpa_supplicant/wpa_supplicant.conf
+    systemctl disable wpa_supplicant
+    systemctl disable wlan_dhcp
     systemctl mask    wpa_supplicant ;;
 esac
 }
 
-mpd_settings () {
-i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 3 \
+mpd_options () {
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 3 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^music_directory' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sed -i '/dop/s/^#*//g' $mpd_conf || sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ folder ]] && sed -i '/^#music_directory\|^#db_file/s/^#//' $mpd_conf || sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
+ [[ $i =~ dop    ]] && sed -i '/dop/s/^#*//g' $mpd_conf || sed -i '/^dop/s/^/#/g' $mpd_conf
+ [[ $i =~ folder ]] && sed -i '/^#*music_directory\|^#*db_file/s/^#*//' $mpd_conf || sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
  [[ $i =~ tag    ]] && sed -i '/metadata.*none/s/^/#/' $mpd_conf || sed -i '/metadata.*none/s/^#*//' $mpd_conf
 fi
 }
@@ -110,7 +113,7 @@ while true; do
 "1"  "Ethernet IP                   유선 IP 설정                 >" \
 "2"  "Wi-Fi client                  무선 연결                    >" \
 "3"  "MPD, Roon Bridge, Airplay     MPD, 룬 브리지, 에어플레이   >" \
-"4"  "MPD settings                  MPD 설정                     >" \
+"4"  "MPD options                   MPD 옵션                     >" \
 "5"  "Reboot                        재시작" \
 "6"  "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
 
@@ -121,7 +124,7 @@ while true; do
   1) ethernet_ip ;;
   2) wifi_client ;;
   3) mpd_roon_air ;;
-  4) mpd_settings ;;
+  4) mpd_options ;;
   5) reboot ;;
   6) poweroff ;;
  esac
