@@ -237,7 +237,27 @@ Audio Render Advanced
 	sudo ln -s /home/pi/audio-config /usr/bin/
 	audio-config
 
-19. Read-only
+19. Web interface
+
+	$ sudo apt-get install lighttpd
+	$ #sudo systemctl disable lighttpd.service
+	$ sudo nano /etc/lighttpd/lighttpd.conf
+		server.modules = (
+			...
+			"mod_cgi",
+		)
+		static-file.exclude-extensions = ( ..., ".sh" )
+		cgi.assign = ( ".sh" => "/bin/sh" )
+		alias.url += ( "/cgi-bin" => "/var/www/cgi-bin/" )
+		$HTTP["url"] == "/cgi-bin" {
+			cgi.assign = ( ".sh" => "" )
+		    }
+	$ sudo systemctl restart lighttpd
+	$ sudo nano /var/www/cgi-bin/test.sh
+	$ sudo nano /var/www/html/index.html
+		 <form action="/cgi-bin/test.sh" method="get">
+
+20. Read-only
 	cp remountro remountrw /home/pi
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
@@ -247,7 +267,7 @@ Audio Render Advanced
 	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
 
-20. Make Image
+21. Make Image
 
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get update
