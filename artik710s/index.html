@@ -1,0 +1,70 @@
+<!DOCUTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <style>
+  body {background-color: ghostwhite;}
+ </style>
+ <title>
+  Audio-config (오디오 설정)
+ </title>
+</head>
+<body>
+ <h2>Audio-config (오디오 설정)</h2>
+ <form action="/cgi-bin/ethernet.sh" method="get">
+  <h3>1. Ethernet IP (유선 IP 설정)</h3>
+  <fieldset>
+  <legend>Static IP (수동 IP)</legend>
+  <input type="number" name="ip1" size="3" min="1" max="254" value="192"> .
+  <input type="number" name="ip2" size="3" min="0" max="255" value="168"> .
+  <input type="number" name="ip3" size="3" min="0" max="255" value="0"> .
+  <input type="number" name="ip4" size="3" min="1" max="254" value="">
+  <legend>Subnet Mask (서브넷 마스크)</legend>
+  <input type="number" name="mask1" size="3" min="0" max="255" value="255" disabled> .
+  <input type="number" name="mask2" size="3" min="0" max="255" value="255" step="255"> .
+  <input type="number" name="mask3" size="3" min="0" max="255" value="255" step="255"> .
+  <input type="number" name="mask4" size="3" min="0" max="255" value="0" disabled>
+  <legend>Gateway (게이트웨이)</legend>
+  <input type="number" name="gw1" size="3" min="1" max="254" value="192"> .
+  <input type="number" name="gw2" size="3" min="0" max="255" value="168"> .
+  <input type="number" name="gw3" size="3" min="0" max="255" value="0"> .
+  <input type="number" name="gw4" size="3" min="1" max="254" value="1">
+  </fieldset><br>
+  &nbsp;<button type="submit"><b>Dynamic IP (자동 IP)</b></button>
+  &nbsp;<button type="cancel"><b>Static IP (수동 IP)</b></button>
+ </form>
+ <form action="/cgi-bin/wifi.sh" method="post">
+  <h3>2. Wi-Fi Client (무선 연결)</h3>
+  <fieldset>
+  <legend>Wi-Fi AP (무선 공유기)</legend>
+  <input type="text" name="ap" value="">
+  <legend>Password (비밀번호)</legend>
+  <input type="password" name="pass" value="">
+  </fieldset><br>
+  &nbsp;<button type="cancel"><b>Disable Wi-Fi (무선 연결 안 함)</b></button>
+  &nbsp;<button type="submit"><b>Enable Wi-Fi (무선 연결)</b></button>
+ </form>
+ <form action="/cgi-bin/services.sh" method="get">
+  <h3>3. MPD, Roon Bridge, Airplay</h3>
+  <input type="checkbox" name="mpd" checked> MPD<br>
+  <input type="checkbox" name="roon" checked> Roon Bridge (룬 브리지)<br>
+  <input type="checkbox" name="airplay"> Airplay (에어플레이)<br><br>
+  &nbsp;<button type="submit"><b>OK (확인)</b></button>
+ </form>
+ <form action="/cgi-bin/mpd-opt.sh" method="get">
+  <h3>4. MPD Options (MPD 옵션)</h3>
+  <input type="checkbox" name="mpd" checked> Enable DoP (DSD over PCM 사용)<br>
+  <input type="checkbox" name="roon"> Enable Music Folder (음악 폴더 사용)<br>
+  <input type="checkbox" name="airplay"> Enable Metadata (태그 사용)<br><br>
+  &nbsp;<button type="submit"><b>OK (확인)</b></button>
+ </form>
+ <form action="/cgi-bin/restart.sh" method="get">
+  <h3>5. Restart System (시스템 다시 시작)</h3>
+  &nbsp;<button type="submit"><b>Reboot (재시작)</b></button>
+  &nbsp;<button type="submit"><b>Poweroff (전원 끄기)</b></button>
+ </form>
+</body>
+<footer>
+ <i>Audio-config (오디오 설정)</i>
+</footer>
+</html>
