@@ -1,0 +1,181 @@
+https://openwrt.org/start?id=toh/xunlong/orangepizero
+
+1. Orange Pi R1 (Alternative)
+
+https://downloads.openwrt.org/releases/18.06.0-rc2/targets/sunxi/cortexa7/openwrt-18.06.0-rc2-sunxi-cortexa7-sun8i-h2-plus-orangepi-r1-ext4-sdcard.img.gz
+https://downloads.openwrt.org/releases/18.06.0-rc2/targets/sunxi/cortexa7/openwrt-18.06.0-rc2-sunxi-cortexa7-sun8i-h2-plus-orangepi-r1-squashfs-sdcard.img.gz
+
+$ gzip -d openwrt-18.06.0-rc2-sunxi-cortexa7-sun8i-h2-plus-orangepi-r1-ext4-sdcard.img.gz
+$ sudo dd status=progress if=openwrt-18.06.0-rc2-sunxi-cortexa7-sun8i-h2-plus-orangepi-r1-ext4-sdcard.img of=/dev/sdc
+
+# vi /etc/config/network
+
+	config interface 'lan'
+	#	option type 'bridge'
+		option ifname 'eth0'
+		option proto 'static'
+		option ipaddr '192.168.0.10'
+		option netmask '255.255.255.0'
+		option gateway '192.168.0.1'
+		option dns '192.168.0.1'
+	#	option ip6assign '60'
+
+# /etc/init.d/network restart
+# opkg update
+## opkg list
+## opkg list | grep -e kmod -e alsa -e mpd -e mpc -e upmpdcli -e shairport
+# opkg install kmod-usb-core kmod-usb-audio kmod-usb-uhci kmod-usb-ohci kmod-usb2 # kmod-usb3
+## opkg install kmod-usb-ohci-pci kmod-usb2-pci
+# opkg install curl nano # mpc mpd-full
+
+# opkg --force-depends remove  libffmpeg-mini
+# opkg --force-depends install libffmpeg-full
+$ scp libffmpeg-mini_3.2.2-1_arm_cortex-a7_neon-vfpv4.ipk libmpdclient_2.14-1_arm_cortex-a7_neon-vfpv4.ipk mpc_0.30-1_arm_cortex-a7_neon-vfpv4.ipk mpd-full_0.20.20-1_arm_cortex-a7_neon-vfpv4.ipk root@192.168.0.10:/tmp/
+
+# opkg install /tmp/libffmpeg-mini_3.2.2-1_arm_cortex-a7_neon-vfpv4.ipk
+# opkg install /tmp/libmpdclient_2.14-1_arm_cortex-a7_neon-vfpv4.ipk
+# opkg install /tmp/mpc_0.30-1_arm_cortex-a7_neon-vfpv4.ipk
+# opkg install /tmp/mpd-full_0.20.20-1_arm_cortex-a7_neon-vfpv4.ipk
+
+## opkg install upmpdcli shairport-sync-mbedtls
+
+$ scp mpd.conf kr2mpd root@192.168.0.10:/tmp/
+
+# nano /etc/sysctl.conf
+
+ALSA
+
+## /etc/init.d/mpd stop
+# mv /etc/mpd.conf /etc/mpd.conf.orig
+# mv /tmp/mpd.conf /etc/mpd.conf
+# nano /etc/mpd.conf
+	bind_to_address "192.168.0.10"
+# nano /etc/init.d/mpd
+	procd_set_param command "$PROG" --no-daemon "$CONFIGFILE"&>/dev/null</dev/null
+	#procd_set_param nice "$NICEPRIO"
+# /etc/init.d/mpd start
+# mv /tmp/kr2mpd /usr/bin/
+
+MPD
+
+# nano /etc/init.d/mpd
+	procd_set_param command nohup "$PROG" --no-daemon "$CONFIGFILE">/dev/null</dev/null 2>/dev/null
+	# Give MPD some real-time priority
+	#procd_set_param nice "$NICEPRIO"
+# /etc/init.d/mpd restart
+
+# opkg update
+# chrt; taskset; pstree; nohup
+# opkg install procps-ng-pgrep coreutils-nohup coreutils-nice
+# chrt; taskset; pstree; nohup
+# opkg remove  --force-depends libffmpeg-mini
+# opkg install --force-depends libffmpeg-full
+
+# /etc/init.d/mpd disable
+# mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.sav
+# mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.sav
+# mv /etc/mpd.conf /etc/mpd.conf.sav
+# mv /usr/lib//libFLAC.so.8.3.0 /usr/lib//libFLAC.so.8.3.0.sav
+# nano /etc/init.d/mpd
+	PROG=/tmp/mpd
+	CONFIGFILE=/tmp/mpd.conf
+
+# nano /etc/rc.local
+
+cp /usr/lib/libasound.so.2.0.0.sav /tmp/libasound.so.2.0.0
+ln -sf /tmp/libasound.so.2.0.0 /usr/lib/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
+ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/mpd /tmp/
+cp /etc/mpd.conf.sav /tmp/mpd.conf
+cp /usr/lib//libFLAC.so.8.3.0.sav /tmp/libFLAC.so.8.3.0
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
+
+echo noop | tee /sys/block/mmcblk0*/queue/scheduler
+
+#nohup /tmp/mpd --no-daemon /tmp/mpd.conf>/dev/null</dev/null 2>/dev/null
+/etc/init.d/mpd start
+
+#sleep 3
+#pkill -x rc.local
+
+2. 15.05.1 Chaos Calmer
+
+15.05.1 Chaos Calmer + Linux kernel 3.4.113 (Armbian)
+
+http://www.orangepi.org/downloadresources/
+https://mega.nz/#F!bpcngYxL!Dfqczf4BpDjtanPMbBv4Kg
+
+$ unrar x openwrt_For_OrangePizero_v0_8_0.rar
+$ sudo fdisk -l
+$ sudo dd status=progress bs=4M if=openwrt_For_OrangePizero_v0_8_0.img of=/dev/sdc
+
+LuCi http://192.168.1.1
+$ ssh root@192.168.1.1 (password:orangepi)
+
+# cp /etc/config/network /etc/config/network.orig
+# cp /etc/config/wireless /etc/config/wireless.orig
+# nano /etc/config/network
+  config 'interface' 'wwan'
+	option 'proto' 'dhcp'
+# nano /etc/config/wireless
+  config 'wifi-device' 'radio0'
+	option 'type'       'mac80211'
+	…
+	option 'channel'    '*'
+	option 'disabled' 0
+
+  config 'wifi-iface'
+	option 'device'     'radio0'
+	option 'network'    'wwan'
+	option 'mode'       'sta'
+	option 'ssid'       '*****'
+	option 'encryption' 'psk2'
+	option 'key'        '*****'
+# /etc/init.d/network restart
+# opkg update
+## opkg list
+## opkg list | grep -e kmod -e alsa -e mpd -e mpc -e upmpdcli -e shairport
+## opkg install kmod-usb-core kmod-usb-audio kmod-usb-uhci kmod-usb-ohci kmod-usb2 # kmod-usb3
+# opkg install kmod-usb-ohci-pci kmod-usb2-pci
+# opkg install alsa-lib mpc nano curl mpd-full
+# cd /tmp
+## wget https://downloads.openwrt.org/snapshots/packages/arm_cortex-a7/packages/mpd-full_0.20.9-2_arm_cortex-a7.ipk
+## opkg install /tmp/mpd-full_0.19.19-2_mipsel_24kc.ipk
+## opkg install upmpdcli shairport-sync-mbedtls # After Chaos Calmer 15.05
+
+3. miZy - tiny fast embedded linux
+
+https://github.com/hyphop/miZy
+https://github.com/hyphop/miZy/wiki
+https://github.com/hyphop/miZy/releases
+
+$ wget https://github.com/hyphop/miZy/releases/download/mpd/orange-pi-h2-miZy-musicbox-mpd.MMC.hybrid.16M.8192.bin.gz
+$ gzip -d orange-pi-h2-miZy-musicbox-mpd.MMC.hybrid.16M.8192.bin.gz
+$ sudo fdisk -l
+$ sudo dd if=orange-pi-h2-miZy-musicbox-mpd.MMC.hybrid.16M.8192.bin.gz of=/dev/sdc
+
+# nano /etc/config/network
+# save_changes # overlay save -f
+
+$ dd of=/dev/mmcblk0 < *.MMC.hybrid.bin
+
+cf)
+
+* Alix
+https://wiki.openwrt.org/toh/pcengines/alix
+
+* Raspberry Pi 2
+https://wiki.openwrt.org/toh/raspberry_pi_foundation/raspberry_pi
+https://downloads.openwrt.org/releases/18.06.0-rc2/targets/brcm2708/bcm2709/openwrt-18.06.0-rc2-brcm2708-bcm2709-rpi-2-ext4-sdcard.img.gz
+https://downloads.openwrt.org/releases/18.06.0-rc2/targets/brcm2708/bcm2709/openwrt-18.06.0-rc2-brcm2708-bcm2709-rpi-2-squahfs-sdcard.img.gz
+https://github.com/Hexxeh/rpi-update
+
+gunzip *.gz
+
+$ telnet 192.168.1.1
+
+# uci set network.lan.proto=dhcp
+# uci commit
+# /etc/init.d/network restart
