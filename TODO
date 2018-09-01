@@ -8,6 +8,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2756' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
@@ -42,7 +43,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	5.4 sudo nano /etc/mpd.conf.sav
 		#gapless_mp3_playback "no"
 
-	5.5 Update kr2mpd for kbs radios
+	5.5 Update kbs radios for kr2mpd
 
 	5.6 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
 
@@ -52,4 +53,6 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	5.9 comment out vm.dirty_background_ratio & vm.dirty_ratio (sysctl.conf)
 
-	5.10 #conservative (cpu governor)
+	5.10 nohup ...>/dev/null</dev/null 2>/dev/null
+
+	5.11 defaults.pcm.minperiodtime 2756 (alsa.conf.sav)
