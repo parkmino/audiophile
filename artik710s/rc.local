@@ -32,7 +32,7 @@ musicpd_bg () {
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
-nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null</dev/null
+nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null
 }
 
 eol () {
@@ -123,6 +123,6 @@ done
 
 musicpd_bg &
 eol &
-nohup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
+nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null
 
 exit 0
