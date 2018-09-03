@@ -1,0 +1,78 @@
+<!DOCUTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content ="width=device-width,initial-scale=1,user-scalable=no">
+ <style>
+  body {background-color: ghostwhite;}
+ </style>
+ <title>
+  Audio-config (오디오 설정)
+ </title>
+ <link rel="stylesheet" href="w3.css">
+</head>
+<body>
+ <h2><b>&nbsp;Audio-config</b></h2>
+ <br><h4><b>&nbsp;1. Ethernet IP (유선 IP 설정)</b></h4>
+ <form action="/cgi-bin/eth-st.sh" method="get">
+  &emsp;Static IP (수동 IP)<br>
+  &emsp;<input type="number" name="ip1" size="3" min="1" max="254" value="192" required> .
+  &emsp;<input type="number" name="ip2" size="3" min="0" max="255" value="168" required> .
+  &emsp;<input type="number" name="ip3" size="3" min="0" max="255" value="0" required> .
+  &emsp;<input type="number" name="ip4" size="3" min="1" max="254" value="3" required><br>
+  &emsp;Subnet Mask (서브넷 마스크)<br>
+  &emsp;<input type="number" name="mask1" size="3" min="0" max="255" value="255" disabled> .
+  &emsp;<input type="number" name="mask2" size="3" min="0" max="255" step="255" value="255" required> .
+  &emsp;<input type="number" name="mask3" size="3" min="0" max="255" step="255" value="255" required> .
+  &emsp;<input type="number" name="mask4" size="3" min="0" max="255" value="0" disabled><br>
+  &emsp;Gateway (게이트웨이)<br>
+  &emsp;<input type="number" name="gw1" size="3" min="1" max="254" value="192" required> .
+  &emsp;<input type="number" name="gw2" size="3" min="0" max="255" value="168" required> .
+  &emsp;<input type="number" name="gw3" size="3" min="0" max="255" value="0" required> .
+  &emsp;<input type="number" name="gw4" size="3" min="1" max="254" value="1" required><br><br>
+  &emsp;<button type="submit">Static IP (수동 IP)</button>
+ </form>
+ <form action="/cgi-bin/eth-dyn.sh" method="get">
+  &emsp;<button type="submit">Dynamic IP (자동 IP)</button>
+ </form>
+ <form action="/cgi-bin/wifi.sh" method="get">
+  </br><h4><b>&nbsp;2. Wi-Fi Client (무선 연결)</b></h4>
+  &emsp;Wi-Fi AP (무선 공유기)<br>
+  &emsp;<input type="text" name="ap" value="" required><br>
+  &emsp;Password (비밀번호)<br>
+  &emsp;<input type="password" name="pass" value="" required><br><br>
+  &emsp;<button type="submit">Wi-Fi (연결)</button>
+ </form>
+ <form action="/cgi-bin/wifi-no.sh" method="get">
+  &emsp;<button type="submit">No Wi-Fi (연결 안 함)</button>
+ </form>
+ <form action="/cgi-bin/services.sh" method="get">
+  </br><h4><b>&nbsp;3. MPD, Roon Bridge, Airplay</b></h4>
+  &emsp;<input type="checkbox" name="mpd" id="mpd-id" checked>
+  <label for="mpd-id">&nbsp;MPD</label><br>
+  &emsp;<input type="checkbox" name="roon" id="roon-id" checked>
+  <label for="roon-id">&nbsp;Roon Bridge (룬 브리지)</label><br>
+  &emsp;<input type="checkbox" name="airplay" id="airplay-id">
+  <label for="airplay-id">&nbsp;Airplay (에어플레이)</label><br><br>
+  &emsp;<button type="submit">OK (확인)</button>
+ </form>
+ <form action="/cgi-bin/mpd-opt.sh" method="get">
+  </br><h4><b>&nbsp;4. MPD Options (MPD 옵션)</b></h4>
+  &emsp;<input type="checkbox" name="dop" id="dop-id" checked>
+  <label for="dop-id">&nbsp;Enable DoP (DSD over PCM 사용)</label><br>
+  &emsp;<input type="checkbox" name="folder" id="folder-id">
+  <label for="folder-id">&nbsp;Enable Music Folder (음악 폴더 사용)</label><br>
+  &emsp;<input type="checkbox" name="tag" id="tag-id">
+  <label for="tag-id">&nbsp;Enable Metadata (태그 사용)</label><br><br>
+  &emsp;<button type="submit">OK (확인)</button>
+ </form>
+ </br><h4><b>&nbsp;5. Restart System (시스템 다시 시작)</b></h4>
+ <form action="/cgi-bin/restart.sh?reboot" method="get">
+  &emsp;<button type="submit" name="f" value="reboot">Reboot (재시작)</button>
+  &emsp;<button type="submit" name="f" value="poweroff">Poweroff (전원 끄기)</button>
+ </form>
+</body>
+<footer>
+ </br><i>&nbsp;Audio-config (오디오 설정)</i>
+</footer>
+</html>
