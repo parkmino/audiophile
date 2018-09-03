@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "Content-type: text/html"
+echo ""
+
 cat /var/www/html/return.html
 
 #eval "$(echo "$QUERY_STRING" | tr '&' ';')"
