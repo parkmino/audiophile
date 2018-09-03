@@ -246,6 +246,7 @@ Audio Render Advanced
 			...
 			"mod_cgi",
 		)
+		server.username = "root"
 		static-file.exclude-extensions = ( ..., ".sh" )
 		cgi.assign = ( ".sh" => "/bin/sh" )
 		alias.url += ( "/cgi-bin" => "/var/www/cgi-bin/" )
@@ -256,6 +257,9 @@ Audio Render Advanced
 	$ sudo nano /var/www/cgi-bin/test.sh
 	$ sudo nano /var/www/html/index.html
 		 <form action="/cgi-bin/test.sh" method="get">
+	$ sudo visudo
+		www-data ALL=(ALL) NOPASSWD:ALL
+	$ sudo adduser www-data sudo
 
 20. Read-only
 	cp remountro remountrw /home/pi
