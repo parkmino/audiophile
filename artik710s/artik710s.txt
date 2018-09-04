@@ -92,6 +92,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	pcm.0.card 1
 # mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.orig
 ### MPD binary & mpd.conf
+# nano /etc/mpd.conf.sav
+	decoder {
+	plugin "pcm"
+	enabled "yes"
+	}
 ### Roon Bridge
 #### Airplay & Spotifyd
 ### rc.local
@@ -112,5 +117,7 @@ https://github.com/davidgs/ARTIK-5-backup
 # echo "* Audio Renderer 18.08" > ~/release
 # mpc clear
 # rm -rf /var/roon/*
+# cat /lib/systemd/system/sshd.service
+# rm /etc/systemd/system/*/sshd.service
 # rm -f /root/.bash_history ~/.bash_history ; history -c
 # tar cf renderer.tar --no-recursion renderer
