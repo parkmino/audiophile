@@ -28,23 +28,30 @@ case $q in
 	#url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8"
 	;;
  2fm)   #kbsr 2
-	#kbsr 25
-	url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8" ;;
+	kbsr 25
+	#url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8"
+	;;
  1r)    #kbsr 3
-	#kbsr 21
-	url="http://112.175.138.137:1935/${1}adio/${1}adio.stream/playlist.m3u8" ;;
+	kbsr 21
+	#url="http://112.175.138.137:1935/${1}adio/${1}adio.stream/playlist.m3u8"
+	;;
  2r)    #kbsr 4
-	#kbsr 22
-	url="http://112.175.138.137:1935/${1}adio/${1}adio.stream/playlist.m3u8" ;;
+	kbsr 22
+	#url="http://112.175.138.137:1935/${1}adio/${1}adio.stream/playlist.m3u8"
+	;;
  3r)    #kbsr 5
-	kbsr 23  ;;
+	kbsr 23
+	;;
  dmb)   #kbsr 6
-	#kbsr dmb
-	url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8" ;;
+	kbsr dmb
+	#url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8"
+	;;
  scr)   #kbsr 7
-	kbsr I26 ;;
+	kbsr I26
+	;;
  rki)   #kbsr 8
-	kbsr I92 ;;
+	kbsr I92
+	;;
  mbcm)  mbcr chm ;;
  mbc4u) mbcr mfm ;;
  mbcfm) mbcr sfm ;;
@@ -54,9 +61,9 @@ case $q in
  tbs)   url="http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8" ;;
  tbse)  url="http://tbs.hscdn.com/tbsradio/efm/playlist.m3u8" ;;
  gugak) url="http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
- stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
+ play|pause|stop) mpc "$q" ;;
 esac
 
-mpc add $url && mpc play $(mpc playlist | wc -l)
+mpc add "$url" && mpc play $(mpc playlist | wc -l)
 
 echo '<meta http-equiv="refresh" content="0;url=/index.html">'
