@@ -12,7 +12,9 @@ usage () {
 
 kbsr () {
 #url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
- url="$(curl -s http://pwwwapi.kbs.co.kr/api/v1/landing/live/$1 | cut -d\" -f16)"
+#url="$(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1 | cut -d\" -f16)"
+#url="$(echo "$url" | cut -d\/ -f-6)/$(curl -s "$url" | tail -1)"
+ url="$(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1 | cut -d\" -f16 | cut -d\/ -f-6)/$(curl -s $(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1 | cut -d\" -f16) | tail -1)"
 }
 
 mbcr () {
@@ -25,21 +27,34 @@ sbsr () {
 
 case $1 in
  1fm)   #kbsr 1
-	kbsr 24  ;;
+        kbsr 24
+	#url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8"
+	;;
  2fm)   #kbsr 2
-	kbsr 25  ;;
+	kbsr 25
+	#url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8"
+	;;
  1r)    #kbsr 3
-	kbsr 21  ;;
+	kbsr 21
+	#url="http://112.175.138.137:1935/${1}adio/${1}adio.stream/playlist.m3u8"
+	;;
  2r)    #kbsr 4
-	kbsr 22  ;;
+	kbsr 22
+	#url="http://112.175.138.137:1935/${1}adio/${1}adio.stream/playlist.m3u8"
+	;;
  3r)    #kbsr 5
-	kbsr 23  ;;
+	kbsr 23
+	;;
  dmb)   #kbsr 6
-	url="http://112.175.138.137:1935/dmb/dmb.stream/playlist.m3u8" ;;
+	kbsr dmb
+	#url="http://112.175.138.137:1935/$1/$1.stream/playlist.m3u8"
+	;;
  scr)   #kbsr 7
-	kbsr I26 ;;
+	kbsr I26
+	;;
  rki)   #kbsr 8
-	kbsr I92 ;;
+	kbsr I92
+	;;
  mbcm)  mbcr chm ;;
  mbc4u) mbcr mfm ;;
  mbcfm) mbcr sfm ;;
