@@ -1,0 +1,161 @@
+https://openwrt.org/toh/raspberry_pi_foundation/raspberry_pi
+https://downloads.openwrt.org/releases/18.06.1/targets/brcm2708/bcm2709/
+
+1. Install
+
+$ sudo dd status=progress if=openwrt-18.06.1-brcm2708-bcm2709-rpi-2-ext4-factory.img of=/dev/sdc
+#
+$ sudo nano /media/parkmino/etc/config/network
+
+	config interface 'lan'
+	#	option type 'bridge'
+		option ifname 'eth0'
+		option proto 'static'
+		option ipaddr '192.168.0.3'
+		option netmask '255.255.255.0'
+		option gateway '192.168.0.1'
+		option dns '192.168.0.1'
+	#	option ip6assign '60'
+
+$ sudo nano /boot/config.txt
+	#dtparam=random=on
+	#dtparam=watchdog=on
+	#dtparam=audio=on
+	#dtparam=i2c0=on
+	#dtparam=i2c1=on
+	#dtparam=spi=on
+
+# uname -a
+## ls -al /usr/bin/rpi-update
+## curl -L --output /usr/bin/rpi-update https://raw.githubusercontent.com/Hexxeh/rpi-update/master/rpi-update && chmod +x /usr/bin/rpi-update
+## rpi-update
+
+## vi /etc/config/network
+
+	config interface 'lan'
+	#	option type 'bridge'
+		option ifname 'eth0'
+		option proto 'static'
+		option ipaddr '192.168.0.10'
+		option netmask '255.255.255.0'
+		option gateway '192.168.0.1'
+		option dns '192.168.0.1'
+	#	option ip6assign '60'
+
+## /etc/init.d/network restart
+# uname -a
+# opkg update
+## opkg list
+## opkg list | grep -e kmod -e alsa -e mpd -e mpc -e upmpdcli -e shairport
+# opkg install kmod-usb-core kmod-usb-audio kmod-usb-uhci kmod-usb-ohci kmod-usb2 # kmod-usb3
+## opkg install kmod-usb-ohci-pci kmod-usb2-pci
+# opkg install curl nano # mpc mpd-full
+# opkg install procps-ng-pgrep coreutils-nohup
+# opkg install /tmp/libmpdclient_2.14-1_arm_cortex-a7_neon-vfpv4.ipk
+# opkg install /tmp/mpc_0.30-1_arm_cortex-a7_neon-vfpv4.ipk
+# opkg install /tmp/mpd-full_0.20.21-1_arm_cortex-a7_neon-vfpv4.ipk
+## opkg install upmpdcli shairport-sync-mbedtls
+
+2. Sysctl.conf
+
+# nano /etc/sysctl.conf
+
+vm.dirty_writeback_centisecs = 0
+vm.oom_dump_tasks = 0
+vm.oom_kill_allocating_task = 1
+vm.overcommit_memory = 1
+vm.panic_on_oom = 2
+vm.swappiness = 0
+vm.vfs_cache_pressure = 0
+kernel.sched_rr_timeslice_ms = 1
+net.ipv4.tcp_sack = 0
+net.ipv4.tcp_no_metrics_save = 1
+net.ipv6.conf.all.disable_ipv6 = 1
+
+3. ALSA
+
+# nano /usr/share/alsa/alsa.conf
+
+4. MPD
+
+$ scp mpd.conf kr2mpd root@192.168.0.3:/tmp/
+
+# /etc/init.d/mpd stop
+# mv /etc/mpd.conf /etc/mpd.conf.orig
+# mv /tmp/mpd.conf /etc/mpd.conf
+# nano /etc/mpd.conf
+	bind_to_address "192.168.0.3"
+# nano /etc/init.d/mpd
+	procd_set_param command nohup "$PROG" --no-daemon "$CONFIGFILE">/dev/null</dev/null 2>/dev/null
+	#procd_set_param nice "$NICEPRIO"
+# /etc/init.d/mpd start
+# mv /tmp/kr2mpd /usr/bin/
+
+# opkg update
+# opkg install procps-ng-pgrep coreutils-nohup # coreutils-nice
+# opkg remove  --force-depends libffmpeg-mini
+# opkg install --force-depends libffmpeg-full
+# reboot
+
+5. Upmpdcli
+
+# opkg update
+# opkg install python
+# nano /etc/config/upmpdcli
+	option interface 'eth0'
+# nano /etc/init.d/upmpdcli 
+	procd_set_param command nohup "${UPMPD_BIN}">/dev/null</dev/null 2>/dev/null
+# /etc/upmpdcli.conf
+	checkcontentformat = 0
+
+6. Rc.local
+
+# mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.sav
+# mv /usr/lib/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8.3.0.sav
+# mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.sav
+# mv /etc/mpd.conf /etc/mpd.conf.sav
+# nano /etc/init.d/mpd
+	PROG=/tmp/mpd
+	CONFIGFILE=/tmp/mpd.conf
+# nano /etc/init.d/upmpdcli
+	UPMPD_BIN=/tmp/${NAME}
+# nano /etc/config/upmpdcli
+	option config '/tmp/upmpdcli.conf'
+
+# /etc/init.d/mpd disable
+# /etc/init.d/upmpdcli disable
+
+# nano /etc/rc.local
+
+cp /usr/lib/libasound.so.2.0.0.sav /tmp/libasound.so.2.0.0
+ln -sf /tmp/libasound.so.2.0.0 /usr/lib/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
+ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /tmp/
+cp /etc/mpd.conf.sav /tmp/mpd.conf
+cp /usr/lib//libFLAC.so.8.3.0.sav /tmp/libFLAC.so.8.3.0
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
+ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
+
+echo noop | tee /sys/block/mmcblk0*/queue/scheduler
+
+#nohup /tmp/mpd --no-daemon /tmp/mpd.conf>/dev/null</dev/null 2>/dev/null
+/etc/init.d/mpd start
+
+#sleep 3
+#pkill -x rc.local
+
+7. Make Image
+
+# nano /etc/config/network
+	option 'device' 'eth0'
+# nano /etc/mpd.conf.sav
+	#bind_to_address
+# echo "* Mino's UPnP Audio Renderer for Raspberry Pi 2 by OpenWrt 18.09" > ~/release
+# mpc clear
+# rm -f /root/.bash_history ~/.bash_history ; history -c
+# poweroff
+
+$ sudo fdisk -l
+$ sudo dd bs=4M if=/dev/sdc of=openwrt_audio_renderer_18.09.img
+$ zip openwrt_audio_renderer_18.09.zip openwrt_audio_renderer_18.09.img
