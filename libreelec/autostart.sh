@@ -7,7 +7,7 @@ for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
 done
 
-for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
  chrt -op 0 $i
  renice  -3 $i
 done
@@ -16,7 +16,7 @@ m_task=3
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ && $2 !~ /kodi/ && $2 !~ /kodi.bin/ {print $1}'); do
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd$|kodi|kodi.bin/ {print $1}'); do
   taskset -acp 0 $pid || true
  done
 fi
