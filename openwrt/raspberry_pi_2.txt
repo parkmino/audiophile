@@ -50,7 +50,7 @@ $ sudo nano /boot/config.txt
 # opkg install kmod-usb-core kmod-usb-audio kmod-usb-uhci kmod-usb-ohci kmod-usb2 # kmod-usb3
 ## opkg install kmod-usb-ohci-pci kmod-usb2-pci
 # opkg install curl nano # mpc mpd-full
-# opkg install procps-ng-pgrep coreutils-nohup
+# opkg install procps-ng-pgrep procps-ng-ps coreutils-nohup
 # opkg install /tmp/libmpdclient_2.14-1_arm_cortex-a7_neon-vfpv4.ipk
 # opkg install /tmp/mpc_0.30-1_arm_cortex-a7_neon-vfpv4.ipk
 # opkg install /tmp/mpd-full_0.20.21-1_arm_cortex-a7_neon-vfpv4.ipk
@@ -144,6 +144,10 @@ echo noop | tee /sys/block/mmcblk0*/queue/scheduler
 
 #sleep 3
 #pkill -x rc.local
+
+echo none > /sys/class/leds/led0/trigger
+echo 0    > /sys/class/leds/led0/brightness
+[ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
 
 7. Make Image
 
