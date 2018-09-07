@@ -50,7 +50,7 @@ $ scp mpd.conf kr2mpd root@192.168.0.10:/tmp/
 # nano /etc/mpd.conf
 	bind_to_address "192.168.0.10"
 # nano /etc/init.d/mpd
-	procd_set_param command "$PROG" --no-daemon "$CONFIGFILE">/dev/null</dev/null 2>/dev/null
+	procd_set_param command nohup "$PROG" --no-daemon "$CONFIGFILE">/dev/null</dev/null 2>/dev/null
 	#procd_set_param nice "$NICEPRIO"
 # /etc/init.d/mpd start
 # mv /tmp/kr2mpd /usr/bin/
@@ -72,9 +72,9 @@ $ scp mpd.conf kr2mpd root@192.168.0.10:/tmp/
 1.5 Rc.local
 
 # mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.sav
+# mv /usr/lib/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8.3.0.sav
 # mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.sav
 # mv /etc/mpd.conf /etc/mpd.conf.sav
-# mv /usr/lib//libFLAC.so.8.3.0 /usr/lib//libFLAC.so.8.3.0.sav
 # nano /etc/init.d/mpd
 	PROG=/tmp/mpd
 	CONFIGFILE=/tmp/mpd.conf
