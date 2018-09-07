@@ -57,7 +57,7 @@ $ scp mpd.conf kr2mpd root@192.168.0.10:/tmp/
 
 # opkg update
 # chrt; taskset; pstree; nohup
-# opkg install procps-ng-pgrep coreutils-nohup coreutils-nice
+# opkg install procps-ng-pgrep procps-ng-ps coreutils-nohup coreutils-nice
 # chrt; taskset; pstree; nohup
 # opkg remove  --force-depends libffmpeg-mini
 # opkg install --force-depends libffmpeg-full
