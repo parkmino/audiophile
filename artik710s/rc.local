@@ -16,7 +16,7 @@ musicpd_bg () {
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
   sec=$(($sec+1))
-  [ "$sec" -ge 10 ] && return
+  [ "$sec" -ge 10 ] && break
  done
  sleep 1
  pgr_mpd=$(pgrep -x mpd)
@@ -43,7 +43,7 @@ eol () {
  until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
   sleep 1
   sec=$(($sec+1))
-  [ "$sec" -ge 10 ] && return
+  [ "$sec" -ge 10 ] && break
  done
  sleep 1
  taskset -acp $s_task $(pgrep -x upmpdcli) || true
