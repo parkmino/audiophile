@@ -61,9 +61,11 @@ case $q in
  tbs)   url="http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8" ;;
  tbse)  url="http://tbs.hscdn.com/tbsradio/efm/playlist.m3u8" ;;
  gugak) url="http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
- play|pause|stop) mpc "$q" ;;
 esac
 
-mpc add "$url" && mpc play $(mpc playlist | wc -l)
+case $q in
+ play|pause|stop) mpc "$q" ;;
+ *) mpc add "$url" && mpc play $(mpc playlist | wc -l) ;;
+esac
 
 echo '<meta http-equiv="refresh" content="0;url=/index.html">'
