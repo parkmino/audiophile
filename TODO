@@ -43,7 +43,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	5.4 sudo nano /etc/mpd.conf.sav
 		#gapless_mp3_playback "no"
 
-	5.5 Update kbs radios for kr2mpd
+	5.5 Update kr2mpd for KBS radios
 
 	5.6 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
 
@@ -56,3 +56,35 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	5.10 nohup ...>/dev/null</dev/null 2>/dev/null
 
 	5.11 defaults.pcm.minperiodtime 2756 (alsa.conf.sav)
+
+	5.12 kernel.printk
+		cat /proc/sys/kernel/printk
+		nano /etc/sysctl.conf
+			kernel.printk = 0 0 0 0
+
+	5.13 sudo sed -i '/^#/d' /etc/mpd.conf.sav
+		#dop
+		#music_directory
+		#metadata
+
+	5.14 sudo nano /etc/mpd.conf.sav
+		input {
+		plugin "mms"
+		enabled "no"
+		}
+		#playlist_plugin {
+		#name "extm3u"
+		#enabled "no"
+		#}
+		#playlist_plugin {
+		#name "xspf"
+		#enabled "no"
+		#}
+		#decoder {
+		#plugin "oggflac"
+		#enabled "no"
+		#}
+		playlist_plugin {
+		name "flac"
+		enabled "no"
+		}
