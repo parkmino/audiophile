@@ -4,6 +4,7 @@ https://downloads.openwrt.org/releases/18.06.1/targets/brcm2708/bcm2709/
 1. Install
 
 $ sudo dd status=progress if=openwrt-18.06.1-brcm2708-bcm2709-rpi-2-ext4-factory.img of=/dev/sdc
+$ sync
 #
 $ sudo nano /media/parkmino/etc/config/network
 
@@ -49,7 +50,7 @@ $ sudo nano /boot/config.txt
 ## opkg list | grep -e kmod -e alsa -e mpd -e mpc -e upmpdcli -e shairport
 # opkg install kmod-usb-core kmod-usb-audio kmod-usb-uhci kmod-usb-ohci kmod-usb2 # kmod-usb3
 ## opkg install kmod-usb-ohci-pci kmod-usb2-pci
-# opkg install curl nano # mpc mpd-full
+# opkg install curl ca-bundle nano # mpc mpd-full
 # opkg install procps-ng-pgrep procps-ng-ps coreutils-nohup
 # opkg install /tmp/libmpdclient_2.14-1_arm_cortex-a7_neon-vfpv4.ipk
 # opkg install /tmp/mpc_0.30-1_arm_cortex-a7_neon-vfpv4.ipk
@@ -149,17 +150,30 @@ echo none > /sys/class/leds/led0/trigger
 echo 0    > /sys/class/leds/led0/brightness
 [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
 
-7. Make Image
+7. Disable tty
+
+# nano /etc/sysctl.conf
+	kernel.printk = 0 4 1 7
+# nano /etc/inittab
+	#::askconsole:/bin/ash --login
+	#tty1::askfirst:/usr/libexec/login.sh
+
+8. Make Image
 
 # nano /etc/config/network
-	option 'device' 'eth0'
+	option proto 'dhcp'
 # nano /etc/mpd.conf.sav
 	#bind_to_address
-# echo "* Mino's UPnP Audio Renderer for Raspberry Pi 2 by OpenWrt 18.09" > ~/release
+# echo "* Mino's UPnP Audio Renderer for Raspberry Pi 2 by OpenWrt 18.10" > ~/release
 # mpc clear
-# rm -f /root/.bash_history ~/.bash_history ; history -c
+# rm -f /root/.bash_history ~/.bash_history
 # poweroff
 
 $ sudo fdisk -l
-$ sudo dd bs=4M if=/dev/sdc of=openwrt_audio_renderer_18.09.img
-$ zip openwrt_audio_renderer_18.09.zip openwrt_audio_renderer_18.09.img
+$ sudo dd bs=4M if=/dev/sdc of=openwrt_audio_renderer_18.10.img
+$ zip openwrt_audio_renderer_18.10.zip openwrt_audio_renderer_18.10.img
+
+cf)
+ https://wiki.openwrt.org/doc/howto/usb.storage
+ https://openwrt.org/docs/guide-user/storage/usb-drives
+ https://wiki.openwrt.org/doc/howto/cifs.client

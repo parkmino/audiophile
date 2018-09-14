@@ -11,10 +11,10 @@ input {
 plugin "ffmpeg"
 enabled "no"
 }
-#input {
-#plugin "mms"
-#enabled "no"
-#}
+input {
+plugin "mms"
+enabled "no"
+}
 mixer_type "none"
 audio_output {
 type "alsa"
@@ -28,36 +28,8 @@ mixer_type "none"
 dop "yes"
 replay_gain_handler "none"
 }
-#decoder {
-#plugin "mad"
-#enabled "no"
-#}
-#decoder {
-#plugin "vorbis"
-#enabled "no"
-#}
-decoder {
-plugin "oggflac"
-enabled "no"
-}
-#decoder {
-#plugin "sndfile"
-#enabled "no"
-#}
-#decoder {
-#plugin "faad"
-#enabled "no"
-#}
 decoder {
 plugin "pcm"
-enabled "no"
-}
-playlist_plugin {
-name "extm3u"
-enabled "no"
-}
-playlist_plugin {
-name "xspf"
 enabled "no"
 }
 playlist_plugin {
@@ -70,6 +42,10 @@ enabled "no"
 }
 playlist_plugin {
 name "embcue"
+enabled "no"
+}
+playlist_plugin {
+name "flac"
 enabled "no"
 }
 audio_buffer_size "3683"
