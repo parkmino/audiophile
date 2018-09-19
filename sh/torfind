@@ -1,0 +1,31 @@
+#!/bin/sh
+echo 'Input number to find torrents or any other key to quit
+(1) JTBC 뉴스룸
+(2) 이규연의 스포트라이트
+(3) 썰전
+(4) 랜선라이프
+(5) 그것이 알고싶다'
+read -p "*" i
+case $i in
+ 1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30"
+    title="JTBC 뉴스룸" ;;
+ 2) [ $(date +%u) -eq 4 ] && [ $(date +%k) -ge 23 ] && time="today 22:50" || time="last thursday 22:50"
+    title="이규연의 스포트라이트" ;;
+ 3) time="last thursday 23:59"
+    title="썰전" ;;
+ 9) time="last thursday 23:59"
+    title="김어준의 블랙하우스" ;;
+ 4) time="last friday 23:00"
+    title="랜선라이프" ;;
+ 5) time="last saturday 23:59"
+    title="그것이 알고싶다" ;;
+ 7) time="last friday 23:00"
+    title="비긴 어게인 시즌2" ;;
+ 8) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 23 ] && time="today 23:00" || time="last friday 23:00"
+    title="팬텀싱어2" ;;
+ *) exit ;;
+esac
+hour=$((($(date +%s)-$(date +%s -d "$time"))/3600))
+[ $hour -le 0 ] && hour=1
+echo +googler -t h$hour -n 9 --np "$title $(date +%y%m%d -d "$time") 토렌트"
+googler -t h$hour -n 9 --np "$title $(date +%y%m%d -d "$time") 토렌트" | more

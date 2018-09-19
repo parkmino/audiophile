@@ -1,0 +1,28 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") [12~13 digits]"
+ echo "Check resident-registration-number"
+}
+
+[ -z "$1" ] && read -p "* Type the RRN to check (12~13 digits) : " rrn || rrn="$@"
+
+nr=$(echo "$rrn" | tr -dc '0-9')
+[ "$nr" = "" ] || [ "$(expr length $nr)" -lt 12 ] && usage && exit
+
+for i in $(seq 1 12); do
+ eval nr$i=$(expr substr $nr $i 1)
+done
+
+cal=$(($nr1*2+$nr2*3+$nr3*4+$nr4*5+$nr5*6+$nr6*7+$nr7*8+$nr8*9+$nr9*2+$nr10*3+$nr11*4+$nr12*5))
+edc=$((11-$(expr $cal % 11)))
+
+printf "• RRN is $nr1$nr2$nr3$nr4$nr5$nr6-$nr7$nr8$nr9$nr10$nr11$nr12$edc (EDN is "
+
+if [ "$(expr length $nr)" -ge 13 ]; then
+ nr13=$(expr substr $nr 13 1)
+ [ $nr13 -eq $edc ] && printf "Correct" || printf "Incorrect!"
+else
+ printf "$edc"
+fi
+printf ")\n"

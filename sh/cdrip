@@ -1,0 +1,3 @@
+#!/bin/sh
+#icedax -D /dev/sr0 -n 8 -l 2560000 -paranoia -L 0 "$@"
+cdda2wav -D /dev/sr0 -n 8 -l 2560000 -S 1 -paranoia -paraopts=readahead=100000 -L 0 "$@"

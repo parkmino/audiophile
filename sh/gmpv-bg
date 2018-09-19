@@ -1,0 +1,35 @@
+#!/bin/sh
+
+ptzzz1 () {
+ echo -n "."
+ sleep 1
+}
+
+pgr_mpv=$(pgrep -nx gnome-mpv)
+
+[ "$pgr_mpv" = "" ] && echo "Error: gnome-mpv is not running" && exit
+
+times=0
+until pstree -p $pgr_mpv | grep -q mpv/ao; do
+ ptzzz1
+ times=$(($times+1))
+ [ "$times" -ge 10 ] && printf "\nNo audio output pid found!\n" && exit
+done
+sleep 1
+
+echo
+taskset -pc 3 $pgr_mpv
+
+echo "$(pstree -np $pgr_mpv)" | while read line; do
+    proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ case $proc in
+  dconf*|gmain|gdbus|pool|mpv/lua*|mpv/cache|mpv/demux) taskset -pc 1 $proc_nr ;;
+  mpv/vo|mpv|mpv/mpv*) taskset -pc 0,2 $proc_nr ;;
+  mpv/ao)
+   taskset -pc 3 $proc_nr
+   #sudo renice -1 -p $proc_nr
+   ionice -c 2 -n 7 -p $proc_nr ;;
+  *) taskset -pc 1 $proc_nr ;;
+ esac
+done

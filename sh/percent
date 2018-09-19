@@ -1,0 +1,14 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") a file or percent_charaters"
+ echo "Decode URL encoding (Percent Decoding)"
+}
+
+[ -z "$1" ] && usage && exit
+
+if [ -f "$1" ]; then
+ sed 's@+@ @g;s@%@\\x@g' "$1" | xargs -0 printf "%b"
+else
+ echo "$@" | cut -d ' ' -f2- | sed 's@+@ @g;s@%@\\x@g' | xargs -0 printf "%b"
+fi

@@ -1,0 +1,34 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") 6|+|c(nbc)|f(une)|g(olf)|m(tv)|s(ports)"
+ echo "   or: $(basename "$0") p(owerfm)|pl(powerfm live)|l(ovefm)|ll(lovefm live)"
+}
+
+[ -z "$1" ] && usage && exit
+
+sbs () {
+ api=$(curl -s "http://apis.sbs.co.kr/play-api/1.0/onair/channel/S$1?v_type=2&platform=pcweb&protocol=hls" | grep -o 'mediaurl.*' | cut -d\" -f3)
+ url=$(curl -s "$api" | tail -1)
+}
+
+case $1 in
+ 6)  sbs 01 ;;
+ +)  sbs 03 ;;
+ c)  sbs 06 ;;
+ f)  sbs 04 ;;
+ g)  sbs 05 ;;
+ m)  sbs 09 ;;
+ s)  sbs 02 ;;
+ p)  sbs 07 ;;
+ pl) sbs 17 ;;
+ l)  sbs 08 ;;
+ ll) sbs 18 ;;
+ *) usage ; exit ;;
+esac
+
+[ -z "$url" ] && echo "$(basename "$0") "$*" stream is not available!" && exit
+
+#cvlc --no-osd -q $url
+#mplayer $url
+mpv $url

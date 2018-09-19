@@ -1,0 +1,43 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename $0) (hour):(min)(:sec) command(s)"
+ echo "Run command(s) at specified time"
+}
+
+get_zero () {
+ sleep $(echo "1-0.$(date +%N)" | bc)
+}
+
+[ -z "$1" ] || ! $(echo "$1" | grep -q ':') && usage && exit
+
+hrs=$(echo "$1" | cut -d ':' -f1)
+min=$(echo "$1" | cut -d ':' -f2)
+sec=$(echo "$1" | cut -d ':' -f3)
+cmd=$(echo "$@" | cut -d ' ' -f2-)
+
+[ "$hrs" = "" ] && hrs=$(date +%k)
+[ "$min" = "" ] && min=0
+[ "$sec" = "" ] && sec=0
+
+! [ "$hrs" -ge 0 ] 2>/dev/null || ! [ "$hrs" -le 23 ] && echo "Error : Hour is out of range [0-23]" && exit
+! [ "$min" -ge 0 ] 2>/dev/null || ! [ "$min" -le 59 ] && echo "Error : Min is out of range [0-59]" && exit
+! [ "$sec" -ge 0 ] 2>/dev/null || ! [ "$sec" -le 59 ] && echo "Error : Sec is out of range [0-59]" && exit
+[ "$(echo "$@ " | cut -d ' ' -f2-)" = "" ] && echo "Error : No command is given" && usage && exit
+
+until [ $(date +%k) -eq $hrs ] && [ $(date +%M) -eq $min ] && [ $(date +%S) -eq $sec ];do
+ curr_sec=$(($(date +%k) * 3600 + $(date +%-M) * 60 + $(date +%-S)))
+ dest_sec=$(expr $hrs \* 3600 + $min \* 60 + $sec)
+ wait_sec=$(($dest_sec - $curr_sec))
+ [ "$wait_sec" -le 0 ] && wait_sec=$(($wait_sec + 86400))
+ printf "\33[2K\r⏳ %02d:%02d:%02d to go for '$cmd' ⌚ $(date +'%p%-I:%M:%S')" $(($wait_sec / 3600)) $(($wait_sec % 3600 / 60)) $(($wait_sec % 60))
+ get_zero
+done
+
+#if $(xmessage -buttons OK:0,Cancel:1 -center -nearmouse -timeout 60 "Time to go #for '$cmd'"); then
+ printf "\n"
+ $cmd # shift; $@
+#else
+# printf "\nCancelled\n"
+# exit
+#fi

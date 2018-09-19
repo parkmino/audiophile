@@ -1,0 +1,41 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") 1tv|2tv|w(orld)|24|s(ports)|d(rama)|j(oy)|W|l(ife)|k(ids)"
+ echo "   or: $(basename "$0") 1fm|2fm|1r|2r|3r|scr|rki"
+}
+
+[ -z "$1" ] && usage && exit
+
+fd=16
+
+case $1 in
+ 1tv) ch=11  ; fd=40 ;;
+ 2tv) ch=12  ; fd=40 ;;
+ w)   ch=14  ; fd=40 ;;
+ 24)  ch=81  ;;
+ s)   ch=N95 ;;
+ d)   ch=N91 ; fd=40 ;;
+ j)   ch=N92 ; fd=40 ;;
+ W)   ch=N94 ;;
+ l)   ch=N93 ;;
+ k)   ch=N96 ;;
+ 1fm) ch=24  ;;
+ 2fm) ch=25  ;;
+ 1r)  ch=21  ;;
+ 2r)  ch=22  ;;
+ 3r)  ch=23  ;;
+ scr) ch=I26 ;;
+ rki) ch=I92 ;;
+ *)   usage  ; exit ;;
+esac
+
+api="$(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$ch | cut -d\" -f$fd)"
+url="$(echo "$api" | grep -o '.*/')$(curl -s "$api" | tail -1)"
+
+#echo "$url" ; exit
+
+case $ch in
+ 1[1,2,4]|81|N9[1-6]) mpv "$url" ;;
+ *) mpc add "$url" && mpc play $(mpc playlist | wc -l) ;;
+esac

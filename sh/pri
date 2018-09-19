@@ -1,0 +1,36 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename $0) [view|set]"
+}
+
+if [ "$1" = view ]; then
+ for pid in $(ps -e --no-headers | awk '{print $1}'); do
+  ps -p $pid -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
+ done
+
+ echo "----- Inquiry Unusual Priorities -----"
+ for pid in $(ps -eo pid,pri --no-headers | awk '$2 != 19 {print $1}'); do
+  ps -p $pid -o pid= -o command= -o policy= -o rtprio= -o ni= -o pri=
+ done
+ #
+ #for pid in $(ps h -eo pid,class,comm | awk '{print $1}'); do
+ # if [ $(taskset -cp $pid | awk '{print $NF}') != 0-3 ]; then
+ #  ps   --no-headers $pid
+ #  taskset       -cp $pid
+ # fi 
+ #done
+elif [ "$1" = set ]; then
+ for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -3 && $4 !~ /mpd|mpv/ {print $1}'); do
+  sudo renice -2 $pid
+ done
+ for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+  sudo chrt -op 0 $pid
+  sudo renice  -3 $pid
+ done
+ #for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd|lightdm|sawfish|mpd/ {print $1}'); do
+ # sudo taskset -acp 0 $pid
+ #done
+else
+ usage
+fi

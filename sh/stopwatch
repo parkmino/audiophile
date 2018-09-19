@@ -1,0 +1,26 @@
+#!/bin/sh
+
+get_zero () {
+ sleep $(echo "1-0.$(date +%N)" | bc)
+}
+
+get_zero
+origin=$(date +'%p%-I:%M:%S')
+start=$(date +%s)
+
+while true; do
+ get_zero
+ now=$(date +%s)
+ dif=$(($now-$start))
+#day=$(($dif/86400))
+#hrs=$(($dif%86400/3600))
+ hrs=$(($dif/3600))
+ min=$(($dif%3600/60))
+ sec=$(($dif%60))
+ if [ $hrs -le 99 ]; then
+  printf "\33[2K\r⏱  %02d:%02d:%02d [ $(date +'%p%-I:%M:%S') - $origin ]" $hrs $min $sec
+ else
+  printf "\nPassed the bounds of 100 hours and exit!\n"
+  exit
+ fi
+done

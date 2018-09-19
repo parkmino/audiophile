@@ -1,0 +1,31 @@
+#!/bin/sh
+
+ip_root=$(echo $(hostname -I) | cut -d'.' -f1-3)
+  my_ip=$(echo $(hostname -I) | cut -d'.' -f4)
+   port=6600
+
+[ -z "$ip_root" ] && echo "Not connected and exit." && exit
+
+for i in $(seq 1 254); do
+ ip="$ip_root.$i"
+ printf "\33[2K\r🖧  $ip "
+ if   [ "${#i}" -eq 1 ]; then
+  printf "  "
+ elif [ "${#i}" -eq 2 ]; then
+  printf " "
+ fi
+ if ping -q -w1 -c1 $ip >/dev/null 2>&1; then
+  name=$(nmblookup -A $ip | sed -n 2p | sed 's/^[ \t]//; s/[ \t].*//')
+  [ "$name" = "No" ] && name=""
+  if [ "$my_ip" -eq "$i" ]; then
+   ping=$(echo ping | nc -w1 localhost $port | head -1 | sed 's/^OK //')
+   mac=$(ifconfig | grep -m1 HWaddr | sed 's/.*HWaddr //; s/ .*//')
+  else
+   ping=$(echo ping | nc -w1 $ip $port | head -1 | sed 's/^OK //')
+   mac=$(arp -a $ip | cut -d' ' -f4)
+  fi
+  [ -z "$ping" ] && printf "[$mac]            $name\n" || printf "[$mac] $ping $name\n"
+ fi
+done
+
+printf "\33[2K\r"

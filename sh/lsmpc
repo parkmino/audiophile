@@ -1,0 +1,3 @@
+#!/bin/sh
+mpc -f "[[[%artist% - ]%title%]|[%file%]] (%time%)" playlist | nl -w3 -s'. '
+mpc -f "%position%. [[[%artist% - ]%title%]|[%file%]]" status

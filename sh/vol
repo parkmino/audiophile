@@ -1,0 +1,74 @@
+#!/bin/sh
+
+snd1="Speaker"
+snd2="Bass Speaker"
+alsa_conf="/usr/share/alsa/alsa.conf"
+card=$(grep -m1 -o 'card .' $alsa_conf | cut -c6) # card=0
+
+#sudo sed -i '1s/$/ ctl.default.type hw ctl.default.card '"$card"''/' $alsa_conf
+[ ! -f "$alsa_conf.mixer.$card" ] && sudo sh -c "sed '1s/$/ ctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf > $alsa_conf.mixer.$card"
+sudo ln -sf $alsa_conf.mixer.$card $alsa_conf
+
+amixer_init() {
+ mixer="
+   'Speaker'		mute
+   'Speaker'		0
+   'Headphone'		mute
+   'Headphone'		0
+   'Bass Speaker'	mute
+   'IEC958'		mute
+   'Master'		87
+   'Master'		unmute
+   'Auto-Mute Mode'	Disabled
+   'Loopback Mixing'	Disabled"
+  #'PCM'		0
+  echo $mixer | xargs -n2 amixer -q set
+}
+
+amixer_snd1_set() {
+ amixer set "$snd1" $1
+}
+
+amixer_snd12_set() {
+ amixer -q set "$snd1" $1
+ amixer -q set "$snd2" $1
+}
+
+case $1 in
+ init) amixer_init ;;
+ mute|unmute|toggle)
+  for i in Speaker "Bass Speaker" Master; do
+   amixer -q set "$i" $1
+  done ;;
+ up)   amixer_snd12_set unmute; amixer_snd1_set 1dB+ ;;
+ down) amixer_snd12_set unmute; amixer_snd1_set 1dB- ;;
+ IEC958) amixer -q set IEC958 $2 ;;
+ [0-9]|[1-9][0-9]|100|stat|status)
+  vol="  0  4  8 11 14 14 20 23 25 27
+	27 27 29 31 33 35 37 39 39 39
+	41 41 43 43 45 45 47 48 49 50
+	51 52 53 54 55 55 56 57 58 58
+	59 60 60 61 62 62 63 64 64 65
+	65 66 67 67 68 68 69 69 70 70
+	71 71 72 72 73 73 74 74 75 75
+	76 76 76 77 77 78 78 78 79 79
+	80 80 80 81 81 82 82 82 83 83
+	83 84 84 84 85 85 85 86 86 86 87 "
+  if [ $1 = stat ] || [ $1 = status ]; then
+   printf "• Status of IEC958\t:     ($(amixer get IEC958 | tail -1 | cut -d '[' -f2 | cut -d ']' -f1))\n"
+   for i in Headphone $snd1 Master; do
+    num=$(amixer get $i | tail -1 | cut -d ':' -f2 | cut -d ' ' -f3)
+    sts=$(amixer get $i | tail -1 | cut -d '[' -f4 | cut -d ']' -f1)
+    for j in $(seq 1 101); do
+     [ $(echo $vol | cut -d ' ' -f $j) -eq $num ] && printf "• Volume of $i\t: %3d ($sts)\n" $(($j-1)) && break
+    done
+   done
+  else
+   amixer_init
+   amixer_snd12_set unmute
+   amixer_snd1_set $(echo $vol | cut -d ' ' -f $(($1+1)))
+  fi ;;
+ *) chrt -i 0 nice -n 19 ionice -c 3 taskset -c 0 alsamixer -V all ;;
+esac
+
+sudo ln -sf /dev/shm/alsa.conf $alsa_conf

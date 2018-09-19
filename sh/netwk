@@ -1,0 +1,83 @@
+#!/bin/sh
+#complete -W 'up on down off quit stop scan list usb 3F_2 anygate iptime puppy study2 jin jintech' netwk ./netwk \~/netwk
+# 3F_2 ( Cisco Meraki MR42 ) http://10.128.128.128 - 192.168.1.241
+
+usage () {
+ echo "Usage: $(basename $0) [up|down|on|off|scan|list|quit|stop]"
+ echo "   or: $(basename $0) [usb|OpenESSID|puppy|study2|jin|jintech|WRTnode265E]"
+ echo "Manage Network"
+}
+
+[ -z "$1" ] && usage && exit
+
+net_inf="/etc/network/interfaces"
+
+wlan=$(ifconfig -a | grep -o   '^wl\w*')
+ lan=$(ifconfig -a | grep -o   '^enp.s.\w*')
+
+if     ifconfig -a | grep -oqs '^usb\w*'; then
+ usb=$(ifconfig -a | grep -o   '^usb\w*')
+elif   ifconfig -a | grep -oqs '^enp.s..u.\w*'; then
+ usb=$(ifconfig -a | grep -o   '^enp.s..u.\w*')
+fi
+
+quit_network () {
+ ifquery --state $wlan >/dev/null && echo "Disconnecting WiFi ..." && sudo ifdown $wlan && sleep 3
+ ifconfig | grep -qs $wlan && echo "Disconnecting WiFi ..." && sudo ifconfig $wlan down
+ ifquery --state $lan >/dev/null && echo "Disconnecting LAN ..." && sudo ifdown $lan && sleep 3
+ ifconfig | grep -qs $lan && echo "Disconnecting LAN ..." && sudo ifconfig $lan down
+ [ -n "$usb" ] && sudo ifconfig $usb down
+ ifconfig | grep -qs wpa-supplicant && sudo killall wpa_supplicant
+    ps ax | grep -qs [d]hclient     && sudo killall dhclient
+ for i in $(ps ax | grep -s $wlan | grep -vs grep | awk '{print $1}'); do
+  sudo killall $i
+ done
+ sudo ip address flush dev $wlan
+}
+
+check_wifi () {
+ sudo iwlist $wlan scan | grep -qs ESSID:\""$1"\" || read -p "Wi-Fi($1) is not found, press Ctrl+c to exit or any other key to continue" dummy
+}
+
+prepare_wifi () {
+ ifconfig | grep -qs $wlan || sudo ifconfig $wlan up && sleep 3
+}
+
+case $1 in
+ up|on)     ifconfig | grep -qs $wlan || sudo ifconfig $wlan up   ;;
+ down|off)  ifconfig | grep -qs $wlan && sudo ifconfig $wlan down ;;
+ quit|stop) quit_network ;;
+ scan) 
+  prepare_wifi
+  sudo iwlist $wlan scan | sed -n '/Cell/,+8p' ;;
+ list)
+  prepare_wifi
+  sudo iwlist $wlan scan | grep ESSID | cut -d':' -f2 | sort -u | nl -ba ;;
+ lan)
+  ifconfig | grep -qs $lan || sudo ifconfig $lan up
+  sudo dhclient -v $lan ;;
+ usb)
+  if [ -z "$usb" ];then
+   echo "Error: USB tethering is not detected"
+   exit
+  fi
+  sudo ifconfig $usb up && sudo dhclient -v $usb ;;
+ puppy|study2|jin|jintech|WRTnode265E)
+  sudo sed -i '/^wpa-\|^wireless-/s/^/#/' $net_inf
+  sudo sed -i '/wpa-ssid '"$1"'$/s/^#*//; /wpa-ssid '"$1"'$/!b;n;s/^#*//' $net_inf
+  if ifconfig | grep -qs $wlan; then
+   check_wifi "$1"
+   quit_network
+  else
+   sudo ifconfig $wlan up
+   sleep 3
+   check_wifi "$1"
+  fi
+  sudo ifup $wlan ;;
+ *)
+  quit_network
+  prepare_wifi
+  check_wifi "$1"
+  sudo iwconfig $wlan essid "$1"
+  sudo dhclient -v $wlan ;;
+esac

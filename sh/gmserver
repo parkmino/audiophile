@@ -1,0 +1,13 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") on/off/scan"
+ echo "Run GMediaServer as UPnP Media Server"
+}
+
+case $1 in
+ on)   gmediaserver -b --disable-tags --no-timestamp --fs-charset=UTF-8 -v0 --profile=generic -ienp3s0 --file-types=unknown /home/parkmino/Music/ /home/parkmino/Videos/ ;;
+ off)  pkill gmediaserver ;;
+ scan) kill -s USR1 $(pgrep -x gmediaserver) ;;
+ *)    usage
+esac

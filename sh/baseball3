@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# Peep at the answer out of 10*(10-1)*(10-2)=720 possibilities
+# echo "• FYI, The answer is $f_nr$s_nr$t_nr"
+echo "• Welcome to Numeric Baseball Game!"
+echo "• Pitch three-digit numbers (000~999)"
+
+nr=$(printf "%1d" $(shuf -i0-9 -n3))
+f_nr=$(expr substr $nr 1 1)
+s_nr=$(expr substr $nr 2 1)
+t_nr=$(expr substr $nr 3 1)
+
+strike=0
+pitch=0
+out=0
+count="" # " [Ball count]"
+
+until [ $strike -ge 3 ] || [ $out -ge 3 ] ; do
+ read -p " *" in
+ if [ ${#in} -eq 3 ] && [ $in -ge 0 2>/dev/null ] && [ $in -le 999 ]; then
+  f_in=$(expr substr $in 1 1) # ${in:0:1}
+  s_in=$(expr substr $in 2 1) # ${in:1:1}
+  t_in=$(expr substr $in 3 1) # ${in:2:1}
+ else
+  echo "• It should be in 000~999 to hit $f_nr$s_nr$t_nr and exit (-_-;)"
+  exit
+ fi
+
+ strike=0
+ ball=0
+
+ [ $f_in -eq $f_nr ] && strike=$((strike + 1)) # ((strike+=1))
+ [ $f_in -eq $s_nr ] && ball=$((ball + 1))     # ((ball+=1))
+ [ $f_in -eq $t_nr ] && ball=$((ball + 1))     # ((ball+=1))
+ [ $s_in -eq $f_nr ] && ball=$((ball + 1))     # ((ball+=1))
+ [ $s_in -eq $s_nr ] && strike=$((strike + 1)) # ((strike+=1))
+ [ $s_in -eq $t_nr ] && ball=$((ball + 1))     # ((ball+=1))
+ [ $t_in -eq $f_nr ] && ball=$((ball + 1))     # ((ball+=1))
+ [ $t_in -eq $s_nr ] && ball=$((ball + 1))     # ((ball+=1))
+ [ $t_in -eq $t_nr ] && strike=$((strike + 1)) # ((strike+=1))
+
+ [ $(($ball + $strike)) -eq 0 ] && out=$((out + 1)) # ((out+=1))
+
+ pitch=$((pitch + 1)) # ((pitch+=1))
+
+ count="$count\n$(printf "%3s" \#$pitch) $f_in$s_in$t_in S:$strike B:$ball O:$out"
+ echo "$count" | grep .
+done
+
+[ $out -ge 3 ] && echo "• Three out and you lost $f_nr$s_nr$t_nr! ☹" && exit
+
+printf "• You beat me at $pitch pitches! "
+if [ $pitch -le 5 ]; then
+ printf "Wonderful ☻\n"
+elif [ $pitch -le 9 ]; then
+ printf "Very good ☺\n"
+else
+ printf "😐\n"
+fi

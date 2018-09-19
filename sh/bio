@@ -1,0 +1,15 @@
+#!/bin/sh
+
+[ -z "$1" ] && read -p "* Type your birthdate (yyyymmdd) : " date || date=$1
+
+if [ $date -ge 19000101 2>/dev/null ] && [ $date -le $(date +%Y%m%d) ] ; then
+ data="$(expr substr $date 1 4)/$(expr substr $date 5 2)/$(expr substr $date 7 2)"
+ if date -d $date >/dev/null 2>&1 ; then
+  printf "\n📆  Birthdate : $data\n"
+  gcal -# "0*d1#999 %;$date" -s0 -xw --biorhythm-axis=25
+ else
+  echo "* $data is not a valid date"
+ fi
+else
+ echo "* It should be in 1900/01/01~$(date +%Y/%m/%d)"
+fi

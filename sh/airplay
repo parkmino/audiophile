@@ -1,0 +1,12 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") [on|play]/[off|stop]"
+ echo "Run Shairport-sync as AirPlay audio player"
+}
+
+case $1 in
+ on|play)  sudo systemctl start avahi-daemon shairport-sync ;;
+ off|stop) sudo systemctl stop  shairport-sync avahi-daemon ;;
+ *)        usage ;;
+esac

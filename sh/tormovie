@@ -1,0 +1,14 @@
+#!/bin/sh
+
+url="https://torrentkim.org/torrent_movie/torrent1.htm"
+str=$(curl -s -m12 $url | grep 인기자료 -A2 | tail -1)
+j=0
+
+printf "\n%s\n\n" $url
+[ -z "$str" ] && echo "Not connected and exit!" && exit
+
+for i in 5 8 11 14 17 22 25 28 31 34; do
+ j=$(($j+1))
+ printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
+ printf "    $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
+done

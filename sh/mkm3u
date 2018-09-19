@@ -1,0 +1,193 @@
+#!/bin/sh
+
+pls () {
+ pls=$(echo "$1" | grep -o '.*/')$(curl -s "$1" | tail -1)
+}
+
+if [ -n "$1" ]; then
+ url=$(grep -i "$*" /home/parkmino/mkm3u | grep -o '....://.*' | tr '#' ' ' | cut -d\" -f1)
+ [ -n "$url" ] && echo "$url" | nl -s" " -w3 || echo "No matching URL!"
+#[ -n "$url" ] && echo "$url" | awk '{print "\n * " $2 " " $3 " " $4 " " $5 " " $6 " " $7 "\n\n   " $1}' || echo "No matching URL!"
+ chNm=$(echo "$url" | tail -1 | cut -d' ' -f2-)
+ url=$(echo "$url" | tail -1 | cut -d' ' -f1)
+ [ -z "${url##*ebs*}" ] || [ -z "${url##*everyon*}" ] && pls "$url" && echo && echo "    $pls"
+ [ -z "${url##*everyon*}" ] && echo "    http://www.everyon.tv/main/schedule.etv?chNum=$(echo "$url" | sed 's/.*phd//' | cut -d\/ -f1)&chNm=$chNm"
+ exit
+fi
+
+utube="/home/parkmino/mpvrun"
+lst="/home/parkmino/Videos/playlist.lst"
+m3u="/home/parkmino/Videos/playlist.m3u"
+kodi_m3u="/home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/strm/playlist.m3u"
+
+echo "http://ebsonair.ebs.co.kr/groundwavefamilypc/familypc1m/playlist.m3u8#EBS1
+http://ebsonair.ebs.co.kr/ebs2familypc/familypc1m/playlist.m3u8#EBS2
+http://ebsonair.ebs.co.kr/ebsufamilypc/familypc1m/playlist.m3u8#EBSU
+http://ebsonair.ebs.co.kr/plus1familypc/familypc1m/playlist.m3u8#EBSi
+http://ebsonair.ebs.co.kr/plus2familypc/familypc1m/playlist.m3u8#EBS+2
+http://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8#EBSe
+http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8#EBSradio
+http://new_iradio.ebs.co.kr/iradio/iradiolive_m4a/playlist.m3u8#EBSiradio
+rtmp://live.kbskme.gscdn.com/1tv/_definst_/1tv_5.stream?id=2101&si=6&secure=NGQyYWZkOThjMzU4NmNkYmNjM2I5YzdkNTE5MWVmOTc1ZjM4NzAxYjcwYmRmZDAzMzNiOTY0MTdmN2Q2MzU2ODk1NzI3MTBhMTkzNmEzMmJmN2FlN2QwYzljYzUxZTY1M2FiNWQxYzM4ZmM5ZTBkMDNjMWUxMTE2Y2MzOTUxMjhhMzk2ZmQ1NTY3YjRlOGY3YjI0ODFlOTFjZTdhYjNjOGQ0OTQyYzNjYzU3MTU5NjQ3YTY4ZDhiNTdiNGJhMWQ4OGEzNTQ3NDQwZTI0ZGRkN2QwMGE5OTBlNmM4ZGExNjhmNzQ0ODRkNWIyNmFiNGU1M2ZkMzIzYzg0ZWVkZmQ2N2ViZDUzZDNkNDJmNzEzODhhZTkwNDM1ZGQ5NjIyM2Jj&csu=false#KBS1tv
+rtmp://live2.kbs.gscdn.com/1tv_home/_definst_/?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFOTdBRjY4M0U5NDFEJmlzc3Vlcj01OC4yMjcuMTk0LjEwNiZjaWQ9NUEzOEY0RDAwRDAyJnBhdGg9LzF0dl9ob21lL19kZWZpbnN0Xy8xdHZfaG9tZS5zdHJlYW0mZmlsZT0xdHZfaG9tZS5zdHJlYW0mYnlwYXNzPWZhbHNlJmF0aW1lPTEzNDczNTc1NDQ=#KBS1tv
+rtmp://live2.kbs.gscdn.com/2tv_home/_definst_/?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFOTg0RUU3NzhCNjU3Jmlzc3Vlcj01OC4yMjcuMTk0LjEwNiZjaWQ9RTcxNkFCNUEyRjBCJnBhdGg9LzJ0dl9ob21lL19kZWZpbnN0Xy8ydHZfaG9tZS5zdHJlYW0mZmlsZT0ydHZfaG9tZS5zdHJlYW0mYnlwYXNzPWZhbHNlJmF0aW1lPTEzNDczNTc1NjM=#KBS2tv
+http://ytnmmd.mmdlive.lldns.net/ytnmmd/1fd65186a3f64875af501b3340a92931/playlist.m3u8#KBS World" > $lst
+
+#echo "http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8#CBS음악FM
+#http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8#tbsFM" >> $lst
+
+echo "rtmp://imbconairtv.imbc.com/imbc_onairtv/_definst_/onairtv_500k.stream?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFQzg5REVGRjFENEMwJmlzc3Vlcj0yMjIuMTIyLjIwNi43NyZjaWQ9NDZBNUZBMDY2NDAwJnBhdGg9L2ltYmNfb25haXJ0di9vbmFpcnR2XzUwMGsuc3RyZWFtP2NtZCZmaWxlPW9uYWlydHZfNTAway5zdHJlYW0/Y21kJmJ5cGFzcz1mYWxzZSZhdGltZT0xNDM0MjY1NDEw#MBC
+http://media.kjmbc.co.kr:1935/live/stream/playlist.m3u8#MBC광주
+http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8#국악방송 HD
+http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8#국악방송 라디오
+http://122.202.129.136:1935/live/ch5/playlist.m3u8#KCTV제주방송
+http://ytnmmd.mmdlive.lldns.net/ytnmmd/9484b70302db4786886ae40308bf45a1/playlist.m3u8#YTN Korean
+http://d1cdshhn0sj9xt.cloudfront.net/529/QualityLevels(2628000,as=video)/Fragments(video=i,format=hls).m3u8#MNet HD" >> $lst
+
+grep youtu.be/ $utube | sort | while read line ; do
+ des=$(echo "$line" | cut -d "=" -f1)
+ url=$(echo "$line" | cut -d \"  -f2)
+ echo "$url#$des" >> $lst
+done
+
+echo "http://edge2.everyon.tv/etv2/phd4/playlist.m3u8#TRENDY
+http://edge2.everyon.tv/etv2/phd8/playlist.m3u8#더뮤비
+http://edge2.everyon.tv/etv2/phd13/playlist.m3u8#리빙TV
+http://edge2.everyon.tv/etv2/phd14/playlist.m3u8#POLARIS
+http://edge2.everyon.tv/etv2/phd15/playlist.m3u8#JEI English
+http://edge2.everyon.tv/etv2/phd21/playlist.m3u8#C'TIME
+http://edge2.everyon.tv/etv2/phd22/playlist.m3u8#서울경제
+http://edge2.everyon.tv/etv2/phd23/playlist.m3u8#이데일리
+http://edge2.everyon.tv/etv2/phd26/playlist.m3u8#한국경제
+http://edge2.everyon.tv/etv2/phd27/playlist.m3u8#CBS
+http://edge2.everyon.tv/etv2/phd30/playlist.m3u8#ONT
+http://edge2.everyon.tv/etv2/phd34/playlist.m3u8#BTN
+http://edge2.everyon.tv/etv2/phd38/playlist.m3u8#STB
+http://edge2.everyon.tv/etv2/phd40/playlist.m3u8#tbs
+http://edge2.everyon.tv/etv2/phd42/playlist.m3u8#육아방송
+http://edge2.everyon.tv/etv2/phd43/playlist.m3u8#동아TV
+http://edge2.everyon.tv/etv2/phd75/playlist.m3u8#현대홈쇼핑 HD
+http://edge2.everyon.tv/etv2/phd71/playlist.m3u8#뮤직비디오
+http://edge2.everyon.tv/etv2/phd263/playlist.m3u8#아이넷TV
+http://edge2.everyon.tv/etv2/phd337/playlist.m3u8#마운틴TV
+http://edge2.everyon.tv/etv2/phd389/playlist.m3u8#event
+http://edge2.everyon.tv/etv2/phd401/playlist.m3u8#국회방송
+http://edge2.everyon.tv/etv2/phd639/playlist.m3u8#내외경제
+http://edge2.everyon.tv/etv2/phd847/playlist.m3u8#드라마 HD
+http://edge2.everyon.tv/etv2/phd865/playlist.m3u8#예능 HD
+http://edge2.everyon.tv/etv2/phd866/playlist.m3u8#영화 HD
+http://edge2.everyon.tv/etv2/phd867/playlist.m3u8#드라마 HD
+http://edge2.everyon.tv/etv2/phd883/playlist.m3u8#GS홈쇼핑 HD
+http://edge2.everyon.tv/etv2/phd901/playlist.m3u8#홈&쇼핑
+http://edge2.everyon.tv/etv2/phd1042/playlist.m3u8#OBS
+http://edge2.everyon.tv/etv2/phd1065/playlist.m3u8#REAL
+http://edge2.everyon.tv/etv2/phd1181/playlist.m3u8#SNTV
+http://edge2.everyon.tv/etv2/phd1195/playlist.m3u8#한국경제
+http://edge2.everyon.tv/etv2/phd1197/playlist.m3u8#Indoor Sports
+http://edge2.everyon.tv/etv2/phd1212/playlist.m3u8#CCTV4
+http://edge2.everyon.tv/etv2/phd1216/playlist.m3u8#방송대학 HD
+http://edge2.everyon.tv/etv2/phd1301/playlist.m3u8#eduTV
+http://edge2.everyon.tv/etv2/phd1328/playlist.m3u8#GS홈쇼핑
+http://edge2.everyon.tv/etv2sb/phd17/playlist.m3u8#MBN
+http://edge2.everyon.tv/etv2sb/phd20/playlist.m3u8#YTN
+http://edge2.everyon.tv/etv2sb/phd77/playlist.m3u8#소비자
+http://edge2.everyon.tv/etv2sb/phd133/playlist.m3u8#연합뉴스
+http://edge2.everyon.tv/etv2sb/phd319/playlist.m3u8#Telenovela
+http://edge2.everyon.tv/etv2sb/phd409/playlist.m3u8#채널A
+http://edge2.everyon.tv/etv2sb/phd435/playlist.m3u8#채널A
+http://edge2.everyon.tv/etv2sb/phd753/playlist.m3u8#런웨이 HD
+http://edge2.everyon.tv/etv2sb/phd784/playlist.m3u8#TRENDY
+http://edge2.everyon.tv/etv2sb/phd933/playlist.m3u8#애니프렌즈
+http://edge2.everyon.tv/etv2sb/phd1020/playlist.m3u8#M1글로벌
+http://edge2.everyon.tv/etv2sb/phd1186/playlist.m3u8#실버아이
+http://edge2.everyon.tv/etv2sb/phd1326/playlist.m3u8#Church HD
+http://edge2.everyon.tv/etv2sb/phd1371/playlist.m3u8#KsportsTV HD
+http://edge2.everyon.tv/etv2sb/phd1373/playlist.m3u8#조담연예
+http://edge2.everyon.tv/etv2sb/phd1377/playlist.m3u8#그린어스뮤직쇼
+http://edge2.everyon.tv/etv2sb/phd1378/playlist.m3u8#가요중심TV
+http://edge1.everyon.tv/etv1/phd2/playlist.m3u8#ETN
+http://edge1.everyon.tv/etv1/phd3/playlist.m3u8#OBSW
+http://edge1.everyon.tv/etv1/phd5/playlist.m3u8#대교어린이
+http://edge1.everyon.tv/etv1/phd7/playlist.m3u8#CHING
+http://edge1.everyon.tv/etv1/phd12/playlist.m3u8#FTV
+http://edge1.everyon.tv/etv1/phd25/playlist.m3u8#Tomato
+http://edge1.everyon.tv/etv1/phd28/playlist.m3u8#CTS
+http://edge1.everyon.tv/etv1/phd35/playlist.m3u8#Arte
+http://edge1.everyon.tv/etv1/phd36/playlist.m3u8#arirang HD
+http://edge1.everyon.tv/etv1/phd44/playlist.m3u8#GTV
+http://edge1.everyon.tv/etv1/phd46/playlist.m3u8#복지TV
+http://edge1.everyon.tv/etv1/phd169/playlist.m3u8#정철영어
+http://edge1.everyon.tv/etv1/phd207/playlist.m3u8#K BADUK
+http://edge1.everyon.tv/etv1/phd273/playlist.m3u8#가요TV
+http://edge1.everyon.tv/etv1/phd385/playlist.m3u8#아시아경제 HD
+http://edge1.everyon.tv/etv1/phd387/playlist.m3u8#Billiards
+http://edge1.everyon.tv/etv1/phd553/playlist.m3u8#BBS
+http://edge1.everyon.tv/etv1/phd849/playlist.m3u8#EDGE HD
+http://edge1.everyon.tv/etv1/phd852/playlist.m3u8#stnSPORTS
+http://edge1.everyon.tv/etv1/phd863/playlist.m3u8#YTN science
+http://edge1.everyon.tv/etv1/phd864/playlist.m3u8#드라마 HD
+http://edge1.everyon.tv/etv1/phd880/playlist.m3u8#K쇼핑 HD
+http://edge1.everyon.tv/etv1/phd905/playlist.m3u8#NS홈쇼핑
+http://edge1.everyon.tv/etv1/phd1015/playlist.m3u8#LIFETIME
+http://edge1.everyon.tv/etv1/phd1016/playlist.m3u8#CHINA
+http://edge1.everyon.tv/etv1/phd1078/playlist.m3u8#채널A HD
+http://edge1.everyon.tv/etv1/phd1094/playlist.m3u8#헬스메디
+http://edge1.everyon.tv/etv1/phd1173/playlist.m3u8#WBS원음방송
+http://edge1.everyon.tv/etv1/phd1327/playlist.m3u8#KBSN+
+http://edge1.everyon.tv/etv1/phd1381/playlist.m3u8#골든라이브
+http://edge1.everyon.tv/etv1/phd1382/playlist.m3u8#NTV
+http://edge1.everyon.tv/etv1sb/phd1/playlist.m3u8#CMC
+http://edge1.everyon.tv/etv1sb/phd6/playlist.m3u8#채널W
+http://edge1.everyon.tv/etv1sb/phd18/playlist.m3u8#머니투데이
+http://edge1.everyon.tv/etv1sb/phd31/playlist.m3u8#국방TV
+http://edge1.everyon.tv/etv1sb/phd33/playlist.m3u8#법률방송
+http://edge1.everyon.tv/etv1sb/phd129/playlist.m3u8#에브리싱
+http://edge1.everyon.tv/etv1sb/phd191/playlist.m3u8#Billiards
+http://edge1.everyon.tv/etv1sb/phd193/playlist.m3u8#YTN life
+http://edge1.everyon.tv/etv1sb/phd251/playlist.m3u8#채널A
+http://edge1.everyon.tv/etv1sb/phd269/playlist.m3u8#FISHING
+http://edge1.everyon.tv/etv1sb/phd327/playlist.m3u8#GCN
+http://edge1.everyon.tv/etv1sb/phd335/playlist.m3u8#C채널
+http://edge1.everyon.tv/etv1sb/phd341/playlist.m3u8#TV조선
+http://edge1.everyon.tv/etv1sb/phd381/playlist.m3u8#브레인TV
+http://edge1.everyon.tv/etv1sb/phd393/playlist.m3u8#KTV
+http://edge1.everyon.tv/etv1sb/phd547/playlist.m3u8#채널A 이제 만나러 갑니다
+http://edge1.everyon.tv/etv1sb/phd551/playlist.m3u8#HISTORY
+http://edge1.everyon.tv/etv1sb/phd563/playlist.m3u8#매일경제 HD
+http://edge1.everyon.tv/etv1sb/phd725/playlist.m3u8#매일경제 스페셜
+http://edge1.everyon.tv/etv1sb/phd745/playlist.m3u8#현대HCN 서초
+http://edge1.everyon.tv/etv1sb/phd778/playlist.m3u8#현대HCN 경북
+http://edge1.everyon.tv/etv1sb/phd779/playlist.m3u8#현대HCN 새로넷
+http://edge1.everyon.tv/etv1sb/phd782/playlist.m3u8#현대HCN 금호
+http://edge1.everyon.tv/etv1sb/phd783/playlist.m3u8#CHING M
+http://edge1.everyon.tv/etv1sb/phd853/playlist.m3u8#현대HCN 충북
+http://edge1.everyon.tv/etv1sb/phd884/playlist.m3u8#ONT
+http://edge1.everyon.tv/etv1sb/phd951/playlist.m3u8#현대HCN 부산
+http://edge1.everyon.tv/etv1sb/phd957/playlist.m3u8#QBS
+http://edge1.everyon.tv/etv1sb/phd967/playlist.m3u8#atom美 HD
+http://edge1.everyon.tv/etv1sb/phd1057/playlist.m3u8#CJ홈쇼핑
+http://edge1.everyon.tv/etv1sb/phd1215/playlist.m3u8#현대홈쇼핑 HD
+http://edge1.everyon.tv/etv1sb/phd1268/playlist.m3u8#서울경제TV
+http://edge1.everyon.tv/etv1sb/phd1296/playlist.m3u8#쇼핑엔티 HD
+http://edge1.everyon.tv/etv1sb/phd1297/playlist.m3u8#문화유산채널 HD
+http://edge1.everyon.tv/etv1sb/phd1298/playlist.m3u8#대교베이비
+http://edge1.everyon.tv/etv1sb/phd1317/playlist.m3u8#참불교방송 HD
+http://edge1.everyon.tv/etv1sb/phd1357/playlist.m3u8#MSTAR HD
+http://edge1.everyon.tv/etv1sb/phd1359/playlist.m3u8#VOD HD
+http://edge1.everyon.tv/etv1sb/phd1363/playlist.m3u8#소셜쇼핑" >> $lst
+
+cat -n $lst
+
+printf "#EXTM3U\n" > $m3u
+while read line; do
+ url=$(echo $line | cut -d '#' -f1)
+ des=$(echo $line | cut -d '#' -f2)
+ [ $(echo "$des" | wc -c) -le 1 ] && des=" . . . "
+ printf "#EXTINF:-1,$des@$(echo $url | cut -d'/' -f3)\n$url\n" >> $m3u
+done < $lst
+
+cat -n $m3u
+
+sed 's/https:\/\/youtu.be\//plugin:\/\/plugin.video.youtube\/?path=\/root\/video\&action=play_video\&videoid=/; /juoradio/s/http/mmsh/; /youtube.com/d' $m3u > $kodi_m3u
+
+cat -n $kodi_m3u

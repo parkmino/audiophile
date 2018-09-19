@@ -1,0 +1,28 @@
+#!/bin/sh
+charge=$(cat /sys/class/power_supply/BAT1/capacity)
+status=$(cat /sys/class/power_supply/BAT1/status)
+printf "$(date +'%Y-%-m-%-d(%a) %p%-I:%M:%S') |"
+
+if [ "$status" = "Charging" ]; then
+ printf " 🔌  "
+elif [ "$status" = "Discharging" ]; then
+ printf " 🔋  "
+else
+ printf " ❓ "
+fi
+
+printf "$charge%%"
+
+if [ $charge -lt 20 ] && [ $status != Charging ]; then
+ printf " ☹"
+#else
+# printf " ☻"
+fi
+
+ut=$(cat /proc/uptime | cut -d'.' -f1)
+day=$(($ut/86400))
+hrs=$(($ut%86400/3600))
+min=$(($ut%3600/60))
+sec=$(($ut%60))
+
+printf " | CPU %0.1f%% | Mem %0.1f%% | Up %d+%02d:%02d:%02d\n" $(grep 'cpu ' /proc/stat | awk '{printf 100*($2+$4)/($2+$4+$5)}') $(free | grep Mem | awk '{print 100*$3/$2}') $day $hrs $min $sec

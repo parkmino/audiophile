@@ -1,0 +1,39 @@
+#!/bin/sh
+
+echo 'Input number to find youtube or any other key to quit
+(1) JTBC 뉴스
+(2) 연합뉴스TV
+(3) YTN
+(4) tbs TV
+(5) RTV 시민방송'
+read -p "*" i
+case $i in
+ 1) ch=jtbc   ; query="%5BLIVE%2FJTBC+뉴스%5D" ;;
+ 2) ch=yonhap ; query="연합뉴스TV+생방송+%28LIVE+%26+NEWS%29" ;;
+ 3) ch=ytn    ; query="%5BYTN+LIVE%5D" ;;
+ 4) ch=tbs    ; query="tbs+tv+live+실시간" ;;
+ 5) ch=rtv    ; query="%5BOn-Air%5D+RTV+시민방송" ;;
+ *) exit ;;
+esac
+
+utube="/home/parkmino/mpvrun"
+mkm3u="/home/parkmino/mkm3u"
+jtbc_m3u="/home/parkmino/Videos/jtbc.m3u"
+
+echo "You will watch it for 7 secs to check!"
+url=$(curl -s "https://www.youtube.com/results?search_query=$query" | grep data-context-item-id | sed 's/.*data-context-item-id="//' | cut -d\" -f1 | head -1)
+mpv --length=7 https://youtu.be/$url
+
+read -p "* $ch live is correct? [Y/n]" answer
+if [ "$answer" != n ]; then
+ sed -i '/'"$ch"'=/s/".*"/"https:\/\/youtu.be\/'"$url"'"/' $utube
+ grep $ch= $utube
+ read -p "* Update mkm3u? [Y/n]" answer
+ if [ "$answer" != n ]; then
+  $mkm3u
+  grep $ch= $mkm3u
+  [ "$ch" = jtbc ] && sed -i 's/youtu.be.*/youtu.be\/'"$url"'/' $jtbc_m3u
+ fi
+else
+ echo "$ch live was not updated"
+fi

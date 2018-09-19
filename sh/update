@@ -1,0 +1,657 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename $0)"
+ echo "   or: $(basename $0) [chk|check]"
+ echo "   or: $(basename $0) [all]"
+ echo "Update system or check packages"
+}
+
+upd () {
+ sudo ntpdate pool.ntp.org
+ sudo apt-get update
+ sudo apt-get dist-upgrade
+ sudo apt-get clean
+}
+
+if [ -z "$1" ]; then
+ upd
+ exit
+elif [ "$1" = all ]; then
+ upd
+ printf \\n
+elif [ "$1" != chk ] && [ "$1" != check ]; then
+ usage
+ exit
+fi
+
+days_diff () {
+ [ -z "${date##*x*}" ] && printf "\n" && return
+ diff=$(($(date +%s)-$(date -ud "$date" +%s)))
+ days=$(($diff/60/60/24))
+ if [ $days -eq 0 ]; then
+  if [ $(($diff/3600)) -eq 0 ]; then
+   printf "오늘 (%d분 전)\n"   $(($diff%3600/60))
+  else
+   printf "오늘 (%d시간 전)\n" $(($diff/3600))
+  fi
+ elif [ $days -eq 1 ]; then
+  printf "어제\n"
+ else
+  printf "${days}일 전\n"
+ fi
+}
+
+msg () {
+ if [ "$current" = "$latest" ]; then
+  printf "최신판\n"
+ else
+  printf "판올림 (${latest})\n"
+ fi
+}
+
+curl_opt="-s -m12"
+
+ADOBE_FLASH () {
+printf "• Adobe Flash\t"
+latest=$(curl $curl_opt 'http://get.adobe.com/kr/flashplayer/about/' | sed -n '/Linux/,+15p' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
+current=$(grep -m1 ^Version /usr/lib/firefox-addons/plugins/readme.txt | cut -d' ' -f2)
+
+printf "$current\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+ if [ "$current" != "$latest" ]; then
+  echo "  Adboe Flash Player $latest download link"
+  echo "  https://get.adobe.com/flashplayer/otherversions/"
+  #echo "  $ sudo tar --overwrite -C /usr/lib/PepperFlash/ -zxvf ~/Downloads/flash_player_ppapi_*.tar.gz"
+  echo "  $ sudo tar --overwrite -C /usr/lib/firefox-addons/plugins/ -zxvf ~/Downloads/flash_player_npapi_*.tar.gz libflashplayer.so readme.txt"
+  echo "  $ rm -rf /home/parkmino/.config/google-chrome/PepperFlash"
+ fi
+fi
+}
+
+ALSA () {
+printf "• ALSA\t\t"
+date=$(curl $curl_opt http://www.alsa-project.org/main/index.php/Main_Page_News | grep -m1 -B1 alsa.*release | head -1 | sed 's/.*>[ \t]//')
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(curl $curl_opt http://www.alsa-project.org/main/index.php/Main_Page_News | grep -m1 "alsa.*release" | cut -d'>' -f3 | cut -d'|' -f1 | sed 's/^[ \t]*//; s/ release //') ($date)\t\t"
+ days_diff
+fi
+}
+
+ANDROID_X86 () {
+printf "• Android-x86\t"
+latest=$(curl $curl_opt http://www.android-x86.org | grep -m1 -i "android-x86.*released" | sed 's/.*droid-x86.//; s/.released.*//')
+current=$(ls -d /home/parkmino/Downloads/android* | sed 's/.*x86_64.//')
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+APCAST () {
+printf "• APCast\t"
+latest=$(curl $curl_opt http://indiwork.co.kr/apcast-firmware/ | grep -m1 'Firmware Upgrade' | cut -d'<' -f1 | sed 's/.*→ //; s/[ \t]*$//')
+current="44M"
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+ARMBIAN () {
+printf "• Armbian\t"
+ver=$(curl $curl_opt https://docs.armbian.com/Release_Changelog/ | grep -m1 v[0-9]\\.[0-9]* | cut -d'>' -f3 | cut -d'<' -f1)
+  dmy=$(echo $ver | sed 's/.*\/ //')
+ year=$(echo $dmy | cut -d'.' -f3)
+month=$(echo $dmy | cut -d'.' -f2)
+  day=$(echo $dmy | cut -d'.' -f1)
+ date="$year-$month-$day"
+if [ -z "$day" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(echo $ver | cut -d' ' -f1) ($date)\t\t"
+ days_diff
+fi
+}
+
+ASSETUPNP () {
+printf "• AssetUPnP\t"
+latest=$(curl $curl_opt http://www.dbpoweramp.com/asset-upnp-dlna.htm | sed -n 's/.*Intel 64 bit Release //p' | cut -d'<' -f1)
+current=$(cat '/home/parkmino/Downloads/AssetUPnP/Versions/Asset-UPnP.txt' | cut -c2-)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+BUBBLEUPNP () {
+printf "• BubbleUPnP\t"
+#latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
+latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
+#current=$(date -d "2018-3-6" +%F)
+ current=3.1.1
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ #latest=$(date -d "$latest" +%F)
+ msg
+fi
+}
+
+BUNKER1 () {
+printf "• 벙커1 특강\t"
+url="http://old.ddanzi.com/appstream/bunker1season2.xml"
+date=$(curl $curl_opt "$url" | grep '<pubDate>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $((2-$days))); do
+   printf '  '
+   curl $curl_opt "$url" | sort -r | grep -m$i '<title>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
+   printf '   '
+   curl $curl_opt "$url" | sort -r | grep -m$i '<enclosure url=' | tail -1 | cut -d'"' -f2
+  done
+ fi
+fi
+}
+
+CREATE_AP () {
+printf "• Create_ap\t"
+latest=$(curl $curl_opt https://github.com/oblique/create_ap/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+current=v$(create_ap --version)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+DAS () {
+printf "• 다스 뵈이다\t"
+url="https://www.podty.me/cast/177643"
+date=$(curl $curl_opt "$url" | grep -m1 'class="date"' | cut -d'>' -f2 | cut -d'<' -f1 | tr . -)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ date="$date -9hour"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $(((2-$days)*2))); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$(($i*2)) data-episode-name= | tail -1 | cut -d'"' -f2
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i data-play-uri= | tail -1 | cut -d'"' -f6
+  done
+ fi
+fi
+}
+
+GHLIGHTCLUB () {
+printf "• 관훈라이트\t"
+url="https://www.youtube.com/playlist?list=PLe85dIAhn3aiJfY-37fJzXuBH6WhG3qvE"
+episodes=#$(curl $curl_opt "$url" | grep -m1 '관훈라이트.* #' | cut -d'#' -f2 | cut -d' ' -f1)
+days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
+ date=$(echo $days | tr -d '.' | tr ' ' '-')
+ diff=$(($(date +%s)-$(date -ud "$date" +%s)))
+ days="$(($diff/60/60/24))일 전"
+fi
+[ "$days" = "1일 전" ] && days="어제"
+if [ "$episodes" = "#" ] || [ -z "$days" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$episodes\t\t\t\t$days\n"
+ [ -z "${days##*오늘*}" ] && last=3
+ [ "$days" = "어제" ]     && last=1
+ if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
+  for i in $(seq 0 $last); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$(($i*2+1)) '관훈라이트.* #' | tail -1 | sed 's/.*관훈라이트.* #/#/' | cut -d\" -f1 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+   printf '   '
+   curl $curl_opt "$url" | grep -m$(($i*2+1)) '관훈라이트.* #' | tail -1 | sed 's/.*watch?v=/http:\/\/youtu.be\//' | cut -d\& -f1
+  done
+ fi
+fi
+}
+
+GNOME_MPV () {
+printf "• Gnome-mpv\t"
+latest=$(curl $curl_opt https://github.com/gnome-mpv/gnome-mpv/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+current=v$(gnome-mpv --version | cut -d' ' -f3)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+GOOGLER () {
+printf "• Googler\t"
+latest=$(curl $curl_opt https://github.com/jarun/googler/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+current=v$(googler --version)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+elif [ "$latest" = "$current" ]; then
+ printf "최신판\n"
+else
+ printf "판올림 ($latest)\n"
+ read -p "  Update googler? [Y/n]" answer
+ [ "$answer" != n ] && printf '  ' && sudo googler -u
+fi
+}
+
+H3DROID () {
+printf "• H3Droid\t"
+latest=$(curl $curl_opt https://h3droid.com/download | grep -m1 'Version [0-9]' | cut -d'>' -f2 | cut -d':' -f1 | cut -d' ' -f2)
+#current=$(ls -d /home/parkmino/Downloads/h3droid* | cut -d'-' -f2 | sort -Vr | head -1)
+#[ -z $current ] && current=1.3.3
+current=1.3.4
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+HANSSAM () {
+printf "• 한쌤 두발네발\t"
+url="http://www.podbbang.com/ch/11969"
+date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
+#date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/한민경의-같이-사는-이야기/id1123924924?mt=2&ign-mpt=uo%3D4' | grep -m1 -A16 preview-title | tail -1 | cut -d\" -f4)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $(((2-$days)*2))); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i \'link_file\' | tail -1 | sed 's/.*link_file'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
+   #curl $curl_opt 'https://itunes.apple.com/us/podcast/한민경의-같이-사는-이야기/id1123924924?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20
+   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
+  done
+ fi
+fi
+}
+
+HIFIBERRY () {
+printf "• HiFiBerry\t"
+date=$(curl $curl_opt -m5 https://www.hifiberry.com/feed/ | grep -m1 '<pubDate>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $((2-$days))); do
+   printf '  '
+   curl $curl_opt https://www.hifiberry.com/feed/ | grep -m$(($i+1)) '<title>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+  done
+ fi
+fi
+}
+
+IPTIME () {
+printf "• ipTIME\t"
+date=$(curl $curl_opt 'http://iptime.com/iptime/?page_id=16' | grep -m1 'kboard-list-date' | cut -d'>' -f2 | cut -d'<' -f1)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$date\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $((2-$days))); do
+   printf '  '
+   curl $curl_opt 'http://iptime.com/iptime/?page_id=16' | grep -m$i '/iptime/?page_id=16&uid=' | tail -1 | cut -d'>' -f3 | cut -d'<' -f1
+  done
+ fi
+fi
+}
+
+JOONGYO () {
+printf "• 중요한 논문\t"
+url="http://www.podbbang.com/ch/11930"
+date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
+#date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/우리도-한번-논문-읽어보세/id1123655741?mt=2&ign-mpt=uo%3D4' | grep -m1 -A14 preview-title | tail -1 | cut -d\" -f4)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $((2-$days))); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
+   printf '   '
+   curl $curl_opt "$url"' | grep -m$i \'link_file\' | tail -1 | sed 's/.*link_file'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
+   #curl $curl_opt 'https://itunes.apple.com/us/podcast/우리도-한번-논문-읽어보세/id1123655741?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20
+   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
+  done
+ fi
+fi
+}
+
+LIBFFMPEG () {
+printf "• Libffmeg\t"
+#latest=$(curl $curl_opt https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases | grep -m1 linux-x64 | sed 's/.*\///; s/-.*//')
+latest=$(curl $curl_opt https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases | grep -m1 linux-x64 | cut -d'/' -f6)
+current=$(ls /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip | head -1 | cut -d'/' -f6 | cut -d'-' -f1)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+ url="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases/download/$latest/$latest-linux-x64.zip"
+ if [ "$current" != "$latest" ] && curl -IL -s $url | grep -qs '302 Found'; then
+  read -p "  Update libffmpeg.so? [Y/n]" answer
+  if [ "$answer" != n ]; then
+   printf '  '
+   sudo rm -f /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip
+   sudo curl -s -L $url -o /usr/lib/x86_64-linux-gnu/opera/$latest-linux-x64.zip
+   sudo unzip -o /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip -d /usr/lib/x86_64-linux-gnu/opera/
+   #sudo unzip -o /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip -d /opt/vivaldi/lib/
+  fi
+ fi
+fi
+}
+
+LIBREELEC () {
+printf "• LibreELEC\t"
+date=$(curl $curl_opt https://github.com/LibreELEC/LibreELEC.tv/releases | grep -m1 datetime | cut -d'"' -f2)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(curl $curl_opt https://github.com/LibreELEC/LibreELEC.tv/releases | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1) ($(echo $date | cut -d'T' -f1))\t\t"
+ days_diff
+fi
+#current=$(ls -d /home/parkmino/Downloads/Libre* | sed 's/.*arm.//')
+}
+
+MINIDLNA () {
+printf "• MiniDLNA\t"
+#latest=$(curl $curl_opt 'https://sourceforge.net/projects/minidlna/files/latest/download?source=files' | grep 'resource was found at' | cut -d'/' -f7)
+latest=$(curl $curl_opt https://sourceforge.net/projects/minidlna/files/minidlna/ | grep 'Click to enter' | head -1 | cut -d\" -f2 | cut -d' ' -f4)
+current=$(ls -d /home/parkmino/Downloads/minidlna* | cut -d'-' -f2)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+MPD_CANTATA_MALP () {
+count=0
+for i in MusicPlayerDaemon/MPD CDrummond/cantata; do # gateship-one/malp
+ count=$(($count+1))
+ if [ $count -eq 1 ]; then
+  printf "• $(echo $i | cut -d'/' -f2)\t\t"
+ elif [ $count -eq 2 ]; then
+  printf "• Cantata\t"
+ else
+  printf "• M.A.L.P.\t"
+ fi
+ date=$(curl $curl_opt https://github.com/$i/commits/master | grep -m1 datetime | cut -d'"' -f2)
+ if [ -z "$date" ]; then
+  printf "\t\t\t\t정보 없음\n"
+ else
+  printf "$(curl $curl_opt https://github.com/$i/releases | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1) ($(date -d "$date" +%F))\t\t"
+  days_diff
+  if [ "$days" -le 1 2>/dev/null ]; then
+   for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
+    printf '  '
+   #curl $curl_opt https://github.com/$i/commits/master | grep -m$j -A1 commit-title | tail -1 | sed 's/.*title=.//; s/.>.*//' | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+    curl $curl_opt https://github.com/$i/commits/master | grep -m$j -A1 commit-title | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
+   done
+  fi
+ fi
+done
+}
+
+MALP () {
+#date=$(curl $curl_opt https://gitlab.com/gateship-one/malp/commits/master | grep -m1 'time class' | rev | cut -d'>' -f2 | cut -d'<' -f2 | rev)
+ date=$(curl -s https://gitlab.com/gateship-one/malp/commits/master | grep -m1 'datetime' | sed 's/.*datetime=//' | cut -d'"' -f2)
+ printf "• M.A.L.P.\t"
+ if [ -z "$date" ]; then
+  printf "\t\t\t\t정보 없음\n"
+ else
+  printf "$(curl $curl_opt https://gitlab.com/gateship-one/malp/tags | grep -m1 item-title | cut -d'>' -f2 | cut -d'<' -f1) ($(date -d "$date" +%F))\t\t"
+  days_diff
+  if [ "$days" -le 1 2>/dev/null ]; then
+   for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
+    printf '  '
+    curl $curl_opt https://gitlab.com/gateship-one/malp/commits/master | grep -m$j item-title | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
+   done
+  fi
+ fi
+}
+
+NAGGOBSAL3 () {
+printf "• 나는 꼽사리다\t"
+url="http://www.podbbang.com/ch/10050"
+date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $(((2-$days)*2))); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | cut -d\' -f4 | tr -d '\\' | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i \'link_file\' | tail -1 | cut -d\' -f4
+   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g' # s/&[a-z]*;//g'
+  done
+ fi
+fi
+}
+
+NEWSTAPA () {
+printf "• 뉴스타파\t"
+ url="http://download.newstapa.org/api/podcast.xml"
+ date=$(curl $curl_opt "$url" | grep -m$((0+2)) '<pubDate>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
+#date=$(curl $curl_opt https://newstapa.org/feed | grep -m1 '<lastBuildDate>' | tail -1 | sed 's/.*<lastBuildDate>//; s/+0000/+0900/' | cut -d\< -f1)
+#date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m1 -A14 preview-title | tail -1 | cut -d\" -f4)
+#date=$(curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m1 pubdate | cut -d\' -f4)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $(((2-$days)*2))); do
+   printf '  '
+    curl $curl_opt "$url" | grep -m$(($i+2)) '<title>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
+   #curl $curl_opt https://newstapa.org/feed | grep -m$(($i+1)) '<title>' | tail -1 | sed 's/.*<title>//' | cut -d'<' -f1 | sed 's/&#[0-9]*;/ /g; s/&amp;#39;//g'
+   #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+   #curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
+   printf '   '
+    curl $curl_opt "$url" | grep -m$(($i+2)) '<link>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
+   #curl $curl_opt https://newstapa.org/feed | grep -m$(($i+1)) '<link>' | tail -1 | sed 's/.*<link>//' | cut -d'<' -f1
+   #echo http://youtu.be/$(curl $curl_opt http://newstapa.org/feed | grep -m$i '<iframe src=' | tail -1 | cut -d"/" -f5 | cut -d'?' -f1)
+   #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f24  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+  done
+ fi
+fi
+}
+
+OPERA () {
+printf "• Opera\t\t"
+latest=$(curl $curl_opt https://blogs.opera.com/desktop/changelog-for-54/ | grep -m1 'blog post' | sed 's/.*content="//; s/[ \t].*//')
+current=$(opera --version)
+printf "$current\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+#current=52.0.2871.40
+ msg
+fi
+}
+
+PAPAIS () {
+printf "• 파파이스\t"
+url="https://www.youtube.com/playlist?list=PLxrXSNAnHXeIQcwTL2vxVxeIuIuFsx9nW"
+episodes=#$(curl $curl_opt "$url" | grep -m1 '김어준의 파파이스#' | cut -d'#' -f2 | cut -d']' -f1)
+days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
+ date=$(echo $days | tr -d '.' | tr ' ' '-')
+ diff=$(($(date +%s)-$(date -ud "$date" +%s)))
+ days="$(($diff/60/60/24))일 전"
+fi
+[ "$days" = "1일 전" ] && days="어제"
+if [ -z "$episodes" ] || [ -z "$days" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$episodes\t\t\t\t$days\n"
+ if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
+  printf '  '
+  curl $curl_opt "$url" | grep -m1 '김어준의 파파이스#' | cut -d']' -f2- | cut -d' ' -f2- | cut -d'"' -f1 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+  printf '  '
+  curl $curl_opt "$url" | grep -m1 '김어준의 파파이스#' | sed 's/.*watch?v=/http:\/\/youtu.be\//' | cut -d'&' -f1
+ fi
+fi
+}
+
+RASPBIAN () {
+printf "• Raspbian\t"
+date=$(curl $curl_opt https://www.raspberrypi.org/downloads/raspbian/ | grep 'Release date' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(curl $curl_opt https://www.raspberrypi.org/downloads/raspbian/ | grep -o Raspbian.*Lite | head -1 | cut -d' ' -f2) ($date)\t\t"
+ days_diff
+fi
+}
+
+TELEGRAM () {
+printf "• Telegram\t"
+ver=$(dpkg -l telegram-cli | tail -1 | cut -d' ' -f6 | cut -d'e' -f1)
+count=0
+dialog=0
+echo "$(telegram-cli -WC -e "dialog_list" | grep unread)" | while read line ; do
+ unread=$(echo $line | sed 's/.*: //; s/ unread.*//')
+ if [ -n "$unread" ]; then
+  count=$(($count+$unread))
+  dialog=$(($dialog+1))
+  printf "\33[2K\r• Telegram\t$ver\t\t\t\t"
+  printf "대화:$dialog, 안 읽음:$count"
+ else
+  printf "\33[2K\r• Telegram\t$ver\t\t\t\t확인 안 됨"
+ fi
+done
+printf \\n
+if [ -n "$count" ] && [ "$count" -ne 0 2>/dev/null ]; then
+ telegram-cli -WC -e "dialog_list" | grep -v ': 0 unread' | sed -n 's/unread/(안 읽음)/; s/User/ /p'
+fi
+}
+
+UBUNTU () {
+printf "• Ubuntu\t"
+latest="$(curl $curl_opt https://changelogs.ubuntu.com/meta-release-lts | grep ^Version | tail -1 | cut -d' ' -f2-)"
+current=$(grep ^PRETTY_NAME= /etc/os-release | cut -d\" -f2 | cut -d' ' -f2-)
+printf "$current\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+UPMPDCLI () {
+printf "• Upmpdcli\t"
+latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/downloads/ | sed -n 's/.*upmpdcli-//p' | sort | cut -d'.' -f1-3 | tail -1)
+current=$(upmpdcli -v | cut -d' ' -f2)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+VIVALDI () {
+printf "• Vivaldi\t"
+latest=$(curl $curl_opt https://vivaldi.com/download/ | grep amd64.deb | cut -d'_' -f2 | cut -d'-' -f1)
+current=$(vivaldi --version | cut -d' ' -f2)
+printf "$current\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+else
+ msg
+fi
+}
+
+YOUTUBE_DL () {
+printf "• Youtube-dl\t"
+latest=$(curl $curl_opt https://github.com/rg3/youtube-dl/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+current=$(youtube-dl --version)
+ printf "$current ($(date -d $(echo $current | cut -d'.' -f1-3 | tr . -) +%F))\t\t"
+#printf "$current \t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+elif [ "$latest" = "$current" ]; then
+ printf "최신판\n"
+else
+ printf "판올림 ($(date -d $(echo $latest | cut -d'.' -f1-3 | tr . -) +%F))\n"
+#printf "판올림 ($latest)\n"
+ read -p "  Update youtube-dl? [Y/n]" answer
+ [ "$answer" != n ] && printf '  ' && youtube-dl --update
+fi
+}
+
+ARMBIAN
+RASPBIAN
+ALSA
+MPD_CANTATA_MALP
+MALP
+UPMPDCLI
+#ASSETUPNP
+#OPERA
+#VIVALDI
+#UBUNTU
+ADOBE_FLASH
+#LIBFFMPEG
+CREATE_AP
+GNOME_MPV
+GOOGLER
+MINIDLNA
+YOUTUBE_DL
+APCAST
+ANDROID_X86
+BUBBLEUPNP
+H3DROID
+LIBREELEC
+HIFIBERRY
+IPTIME
+NEWSTAPA
+#NAGGOBSAL3
+GHLIGHTCLUB
+#PAPAIS
+DAS
+#BUNKER1
+#HANSSAM
+#JOONGYO
+TELEGRAM

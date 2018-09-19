@@ -1,0 +1,46 @@
+#!/bin/sh
+
+#git clone https://github.com/oblique/create_ap
+#cd create_ap
+#sudo make install
+#sudo apt-get install hostapd dnsmasq
+#sudo systemctl disable hostapd dnsmasq
+
+usage () {
+ echo "Usage: $(basename "$0") [on|off]"
+ echo "Turn on/off an Wireless AP"
+}
+
+[ ! "$1" = on ] && [ ! "$1" = off ] && usage && exit
+
+wlan=$(ifconfig -a | grep -o '^wl\w*')
+ lan=$(ifconfig -a | grep -o '^enp.s.\w*')
+
+quit_network () {
+ echo "Disconnect network..."
+ ifquery --state $wlan >/dev/null   && sudo ifdown   $wlan && sleep 3
+ ifconfig | grep -qs $wlan          && sudo ifconfig $wlan down
+ ifquery --state  $lan >/dev/null   && sudo ifdown   $lan && sleep 3
+ ifconfig | grep -qs  $lan          && sudo ifconfig $lan down
+ [ -n "$usb" ] && sudo ifconfig $usb down
+ ifconfig | grep -qs wpa-supplicant && sudo killall wpa_supplicant
+    ps ax | grep -qs [d]hclient     && sudo killall dhclient
+ for i in $(ps ax | grep -s $wlan | grep -vs grep | awk '{print $1}'); do
+  sudo killall $i
+ done
+ sudo ip address flush dev $wlan
+}
+
+if [ "$1" = on ];then
+ #sudo ifup $lan
+ #sudo create_ap -n $wlan puppy woofwoof
+ #sudo create_ap $wlan $lan puppy woofwoof
+ #sudo systemctl start hostapd create_ap
+  sudo create_ap --daemon -g 192.168.11.1 $wlan $lan puppy woofwoof
+ #echo "Type 'sudo create_ap --stop ap0' to stop it"
+  echo "Run \'$(basename "$0") off\' to stop it"
+else
+  sudo create_ap --stop ap0
+ #sudo systemctl stop create_ap hostapd
+ #sudo ifdown $wlan
+fi

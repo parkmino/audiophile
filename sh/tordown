@@ -1,0 +1,9 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") torrent"
+}
+
+[ -z "$1" ] && usage && exit
+
+aria2c --dir=/home/parkmino/Downloads --seed-time=0 --enable-dht6=false --disable-ipv6=true "$*"

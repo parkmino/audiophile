@@ -1,0 +1,57 @@
+#!/bin/sh
+
+mpd_bg () {
+
+ [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && sudo killall mpd
+
+ times=0
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+  times=$(($times+1))
+  [ "$times" -ge 10 ] && printf "\nNo audio output pid found!\n" && exit
+ done
+ sleep 1
+
+ m_task=$(($(nproc --all)-1))
+ [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+
+ pgr_mpd=$(pgrep -x mpd)
+
+  taskset -pc $m_task $pgr_mpd
+
+# n=0
+# echo "$(chrt -ap $(pgrep -x mpd))" | cut -d' ' -f2 | uniq | cut -d\' -f1 | while read line; do
+#  n=$((n+1))
+#  [ "$n" -eq 1 ] && echo "main is $line"      # main
+#  [ "$n" -eq 2 ] && echo "io is $line"        # io
+#  [ "$n" -eq 3 ] && echo "player is $line"    # player
+#  [ "$n" -eq 4 ] && echo "decoder is $line"   # decoder
+#  [ "$n" -eq 5 ] && echo "output is $line"    # output
+# done
+
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d'{' -f2 | cut -d'}' -f1 | cut -d':' -f1)
+ #proc=$(echo "$line" | sed 's/.*{//; s/}.*//; s/:.*//')
+ #proc=$(echo "$line" | awk -F '[{,:,}]' '{ print $2 }')
+  proc_nr=$(echo "$line" | cut -d'}' -f2 | cut -d'(' -f2 | cut -d')' -f1)
+ #proc_nr=$(echo "$line" | cut -d'}' -f2 | grep -o '[0-9]*')
+ #proc_nr=$(echo "$line" | sed 's/.*(//; s/)//')
+ #proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#sudo renice -1 -p   $proc_nr
+		 chrt -opv 0	     $proc_nr ;;
+  esac
+ done
+
+ pkill mpdrun
+
+}
+
+mpd_bg &
+sleep 1
+nphup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null

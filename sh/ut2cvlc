@@ -1,0 +1,43 @@
+#!/bin/sh
+#complete -W 'jtbc tbs yonhap ytn' ./ut2cvlc \~/ut2cvlc
+
+usage () {
+ echo "Usage: $(basename "$0") [jtbc|tbs|yonhap|ytn|youtube-url]"
+}
+
+[ -z "$1" ] && usage && exit
+
+if [ "$1" = jtbc ] || [ "$1" = j ] ; then
+ echo "
+▷  07:30 아침&
+▷  14:30 뉴스 현장
+▷  15:50 사건 반장
+▷  17:10 정치부회의
+▷  19:55 JTBC 뉴스룸
+
+▶  공식 홈페이지 http://news.jtbc.co.kr
+▶  공식 페이스북 https://www.facebook.com/jtbcnews
+▶  공식 트위터 https://twitter.com/JTBC_news
+
+방송사 : JTBC (http://www.jtbc.co.kr)
+카테고리	뉴스/정치
+라이선스	표준 YouTube 라이선스
+"
+ min=$(date +%R | awk -F: '{ print ($1 * 60) + $2 }')
+ [ $min -lt  860 ] || [ $min -gt 1290 ] && printf "JTBC News might not be on air now!\n"
+fi
+
+case $1 in
+ jtbc|tbs|yonhap|ytn)
+  url=$(grep $1= /home/parkmino/mpvrun | cut -d'"' -f2)
+  youtube-dl -qs "$url" || exit ;;
+ *)
+  url="$1"
+  if [ -z "${url##*http*youtu*be*}" ] ; then
+   youtube-dl -qs "$url" || exit
+  fi ;;
+esac
+
+gnome-mpv $(youtube-dl -f 'bestvideo[width<=2048][height<=2048]+bestaudio/best[width<=2048][height<=2048]' -g "$url")
+
+#cvlc --no-osd -q $(youtube-dl -f 'bestvideo[width<=2048][height<=2048]+bestaudio/best[width<=2048][height<=2048]' -g "$url")

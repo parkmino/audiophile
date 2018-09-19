@@ -1,0 +1,4 @@
+#!/bin/sh
+vol mute
+[ "$1" -gt 0 ] 2>/dev/null && sleep "$1" && vol unmute
+vol stat

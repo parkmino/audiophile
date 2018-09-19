@@ -1,0 +1,31 @@
+#!/bin/sh
+
+###
+# echo $(curl...) | base64 -d | openssl enc -des-ecb -d -K 7d1ff4ea -nosalt
+# echo $(curl...) | base64 -d | mcrypt -dFb -k 7d1ff4ea -m ECB -a DES
+
+usage () {
+ echo "Usage: $(basename "$0") 6|+|c(nbc)|f(une)|g(olf)|m(tv)|n(ick)|s(ports)|p(owerfm)|l(ovefm)"
+}
+
+[ -z "$1" ] && usage && exit
+
+case $1 in
+ 6) ch=sbsch6pc  ; stream=sbs1ch61 ;;
+ +) ch=sbspluspc ; stream=sbsplus1 ;;
+ c) ch=sbscnbc   ; stream=sbscnbc1 ;;
+ f) ch=sbsetvpc  ; stream=sbsetv1  ;;
+ g) ch=sbsgolf   ; stream=sbsgolf1 ;;
+ m) ch=sbsmtvpc  ; stream=sbsmtv1  ;;
+ n) ch=sbsnickpc ; stream=sbsnick1 ;;
+ s) ch=sbsespn   ; stream=sbsespn1 ;;
+ p) ch=powerpc   ; stream=powerfm  ;;
+ l) ch=lovepc    ; stream=lovefm   ;;
+ *) usage ; exit ;;
+esac
+
+api=$(curl -s "http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channelPath=$ch&streamName=$stream.stream&playerType=mobile")
+url=$(curl -s $(sbs_dec.py "$api") | tail -1)
+
+[ -z "$url" ] && echo "$(basename "$0") "$*" stream is not available!" && exit
+mpv $url
