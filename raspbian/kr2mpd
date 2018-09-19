@@ -16,18 +16,18 @@ pls () {
 
 kbsr () {
 #url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
- pls $(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1 | cut -d\" -f16)
+ pls $(curl -s "http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1" | cut -d\" -f16)
 }
 
 mbcr () {
-#pls $(curl -s "http://miniplay.imbc.com/WebLiveURL.ashx?channel=$1&agent=android&protocol=M3U8&nocash=" | sed -n '3p' | cut -d\" -f2)
- pls $(curl -s "http://miniplay.imbc.com/AACLiveURL.ashx?protocol=M3U8&channel=$1&agent=android&androidVersion=24")
+#pls $(curl -s "http://miniplay.imbc.com/WebLiveURL.ashx?channel=$1&agent=android&protocol=M3U8" | sed -n '3p' | cut -d\" -f2)
+ pls $(curl -s "http://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
 }
 
 sbsr () {
 #api=$(curl -s "http://apis.sbs.co.kr/play-api/1.0/onair/channel/S$1?v_type=2&platform=pcweb&protocol=hls" | grep -o 'mediaurl.*' | cut -d\" -f3)
 #url=$(curl -s "$api" | tail -1)
- api=$(curl -s 'http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?playerType=mobile&channelPath='"$1"'&streamName='"$2"'.stream&rnd=199')
+ api=$(curl -s "http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channelPath=$1&streamName=$2.stream&playerType=mobile")
  url=$(curl -s $(sbs_dec.py "$api") | tail -1)
 }
 
