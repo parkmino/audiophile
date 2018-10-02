@@ -8,17 +8,18 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
-	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2756' > /usr/share/alsa/alsa.conf.sav"
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 2. sudo nano /etc/mpd.conf.sav
 
-	mixer_type "none"		# In/outside of ALSA output
+	mixer_type "disabled"		# In/outside of ALSA output
 	mixer_device "/dev/null"
 	#tags "no"			# Remove the line
 	audio_buffer_size "3683"
 	buffer_before_play "10.55969372980212839891001004021011%"
+	audio_buffer_size "3684"	# for MPD 0.21
 
 3. sudo nano /etc/sysctl.conf
 	kernel.sched_min_granularity_ns = 229980
@@ -37,13 +38,13 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	5.2 exit instead of pkill in rc.local
 
-	5.3 wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.1.7-1%2bb4_armhf.deb
+	5.3 wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.2.1-1_armhf.deb
 	    sudo dpkg -i shairport*.deb
 
 	5.4 sudo nano /etc/mpd.conf.sav
 		#gapless_mp3_playback "no"
 
-	5.5 Update kr2mpd for KBS radios
+	5.5 Update kr2mpd
 
 	5.6 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
 
@@ -61,6 +62,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 		cat /proc/sys/kernel/printk
 		nano /etc/sysctl.conf
 			kernel.printk = 0 0 0 0
+			kernel.watchdog_thresh = 0 # Only for Ubuntu ?
 
 	5.13 sudo sed -i '/^#/d' /etc/mpd.conf.sav
 		#dop
