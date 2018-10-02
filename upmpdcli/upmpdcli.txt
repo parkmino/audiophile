@@ -1,5 +1,5 @@
 $ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp4/libupnpp4_0.16.1-1~ppa1~stretch_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.2.16-1~ppa1~stretch_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.3.4-1~ppa1~stretch_armhf.deb
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd12 libjsoncpp1
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
 
@@ -61,4 +61,4 @@ $ sudo systemctl disable upmpdcli.service
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
 $ sudo nano /etc/rc.local
-	nohup taskset -ac 1 /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf >/dev/null 2>&1 &
+	nohup taskset -ac 1 /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null&>/dev/null</dev/null
