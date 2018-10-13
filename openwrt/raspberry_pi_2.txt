@@ -134,7 +134,7 @@ cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
 ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /tmp/
 cp /etc/mpd.conf.sav /tmp/mpd.conf
-cp /usr/lib//libFLAC.so.8.3.0.sav /tmp/libFLAC.so.8.3.0
+cp /usr/lib/libFLAC.so.8.3.0.sav /tmp/libFLAC.so.8.3.0
 ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
 ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
 
@@ -143,12 +143,14 @@ echo noop | tee /sys/block/mmcblk0*/queue/scheduler
 #nohup /tmp/mpd --no-daemon /tmp/mpd.conf>/dev/null</dev/null 2>/dev/null
 /etc/init.d/mpd start
 
-#sleep 3
-#pkill -x rc.local
-
+echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
 echo none > /sys/class/leds/led0/trigger
 echo 0    > /sys/class/leds/led0/brightness
 [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+
+#sleep 3
+#pkill -x rc.local
 
 7. Disable tty
 
