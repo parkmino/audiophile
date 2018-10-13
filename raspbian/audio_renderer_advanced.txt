@@ -133,8 +133,9 @@ Audio Render Advanced
 	https://github.com/Spotifyd/spotifyd
 	https://github.com/Spotifyd/spotifyd/releases/latest
 
-	wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
-	unzip spotifyd-*.zip -d /home/pi
+	#wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
+	curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
+	unzip spotifyd-*.zip -d /home/pi && rm spotifyd-*.zip
 	sudo nano /etc/rc.local
 
 	spotifyd () {
@@ -153,6 +154,7 @@ Audio Render Advanced
 	password = PASS
 	backend = alsa
 	device = pcm.0
+	mixer = /dev/null
 	device_name = Spotifyd
 	#bitrate = 320
 
