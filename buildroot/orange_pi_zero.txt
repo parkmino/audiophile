@@ -1,0 +1,270 @@
+Buildroot
+
+https://buildroot.org/
+https://buildroot.org/docs.html
+https://buildroot.org/download.html
+
+http://git.buildroot.net/buildroot/
+https://github.com/buildroot/buildroot
+
+$ cd buildroot-2018.08/
+$ make help
+$ make list-defconfigs (184 pre-defined boards for Buildroot 2018.8)
+$ make menuconfig
+$ make # make 2>&1 | tee build.log
+
+Orange Pi Zero
+
+$ mkdir ../orange_pi_zero && cd ../orange_pi_zero && mkdir rootfs-overlay
+$ cp ../buildroot-2018.08/configs/orangepi_zero_defconfig .config
+$ make -C ../buildroot-2018.8 O=$(pwd) menuconfig
+$ make # BR2_PACKAGE_COREUTILS=y BR2_PACKAGE_PROCPS_NG=y BR2_PACKAGE_ALSA_LIB_MIXER=
+
+1. Menuconfig
+
+$ make menuconfig
+
+Build Options --->
+ [ ] strip target binaries
+ gcc optimization level (optimization level 2)
+
+Toolchain --->
+ [*] Enable WCHAR support
+ [*] Enable C++ support
+
+System configuration --->
+ [ ] Enable root login with password
+ [ ] Run a getty (login prompt) after boot ---
+ (root) Root password
+ ($(CONFIG_DIR)/rootfs-overlay) Root filesystem overlay directories
+ ($(CONFIG_DIR)/post-build.sh) Custom scripts to run before creating filesystem images
+ () Custom scripts to run inside the fakeroot environment
+
+Target packages --->
+ [*] Show packages that are also provided by busybox
+ coreutils, procps_ng, psmisc
+ System tools --->
+  -*- util-linux --->
+   [*] scheduling utilities (chrt, ionice, taskset)
+ dropbear, ca_certificates, curl, nano
+ alsa_lib, mpd, mpd_mpc, ncmpc
+
+Filesystem images --->
+ (256M) exact size
+
+2. Linux-menuconfig
+
+$ make linux-menuconfig
+
+Device Drivers --->
+ <*> Sound card support --->
+  <*> Advanced Linux Sound Architecture --->
+   [*] USB sound devices --->
+    <*> USB Audio/MIDI driver
+
+3. Install Packages
+
+coreutils, procps_ng, psmisc, dropbear(SSH), ca_certificates
+alsa_lib, mpd, mpd_mpc, ncmpc
+curl, nano
+
+$ nano packages.frag
+
+BR2_PACKAGE_COREUTILS=y
+BR2_PACKAGE_PROCPS_NG=y
+BR2_PACKAGE_PSMISC=y
+BR2_PACKAGE_DROPBEAR=y
+BR2_PACKAGE_CA_CERTIFICATES=y
+BR2_PACKAGE_ALSA_LIB=y
+BR2_PACKAGE_ALSA_LIB_PCM=y
+BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS=hw
+BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS=hw
+BR2_PACKAGE_MPD=y
+BR2_PACKAGE_MPD_ALSA=y
+BR2_PACKAGE_MPD_AUDIOFILE=y
+BR2_PACKAGE_MPD_CURL=y
+BR2_PACKAGE_MPD_DSD=y
+BR2_PACKAGE_MPD_FFMPEG=y
+BR2_PACKAGE_MPD_FLAC=y
+BR2_PACKAGE_MPD_LIBMPDCLIENT=y
+BR2_PACKAGE_MPD_TCP=y
+BR2_PACKAGE_MPD_UPNP=y
+BR2_PACKAGE_MPD_MPC=y
+BR2_PACKAGE_NCMPC=y
+BR2_PACKAGE_CURL=y
+BR2_PACKAGE_NANO=y
+
+4. Rootfs Overlay
+
+$ mkdir -p rootfs-overlay/etc/init.d
+
+rootfs-overlay/etc/init.d/S99rc.local
+rootfs-overlay/etc/sysctl.conf
+rootfs-overlay/etc/mpd.conf.sav
+
+$ nano rootfs-overlay/etc/init.d/S99rc.local.sh
+
+#!/bin/sh
+
+#/etc/init.d/S01logging stop
+[ -e /boot/.nossh ] && /etc/init.d/S50dropbear stop
+
+[ -e /dev/snd/timer ] && rm /dev/snd/timer
+
+cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2
+cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/mpd /dev/shm/ # /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
+
+echo noop | tee /sys/block/mmcblk0*/queue/scheduler
+
+nohup /dev/shm/mpd --no-daemon /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+
+echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+
+m_task=$(($(nproc --all)-1))
+[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+
+pgr_mpd=$(pgrep -nx mpd)
+
+taskset -pc $m_task $pgr_mpd
+
+echo "$(pstree -npt $pgr_mpd)" | while read line ; do
+ proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ case $proc in
+  output) chrt -opv 0 $proc_nr ;;
+ esac
+done
+
+#sysctl -p /etc/sysctl.conf
+
+echo none > /sys/class/leds/green_led/trigger
+#echo none > /sys/class/leds/led0/trigger
+#echo 0    > /sys/class/leds/led0/brightness
+#[ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+
+pkill -x rc.local
+
+exit 0
+
+$ chmod +x rootfs-overlay/etc/init.d/S99rc.local.sh
+
+$ nano rootfs-overlay/etc/sysctl.conf
+
+vm.dirty_writeback_centisecs = 0
+vm.oom_dump_tasks = 0
+vm.oom_kill_allocating_task = 1
+vm.overcommit_memory = 1
+vm.panic_on_oom = 2
+vm.swappiness = 0
+vm.vfs_cache_pressure = 0
+kernel.printk = 0 0 0 0
+kernel.sched_rr_timeslice_ms = 1
+net.ipv4.tcp_sack = 0
+net.ipv4.tcp_no_metrics_save = 1
+net.ipv6.conf.all.disable_ipv6 = 1
+
+$ cp mpd.conf rootfs-overlay/etc/mpd.conf.sav
+
+5. Post Build Shell Scripts
+
+$ nano post-build.sh
+
+#!/bin/sh
+
+TARGET_DIR=$1
+BOARD_DIR=./
+
+#sed -i 's/^root::/root:8kfIfYHmcyQEE:/' $TARGET_DIR/etc/shadow
+#sed -i 's/^root::/root:*:/' $TARGET_DIR/etc/shadow
+#sed -i 's/^console/#console/' $TARGET_DIR/etc/inittab
+
+chmod -x $TARGET_DIR/etc/init.d/S01logging $TARGET_DIR/etc/init.d/S95mpd
+
+[ -d $TARGET_DIR/usr/share/alsa ] && [ ! -d $TARGET_DIR/usr/share/alsa.orig ] && mv $TARGET_DIR/usr/share/alsa $TARGET_DIR/usr/share/alsa.orig
+[ -d $TARGET_DIR/usr/share/alsa ] && rm -rf $TARGET_DIR/usr/share/alsa
+[ ! -d $TARGET_DIR/usr/share/alsa ] && mkdir -p $TARGET_DIR/usr/share/alsa
+printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2757' > $TARGET_DIR/usr/share/alsa/alsa.conf.sav
+[ -f $TARGET_DIR/etc/mpd.conf ] && rm $TARGET_DIR/etc/mpd.conf
+
+for i in $TARGET_DIR/usr/lib/libasound.so.2.0.0 $TARGET_DIR/usr/lib/libFLAC.so.8.3.0;do
+ [ -e "$i" ] && mv "$i" "$i".sav
+done
+
+exit 0
+
+6. Flashing
+
+$ sudo fdisk -l
+$ sudo dd status=progress if=/home/parkmino/Downloads/buildroot/orange_pi_zero/images/sdcard.img of=/dev/sdc
+$ sync
+
+7. Customization
+
+7.1 Blacklist Modules
+
+$ nano /etc/modprobe.conf
+
+blacklist ...
+
+7.2 Static IP
+
+$ nano /etc/network/interfaces
+
+iface eth0 inet static
+address 192.168.0.10
+netmask 255.255.255.0
+gateway 192.168.0.1
+dns-nameservers 8.8.8.8
+
+8. Spotifyd
+
+$ nano rootfs-overlay/etc/spotifyd.conf
+
+[global]
+username = USER
+password = PASS
+backend = alsa
+device = pcm.0
+mixer = /dev/null
+device_name = Spotifyd
+#bitrate = 320
+
+$ nano rootfs-overlay/etc/init.d/S99rc.local.sh
+
+nohup /usr/bin/spotifyd --no-daemon -c /etc/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+
+$ nano post-build.sh
+curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
+unzip spotifyd*.zip -d $TARGET_DIR/usr/bin/ && rm spotifyd*.zip
+#chmod +x $TARGET_DIR/usr/bin/spotifyd
+
+$ Add premium account
+
+$ sed -i '/username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' /etc/spotifyd.conf
+
+9. Shairport-sync
+
+$ make menuconfig
+ [*] shairport-sync 
+  [*] libsoxr support
+
+$ nano post-build.sh
+
+ sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' $TRARGET_DIR//etc/shairport-sync.conf
+#sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' $TRARGET_DIR//etc/shairport-sync.conf   # 24Bit Only
+ sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' $TRARGET_DIR//etc/shairport-sync.conf
+ sed -i '/convolution =\|loudness =/s/^\/*//; /convolution =\|loudness =/s/".*"/"no"/' $TRARGET_DIR//etc/shairport-sync.conf
+
+chmod -x $TRARGET_DIR/S??shaiport-sync
+
+$ nano rootfs-overlay/etc/init.d/S99rc.local.sh
+
+[ -e /boot/airplay ] && /etc/init.d/S??shaiport-sync start
