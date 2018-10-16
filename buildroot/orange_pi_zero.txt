@@ -68,6 +68,13 @@ coreutils, procps_ng, psmisc, dropbear(SSH), ca_certificates
 alsa_lib, mpd, mpd_mpc, ncmpc
 curl, nano
 
+$ grep 'CONFIG_IONICE\|CONFIG_TASKSET' ../buildroot-2018.08/package/busybox/busybox.config
+$ sed -i 's/.*CONFIG_IONICE.*/CONFIG_IONICE=y/; s/.*CONFIG_TASKSET.*/CONFIG_TASKSET=y/' ../buildroot-2018.08/package/busybox/busybox.config
+$ grep 'CONFIG_IONICE\|CONFIG_TASKSET' ../buildroot-2018.08/package/busybox/busybox.config
+
+CONFIG_IONICE=y
+CONFIG_TASKSET=y
+
 $ nano packages.frag
 
 BR2_PACKAGE_COREUTILS=y
@@ -111,6 +118,48 @@ $ nano rootfs-overlay/etc/init.d/S99rc.local.sh
 
 [ -e /dev/snd/timer ] && rm /dev/snd/timer
 
+musicpd_bg () {
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+ sleep 1
+ pgr_mpd=$(pgrep -x mpd)
+ taskset -pc $m_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+#nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+}
+
+eol () {
+#until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+# sleep 1
+#done
+#sleep 1
+#taskset -pc $s_task $(pgrep -x upmpdcli)
+#taskset -acp $s_task $(pgrep -x upmpdcli) || true
+#echo "$(pstree -np $(pgrep -x upmpdcli))" | while read line ; do
+# proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+# taskset -cp $s_task $proc_nr || true
+#done
+#echo none > /sys/class/leds/led0/trigger
+#echo 0    > /sys/class/leds/led0/brightness
+#[ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+echo none > /sys/class/leds/green_led/trigger
+ pkill -x rc.local
+}
+
 cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
@@ -123,10 +172,33 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
 
 echo noop | tee /sys/block/mmcblk0*/queue/scheduler
 
-nohup /dev/shm/mpd --no-daemon /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
+done
 
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
+done
+
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
+  taskset -acp 0 $pid || true
+ done
+fi
+
+#sysctl -p /etc/sysctl.conf
 echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+
+swapoff -a
+
+musicpd_bg &
+eol &
+nohup /dev/shm/mpd --no-daemon /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 
 m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
@@ -134,23 +206,6 @@ m_task=$(($(nproc --all)-1))
 pgr_mpd=$(pgrep -nx mpd)
 
 taskset -pc $m_task $pgr_mpd
-
-echo "$(pstree -npt $pgr_mpd)" | while read line ; do
- proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
- proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
- case $proc in
-  output) chrt -opv 0 $proc_nr ;;
- esac
-done
-
-#sysctl -p /etc/sysctl.conf
-
-echo none > /sys/class/leds/green_led/trigger
-#echo none > /sys/class/leds/led0/trigger
-#echo 0    > /sys/class/leds/led0/brightness
-#[ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
-
-pkill -x rc.local
 
 exit 0
 
@@ -203,8 +258,11 @@ exit 0
 6. Flashing
 
 $ sudo fdisk -l
-$ sudo dd status=progress if=/home/parkmino/Downloads/buildroot/orange_pi_zero/images/sdcard.img of=/dev/sdc
+$ sudo dd status=progress if=../images/sdcard.img of=/dev/sdc
 $ sync
+
+$ mv ../images/sdcard.img ../images/buildroot_renderer_$(date +"%y.%m").img
+$ zip ../images/buildroot_renderer_$(date +"%y.%m").zip ../images/buildroot_renderer_$(date +"%y.%m").img
 
 7. Customization
 
