@@ -20,7 +20,7 @@ until pstree -pt $pgr_mpv | grep -q mpv/ao; do
 done
 sleep 1
 
-echo
+#echo
 taskset -pc 3 $pgr_mpv
 
 echo "$(pstree -npt $pgr_mpv)" | while read line; do

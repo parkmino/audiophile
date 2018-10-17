@@ -23,10 +23,15 @@ echo "$proc = $(cat $proc) ($(echo $proc | cut -d'/' -f4))"
 
 /home/parkmino/pri set
 
-grep -E '( sysctl.*|ln.*libasound|ln.*alsa)' /etc/rc.local | while read line ; do
- sudo $line
+grep ' sysctl.*\|ln.*libasound\|ln.*alsa\| echo.*sys' /etc/rc.local | while read line ; do
+ sudo sh -c "$line"
 done
 
 #sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2
 ls -al /usr/lib/x86_64-linux-gnu/libasound.so.2 /usr/share/alsa/alsa.conf
+
+for i in /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer; do # /dev/snd/control*
+ [ -f "$i" ] && sudo rm "$i"
+done
+
 numlockx off

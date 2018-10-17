@@ -31,8 +31,8 @@ if [ "$answer" != n ]; then
  read -p "* Update mkm3u? [Y/n]" answer
  if [ "$answer" != n ]; then
   $mkm3u
-  grep $ch= $mkm3u
-  [ "$ch" = jtbc ] && sed -i 's/youtu.be.*/youtu.be\/'"$url"'/' $jtbc_m3u
+  #grep $ch= $utube
+  [ "$ch" = jtbc ] && sed -i 's/youtu.be.*/youtu.be\/'"$url"'/' $jtbc_m3u && echo "JTBC News url is $(tail -1 $jtbc_m3u)"
  fi
 else
  echo "$ch live was not updated"

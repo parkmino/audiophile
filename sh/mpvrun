@@ -7,7 +7,7 @@ usage () {
 
 [ -z "$1" ] && usage && exit
 
-             jtbc="https://youtu.be/94jwjzKrO18"
+             jtbc="https://youtu.be/9qIkkomIpTg"
               tbs="https://youtu.be/5e5tRhUUlUA"
            yonhap="https://youtu.be/5Kk5La-f7oY"
               ytn="https://youtu.be/aR8Fe1lTKHo"

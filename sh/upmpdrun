@@ -12,7 +12,6 @@ m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
 
 taskset -acp $s_task $(pgrep -x upmpdcli)
-
 ) &
 
-nohup /usr/bin/upmpdcli -c /etc/upmpdcli.conf>/dev/null&>/dev/null</dev/null
+nohup /usr/bin/upmpdcli -D -c /etc/upmpdcli.conf>/dev/null</dev/null 2>/dev/null

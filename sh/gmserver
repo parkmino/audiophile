@@ -6,7 +6,7 @@ usage () {
 }
 
 case $1 in
- on)   gmediaserver -b --disable-tags --no-timestamp --fs-charset=UTF-8 -v0 --profile=generic -ienp3s0 --file-types=unknown /home/parkmino/Music/ /home/parkmino/Videos/ ;;
+ on)   nohup gmediaserver -b --disable-tags --no-timestamp --fs-charset=UTF-8 -v0 --profile=generic -ienp3s0 --file-types=unknown /home/parkmino/Music/ /home/parkmino/Videos/>/dev/null</dev/null 2>/dev/null ;;
  off)  pkill gmediaserver ;;
  scan) kill -s USR1 $(pgrep -x gmediaserver) ;;
  *)    usage
