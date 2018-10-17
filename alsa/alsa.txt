@@ -20,21 +20,19 @@ $ sudo make install
 
 $ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
 $ sudo cp /usr/lib/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav
-$ sudo chmod -w /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav
 $ sudo cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 
 ### ALSA.CONF
 
-$ sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so/.so.sav/' '{}' \;
-$ sudo rm -rf /usr/share/alsa.org
-$ sudo mv /usr/share/alsa /usr/share/alsa.org
+$ sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
+$ sudo rm -rf /usr/share/alsa.orig
+$ sudo mv /usr/share/alsa /usr/share/alsa.orig
 $ sudo systemctl mask alsa-store.service
 $ sudo systemctl mask alsa-restore.service
 $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 $ sudo mkdir /usr/share/alsa
 $ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
-$ sudo chmod -w /usr/share/alsa/alsa.conf.sav
 $ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 $ sudo nano /etc/rc.local
@@ -43,4 +41,4 @@ $ sudo nano /etc/rc.local
 
 $ sudo find /usr/lib/*/alsa-lib/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
 $ sudo mv /usr/share/alsa /usr/share/alsa.tweak
-$ sudo mv /usr/share/alsa.org /usr/share/alsa
+$ sudo mv /usr/share/alsa.orig /usr/share/alsa
