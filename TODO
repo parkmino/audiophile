@@ -6,22 +6,22 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 1. ALSA
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0' > /usr/share/alsa/alsa.conf.sav"
-	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+	sudo sh -c "echo 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 2. sudo nano /etc/mpd.conf.sav
 
-	mixer_type "disabled"		# In/outside of ALSA output
-	mixer_device "/dev/null"
-	#gapless_mp3_playback "no"	# Remove this line
-	#tags "no"			# Remove this line
+	mixer_type "disabled"			# In/outside of ALSA output
+	mixer_device "/dev/snd/timer"
+	#gapless_mp3_playback "no"		# Remove this line
+	#tags "no"				# Remove this line
 	audio_buffer_size "3683"
 	buffer_before_play "10.55969372980212839891001004021011%"
-	audio_buffer_size "3684"	# for MPD 0.21
+	audio_buffer_size "3684"		# for MPD 0.21
 
 3. sudo nano /etc/sysctl.conf
 	kernel.sched_min_granularity_ns = 229980
@@ -99,7 +99,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 		ls -al /dev/snd/
 		sudo rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer # /dev/snd/control*
 		sudo nano /etc/rc.local
-			for i in /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer; do # /dev/snd/control*
+			for i in /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq; do # /dev/snd/timer /dev/snd/control*
 			 [ -e "$i" ] && rm "$i"
 			done
 
