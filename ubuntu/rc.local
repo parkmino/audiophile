@@ -43,6 +43,7 @@
 #}
 
  sysctl -w kernel.watchdog=0
+ sysctl -w kernel.watchdog_thresh=0
  sysctl -w kernel.ftrace_enabled=0
 #sysctl -w kernel.kexec_load_disabled=1
 #sysctl -w kernel.modules_disabled=1
@@ -56,9 +57,10 @@
  sysctl -w kernel.sched_migration_cost_ns=4899005
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window_ns=345995
+#sysctl -w kernel.sched_shares_window_ns=345995
 #sysctl -w kernel.sched_tunable_scaling=1
  sysctl -w kernel.sched_time_avg_ms=6289
+ sysctl -w kernel.printk="0 0 0 0"
 
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
@@ -93,6 +95,9 @@
 #sysctl -w dev.rtc.max-user-freq=4032
  sysctl -w dev.hpet.max-user-freq=2147483520
 
+ echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+ echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+
 swapoff -a
 
 #chmod -w /lib/systemd/systemd /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /usr/share/alsa/alsa.conf.sav /usr/bin/mpd /etc/mpd.conf.sav
@@ -124,7 +129,7 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd|lightdm|sawfish|mpd/ {print $1}'); do
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
   taskset -acp 0 $pid || true
  done
 
@@ -153,7 +158,9 @@ fi
 #hdparm -A1 -a1280 -B255 -X64 /dev/sda # -r1
 #
 #mpd_bg &
-#nohup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
+#nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null&>/dev/null</dev/null
+
+rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
 modprobe -r psmouse
 

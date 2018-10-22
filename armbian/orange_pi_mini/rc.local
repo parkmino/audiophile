@@ -11,8 +11,8 @@
 #
 # By default this script does nothing.
 
- sysctl -w vm.dirty_background_ratio=0
- sysctl -w vm.dirty_ratio=0
+#sysctl -w vm.dirty_background_ratio=0
+#sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
  sysctl -w vm.oom_dump_tasks=0
  sysctl -w vm.oom_kill_allocating_task=1
@@ -29,16 +29,17 @@
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
- sysctl -w kernel.sched_min_granularity_ns=229978
- sysctl -w kernel.sched_wakeup_granularity_ns=388290
- sysctl -w kernel.sched_latency_ns=1394054
+ sysctl -w kernel.sched_min_granularity_ns=229980
+ sysctl -w kernel.sched_wakeup_granularity_ns=388286
+ sysctl -w kernel.sched_latency_ns=1394058
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost=4899004
+ sysctl -w kernel.sched_migration_cost=4899005
  sysctl -w kernel.sched_nr_migrate=0
 #sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window=345996
+ sysctl -w kernel.sched_shares_window=345995
 #sysctl -w kernel.sched_tunable_scaling=1
  sysctl -w kernel.sched_time_avg=6289
+ sysctl -w kernel.printk="0 0 0 0"
 
 #sysctl -w net.core.rmem_max=12582912
 #sysctl -w net.core.wmem_max=12582912
@@ -98,6 +99,11 @@ echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
+echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
 #done
@@ -131,7 +137,8 @@ echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #ionice -c 2 -n 7 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null &
 #nice -n -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null &
 #taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null
-nohup /dev/shm/rygel -c /dev/shm/rygel.conf&>/dev/null</dev/null
+nohup /dev/shm/rygel -c /dev/shm/rygel.conf>/dev/null</dev/null 2>/dev/null
+#nohup gmediaserver -b --disable-tags --no-timestamp --fs-charset=UTF-8 -v0 --profile=generic -ieth0 --file-types=unknown /mnt/>/dev/null</dev/null 2>/dev/null
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
 #done

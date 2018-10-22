@@ -64,6 +64,10 @@ mpd_bg () {
 #chmod -w /lib/systemd/systemd /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav
 #chmod -R -w /usr/lib/arm-linux-gnueabihf/
 
+mknod -m 640 /dev/port c 1 4 && chown root:kmem /dev/port
+
+rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
@@ -78,6 +82,8 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
 #chmod -w /dev/shm/mpd.conf
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
+echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice  -2 $i
@@ -136,6 +142,6 @@ taskset -cp $m_task 1
 #mount -o remount,ro /
 
 mpd_bg &
-nohup /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null</dev/null
+nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 
 exit 0
