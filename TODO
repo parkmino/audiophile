@@ -9,14 +9,14 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 9' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-	sudo sh -c "echo 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 2. sudo nano /etc/mpd.conf.sav
 
 	mixer_type "disabled"			# In/outside of ALSA output
-	mixer_device "/dev/snd/timer"
+	mixer_device "/dev/port"
 	#gapless_mp3_playback "no"		# Remove this line
 	#tags "no"				# Remove this line
 	audio_buffer_size "3683"
@@ -58,7 +58,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	5.10 cat /proc/sys/kernel/printk
 		nano /etc/sysctl.conf
 			kernel.printk = 0 0 0 0
-			kernel.watchdog_thresh = 0 # Only for Ubuntu ?
+			kernel.watchdog = 0
+			kernel.watchdog_thresh = 0 # Only for Ubuntu & Orange Pi Zero for Armbian/Deitpi
 
 	5.12 sudo sed -i '/^#/d' /etc/mpd.conf.sav
 		#dop
@@ -93,15 +94,13 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 
 	5.15 Enable memory hardwall
 		echo 1 | sudo tee /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
-		sudo sh -c "echo 0 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall"
+		sudo sh -c "echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall"
 
 	5.16 /dev/snd
 		ls -al /dev/snd/
 		sudo rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer # /dev/snd/control*
 		sudo nano /etc/rc.local
-			for i in /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq; do # /dev/snd/timer /dev/snd/control*
-			 [ -e "$i" ] && rm "$i"
-			done
+			rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true # /dev/snd/control*
 
 	5.17 CPU Ondemand governor configuration options
 		$ sudo nano /etc/rc.local
@@ -110,3 +109,10 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 			echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor	# 1
 			#echo 40 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold		# 95
 			#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy			# 1
+
+	5.18 /dev/port # coreutils
+		$ man port
+		$ sudo mknod -m 640 /dev/port c 1 4
+		$ sudo chown root:kmem /dev/port
+		$ nano /etc/rc.local
+			mknod -m 640 /dev/port c 1 4 && chown root:kmem /dev/port
