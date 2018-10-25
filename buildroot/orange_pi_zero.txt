@@ -66,7 +66,7 @@ Device Drivers --->
 
 coreutils, procps_ng, psmisc, dropbear(SSH), ca_certificates
 alsa_lib, mpd, mpd_mpc, ncmpc
-curl, nano
+curl, nano, bc
 
 $ grep 'CONFIG_IONICE\|CONFIG_TASKSET' ../buildroot-2018.08/package/busybox/busybox.config
 $ sed -i 's/.*CONFIG_IONICE.*/CONFIG_IONICE=y/; s/.*CONFIG_TASKSET.*/CONFIG_TASKSET=y/' ../buildroot-2018.08/package/busybox/busybox.config
@@ -100,6 +100,7 @@ BR2_PACKAGE_MPD_MPC=y
 BR2_PACKAGE_NCMPC=y
 BR2_PACKAGE_CURL=y
 BR2_PACKAGE_NANO=y
+BR2_PACKAGE_BC=y
 
 4. Rootfs Overlay
 
@@ -108,56 +109,53 @@ $ mkdir -p rootfs-overlay/etc/init.d
 rootfs-overlay/etc/init.d/S99rc.local
 rootfs-overlay/etc/sysctl.conf
 rootfs-overlay/etc/mpd.conf.sav
+rootfs-overlay/etc/audio.conf
 
 $ nano rootfs-overlay/etc/init.d/S99rc.local.sh
 
 #!/bin/sh
 
-#/etc/init.d/S01logging stop
-[ -e /boot/.nossh ] && /etc/init.d/S50dropbear stop
+if [ -e /etc/audio.conf ]; then
+     log=$(grep -m1 ^log=     /etc/audio.conf | cut -d\= -f2)
+     ssh=$(grep -m1 ^ssh=     /etc/audio.conf | cut -d\= -f2)
+    upnp=$(grep -m1 ^upnp=    /etc/audio.conf | cut -d\= -f2)
+ airplay=$(grep -m1 ^airplay= /etc/audio.conf | cut -d\= -f2)
+ spotify=$(grep -m1 ^spotify= /etc/audio.conf | cut -d\= -f2)
+fi
+
+[ "$log" != on ] && /etc/init.d/S01logging stop
+[ "$ssh" != on ] && /etc/init.d/S50dropbear stop
 
 [ -e /dev/snd/timer ] && rm /dev/snd/timer
 
-musicpd_bg () {
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+eol () {
+ sec=0
+ until [ $(pidof mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pidof mpd) 2>/dev/null | grep -q output); do
   sleep 1
+  sec=$(($sec+1))
+  [ "$sec" -ge 10 ] && printf "\nMPD is not available!\n" && return
  done
  sleep 1
- pgr_mpd=$(pgrep -x mpd)
- taskset -pc $m_task $pgr_mpd
- #renice -1 -p       $pgr_mpd
- echo "$(pstree -np $pgr_mpd)" | while read line ; do
+ pgr_mpd=$(pidof mpd)
+ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		 taskset -cp $s_task $proc_nr ;;
-   io)		 taskset -cp $s_task $proc_nr ;;
-   player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $s_task $proc_nr ;;
-   output)	 taskset -cp $m_task $proc_nr
-		#renice -1 -p	     $proc_nr
-		 chrt -op 0	     $proc_nr ;;
+   output) chrt -op 0 $proc_nr ;;
   esac
  done
-#nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+ [ "$upnp" = on ] && nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+ echo 0 > /sys/class/leds/orangepi\:green\:pwr/brightness
 }
 
-eol () {
-#until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
-# sleep 1
-#done
-#sleep 1
-#taskset -pc $s_task $(pgrep -x upmpdcli)
-#taskset -acp $s_task $(pgrep -x upmpdcli) || true
-#echo "$(pstree -np $(pgrep -x upmpdcli))" | while read line ; do
-# proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-# taskset -cp $s_task $proc_nr || true
-#done
-#echo none > /sys/class/leds/led0/trigger
-#echo 0    > /sys/class/leds/led0/brightness
-#[ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
-echo none > /sys/class/leds/green_led/trigger
- pkill -x rc.local
+spotifyd () {
+ cp /usr/bin/spotifyd /etc/spotifyd.conf /dev/shm/
+ sleep 1
+ nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+}
+
+shairport_sync () {
+ /etc/init.d/M??shaiport-sync start
 }
 
 cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
@@ -166,11 +164,13 @@ cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /dev/shm/ # /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so.1.0.0
 cp /usr/lib/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
 
-echo noop | tee /sys/block/mmcblk0*/queue/scheduler
+echo none | tee /sys/block/mmcblk0*/queue/scheduler
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
@@ -181,31 +181,24 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd
  renice  -3 $i
 done
 
-m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
-[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+for i in $(awk '/ehci.*usb/{print +$1}' /proc/interrupts); do
+ echo 8 > /proc/irq/$i/smp_affinity
+done
+echo 1 > /proc/irq/default_smp_affinity
 
-if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
-  taskset -acp 0 $pid || true
- done
-fi
-
-#sysctl -p /etc/sysctl.conf
-echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
-echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+sysctl -p /etc/sysctl.conf
+#echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 
 swapoff -a
 
-musicpd_bg &
+mknod -m 000 /dev/mixer c 1 4 && chown root:kmem /dev/mixer
+
+[ "$spotify" = on ] && (spotifyd &) && sleep 3
+
+[ "$airplay" = on ] && /etc/init.d/M??shaiport-sync start
+
 eol &
-nohup /dev/shm/mpd --no-daemon /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
-
-m_task=$(($(nproc --all)-1))
-[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
-
-pgr_mpd=$(pgrep -nx mpd)
-
-taskset -pc $m_task $pgr_mpd
+nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 
 exit 0
 
@@ -224,7 +217,7 @@ kernel.printk = 0 0 0 0
 kernel.sched_rr_timeslice_ms = 1
 net.ipv4.tcp_sack = 0
 net.ipv4.tcp_no_metrics_save = 1
-net.ipv6.conf.all.disable_ipv6 = 1
+#net.ipv6.conf.all.disable_ipv6 = 1
 
 $ cp mpd.conf rootfs-overlay/etc/mpd.conf.sav
 
@@ -241,7 +234,8 @@ BOARD_DIR=./
 #sed -i 's/^root::/root:*:/' $TARGET_DIR/etc/shadow
 #sed -i 's/^console/#console/' $TARGET_DIR/etc/inittab
 
-chmod -x $TARGET_DIR/etc/init.d/S01logging $TARGET_DIR/etc/init.d/S95mpd
+mv $TARGET_DIR/etc/init.d/S95mpd $TARGET_DIR/etc/init.d/M95mpd
+mv $TARGET_DIR/etc/init.d/S??upmpdcli $TARGET_DIR/etc/init.d/M??upmpdcli
 
 [ -d $TARGET_DIR/usr/share/alsa ] && [ ! -d $TARGET_DIR/usr/share/alsa.orig ] && mv $TARGET_DIR/usr/share/alsa $TARGET_DIR/usr/share/alsa.orig
 [ -d $TARGET_DIR/usr/share/alsa ] && rm -rf $TARGET_DIR/usr/share/alsa
@@ -316,13 +310,10 @@ $ make menuconfig
 
 $ nano post-build.sh
 
- sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' $TRARGET_DIR//etc/shairport-sync.conf
-#sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' $TRARGET_DIR//etc/shairport-sync.conf   # 24Bit Only
- sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' $TRARGET_DIR//etc/shairport-sync.conf
- sed -i '/convolution =\|loudness =/s/^\/*//; /convolution =\|loudness =/s/".*"/"no"/' $TRARGET_DIR//etc/shairport-sync.conf
+ sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' $TRARGET_DIR/etc/shairport-sync.conf
+#sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' $TRARGET_DIR/etc/shairport-sync.conf   # 24Bit Only
+ sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' $TRARGET_DIR/etc/shairport-sync.conf
+ sed -i '/convolution =\|loudness =/s/^\/*//; /convolution =\|loudness =/s/".*"/"no"/' $TRARGET_DIR/etc/shairport-sync.conf
 
-chmod -x $TRARGET_DIR/S??shaiport-sync
-
-$ nano rootfs-overlay/etc/init.d/S99rc.local.sh
-
-[ -e /boot/airplay ] && /etc/init.d/S??shaiport-sync start
+#$ chmod -x $TRARGET_DIR/etc/init.d/S??shaiport-sync
+$ mv $TRARGET_DIR/etc/init.d/S??shaiport-sync $TRARGET_DIR/etc/init.d/M??shaiport-sync
