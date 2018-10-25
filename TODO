@@ -93,14 +93,17 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 		sudo sh -c "echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance"
 
 	5.15 Enable memory hardwall
-		echo 1 | sudo tee /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
-		sudo sh -c "echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall"
+		#echo 1 | sudo tee /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+		#sudo sh -c "echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall"
 
 	5.16 /dev/snd
 		ls -al /dev/snd/
 		sudo rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer # /dev/snd/control*
 		sudo nano /etc/rc.local
-			rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true # /dev/snd/control*
+			rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true # /dev/snd/*C0* /dev/snd/*D[1-9]*
+			for i in $(ls /dev/snd/); do
+				[ ! "$i" = "by-id"  ] && [ ! "$i" = "by-path"  ] && [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -f "/dev/snd/$i"
+			done
 
 	5.17 CPU Ondemand governor configuration options
 		$ sudo nano /etc/rc.local
@@ -110,9 +113,9 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 			#echo 40 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold		# 95
 			#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy			# 1
 
-	5.18 /dev/port # coreutils
-		$ man port
-		$ sudo mknod -m 640 /dev/port c 1 4
-		$ sudo chown root:kmem /dev/port
-		$ nano /etc/rc.local
-			mknod -m 640 /dev/port c 1 4 && chown root:kmem /dev/port
+	5.18 Customized mixer
+		$ sudo nano /etc/rc.local
+			mknod -m 000 /dev/mixer c 1 4
+			chown root:kmem /dev/mixer
+		$ sudo nano /etc/mpd.conf.sav
+			mixer_device "/dev/mixer"
