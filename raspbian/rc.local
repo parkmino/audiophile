@@ -11,6 +11,8 @@
 #
 # By default this script does nothing.
 
+# Print the IP address
+
 musicpd_bg () {
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
@@ -32,7 +34,7 @@ musicpd_bg () {
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
-nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null&>/dev/null</dev/null
+nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
 }
 
 eol () {
@@ -50,20 +52,20 @@ eol () {
 
 roon_bridge () {
  cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
- cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
  sleep 1
  systemctl start roonbridge
 }
 
 spotifyd () {
- cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
  cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
  sleep 1
-nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null&>/dev/null</dev/null
+nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
 }
 
 shairport_sync () {
- cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
  sleep 1
  systemctl start avahi-daemon shairport-sync
 }
@@ -79,7 +81,15 @@ ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.
 cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
 
-echo noop > /sys/block/mmcblk0*/queue/scheduler
+echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+
+echo noop > /sys/block/mmcblk0/queue/scheduler
+echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+
+mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
+rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
@@ -90,7 +100,7 @@ for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
 done
 
-for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
  chrt -op 0 $i
  renice  -3 $i
 done
@@ -99,7 +109,7 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd$/ {print $1}'); do
   taskset -acp 0 $pid || true
  done
 fi
@@ -140,13 +150,13 @@ pkill plymouthd
 swapoff -a
 
 ### Roon Bridge
-####(roon_bridge &) && sleep 3
+#(roon_bridge &) && sleep 3
 
 ### Spotify
 #(spotifyd &) && sleep 3
 
 ### Shaiport-sync
-#(shairport_sync &) && sleep 3
+###(shairport_sync &) && sleep 3
 
 ### Taskset
 echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
@@ -162,6 +172,6 @@ done
 
 musicpd_bg &
 eol &
-nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null&>/dev/null</dev/null
+nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 
 exit 0
