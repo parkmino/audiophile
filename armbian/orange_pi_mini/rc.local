@@ -95,14 +95,14 @@ do
 done
 
 #echo ondemand | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+ echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+ echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
-echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
-echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
-echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load
-echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+ echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+#echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+ echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load
+ echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
 
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
