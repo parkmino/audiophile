@@ -1,5 +1,5 @@
 $ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp4/libupnpp4_0.16.1-1~ppa1~stretch_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.3.4-1~ppa1~stretch_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.3.6-1~ppa1~stretch_armhf.deb
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd12 libjsoncpp1
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
 
@@ -21,34 +21,6 @@ $ sudo nano /etc/upmpdcli.conf
 
 checkcontentformat = 0
 ...
-[radio KBS클래식FM]
-url = http://juoradio.appspot.com/kbs1
-artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_24.png
-
-[radio KBS쿨FM]
-url = http://juoradio.appspot.com/kbs2
-artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_25.png
-
-[radio KBS1Radio]
-url = http://juoradio.appspot.com/kbs1r
-artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_21.png
-
-[radio KBS해피FM]
-url = http://juoradio.appspot.com/kbs2r
-artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_22.png
-
-[radio KBS3Radio]
-url = http://juoradio.appspot.com/kbs3r
-artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_23.png
-
-[radio KBS한민족방송]
-url = http://juoradio.appspot.com/kbsscr
-artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_26.png
-
-[radio KBS월드라디오]
-url = http://juoradio.appspot.com/kbsrki
-artUrl = http://img.kbs.co.kr/kplayer/WebV4/assets/images/channel_logo/square/channel_I92.png
-
 [radio CBS음악FM]
 url = http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
 artUrl = http://cdn-radiotime-logos.tunein.com/s14584q.png
