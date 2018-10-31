@@ -4,7 +4,7 @@ Audio Render Advanced
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M if=2017-08-16-raspbian-stretch-lite.img of=/dev/sdc
-	$ scp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd ut2mpd tts *.pls pi@192.168.0.3:/home/pi/
+	$ scp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd sbs_dec.py ut2mpd tts *.pls pi@192.168.0.3:/home/pi/
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
@@ -122,7 +122,8 @@ Audio Render Advanced
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
-	sudo ln -s /home/pi/kr2mpd /home/pi/ut2mpd /home/pi/tts /usr/bin/
+	sudo apt-get install python-crypto
+	sudo ln -s /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts /usr/bin/
 	sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
 	sudo mkdir /var/lib/mpd/music/webradio
 	sudo mv *.pls /var/lib/mpd/music/webradio
@@ -214,6 +215,8 @@ Audio Render Advanced
 
 	$ sudo apt update
 	$ sudo apt install shairport-sync
+	$ wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.2.1-1_armhf.deb
+	$ sudo dpkg -i shairport*.deb
 	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' /etc/shairport-sync.conf
 	$ sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
 	$ sudo sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' /etc/shairport-sync.conf
@@ -280,21 +283,25 @@ Audio Render Advanced
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
 	$ sudo systemctl daemon-reload
-	$ youtube-dl --update
+	$ sudo youtube-dl --update
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" > ~/release
+	$ cat ~/release
 	$ mpc clear
 	$ sudo rm -rf /var/roon/*
-	$ sudo rm -f /root/.bash_history ~/.bash_history ; history -c
+	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdc of=raspbian_audio_renderer_$(date +"%y.%m").img
+	$ sudo dd bs=4M status=progress if=/dev/sdc of=raspbian_audio_renderer_$(date +"%y.%m").img
 	$ zip raspbian_audio_renderer_$(date +"%y.%m").zip raspbian_audio_renderer_$(date +"%y.%m").img
 
-cf)
+	https://github.com/Drewsif/PiShrink
+	$ wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
+	$ chmod +x pishrink.sh
+	$ sudo mv pishrink.sh /usr/local/bin
+	$ sudo pishrink.sh raspbian_audio_renderer_$(date +"%y.%m").img raspbian_audio_renderer_expand_$(date +"%y.%m").img
 
-sudo sysctl -w vm.dirty_background_ratio=10
-sudo sysctl -w vm.dirty_ratio=20
+cf)
 
 sudo sed -i 's/raspbian.raspberrypi.org/mirrordirector.raspberrypi.org/' /etc/apt/sources.list
 sudo sed -i 's/http:\/\/raspbian.raspberrypi.org/ftp:\/\/ftp.neowiz.com\/raspbian/' /etc/apt/sources.list
