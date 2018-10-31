@@ -24,6 +24,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	audio_buffer_size "3684"		# for MPD 0.21
 
 3. sudo nano /etc/sysctl.conf
+	#vm.dirty_background_ratio = 0
+	#vm.dirty_ratio = 0
 	kernel.sched_min_granularity_ns = 229980
 	kernel.sched_wakeup_granularity_ns = 388286
 	kernel.sched_latency_ns = 1394058
@@ -31,42 +33,39 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 	kernel.sched_shares_window = 345995
 	kernel.sched_time_avg = 6289
 
-4. dpkg -i gmediaserver_0.13.0-8_armhf.deb # For Orange Pi Mini
+4. Raspbian
 
-5. Raspbian
-
-	5.1 sudo systemctl status rc.local
+	4.1 sudo systemctl status rc.local
 	    sudo systemctl daemon-reload
 
-	5.2 exit instead of pkill in rc.local
-
-	5.3 wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.2.1-1_armhf.deb
+	4.2 wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.2.1-1_armhf.deb
 	    sudo dpkg -i shairport*.deb
 
-	5.4 Update kr2mpd
+	4.3 Update kr2mpd
+		sudo apt-get install python-crypto
 
-	5.5 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
+	4.4 echo noop | tee /sys/block/mmcblk0*/queue/scheduler (rc.local)
 
-	5.6 Typo pcm.o -> pcm.0, sudevice -> subdevice (alsa.conf.roon)
+	4.5 Typo pcm.o -> pcm.0, sudevice -> subdevice (alsa.conf.roon)
 
-	5.7 taskset !~ /systemd$/ (rc.local)
+	4.6 taskset !~ /systemd$/ (rc.local)
 
-	5.8 comment out vm.dirty_background_ratio & vm.dirty_ratio (sysctl.conf)
+	4.7 comment out vm.dirty_background_ratio & vm.dirty_ratio (sysctl.conf)
 
-	5.9 nohup ...>/dev/null</dev/null 2>/dev/null
+	4.8 nohup ...>/dev/null</dev/null 2>/dev/null
 
-	5.10 cat /proc/sys/kernel/printk
+	4.9 cat /proc/sys/kernel/printk
 		nano /etc/sysctl.conf
 			kernel.printk = 0 0 0 0
 			kernel.watchdog = 0
 			kernel.watchdog_thresh = 0 # Only for Ubuntu & Orange Pi Zero for Armbian/Deitpi
 
-	5.12 sudo sed -i '/^#/d' /etc/mpd.conf.sav
+	4.10 sudo sed -i '/^#/d' /etc/mpd.conf.sav
 		#dop
 		#music_directory
 		#metadata
 
-	5.13 sudo nano /etc/mpd.conf.sav
+	4.11 sudo nano /etc/mpd.conf.sav
 		input {
 		plugin "mms"
 		enabled "no"
@@ -88,15 +87,15 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 		enabled "no"
 		}
 
-	5.14 Disble load balancing
+	4.12 Disble load balancing
 		echo 0 | sudo tee /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 		sudo sh -c "echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance"
 
-	5.15 Enable memory hardwall
+	4.13 Enable memory hardwall
 		#echo 1 | sudo tee /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
 		#sudo sh -c "echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall"
 
-	5.16 /dev/snd
+	4.14 /dev/snd
 		ls -al /dev/snd/
 		sudo rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer # /dev/snd/control*
 		sudo nano /etc/rc.local
@@ -105,7 +104,7 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 				[ ! "$i" = "by-id"  ] && [ ! "$i" = "by-path"  ] && [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -f "/dev/snd/$i"
 			done
 
-	5.17 CPU Ondemand governor configuration options
+	4.15 CPU Ondemand governor configuration options
 		$ sudo nano /etc/rc.local
 			echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate		# 1-1000000
 			echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load		# 0
@@ -113,9 +112,8 @@ $ mpc listall | grep -m1 노력 | mpc add && mpc play $(mpc playlist | wc -l)
 			#echo 40 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold		# 95
 			#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy			# 1
 
-	5.18 Customized mixer
+	4.16 Customized mixer
 		$ sudo nano /etc/rc.local
-			mknod -m 000 /dev/mixer c 1 4
-			chown root:kmem /dev/mixer
+			mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
 		$ sudo nano /etc/mpd.conf.sav
 			mixer_device "/dev/mixer"
