@@ -12,11 +12,8 @@
 # By default this script does nothing.
 
 musicpd_bg () {
- sec=0
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
-  sec=$(($sec+1))
-  [ "$sec" -ge 10 ] && break
  done
  sleep 1
  pgr_mpd=$(pgrep -x mpd)
@@ -39,11 +36,8 @@ nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null
 }
 
 eol () {
- sec=0
  until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
   sleep 1
-  sec=$(($sec+1))
-  [ "$sec" -ge 10 ] && break
  done
  sleep 1
  taskset -acp $s_task $(pgrep -x upmpdcli) || true
@@ -70,11 +64,21 @@ ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so.1
 cp /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8
 
+echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+
 echo noop | tee /sys/block/mmcblk0*/queue/scheduler
+echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+
+mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
+rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
@@ -103,11 +107,11 @@ fi
 swapoff -a
 
 ### Remove services
-for i in getty@tty1 serial-getty@ttySAC3
+for i in getty@tty1 serial-getty@ttySAC3 systemd-timesyncd
 do
  service $i stop
 done
-for i in hciattach tzdaemon # bluetoothd
+for i in hciattach tzdaemon bluetoothd
 do
  pkill $i
 done
@@ -132,3 +136,4 @@ eol &
 nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null
 
 exit 0
+
