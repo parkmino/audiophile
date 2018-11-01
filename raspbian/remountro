@@ -1,4 +1,0 @@
-#!/bin/sh
-sync
-sleep 1
-sudo mount -o remount,ro /
