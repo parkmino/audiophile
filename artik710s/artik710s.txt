@@ -71,7 +71,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### Kernel option
 # cat /boot/cmdline.txt /boot/config.txt (???)
 
-# apt-get install bc nano psmisc software-properties-common # ffmpeg libav-tools
+# apt-get install bc nano psmisc software-properties-common python-crypto # ffmpeg libav-tools
 # apt-get install mpd mpc ncmpc
 # nano /etc/mpd.conf
 	#bind_to_address "localhost"
@@ -95,14 +95,14 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # nano /etc/mpd.conf.sav
 	decoder {
 	plugin "pcm"
-	enabled "yes"
+	enabled "no"
 	}
 ### Roon Bridge
 #### Airplay & Spotifyd
 ### rc.local
 ### sysctl.conf
 ### USB mount
-### Internet radio (kr2mpd, ut2mpd, *.m3u8/pls)
+### Internet radio (kr2mpd, sbs_dec.py, ut2mpd, *.m3u8/pls)
 ### audio-config
 
 ### Back up
