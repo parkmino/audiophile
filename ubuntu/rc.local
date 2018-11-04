@@ -10,40 +10,6 @@
 # bits.
 #
 # By default this script does nothing.
-#
-#mpd_bg () {
-#
-# sec=0
-# until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pgrep -x mpd) 2>/dev/null | grep -q output); do
-#  sleep 1
-#  sec=$(($sec+1))
-#  [ "$sec" -ge 10 ] && printf "\nMPD is not available!\n" && exit
-# done
-#
-# sleep 1
-#
-# pgr_mpd=$(pgrep -x mpd)
-#
-#  taskset -pc $m_task $pgr_mpd
-# #renice -1 -p $pgr_mpd
-#
-# echo "$(pstree -np $pgr_mpd)" | while read line ; do
-#  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
-#  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-#  case $proc in
-#   mpd)	 taskset -cp $s_task $proc_nr ;;
-#   io)		 taskset -cp $s_task $proc_nr ;;
-#   player)	 taskset -cp $s_task $proc_nr ;;
-#   decoder)	 taskset -cp $s_task $proc_nr ;;
-#   output)	 taskset -cp $m_task $proc_nr
-#		 renice -1 -p	     $proc_nr
-#		 ionice -c 2 -n 7 -p $proc_nr
-#		 chrt -op 0	     $proc_nr ;;
-#  esac
-# done
-# #
-##nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf&>/dev/null</dev/null&
-#}
 
  sysctl -w kernel.watchdog=0
  sysctl -w kernel.watchdog_thresh=0
@@ -53,11 +19,11 @@
  sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
- sysctl -w kernel.sched_min_granularity_ns=229980
- sysctl -w kernel.sched_wakeup_granularity_ns=388286
+ sysctl -w kernel.sched_min_granularity_ns=229979
+ sysctl -w kernel.sched_wakeup_granularity_ns=388287
  sysctl -w kernel.sched_latency_ns=1394058
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899005
+ sysctl -w kernel.sched_migration_cost_ns=4899006
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window_ns=345995
@@ -104,9 +70,6 @@
 swapoff -a
 
 mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
-
-#chmod -w /lib/systemd/systemd /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /usr/share/alsa/alsa.conf.sav /usr/bin/mpd /etc/mpd.conf.sav
-#chmod -R -w /usr/lib/x86_64-linux-gnu/ /lib/modules/*/kernel/sound/
 
 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2
@@ -157,13 +120,9 @@ if [ "$m_task" -ge 1 ];then
   echo " $(cat $proc_snd)"
  done
  echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
- #taskset -apc $m_task `pgrep snd_hda`
 fi
 
 #hdparm -A1 -a1280 -B255 -X64 /dev/sda # -r1
-#
-#mpd_bg &
-#nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null&>/dev/null</dev/null
 
 for i in $(ls /dev/snd/); do
  [ ! "$i" = "by-id"  ] && [ ! "$i" = "by-path"  ] && [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -f "/dev/snd/$i"
