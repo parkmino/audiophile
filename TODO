@@ -1,0 +1,4 @@
+1. Artik 710s
+
+	# service systemd-journald systemd-logind systemd-timesyncd stop
+	# systemd-resolved
