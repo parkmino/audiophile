@@ -25,8 +25,8 @@ $ sudo cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound
 ### ALSA.CONF
 
 $ sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
-$ sudo rm -rf /usr/share/alsa.sav
-$ sudo mv /usr/share/alsa /usr/share/alsa.sav
+$ sudo rm -rf /usr/share/alsa.orig
+$ sudo mv /usr/share/alsa /usr/share/alsa.orig
 $ sudo systemctl mask alsa-store.service
 $ sudo systemctl mask alsa-restore.service
 $ sudo nano /lib/modprobe.d/aliases.conf
@@ -41,4 +41,4 @@ $ sudo nano /etc/rc.local
 
 $ sudo find /usr/lib/*/alsa-lib/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
 $ sudo mv /usr/share/alsa     /usr/share/alsa.tweak
-$ sudo mv /usr/share/alsa.sav /usr/share/alsa
+$ sudo mv /usr/share/alsa.orig /usr/share/alsa
