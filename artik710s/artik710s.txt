@@ -5,7 +5,7 @@ $ ssh root@192.168.0.x
 	password : root
 
 # uname -a; cat /etc/os-release
-	Ubuntu 16.04.3 LTS (Linux artix 4.4.71)
+	Ubuntu 16.04.4 LTS (Linux artix 4.4.113)
 # apt-get update
 	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710s
 # apt-get upgrade
@@ -54,7 +54,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # /etc/resolvconf/resolv.conf.d/head
 	domain your.domain.name
 # resolvconf -u
-# hostnamectl (in Ubuntu 18.04)
+# hostnamectl set-hostname Bann_Network_Player
 
 ### SSH message
 # ls /etc/update-motd.d/*
@@ -62,11 +62,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### Remove services
 # apt-get remove zigbeed
 # apt-get autoremove
-# systemctl stop    avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
-# systemctl disable avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
+# systemctl stop    avahi-daemon bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant
+# systemctl disable avahi-daemon bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant
 # systemctl mask wpa_supplicant
 # service getty@tty1 stop; service serial-getty@ttySAC3 stop
-# pkill hciattach; pkill tzdaemon
+# pkill hciattach; pkill tzdaemon; pkill start-launcher
 
 ### Kernel option
 # cat /boot/cmdline.txt /boot/config.txt (???)
@@ -83,8 +83,10 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # add-apt-repository ppa:jean-francois-dockes/upnpp1
 # apt-get update
 # apt-get install upmpdcli
+# nano /etc/upmpdcli.conf
+	friendlyname = rainbow
 	checkcontentformat = 0
-	friendlyname = Somewhere over the rainbow
+# cp rainbow.png /usr/share/upmpdcli/icon.png
 # systemctl restart upmpdcli
 # systemctl disable upmpdcli
 

@@ -45,6 +45,9 @@ eol () {
 }
 
 roon_bridge () {
+#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
+#cp -r /opt/roon /dev/shm/
+#ln -sf /dev/shm/roon /opt/RoonBridge
 #cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
 #cp /usr/lib/libasound.so.2.0.0_full /dev/shm/libasound.so.2.0.0
 #sleep 1
@@ -109,11 +112,11 @@ swapoff -a
 ### Remove services
 for i in getty@tty1 serial-getty@ttySAC3 systemd-timesyncd
 do
- service $i stop
+ service $i stop || true
 done
-for i in hciattach tzdaemon bluetoothd
+for i in hciattach tzdaemon start-launcher
 do
- pkill $i
+ pkill $i || true
 done
 
 ### Roon Bridge
@@ -136,4 +139,3 @@ eol &
 nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null
 
 exit 0
-
