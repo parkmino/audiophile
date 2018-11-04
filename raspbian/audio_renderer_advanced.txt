@@ -65,11 +65,17 @@ Audio Render Advanced
 		#blacklist btbcm
 		#blacklist hci_uart
 
-6. ALSA configuration
+6. Disable services
+
+	$ sudo systemctl disable getty@tty1 cron rsyslog systemd-timesyncd triggerhappy
+	$ sudo systemctl mask systemd-journald systemd-logind dbus
+	$ #sudo systemctl mask systemd-journal-flush.service systemd-journald.service
+
+7. ALSA configuration
 	sudo nano /lib/modprobe.d/aliases.conf
 		#options snd-usb-audio index=-2
 
-7. MPD Setup
+8. MPD Setup
 
 	sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libmad0 libid3tag0 libmpdclient2 libmms0 libupnp6
 	sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
@@ -77,9 +83,9 @@ Audio Render Advanced
 	sudo cp mpd.conf /etc/mpd.conf.sav
 	sudo apt-get install mpc ncmpc
 
-8. Upmpdcli Setup
+9. Upmpdcli Setup
 
-9. CIFS & NFS mounting
+10. CIFS & NFS mounting
 
 	sudo apt-get install cifs-utils nfs-common
 	sudo mkdir /mnt/cifs /mnt/nfs
@@ -88,23 +94,23 @@ Audio Render Advanced
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
 
-10. Edit /etc/fstab
+11. Edit /etc/fstab
 
 	/dev/mmcblk0p1  /boot           vfat    defaults          0       2
 	/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
 
-11. Edit /etc/rc.local
+12. Edit /etc/rc.local
 	
-12. Sysctl Configuration
+13. Sysctl Configuration
 
 	sudo nano /etc/sysctl.conf
 
-13. Disabel swap
+14. Disabel swap
 
 	cat /proc/swaps
 	sudo systemctl disable dphys-swapfile
 
-14. USB Mount
+15. USB Mount
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -118,7 +124,7 @@ Audio Render Advanced
 	sudo systemctl restart remote-fs.target
 	sudo systemctl restart local-fs.target
 
-15. Internet Radio & TTS (Text to Speech)
+16. Internet Radio & TTS (Text to Speech)
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
@@ -129,7 +135,7 @@ Audio Render Advanced
 	sudo mv *.pls /var/lib/mpd/music/webradio
 	mpc update
 
-16. Spotifyd
+17. Spotifyd
 
 	https://github.com/Spotifyd/spotifyd
 	https://github.com/Spotifyd/spotifyd/releases/latest
@@ -165,7 +171,7 @@ Audio Render Advanced
 	sudo sed -i '/spotifyd &/s/^/#/'  /etc/rc.local
 	sed -i '/username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' /home/pi/spotifyd.conf
 
-17. Roon Bridge
+18. Roon Bridge
 
 	https://kb.roonlabs.com/LinuxInstall
 
@@ -184,19 +190,22 @@ Audio Render Advanced
 
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
+		#ExecStart=nohup /opt/RoonBridge/Bridge/RoonBridge>/dev/null</dev/null 2>/dev/null
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
-	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.sav > /usr/share/alsa/alsa.conf.roon"
-	$ sudo sh -c "printf '\n' >> /usr/share/alsa/alsa.conf.roon"
-	$ sudo sh -c "cat /usr/share/alsa.org/alsa.conf >> /usr/share/alsa/alsa.conf.roon"
+	$ sudo sh -c "cat /usr/share/alsa.org/alsa.conf > /usr/share/alsa/alsa.conf.roon"
 	$ sudo sed -i 's/^[ \t]*//; /^$/d' /usr/share/alsa/alsa.conf.roon
 	$ head -20 /usr/share/alsa/alsa.conf.roon
 	$ sudo nano /usr/share/alsa/alsa.conf.roon
+	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.sav >> /usr/share/alsa/alsa.conf.roon"
 
 	$ sudo nano /etc/rc.local
 
 	roon_bridge () {
+	#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
+	#cp -r /opt/roon /dev/shm/
+	#ln -sf /dev/shm/roon /opt/RoonBridge
 	 cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
 	 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
 	 sleep 1
@@ -211,7 +220,7 @@ Audio Render Advanced
 	sudo sed -i '/roon_bridge &/s/^#*//' /etc/rc.local
 	sudo sed -i '/roon_bridge &/s/^/#/' /etc/rc.local
 
-18. Shairport-sync (AirPlay)
+19. Shairport-sync (AirPlay)
 
 	$ sudo apt update
 	$ sudo apt install shairport-sync
@@ -236,13 +245,13 @@ Audio Render Advanced
 
 	$ nano ~/audio-config
 
-18. audio-config
+20. audio-config
 
 	cp audio-config /home/pi
 	sudo ln -s /home/pi/audio-config /usr/bin/
 	audio-config
 
-19. Web interface
+21. Web interface
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
@@ -266,7 +275,7 @@ Audio Render Advanced
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-20. Read-only
+22. Read-only
 	cp remountro remountrw /home/pi
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
@@ -276,7 +285,7 @@ Audio Render Advanced
 	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
 
-21. Make Image
+23. Make Image
 
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get update
@@ -293,6 +302,7 @@ Audio Render Advanced
 
 	$ sudo fdisk -l
 	$ sudo dd bs=4M status=progress if=/dev/sdc of=raspbian_audio_renderer_$(date +"%y.%m").img
+	$ sync
 	$ zip raspbian_audio_renderer_$(date +"%y.%m").zip raspbian_audio_renderer_$(date +"%y.%m").img
 
 	https://github.com/Drewsif/PiShrink
@@ -300,6 +310,7 @@ Audio Render Advanced
 	$ chmod +x pishrink.sh
 	$ sudo mv pishrink.sh /usr/local/bin
 	$ sudo pishrink.sh raspbian_audio_renderer_$(date +"%y.%m").img raspbian_audio_renderer_expand_$(date +"%y.%m").img
+	$ zip raspbian_audio_renderer_expand_$(date +"%y.%m").zip raspbian_audio_renderer_expand_$(date +"%y.%m").img
 
 cf)
 

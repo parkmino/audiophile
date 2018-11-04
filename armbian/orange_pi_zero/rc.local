@@ -104,7 +104,7 @@ if [ "$m_task" -ge 1 ];then
 fi
 
 ### Remove services
-for i in cron systemd-journald systemd-logind dbus getty@tty1 serial-getty@ttyS0 systemd-udevd
+for i in systemd-udevd # cron systemd-journald systemd-logind dbus getty@tty1 serial-getty@ttyS0 systemd-udevd
 do
  service $i stop
 done

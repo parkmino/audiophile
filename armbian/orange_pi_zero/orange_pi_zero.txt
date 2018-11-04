@@ -91,11 +91,16 @@ Orange Pi Zero
 		blacklist g_serial
 		#blacklist btrfs
 
-07. /etc/sysctl.conf
+07. Remove service
 
-08. /etc/rc.local
+	# systemctl disable cron getty@tty1 serial-getty@ttyS0
+	# systemctl mask cron dbus dbus.socket rsyslog systemd-journald-dev-log.socket systemd-journald systemd-journald.socket systemd-journal-flush systemd-logind
 
-09. ALSA
+08. /etc/sysctl.conf
+
+09. /etc/rc.local
+
+10. ALSA
 
 	# nano /usr/share/alsa/alsa.conf
 		pcm.sound.card 1
@@ -104,7 +109,7 @@ Orange Pi Zero
 	# mv libasound.so.2.0.0 libasound.so.2.0.0.sav
 	# ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 
-10. MPD
+11. MPD
 
 	$ sudo cp mpd /usr/bin
 	$ sudo cp icon.png /root
@@ -115,9 +120,9 @@ Orange Pi Zero
 
 	# apt-get install libcue1 libaudiofile1 libavformat-dev libflac8 libmad0 libid3tag0 libmpdclient2 libupnp6
 
-11. Upmpdcli
+12. Upmpdcli
 
-12. USB IRQ
+13. USB IRQ
 
 	# cat /proc/interrupts
 	# nano /etc/rc.local
@@ -130,7 +135,7 @@ Orange Pi Zero
 		  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
 		 done
 
-13. USB auto mount
+14. USB auto mount
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -146,7 +151,7 @@ Orange Pi Zero
 	# systemctl restart remote-fs.target
 	# systemctl restart local-fs.target
 
-14. Static IP
+15. Static IP
 
 	# cp /etc/network/interfaces.default /etc/network/interfaces
 	# nano /etc/network/interfaces
@@ -161,11 +166,11 @@ Orange Pi Zero
 			dns-nameservers 168.126.63.1
 	# systemctl disable network-manager.service
 
-15. Show release
+16. Show release
 
 	# echo "* Mino's UPnP Audio Renderer for Orang Pi Zero 17.06" > release
 
-16. Make Image
+17. Make Image
 
 	# nano ~/release
 	# mpc clear

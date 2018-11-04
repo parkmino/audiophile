@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-# Print the IP address
+
 
 musicpd_bg () {
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
@@ -86,7 +86,7 @@ echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 
 echo noop > /sys/block/mmcblk0/queue/scheduler
-echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 
 mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
 rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
@@ -140,10 +140,10 @@ fi
 service getty@tty1 stop
 
 ### Remove services
-for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
-do
- service $i stop
-done
+#for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
+#do
+# service $i stop
+#done
 pkill plymouthd
 [ -f /boot/.nossh ] && service sshd stop
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)

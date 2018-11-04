@@ -89,7 +89,7 @@ done
 # echo 2 > /proc/irq/$irq/smp_affinity
 #done
 
-for i in cron ntp lirc rsyslog systemd-journald systemd-udevd systemd-logind dbus haveged sshd getty@tty1 # serial-getty@ttyS0
+for i in systemd-udevd # cron ntp lirc rsyslog systemd-journald systemd-udevd systemd-logind dbus haveged sshd getty@tty1 # serial-getty@ttyS0
 do
  service $i stop
 done

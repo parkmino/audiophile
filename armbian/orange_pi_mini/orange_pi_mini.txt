@@ -278,6 +278,8 @@ Orange Pi Mini II
 
 	# ps ax
 	# systemctl disable lirc cron ntp rsyslog
+	# systemctl disable cron ntp lirc haveged ssh getty@tty1
+	# systemctl mask dbus dbus.socket rsyslog systemd-journald-dev-log.socket systemd-journald systemd-journald.socket systemd-journal-flush systemd-logind
 	# systemctl mask alsa-store.service
 	# systemctl mask alsa-restore.service
 
