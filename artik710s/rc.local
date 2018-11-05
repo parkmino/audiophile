@@ -110,7 +110,7 @@ fi
 swapoff -a
 
 ### Remove services
-for i in getty@tty1 serial-getty@ttySAC3 systemd-timesyncd
+for i in systemd-journald systemd-resolved systemd-timesyncd getty@tty1 serial-getty@ttySAC3
 do
  service $i stop || true
 done
