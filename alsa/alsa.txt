@@ -24,7 +24,12 @@ $ sudo cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound
 
 ### ALSA.CONF
 
-$ sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
+$ dpkg-query -l 'libasound*'
+$ sudo apt-get remove '^libasound2-plugin.*'
+$ ls /usr/lib/*/alsa-lib/
+$ sudo rm -rf /usr/lib/*/alsa-lib/
+$ #sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
+
 $ sudo rm -rf /usr/share/alsa.orig
 $ sudo mv /usr/share/alsa /usr/share/alsa.orig
 $ sudo systemctl mask alsa-store.service
