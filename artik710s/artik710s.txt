@@ -1,6 +1,24 @@
 https://developer.artik.io/documentation/artik/getting-started/
 https://developer.artik.io/downloads/37339dc3-5909-4500-8506-25af16b022b9/download
 
+QEMU
+$ sudo apt-get install qemu-user-static
+$ mkdir rootfs
+$ sudo tar xf rootfs.tar.gz -C rootfs
+$ sudo cp /usr/bin/qemu-aarch64-static rootfs/usr/bin
+$ sudo mount -ro bind /dev rootfs/dev/
+$ sudo mount -ro bind /proc rootfs/proc/
+$ sudo chmod 777 rootfs/tmp
+$ sudo cp /etc/resolv.conf rootfs/etc/.
+$ sudo chroot rootfs
+$ ...
+$ exit
+$ sudo umount -A rootfs/dev
+$ sudo umount -A rootfs/proc
+$ sudo rm rootfs/etc/resolv.conf
+$ cd rootfs
+$ sudo tar -czf ../yourrootfs.tar.gz *
+
 $ ssh root@192.168.0.x
 	password : root
 
