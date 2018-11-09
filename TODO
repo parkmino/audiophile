@@ -1,0 +1,8 @@
+1. sudo nano /etc/rc.local
+	#rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true   # RoonBridge compatible
+
+2. nano kr2mpd
+
+3. sudo nano /etc/rc.local
+	cp /usr/bin/nohup ... /dev/shm/
+	/dev/shm/nohup ...
