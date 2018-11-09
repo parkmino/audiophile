@@ -86,7 +86,7 @@ fi
 ANDROID_X86 () {
 printf "• Android-x86\t"
 latest=$(curl $curl_opt http://www.android-x86.org | grep -m1 -i "android-x86.*released" | sed 's/.*droid-x86.//; s/.released.*//')
-current=$(ls -d /home/parkmino/Downloads/android* | sed 's/.*x86_64.//')
+current=$(ls -d /home/parkmino/Downloads/android*/ | head -1 | cut -d\/ -f5 | cut -d\- -f3-)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -223,7 +223,7 @@ else
  if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
   for i in $(seq 0 $last); do
    printf '  '
-   curl $curl_opt "$url" | grep -m$(($i*2+1)) '관훈라이트.* #' | tail -1 | sed 's/.*관훈라이트.* #/#/' | cut -d\" -f1 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+   curl $curl_opt "$url" | grep -m$(($i*2+1)) '관훈라이트.* #' | tail -1 | sed 's/.*관훈라이트 *//' | cut -d\" -f1 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    printf '   '
    curl $curl_opt "$url" | grep -m$(($i*2+1)) '관훈라이트.* #' | tail -1 | sed 's/.*watch?v=/http:\/\/youtu.be\//' | cut -d\& -f1
   done
@@ -325,29 +325,6 @@ else
   for i in $(seq 1 $((2-$days))); do
    printf '  '
    curl $curl_opt 'http://iptime.com/iptime/?page_id=16' | grep -m$i '/iptime/?page_id=16&uid=' | tail -1 | cut -d'>' -f3 | cut -d'<' -f1
-  done
- fi
-fi
-}
-
-JOONGYO () {
-printf "• 중요한 논문\t"
-url="http://www.podbbang.com/ch/11930"
-date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
-#date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/우리도-한번-논문-읽어보세/id1123655741?mt=2&ign-mpt=uo%3D4' | grep -m1 -A14 preview-title | tail -1 | cut -d\" -f4)
-if [ -z "$date" ]; then
- printf "\t\t\t\t정보 없음\n"
-else
- printf "$(date -d "$date" +%F)\t\t\t"
- days_diff
- if [ "$days" -le 1 2>/dev/null ]; then
-  for i in $(seq 1 $((2-$days))); do
-   printf '  '
-   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
-   printf '   '
-   curl $curl_opt "$url"' | grep -m$i \'link_file\' | tail -1 | sed 's/.*link_file'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
-   #curl $curl_opt 'https://itunes.apple.com/us/podcast/우리도-한번-논문-읽어보세/id1123655741?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20
-   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
   done
  fi
 fi
@@ -592,18 +569,6 @@ else
 fi
 }
 
-VIVALDI () {
-printf "• Vivaldi\t"
-latest=$(curl $curl_opt https://vivaldi.com/download/ | grep amd64.deb | cut -d'_' -f2 | cut -d'-' -f1)
-current=$(vivaldi --version | cut -d' ' -f2)
-printf "$current\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
-}
-
 YOUTUBE_DL () {
 printf "• Youtube-dl\t"
 latest=$(curl $curl_opt https://github.com/rg3/youtube-dl/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
@@ -630,7 +595,6 @@ MALP
 UPMPDCLI
 #ASSETUPNP
 #OPERA
-#VIVALDI
 #UBUNTU
 ADOBE_FLASH
 #LIBFFMPEG
@@ -648,10 +612,9 @@ HIFIBERRY
 IPTIME
 NEWSTAPA
 #NAGGOBSAL3
-GHLIGHTCLUB
+#GHLIGHTCLUB
 #PAPAIS
 DAS
 #BUNKER1
 #HANSSAM
-#JOONGYO
 TELEGRAM
