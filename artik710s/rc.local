@@ -81,8 +81,8 @@ echo noop | tee /sys/block/mmcblk0*/queue/scheduler
 echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 
 mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
-rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-
+#rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+#
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
 #done
