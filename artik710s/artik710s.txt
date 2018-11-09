@@ -17,7 +17,7 @@ $ sudo umount -A rootfs/dev
 $ sudo umount -A rootfs/proc
 $ sudo rm rootfs/etc/resolv.conf
 $ cd rootfs
-$ sudo tar -czf ../yourrootfs.tar.gz *
+$ sudo tar -czf ../myrootfs.tar.gz *
 
 $ ssh root@192.168.0.x
 	password : root
