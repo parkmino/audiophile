@@ -1,8 +1,8 @@
 #!/bin/sh
 #complete -W '1fm 2fm 1r 2r 3r dmb scr rki mbcm mbc4u mbcfm sbsp sbsl cbs tbs tbse gugak stop' kr2mpd ./kr2mpd \~/kr2mpd
 
- host=127.0.0.1
-#host=192.168.0.14
+ host="127.0.0.1"
+#host="192.168.0.14"
 
 usage () {
  echo "Usage: $(basename "$0") 1fm,2fm,1r,2r,3r,dmb,scr,rki(KBS라디오)"
@@ -19,7 +19,8 @@ pls () {
 
 kbsr () {
 #url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
- pls $(curl -s "http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1" | cut -d\" -f16)
+#pls $(curl -s "http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1" | cut -d\" -f16)
+ pls $(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1&ch_type=radioList" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
 }
 
 mbcr () {
@@ -50,9 +51,9 @@ case $1 in
  3r)    #kbsr 5
 	kbsr 23
 	;;
- dmb)   #kbsr 6
-	kbsr dmb
-	;;
+#dmb)   #kbsr 6
+#	kbsr dmb
+#	;;
  scr)   #kbsr 7
 	kbsr I26
 	;;
