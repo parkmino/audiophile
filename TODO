@@ -6,3 +6,5 @@
 3. sudo nano /etc/rc.local
 	cp /usr/bin/nohup ... /dev/shm/
 	/dev/shm/nohup ...
+
+4. Remove connmanctl for Artik
