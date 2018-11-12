@@ -55,7 +55,7 @@
 
 swapoff -a
 
-for i in /usr/bin/rygel /etc/rygel.conf; do
+for i in /usr/bin/nohup /usr/bin/rygel /etc/rygel.conf; do
  [ -e $i ] && cp $i /dev/shm/
 done
 
@@ -137,8 +137,8 @@ done
 #ionice -c 2 -n 7 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null &
 #nice -n -1 taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null &
 #taskset -ac 1 /dev/shm/rygel -c /dev/shm/rygel.conf> /dev/null
-nohup /dev/shm/rygel -c /dev/shm/rygel.conf>/dev/null</dev/null 2>/dev/null
-#nohup gmediaserver -b --disable-tags --no-timestamp --fs-charset=UTF-8 -v0 --profile=generic -ieth0 --file-types=unknown /mnt/>/dev/null</dev/null 2>/dev/null
+/dev/shm/nohup /dev/shm/rygel -c /dev/shm/rygel.conf>/dev/null</dev/null 2>/dev/null
+#/dev/shm/nohup gmediaserver -b --disable-tags --no-timestamp --fs-charset=UTF-8 -v0 --profile=generic -ieth0 --file-types=unknown /mnt/>/dev/null</dev/null 2>/dev/null
 #until pstree -np $(pgrep -x rygel) | grep -q gmain; do
 # sleep 1
 #done
