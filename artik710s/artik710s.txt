@@ -1,5 +1,7 @@
 https://developer.artik.io/documentation/artik/getting-started/
 https://developer.artik.io/downloads/37339dc3-5909-4500-8506-25af16b022b9/download
+http://developer.artik.io/downloads/artik710s-sdfuse-a710s-os-18-05-00-img/download # Artik 710s
+http://developer.artik.io/downloads/artik710-sdfuse-a710-os-18-05-00-img/download # Artik 710
 
 QEMU
 $ sudo apt-get install qemu-user-static
