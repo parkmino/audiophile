@@ -72,15 +72,19 @@ swapoff -a
 mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
 
 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/mpd      /dev/shm/
+cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /usr/lib/x86_64-linux-gnu/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so.1.0.0
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so.1
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
 cp /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 
@@ -98,7 +102,7 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
-  taskset -acp 0 $pid || true
+  taskset -acp 0 $pid 2>/dev/null || true
  done
 
  until $(grep -q snd /proc/interrupts); do
