@@ -15,9 +15,10 @@ $ make # make 2>&1 | tee build.log
 
 Orange Pi Zero
 
-$ mkdir ../orange_pi_zero && cd ../orange_pi_zero && mkdir rootfs-overlay
+$ cd ../
+$ mkdir orange_pi_zero && cd orange_pi_zero && mkdir rootfs-overlay
 $ cp ../buildroot-2018.08/configs/orangepi_zero_defconfig .config
-$ make -C ../buildroot-2018.8 O=$(pwd) menuconfig
+$ make -C ../buildroot-2018.08 O=$(pwd) menuconfig
 $ make # BR2_PACKAGE_COREUTILS=y BR2_PACKAGE_PROCPS_NG=y BR2_PACKAGE_ALSA_LIB_MIXER=
 
 1. Menuconfig
@@ -29,13 +30,15 @@ Build Options --->
  gcc optimization level (optimization level 2)
 
 Toolchain --->
+ C library (uClibc-ng) --->
+  (X) glibc
  [*] Enable WCHAR support
  [*] Enable C++ support
 
 System configuration --->
- [ ] Enable root login with password
- [ ] Run a getty (login prompt) after boot ---
+ [*] Enable root login with password
  (root) Root password
+ [ ] Run a getty (login prompt) after boot ---
  ($(CONFIG_DIR)/rootfs-overlay) Root filesystem overlay directories
  ($(CONFIG_DIR)/post-build.sh) Custom scripts to run before creating filesystem images
  () Custom scripts to run inside the fakeroot environment
@@ -204,6 +207,8 @@ exit 0
 
 $ chmod +x rootfs-overlay/etc/init.d/S99rc.local.sh
 
+$ cp audio.conf rootfs-overlay/etc/
+
 $ nano rootfs-overlay/etc/sysctl.conf
 
 vm.dirty_writeback_centisecs = 0
@@ -248,6 +253,8 @@ for i in $TARGET_DIR/usr/lib/libasound.so.2.0.0 $TARGET_DIR/usr/lib/libFLAC.so.8
 done
 
 exit 0
+
+$ chmod +x post-build.sh
 
 6. Flashing
 
