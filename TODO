@@ -8,3 +8,27 @@
 	/dev/shm/nohup ...
 
 4. Remove connmanctl for Artik
+
+5. Disable syslog in mpd and null log in mpd.conf
+
+6. Use spotify's alsa.conf same as Roon
+
+7. Remove -O2 compile option for raspbian mpd
+
+8. sudo nano /etc/rc.local
+
+cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so
+cp /usr/lib/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so.1
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so
+cp /usr/lib/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
+
+taskset -acp 0 $pid 2>/dev/null || true
+
