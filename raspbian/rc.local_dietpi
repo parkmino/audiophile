@@ -1,0 +1,182 @@
+#!/bin/sh -e
+#
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to disable this script please use systemd to control the service:
+# systemctl disable rc-local.service
+#
+# By default this script does nothing.
+
+musicpd_bg () {
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+ sleep 1
+ pgr_mpd=$(pgrep -x mpd)
+ taskset -pc $m_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+/dev/shm/nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+}
+
+eol () {
+ until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+  sleep 1
+ done
+ sleep 1
+ taskset -acp $s_task $(pgrep -x upmpdcli) || true
+ /root/llctl f0 l0 d0
+ echo none > /sys/class/leds/led0/trigger
+ echo 0    > /sys/class/leds/led0/brightness
+ [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+ pkill cron
+ pkill rc.local
+}
+
+roon_bridge () {
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+ sleep 1
+ systemctl start roonbridge
+}
+
+spotifyd () {
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+ cp /root/spotifyd /root/spotifyd.conf /dev/shm/
+ sleep 1
+/dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+}
+
+shairport_sync () {
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+ sleep 1
+ systemctl start avahi-daemon shairport-sync
+}
+
+cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so
+cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so
+cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so
+
+echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+
+echo noop > /sys/block/mmcblk0/queue/scheduler
+[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+
+mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
+#rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+#
+#for i in ondemand conservative powersave; do
+# grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+#done
+#[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
+done
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
+done
+
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd$/ {print $1}'); do
+  taskset -acp 0 $pid 2>/dev/null || true
+ done
+fi
+
+### For Criterion from Reference Club
+#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
+#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
+
+### Unmute IQaudIO I2S
+#echo "22"  > /sys/class/gpio/export
+#echo "out" > /sys/class/gpio/gpio22/direction
+#echo "1"   > /sys/class/gpio/gpio22/value
+
+### Digital Volume
+#amixer -D control set 'Digital',0 67% || true # 40@67% 60@81%
+
+### Turn off USBs
+#if lsusb -d 0424:9514; then
+#/root/hub-ctrl -h 0 -P 5 -p 0
+#/root/hub-ctrl -h 0 -P 4 -p 0
+#fi
+#/root/hub-ctrl -h 0 -P 3 -p 0
+#/root/hub-ctrl -h 0 -P 2 -p 0 # USB power  off
+#/root/hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
+
+### Turn off HDMI
+/opt/vc/bin/tvservice -o
+#service getty@tty1 stop
+
+### Remove services
+#for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
+#do
+# service $i stop
+#done
+#pkill plymouthd
+[ -f /boot/.nossh ] && service dropbear stop
+#renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
+swapoff -a
+
+### Roon Bridge
+#(roon_bridge &) && sleep 3
+
+### Spotify
+#(spotifyd &) && sleep 3
+
+### Shaiport-sync
+###(shairport_sync &) && sleep 3
+
+### Taskset
+echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
+for pid in 1 $(pgrep -x rc.local); do
+ taskset -acp $m_task $pid || true
+done
+
+### Text to Speech
+#tts
+
+### Read-only
+#remountro
+
+musicpd_bg &
+eol &
+/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+
+exit 0
