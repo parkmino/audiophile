@@ -79,6 +79,8 @@ Audio Render Advanced
 
 7. ALSA
 
+	$ cp alsa.conf alsa.conf.roon /usr/share/alsa/
+
 8. MPD
 
 	sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libid3tag0 libmpdclient2 libupnp6
