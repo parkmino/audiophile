@@ -112,8 +112,10 @@ Audio Render Advanced
 
 14. Disabel swap
 
-	cat /proc/swaps
-	sudo systemctl disable dphys-swapfile
+	$ cat /proc/swaps
+	$ sudo systemctl disable dphys-swapfile
+	# nano /etc/fstab
+		#/var/swap ...
 
 15. USB Mount
 
@@ -132,23 +134,25 @@ Audio Render Advanced
 
 16. Internet Radio & TTS (Text to Speech)
 
-	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-	sudo chmod a+rx /usr/local/bin/youtube-dl
-	sudo ln -s /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts /usr/bin/
-	sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
-	sudo mkdir /var/lib/mpd/music/webradio
-	sudo mv *.pls /var/lib/mpd/music/webradio
-	mpc update
+	$ sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+	$ sudo chmod a+rx /usr/local/bin/youtube-dl
+	$ sudo ln -sf /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts /usr/bin/
+	# ln -sf /root/kr2mpd /root/sbs_dec.py /root/ut2mpd /root/tts /usr/bin/
+	$ sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
+	$ sudo mkdir /var/lib/mpd/music/webradio
+	$ sudo mv *.pls /var/lib/mpd/music/webradio
+	$ mpc update
 
 17. Spotifyd
 
 	https://github.com/Spotifyd/spotifyd
 	https://github.com/Spotifyd/spotifyd/releases/latest
 
-	#wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
-	curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
-	unzip spotifyd-*.zip -d /home/pi && rm spotifyd-*.zip
-	sudo nano /etc/rc.local
+	$ #wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
+	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
+	$ unzip spotifyd-*.zip -d /home/pi && rm spotifyd-*.zip
+	# unzip spotifyd-*.zip -d /root && rm spotifyd-*.zip
+	$ sudo nano /etc/rc.local
 
 	spotifyd () {
 	cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
@@ -159,7 +163,8 @@ Audio Render Advanced
 	...
 	#spotifyd &
 
-	nano /home/pi/spotifyd.conf
+	$ nano /home/pi/spotifyd.conf
+	# nano /root/spotifyd.con
 
 	[global]
 	username = USER
@@ -184,6 +189,11 @@ Audio Render Advanced
 	$ sudo apt update
 	$ sudo apt upgrade
 	$ sudo apt dist-upgrade
+
+	# dietpi-services
+	# nano /DietPi/dietpi/.dietpi-services_include_exclude
+		- roonbridge
+		- shairport-sync
 
 	$ curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv7hf.sh
 	$ chmod +x roonbridge-installer-linuxarmv7hf.sh
@@ -227,8 +237,8 @@ Audio Render Advanced
 
 19. Shairport-sync (AirPlay)
 
-	$ sudo apt update
-	$ sudo apt install shairport-sync
+	$ sudo apt-get update
+	$ sudo apt-get install shairport-sync
 	$ wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.2.1-1_armhf.deb
 	$ sudo dpkg -i shairport*.deb
 	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' /etc/shairport-sync.conf
@@ -252,9 +262,11 @@ Audio Render Advanced
 
 20. audio-config
 
-	cp audio-config /home/pi
-	sudo ln -s /home/pi/audio-config /usr/bin/
-	audio-config
+	$ cp audio-config /home/pi
+	# cp audio-config_dietpi /root
+	$ sudo ln -s /home/pi/audio-config /usr/bin/
+	# ln -s /root/audio-config /usr/bin/
+	$ audio-config
 
 21. Web interface
 
@@ -280,7 +292,7 @@ Audio Render Advanced
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-22. Read-only
+22. Read-only (Just for reference)
 	cp remountro remountrw /home/pi
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
@@ -306,16 +318,16 @@ Audio Render Advanced
 	$ sudo poweroff
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M status=progress if=/dev/sdc of=raspbian_audio_renderer_$(date +"%y.%m").img
+	$ sudo dd bs=4M status=progress if=/dev/sdc of=raspi_audio_renderer_$(date +"%y.%m").img
 	$ sync
-	$ zip raspbian_audio_renderer_$(date +"%y.%m").zip raspbian_audio_renderer_$(date +"%y.%m").img
+	$ zip raspi_audio_renderer_$(date +"%y.%m").zip raspi_audio_renderer_$(date +"%y.%m").img
 
 	https://github.com/Drewsif/PiShrink
 	$ wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
 	$ chmod +x pishrink.sh
 	$ sudo mv pishrink.sh /usr/local/bin
-	$ sudo pishrink.sh raspbian_audio_renderer_$(date +"%y.%m").img raspbian_audio_renderer_expand_$(date +"%y.%m").img
-	$ zip raspbian_audio_renderer_expand_$(date +"%y.%m").zip raspbian_audio_renderer_expand_$(date +"%y.%m").img
+	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
+	$ zip raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
 cf)
 
