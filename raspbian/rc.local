@@ -142,14 +142,14 @@ fi
 
 ### Turn off HDMI
 /opt/vc/bin/tvservice -o
-service getty@tty1 stop
+#service getty@tty1 stop
 
 ### Remove services
 #for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
 #do
 # service $i stop
 #done
-pkill plymouthd
+#pkill plymouthd
 [ -f /boot/.nossh ] && service sshd stop
 #renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
 swapoff -a
