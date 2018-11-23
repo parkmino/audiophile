@@ -1,21 +1,17 @@
 1. sudo nano /etc/rc.local
 	#rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true   # RoonBridge compatible
 
-2. nano kr2mpd
+2. update kr2mpd
 
 3. sudo nano /etc/rc.local
 	cp /usr/bin/nohup ... /dev/shm/
 	/dev/shm/nohup ...
 
-4. Remove connmanctl for Artik
+4. Disable syslog in mpd and null log in mpd.conf
 
-5. Disable syslog in mpd and null log in mpd.conf
+5. Use spotify's alsa.conf same as Roon
 
-6. Use spotify's alsa.conf same as Roon
-
-7. Remove -O2 compile option for raspbian mpd
-
-8. sudo nano /etc/rc.local
+6. sudo nano /etc/rc.local
 
 cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0
@@ -31,4 +27,3 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
 
 taskset -acp 0 $pid 2>/dev/null || true
-
