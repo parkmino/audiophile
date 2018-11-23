@@ -376,9 +376,8 @@ esac
 }
 
 roon_airplay () {
-i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 9 59 2 \
-"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q '^(roon_bridge' /etc/rc.local && echo ON || echo OFF) \
-"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 8 59 1 \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q '^(roon_bridge' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -393,7 +392,7 @@ while true; do
  "2"  "MPD options            MPD 옵션               >" \
  "3"  "Renderer name          렌더러 이름 바꾸기     >" \
  "4"  "IP TTS                 IP TTS                 >" \
- "5"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
+ "5"  "Roon Bridge            룬 브리지              >" \
  "6"  "Spotify                Spotify 설정           >" \
  "7"  "SSH turn-off           SSH 사용 안 함" \
  "8"  "DietPi update          DietPi 업데이트" \
