@@ -163,7 +163,7 @@ exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dbus ]] && sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local || sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local
  [[ $i =~ tts  ]] && sudo sed -i '/tts/s/^#//' /etc/rc.local || sudo sed -i '/tts/s/^/#/' /etc/rc.local
- [[ $i =~ eng  ]] && sudo sed -i '/tts/s/.*/tts en My I P is $(hostname -I)/' $mpd_conf || sudo sed -i '/tts/s/.*/tts/' $mpd_conf
+ [[ $i =~ eng  ]] && sudo sed -i '/tts/s/.*/tts en My I P is $(hostname -I)/' /etc/rc.local || sudo sed -i '/tts/s/.*/tts/' /etc/rc.local
 fi
 }
 
