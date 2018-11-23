@@ -2,23 +2,32 @@ Audio Render Advanced
 
 0. Flashing
 
+	https://www.raspberrypi.org/downloads/raspbian/
+	http://downloads.raspberrypi.org/raspbian_lite/images/
+
 	$ sudo fdisk -l
-	$ sudo dd bs=4M if=2017-08-16-raspbian-stretch-lite.img of=/dev/sdc
-	$ scp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd sbs_dec.py ut2mpd tts *.pls pi@192.168.0.3:/home/pi/
+	$ sudo umount /dev/sdc?
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/2018-04-18-raspbian-stretch-lite.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/DietPi_v6.17_RPi-ARMv6-Stretch.img of=/dev/sdc
+	$ sync
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
 
 	$ ssh pi@rpi_ip
 	  password: raspberry
+	$ ssh root@dietpi_ip
+	  password: dietpi
+	$ scp mpd mpd.conf hub-ctrl llctl icon.png audio-config kr2mpd sbs_dec.py ut2mpd tts *.pls pi@192.168.0.3:/home/pi/
 
 1. Update & upgrade
 
-	sudo apt-get update
-	sudo apt-get upgrade
-	sudo apt-get dist-upgrade
+	$ sudo apt-get update
+	$ sudo apt-get upgrade
+	$ sudo apt-get dist-upgrade
 
-	sudo apt-get install ntpdate bc exfat-fuse exfat-utils
+	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-crypto
+	# apt-get install openssh-client libusb-0.1-4
 
 2. Configuration file
 
@@ -33,15 +42,12 @@ Audio Render Advanced
 3. Kernel option
 
 	sudo nano /boot/cmdline.txt
-		root=
+		root=/dev/mmcblk0p2
 		#console=serial0,115200 console=tty1
 		consoleblank=0
 		smsc95xx.turbo_mode=0
 		elevator=noop
 		selinux=0
-		#dwc_otg.fiq_split_enable=0 dwc_otg.fiq_fix_enable=0
-		#dwc_otg.fiq_fsm_enable=0
-		#dwc_otg.fiq_enable=1 dwc_otg.fiq_fsm_enable=1 dwc_otg.fiq_fsm_mask=0x3
 
 4. Localisation
 
@@ -52,8 +58,8 @@ Audio Render Advanced
 
 	lsmod
 	sudo nano /etc/modprobe.d/raspi-blacklist.conf
-		blacklist uio
-		blacklist uio-pdrv-genirq
+		#blacklist uio
+		#blacklist uio-pdrv-genirq
 		#blacklist cfg80211
 		#blacklist bcm2835_gpiomem
 		#blacklist fixed
@@ -67,27 +73,25 @@ Audio Render Advanced
 
 6. Disable services
 
-	$ sudo systemctl disable getty@tty1 cron rsyslog systemd-timesyncd triggerhappy
-	$ sudo systemctl mask systemd-journald systemd-logind dbus
+	$ sudo systemctl disable getty@tty1 cron rsyslog systemd-timesyncd triggerhappy avahi-daemon
+	$ sudo systemctl mask systemd-journald systemd-logind dbus.service dbus.socket
 	$ #sudo systemctl mask systemd-journal-flush.service systemd-journald.service
 
-7. ALSA configuration
-	sudo nano /lib/modprobe.d/aliases.conf
-		#options snd-usb-audio index=-2
+7. ALSA
 
-8. MPD Setup
+8. MPD
 
-	sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libmad0 libid3tag0 libmpdclient2 libmms0 libupnp6
+	sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libid3tag0 libmpdclient2 libupnp6
 	sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
 	sudo cp mpd /usr/bin/
 	sudo cp mpd.conf /etc/mpd.conf.sav
 	sudo apt-get install mpc ncmpc
 
-9. Upmpdcli Setup
+9. Upmpdcli
 
 10. CIFS & NFS mounting
 
-	sudo apt-get install cifs-utils nfs-common
+	#sudo apt-get install cifs-utils nfs-common
 	sudo mkdir /mnt/cifs /mnt/nfs
 	sudo ln -s /mnt/     /var/lib/mpd/music
 	sudo nano /etc/fstab
@@ -104,6 +108,7 @@ Audio Render Advanced
 13. Sysctl Configuration
 
 	sudo nano /etc/sysctl.conf
+	sudo sysctl -p /etc/sysctl.conf
 
 14. Disabel swap
 
@@ -114,6 +119,7 @@ Audio Render Advanced
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
+	sudo mkdir /mnt/usb
 	sudo nano /etc/fstab
 		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
 		#/dev/sda1 /mnt/usb vfat    ro 0 0
@@ -128,7 +134,6 @@ Audio Render Advanced
 
 	sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
-	sudo apt-get install python-crypto
 	sudo ln -s /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts /usr/bin/
 	sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
 	sudo mkdir /var/lib/mpd/music/webradio
@@ -161,9 +166,9 @@ Audio Render Advanced
 	password = PASS
 	backend = alsa
 	device = pcm.0
-	mixer = /dev/null
+	mixer = /dev/mixer
 	device_name = Spotifyd
-	#bitrate = 320
+	bitrate = 320
 
 	nano audio-config
 
