@@ -53,7 +53,7 @@ Target packages --->
  alsa_lib, mpd, mpd_mpc, ncmpc, upmpdcli
 
 Filesystem images --->
- (256M) exact size
+ (512M) exact size
 
 2. Linux-menuconfig
 
@@ -215,13 +215,13 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd
  renice  -3 $i
 done
 
-for i in $(awk '/ehci.*usb/{print +$1}' /proc/interrupts); do
- echo 8 > /proc/irq/$i/smp_affinity
-done
-echo 1 > /proc/irq/default_smp_affinity
-
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
+for i in $(awk '/ehci.*usb/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity || true
+done
+ echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
@@ -311,18 +311,6 @@ mixer_device "/dev/mixer"
 mixer_type "none"
 replay_gain_handler "none"
 }
-#decoder {
-#plugin "oggflac"
-#enabled "no"
-#}
-#decoder {
-#plugin "dsdiff"
-#enabled "no"
-#}
-#decoder {
-#plugin "dsf"
-#enabled "no"
-#}
 decoder {
 plugin	"pcm"
 enabled "no"
