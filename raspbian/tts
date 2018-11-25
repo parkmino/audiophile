@@ -5,7 +5,7 @@
 # Chinese - zh, English - en, Finnish - fi, French - fr, German - de, Japanese - ja, ...
 
 alsa=$(grep -m1 ^device /etc/mpd.conf.sav | cut -d'"' -f2)
-pico_wav="/home/pi/tts.wav"
+pico_wav="~/tts.wav"
 
 wget -q --spider -T1 http://google.com && tts_svc=google || tts_svc=pico
 

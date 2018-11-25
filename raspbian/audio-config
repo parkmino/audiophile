@@ -2,7 +2,7 @@
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-spotifyd_conf=/home/pi/spotifyd.conf
+spotifyd_conf=~/spotifyd.conf
 
 sound_card_initial () {
  sudo sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio\|dtoverlay=justboom\|dtoverlay=rpi-dac/d' /boot/config.txt
