@@ -38,7 +38,7 @@ days_diff () {
  elif [ $days -eq 1 ]; then
   printf "어제\n"
  else
-  printf "${days}일 전\n"
+  printf -- "${days}일 전\n"
  fi
 }
 

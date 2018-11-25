@@ -1,0 +1,12 @@
+#!/bin/sh
+
+ wk=$(date +%u)
+ hr=$(date +%H)
+min=$(date +%M)
+
+[ "$wk" -ge 6 ] && echo "News Factory is not on air today!" && exit
+[ "$hr" -lt 6 ] || ([ "$hr" -eq 6 ] && [ "$min" -lt 30 ]) || [ "$hr" -ge 9 ] || ([ "$hr" -eq 8 ] && [ "$min" -gt 55 ]) && echo "News Factory is not on air for now!" && exit
+
+([ "$hr" -eq 6 ] && [ "$min" -ge 30 ]) || ([ "$hr" -eq 7 ] && [ "$min" -lt 6 ]) && runat 7:06:40 kr2mpd tbs & && exit
+([ "$hr" -eq 7 ] && [ "$min" -gt 55 ]) || ([ "$hr" -eq 8 ] && [ "$min" -lt 11 ]) && runat 8:11:40 kr2mpd tbs & && exit
+kr2mpd tbs &
