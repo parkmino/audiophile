@@ -95,7 +95,7 @@ Audio Render Advanced
 
 	#sudo apt-get install cifs-utils nfs-common
 	sudo mkdir /mnt/cifs /mnt/nfs
-	sudo ln -s /mnt/     /var/lib/mpd/music
+	sudo ln -s /mnt/ /var/lib/mpd/music
 	sudo nano /etc/fstab
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
@@ -145,6 +145,8 @@ Audio Render Advanced
 	$ sudo mv *.pls /var/lib/mpd/music/webradio
 	$ mpc update
 
+	$ sudo apt-get install mpg123 sox libttspico-utils
+
 17. Spotifyd
 
 	https://github.com/Spotifyd/spotifyd
@@ -152,8 +154,7 @@ Audio Render Advanced
 
 	$ #wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
 	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
-	$ unzip spotifyd-*.zip -d /home/pi && rm spotifyd-*.zip
-	# unzip spotifyd-*.zip -d /root && rm spotifyd-*.zip
+	$ unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
 	$ sudo nano /etc/rc.local
 
 	spotifyd () {
@@ -165,8 +166,7 @@ Audio Render Advanced
 	...
 	#spotifyd &
 
-	$ nano /home/pi/spotifyd.conf
-	# nano /root/spotifyd.con
+	$ nano ~/spotifyd.conf
 
 	[global]
 	username = USER
@@ -181,7 +181,7 @@ Audio Render Advanced
 
 	sudo sed -i '/spotifyd &/s/^#*//' /etc/rc.local
 	sudo sed -i '/spotifyd &/s/^/#/'  /etc/rc.local
-	sed -i '/username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' /home/pi/spotifyd.conf
+	sed -i '/username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' ~/spotifyd.conf
 
 18. Roon Bridge
 
@@ -264,7 +264,7 @@ Audio Render Advanced
 
 20. audio-config
 
-	$ cp audio-config /home/pi
+	$ cp audio-config ~/
 	# cp audio-config_dietpi /root
 	$ sudo ln -s /home/pi/audio-config /usr/bin/
 	# ln -s /root/audio-config /usr/bin/
@@ -295,7 +295,7 @@ Audio Render Advanced
 	$ sudo adduser www-data sudo
 
 22. Read-only (Just for reference)
-	cp remountro remountrw /home/pi
+	cp remountro remountrw ~/
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
 	sudo nano /etc/rc.local
