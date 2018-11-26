@@ -27,3 +27,5 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
 
 taskset -acp 0 $pid 2>/dev/null || true
+
+7. /dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
