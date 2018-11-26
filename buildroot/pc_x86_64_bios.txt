@@ -445,6 +445,8 @@ $ nano roofs-overlay/etc/init.d/roonbridge
 
 DAEMON_EXECUTABLE="/opt/RoonBridge/Bridge/RoonBridge"
 #DAEMON_EXECUTABLE="/opt/$PACKAGE_NAME/start.sh"
+DAEMON_HOMEDIR="/opt/RoonBridge/Bridge"
+#DAEMON_HOMEDIR="/opt/$PACKAGE_NAME"
 
 $ chmod +x roofs-overlay/etc/init.d/roonbridge
 $ nano /home/parkmino/Downloads/buildroot/pc_x86_64_bios/rootfs-overlay/etc/init.d/S99Zrc.local.sh
@@ -453,7 +455,7 @@ if [ "$roon" = on ]; then
 #[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
 #cp -r /opt/roon /dev/shm/
 #ln -sf /dev/shm/roon /opt/RoonBridge
-#cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
 #cp /usr/lib/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
 #sleep 1
 #ROON_DATAROOT=/var/roon /opt/RoonBridge/Bridge/RoonBridge
