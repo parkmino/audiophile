@@ -458,6 +458,10 @@ if [ "$roon" = on ]; then
  cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
 #cp /usr/lib/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
 #sleep 1
-#ROON_DATAROOT=/var/roon /opt/RoonBridge/Bridge/RoonBridge
+#export ROON_DATAROOT=/var/roon
+#export ROON_ID_DIR=/var/roon
+#cd /opt/RoonBridge/Bridge
+#/dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
+##ROON_DATAROOT=/var/roon /opt/RoonBridge/Bridge/RoonBridge
 /etc/init.d/roonbridge start
 fi
