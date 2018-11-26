@@ -110,7 +110,7 @@ BR2_PACKAGE_BC=y
 
 4. Rootfs Overlay
 
-$ mkdir -p rootfs-overlay/etc/init.d rootfs-overlay/usr/bin/ rootfs-overlay/usr/share/upmpdcli
+$ mkdir -p rootfs-overlay/etc/init.d rootfs-overlay/usr/bin/ rootfs-overlay/usr/share/upmpdcli rootfs-overlay/opt/RoonBridge
 
 rootfs-overlay/etc/init.d/S99Zrc.local.sh
 rootfs-overlay/etc/sysctl.conf
@@ -433,3 +433,29 @@ $ nano post-build.sh
 
 #$ chmod -x $TRARGET_DIR/etc/init.d/S??shaiport-sync
 $ mv $TRARGET_DIR/etc/init.d/S??shaiport-sync $TRARGET_DIR/etc/init.d/M??shaiport-sync
+
+10. Roon Bridge
+
+https://kb.roonlabs.com/LinuxInstall
+
+$ wget http://download.roonlabs.com/builds/RoonBridge_linuxx64.tar.bz2
+$ wget http://download.roonlabs.com/builds/roonbridge-installer-linuxx64.sh
+$ tar xvjf RoonBridge_linuxx64.tar.bz2 /home/parkmino/Downloads/buildroot/pc_x86_64_bios/rootfs-overlay/opt/RoonBridge
+$ nano roofs-overlay/etc/init.d/roonbridge
+
+DAEMON_EXECUTABLE="/opt/RoonBridge/Bridge/RoonBridge"
+#DAEMON_EXECUTABLE="/opt/$PACKAGE_NAME/start.sh"
+
+$ chmod +x roofs-overlay/etc/init.d/roonbridge
+$ nano /home/parkmino/Downloads/buildroot/pc_x86_64_bios/rootfs-overlay/etc/init.d/S99Zrc.local.sh
+
+if [ "$roon" = on ]; then
+#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
+#cp -r /opt/roon /dev/shm/
+#ln -sf /dev/shm/roon /opt/RoonBridge
+#cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+#cp /usr/lib/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+#sleep 1
+#ROON_DATAROOT=/var/roon /opt/RoonBridge/Bridge/RoonBridge
+/etc/init.d/roonbridge start
+fi
