@@ -29,3 +29,32 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
 taskset -acp 0 $pid 2>/dev/null || true
 
 7. /dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
+
+8. Buildroot for PC - CPU Affinity for multi-core
+
+multi-threads : 2,4,6,8,12,20,24,28,32,36
+
+0000-0000-0000-0000-0000-0000-0000-0000-0000
+8421-8421-8421-8421-8421-8421-8421-8421-8421
+3    3    2    2    2         1
+6    2    8    4    0         2    8 6  4 2
+
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
+  taskset -acp $o_task $pid || true
+ done
+fi
+
+[ $(nproc --all) -eq  2 ] && echo         "2" > /proc/irq/$i/smp_affinity || true && echo         "1" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq  4 ] && echo         "8" > /proc/irq/$i/smp_affinity || true && echo         "4" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq  6 ] && echo        "30" > /proc/irq/$i/smp_affinity || true && echo        "10" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq  8 ] && echo        "80" > /proc/irq/$i/smp_affinity || true && echo        "70" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq 12 ] && echo       "800" > /proc/irq/$i/smp_affinity || true && echo       "700" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq 20 ] && echo     "80000" > /proc/irq/$i/smp_affinity || true && echo     "70000" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq 24 ] && echo    "800000" > /proc/irq/$i/smp_affinity || true && echo    "700000" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq 28 ] && echo   "8000000" > /proc/irq/$i/smp_affinity || true && echo   "7000000" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq 32 ] && echo  "80000000" > /proc/irq/$i/smp_affinity || true && echo  "70000000" > /proc/irq/default_smp_affinity || true
+[ $(nproc --all) -eq 36 ] && echo "800000000" > /proc/irq/$i/smp_affinity || true && echo "700000000" > /proc/irq/default_smp_affinity || true

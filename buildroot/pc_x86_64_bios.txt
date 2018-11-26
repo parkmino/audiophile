@@ -216,16 +216,24 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd
 done
 
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
-[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
 
-for i in $(awk '/ehci.*usb/{print +$1}' /proc/interrupts); do
- echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity || true
+for i in $(awk '/hci.*usb/{print +$1}' /proc/interrupts); do
+ [ $(nproc --all) -eq  2 ] && echo         "2" > /proc/irq/$i/smp_affinity || true && echo         "1" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq  4 ] && echo         "8" > /proc/irq/$i/smp_affinity || true && echo         "4" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq  6 ] && echo        "30" > /proc/irq/$i/smp_affinity || true && echo        "10" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq  8 ] && echo        "80" > /proc/irq/$i/smp_affinity || true && echo        "70" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq 12 ] && echo       "800" > /proc/irq/$i/smp_affinity || true && echo       "700" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq 20 ] && echo     "80000" > /proc/irq/$i/smp_affinity || true && echo     "70000" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq 24 ] && echo    "800000" > /proc/irq/$i/smp_affinity || true && echo    "700000" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq 28 ] && echo   "8000000" > /proc/irq/$i/smp_affinity || true && echo   "7000000" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq 32 ] && echo  "80000000" > /proc/irq/$i/smp_affinity || true && echo  "70000000" > /proc/irq/default_smp_affinity || true
+ [ $(nproc --all) -eq 36 ] && echo "800000000" > /proc/irq/$i/smp_affinity || true && echo "700000000" > /proc/irq/default_smp_affinity || true
 done
- echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
-  taskset -cp 0 $pid 2>/dev/null || true
+  taskset -cp $o_task $pid || true
  done
 fi
 
