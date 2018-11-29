@@ -159,6 +159,7 @@ mpd_bg () {
    taskset -cp $s_task $proc_nr || true
   done
  fi
+ echo "IP address is $(hostname -I)" || true
  pkill -x rcS
 }
 
