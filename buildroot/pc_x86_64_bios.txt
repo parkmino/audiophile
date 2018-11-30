@@ -163,16 +163,6 @@ mpd_bg () {
  pkill -x rcS
 }
 
-spotifyd () {
- cp /usr/bin/spotifyd /etc/spotifyd.conf /dev/shm/
- sleep 1
- nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
-}
-
-shairport_sync () {
- /etc/init.d/_S??shaiport-sync start
-}
-
 if [ -e /etc/audio.conf ]; then
      log=$(grep -m1 ^log=     /etc/audio.conf | cut -d\= -f2)
     acpi=$(grep -m1 ^acpi=    /etc/audio.conf | cut -d\= -f2)
@@ -248,9 +238,22 @@ swapoff -a
 
 mknod -m 000 /dev/mixer c 1 4 && chown root:kmem /dev/mixer
 
-[ "$spotify" = on ] && (spotifyd &) && sleep 3
+if [ "$roon" = on ]; then
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ /etc/init.d/roonbridge start
+fi
 
-[ "$airplay" = on ] && /etc/init.d/M??shaiport-sync start
+if [ "$spotify" = on ]; then
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ cp /usr/bin/spotifyd /etc/spotifyd.conf /dev/shm/
+ sleep 1
+ nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+fi
+
+if [ "$airplay" = on ]; then
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ /etc/init.d/_S99shairport-sync start
+fi
 
 taskset -cp $m_task 1
 
@@ -275,9 +278,10 @@ log=off
 acpi=off
 ssh=off
 wpa=off
+#mpd=on
 upnp=on
-#airplay=on
-#spotify=on
+#roon=off
+#spotify=off
 
 $ nano rootfs-overlay/etc/sysctl.conf
 
@@ -424,7 +428,11 @@ device_name = Spotifyd
 
 $ nano rootfs-overlay/etc/init.d/S99Zrc.local.sh
 
-nohup /usr/bin/spotifyd --no-daemon -c /etc/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+if [ "$spotify" = on ]; then
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ cp /usr/bin/spotifyd /etc/spotifyd.conf /dev/shm/
+ nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+fi
 
 $ Add premium account
 
@@ -444,7 +452,14 @@ $ nano post-build.sh
  sed -i '/convolution =\|loudness =/s/^\/*//; /convolution =\|loudness =/s/".*"/"no"/' $TRARGET_DIR/etc/shairport-sync.conf
 
 #$ chmod -x $TRARGET_DIR/etc/init.d/S??shaiport-sync
-$ mv $TRARGET_DIR/etc/init.d/S??shaiport-sync $TRARGET_DIR/etc/init.d/M??shaiport-sync
+$ mv $TRARGET_DIR/etc/init.d/S99shaiport-sync $TRARGET_DIR/etc/init.d/_S99shaiport-sync
+
+$ nano rootfs-overlay/etc/init.d/S99Zrc.local.sh
+
+if [ "$airplay" = on ]; then
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+ /etc/init.d/_S99shairport-sync start
+fi
 
 10. Roon Bridge
 
@@ -477,3 +492,14 @@ if [ "$roon" = on ]; then
 ##ROON_DATAROOT=/var/roon /opt/RoonBridge/Bridge/RoonBridge
 /etc/init.d/roonbridge start
 fi
+
+11. Optional MPD
+
+$ nano /etc/init.d/S99Zrc.local.sh
+
+if [ -e /etc/audio.conf ]; then
+     mpd=$(grep -m1 ^log=     /etc/audio.conf | cut -d\= -f2)
+fi
+
+[ "$mpd" != off ] || [ "$upnp" != off ] && nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+[ "$upnp" != off ] && nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
