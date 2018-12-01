@@ -88,3 +88,9 @@ patch -p1 < ./mpd-0.21git-...patch
 $ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec pcm_s16le	blank.wav
 $ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec flac	blank.flac
 $ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec mp3	blank.mp3
+
+https://www.musicpd.org/doc/html/protocol.html
+commands, stats, status, decoders, urlhandlers, close
+$ telnet localhost 6600
+$ nc localhost 6600
+$ echo stats | nc -w1 localhost 6600
