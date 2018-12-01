@@ -124,27 +124,36 @@ $ nano rootfs-overlay/etc/init.d/S99Zrc.local.sh
 [ -e /dev/shm/rc.local_on ] && exit || touch /dev/shm/rc.local_on
 
 mpd_bg () {
- sec=0
- until [ $(pidof mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pidof mpd) 2>/dev/null | grep -q output); do
+ if [ "$mpd" != off ] || [ "$upnp" != off ]; then
+  sec=0
+  until [ $(pidof mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pidof mpd) 2>/dev/null | grep -q output); do
+   sleep 1
+   sec=$(($sec+1))
+   [ "$sec" -ge 5 ] && printf "\nMPD is not available!\n" && return
+  done
   sleep 1
-  sec=$(($sec+1))
-  [ "$sec" -ge 5 ] && printf "\nMPD is not available!\n" && return
- done
- sleep 1
- pgr_mpd=$(pidof mpd)
- taskset -cp $m_task $pgr_mpd
- echo "$(pstree -npt $pgr_mpd)" | while read line ; do
-  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
-  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-  case $proc in
-   mpd)		taskset -cp $s_task $proc_nr ;;
-   io)		taskset -cp $s_task $proc_nr ;;
-   player)	taskset -cp $s_task $proc_nr ;;
-   decoder)	taskset -cp $s_task $proc_nr ;;
-   output)	taskset -cp $m_task $proc_nr
-		chrt -op 0	    $proc_nr ;;
-  esac
- done
+  pgr_mpd=$(pidof mpd)
+  taskset -cp $m_task $pgr_mpd
+  echo "$(pstree -npt $pgr_mpd)" | while read line ; do
+   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+   case $proc in
+    mpd)	taskset -cp $s_task $proc_nr ;;
+    io)		taskset -cp $s_task $proc_nr ;;
+    player)	taskset -cp $s_task $proc_nr ;;
+    decoder)	taskset -cp $s_task $proc_nr ;;
+    output)	taskset -cp $m_task $proc_nr
+ 		chrt -op 0	    $proc_nr ;;
+   esac
+  done
+ fi
+ eol &
+ if [ "$upnp" != off ]; then
+nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+ fi
+}
+
+eol () {
  if [ "$upnp" != off ]; then
   sec=0
   until [ $(pidof upmpdcli) -gt 0 ] 2>/dev/null; do
@@ -160,7 +169,7 @@ mpd_bg () {
   done
  fi
  echo "IP address is $(hostname -I)" || true
- pkill -x rcS
+ pkill -x rcS || true
 }
 
 if [ -e /etc/audio.conf ]; then
@@ -168,7 +177,9 @@ if [ -e /etc/audio.conf ]; then
     acpi=$(grep -m1 ^acpi=    /etc/audio.conf | cut -d\= -f2)
      ssh=$(grep -m1 ^ssh=     /etc/audio.conf | cut -d\= -f2)
      wpa=$(grep -m1 ^wpa=     /etc/audio.conf | cut -d\= -f2)
+     mpd=$(grep -m1 ^mpd=     /etc/audio.conf | cut -d\= -f2)
     upnp=$(grep -m1 ^upnp=    /etc/audio.conf | cut -d\= -f2)
+    roon=$(grep -m1 ^roon=    /etc/audio.conf | cut -d\= -f2)
  airplay=$(grep -m1 ^airplay= /etc/audio.conf | cut -d\= -f2)
  spotify=$(grep -m1 ^spotify= /etc/audio.conf | cut -d\= -f2)
 fi
@@ -212,7 +223,7 @@ proc_all=$(nproc --all)
 m_task=$(($proc_all-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
 
-for i in $(awk '/hci.*usb/{print +$1}' /proc/interrupts); do
+for i in $(awk '/ehci.*usb/{print +$1}' /proc/interrupts); do
  [ "$proc_all" -eq  2 ] && echo         "2" > /proc/irq/$i/smp_affinity || true && echo         "1" > /proc/irq/default_smp_affinity || true
  [ "$proc_all" -eq  4 ] && echo         "8" > /proc/irq/$i/smp_affinity || true && echo         "4" > /proc/irq/default_smp_affinity || true
  [ "$proc_all" -eq  6 ] && echo        "30" > /proc/irq/$i/smp_affinity || true && echo        "10" > /proc/irq/default_smp_affinity || true
@@ -238,19 +249,19 @@ swapoff -a
 
 mknod -m 000 /dev/mixer c 1 4 && chown root:kmem /dev/mixer
 
-if [ "$roon" = on ]; then
+if ([ -x /opt/RoonBridge/Bridge/RoonBridge ] || [ -x /opt/roon/Bridge/RoonBridge ]) && [ "$roon" = on ]; then
  cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
  /etc/init.d/roonbridge start
 fi
 
-if [ "$spotify" = on ]; then
+if [ -x /usr/bin/spotifyd ] && [ "$spotify" = on ]; then
  cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
  cp /usr/bin/spotifyd /etc/spotifyd.conf /dev/shm/
  sleep 1
  nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
 fi
 
-if [ "$airplay" = on ]; then
+if [ -x /etc/init.d/_S99shairport-sync ] && [ "$airplay" = on ]; then
  cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
  /etc/init.d/_S99shairport-sync start
 fi
@@ -258,8 +269,9 @@ fi
 taskset -cp $m_task 1
 
 mpd_bg &
-nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
-[ "$upnp" != off ] && nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+if [ "$mpd" != off ] || [ "$upnp" != off ]; then
+nohup /dev/shm/mpd --no-daemon /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+fi
 
 exit 0
 
@@ -278,9 +290,10 @@ log=off
 acpi=off
 ssh=off
 wpa=off
-#mpd=on
+mpd=on
 upnp=on
 #roon=off
+#airplay=off
 #spotify=off
 
 $ nano rootfs-overlay/etc/sysctl.conf
@@ -498,7 +511,7 @@ fi
 $ nano /etc/init.d/S99Zrc.local.sh
 
 if [ -e /etc/audio.conf ]; then
-     mpd=$(grep -m1 ^log=     /etc/audio.conf | cut -d\= -f2)
+     mpd=$(grep -m1 ^mpd=     /etc/audio.conf | cut -d\= -f2)
 fi
 
 [ "$mpd" != off ] || [ "$upnp" != off ] && nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
