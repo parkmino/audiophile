@@ -235,7 +235,7 @@ Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button 
 
 Input Spotify device_name.   Spotify 장치명을 입력합니다.\
 
-(without space)              (공란없이)" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 61 $spotify_device 3>&1 1>&2 2>&3)
+(without space)              (빈칸 없이)" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 61 $spotify_device 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_device" ]; then
