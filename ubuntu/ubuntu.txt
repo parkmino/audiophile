@@ -379,3 +379,8 @@ Tuning
 		http://alsa.opensrc.org/index.php/DigitalOut
 	Secure Ripping
 		http://wiki.hydrogenaudio.org/index.php?title=Secure_ripping
+
+cf)
+PC   : Ubuntu, Ubuntu Studio, Xubuntu, Lubuntu > Voyage MPD, Voyage Linux > AV Linux > Puppy, mpdPup > SliTaz > Tiny Core, TinyMPD > Buildroot
+SBC  : Archphile, lightMPD, Moode Audio, piCore, RuneAudio, Volumio, Voyage MuBox > Raspbian Lite > Armbian > DietPi > OpenWrt > Buildroot
+Kodi : OSMC > OpenELEC > LibreELEC
