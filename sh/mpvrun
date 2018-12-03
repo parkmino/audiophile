@@ -7,12 +7,12 @@ usage () {
 
 [ -z "$1" ] && usage && exit
 
-             jtbc="https://youtu.be/z4HKJxqb2xw"
-              tbs="https://youtu.be/5e5tRhUUlUA"
+             jtbc="https://youtu.be/q9u_z3ppyGU"
+              tbs="https://youtu.be/CqERZQYOEPY"
            yonhap="https://youtu.be/5Kk5La-f7oY"
               ytn="https://youtu.be/aR8Fe1lTKHo"
       ytn_science="https://youtu.be/kRARhPoIfd0"
-	 ytn_life="https://youtu.be/iHx3UnB2QAs"
+	 ytn_life="https://youtu.be/g-Fhjcatieo"
                 j=$jtbc
                 t=$tbs
                 h=$yonhap

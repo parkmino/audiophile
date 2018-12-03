@@ -4,8 +4,9 @@ echo 'Input number to find torrents or any other key to quit
 (2) 이규연의 스포트라이트
 (3) 랜선라이프
 (4) 더 팬
-(5) 그것이 알고싶다
-(6) 썰전'
+(5) 보컬플레이
+(6) 그것이 알고싶다
+(7) 썰전'
 read -p "*" i
 case $i in
  1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30"
@@ -16,13 +17,15 @@ case $i in
     title="랜선라이프" ;;
  4) time="last saturday 20:00"
     title="더 팬" ;;
- 5) time="last saturday 23:59"
+ 5) time="last saturday 23:50"
+    title="보컬플레이" ;;
+ 6) time="last saturday 23:59"
     title="그것이 알고싶다" ;;
- 6) time="last sunday 22:30"
+ 7) time="last sunday 22:30"
     title="썰전" ;;
- 7) time="last friday 23:00"
+ 8) time="last friday 23:00"
     title="비긴 어게인 시즌2" ;;
- 8) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 23 ] && time="today 23:00" || time="last friday 23:00"
+ 9) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 23 ] && time="today 23:00" || time="last friday 23:00"
     title="팬텀싱어2" ;;
  *) exit ;;
 esac

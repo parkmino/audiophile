@@ -98,7 +98,7 @@ fi
 APCAST () {
 printf "• APCast\t"
 latest=$(curl $curl_opt http://indiwork.co.kr/apcast-firmware/ | grep -m1 'Firmware Upgrade' | cut -d'<' -f1 | sed 's/.*→ //; s/[ \t]*$//')
-current="44M"
+current="45M"
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -356,7 +356,7 @@ fi
 
 LIBREELEC () {
 printf "• LibreELEC\t"
-date=$(curl $curl_opt https://github.com/LibreELEC/LibreELEC.tv/releases | grep -m1 datetime | cut -d'"' -f2)
+date=$(curl $curl_opt https://github.com/LibreELEC/LibreELEC.tv/releases | grep -m1 datetime | sed 's/.*datetime//' | cut -d'"' -f2)
 if [ -z "$date" ]; then
  printf "\t\t\t\t정보 없음\n"
 else
@@ -379,16 +379,16 @@ else
 fi
 }
 
-MPD_CANTATA_MALP () {
+MPD_CANTATA_MYMPD () {
 count=0
-for i in MusicPlayerDaemon/MPD CDrummond/cantata; do # gateship-one/malp
+for i in MusicPlayerDaemon/MPD CDrummond/cantata jcorporation/myMPD; do # gateship-one/malp
  count=$(($count+1))
  if [ $count -eq 1 ]; then
   printf "• $(echo $i | cut -d'/' -f2)\t\t"
  elif [ $count -eq 2 ]; then
   printf "• Cantata\t"
  else
-  printf "• M.A.L.P.\t"
+  printf "• myMPD\t\t"
  fi
  date=$(curl $curl_opt https://github.com/$i/commits/master | grep -m1 datetime | cut -d'"' -f2)
  if [ -z "$date" ]; then
@@ -590,7 +590,7 @@ fi
 ARMBIAN
 RASPBIAN
 ALSA
-MPD_CANTATA_MALP
+MPD_CANTATA_MYMPD
 MALP
 UPMPDCLI
 #ASSETUPNP

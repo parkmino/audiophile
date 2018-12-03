@@ -8,7 +8,8 @@ echo 'Input number to find youtube or any other key to quit
 (5) RTV 시민방송'
 read -p "*" i
 case $i in
- 1) ch=jtbc   ; query="%5BLIVE%2FJTBC+뉴스%5D" ;;
+#1) ch=jtbc   ; query="%5BLIVE%2FJTBC+뉴스%5D" ;;
+ 1) ch=jtbc   ; query="JTBC+뉴스룸" ;;
  2) ch=yonhap ; query="연합뉴스TV+생방송+%28LIVE+%26+NEWS%29" ;;
  3) ch=ytn    ; query="%5BYTN+LIVE%5D" ;;
  4) ch=tbs    ; query="tbs+tv+live+실시간" ;;
@@ -22,6 +23,8 @@ jtbc_m3u="/home/parkmino/Videos/jtbc.m3u"
 
 echo "You will watch it for 7 secs to check!"
 url=$(curl -s "https://www.youtube.com/results?search_query=$query" | grep data-context-item-id | sed 's/.*data-context-item-id="//' | cut -d\" -f1 | head -1)
+echo "https://youtu.be/$url"
+echo "https://youtu.be/$url" | xclip -selection c
 mpv --length=7 https://youtu.be/$url
 
 read -p "* $ch live is correct? [Y/n]" answer

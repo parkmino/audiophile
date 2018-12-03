@@ -30,8 +30,7 @@ http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8#EBSradio
 http://new_iradio.ebs.co.kr/iradio/iradiolive_m4a/playlist.m3u8#EBSiradio
 rtmp://live.kbskme.gscdn.com/1tv/_definst_/1tv_5.stream?id=2101&si=6&secure=NGQyYWZkOThjMzU4NmNkYmNjM2I5YzdkNTE5MWVmOTc1ZjM4NzAxYjcwYmRmZDAzMzNiOTY0MTdmN2Q2MzU2ODk1NzI3MTBhMTkzNmEzMmJmN2FlN2QwYzljYzUxZTY1M2FiNWQxYzM4ZmM5ZTBkMDNjMWUxMTE2Y2MzOTUxMjhhMzk2ZmQ1NTY3YjRlOGY3YjI0ODFlOTFjZTdhYjNjOGQ0OTQyYzNjYzU3MTU5NjQ3YTY4ZDhiNTdiNGJhMWQ4OGEzNTQ3NDQwZTI0ZGRkN2QwMGE5OTBlNmM4ZGExNjhmNzQ0ODRkNWIyNmFiNGU1M2ZkMzIzYzg0ZWVkZmQ2N2ViZDUzZDNkNDJmNzEzODhhZTkwNDM1ZGQ5NjIyM2Jj&csu=false#KBS1tv
 rtmp://live2.kbs.gscdn.com/1tv_home/_definst_/?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFOTdBRjY4M0U5NDFEJmlzc3Vlcj01OC4yMjcuMTk0LjEwNiZjaWQ9NUEzOEY0RDAwRDAyJnBhdGg9LzF0dl9ob21lL19kZWZpbnN0Xy8xdHZfaG9tZS5zdHJlYW0mZmlsZT0xdHZfaG9tZS5zdHJlYW0mYnlwYXNzPWZhbHNlJmF0aW1lPTEzNDczNTc1NDQ=#KBS1tv
-rtmp://live2.kbs.gscdn.com/2tv_home/_definst_/?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFOTg0RUU3NzhCNjU3Jmlzc3Vlcj01OC4yMjcuMTk0LjEwNiZjaWQ9RTcxNkFCNUEyRjBCJnBhdGg9LzJ0dl9ob21lL19kZWZpbnN0Xy8ydHZfaG9tZS5zdHJlYW0mZmlsZT0ydHZfaG9tZS5zdHJlYW0mYnlwYXNzPWZhbHNlJmF0aW1lPTEzNDczNTc1NjM=#KBS2tv
-http://ytnmmd.mmdlive.lldns.net/ytnmmd/1fd65186a3f64875af501b3340a92931/playlist.m3u8#KBS World" > $lst
+rtmp://live2.kbs.gscdn.com/2tv_home/_definst_/?id=2101&secure=c2lkPWticy1saXZlJnRva2VuPUtCUy1MSVZFOTg0RUU3NzhCNjU3Jmlzc3Vlcj01OC4yMjcuMTk0LjEwNiZjaWQ9RTcxNkFCNUEyRjBCJnBhdGg9LzJ0dl9ob21lL19kZWZpbnN0Xy8ydHZfaG9tZS5zdHJlYW0mZmlsZT0ydHZfaG9tZS5zdHJlYW0mYnlwYXNzPWZhbHNlJmF0aW1lPTEzNDczNTc1NjM=#KBS2tv" > $lst
 
 #echo "http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8#CBS음악FM
 #http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8#tbsFM" >> $lst
@@ -136,6 +135,7 @@ http://edge1.everyon.tv/etv1/phd1173/playlist.m3u8#WBS원음방송
 http://edge1.everyon.tv/etv1/phd1327/playlist.m3u8#KBSN+
 http://edge1.everyon.tv/etv1/phd1381/playlist.m3u8#골든라이브
 http://edge1.everyon.tv/etv1/phd1382/playlist.m3u8#NTV
+http://edge1.everyon.tv/etv1/phd1387/playlist.m3u8#미용(?)
 http://edge1.everyon.tv/etv1sb/phd1/playlist.m3u8#CMC
 http://edge1.everyon.tv/etv1sb/phd6/playlist.m3u8#채널W
 http://edge1.everyon.tv/etv1sb/phd18/playlist.m3u8#머니투데이
@@ -174,7 +174,7 @@ http://edge1.everyon.tv/etv1sb/phd1298/playlist.m3u8#대교베이비
 http://edge1.everyon.tv/etv1sb/phd1317/playlist.m3u8#참불교방송 HD
 http://edge1.everyon.tv/etv1sb/phd1357/playlist.m3u8#MSTAR HD
 http://edge1.everyon.tv/etv1sb/phd1359/playlist.m3u8#VOD HD
-http://edge1.everyon.tv/etv1sb/phd1363/playlist.m3u8#소셜쇼핑" >> $lst
+http://edge1.everyon.tv/etv1sb/phd1379/playlist.m3u8#E-다이어트" >> $lst
 
 cat -n $lst
 

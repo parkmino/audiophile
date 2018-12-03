@@ -1,11 +1,11 @@
 #!/bin/sh
 
 mpd_conf="/etc/mpd.conf.sav"
-mpd4droid="/home/parkmino/Downloads/mpd.conf_android"
-mpd4win="/home/parkmino/Downloads/mpd.conf_windows"
+mpd4droid="/home/parkmino/Downloads/mpd_android.conf"
+mpd4win="/home/parkmino/Downloads/mpd_windows.conf"
 
-grep -m1 "^mixer_type" $mpd_conf > $mpd4droid
-grep -e "^gapless_mp3_playback" -e "^zeroconf_enabled" -e "^audio_buffer" -e "^buffer_before_play" $mpd_conf >> $mpd4droid
+#grep -m1 "^mixer_type" $mpd_conf > $mpd4droid
+ grep -e "^gapless_mp3_playback" -e "^zeroconf_enabled" -e "^audio_buffer" -e "^buffer_before_play" $mpd_conf >> $mpd4droid
 
 echo 'input {
 plugin "ffmpeg"
@@ -20,10 +20,6 @@ plugin "vorbis"
 enabled "no"
 }
 decoder {
-plugin "oggflac"
-enabled "no"
-}
-decoder {
 plugin "opus"
 enabled "no"
 }
@@ -33,6 +29,13 @@ enabled "no"
 }' >> $mpd4droid
 
 cp $mpd4droid $mpd4win
+
+echo 'audio_output {
+type "sles"
+name "sles"
+mixer_type "none"
+replay_gain_handler "none"
+}' >> $mpd4droid
 
 echo 'music_directory "d:/Music"
 playlist_directory "c:/mpd/playlists"
