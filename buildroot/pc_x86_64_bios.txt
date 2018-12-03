@@ -270,15 +270,15 @@ swapoff -a
 mknod -m 000 /dev/mixer c 1 4 && chown root:kmem /dev/mixer
 
 if ([ -x /opt/RoonBridge/Bridge/RoonBridge ] || [ -x /opt/roon/Bridge/RoonBridge ]) && [ "$roon" = on ]; then
- roon_bg &
+ (roon_bg &) && sleep 3
 fi
 
 if [ -x /usr/bin/spotifyd ] && [ "$spotify" = on ]; then
- spot_bg &
+ (spot_bg &) && sleep 1
 fi
 
 if [ -x /etc/init.d/_S99shairport-sync ] && [ "$airplay" = on ]; then
- air_bg &
+ (air_bg &) && sleep 1
 fi
 
 taskset -cp $m_task 1
