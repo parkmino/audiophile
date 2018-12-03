@@ -158,10 +158,10 @@ swapoff -a
 #(roon_bridge &) && sleep 3
 
 ### Spotify
-#(spotifyd &) && sleep 3
+#(spotifyd &) && sleep 1
 
 ### Shaiport-sync
-###(shairport_sync &) && sleep 3
+###(shairport_sync &) && sleep 1
 
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
