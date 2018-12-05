@@ -2,14 +2,20 @@
 
 cp /usr/lib/libasound.so.2.0.0 /dev/shm/
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+[ -e /dev/snd/timer ] && rm /dev/snd/timer
+mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
+
+echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
- renice -2 $i
+ renice -2 $i || true
 done
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
- chrt -op 0 $i
- renice  -3 $i
+ chrt -op 0 $i || true
+ renice  -3 $i || true
 done
 
 m_task=3
@@ -21,12 +27,12 @@ if [ "$m_task" -ge 1 ];then
  done
 fi
 
-avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
-$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
-$(echo $avail_gov | grep -q conservative) && gov=conservative
-$(echo $avail_gov | grep -q powersave)    && gov=powersave
-[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-
+#avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
+#$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
+#$(echo $avail_gov | grep -q conservative) && gov=conservative
+#$(echo $avail_gov | grep -q powersave)    && gov=powersave
+#[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+#
 ### Turn off USBs
 #if lsusb -d 0424:9514; then
 hub-ctrl -h 0 -P 5 -p 0
@@ -40,6 +46,8 @@ hub-ctrl -h 0 -P 4 -p 0
 modprobe -r 8021q
 
 swapoff -a
+
+echo 4 > /proc/irq/default_smp_affinity || true
 
 (
  until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q complet); do
@@ -57,7 +65,7 @@ swapoff -a
 
  taskset -cp $m_task $pgr_kodi
 
- systemctl stop eventlircd irqbalance pulseaudio wpa_supplicant
+ systemctl stop eventlircd pulseaudio wpa_supplicant
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger

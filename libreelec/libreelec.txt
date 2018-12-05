@@ -6,12 +6,12 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ unsquashfs SYSTEM.orig
 	$ cd squashfs-root
 	  ALSA tweak
-	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 ctl.default /dev/null' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 	$ nano usr/lib/modprobe.d/alsa-base.conf
 		#options snd-usb-audio index=-2
 	  Kodi.bin tweak
 	$ nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/kodi/kodi.sh
-		nohup /usr/lib/kodi/kodi.bin&>/dev/null</dev/null
+		nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null
 	$ cp bin/ps usr/bin/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.3.0.0 usr/lib/
 	$ cp chrt taskset hub-ctrl llctl usr/bin/
@@ -25,7 +25,7 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ sudo mksquashfs squashfs-root SYSTEM
 
 	$ mount
-	$ sudo umount /dev/sdc1 /dev/sdc2
+	$ sudo umount /dev/sdc?
 	$ sudo dd if=LibreELEC-RPi2.arm-8.0.2.img of=/dev/sdc
 	$ mv SYSTEM SYSTEM.orig
 	$ cp SYSTEM SYSTEM
@@ -51,6 +51,22 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 5. Sysctl.conf
 
 	# nano ~/.config/sysctl.d/sysctl.conf
+
+	vm.dirty_writeback_centisecs = 0
+	vm.oom_dump_tasks = 0
+	vm.oom_kill_allocating_task = 1
+	vm.overcommit_memory = 1
+	vm.panic_on_oom = 2
+	vm.stat_interval = 5
+	vm.swappiness = 0
+	vm.vfs_cache_pressure = 0
+	kernel.printk = 0 0 0 0
+	kernel.watchdog = 0
+	kernel.watchdog_thresh = 0
+	kernel.sched_rr_timeslice_ms = 1
+	net.ipv4.tcp_sack = 0
+	net.ipv4.tcp_no_metrics_save = 1
+	net.ipv6.conf.all.disable_ipv6 = 1
 
 6. Autostart.sh
 
