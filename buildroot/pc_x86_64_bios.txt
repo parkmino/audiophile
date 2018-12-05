@@ -149,6 +149,8 @@ mpd_bg () {
  fi
  eol &
  if [ "$upnp" != off ]; then
+  cp /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+  sleep 1
 nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
  fi
 }
@@ -217,8 +219,8 @@ ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
-cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+#cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+#cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /usr/lib/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so.1.0.0
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so.1
@@ -285,6 +287,9 @@ taskset -cp $m_task 1
 
 mpd_bg &
 if [ "$mpd" != off ] || [ "$upnp" != off ]; then
+ cp /usr/bin/mpd /dev/shm/
+ cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+ sleep 1
 nohup /dev/shm/mpd --no-daemon /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 fi
 
