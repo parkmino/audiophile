@@ -4,10 +4,10 @@ lircd=off
 pulse=off
 wpa=off
 
-cp /usr/lib/libasound.so.2.0.0 /dev/shm/
+cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
-[ -e /dev/snd/timer ] && rm /dev/snd/timer
 mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
+[ -e /dev/snd/timer ] && rm /dev/snd/timer
 
 echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true

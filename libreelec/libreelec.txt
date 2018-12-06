@@ -17,6 +17,7 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	$ cp chrt taskset hub-ctrl llctl usr/bin/
 	$ mv usr/lib/libasound.so   usr/lib/libasound.so.orig
 	$ mv usr/lib/libasound.so.2 usr/lib/libasound.so.2.orig
+	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
 	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
 	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
 	$ mv usr/share/alsa/alsa.conf usr/share/alsa/alsa.conf.sav
