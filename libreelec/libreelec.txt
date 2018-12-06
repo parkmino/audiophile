@@ -8,15 +8,16 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	  ALSA tweak
 	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
 	$ nano usr/lib/modprobe.d/alsa-base.conf
-		#options snd-usb-audio index=-2
+	 	#options snd-usb-audio index=-2
 	  Kodi.bin tweak
 	$ nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/kodi/kodi.sh
 		nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null
-	$ cp bin/ps usr/bin/
+	$ cp ps chrt taskset hub-ctrl llctl usr/bin/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.3.0.0 usr/lib/
-	$ cp chrt taskset hub-ctrl llctl usr/bin/
-	$ mv usr/lib/libasound.so   usr/lib/libasound.so.orig
-	$ mv usr/lib/libasound.so.2 usr/lib/libasound.so.2.orig
+	$ mv usr/lib/libasound.so       usr/lib/libasound.so.orig
+	$ mv usr/lib/libasound.so.2     usr/lib/libasound.so.2.orig
+	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
+	$ cp libasound.so.2.0.0.sav     usr/lib/libasound.so.2.0.0.sav
 	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
 	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
 	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
