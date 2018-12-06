@@ -52,23 +52,25 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 
 	# nano ~/.config/sysctl.d/sysctl.conf
 
-	vm.dirty_writeback_centisecs = 0
-	vm.oom_dump_tasks = 0
-	vm.oom_kill_allocating_task = 1
-	vm.overcommit_memory = 1
-	vm.panic_on_oom = 2
-	vm.stat_interval = 5
-	vm.swappiness = 0
-	vm.vfs_cache_pressure = 0
-	kernel.printk = 0 0 0 0
-	kernel.watchdog = 0
-	kernel.watchdog_thresh = 0
-	kernel.sched_rr_timeslice_ms = 1
-	net.ipv4.tcp_sack = 0
-	net.ipv4.tcp_no_metrics_save = 1
-	net.ipv6.conf.all.disable_ipv6 = 1
-
 6. Autostart.sh
 
 	# nano /storage/.config/autostart.sh
 	# chmod +x /storage/.config/autostart.sh
+
+7. Patch
+
+	$ nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/etc/profile
+
+	if [ ! -e /storage/.config/not_first ]; then
+	 sed -i '/...$/s/.../... consoleblank=0 elevator=noop selinux=0/' /boot/cmdline.txt
+	 sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
+	 printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > ~/.config/modprobe.d/libreelec-blacklist.conf
+	 cp /etc/sysctl.conf ~/.config/sysctl.d/sysctl.conf
+	 cp /etc/autostart.sh /storage/.config/autostart.sh
+	 touch /storage/.config/not_first
+	 read -p "* Reboot to apply the patch? [Y/n]" answer
+	 [ "$answer" != n ] && reboot
+	fi
+
+	$ cp /home/parkmino/git/audiophile/libreelec/sysctl.conf  /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/etc/
+	$ cp /home/parkmino/git/audiophile/libreelec/autostart.sh /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/etc/

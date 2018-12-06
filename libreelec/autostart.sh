@@ -1,5 +1,9 @@
 #!/bin/sh
 
+lircd=off
+pulse=off
+wpa=off
+
 cp /usr/lib/libasound.so.2.0.0 /dev/shm/
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 [ -e /dev/snd/timer ] && rm /dev/snd/timer
@@ -18,10 +22,10 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd
  renice  -3 $i || true
 done
 
-m_task=3
+m_task=3 # grep -m1 siblings /proc/cpuinfo | grep -o [0-9*] # getconf _NPROCESSORS_ONLN # echo $(($(cat /sys/devices/system/cpu/present | sed 's/0-//')+1)) # grep -c ^processor /proc/cpuinfo
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
 
-if [ "$m_task" -ge 1 ];then
+if [ "$m_task" -ge 1 ]; then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd$|kodi|kodi.bin/ {print $1}'); do
   taskset -acp 0 $pid || true
  done
@@ -43,7 +47,7 @@ hub-ctrl -h 0 -P 4 -p 0
 #hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
 
 ### Remove modules
-modprobe -r 8021q
+modprobe -r 8021q || true
 
 swapoff -a
 
@@ -65,7 +69,9 @@ echo 4 > /proc/irq/default_smp_affinity || true
 
  taskset -cp $m_task $pgr_kodi
 
- systemctl stop eventlircd pulseaudio wpa_supplicant
+ [ "$lircd" = off ] && systemctl stop eventlircd
+ [ "$pulse" = off ] && systemctl stop pulseaudio
+ [ "$wpa"   = off ] && systemctl stop wpa_supplicant
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
