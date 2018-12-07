@@ -174,13 +174,22 @@ eol () {
  pkill -x rcS || true
 }
 
-roon_bg () {
+roonbridge_bg () {
  cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
 #export ROON_DATAROOT=/var/roon
 #export ROON_ID_DIR=/var/roon
 #cd /opt/RoonBridge/Bridge
 #/dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
  /etc/init.d/roonbridge start
+}
+
+roonserver_bg () {
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+#export ROON_DATAROOT=/var/roon
+#export ROON_ID_DIR=/var/roon
+#cd /opt/RoonServer/Server
+#/dev/shm/nohup /opt/RoonServer/Server/RoonServer
+ /etc/init.d/roonserver start
 }
 
 spot_bg () {
@@ -195,15 +204,16 @@ air_bg () {
 }
 
 if [ -e /etc/audio.conf ]; then
-     log=$(grep -m1 ^log=     /etc/audio.conf | cut -d\= -f2)
-    acpi=$(grep -m1 ^acpi=    /etc/audio.conf | cut -d\= -f2)
-     ssh=$(grep -m1 ^ssh=     /etc/audio.conf | cut -d\= -f2)
-     wpa=$(grep -m1 ^wpa=     /etc/audio.conf | cut -d\= -f2)
-     mpd=$(grep -m1 ^mpd=     /etc/audio.conf | cut -d\= -f2)
-    upnp=$(grep -m1 ^upnp=    /etc/audio.conf | cut -d\= -f2)
-    roon=$(grep -m1 ^roon=    /etc/audio.conf | cut -d\= -f2)
- airplay=$(grep -m1 ^airplay= /etc/audio.conf | cut -d\= -f2)
- spotify=$(grep -m1 ^spotify= /etc/audio.conf | cut -d\= -f2)
+       log=$(grep -m1 ^log=        /etc/audio.conf | cut -d\= -f2)
+      acpi=$(grep -m1 ^acpi=       /etc/audio.conf | cut -d\= -f2)
+       ssh=$(grep -m1 ^ssh=        /etc/audio.conf | cut -d\= -f2)
+       wpa=$(grep -m1 ^wpa=        /etc/audio.conf | cut -d\= -f2)
+       mpd=$(grep -m1 ^mpd=        /etc/audio.conf | cut -d\= -f2)
+      upnp=$(grep -m1 ^upnp=       /etc/audio.conf | cut -d\= -f2)
+roonbridge=$(grep -m1 ^roonbridge= /etc/audio.conf | cut -d\= -f2)
+roonserver=$(grep -m1 ^roonserver= /etc/audio.conf | cut -d\= -f2)
+   airplay=$(grep -m1 ^airplay=    /etc/audio.conf | cut -d\= -f2)
+   spotify=$(grep -m1 ^spotify=    /etc/audio.conf | cut -d\= -f2)
 fi
 
 [ "$log"  != on ] && /etc/init.d/S01logging stop
@@ -271,8 +281,12 @@ swapoff -a
 
 mknod -m 000 /dev/mixer c 1 4 && chown root:kmem /dev/mixer
 
-if ([ -x /opt/RoonBridge/Bridge/RoonBridge ] || [ -x /opt/roon/Bridge/RoonBridge ]) && [ "$roon" = on ]; then
- (roon_bg &) && sleep 3
+if [ "$roonserver" = on ] && [ -e /opt/RoonServer/Server/RoonServer ]; then
+ (roonserver_bg &) && sleep 3
+fi
+
+if [ "$roonserver" = off ] && [ "$roonbridge" = on ] && ([ -e /opt/RoonBridge/Bridge/RoonBridge ] || [ -e /opt/roon/Bridge/RoonBridge ]); then
+ (roonbridge_bg &) && sleep 3
 fi
 
 if [ -x /usr/bin/spotifyd ] && [ "$spotify" = on ]; then
@@ -312,7 +326,8 @@ ssh=off
 wpa=off
 mpd=on
 upnp=on
-#roon=off
+#roonbridge=off
+#roonserver=off
 #airplay=off
 #spotify=off
 
@@ -494,7 +509,39 @@ if [ "$airplay" = on ]; then
  /etc/init.d/_S99shairport-sync start
 fi
 
-10. Roon Bridge
+10. Roon Server
+
+https://kb.roonlabs.com/LinuxInstall
+
+$ wget http://download.roonlabs.com/builds/RoonServer_linuxx64.tar.bz2
+$ wget http://download.roonlabs.com/builds/roonserver-installer-linuxx64.sh
+$ tar xvjf RoonServer_linuxx64.tar.bz2 /home/parkmino/Downloads/buildroot/pc_x86_64_bios/rootfs-overlay/opt/RoonServer
+$ nano roofs-overlay/etc/init.d/roonserver
+
+DAEMON_EXECUTABLE="/opt/RoonServer/Server/RoonServer"
+#DAEMON_EXECUTABLE="/opt/$PACKAGE_NAME/start.sh"
+DAEMON_HOMEDIR="/opt/RoonServer/Server"
+#DAEMON_HOMEDIR="/opt/$PACKAGE_NAME"
+
+$ chmod +x roofs-overlay/etc/init.d/roonserver
+$ nano /home/parkmino/Downloads/buildroot/pc_x86_64_bios/rootfs-overlay/etc/init.d/S99Zrc.local.sh
+
+if [ "$roonserver" = on ] && [ -e /opt/RoonServer/Server/RoonServer ]; then
+ cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+#cp /usr/lib/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+#sleep 1
+#export ROON_DATAROOT=/var/roon
+#export ROON_ID_DIR=/var/roon
+#cd /opt/RoonServer/Server
+#/dev/shm/nohup /opt/RoonServer/Server/RoonServer
+##ROON_DATAROOT=/var/roon /opt/RoonServer/Server/RoonServer
+/etc/init.d/roonserver start
+fi
+
+Filesystem images --->
+ (1000M) exact size
+
+11. Roon Bridge
 
 https://kb.roonlabs.com/LinuxInstall
 
@@ -511,7 +558,7 @@ DAEMON_HOMEDIR="/opt/RoonBridge/Bridge"
 $ chmod +x roofs-overlay/etc/init.d/roonbridge
 $ nano /home/parkmino/Downloads/buildroot/pc_x86_64_bios/rootfs-overlay/etc/init.d/S99Zrc.local.sh
 
-if [ "$roon" = on ]; then
+if [ "$roonserver" = off ] && [ "$roonbridge" = on ] && ([ -e /opt/RoonBridge/Bridge/RoonBridge ] || [ -e /opt/roon/Bridge/RoonBridge ]) ; then
 #[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
 #cp -r /opt/roon /dev/shm/
 #ln -sf /dev/shm/roon /opt/RoonBridge
@@ -526,7 +573,7 @@ if [ "$roon" = on ]; then
 /etc/init.d/roonbridge start
 fi
 
-11. Optional MPD
+12. Optional MPD
 
 $ nano /etc/init.d/S99Zrc.local.sh
 
