@@ -1,0 +1,40 @@
+#!/bin/sh
+
+pgr_sqz=$(pidof squeezelite)
+
+[ -n "$pgr_sqz" ] && echo "Squeezelite is already running !" && exit
+
+(
+ sec=0
+ until [ "$(pidof squeezelite)" -gt 0 ] 2>/dev/null; do
+  sleep 1
+  sec=$(($sec+1))
+  [ "$sec" -ge 5 ] && printf "\nSqueezelite is not available!\n" && exit
+ done
+
+ sleep 1
+
+ pgr_sqz=$(pidof squeezelite)
+
+ [ -z "$pgr_sqz" ] 2>/dev/null || [ ! "$pgr_sqz" -ge 1 ] 2>/dev/null && echo "Wrong pid of Squeezelite !" && exit
+
+ m_task=$(($(nproc --all)-1))
+ [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+
+ sudo taskset -pc $m_task $pgr_sqz
+
+ echo "$(pstree -npt $pgr_sqz)" | while read line ; do
+ #proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  proc_sch=$(chrt -p $proc_nr | head -1 | cut -d"_" -f2)
+  case $proc_sch in
+   OTHER) sudo taskset -cp $s_task $proc_nr ;;
+   FIFO)  sudo taskset -cp $m_task $proc_nr
+          sudo chrt -opv 0         $proc_nr ;;
+  esac
+ done
+ pkill -x sqzlite
+) &
+
+[ ! -e /dev/shm/squeezelite ] && sudo cp /usr/bin/squeezelite /dev/shm/squeezelite
+sudo /dev/shm/squeezelite -n Squeezelite -o pcm.0>/dev/null</dev/null 2>/dev/null
