@@ -203,18 +203,7 @@ air_bg () {
  /etc/init.d/_S99shairport-sync start
 }
 
-if [ -e /etc/audio.conf ]; then
-       log=$(grep -m1 ^log=        /etc/audio.conf | cut -d\= -f2)
-      acpi=$(grep -m1 ^acpi=       /etc/audio.conf | cut -d\= -f2)
-       ssh=$(grep -m1 ^ssh=        /etc/audio.conf | cut -d\= -f2)
-       wpa=$(grep -m1 ^wpa=        /etc/audio.conf | cut -d\= -f2)
-       mpd=$(grep -m1 ^mpd=        /etc/audio.conf | cut -d\= -f2)
-      upnp=$(grep -m1 ^upnp=       /etc/audio.conf | cut -d\= -f2)
-roonbridge=$(grep -m1 ^roonbridge= /etc/audio.conf | cut -d\= -f2)
-roonserver=$(grep -m1 ^roonserver= /etc/audio.conf | cut -d\= -f2)
-   airplay=$(grep -m1 ^airplay=    /etc/audio.conf | cut -d\= -f2)
-   spotify=$(grep -m1 ^spotify=    /etc/audio.conf | cut -d\= -f2)
-fi
+[ -r /etc/audio.conf ] && . /etc/audio.conf
 
 [ "$log"  != on ] && /etc/init.d/S01logging stop
 [ "$apci" != on ] && /etc/init.d/S02acpid stop

@@ -1,8 +1,6 @@
 #!/bin/sh
 
-lircd=off
-pulse=off
-wpa=off
+[ -r /storage/.config/audio.conf ] && . /storage/.config/audio.conf
 
 cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
