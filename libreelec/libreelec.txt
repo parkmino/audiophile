@@ -54,12 +54,16 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 
 	# nano ~/.config/sysctl.d/sysctl.conf
 
-6. Autostart.sh
+6. Audio.conf
+
+	# nano /storage/.config/audio.conf
+
+7. Autostart.sh
 
 	# nano /storage/.config/autostart.sh
 	# chmod +x /storage/.config/autostart.sh
 
-7. Patch
+8. Patch
 
 	$ nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/etc/profile
 
@@ -68,7 +72,7 @@ LibreELEC (Libre Embedded Linux Entertainment Center)
 	 sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
 	 printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > ~/.config/modprobe.d/libreelec-blacklist.conf
 	 cp /etc/sysctl.conf ~/.config/sysctl.d/sysctl.conf
-	 cp /etc/autostart.sh /storage/.config/autostart.sh
+	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
 	 touch /storage/.config/not_first
 	 read -p "* Reboot to apply the patch? [Y/n]" answer
 	 [ "$answer" != n ] && reboot
