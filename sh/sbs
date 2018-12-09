@@ -29,5 +29,5 @@ url=$(curl -s $(sbs_dec.py "$api") | tail -1)
 
 [ -z "$url" ] && echo "$(basename "$0") "$*" stream is not available!" && exit
 echo $url
-echo $url | xclip -selection c
+#echo $url | xclip -selection c
 #/dev/shm/nohup mpv  $url
