@@ -304,7 +304,29 @@ Audio Render Advanced
 	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
 
-23. Make Image
+23. audio.conf
+
+	$ sudo cp audio.conf /etc/default/audio.conf
+	$ sudo nano /etc/rc.local
+
+		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+		if [ "$alsa" = plug ]; then
+		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.plug /dev/shm/libasound.so.2.0.0
+		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+		elif [ "$alsa" = mix ] || [ "$roonbridge" = "on" ] || [ "$airplay" = "on" ] || [ "$spotify" = "on" ]; then
+		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		else
+		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+		fi		
+		[ "$roonbridge" = on ] && (roon_bridge &) && sleep 3
+		[ "$spotify" = on ] && (spotifyd &) && sleep 1
+		if [ "$tts" = on ]; then
+		 [ "$tts_eng" = on ] && tts en My I P is $(hostname -I) || tts
+		fi
+
+24. Make Image
 
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get update
