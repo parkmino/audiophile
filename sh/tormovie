@@ -1,14 +1,29 @@
 #!/bin/sh
 
-url="https://torrentkim.org/torrent_movie/torrent1.htm"
-str=$(curl -s -m12 $url | grep 인기자료 -A2 | tail -1)
-j=0
+### Torrentkim
+#
+#url="https://torrentkim.org/torrent_movie/torrent1.htm"
+#str=$(curl -s -m12 $url | grep 인기자료 -A2 | tail -1)
+#j=0
+#
+#printf "\n%s\n\n" $url
+#[ -z "$str" ] && echo "Not connected and exit!" && exit
+#
+#for i in 5 8 11 14 17 22 25 28 31 34; do
+# j=$(($j+1))
+# printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
+# printf "    $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
+#done
+
+### Torrenthaja
+
+url="https://torrenthaja.com"
 
 printf "\n%s\n\n" $url
-[ -z "$str" ] && echo "Not connected and exit!" && exit
+wget --spider -q "$url" 2>&1 || (echo "Not connected and exit!" && exit)
 
-for i in 5 8 11 14 17 22 25 28 31 34; do
- j=$(($j+1))
- printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
- printf "    $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
+for i in $(seq 1 10); do # upto 15
+#curl -s "$url" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
+ printf "%02d.%s\n" $i "$(curl -s "$url" | grep '<strong>' | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
+ printf "    $(curl -s "$url" | grep -m$i -o "https://torrenthaja.com/torrent_.*.html" | tail -1)\n"
 done
