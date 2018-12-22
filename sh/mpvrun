@@ -3,18 +3,20 @@
 
 usage () {
  echo "Usage: $(basename "$0") [file|url]"
- echo "   or: $(basename "$0") [jtbc(j)|tbs(t)|yonhap(h)|ytn(y)|ytn_life(yl)|ytn_science(ys)]"
+ echo "   or: $(basename "$0") [jtbc(j)|kbs_news(k)|tbs(t)|yonhap(h)|ytn(y)|ytn_life(yl)|ytn_science(ys)]"
 }
 
 [ -z "$1" ] && usage && exit
 
              jtbc="https://youtu.be/q9u_z3ppyGU"
+         kbs_news="https://youtu.be/kHfz5vER9jQ"
               tbs="https://youtu.be/CqERZQYOEPY"
            yonhap="https://youtu.be/5Kk5La-f7oY"
               ytn="https://youtu.be/aR8Fe1lTKHo"
 	 ytn_life="https://youtu.be/g-Fhjcatieo"
       ytn_science="https://youtu.be/kRARhPoIfd0"
                 j=$jtbc
+                k=$kbs_news
                 t=$tbs
                 h=$yonhap
                 y=$ytn

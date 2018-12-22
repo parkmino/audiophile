@@ -2,20 +2,22 @@
 
 echo 'Input number to find youtube or any other key to quit
 (1) JTBC 뉴스
-(2) tbs TV
-(3) 연합뉴스TV
-(4) YTN LIVE
-(5) YTN 라이프
-(6) YTN 사이언스' # (7) RTV 시민방송
+(2) KBS 뉴스
+(3) tbs TV
+(4) 연합뉴스TV
+(5) YTN LIVE
+(6) YTN 라이프
+(7) YTN 사이언스' # (8) RTV 시민방송
 read -p "*" i
 case $i in
  1) ch=jtbc        ; query="\[LIVE%2FJTBC+뉴스\]+$(date +%_m)월+$(date +%_d)일" ;;
- 2) ch=tbs         ; query="tbs+tv+live+실시간" ;;
- 3) ch=yonhap      ; query="연합뉴스TV+생방송" ;;
- 4) ch=ytn         ; query="ytn실시간" ;;
- 5) ch=ytn_life    ; query="ytn+라이프+HD+생방송" ;;
- 6) ch=ytn_science ; query="ytn+science+live" ;;
- 7) ch=rtv         ; query="RTV+시민방송님의+실시간+스트리밍" ;;
+ 2) ch=kbs_news    ; query="대한민국의+오늘+KBS뉴스" ;;
+ 3) ch=tbs         ; query="tbs+tv+live+실시간" ;;
+ 4) ch=yonhap      ; query="연합뉴스TV+생방송" ;;
+ 5) ch=ytn         ; query="ytn실시간" ;;
+ 6) ch=ytn_life    ; query="ytn+라이프+HD+생방송" ;;
+ 7) ch=ytn_science ; query="ytn+science+live" ;;
+ 8) ch=rtv         ; query="RTV+시민방송님의+실시간+스트리밍" ;;
  *) exit ;;
 esac
 
