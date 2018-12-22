@@ -2,7 +2,8 @@
 #complete -W 'jtbc j tbs t yonhap h ytn y' ./mpvrun \~/mpvrun
 
 usage () {
- echo "Usage: $(basename "$0") [file|url|jtbc(j)|jtbclive(jl)|tbs(t)|yonhap(h)|ytn(y)|ytn_science(ys)|ytn_life(yl)]"
+ echo "Usage: $(basename "$0") [file|url]"
+ echo "   or: $(basename "$0") [jtbc(j)|tbs(t)|yonhap(h)|ytn(y)|ytn_life(yl)|ytn_science(ys)]"
 }
 
 [ -z "$1" ] && usage && exit
@@ -11,14 +12,14 @@ usage () {
               tbs="https://youtu.be/CqERZQYOEPY"
            yonhap="https://youtu.be/5Kk5La-f7oY"
               ytn="https://youtu.be/aR8Fe1lTKHo"
-      ytn_science="https://youtu.be/kRARhPoIfd0"
 	 ytn_life="https://youtu.be/g-Fhjcatieo"
+      ytn_science="https://youtu.be/kRARhPoIfd0"
                 j=$jtbc
                 t=$tbs
                 h=$yonhap
                 y=$ytn
-	       ys=$ytn_science
                yl=$ytn_life
+	       ys=$ytn_science
 
 if [ "$1" = jtbc ] || [ "$1" = j ] ; then
  echo "

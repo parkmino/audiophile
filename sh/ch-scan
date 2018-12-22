@@ -142,7 +142,7 @@ case $1 in
   echo "* Following channels are not detected"
   while read line; do
    ch=$(echo $line | grep -o phd.*/ | tr -d 'phd'| tr -d '/')
-   if ! grep -qs "CH.$ch" $file && echo $line | grep -qs lgetv1 && [ "$ch" -ge "$start" ] && [ "$ch" -le "$end" ] ; then
+   if ! grep -qs "CH.$ch" $file && echo $line | grep -qs lgetv1 && [ "$ch" -ge "$start" ] && [ "$ch" -le "$end" ] 2>/dev/null; then
     printf "$line\n"
    fi
   done < $mkm3u ;;
