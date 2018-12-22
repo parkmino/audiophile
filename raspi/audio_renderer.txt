@@ -312,7 +312,7 @@ Audio Render Advanced
 		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 		if [ "$alsa" = plug ]; then
 		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.plug /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+		 cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
 		elif [ "$alsa" = mix ] || [ "$roonbridge" = "on" ] || [ "$airplay" = "on" ] || [ "$spotify" = "on" ]; then
 		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
 		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
