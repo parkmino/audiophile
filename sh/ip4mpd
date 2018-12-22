@@ -1,31 +1,39 @@
 #!/bin/sh
 
-ip_root=$(echo $(hostname -I) | cut -d'.' -f1-3)
-  my_ip=$(echo $(hostname -I) | cut -d'.' -f4)
+  my_ip=$(hostname -I | tr -d ' ')
+ip_root=$(hostname -I | cut -d'.' -f1-3)
    port=6600
 
-[ -z "$ip_root" ] && echo "Not connected and exit." && exit
+[ "$my_ip" = "" ] || [ "$my_ip" = "127.0.0.1" ] && echo "Network is not available and exit." && exit
 
-for i in $(seq 1 254); do
- ip="$ip_root.$i"
+for i in nmap fping nc; do # nmblookup
+ [ -z "$(which $i)" ] && echo "$i is not installed and exit." && exit
+done
+
+#sudo nmap -p $port --open ${ip_root}.1-254 && printf \\n
+
+echo "$(fping -a -q -r0 -g ${ip_root}.1 ${ip_root}.254 | sort -V)" | while read ip; do
  printf "\33[2K\r🖧  $ip "
- if   [ "${#i}" -eq 1 ]; then
+ if   [ "${#ip}" -eq 11 ]; then
   printf "  "
- elif [ "${#i}" -eq 2 ]; then
+ elif [ "${#ip}" -eq 12 ]; then
   printf " "
  fi
- if ping -q -w1 -c1 $ip >/dev/null 2>&1; then
-  name=$(nmblookup -A $ip | sed -n 2p | sed 's/^[ \t]//; s/[ \t].*//')
-  [ "$name" = "No" ] && name=""
-  if [ "$my_ip" -eq "$i" ]; then
-   ping=$(echo ping | nc -w1 localhost $port | head -1 | sed 's/^OK //')
-   mac=$(ifconfig | grep -m1 HWaddr | sed 's/.*HWaddr //; s/ .*//')
-  else
-   ping=$(echo ping | nc -w1 $ip $port | head -1 | sed 's/^OK //')
-   mac=$(arp -a $ip | cut -d' ' -f4)
-  fi
-  [ -z "$ping" ] && printf "[$mac]            $name\n" || printf "[$mac] $ping $name\n"
+ #name=$(nmblookup -A $ip | sed -n 2p | sed 's/^[ \t]//; s/[ \t].*//')
+ #[ "$name" = "No" ] && name=""
+ if [ "$ip" = "$my_ip" ]; then
+  ping=$(echo ping | nc -w1 localhost $port | head -1 | sed 's/^OK //')
+  mac=$(ifconfig | grep -m1 HWaddr | sed 's/.*HWaddr //; s/ .*//')
+  name="localhost ($(cat /proc/sys/kernel/hostname))"
+ else
+  ping=$(echo ping | nc -w1 $ip $port | head -1 | sed 's/^OK //')
+ #mac=$(arp -a $ip | cut -d' ' -f4)
+  sudo true
+  string=$(sudo nmap -sn $ip | grep -m1 ^MAC)
+  mac=$(echo $string | cut -d' ' -f3)
+  name=$(echo $string | cut -d'(' -f2 | cut -d')' -f1)
  fi
+ [ -z "$ping" ] && printf "[$mac]            $name\n" || printf "[$mac] $ping $name\n"
 done
 
 printf "\33[2K\r"
