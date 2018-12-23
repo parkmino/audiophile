@@ -33,5 +33,5 @@ case $i in
 esac
 
 url=$(curl -s "$url" | grep -m1 -o data-context-item-id.* | cut -d\" -f2)
-echo "https://youtu.be/$url"
-echo "plugin://plugin.video.youtube/play/?video_id=$url"
+ [ -n "$url" ] && echo "https://youtu.be/$url"
+#[ -n "$url" ] && echo "plugin://plugin.video.youtube/play/?video_id=$url"
