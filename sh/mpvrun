@@ -8,13 +8,13 @@ usage () {
 
 [ -z "$1" ] && usage && exit
 
-             jtbc="https://youtu.be/q9u_z3ppyGU"
-         kbs_news="https://youtu.be/kHfz5vER9jQ"
-              tbs="https://youtu.be/CqERZQYOEPY"
-           yonhap="https://youtu.be/5Kk5La-f7oY"
-              ytn="https://youtu.be/aR8Fe1lTKHo"
-	 ytn_life="https://youtu.be/g-Fhjcatieo"
-      ytn_science="https://youtu.be/kRARhPoIfd0"
+             jtbc="https://www.youtube.com/user/JTBC10news"
+         kbs_news="https://www.youtube.com/user/NewsKBS"
+              tbs="https://www.youtube.com/user/seoultbstv/featured"
+           yonhap="https://www.youtube.com/channel/UCTHCOPwqNfZ0uiKOvFyhGwg"
+              ytn="https://www.youtube.com/user/ytnnews24"
+	 ytn_life="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q"
+      ytn_science="https://www.youtube.com/user/ytnscience"
                 j=$jtbc
                 k=$kbs_news
                 t=$tbs
@@ -44,11 +44,11 @@ if [ "$1" = jtbc ] || [ "$1" = j ] ; then
 fi
 
 case $1 in
- jtbc|j|tbs|t|yonhap|h|ytn|y)
-  url=$(eval echo \"\$"$1"\")
-  youtube-dl -qs "$url" || exit ;;
- jtbclive|jl)
-  url=$(curl -s https://www.youtube.com/results?search_query=live+jtbc | grep data-context-item-id | sed 's/.*data-context-item-id="/https:\/\/youtu.be\//' | cut -d\" -f1 | head -1)
+ jtbc|j|tbs|t|yonhap|h|ytn|y|ytn_life|yl|ytn_science|ys)
+  #url=$(eval echo \"\$"$1"\")
+  #echo "$url"
+  url="https://youtu.be/$(curl -s "$(eval echo \"\$"$1"\")" | grep -m1 -o data-context-item-id.* | cut -d\" -f2)"
+  echo "$url"
   youtube-dl -qs "$url" || exit ;;
  *)
   url="$1"
