@@ -2,8 +2,16 @@
 
 [ -r /storage/.config/audio.conf ] && . /storage/.config/audio.conf
 
-cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+cp /usr/lib/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+
+if [ "$alsa_conf" = min ]; then
+ cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+else
+ cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+fi
+
+cp /usr/bin/nohup /dev/shm/
+
 mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
 [ -e /dev/snd/timer ] && rm /dev/snd/timer
 
@@ -37,15 +45,17 @@ fi
 #
 ### Turn off USBs
 #if lsusb -d 0424:9514; then
-hub-ctrl -h 0 -P 5 -p 0
-hub-ctrl -h 0 -P 4 -p 0
+#hub-ctrl -h 0 -P 5 -p 0
+#hub-ctrl -h 0 -P 4 -p 0
 #fi
 #hub-ctrl -h 0 -P 3 -p 0
 #hub-ctrl -h 0 -P 2 -p 0 # USB power  off
 #hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
 
 ### Remove modules
-modprobe -r 8021q || true
+ modprobe -r 8021q || true
+#modprobe -r bcm2835_gpiomem || true
+#modprobe -r fixed || true
 
 swapoff -a
 
@@ -67,7 +77,8 @@ echo 4 > /proc/irq/default_smp_affinity || true
 
  taskset -cp $m_task $pgr_kodi
 
- [ "$lircd" = off ] && systemctl stop eventlircd
+ [ "$lirc"  = off ] && systemctl stop eventlircd
+ [ "$nfs"   = off ] && systemctl stop rpcbind
  [ "$pulse" = off ] && systemctl stop pulseaudio
  [ "$wpa"   = off ] && systemctl stop wpa_supplicant
 

@@ -1,82 +1,140 @@
-LibreELEC (Libre Embedded Linux Entertainment Center)
+LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
-1. Unsquashfs & mksquashfs
+1. Squashfs
+
+  1.1 Unsquashfs
 
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
+	$ [ ! -d copy  ] && mkdir copy
 	$ cd squashfs-root
-	  ALSA tweak
-	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' > /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/share/alsa/alsa.conf.sav
+
+  1.2 ALSA
+
+	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
+	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.sav ../copy/libasound.so.2.0.0.min
+	$ cp ../copy/libasound.so.2.0.0.min usr/lib/
+	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
+	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
+	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
+	$ mv usr/share/alsa usr/share/alsa.orig
+	$ mkdir usr/share/alsa
+	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' > ../copy/alsa.conf.min
+	$ cp ../copy/alsa.conf.min usr/share/alsa/
+	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
+	$ sed -i '$d' ../copy/alsa.conf.mix
+	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' >> ../copy/alsa.conf.mix
+	$ cp ../copy/alsa.conf.mix usr/share/alsa/
+	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
 	$ nano usr/lib/modprobe.d/alsa-base.conf
 	 	#options snd-usb-audio index=-2
-	  Kodi.bin tweak
-	$ nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/usr/lib/kodi/kodi.sh
-		nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null
-	$ cp ps chrt taskset hub-ctrl llctl usr/bin/
-	$ cp lib/arm-linux-gnueabihf/libprocps.so.3.0.0 usr/lib/
-	$ mv usr/lib/libasound.so       usr/lib/libasound.so.orig
-	$ mv usr/lib/libasound.so.2     usr/lib/libasound.so.2.orig
-	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
-	$ cp libasound.so.2.0.0.sav     usr/lib/libasound.so.2.0.0.sav
-	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
-	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
-	$ ln -s /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
-	$ mv usr/share/alsa/alsa.conf usr/share/alsa/alsa.conf.sav
-	$ ln -s /dev/shm/alsa.conf usr/share/alsa/alsa.conf
+		#options snd-usb-usx2y index=-2
+		#options snd-usb-caiaq index=-2
+
+  1.3 Kodi.bin
+
+	$ nano usr/lib/kodi/kodi.sh
+		/dev/shm/nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null $SAVED_ARGS
+
+  1.4 Patch
+
+	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl llctl kr2url sbs_dec.py kbs sbs ut2kodi ../copy/
+	$ rm usr/bin/ps usr/bin/nohup
+	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,kr2url,sbs_dec.py,kbs,sbs,ut2kodi} usr/bin/
+	$ cp ../copy/{KBS*,MBC*,SBS*,*.m3u} etc/
+	$ cp lib/arm-linux-gnueabihf/libprocps.so.6.0.0 ../copy/libprocps.so.6
+	$ cp ../copy/libprocps.so.6 usr/lib/
+	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
+	$ cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
+
+	$ nano ../tuning_audio
+	$ chmod +x ../tuning_audio
+
+	#!/bin/sh
+	# Audio patch
+	if [ ! -e /storage/.config/audio_patched ]; then
+	#sed -i '/boot=/s/quiet $/quiet consoleblank=0 elevator=noop selinux=0/' /flash/cmdline.txt
+	#sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
+	 printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > /storage/.config/modprobe.d/libreelec-blacklist.conf
+	 cp /etc/sysctl.conf /storage/.config/sysctl.d/
+	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
+	 mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
+         cp etc/*.py etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
+	 touch /storage/.config/audio_patched
+	#read -p "* Reboot to apply the audio tunings? [Y/n]" answer
+	#[ "$answer" != n ] && reboot
+	 echo "The audio tunings applied and rebooting ..."
+	 sync
+	 reboot -f
+	fi
+
+	$ echo '[Unit]
+Description=Tuning Audio
+DefaultDependencies=no
+
+[Service]
+Type=idle
+ExecStart=/usr/lib/libreelec/tuning_audio
+StandardInput=tty-force
+StandardOutput=inherit
+StandardError=inherit' > ../tuning_audio.service
+
+	$ echo '[Unit]
+Description=Tuning Audio
+Requires=tuning_audio.service
+After=tuning_audio.service
+AllowIsolate=yes' ../tuning_audio.target
+
+	$ cp ../tuning_audio usr/lib/libreelec/
+	$ cp ../tuning_audio.service ../tuning_audio.target usr/lib/systemd/system/
+	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
+
+  1.6 Mksquashfs
+
 	$ cd ..
+	$ [ -f SYSTEM ] && rm -f SYSTEM
 	$ sudo mksquashfs squashfs-root SYSTEM
 
-	$ mount
+2. Flashing
+
+	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd if=LibreELEC-RPi2.arm-8.0.2.img of=/dev/sdc
-	$ mv SYSTEM SYSTEM.orig
-	$ cp SYSTEM SYSTEM
-
-2. Boot configuration
-
-	$ sudo nano /boot/cmdline.txt
-		... consoleblank=0 elevator=noop selinux=0 # iv6.disable=1
-	$ sudo nano /boot/config.txt
-		#disable_pvt=1
+	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.001/LibreELEC-RPi2.arm-8.95.001.img of=/dev/sdc
+	$ sync
+	$ mv /media/parkmino/LIBREELEC/SYSTEM /media/parkmino/LIBREELEC/SYSTEM.orig
+	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.001/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
+	$ sync
+	$ sudo umount /dev/sdc?
 
 3. SSH login
 
 	$ ssh root@192.168.0.x (password: libreelec)
 
-4. Disable modules
+4. More tweaks
 
-	# lsmod
-	# nano ~/.config/modprobe.d/libreelec-blacklist.conf
-		blacklist bcm2835_gpiomem
-		blacklist fixed
+	$ nano /flash/cmdline.txt
+	$ nano /storage/.config/audio.conf
+	$ nano /storage/.config/autostart.sh
+	$ cp -r ../video/* /storage/.kodi/userdata/playlists/video/
 
-5. Sysctl.conf
+cf)
 
-	# nano ~/.config/sysctl.d/sysctl.conf
+https://notepad-plus-plus.org/
 
-6. Audio.conf
+https://github.com/soju6jan
 
-	# nano /storage/.config/audio.conf
+Screenshots
+Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
 
-7. Autostart.sh
+# nano KBS\ 1FM.py
 
-	# nano /storage/.config/autostart.sh
-	# chmod +x /storage/.config/autostart.sh
+import subprocess, xbmc, xbmcgui
 
-8. Patch
+url = subprocess.check_output ('/usr/bin/kr2url 1fm' , shell=True)
 
-	$ nano /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/etc/profile
+listitem = xbmcgui.ListItem('KBS Classic FM')
+xbmc.Player().play(url, listitem)
 
-	if [ ! -e /storage/.config/not_first ]; then
-	 sed -i '/...$/s/.../... consoleblank=0 elevator=noop selinux=0/' /boot/cmdline.txt
-	 sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
-	 printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > ~/.config/modprobe.d/libreelec-blacklist.conf
-	 cp /etc/sysctl.conf ~/.config/sysctl.d/sysctl.conf
-	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
-	 touch /storage/.config/not_first
-	 read -p "* Reboot to apply the patch? [Y/n]" answer
-	 [ "$answer" != n ] && reboot
-	fi
+import urllib
 
-	$ cp /home/parkmino/git/audiophile/libreelec/sysctl.conf  /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/etc/
-	$ cp /home/parkmino/git/audiophile/libreelec/autostart.sh /home/parkmino/Downloads/LibreELEC-RPi2.arm-8.0.2/SYSTEM/squashfs-root/etc/
+u = urllib.urlopen("http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=24").read()

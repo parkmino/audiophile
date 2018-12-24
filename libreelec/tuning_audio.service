@@ -1,0 +1,10 @@
+[Unit]
+Description=Tuning Audio
+DefaultDependencies=no
+
+[Service]
+Type=idle
+ExecStart=/usr/lib/libreelec/tuning_audio
+StandardInput=tty-force
+StandardOutput=inherit
+StandardError=inherit
