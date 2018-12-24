@@ -357,6 +357,20 @@ else
 fi
 }
 
+KODI () {
+printf "• Kodi\t\t"
+url="https://github.com/xbmc/xbmc/releases"
+date=$(curl $curl_opt "$url" | grep -m1 datetime | sed 's/.*datetime//' | cut -d'"' -f2)
+if [ -z "$date" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ release="$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1)"
+ printf "$release ($(echo $date | cut -d'T' -f1))"
+ [ $(echo "$release" | wc -c) -ge 12 ] && printf \\t || printf \\t\\t
+ days_diff
+fi
+}
+
 LIBFFMPEG () {
 printf "• Libffmeg\t"
 #latest=$(curl $curl_opt https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases | grep -m1 linux-x64 | sed 's/.*\///; s/-.*//')
@@ -658,6 +672,7 @@ APCAST
 ANDROID_X86
 BUBBLEUPNP
 H3DROID
+KODI
 LIBREELEC
 HIFIBERRY
 IPTIME
