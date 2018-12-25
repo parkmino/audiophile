@@ -13,17 +13,18 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
 	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
 	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.sav ../copy/libasound.so.2.0.0.min
+	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' > ../copy/alsa.conf.min
+	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
+	$ sed -i '$d' ../copy/alsa.conf.mix
+	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' >> ../copy/alsa.conf.mix
+
 	$ cp ../copy/libasound.so.2.0.0.min usr/lib/
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
 	$ mv usr/share/alsa usr/share/alsa.orig
 	$ mkdir usr/share/alsa
-	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' > ../copy/alsa.conf.min
 	$ cp ../copy/alsa.conf.min usr/share/alsa/
-	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
-	$ sed -i '$d' ../copy/alsa.conf.mix
-	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' >> ../copy/alsa.conf.mix
 	$ cp ../copy/alsa.conf.mix usr/share/alsa/
 	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
 	$ nano usr/lib/modprobe.d/alsa-base.conf
@@ -37,15 +38,6 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 		/dev/shm/nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null $SAVED_ARGS
 
   1.4 Patch
-
-	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl llctl kr2url sbs_dec.py kbs sbs ut2kodi ../copy/
-	$ rm usr/bin/ps usr/bin/nohup
-	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,kr2url,sbs_dec.py,kbs,sbs,ut2kodi} usr/bin/
-	$ cp ../copy/{KBS*,MBC*,SBS*,*.m3u} etc/
-	$ cp lib/arm-linux-gnueabihf/libprocps.so.6.0.0 ../copy/libprocps.so.6
-	$ cp ../copy/libprocps.so.6 usr/lib/
-	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
-	$ cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
 
 	$ nano ../tuning_audio
 	$ chmod +x ../tuning_audio
@@ -83,8 +75,16 @@ StandardError=inherit' > ../tuning_audio.service
 Description=Tuning Audio
 Requires=tuning_audio.service
 After=tuning_audio.service
-AllowIsolate=yes' ../tuning_audio.target
+AllowIsolate=yes' > ../tuning_audio.target
 
+	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl llctl kr2url sbs_dec.py kbs sbs ut2kodi ../copy/
+	$ rm usr/bin/ps usr/bin/nohup
+	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,kr2url,sbs_dec.py,kbs,sbs,ut2kodi} usr/bin/
+	$ cp ../copy/{KBS*,MBC*,SBS*,*.m3u} etc/
+	$ cp lib/arm-linux-gnueabihf/libprocps.so.6.0.0 ../copy/libprocps.so.6
+	$ cp ../copy/libprocps.so.6 usr/lib/
+	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
+	$ cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.service ../tuning_audio.target usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
