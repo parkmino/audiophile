@@ -27,15 +27,12 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ cp ../copy/alsa.conf.min usr/share/alsa/
 	$ cp ../copy/alsa.conf.mix usr/share/alsa/
 	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
-	$ nano usr/lib/modprobe.d/alsa-base.conf
-	 	#options snd-usb-audio index=-2
-		#options snd-usb-usx2y index=-2
-		#options snd-usb-caiaq index=-2
+	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
 
   1.3 Kodi.bin
 
-	$ nano usr/lib/kodi/kodi.sh
-		/dev/shm/nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null $SAVED_ARGS
+	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/a/dev/shm/nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null $SAVED_ARGS' usr/lib/kodi/kodi.sh
+	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/s/^/#/' usr/lib/kodi/kodi.sh
 
   1.4 Patch
 
