@@ -3,6 +3,7 @@
 # Audio patch
 
 if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /storage/.config/modprobe.d/ ] && [ -d /storage/.config/sysctl.d/ ]; then
+ echo "Audio tunings will be applied and reboot..."
 #sed -i '/boot=/s/quiet $/quiet consoleblank=0 elevator=noop selinux=0/' /flash/cmdline.txt
 #sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
  printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > /storage/.config/modprobe.d/libreelec-blacklist.conf
@@ -13,7 +14,6 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
  touch /storage/.config/audio_patched
 #read -p "* Reboot to apply the audio tunings? [Y/n]" answer
 #[ "$answer" != n ] && reboot
- echo "The audio tunings applied and rebooting ..."
  sync
  reboot -f
 fi
