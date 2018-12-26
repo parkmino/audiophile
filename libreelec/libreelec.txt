@@ -86,7 +86,13 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ cp ../tuning_audio.service ../tuning_audio.target usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
 
-  1.6 Mksquashfs
+  1.6 Korean Transaltion
+
+	$ https://www.transifex.com/libreelec/
+	$ mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
+	$ cp ..copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
+
+  1.7 Mksquashfs
 
 	$ cd ..
 	$ [ -f SYSTEM ] && rm -f SYSTEM
