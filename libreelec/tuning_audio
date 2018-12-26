@@ -15,5 +15,6 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
 #read -p "* Reboot to apply the audio tunings? [Y/n]" answer
 #[ "$answer" != n ] && reboot
  sync
+ sleep 1
  reboot -f
 fi
