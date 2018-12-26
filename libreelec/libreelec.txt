@@ -90,7 +90,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 	$ https://www.transifex.com/libreelec/
 	$ mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
-	$ cp ..copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
+	$ cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
 
   1.7 Mksquashfs
 
