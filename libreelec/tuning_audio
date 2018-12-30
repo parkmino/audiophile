@@ -3,6 +3,10 @@
 # Audio patch
 
 if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /storage/.config/modprobe.d/ ] && [ -d /storage/.config/sysctl.d/ ]; then
+ echo -en "\033[?25l"
+ if [ -f /sys/devices/virtual/graphics/fbcon/cursor_blink ] ; then
+  echo 0 > /sys/devices/virtual/graphics/fbcon/cursor_blink
+ fi
  echo "Audio tunings will be applied and reboot..."
 #sed -i '/boot=/s/quiet $/quiet consoleblank=0 elevator=noop selinux=0/' /flash/cmdline.txt
 #sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
