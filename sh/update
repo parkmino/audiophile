@@ -72,6 +72,54 @@ else
 fi
 }
 
+ALILEO () {
+printf "• 알릴레오\t"
+url="https://www.youtube.com/playlist?list=PLtAbTqMyJif9KRRd8f1o3JQUHvsqvWacq"
+days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
+ date=$(echo $days | tr -d '.' | tr ' ' '-')
+ diff=$(($(date +%s)-$(date -ud "$date" +%s)))
+ days="$(($diff/60/60/24))일 전"
+fi
+[ "$days" = "1일 전" ] && days="어제"
+if [ -z "$days" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "\t\t\t\t$days\n"
+ [ -z "${days##*오늘*}" ] && last=4
+ [ "$days" = "어제" ]     && last=1
+ if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
+  for i in $(seq 1 $last); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|고칠레오\)'.* | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+   printf '   https://youtu.be/'
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|고칠레오\)'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1
+  done
+ fi
+fi
+}
+
+ALILEO_PODBBANG () {
+printf "• 알릴레오\t"
+url="http://www.podbbang.com/ch/1769580"
+date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
+if [ -z "$date" ] || [ "$date" = "_hp_v2.swf?xml_url=" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $(((2-$days)*1))); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | cut -d\' -f4 | tr -d '\\' | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i \'link_file\' | tail -1 | cut -d\' -f4
+   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g' # s/&[a-z]*;//g'
+  done
+ fi
+fi
+}
+
 ALSA () {
  printf "• ALSA\t\t"
  url="http://www.alsa-project.org/main/index.php/Main_Page_News"
@@ -299,29 +347,6 @@ else
 fi
 }
 
-HANSSAM () {
-printf "• 한쌤 두발네발\t"
-url="http://www.podbbang.com/ch/11969"
-date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
-#date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/한민경의-같이-사는-이야기/id1123924924?mt=2&ign-mpt=uo%3D4' | grep -m1 -A16 preview-title | tail -1 | cut -d\" -f4)
-if [ -z "$date" ]; then
- printf "\t\t\t\t정보 없음\n"
-else
- printf "$(date -d "$date" +%F)\t\t\t"
- days_diff
- if [ "$days" -le 1 2>/dev/null ]; then
-  for i in $(seq 1 $(((2-$days)*2))); do
-   printf '  '
-   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
-   printf '   '
-   curl $curl_opt "$url" | grep -m$i \'link_file\' | tail -1 | sed 's/.*link_file'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
-   #curl $curl_opt 'https://itunes.apple.com/us/podcast/한민경의-같이-사는-이야기/id1123924924?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20
-   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
-  done
- fi
-fi
-}
-
 HIFIBERRY () {
 printf "• HiFiBerry\t"
 url="https://www.hifiberry.com/feed/"
@@ -488,27 +513,6 @@ MALP () {
  fi
 }
 
-NAGGOBSAL3 () {
-printf "• 나는 꼽사리다\t"
-url="http://www.podbbang.com/ch/10050"
-date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
-if [ -z "$date" ]; then
- printf "\t\t\t\t정보 없음\n"
-else
- printf "$(date -d "$date" +%F)\t\t\t"
- days_diff
- if [ "$days" -le 1 2>/dev/null ]; then
-  for i in $(seq 1 $(((2-$days)*2))); do
-   printf '  '
-   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | cut -d\' -f4 | tr -d '\\' | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
-   printf '   '
-   curl $curl_opt "$url" | grep -m$i \'link_file\' | tail -1 | cut -d\' -f4
-   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g' # s/&[a-z]*;//g'
-  done
- fi
-fi
-}
-
 NEWSTAPA () {
 printf "• 뉴스타파\t"
  url="http://download.newstapa.org/api/podcast.xml"
@@ -522,7 +526,7 @@ else
  printf "$(date -d "$date" +%F)\t\t\t"
  days_diff
  if [ "$days" -le 1 2>/dev/null ]; then
-  for i in $(seq 1 $(((2-$days)*2))); do
+  for i in $(seq 1 $(((2-$days)*1))); do
    printf '  '
     curl $curl_opt "$url" | grep -m$(($i+2)) '<title>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
    #curl $curl_opt https://newstapa.org/feed | grep -m$(($i+1)) '<title>' | tail -1 | sed 's/.*<title>//' | cut -d'<' -f1 | sed 's/&#[0-9]*;/ /g; s/&amp;#39;//g'
@@ -548,30 +552,6 @@ if [ -z "$latest" ]; then
 else
 #current=52.0.2871.40
  msg
-fi
-}
-
-PAPAIS () {
-printf "• 파파이스\t"
-url="https://www.youtube.com/playlist?list=PLxrXSNAnHXeIQcwTL2vxVxeIuIuFsx9nW"
-episodes=#$(curl $curl_opt "$url" | grep -m1 '김어준의 파파이스#' | cut -d'#' -f2 | cut -d']' -f1)
-days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
-if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
- date=$(echo $days | tr -d '.' | tr ' ' '-')
- diff=$(($(date +%s)-$(date -ud "$date" +%s)))
- days="$(($diff/60/60/24))일 전"
-fi
-[ "$days" = "1일 전" ] && days="어제"
-if [ -z "$episodes" ] || [ -z "$days" ]; then
- printf "\t\t\t\t정보 없음\n"
-else
- printf "$episodes\t\t\t\t$days\n"
- if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
-  printf '  '
-  curl $curl_opt "$url" | grep -m1 '김어준의 파파이스#' | cut -d']' -f2- | cut -d' ' -f2- | cut -d'"' -f1 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
-  printf '  '
-  curl $curl_opt "$url" | grep -m1 '김어준의 파파이스#' | sed 's/.*watch?v=/http:\/\/youtu.be\//' | cut -d'&' -f1
- fi
 fi
 }
 
@@ -677,10 +657,8 @@ LIBREELEC
 HIFIBERRY
 IPTIME
 NEWSTAPA
-#NAGGOBSAL3
 #GHLIGHTCLUB
-#PAPAIS
 DAS
+ALILEO
 #BUNKER1
-#HANSSAM
 TELEGRAM
