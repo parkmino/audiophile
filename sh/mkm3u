@@ -177,16 +177,7 @@ http://edge1.everyon.tv/etv1sb/phd1359/playlist.m3u8#VOD HD
 http://edge1.everyon.tv/etv1sb/phd1379/playlist.m3u8#E-다이어트" > /dev/null # >> $lst
 
 echo "http://edge2.everyon.tv/etv2/phd71/playlist.m3u8#뮤직비디오 HD
-http://edge1.everyon.tv/etv1sb/phd129/playlist.m3u8#에브리싱
-http://edge2.everyon.tv/etv2sb/phd133/playlist.m3u8#연합뉴스
 http://edge1.everyon.tv/etv1/phd273/playlist.m3u8#가요TV
-http://edge1.everyon.tv/etv1/phd387/playlist.m3u8#Billiards
-http://edge2.everyon.tv/etv2sb/phd409/playlist.m3u8#채널A 개밥주는남자 시즌2
-http://edge2.everyon.tv/etv2sb/phd435/playlist.m3u8#채널A 유쾌한 삼촌
-http://edge1.everyon.tv/etv1sb/phd547/playlist.m3u8#채널A 이제 만나러 갑니다
-http://edge2.everyon.tv/etv2sb/phd753/playlist.m3u8#런웨이 HD
-http://edge1.everyon.tv/etv1sb/phd783/playlist.m3u8#CHING M HD
-http://edge2.everyon.tv/etv2sb/phd784/playlist.m3u8#TRENDY
 http://edge2.everyon.tv/etv2/phd847/playlist.m3u8#드라마
 http://edge1.everyon.tv/etv1/phd864/playlist.m3u8#드라마
 http://edge2.everyon.tv/etv2/phd865/playlist.m3u8#예능
@@ -194,24 +185,10 @@ http://edge2.everyon.tv/etv2/phd866/playlist.m3u8#영화
 http://edge2.everyon.tv/etv2/phd867/playlist.m3u8#드라마
 http://edge1.everyon.tv/etv1/phd880/playlist.m3u8#K쇼핑 HD
 http://edge2.everyon.tv/etv2/phd883/playlist.m3u8#GS홈쇼핑 HD
-http://edge1.everyon.tv/etv1sb/phd884/playlist.m3u8#ONT
 http://edge2.everyon.tv/etv2/phd901/playlist.m3u8#홈&쇼핑
-http://edge2.everyon.tv/etv2sb/phd933/playlist.m3u8#애니프렌즈
-http://edge1.everyon.tv/etv1sb/phd957/playlist.m3u8#QBS
-http://edge1.everyon.tv/etv1sb/phd967/playlist.m3u8#atom美 HD
-http://edge2.everyon.tv/etv2sb/phd1020/playlist.m3u8#기독교방송 HD
-http://edge2.everyon.tv/etv2/phd1181/playlist.m3u8#실버넷TV
 http://edge2.everyon.tv/etv2sb/phd1198/playlist.m3u8#대체화면용
-http://edge1.everyon.tv/etv1sb/phd1268/playlist.m3u8#서울경제TV
-http://edge1.everyon.tv/etv1sb/phd1297/playlist.m3u8#문화유산채널 HD
-http://edge1.everyon.tv/etv1sb/phd1317/playlist.m3u8#참불교방송 HD
 http://edge2.everyon.tv/etv2/phd1328/playlist.m3u8#GS홈쇼핑
-http://edge1.everyon.tv/etv1sb/phd1357/playlist.m3u8#MSTAR
-http://edge2.everyon.tv/etv2sb/phd1373/playlist.m3u8#조담연예
-http://edge1.everyon.tv/etv1sb/phd1379/playlist.m3u8#E-다이어트
-http://edge1.everyon.tv/etv1/phd1381/playlist.m3u8#라이브스타 HD
-http://edge1.everyon.tv/etv1/phd1382/playlist.m3u8#NTV HD
-http://edge1.everyon.tv/etv1/phd1387/playlist.m3u8#소셜쇼핑 강남스타일 HD" >> $lst
+http://edge1.everyon.tv/etv1/phd1382/playlist.m3u8#NTV HD" >> $lst
 
 cat -n $lst
 
