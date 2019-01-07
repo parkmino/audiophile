@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.kut2kodi" name="kut2kodi" version="0.9.0" provider-name="parkmino">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Korean YouTube to Kodi</summary>
+    <description lang="en_GB">Play Korean YouTube to Kodi</description>
+    <disclaimer lang="en_GB"></disclaimer>
+    <language></language> <!-- the language of the videos the plugin provides, may be left blank -->
+    <platform>all</platform>
+    <license>GPL-2.0</license>
+    <forum></forum> <!-- may be left blank  -->
+    <website>http://parkmino.github.io</website> <!-- the url of the website that contains the videos (or the official website of your plugin).  -->
+    <email>parkmino@parkmino</email> <!-- may be left blank  -->
+    <source>http://github.com/parkmino/plugin.audio.kut2kodi</source>
+    <news>v0.9.0 (01/06/2019)
+      [new] initialize
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart></fanart>
+        <banner></banner>
+        <clearlogo></clearlogo>
+        <screenshot></screenshot>
+    </assets>
+  </extension>
+</addon>
