@@ -41,9 +41,9 @@ case $1 in
  def)
    echo "pcm.$card"
    [ ! -f "${alsa_conf}.default.$card" ] && sudo sh -c "sed '1s/^/pcm.default pcm.'"$card"' /' $alsa_conf > $alsa_conf.default.$card"
-   sudo ln -sf $alsa_conf.default.$card $alsa_conf ;;
+   sudo cp $alsa_conf.default.$card /dev/shm/alsa.conf ;;
  nodef)
-   sudo ln -sf /dev/shm/alsa.conf $alsa_conf ;;
+   sudo cp $alsa_conf.sav /dev/shm/alsa.conf ;;
  *) usage ;;
 esac
 
