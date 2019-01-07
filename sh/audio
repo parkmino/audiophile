@@ -21,17 +21,15 @@ case $1 in
   fi
 
   if [ "$1" = hdmi ] || [ "$1" = usb ]; then
-   sudo sh -c "sed '1s/.card../.card.'"$card"'/' $alsa_conf > $alsa_conf.$1"
-   sudo ln -sf $alsa_conf.$1 $alsa_conf
+   sudo sed -i '1s/.card../.card.'"$card"'/' /dev/shm/alsa.conf
   else
-   sudo ln -sf /dev/shm/alsa.conf $alsa_conf
+   sudo cp $alsa_conf /dev/shm/alsa.conf
   fi
 
-  [ ! -f "$alsa_conf.mixer.$card" ] && sudo sh -c "sed '1s/$/ ctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf > $alsa_conf.mixer.$card"
-  sudo ln -sf $alsa_conf.mixer.$card $alsa_conf
+  sudo sed -i '1s/$/ ctl.default.type hw ctl.default.card '"$card"'/' /dev/shm/alsa.conf
   amixer -q set IEC958 $IEC958
   echo "* IEC985 is $(amixer get IEC958 | tail -1 | cut -d '[' -f2 | cut -d ']' -f1)"
-  sudo ln -sf /dev/shm/alsa.conf $alsa_conf
+  sudo sed -i 's/ ctl.*//' $alsa_conf
 
   for i in $(awk '/'"$irq"'/{print +$1}' /proc/interrupts); do
    proc="/proc/irq/$i/smp_affinity"
@@ -40,8 +38,7 @@ case $1 in
   done ;;
  def)
    echo "pcm.$card"
-   [ ! -f "${alsa_conf}.default.$card" ] && sudo sh -c "sed '1s/^/pcm.default pcm.'"$card"' /' $alsa_conf > $alsa_conf.default.$card"
-   sudo cp $alsa_conf.default.$card /dev/shm/alsa.conf ;;
+   sudo sed -i '1s/^/pcm.default pcm.'"$card"' /' /dev/shm/alsa.conf ;;
  nodef)
    sudo cp $alsa_conf.sav /dev/shm/alsa.conf ;;
  *) usage ;;

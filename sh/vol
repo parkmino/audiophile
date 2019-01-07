@@ -2,12 +2,12 @@
 
 snd1="Speaker"
 snd2="Bass Speaker"
-alsa_conf="/usr/share/alsa/alsa.conf"
+alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card .' $alsa_conf | cut -c6) # card=0
 
-#sudo sed -i '1s/$/ ctl.default.type hw ctl.default.card '"$card"''/' $alsa_conf
-sudo sh -c "sed '1s/$/ ctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf > $alsa_conf.mixer.$card"
-sudo cp $alsa_conf.mixer.$card /dev/shm/alsa.conf
+sudo sed -i '1s/$/ ctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+#sudo sh -c "sed '1s/$/ ctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf > $alsa_conf.mixer.$card"
+#sudo cp $alsa_conf.mixer.$card /dev/shm/alsa.conf
 
 amixer_init() {
  mixer="
@@ -71,4 +71,4 @@ case $1 in
  *) chrt -i 0 nice -n 19 ionice -c 3 taskset -c 0 alsamixer -V all ;;
 esac
 
-sudo sed -i 's/ ctl.*//' /dev/shm/alsa.conf
+sudo sed -i 's/ ctl.*//' $alsa_conf
