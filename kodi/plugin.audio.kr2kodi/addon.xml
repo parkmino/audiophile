@@ -16,7 +16,7 @@
     <forum></forum> <!-- may be left blank  -->
     <website>http://parkmino.github.io</website> <!-- the url of the website that contains the videos (or the official website of your plugin).  -->
     <email>parkmino@parkmino</email> <!-- may be left blank  -->
-    <source>http://github.com/parkmino/plugin.audio.kr2kodi</source>
+    <source>https://github.com/parkmino/audiophile/tree/master/kodi/plugin.audio.kr2kodi</source>
     <news>v0.9.0 (01/05/2019)
       [new] initialize
     </news>
