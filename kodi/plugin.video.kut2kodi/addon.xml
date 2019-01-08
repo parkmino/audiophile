@@ -2,6 +2,7 @@
 <addon id="plugin.video.kut2kodi" name="kut2kodi" version="0.9.0" provider-name="parkmino">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="plugin.video.youtube" version="5.4.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
