@@ -4,6 +4,8 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
+	$ cp SYSTEM Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002
+	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -11,28 +13,29 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.2 ALSA
 
-	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
 	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.sav ../copy/libasound.so.2.0.0.min
 	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' > ../copy/alsa.conf.min
 	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
 	$ sed -i '$d' ../copy/alsa.conf.mix
 	$ printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/mixer' >> ../copy/alsa.conf.mix
 
+	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
 	$ cp ../copy/libasound.so.2.0.0.min usr/lib/
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
 	$ mv usr/share/alsa usr/share/alsa.orig
 	$ mkdir usr/share/alsa
-	$ cp ../copy/alsa.conf.min usr/share/alsa/
-	$ cp ../copy/alsa.conf.mix usr/share/alsa/
+	$ cp ../copy/alsa.conf.min ../copy/alsa.conf.mix usr/share/alsa/
 	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
 	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
+	$ nano usr/lib/modprobe.d/alsa-base.conf
 
   1.3 Kodi.bin
 
 	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/a/dev/shm/nohup /usr/lib/kodi/kodi.bin>/dev/null</dev/null 2>/dev/null $SAVED_ARGS' usr/lib/kodi/kodi.sh
 	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/s/^/#/' usr/lib/kodi/kodi.sh
+	$ nano usr/lib/kodi/kodi.sh
 
   1.4 Patch
 
@@ -40,20 +43,29 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ chmod +x ../tuning_audio
 
 	#!/bin/sh
+
 	# Audio patch
-	if [ ! -e /storage/.config/audio_patched ]; then
+
+	if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /storage/.config/modprobe.d/ ] && [ -d /storage/.config/sysctl.d/ ]; then
+	 echo -en "\033[?25l"
+	 if [ -f /sys/devices/virtual/graphics/fbcon/cursor_blink ] ; then
+	  echo 0 > /sys/devices/virtual/graphics/fbcon/cursor_blink
+	 fi
+	 echo "Audio tunings will be applied and reboot..."
 	#sed -i '/boot=/s/quiet $/quiet consoleblank=0 elevator=noop selinux=0/' /flash/cmdline.txt
 	#sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
 	 printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > /storage/.config/modprobe.d/libreelec-blacklist.conf
 	 cp /etc/sysctl.conf /storage/.config/sysctl.d/
 	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
-	 mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
-         cp etc/*.py etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
+	#mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
+	#cp /etc/*.py /etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
+	#cp -r /etc/plugin.* /storage/.kodi/addons/
+	 cp /etc/plugin.*.zip /storage/backup/
 	 touch /storage/.config/audio_patched
 	#read -p "* Reboot to apply the audio tunings? [Y/n]" answer
 	#[ "$answer" != n ] && reboot
-	 echo "The audio tunings applied and rebooting ..."
 	 sync
+	 sleep 1
 	 reboot -f
 	fi
 
@@ -74,13 +86,18 @@ Requires=tuning_audio.service
 After=tuning_audio.service
 AllowIsolate=yes' > ../tuning_audio.target
 
-	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl llctl kr2url sbs_dec.py kbs sbs ut2kodi ../copy/
-	$ rm usr/bin/ps usr/bin/nohup
-	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,kr2url,sbs_dec.py,kbs,sbs,ut2kodi} usr/bin/
-	$ cp ../copy/{KBS*,MBC*,SBS*,*.m3u} etc/
+	$ cp bin/ps usr/bin/{chrt,nohup,taskset,inst_addon} hub-ctrl llctl ../copy/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.6.0.0 ../copy/libprocps.so.6
-	$ cp ../copy/libprocps.so.6 usr/lib/
 	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
+
+	$ rm usr/bin/ps usr/bin/nohup
+	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,inst_addon} usr/bin/
+	$ #cp ../copy/{KBS*,MBC*,SBS*,*.m3u} etc/
+	$ #cp -r ../../plugin.audio.kr2kodi etc/
+	$ #cp -r ../../{plugin.video.ktv2kodi,plugin.video.kut2kodi} etc/
+	$ cp ../../plugin.audio.kr2kodi.zip etc/
+	$ #cp ../../plugin.video.ktv2kodi.zip ../../plugin.video.kut2kodi.zip etc/
+	$ cp ../copy/libprocps.so.6 usr/lib/
 	$ cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.service ../tuning_audio.target usr/lib/systemd/system/
@@ -89,8 +106,8 @@ AllowIsolate=yes' > ../tuning_audio.target
   1.6 Korean Transaltion
 
 	$ https://www.transifex.com/libreelec/
-	$ mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
-	$ cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
+	$ #mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
+	$ #cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
 
   1.7 Mksquashfs
 
@@ -102,10 +119,10 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.001/LibreELEC-RPi2.arm-8.95.001.img of=/dev/sdc
+	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002/LibreELEC-RPi2.arm-8.95.002.img of=/dev/sdc
 	$ sync
 	$ mv /media/parkmino/LIBREELEC/SYSTEM /media/parkmino/LIBREELEC/SYSTEM.orig
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.001/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
+	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
 	$ sync
 	$ sudo umount /dev/sdc?
 
@@ -137,7 +154,3 @@ url = subprocess.check_output ('/usr/bin/kr2url 1fm' , shell=True)
 
 listitem = xbmcgui.ListItem('KBS Classic FM')
 xbmc.Player().play(url, listitem)
-
-import urllib
-
-u = urllib.urlopen("http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=24").read()
