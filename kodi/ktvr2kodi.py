@@ -101,21 +101,21 @@ def ch_func(ch):
     elif ch == 'SBS Love FM':
         url = sbs_func('lovepc',   'lovefm')
     elif ch == 'SBS':
-        url = sbs_func('sbsch6pc', 'sbs1ch61')
+        url = sbs_func('sbsch6pc', 'sbsch60')
     elif ch == 'SBS Plus':
-        url = sbs_func('sbspluspc', 'sbsplus1')
+        url = sbs_func('sbspluspc', 'sbsplus0')
     elif ch == 'SBS CNBC':
-        url = sbs_func('sbscnbc',   'sbscnbc1')
+        url = sbs_func('sbscnbc',   'sbscnbc0')
     elif ch == 'SBS funE':
-        url = sbs_func('sbsetvpc',  'sbsetv1')
+        url = sbs_func('sbsetvpc',  'sbsetv0')
     elif ch == 'SBS Golf':
-        url = sbs_func('sbsgolf',   'sbsgolf1')
+        url = sbs_func('sbsgolf',   'sbsgolf')
     elif ch == 'SBS MTV':
-        url = sbs_func('sbsmtvpc',  'sbsmtv1')
+        url = sbs_func('sbsmtvpc',  'sbsmtv0')
     elif ch == 'SBS nick':
-        url = sbs_func('sbsnickpc', 'sbsnick1')
+        url = sbs_func('sbsnickpc', 'sbsnick0')
     elif ch == 'SBS Sports':
-        url = sbs_func('sbsespn',   'sbsespn1')
+        url = sbs_func('sbsespn',   'sbsespn0')
     else:
         print 'Argument(s) is missing or invalid!'
         quit()
