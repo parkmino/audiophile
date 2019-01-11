@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import sys, xbmcgui, xbmcplugin
 import urllib, urllib2, re
@@ -57,29 +58,29 @@ def sbs_func(code1, code2):
     return url
 
 def ch_func(ch):
-    if   ch == 'KBS 1FM':
+    if   ch == chs[0]:
         url = kbs_func('24')
-    elif ch == 'KBS 2FM':
+    elif ch == chs[1]:
         url = kbs_func('25')
-    elif ch == 'KBS 1R':
-        url = kbs_func('21')
-    elif ch == 'KBS 2R':
-        url = kbs_func('22')
-    elif ch == 'KBS 3R':
+    elif ch == chs[2]:
         url = kbs_func('23')
-    elif ch == 'KBS SCR':
+    elif ch == chs[3]:
+        url = kbs_func('22')
+    elif ch == chs[4]:
+        url = kbs_func('21')
+    elif ch == chs[5]:
         url = kbs_func('I26')
-    elif ch == 'KBS RKI':
+    elif ch == chs[6]:
         url = kbs_func('I92')
-    elif ch == 'MBC Channel M':
+    elif ch == chs[7]:
         url = mbc_func('chm')
-    elif ch == 'MBC FM4U':
+    elif ch == chs[8]:
         url = mbc_func('mfm')
-    elif ch == 'MBC FM':
+    elif ch == chs[9]:
         url = mbc_func('sfm')
-    elif ch == 'SBS Power FM':
+    elif ch == chs[10]:
         url = sbs_func('powerpc',  'powerfm')
-    elif ch == 'SBS Love FM':
+    elif ch == chs[11]:
         url = sbs_func('lovepc',   'lovefm')
     else:
         print 'Argument(s) is missing or invalid!'
@@ -91,15 +92,14 @@ def add_func(ch, url):
     li = xbmcgui.ListItem(ch, iconImage='DefaultAudio.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
-chs = ["KBS 1FM", "KBS 2FM", "MBC Channel M", "MBC FM4U", "MBC FM", "SBS Power FM", "SBS Love FM"]
+chs = ["KBS 클래식 FM", "KBS 쿨 FM", "MBC 표준FM", "MBC FM4U", "MBC 올댓뮤직", "SBS 파워 FM", "SBS 러브 FM"]
 for ch in chs:
-    ch = ch
     url = ch_func(ch)
     add_func(ch, url)
 
-add_func('CBS Music FM', 'http://aac.cbs.co.kr/cbs939/cbs939.stream/playlist.m3u8')
-add_func('tbs FM',       'http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8')
-add_func('Gukak FM',     'http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8')
+add_func('CBS 음악 FM', 'http://aac.cbs.co.kr/cbs939/cbs939.stream/playlist.m3u8')
 add_func('EBS FM',       'http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8')
+add_func('tbs FM',       'http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8')
+add_func('국악 FM',     'http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8')
 
 xbmcplugin.endOfDirectory(addon_handle)

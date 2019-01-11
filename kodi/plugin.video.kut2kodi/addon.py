@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import sys, xbmcgui, xbmcplugin
 import urllib, urllib2, re
@@ -21,19 +22,19 @@ def ut_func(ch):
     return url
 
 def ch_func(ch):
-    if   ch == 'JTBC News':
+    if   ch == chs[0]:
         url = ut_func('user/JTBC10news')
-    elif ch == 'KBS News':
+    elif ch == chs[1]:
         url = ut_func('user/NewsKBS')
-    elif ch == 'tbs TV':
+    elif ch == chs[2]:
         url = ut_func('user/seoultbstv/featured')
-    elif ch == 'YONHAP News':
+    elif ch == chs[3]:
         url = ut_func('channel/UCTHCOPwqNfZ0uiKOvFyhGwg')
-    elif ch == 'YTN LIVE':
+    elif ch == chs[4]:
         url = ut_func('user/ytnnews24')
-    elif ch == 'YTN Life':
+    elif ch == chs[5]:
         url = ut_func('channel/UCDww6ExpwQS0TzmREIOo40Q')
-    elif ch == 'YTN Science':
+    elif ch == chs[6]:
         url = ut_func('user/ytnscience')
     else:
         print 'Argument(s) is missing or invalid!'
@@ -46,7 +47,7 @@ def add_func(ch, url):
     li.setProperty('IsPlayable', 'true')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
-chs = ["JTBC News", "KBS News", "tbs TV", "YONHAP News", "YTN LIVE", "YTN Life", "YTN Science"]
+chs = ["JTBC 뉴스", "KBS 뉴스", "tbs TV", "연합뉴스", "YTN 라이브", "YTN 라이프", "YTN 사이언스"]
 for ch in chs:
     ch = ch
     url = ch_func(ch)

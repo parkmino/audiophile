@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import sys, xbmcgui, xbmcplugin
 import urllib, urllib2, re
@@ -57,41 +58,41 @@ def sbs_func(code1, code2):
     return url
 
 def ch_func(ch):
-    if   ch == 'KBS 1TV':
+    if   ch == chs[0]:
         url = kbs_func('11')
-    elif ch == 'KBS 2TV':
+    elif ch == chs[1]:
         url = kbs_func('12')
-    elif ch == 'KBS WORLD':
+    elif ch == chs[2]:
         url = kbs_func('14')
-    elif ch == 'KBS24':
+    elif ch == chs[3]:
         url = kbs_func('81')
-    elif ch == 'KBSN Sports':
+    elif ch == chs[4]:
         url = kbs_func('N95')
-    elif ch == 'KBSN Drama':
+    elif ch == chs[5]:
         url = kbs_func('N91')
-    elif ch == 'KBSN Joy':
+    elif ch == chs[6]:
         url = kbs_func('N92')
-    elif ch == 'KBSN W':
+    elif ch == chs[7]:
         url = kbs_func('N94')
-    elif ch == 'KBSN Life':
+    elif ch == chs[8]:
         url = kbs_func('N93')
-    elif ch == 'KBSN Kids':
+    elif ch == chs[9]:
         url = kbs_func('N96')
-    elif ch == 'SBS':
+    elif ch == chs[10]:
         url = sbs_func('sbsch6pc', 'sbsch60')
-    elif ch == 'SBS Plus':
+    elif ch == chs[11]:
         url = sbs_func('sbspluspc', 'sbsplus0')
-    elif ch == 'SBS CNBC':
+    elif ch == chs[12]:
         url = sbs_func('sbscnbc',   'sbscnbc0')
-    elif ch == 'SBS funE':
+    elif ch == chs[13]:
         url = sbs_func('sbsetvpc',  'sbsetv0')
-    elif ch == 'SBS Golf':
+    elif ch == chs[14]:
         url = sbs_func('sbsgolf',   'sbsgolf')
-    elif ch == 'SBS MTV':
+    elif ch == chs[15]:
         url = sbs_func('sbsmtvpc',  'sbsmtv0')
-    elif ch == 'SBS nick':
+    elif ch == chs[16]:
         url = sbs_func('sbsnickpc', 'sbsnick0')
-    elif ch == 'SBS Sports':
+    elif ch == chs[17]:
         url = sbs_func('sbsespn',   'sbsespn0')
     else:
         print 'Argument(s) is missing or invalid!'
@@ -103,9 +104,9 @@ def add_func(ch, url):
     li = xbmcgui.ListItem(ch, iconImage='DefaultVideo.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
-chs = ["KBS 1TV", "KBS 2TV", "KBS WORLD", "KBS24", "KBSN Sports", "KBSN Drama", "KBSN Joy", "KBSN W", "KBSN Life", "KBSN Kids", "SBS", "SBS Plus", "SBS CNBC", "SBS funE", "SBS Golf", "SBS MTV", "SBS nick", "SBS Sports"]
+chs = ["KBS 1TV", "KBS 2TV", "KBS 월드", "KBS24", "KBSN 스포츠", "KBSN 드라마", "KBSN 조이", "KBSN W", "KBSN 라이프", "KBSN 키즈", "SBS", "SBS 플러스", "SBS CNBC", "SBS funE", "SBS 골프", "SBS MTV", "SBS nick", "SBS 스포츠"]
+
 for ch in chs:
-    ch = ch
     url = ch_func(ch)
     add_func(ch, url)
 
@@ -115,7 +116,7 @@ add_func('EBSU',  'http://ebsonair.ebs.co.kr/ebsufamilypc/familypc1m/playlist.m3
 add_func('EBSi',  'http://ebsonair.ebs.co.kr/plus1familypc/familypc1m/playlist.m3u8')
 add_func('EBS+2', 'http://ebsonair.ebs.co.kr/plus2familypc/familypc1m/playlist.m3u8')
 add_func('EBSe',  'http://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8')
-add_func('Gukak', 'http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8')
+add_func('국악 TV', 'http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8')
 add_func('MNet',  'http://d1cdshhn0sj9xt.cloudfront.net/529/QualityLevels(2628000,as=video)/Fragments(video=i,format=hls).m3u8')
 
 xbmcplugin.endOfDirectory(addon_handle)

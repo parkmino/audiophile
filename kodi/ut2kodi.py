@@ -1,6 +1,9 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-ch = 'YTN Life'
+chs = ["JTBC 뉴스", "KBS 뉴스", "tbs TV", "연합뉴스", "YTN 라이브", "YTN 라이프", "YTN 사이언스"]
+
+ch = chs[4]
 
 import urllib, urllib2, re
 import xbmc
@@ -20,19 +23,19 @@ def ut_func(ch):
     return url
 
 def ch_func(ch):
-    if   ch == 'JTBC News':
+    if   ch == chs[0]:
         url = ut_func('user/JTBC10news')
-    elif ch == 'KBS News':
+    elif ch == chs[1]:
         url = ut_func('user/NewsKBS')
-    elif ch == 'tbs TV':
+    elif ch == chs[2]:
         url = ut_func('user/seoultbstv/featured')
-    elif ch == 'YONHAP News':
+    elif ch == chs[3]:
         url = ut_func('channel/UCTHCOPwqNfZ0uiKOvFyhGwg')
-    elif ch == 'YTN LIVE':
+    elif ch == chs[4]:
         url = ut_func('user/ytnnews24')
-    elif ch == 'YTN Life':
+    elif ch == chs[5]:
         url = ut_func('channel/UCDww6ExpwQS0TzmREIOo40Q')
-    elif ch == 'YTN Science':
+    elif ch == chs[6]:
         url = ut_func('user/ytnscience')
     else:
         print 'Argument(s) is missing or invalid!'

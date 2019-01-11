@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-ch = 'KBS 1FM'
+chs = ["KBS 1FM", "KBS 2FM", "KBS 1R", "KBS 2R", "KBS 3R", "KBS SCR", "KBS RKI",  "KBS 1TV", "KBS 2TV", "KBS WORLD", "KBS24", "KBSN Sports", "KBSN Drama", "KBSN Joy", "KBSN W", "KBSN Life", "KBSN Kids", "MBC Channel M", "MBC FM4U", "MBC FM", "SBS", "SBS Power FM", "SBS Love FM", "SBS Plus", "SBS CNBC", "SBS funE", "SBS Golf", "SBS MTV", "SBS nick", "SBS Sports"]
+
+ch = chs[0]
 
 import urllib, urllib2, re
 import xbmc, xbmcgui
@@ -56,66 +58,66 @@ def sbs_func(code1, code2):
     return url
 
 def ch_func(ch):
-    if   ch == 'KBS 1FM':
+    if   ch == chs[0]:
         url = kbs_func('24')
-    elif ch == 'KBS 2FM':
+    elif ch == chs[1]:
         url = kbs_func('25')
-    elif ch == 'KBS 1R':
+    elif ch == chs[2]:
         url = kbs_func('21')
-    elif ch == 'KBS 2R':
+    elif ch == chs[3]:
         url = kbs_func('22')
-    elif ch == 'KBS 3R':
+    elif ch == chs[4]:
         url = kbs_func('23')
-    elif ch == 'KBS SCR':
+    elif ch == chs[5]:
         url = kbs_func('I26')
-    elif ch == 'KBS RKI':
+    elif ch == chs[6]:
         url = kbs_func('I92')
-    elif ch == 'KBS 1TV':
+    elif ch == chs[7]:
         url = kbs_func('11')
-    elif ch == 'KBS 2TV':
+    elif ch == chs[8]:
         url = kbs_func('12')
-    elif ch == 'KBS WORLD':
+    elif ch == chs[9]:
         url = kbs_func('14')
-    elif ch == 'KBS24':
+    elif ch == chs[10]:
         url = kbs_func('81')
-    elif ch == 'KBSN Sports':
+    elif ch == chs[11]:
         url = kbs_func('N95')
-    elif ch == 'KBSN Drama':
+    elif ch == chs[12]:
         url = kbs_func('N91')
-    elif ch == 'KBSN Joy':
+    elif ch == chs[13]:
         url = kbs_func('N92')
-    elif ch == 'KBSN W':
+    elif ch == chs[14]:
         url = kbs_func('N94')
-    elif ch == 'KBSN Life':
+    elif ch == chs[15]:
         url = kbs_func('N93')
-    elif ch == 'KBSN Kids':
+    elif ch == chs[16]:
         url = kbs_func('N96')
-    elif ch == 'MBC Channel M':
+    elif ch == chs[17]:
         url = mbc_func('chm')
-    elif ch == 'MBC FM4U':
+    elif ch == chs[18]:
         url = mbc_func('mfm')
-    elif ch == 'MBC FM':
+    elif ch == chs[19]:
         url = mbc_func('sfm')
-    elif ch == 'SBS Power FM':
-        url = sbs_func('powerpc',  'powerfm')
-    elif ch == 'SBS Love FM':
-        url = sbs_func('lovepc',   'lovefm')
-    elif ch == 'SBS':
+    elif ch == chs[20]:
+        url = sbs_func('powerpc', 'powerfm')
+    elif ch == chs[21]:
+        url = sbs_func('lovepc', 'lovefm')
+    elif ch == chs[22]:
         url = sbs_func('sbsch6pc', 'sbsch60')
-    elif ch == 'SBS Plus':
+    elif ch == chs[23]:
         url = sbs_func('sbspluspc', 'sbsplus0')
-    elif ch == 'SBS CNBC':
-        url = sbs_func('sbscnbc',   'sbscnbc0')
-    elif ch == 'SBS funE':
-        url = sbs_func('sbsetvpc',  'sbsetv0')
-    elif ch == 'SBS Golf':
-        url = sbs_func('sbsgolf',   'sbsgolf')
-    elif ch == 'SBS MTV':
-        url = sbs_func('sbsmtvpc',  'sbsmtv0')
-    elif ch == 'SBS nick':
+    elif ch == chs[24]:
+        url = sbs_func('sbscnbc', 'sbscnbc0')
+    elif ch == chs[25]:
+        url = sbs_func('sbsetvpc', 'sbsetv0')
+    elif ch == chs[26]:
+        url = sbs_func('sbsgolf', 'sbsgolf')
+    elif ch == chs[27]:
+        url = sbs_func('sbsmtvpc', 'sbsmtv0')
+    elif ch == chs[28]:
         url = sbs_func('sbsnickpc', 'sbsnick0')
-    elif ch == 'SBS Sports':
-        url = sbs_func('sbsespn',   'sbsespn0')
+    elif ch == chs[29]:
+        url = sbs_func('sbsespn', 'sbsespn0')
     else:
         print 'Argument(s) is missing or invalid!'
         quit()
