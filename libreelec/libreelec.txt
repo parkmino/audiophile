@@ -59,6 +59,7 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
 	#mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
 	#cp /etc/*.py /etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
+	 cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
 	#cp -r /etc/plugin.* /storage/.kodi/addons/
 	 cp /etc/plugin.*.zip /storage/backup/
 	 touch /storage/.config/audio_patched
@@ -93,6 +94,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ rm usr/bin/ps usr/bin/nohup
 	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,inst_addon} usr/bin/
 	$ #cp ../copy/{KBS*,MBC*,SBS*,*.m3u} etc/
+	$ cp ../copy/*.pls etc/
 	$ #cp -r ../../plugin.audio.kr2kodi etc/
 	$ #cp -r ../../{plugin.video.ktv2kodi,plugin.video.kut2kodi} etc/
 	$ cp ../../plugin.audio.kr2kodi.zip etc/

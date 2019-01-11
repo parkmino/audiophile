@@ -13,8 +13,11 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
  printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > /storage/.config/modprobe.d/libreelec-blacklist.conf
  cp /etc/sysctl.conf /storage/.config/sysctl.d/
  cp /etc/audio.conf /etc/autostart.sh /storage/.config/
- mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
- cp etc/*.py etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
+#mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
+#cp /etc/*.py /etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
+ cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
+#cp -r /etc/plugin.* /storage/.kodi/addons/
+ cp /etc/plugin.*.zip /storage/backup/
  touch /storage/.config/audio_patched
 #read -p "* Reboot to apply the audio tunings? [Y/n]" answer
 #[ "$answer" != n ] && reboot
