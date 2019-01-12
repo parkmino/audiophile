@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ktv2kodi" name="KTV2kodi" version="0.9.0" provider-name="parkmino">
+<addon id="plugin.video.kt2kodi" name="KT2kodi" version="0.9.0" provider-name="parkmino">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
   </requires>
