@@ -2,7 +2,7 @@
 #complete -W '1fm 2fm 1r 2r 3r dmb scr rki mbcm mbc4u mbcfm sbsp sbsl cbs tbs tbse gugak stop' kr2mpd ./kr2mpd \~/kr2mpd
 
  host="127.0.0.1"
-#host="192.168.0.25"
+#host="192.168.0.3"
 
 usage () {
  echo "Usage: $(basename "$0") 1fm,2fm,1r,2r,3r,dmb,scr,rki(KBS라디오)"

@@ -123,7 +123,7 @@ fi
 ALSA () {
  printf "• ALSA\t\t"
  url="http://www.alsa-project.org/main/index.php/Main_Page_News"
- date=$(curl $curl_opt "$url" | grep -m1 -B1 alsa.*release | head -1 | cut -d" " -f2)
+ date=$(curl $curl_opt "$url" | grep -m1 -B1 alsa.*release | head -1 | grep -o [0-9]...-[0-9].-[0-9].)
  if [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
@@ -189,7 +189,7 @@ printf "• BubbleUPnP\t"
 #latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
 latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
 #current=$(date -d "2018-3-6" +%F)
- current=3.1.2
+ current=3.2
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"

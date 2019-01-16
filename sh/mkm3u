@@ -202,6 +202,6 @@ done < $lst
 
 cat -n $m3u
 
-sed 's/https:\/\/youtu.be\//plugin:\/\/plugin.video.youtube\/play\/?video_id=/; /juoradio/s/http/mmsh/; /youtube.com/d' $m3u > $kodi_m3u
-
-cat -n $kodi_m3u
+#sed 's/https:\/\/youtu.be\//plugin:\/\/plugin.video.youtube\/play\/?video_id=/; /#juoradio/s/http/mmsh/; /youtube.com/d' $m3u > $kodi_m3u
+#
+#cat -n $kodi_m3u

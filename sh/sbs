@@ -11,14 +11,14 @@ usage () {
 [ -z "$1" ] && usage && exit
 
 case $1 in
- 6) ch=sbsch6pc  ; stream=sbs1ch61 ;;
- +) ch=sbspluspc ; stream=sbsplus1 ;;
- c) ch=sbscnbc   ; stream=sbscnbc1 ;;
- f) ch=sbsetvpc  ; stream=sbsetv1  ;;
- g) ch=sbsgolf   ; stream=sbsgolf1 ;;
- m) ch=sbsmtvpc  ; stream=sbsmtv1  ;;
- n) ch=sbsnickpc ; stream=sbsnick1 ;;
- s) ch=sbsespn   ; stream=sbsespn1 ;;
+ 6) ch=sbsch6pc  ; stream=sbsch60  ;;
+ +) ch=sbspluspc ; stream=sbsplus0 ;;
+ c) ch=sbscnbc   ; stream=sbscnbc0 ;;
+ f) ch=sbsetvpc  ; stream=sbsetv0  ;;
+ g) ch=sbsgolf   ; stream=sbsgolf  ;;
+ m) ch=sbsmtvpc  ; stream=sbsmtv0  ;;
+ n) ch=sbsnickpc ; stream=sbsnick0 ;;
+ s) ch=sbsespn   ; stream=sbsespn0 ;;
  p) ch=powerpc   ; stream=powerfm  ;;
  l) ch=lovepc    ; stream=lovefm   ;;
  *) usage ; exit ;;
