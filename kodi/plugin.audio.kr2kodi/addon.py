@@ -63,24 +63,14 @@ def ch_func(ch):
     elif ch == chs[1]:
         url = kbs_func('25')
     elif ch == chs[2]:
-        url = kbs_func('23')
-    elif ch == chs[3]:
-        url = kbs_func('22')
-    elif ch == chs[4]:
-        url = kbs_func('21')
-    elif ch == chs[5]:
-        url = kbs_func('I26')
-    elif ch == chs[6]:
-        url = kbs_func('I92')
-    elif ch == chs[7]:
         url = mbc_func('chm')
-    elif ch == chs[8]:
+    elif ch == chs[3]:
         url = mbc_func('mfm')
-    elif ch == chs[9]:
+    elif ch == chs[4]:
         url = mbc_func('sfm')
-    elif ch == chs[10]:
+    elif ch == chs[5]:
         url = sbs_func('powerpc',  'powerfm')
-    elif ch == chs[11]:
+    elif ch == chs[6]:
         url = sbs_func('lovepc',   'lovefm')
     else:
         print 'Argument(s) is missing or invalid!'
