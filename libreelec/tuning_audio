@@ -25,3 +25,5 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
  sleep 1
  reboot -f
 fi
+
+[ -f /storage/.kodi/userdata/playlists/music/*.pls ] || cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
