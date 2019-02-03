@@ -15,6 +15,8 @@ usage () {
 
 wlan=$(ifconfig -a | grep -o '^wl\w*')
  lan=$(ifconfig -a | grep -o '^enp.s.\w*')
+  ap=puppy_ap
+pass=woofwoof
 
 quit_network () {
  echo "Disconnect network..."
@@ -36,9 +38,10 @@ if [ "$1" = on ];then
  #sudo create_ap -n $wlan puppy woofwoof
  #sudo create_ap $wlan $lan puppy woofwoof
  #sudo systemctl start hostapd create_ap
-  sudo create_ap --daemon -g 192.168.11.1 $wlan $lan puppy woofwoof
+  sudo create_ap --daemon -g 192.168.11.1 $wlan $lan $ap $pass>/dev/null</dev/null 2>/dev/null
  #echo "Type 'sudo create_ap --stop ap0' to stop it"
-  echo "Run \'$(basename "$0") off\' to stop it"
+  echo "Create_ap is running under the name of $ap"
+  echo "Run '$(basename "$0") off' to stop it"
 else
   sudo create_ap --stop ap0
  #sudo systemctl stop create_ap hostapd

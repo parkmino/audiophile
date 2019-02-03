@@ -7,7 +7,7 @@ echo 'Input number to find torrents or any other key to quit
 (5) 보컬플레이
 (6) 그것이 알고싶다
 (7) 썰전'
-read -p "*" i
+read -p " " i
 case $i in
  1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30"
     title="JTBC 뉴스룸" ;;

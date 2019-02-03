@@ -189,7 +189,7 @@ printf "• BubbleUPnP\t"
 #latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
 latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
 #current=$(date -d "2018-3-6" +%F)
- current=3.2
+ current=3.2.1
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -265,7 +265,7 @@ printf "• DietPi\t"
 # echo "  $(echo "$url" | cut -d"/" -f1-4)$(curl -s "$url" | grep -m1 'DietPi v[0-9]*.[0-9]*' | cut -d\" -f2 | cut -d"." -f2- | sed 's/\&amp;/\&/g')"
 #fi
  ver=$(curl $curl_opt "$url" | grep -m1 -o 'DietPi v[0-9]*.[0-9]*' | cut -d" " -f2)
- date="$(curl -s https://dietpi.com/phpbb/viewforum.php?f=10 | grep -m1 -A3 'DietPi v[0-9]*.[0-9]*' | tail -1 | cut -d">" -f4 | cut -d"<" -f1)"
+ date="$(curl -s $url | grep -m1 -A3 'DietPi v[0-9]*.[0-9]*' | tail -1 | cut -d">" -f4 | cut -d"<" -f1)"
  if [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
@@ -513,6 +513,27 @@ MALP () {
  fi
 }
 
+NAGGOPBSAL () {
+printf "• 나는 꼽사리다\t"
+url="http://www.podbbang.com/ch/10050"
+date=$(curl $curl_opt "$url" | grep -m1 pubdate | cut -d\' -f4)
+if [ -z "$date" ] || [ "$date" = "_hp_v2.swf?xml_url=" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for i in $(seq 1 $(((2-$days)*1))); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i \'share_title\' | tail -1 | cut -d\' -f4 | tr -d '\\' | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g'
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i \'link_file\' | tail -1 | cut -d\' -f4
+   #curl $curl_opt "$url" | grep -m$i \'summary\' | tail -1 | cut -d\' -f4 | sed 's/+/ /g;s/%/\\x/g' | xargs -0 printf "%b" | sed 's/<br \/>/\n/g; s/&apos;/'\''/g; s/&quot;/"/g' # s/&[a-z]*;//g'
+  done
+ fi
+fi
+}
+
 NEWSTAPA () {
 printf "• 뉴스타파\t"
  url="http://download.newstapa.org/api/podcast.xml"
@@ -645,7 +666,7 @@ ADOBE_FLASH
 CREATE_AP
 GNOME_MPV
 GOOGLER
-MESON
+#MESON
 MINIDLNA
 YOUTUBE_DL
 APCAST
@@ -656,6 +677,7 @@ KODI
 LIBREELEC
 HIFIBERRY
 IPTIME
+NAGGOPBSAL
 NEWSTAPA
 #GHLIGHTCLUB
 DAS

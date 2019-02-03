@@ -18,7 +18,7 @@ if [ -z "$i" ]; then
 (5) YTN LIVE
 (6) YTN 라이프
 (7) YTN 사이언스' # (8) RTV 시민방송
- read -p "*" i
+ read -p " " i
 fi
 
 case $i in
