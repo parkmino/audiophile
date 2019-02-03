@@ -26,4 +26,4 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
  reboot -f
 fi
 
-[ -f /storage/.kodi/userdata/playlists/music/*.pls ] || cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
+[ -d /storage/.kodi/userdata/playlists/music/ ] && [ ! -f "/storage/.kodi/userdata/playlists/music/EBS FM.pls" ] && cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
