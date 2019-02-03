@@ -4,8 +4,9 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
-	$ cp SYSTEM Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002
-	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002
+	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-9.0.0.img.gz
+	$ cp SYSTEM Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0
+	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -59,7 +60,7 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
 	#mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
 	#cp /etc/*.py /etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
-	 cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
+	#cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
 	#cp -r /etc/plugin.* /storage/.kodi/addons/
 	 cp /etc/plugin.*.zip /storage/backup/
 	 touch /storage/.config/audio_patched
@@ -69,6 +70,8 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	 sleep 1
 	 reboot -f
 	fi
+
+	[ -d /storage/.kodi/userdata/playlists/music/ ] && ! ls /storage/.kodi/userdata/playlists/music/*.pls>/dev/null 2>&1 && cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
 
 	$ echo '[Unit]
 Description=Tuning Audio
@@ -104,6 +107,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.service ../tuning_audio.target usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
+	$ [ ! -f usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig ] && mv usr/share/kodi/addons/skin.estuary/xml/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig && cp ../copy/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml
 
   1.6 Korean Transaltion
 
@@ -121,10 +125,10 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002/LibreELEC-RPi2.arm-8.95.002.img of=/dev/sdc
+	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0/LibreELEC-RPi2.arm-9.0.0.img of=/dev/sdc
 	$ sync
 	$ mv /media/parkmino/LIBREELEC/SYSTEM /media/parkmino/LIBREELEC/SYSTEM.orig
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-8.95.002/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
+	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
 	$ sync
 	$ sudo umount /dev/sdc?
 
