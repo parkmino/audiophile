@@ -44,8 +44,8 @@ mpv --length=7 https://youtu.be/$url
 
 read -p "* $ch live is correct? [Y/n]" answer
 if [ "$answer" != n ]; then
- sed -i '/'"$ch"'=/s/".*"/"https:\/\/youtu.be\/'"$url"'"/' $utube
- grep $ch= $utube
+#sed -i '/'"$ch"'=/s/".*"/"https:\/\/youtu.be\/'"$url"'"/' $utube
+#grep $ch= $utube
  read -p "* Update mkm3u? [Y/n]" answer
  if [ "$answer" != n ]; then
   $mkm3u
