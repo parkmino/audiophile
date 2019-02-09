@@ -8,7 +8,7 @@ usage () {
 
 [ -z "$1" ] && usage && exit
 
-             jtbc="https://youtu.be/6q0pCLyX_Fs"
+             jtbc="https://youtu.be/h3ozTKPqF80"
          kbs_news="https://www.youtube.com/user/NewsKBS"
               tbs="https://www.youtube.com/user/seoultbstv/featured"
            yonhap="https://www.youtube.com/channel/UCTHCOPwqNfZ0uiKOvFyhGwg"

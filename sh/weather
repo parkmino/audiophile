@@ -1,5 +1,5 @@
 #!/bin/sh
 
-[ -n "$1" ] && loc="$1" || loc="들성로11길"
+[ -n "$1" ] && loc="$1" || loc="문화청솔아파트"
 
 curl -H "Accept-Language: ${LANG%_*}" --compressed wttr.in/"$loc"?Mn2
