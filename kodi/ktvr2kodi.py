@@ -42,11 +42,11 @@ def sbs_func(code1, code2):
     Base_URL = 'http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channelPath=' + code1 + '&streamName=' + code2 + '.stream&playerType=mobile'
     data = url_func(Base_URL)
 
-    import base64, Crypto.Cipher.DES
+    import base64, Cryptodome.Cipher.DES
 
     key = b'7d1ff4ea8925c225'
     ciphertext = base64.b64decode(data)
-    cipher = Crypto.Cipher.DES.new(key[:8], mode=Crypto.Cipher.DES.MODE_ECB)
+    cipher = Cryptodome.Cipher.DES.new(key[:8], mode=Cryptodome.Cipher.DES.MODE_ECB)
     text = cipher.decrypt(ciphertext)
     url = text.decode('utf8')
 
