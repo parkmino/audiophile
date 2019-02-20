@@ -1,18 +1,18 @@
 #!/bin/sh
 echo 'Input number to find torrents or any other key to quit
 (1) JTBC 뉴스룸
-(2) 이규연의 스포트라이트
-(3) 랜선라이프
+(2) 랜선라이프
+(3) 이규연의 스포트라이트
 (4) 그것이 알고싶다
 (5) 썰전'
 read -p " " i
 case $i in
  1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30"
     title="JTBC 뉴스룸" ;;
- 2) [ $(date +%u) -eq 4 ] && [ $(date +%k) -ge 23 ] && time="today 22:50" || time="last thursday 22:50"
-    title="이규연의 스포트라이트" ;;
- 3) time="last friday 23:00"
+ 2) time="last tuesday 23:59"
     title="랜선라이프" ;;
+ 3) [ $(date +%u) -eq 4 ] && [ $(date +%k) -ge 23 ] && time="today 22:50" || time="last thursday 22:50"
+    title="이규연의 스포트라이트" ;;
  4) time="last saturday 23:59"
     title="그것이 알고싶다" ;;
  5) time="last sunday 22:30"

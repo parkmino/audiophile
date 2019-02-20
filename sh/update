@@ -122,12 +122,15 @@ fi
 
 ALSA () {
  printf "• ALSA\t\t"
- url="http://www.alsa-project.org/main/index.php/Main_Page_News"
- date=$(curl $curl_opt "$url" | grep -m1 -B1 alsa.*release | head -1 | grep -o [0-9]...-[0-9].-[0-9].)
+#url="http://www.alsa-project.org/main/index.php/Main_Page_News"
+#date=$(curl $curl_opt "$url" | grep -m1 -B1 alsa.*release | head -1 | grep -o [0-9]...-[0-9].-[0-9].)
+ url="https://github.com/alsa-project/alsa-lib/releases"
+ date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d\" -f2)
  if [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
-  printf "$(curl $curl_opt "$url" | grep -om1 "alsa.*release" | cut -d" " -f2) ($date)\t\t"
+ #printf "$(curl $curl_opt "$url" | grep -om1 "alsa.*release" | cut -d" " -f2) ($date)\t\t"
+  printf "$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1) ($(date -d "$date" +%F))\t\t"
   days_diff
  fi
 }
@@ -305,9 +308,9 @@ else
 fi
 }
 
-GNOME_MPV () {
-printf "• Gnome-mpv\t"
-latest=$(curl $curl_opt https://github.com/gnome-mpv/gnome-mpv/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+CELLULOID () {
+printf "• Celluloid\t"
+latest=$(curl $curl_opt https://github.com/celluloid-player/celluloid/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
 current=v$(gnome-mpv --version | cut -d' ' -f3)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
@@ -663,8 +666,8 @@ UPMPDCLI
 #UBUNTU
 ADOBE_FLASH
 #LIBFFMPEG
+CELLULOID
 CREATE_AP
-GNOME_MPV
 GOOGLER
 #MESON
 MINIDLNA
