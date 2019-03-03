@@ -130,7 +130,7 @@ ALSA () {
   printf "\t\t\t\t정보 없음\n"
  else
  #printf "$(curl $curl_opt "$url" | grep -om1 "alsa.*release" | cut -d" " -f2) ($date)\t\t"
-  printf "$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1) ($(date -d "$date" +%F))\t\t"
+ printf "$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d\/ -f6 | cut -d\" -f1) ($(date -d "$date" +%F))\t\t"
   days_diff
  fi
 }
@@ -247,7 +247,7 @@ else
  if [ "$days" -le 1 2>/dev/null ]; then
   for i in $(seq 1 $(((2-$days)*2))); do
    printf '  '
-   curl $curl_opt "$url" | grep -m$(($i*2)) data-episode-name= | tail -1 | cut -d'"' -f2
+   curl $curl_opt "$url" | grep -m$(($i*2)) data-episode-name= | tail -1 | cut -d'"' -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
    printf '   '
    curl $curl_opt "$url" | grep -m$i data-play-uri= | tail -1 | cut -d'"' -f6
   done
@@ -392,7 +392,7 @@ date=$(curl $curl_opt "$url" | grep -m1 datetime | sed 's/.*datetime//' | cut -d
 if [ -z "$date" ]; then
  printf "\t\t\t\t정보 없음\n"
 else
- release="$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1)"
+ release="$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d\/ -f6 | cut -d\" -f1)"
  printf "$release ($(echo $date | cut -d'T' -f1))"
  [ $(echo "$release" | wc -c) -ge 12 ] && printf \\t || printf \\t\\t
  days_diff
@@ -430,7 +430,7 @@ date=$(curl $curl_opt "$url" | grep -m1 datetime | sed 's/.*datetime//' | cut -d
 if [ -z "$date" ]; then
  printf "\t\t\t\t정보 없음\n"
 else
- printf "$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1) ($(echo $date | cut -d'T' -f1))\t\t"
+ printf "$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d\/ -f6 | cut -d\" -f1) ($(echo $date | cut -d'T' -f1))\t\t"
  days_diff
 fi
 #current=$(ls -d /home/parkmino/Downloads/Libre* | sed 's/.*arm.//')
@@ -568,7 +568,7 @@ fi
 
 OPERA () {
 printf "• Opera\t\t"
-latest=$(curl $curl_opt https://blogs.opera.com/desktop/changelog-for-54/ | grep -m1 'blog post' | sed 's/.*content="//; s/[ \t].*//')
+latest=$(curl $curl_opt "https://blogs.opera.com/desktop/changelog-for-54/" | grep -m1 'blog post' | sed 's/.*content="//; s/[ \t].*//')
 current=$(opera --version)
 printf "$current\t\t\t"
 if [ -z "$latest" ]; then
