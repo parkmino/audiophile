@@ -1,64 +1,44 @@
-1. sudo nano /etc/rc.local for RoonBride compatibility
-	#rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-	rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+1. ALSA compatibility for Airplay, Roon and Spotify
 
-2. update kr2mpd
+	sudo nano /etc/audio.conf
+
+		alsa_conf=mix # min or mix
+		airplay=off
+		roon=off
+		spotify=off
+		ssh=off
+		wifi=off
+
+	sudo nano /etc/rc.local
+
+		if [ "$alsa_conf" = min ]; then
+		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+		 rm -rf /dev/snd/*c /dev/snd/by* || true
+		else
+		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		fi
+		rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+
+2. ALSA Mixer
+
+	sudo nano /etc/rc.local
+		mknod -m 000 /dev/shm/mixer p
+		rm -rf /dev/snd/by* || true
+	sed -i 's/\/dev\/mixer/\/dev\/shm\/mixer/g; s/pcm.0.sync_ptr_ioctl 1 //' /etc/rc.local /etc/mpd.conf.sav #/usr/share/alsa/alsa.conf.sav
 
 3. sudo nano /etc/rc.local
-	cp /usr/bin/nohup ... /dev/shm/
+
+	cp /usr/bin/nohup /dev/shm/
 	/dev/shm/nohup ...
+	taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
 
-4. Disable syslog in mpd and null log in mpd.conf
+4. Disable syslog in mpd and /dev/null log in mpd.conf
 
-5. Use spotify's alsa.conf same as Roon
+5. Try /dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
 
-6. sudo nano /etc/rc.local
+6. Update kr2mpd
 
-cp /usr/lib/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so.2
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/libasound.so
-cp /usr/lib/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so.1.0.0
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so.1
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/libaudiofile.so
-cp /usr/lib/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8.3.0
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so.8
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/libFLAC.so
-
-taskset -acp 0 $pid 2>/dev/null || true
-
-7. /dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
-
-8. Buildroot for PC - CPU Affinity for multi-core
-
-multi-threads : 2,4,6,8,12,20,24,28,32,36
-
-0000-0000-0000-0000-0000-0000-0000-0000-0000
-8421-8421-8421-8421-8421-8421-8421-8421-8421
-3    3    2    2    2         1
-6    2    8    4    0         2    8 6  4 2
-
-proc_all=$(nproc --all)
-m_task=$(($proc_all-1)); h_task=0; s_task=0
-[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
-
-if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
-  taskset -acp $o_task $pid || true
- done
-fi
-
-for i in $(awk '/hci.*usb/{print +$1}' /proc/interrupts); do
- [ "$proc_all" -eq  2 ] && echo         "2" > /proc/irq/$i/smp_affinity || true && echo         "1" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq  4 ] && echo         "8" > /proc/irq/$i/smp_affinity || true && echo         "4" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq  6 ] && echo        "30" > /proc/irq/$i/smp_affinity || true && echo        "10" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq  8 ] && echo        "80" > /proc/irq/$i/smp_affinity || true && echo        "70" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq 12 ] && echo       "800" > /proc/irq/$i/smp_affinity || true && echo       "700" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq 20 ] && echo     "80000" > /proc/irq/$i/smp_affinity || true && echo     "70000" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq 24 ] && echo    "800000" > /proc/irq/$i/smp_affinity || true && echo    "700000" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq 28 ] && echo   "8000000" > /proc/irq/$i/smp_affinity || true && echo   "7000000" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq 32 ] && echo  "80000000" > /proc/irq/$i/smp_affinity || true && echo  "70000000" > /proc/irq/default_smp_affinity || true
- [ "$proc_all" -eq 36 ] && echo "800000000" > /proc/irq/$i/smp_affinity || true && echo "700000000" > /proc/irq/default_smp_affinity || true
-done
+7. Hdparm
+	sudo nano /etc/hdparm.conf
+		read_ahead_sect = 1288
+	sudo hdparm -a 1288 /dev/sda
