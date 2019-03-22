@@ -66,7 +66,7 @@ mpd_bg () {
 
 mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
 
-rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+rm -rf /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer /dev/snd/by* || true
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
