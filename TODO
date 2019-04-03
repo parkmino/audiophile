@@ -24,7 +24,24 @@
 	sudo nano /etc/rc.local
 		mknod -m 000 /dev/shm/mixer p
 		rm -rf /dev/snd/by* || true
-	sed -i 's/\/dev\/mixer/\/dev\/shm\/mixer/g; s/pcm.0.sync_ptr_ioctl 1 //' /etc/rc.local /etc/mpd.conf.sav #/usr/share/alsa/alsa.conf.sav
+	sudo sed -i 's/\/dev\/mixer/\/dev\/shm\/mixer/g' /etc/rc.local /etc/mpd.conf.sav
+
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+
+	sudo sh -c "printf 'pcm.0.type  hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+
+	sudo sh -c "printf 'pcm.0.type\nhw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+
+	sudo sh -c "printf 'pcm.0.type=hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+	sudo sed -i 's/type hw/type=hw/' /usr/share/alsa/alsa.conf.sav
+
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0;pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+	sudo sed -i 's/ pcm.0.device/;pcm.0.device/' /usr/share/alsa/alsa.conf.sav
+
+	sudo sh -c "printf 'pcm.0.type hw;pcm.0.card 0;pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+	sudo sed -i 's/pcm.0.type hw /pcm.0.type hw;/; s/ pcm.0.device/;pcm.0.device/' /usr/share/alsa/alsa.conf.sav
+
+	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 3. sudo nano /etc/rc.local
 
