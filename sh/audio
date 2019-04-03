@@ -7,8 +7,9 @@ usage () {
  echo "Manipulate ALSA output"
 }
 
-alsa_conf=/usr/share/alsa/alsa.conf
-card=$(grep -m1 -o 'card .' $alsa_conf | cut -b6)
+alsa_orig="/usr/share/alsa/alsa.conf.sav"
+alsa_conf="/dev/shm/alsa.conf"
+card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
 case $1 in
  hdmi|usb|int)
@@ -21,15 +22,17 @@ case $1 in
   fi
 
   if [ "$1" = hdmi ] || [ "$1" = usb ]; then
-   sudo sed -i '1s/.card../.card.'"$card"'/' /dev/shm/alsa.conf
+   sudo sed -i '1s/.card../.card.'"$card"'/' $alsa_conf
   else
-   sudo cp $alsa_conf /dev/shm/alsa.conf
+   sudo cp $alsa_orig $alsa_conf
   fi
 
-  sudo sed -i '1s/$/ ctl.default.type hw ctl.default.card '"$card"'/' /dev/shm/alsa.conf
+ sudo sed -i '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+#sudo sh -c "sed '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf > $alsa_conf.mixer.$card"
   amixer -q set IEC958 $IEC958
   echo "* IEC985 is $(amixer get IEC958 | tail -1 | cut -d '[' -f2 | cut -d ']' -f1)"
-  sudo sed -i 's/ ctl.*//' $alsa_conf
+  #sudo sed -i 's/ ctl.*//' $alsa_conf
+  sudo cp $alsa_orig $alsa_conf
 
   for i in $(awk '/'"$irq"'/{print +$1}' /proc/interrupts); do
    proc="/proc/irq/$i/smp_affinity"
@@ -38,9 +41,9 @@ case $1 in
   done ;;
  def)
    echo "pcm.$card"
-   grep -q pcm.default /dev/shm/alsa.conf || sudo sed -i '1s/^/pcm.default pcm.'"$card"' /' /dev/shm/alsa.conf ;;
+   grep -q pcm.default /dev/shm/alsa.conf || sudo sed -i '1s/^/pcm.default pcm.'"$card"'\n/' $alsa_conf ;;
  nodef)
-   sudo cp $alsa_conf.sav /dev/shm/alsa.conf ;;
+   sudo cp $alsa_orig $alsa_conf ;;
  *) usage ;;
 esac
 

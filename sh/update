@@ -192,7 +192,7 @@ printf "• BubbleUPnP\t"
 #latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
 latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
 #current=$(date -d "2018-3-6" +%F)
- current=3.2.1
+ current=3.2.2.1
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -268,7 +268,7 @@ printf "• DietPi\t"
 # echo "  $(echo "$url" | cut -d"/" -f1-4)$(curl -s "$url" | grep -m1 'DietPi v[0-9]*.[0-9]*' | cut -d\" -f2 | cut -d"." -f2- | sed 's/\&amp;/\&/g')"
 #fi
  ver=$(curl $curl_opt "$url" | grep -m1 -o 'DietPi v[0-9]*.[0-9]*' | cut -d" " -f2)
- date="$(curl -s $url | grep -m1 -A3 'DietPi v[0-9]*.[0-9]*' | tail -1 | cut -d">" -f4 | cut -d"<" -f1)"
+ date="$(curl -s $url | grep -m1 -A2 'DietPi v[0-9]*.[0-9]*' | tail -1 | cut -d">" -f4 | cut -d"<" -f1)"
  if [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
@@ -447,11 +447,11 @@ elif [ "$latest" = "$current" ]; then
  printf "최신판\n"
 else
  printf "판올림 ($latest)\n"
- echo "  $ cd /home/parkmino/meson-$current"
+ echo "  $ cd /home/parkmino/Downloads/meson-$current"
  echo "  $ sudo python3 setup.py install --record files.txt && cat files.txt | xargs sudo rm -rf && cd .. && sudo rm -rf meson-$current"
  echo '  $ curl -s $(curl -s https://github.com/mesonbuild/meson/releases/latest | cut -d\" -f2) | grep -m1 tar.gz | cut -d\" -f2 | wget "https://github.com/$(cat -)"'
  echo "  $ tar -xvzf meson-$latest && cd meson-$latest"
- echo "  $ sudo python3 install setup.py"
+ echo "  $ sudo python3 setup.py install"
  echo "  $ meson --version"
 fi
 }
@@ -669,10 +669,10 @@ ADOBE_FLASH
 CELLULOID
 CREATE_AP
 GOOGLER
-#MESON
+MESON
 MINIDLNA
 YOUTUBE_DL
-APCAST
+#APCAST
 ANDROID_X86
 BUBBLEUPNP
 H3DROID
