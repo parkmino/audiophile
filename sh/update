@@ -86,7 +86,7 @@ if [ -z "$days" ]; then
  printf "\t\t\t\t정보 없음\n"
 else
  printf "\t\t\t\t$days\n"
- [ -z "${days##*오늘*}" ] && last=4
+ [ -z "${days##*오늘*}" ] && last=2
  [ "$days" = "어제" ]     && last=1
  if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
   for i in $(seq 1 $last); do
@@ -235,6 +235,33 @@ fi
 }
 
 DAS () {
+printf "• 다스 뵈이다\t"
+url="https://www.youtube.com/playlist?list=UUxvU6bRtYhNLvZleAIGa-FQ"
+days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
+ date=$(echo $days | tr -d '.' | tr ' ' '-')
+ diff=$(($(date +%s)-$(date -ud "$date" +%s)))
+ days="$(($diff/60/60/24))일 전"
+fi
+[ "$days" = "1일 전" ] && days="어제"
+if [ -z "$days" ]; then
+ printf "\t\t\t\t정보 없음\n"
+else
+ printf "\t\t\t\t$days\n"
+ [ -z "${days##*오늘*}" ] && last=2
+ [ "$days" = "어제" ]     && last=1
+ if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
+  for i in $(seq 1 $last); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="김어준'.* | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+   printf '   https://youtu.be/'
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="김어준'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1
+  done
+ fi
+fi
+}
+
+DAS_PODTY () {
 printf "• 다스 뵈이다\t"
 url="https://www.podty.me/cast/177643"
 date=$(curl $curl_opt "$url" | grep -m1 'class="date"' | cut -d'>' -f2 | cut -d'<' -f1 | tr . -)

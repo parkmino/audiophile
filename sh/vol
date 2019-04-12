@@ -73,3 +73,4 @@ esac
 
 #sudo sed -i 's/ ctl.*//' $alsa_conf
 sudo cp $alsa_orig $alsa_conf
+#sudo chmod -w $alsa_conf
