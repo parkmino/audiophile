@@ -32,11 +32,10 @@
 	sudo sed -i 's/pcm.0.type hw /pcm.0.type hw;/' /usr/share/alsa/alsa.conf.sav
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0;pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-	sudo sed -i 's/ pcm.0.device/;pcm.0.device/' /usr/share/alsa/alsa.conf.sav
-
-	sudo sh -c "printf 'pcm.0.type hw;pcm.0.card 0;pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+
+	printf 'pcm.default pcm.0 pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/shm/mixer' > copy/alsa.conf.min
 
 3. sudo nano /etc/rc.local
 
@@ -58,3 +57,38 @@
 8. File permission
 
 	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
+
+9. Artik 710 Menu
+
+	myMPD
+
+	-------------------------	### Commands
+	KBS 클래식 FM			/root/kr2mpd 1fm
+	KBS 쿨 FM			/root/kr2mpd 2fm
+	MBC FM				/root/kr2mpd mbcfm
+	MBC FM4U			/root/kr2mpd mbc4u
+	SBS 파워 FM			/root/kr2mpd sbsp
+	SBS 러브 FM			/root/kr2mpd sbsl
+	-------------------------
+	UPnP - DSD over PCM (DoP)	sed -i '/dop/s/^#*//' /etc/mpd.conf.sav
+	UPnP - Native DSD		sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav
+	-------------------------
+	Roon Bridge - Enable		sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf
+	Roon Bridge - Disable		sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf
+	-------------------------
+	Run SSH				systemctl start openssh
+	-------------------------
+	Reboot      (다시 시작)	reboot
+	Power off   (전원 끄기)	poweroff
+	-------------------------
+
+
+10. Enable MPD status
+
+	sudo nano /etc/mpd.conf.sav
+		state_file "/var/lib/mpd/state"
+
+
+11. Software volume option for Artik SSH
+
+	sudo sed -i '/mixer_type/s/".*"/"software"/' /etc/mpd.conf.sav
