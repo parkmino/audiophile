@@ -28,30 +28,25 @@
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
-	sudo sh -c "printf 'pcm.0.type  hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-
-	sudo sh -c "printf 'pcm.0.type\nhw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-
-	sudo sh -c "printf 'pcm.0.type=hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-	sudo sed -i 's/type hw/type=hw/' /usr/share/alsa/alsa.conf.sav
+	sudo sh -c "printf 'pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
+	sudo sed -i 's/pcm.0.type hw /pcm.0.type hw;/' /usr/share/alsa/alsa.conf.sav
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0;pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 	sudo sed -i 's/ pcm.0.device/;pcm.0.device/' /usr/share/alsa/alsa.conf.sav
 
 	sudo sh -c "printf 'pcm.0.type hw;pcm.0.card 0;pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-	sudo sed -i 's/pcm.0.type hw /pcm.0.type hw;/; s/ pcm.0.device/;pcm.0.device/' /usr/share/alsa/alsa.conf.sav
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 3. sudo nano /etc/rc.local
 
 	cp /usr/bin/nohup /dev/shm/
-	/dev/shm/nohup ...
+	/dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null #
 	taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
 
 4. Disable syslog in mpd and /dev/null log in mpd.conf
 
-5. Try /dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
+5. Try /dev/shm/nohup and null in/output for RoonBridge
 
 6. Update kr2mpd
 
@@ -59,3 +54,7 @@
 	sudo nano /etc/hdparm.conf
 		read_ahead_sect = 1288
 	sudo hdparm -a 1288 /dev/sda
+
+8. File permission
+
+	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
