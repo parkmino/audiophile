@@ -73,4 +73,4 @@ type hw
 card $CARD
 hint.description "Direct control device"
 }
-pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757
+pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.sync_ptr_ioctl 1 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757
