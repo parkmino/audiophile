@@ -2,7 +2,7 @@
 
 	sudo nano /etc/audio.conf
 
-		alsa_conf=mix # min or mix
+		alsa_conf=mix # min or mix or orig
 		airplay=off
 		roon=off
 		spotify=off
@@ -13,20 +13,18 @@
 
 		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 		...
-		if [ "$alsa_conf" = min ]; then
+		if [ "$alsa_conf" = orig ]; then
+		 cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
+		elif [ "$alsa_conf" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
 		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 		 rm -rf /dev/snd/*c /dev/snd/by* || true
+		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 		else
 		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 		fi
-		rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
-2. ALSA Mixer
-
-	sudo nano /etc/rc.local
-		mknod -m 000 /dev/shm/mixer p
-		rm -rf /dev/snd/by* || true
-	sudo sed -i 's/\/dev\/mixer/\/dev\/shm\/mixer/g' /etc/rc.local /etc/mpd.conf.sav
+2. ALSA configuration
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
@@ -37,28 +35,40 @@
 
 	printf 'pcm.default pcm.0 pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/shm/mixer' > copy/alsa.conf.min
 
-3. sudo nano /etc/rc.local
+3. ALSA Mixer
+
+	sudo nano /etc/rc.local
+		mknod -m 000 /dev/shm/mixer p
+		rm -rf /dev/snd/by* || true
+	sudo sed -i 's/\/dev\/mixer/\/dev\/shm\/mixer/g' /etc/rc.local /etc/mpd.conf.sav
+
+4. ALSA library file permission
+
+	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
+
+5. sudo nano /etc/rc.local
 
 	cp /usr/bin/nohup /dev/shm/
 	/dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null #
 	taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
 
-4. Disable syslog in mpd and /dev/null log in mpd.conf
+6. Disable syslog in mpd and /dev/null log in mpd.conf
 
-5. Try /dev/shm/nohup and null in/output for RoonBridge
+7. Try /dev/shm/nohup and null in/output for RoonBridge
 
-6. Update kr2mpd
+8. Update kr2mpd
 
-7. Hdparm
+9. Hdparm
 	sudo nano /etc/hdparm.conf
 		read_ahead_sect = 1288
 	sudo hdparm -a 1288 /dev/sda
 
-8. File permission
+10. Enable MPD status for audio renderer
 
-	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
+	sudo nano /etc/mpd.conf.sav
+		state_file "/var/lib/mpd/state"
 
-9. Artik 710 Menu
+11. Artik 710 Menu
 
 	myMPD
 
@@ -82,13 +92,6 @@
 	Power off   (전원 끄기)	poweroff
 	-------------------------
 
-
-10. Enable MPD status
-
-	sudo nano /etc/mpd.conf.sav
-		state_file "/var/lib/mpd/state"
-
-
-11. Software volume option for Artik SSH
+12. Software volume option for Artik SSH
 
 	sudo sed -i '/mixer_type/s/".*"/"software"/' /etc/mpd.conf.sav
