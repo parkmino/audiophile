@@ -11,6 +11,8 @@
 
 	sudo nano /etc/rc.local
 
+		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+		...
 		if [ "$alsa_conf" = min ]; then
 		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 		 rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -30,8 +32,6 @@
 
 	sudo sh -c "printf 'pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 	sudo sed -i 's/pcm.0.type hw /pcm.0.type hw;/' /usr/share/alsa/alsa.conf.sav
-
-	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0;pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
