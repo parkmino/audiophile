@@ -97,8 +97,9 @@ Audio Render Advanced
 	sudo mkdir /mnt/cifs /mnt/nfs
 	sudo ln -s /mnt/ /var/lib/mpd/music
 	sudo nano /etc/fstab
-		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,rsize=8192,iocharset=utf8 0 0
-		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
+		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
+		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
+		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
 
 11. Edit /etc/fstab
 
@@ -149,7 +150,7 @@ Audio Render Advanced
 
 17. Spotifyd
 
-	https://github.com/Spotifyd/spotifyd
+	https://github.com/Spotifyd/spotifydf
 	https://github.com/Spotifyd/spotifyd/releases/latest
 
 	$ #wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
@@ -262,7 +263,27 @@ Audio Render Advanced
 
 	$ nano ~/audio-config
 
-20. audio-config
+20. myMPD
+
+	$ sudo apt-get install libmediainfo-dev libmediainfo0v5
+	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget "$(cat -)" -O ./mympd.zip
+	$ unzip mympd.zip -d ~/ && rm mympd.zip
+	$ cd myMPD*
+	$ ./mkrelease.sh or ./mkdebian.sh
+	$ sudo systemctl disable mympd
+	$ sudo nano /etc/mympd/mympd.conf
+		host = 127.0.0.1
+		ssl = false
+		loglevel = 0
+		coverimage = true
+		coverimage = cover.jpg
+		stickers = false
+		syscmds = true
+		background = #111
+		coverextract = true
+	$ sudo nano /etc/mympd/syscmds/'1KBS 클래식 FM' ...
+
+21. audio-config
 
 	$ cp audio-config ~/
 	# cp audio-config_dietpi /root
@@ -270,7 +291,7 @@ Audio Render Advanced
 	# ln -s /root/audio-config /usr/bin/
 	$ audio-config
 
-21. Web interface
+22. Web interface
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
@@ -294,7 +315,7 @@ Audio Render Advanced
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-22. Read-only (Just for reference)
+23. Read-only (Just for reference)
 	cp remountro remountrw ~/
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
@@ -304,29 +325,17 @@ Audio Render Advanced
 	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
 
-23. audio.conf
+24. audio.conf
 
 	$ sudo cp audio.conf /etc/default/audio.conf
-	$ sudo nano /etc/rc.local
-
-		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
-		if [ "$alsa" = plug ]; then
-		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.plug /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
-		elif [ "$alsa" = mix ] || [ "$roonbridge" = "on" ] || [ "$airplay" = "on" ] || [ "$spotify" = "on" ]; then
-		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
-		else
-		 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
-		fi		
+	$ sudo nano /etc/rc.local		
 		[ "$roonbridge" = on ] && (roon_bridge &) && sleep 3
 		[ "$spotify" = on ] && (spotifyd &) && sleep 1
 		if [ "$tts" = on ]; then
 		 [ "$tts_eng" = on ] && tts en My I P is $(hostname -I) || tts
 		fi
 
-24. Make Image
+25. Make Image
 
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get update
