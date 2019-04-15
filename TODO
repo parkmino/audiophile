@@ -1,8 +1,8 @@
 1. ALSA compatibility for Airplay, Roon and Spotify
 
-	sudo nano /etc/audio.conf
+	sudo nano /etc/default/audio.conf
 
-		alsa_conf=mix # min or mix or orig
+		alsa=mix # min or mix or orig
 		airplay=off
 		roon=off
 		spotify=off
@@ -13,14 +13,31 @@
 
 		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 		...
-		if [ "$alsa_conf" = orig ]; then
+		if [ "$alsa" = orig ]; then
+		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
 		 cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-		elif [ "$alsa_conf" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
+		elif [ "$alsa" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
+		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
 		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 		 rm -rf /dev/snd/*c /dev/snd/by* || true
 		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 		else
+		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
 		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+		fi
+
+		if [ "$alsa" = orig ]; then
+		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
+		 cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
+		elif [ "$alsa" = mix ] || [ "roon" = on ] || [ "airplay" = on ] || [ "spotify" = on ]; then
+		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+		else
+		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+		 rm -rf /dev/snd/*c /dev/snd/by* || true
 		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 		fi
 
@@ -31,6 +48,9 @@
 	sudo sh -c "printf 'pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 	sudo sed -i 's/pcm.0.type hw /pcm.0.type hw;/' /usr/share/alsa/alsa.conf.sav
 
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759' > /usr/share/alsa/alsa.conf.sav"
+	sudo sed -i 's/minperiodtime [0-9]*/minperiodtime 2759/' /usr/share/alsa/alsa.conf.sav
+
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
 	printf 'pcm.default pcm.0 pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/shm/mixer' > copy/alsa.conf.min
@@ -38,13 +58,15 @@
 3. ALSA Mixer
 
 	sudo nano /etc/rc.local
-		mknod -m 000 /dev/shm/mixer p
-		rm -rf /dev/snd/by* || true
+		 mknod -m 644 /dev/shm/mixer p
 	sudo sed -i 's/\/dev\/mixer/\/dev\/shm\/mixer/g' /etc/rc.local /etc/mpd.conf.sav
 
-4. ALSA library file permission
+4. File permission
 
 	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
+	sudo nano /etc/rc.local
+		#chmod -w /dev/shm/*
+		#chmod -w -R /dev/shm/opt/*
 
 5. sudo nano /etc/rc.local
 
@@ -92,6 +114,11 @@
 	Power off   (전원 끄기)	poweroff
 	-------------------------
 
-12. Software volume option for Artik SSH
+12. Software volume & Raw PCM option for Artik SSH
 
 	sudo sed -i '/mixer_type/s/".*"/"software"/' /etc/mpd.conf.sav
+
+13. sysctl
+
+	sudo nano /etc/sysctl.conf
+		kernel.sched_migration_cost = 4899007 # 4899006
