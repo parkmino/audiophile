@@ -11,9 +11,28 @@
 #
 # By default this script does nothing.
 
+if [ "$alsa" = orig ]; then
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
+elif [ "$alsa" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+ rm -rf /dev/snd/*c /dev/snd/by* || true
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+else
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+fi
+
+mknod -m 644 /dev/shm/mixer p
+
 musicpd_bg () {
+ sec=0
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
+  sec=$(($sec+1))
+  [ "$sec" -ge 10 ] && break
  done
  sleep 1
  pgr_mpd=$(pgrep -x mpd)
@@ -32,12 +51,15 @@ musicpd_bg () {
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
-nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null
+/dev/shm/nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null #
 }
 
 eol () {
+ sec=0
  until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
   sleep 1
+  sec=$(($sec+1))
+  [ "$sec" -ge 10 ] && break
  done
  sleep 1
  taskset -acp $s_task $(pgrep -x upmpdcli) || true
@@ -45,9 +67,6 @@ eol () {
 }
 
 roon_bridge () {
-#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
-#cp -r /opt/roon /dev/shm/
-#ln -sf /dev/shm/roon /opt/RoonBridge
 #cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
 #cp /usr/lib/libasound.so.2.0.0_full /dev/shm/libasound.so.2.0.0
 #sleep 1
@@ -60,29 +79,23 @@ shairport_sync () {
  systemctl start avahi-daemon shairport-sync
 }
 
-cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2
-cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so.1
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so
 cp /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8
-
-echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
-echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so
 
 echo noop | tee /sys/block/mmcblk0*/queue/scheduler
-echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 
-mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
-#rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-#
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
 #done
@@ -103,20 +116,20 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd/ {print $1}'); do
-  taskset -acp $o_task $pid || true
+  taskset -acp $o_task $pid 2>/dev/null || true
  done
 fi
 
 swapoff -a
 
 ### Remove services
-for i in systemd-journald systemd-resolved systemd-timesyncd getty@tty1 serial-getty@ttySAC3
+for i in getty@tty1 serial-getty@ttySAC3
 do
- service $i stop || true
+ service $i stop
 done
-for i in hciattach tzdaemon start-launcher
+for i in hciattach tzdaemon # bluetoothd
 do
- pkill $i || true
+ pkill $i
 done
 
 ### Roon Bridge
@@ -136,6 +149,6 @@ done
 
 musicpd_bg &
 eol &
-nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null
+/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null #
 
 exit 0

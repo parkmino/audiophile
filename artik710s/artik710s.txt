@@ -3,29 +3,11 @@ https://developer.artik.io/downloads/37339dc3-5909-4500-8506-25af16b022b9/downlo
 http://developer.artik.io/downloads/artik710s-sdfuse-a710s-os-18-05-00-img/download # Artik 710s
 http://developer.artik.io/downloads/artik710-sdfuse-a710-os-18-05-00-img/download # Artik 710
 
-QEMU
-$ sudo apt-get install qemu-user-static
-$ mkdir rootfs
-$ sudo tar xf rootfs.tar.gz -C rootfs
-$ sudo cp /usr/bin/qemu-aarch64-static rootfs/usr/bin
-$ sudo mount -ro bind /dev rootfs/dev/
-$ sudo mount -ro bind /proc rootfs/proc/
-$ sudo chmod 777 rootfs/tmp
-$ sudo cp /etc/resolv.conf rootfs/etc/.
-$ sudo chroot rootfs
-$ ...
-$ exit
-$ sudo umount -A rootfs/dev
-$ sudo umount -A rootfs/proc
-$ sudo rm rootfs/etc/resolv.conf
-$ cd rootfs
-$ sudo tar -czf ../myrootfs.tar.gz *
-
 $ ssh root@192.168.0.x
 	password : root
 
 # uname -a; cat /etc/os-release
-	Ubuntu 16.04.4 LTS (Linux artix 4.4.113)
+	Ubuntu 16.04.3 LTS (Linux artix 4.4.71)
 # apt-get update
 	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710s
 # apt-get upgrade
@@ -74,7 +56,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # /etc/resolvconf/resolv.conf.d/head
 	domain your.domain.name
 # resolvconf -u
-# hostnamectl set-hostname Bann_Network_Player
+# hostnamectl (in Ubuntu 18.04)
 
 ### SSH message
 # ls /etc/update-motd.d/*
@@ -82,16 +64,16 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### Remove services
 # apt-get remove zigbeed
 # apt-get autoremove
-# systemctl stop    avahi-daemon bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant
-# systemctl disable avahi-daemon bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant
+# systemctl stop    avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
+# systemctl disable avahi-daemon bluetoothd dnsmasq mosquitto pulseaudio wpa_supplicant
 # systemctl mask wpa_supplicant
 # service getty@tty1 stop; service serial-getty@ttySAC3 stop
-# pkill hciattach; pkill tzdaemon; pkill start-launcher
+# pkill hciattach; pkill tzdaemon
 
 ### Kernel option
 # cat /boot/cmdline.txt /boot/config.txt (???)
 
-# apt-get install bc nano psmisc software-properties-common python-crypto # ffmpeg libav-tools
+# apt-get install bc nano psmisc software-properties-common # ffmpeg libav-tools
 # apt-get install mpd mpc ncmpc
 # nano /etc/mpd.conf
 	#bind_to_address "localhost"
@@ -103,10 +85,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # add-apt-repository ppa:jean-francois-dockes/upnpp1
 # apt-get update
 # apt-get install upmpdcli
-# nano /etc/upmpdcli.conf
-	friendlyname = rainbow
 	checkcontentformat = 0
-# cp rainbow.png /usr/share/upmpdcli/icon.png
+	friendlyname = Somewhere over the rainbow
 # systemctl restart upmpdcli
 # systemctl disable upmpdcli
 
@@ -119,12 +99,39 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	plugin "pcm"
 	enabled "no"
 	}
+
+### Audio.conf
+# sudo nano /etc/default/audio.conf
+
+	# audio.conf
+	#
+	# alsa has the options of min(imal), mix(er) and orig(inal).
+	# To enable a feature, set feature=on.
+	# To disable a feature, set feature=off
+	# To ignore a feature, comment out the line by '#'
+
+	alsa=min # min or mix or orig
+	airplay=off
+	roon=on
+	spotify=off
+	ssh=off
+	wifi=off
+
+### /etc/fstab
+
+# nano /etc/fstab
+
+	#/dev/sda1         /mnt/usb  vfat    ro 0 0
+	#/dev/sda1         /mnt/usb  ntfs-3g ro 0 0
+	#//192.168.0.x/xxx /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
+	#//192.168.0.x/xxx /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
+
 ### Roon Bridge
 #### Airplay & Spotifyd
 ### rc.local
 ### sysctl.conf
 ### USB mount
-### Internet radio (kr2mpd, sbs_dec.py, ut2mpd, *.m3u8/pls)
+### Internet radio (kr2mpd, ut2mpd, *.m3u8/pls)
 ### audio-config
 
 ### Back up
@@ -136,10 +143,15 @@ https://github.com/davidgs/ARTIK-5-backup
 # apt-get dist-upgrade
 # systemctl daemon-reload
 # youtube-dl --update
-# echo "* Audio Renderer 18.08" > ~/release
+# echo "* Audio Renderer 19.04" > ~/release
 # mpc clear
 # rm -rf /var/roon/*
 # cat /lib/systemd/system/sshd.service
 # rm /etc/systemd/system/*/sshd.service
 # rm -f /root/.bash_history ~/.bash_history ; history -c
 # tar cf renderer.tar --no-recursion renderer
+
+cf)
+https://oinkzwurgl.org/hacking/bash_cgi/
+http://www.team2053.org/docs/bashcgi/postdata.html
+https://marc.waeckerlin.org/computer/blog/parsing_of_query_string_in_bash_cgi_scripts
