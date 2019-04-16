@@ -327,7 +327,23 @@ Audio Render Advanced
 
 24. audio.conf
 
-	$ sudo cp audio.conf /etc/default/audio.conf
+	$ sudo nano /etc/default/audio.conf
+		# audio.conf
+		#
+		# alsa has the options of min(imal), mix(er) and orig(inal).
+		# To enable a feature, set feature=on.
+		# To disable a feature, set feature=off
+		# To ignore a feature, comment out the line by '#'
+
+		alsa=min # min or mix or orig
+		airplay=off
+		roon=on
+		spotify=off
+		ssh=off
+		upnp=on
+		wifi=off
+		tts=on
+		tts_eng=off
 	$ sudo nano /etc/rc.local		
 		[ "$roonbridge" = on ] && (roon_bridge &) && sleep 3
 		[ "$spotify" = on ] && (spotifyd &) && sleep 1
