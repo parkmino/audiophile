@@ -2,7 +2,8 @@
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-spotifyd_conf=/root/spotifyd.conf
+spotifyd_conf=~/spotifyd.conf
+audio_conf=/etc/default/audio.conf
 
 ethernet_ip () {
 i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
@@ -90,36 +91,94 @@ i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ folder ]] && sudo sed -i '/^#*music_directory\|^#*db_file/s/^#*//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
- [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
- [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
- [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+ [[ $i =~ dop    ]] && sed -i '/dop/s/^#*//g' $mpd_conf || sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ folder ]] && sed -i '/^#*music_directory\|^#*db_file/s/^#*//' $mpd_conf || sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
+ [[ $i =~ tag    ]] && sed -i '/metadata.*none/s/^/#/' $mpd_conf || sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ pcm    ]] && sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
+ [[ $i =~ vol    ]] && sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
 fi
 }
 
 mpd_roon_air () {
-i=$(whiptail --title "MPD, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 59 3 \
-"mpd"       "Enable MPD           MPD 사용" $(grep -q '^musicpd_bg &' /etc/rc.local && echo ON || echo OFF) \
-"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q '^(roon_bridge' /etc/rc.local && echo ON || echo OFF) \
-"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q '^(shairport_sync' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 59 3 \
+"upnp"      "Enable UPnP          UPnP 사용" $(grep upnp= /etc/default/audio.conf | cut -d= -f2 | grep -q on - && echo ON || echo OFF) \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep roon= /etc/default/audio.conf | cut -d= -f2 | grep -q on - && echo ON || echo OFF) \
+"airplay"   "Enable AirPlay       에어플레이 사용" $(grep airplay= /etc/default/audio.conf | cut -d= -f2 | grep -q on - && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ mpd ]] && sed -i '/musicpd_bg &/,+2s/^#*//' /etc/rc.local || sed -i '/musicpd_bg &/,+2s/^/#/' /etc/rc.local
- [[ $i =~ roon ]] && sed -i '/(roon_bridge/s/^#*//' /etc/rc.local || sed -i '/(roon_bridge/s/^/#/' /etc/rc.local
- [[ $i =~ airplay ]] && sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
+ [[ $i =~ upnp ]] && sed -i '/upnp=/s/".*"/"on"/' $audio_conf || sed -i '/upnp=/s/".*"/"off"/' $audio_conf
+ [[ $i =~ roon ]] && sed -i '/roon=/s/".*"/"on"/' $audio_conf || sed -i '/roon=/s/".*"/"off"/' $audio_conf
+ [[ $i =~ airplay ]] && sed -i '/airplay=/s/".*"/"on"/' $audio_conf || sed -i '/airplay=/s/".*"/"off"/' $audio_conf
 fi
 }
 
+spotifyd () {
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 14 70 6 \
+
+i=$(whiptail --title "Spotify / Spotify 설정" --menu "\
+Select/선택
+
+    To disable spotify, just remove username or password.
+  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 14 66 3 \
+"1"  "Spotify ┬ device name     장치 이름     >" \
+"2"  "        │ username        사용자        >" \
+"3"  "        └ password        비밀번호      >" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+[ "$exitstatus" != 0 ] && return
+
+case $i in
+ 1) spotify_device=$(grep device_name $spotifyd_conf | cut -d' ' -f3)
+    input_user=$(whiptail --title "Spotify device name / Spotify 장치 이름" --inputbox "\
+
+Input Spotify device name.   Spotify 장치 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 $spotify_device 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_user" ]; then
+      sed -i '/device_name/s/=.*/= '"$input_user"'/' $spotifyd_conf
+     fi
+    fi ;;
+ 2) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
+    input_user=$(whiptail --title "Spotify username / Spotify 사용자" --inputbox "\
+
+Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 58 $spotify_user 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_user" ]; then
+      sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
+      sed -i '/spotify/s/".*"/"on"/'  $audio_conf
+     else
+      sed -i '/spotify/s/".*"/"off"/' $audio_conf
+     fi
+    fi ;;
+ 3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
+    input_pwd=$(whiptail --title "Spotify password / Spotify 비밀번호" --inputbox "\
+
+Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_pwd" ]; then
+      sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
+      sed -i '/spotify/s/".*"/"on"/'  $audio_conf
+     else
+      sed -i '/spotify/s/".*"/"off"/' $audio_conf
+     fi
+    fi ;;
+esac
+
+done
+}
+
+while true; do
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 15 70 7 \
 "1"  "Ethernet IP                   유선 IP 설정                 >" \
 "2"  "Wi-Fi client                  무선 연결                    >" \
-"3"  "MPD, Roon Bridge, Airplay     MPD, 룬 브리지, 에어플레이   >" \
-"4"  "MPD options                   MPD 옵션                     >" \
-"5"  "Reboot                        다시 시작" \
-"6"  "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
+"3"  "UPnP, Roon Bridge, Airplay    UPnP, 룬 브리지, 에어플레이  >" \
+"4"  "Spotify                       스포티파이                   >" \
+"5"  "MPD options                   MPD 옵션                     >" \
+"6"  "Reboot                        다시 시작" \
+"7"  "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
@@ -128,8 +187,9 @@ while true; do
   1) ethernet_ip ;;
   2) wifi_client ;;
   3) mpd_roon_air ;;
-  4) mpd_options ;;
-  5) reboot ;;
-  6) poweroff ;;
+  4) spotifyd ;;
+  5) mpd_options ;;
+  6) reboot ;;
+  7) poweroff ;;
  esac
 done

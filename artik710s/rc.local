@@ -11,6 +11,8 @@
 #
 # By default this script does nothing.
 
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
 if [ "$alsa" = orig ]; then
  cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
@@ -67,9 +69,9 @@ eol () {
 }
 
 roon_bridge () {
-#cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
-#cp /usr/lib/libasound.so.2.0.0_full /dev/shm/libasound.so.2.0.0
-#sleep 1
+#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
+#cp -r /opt/roon /dev/shm/
+#ln -sf /dev/shm/roon /opt/RoonBridge
  systemctl start roonbridge
 }
 
@@ -77,6 +79,10 @@ shairport_sync () {
 #cp /usr/lib/libasound.so.2.0.0_full /dev/shm/libasound.so.2.0.0
 #sleep 1
  systemctl start avahi-daemon shairport-sync
+}
+
+spotifyd () {
+/dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf&>/dev/null</dev/null 2>/dev/null
 }
 
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0
@@ -133,10 +139,13 @@ do
 done
 
 ### Roon Bridge
-(roon_bridge &) && sleep 3
+[ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Shaiport-sync
-#(shairport_sync &) && sleep 3
+[ "$airplay" = on ] && (shairport_sync &) && sleep 3
+
+### Spotifyd
+[ "$spotify" = on ] && spotify
 
 ### Taskset
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
@@ -147,8 +156,10 @@ for pid in 1 $(pgrep -x rc.local); do
  taskset -cp $m_task $pid || true
 done
 
-musicpd_bg &
-eol &
+if [ "$upnp" = on ]; then
+ musicpd_bg &
+ eol &
 /dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null #
+fi
 
 exit 0

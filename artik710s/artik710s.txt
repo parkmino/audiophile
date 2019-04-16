@@ -115,6 +115,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	roon=on
 	spotify=off
 	ssh=off
+	upnp=on
 	wifi=off
 
 ### /etc/fstab
@@ -123,8 +124,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 
 	#/dev/sda1         /mnt/usb  vfat    ro 0 0
 	#/dev/sda1         /mnt/usb  ntfs-3g ro 0 0
-	#//192.168.0.x/xxx /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
-	#//192.168.0.x/xxx /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
+	#//192.168.0.x/Music /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
+	#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
 
 ### Roon Bridge
 #### Airplay & Spotifyd
