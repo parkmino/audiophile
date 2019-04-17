@@ -53,7 +53,7 @@
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
-	printf 'pcm.default pcm.0 pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757 ctl.default /dev/shm/mixer' > copy/alsa.conf.min
+	printf 'pcm.default pcm.0 pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default /dev/shm/mixer' > copy/alsa.conf.min
 
 3. ALSA Mixer
 
@@ -64,9 +64,6 @@
 4. File permission
 
 	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
-	sudo nano /etc/rc.local
-		#chmod -w /dev/shm/*
-		#chmod -w -R /dev/shm/opt/*
 
 5. sudo nano /etc/rc.local
 
@@ -121,4 +118,14 @@
 13. sysctl
 
 	sudo nano /etc/sysctl.conf
-		kernel.sched_migration_cost = 4899007 # 4899006
+		kernel.sched_latency_ns = 1394059	# 1394058
+		#kernel.sched_migration_cost = 4899007	# 4899006
+		kernel.sched_time_avg_ms = 6288		# 6289
+
+14. mpd.conf
+
+	sudo nano /etc/mpd.conf.sav
+		audio_buffer_size "3684" # for 0.21.x
+		audio_buffer_size "3683" #
+		buffer_before_play "10.5596937298022%" #
+		buffer_before_play "10.55969372980212839891001004021012%" #
