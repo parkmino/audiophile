@@ -45,9 +45,6 @@
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
-	sudo sh -c "printf 'pcm.0.type hw;pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-	sudo sed -i 's/pcm.0.type hw /pcm.0.type hw;/' /usr/share/alsa/alsa.conf.sav
-
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759' > /usr/share/alsa/alsa.conf.sav"
 	sudo sed -i 's/minperiodtime [0-9]*/minperiodtime 2759/' /usr/share/alsa/alsa.conf.sav
 
