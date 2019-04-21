@@ -11,24 +11,6 @@
 #
 # By default this script does nothing.
 
-[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
-
-if [ "$alsa" = orig ]; then
- cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
- cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-elif [ "$alsa" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
- cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
- cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
- rm -rf /dev/snd/*c /dev/snd/by* || true
- rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-else
- cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
- cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
- rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-fi
-
-mknod -m 644 /dev/shm/mixer p
-
 musicpd_bg () {
  sec=0
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
@@ -84,6 +66,24 @@ shairport_sync () {
 spotifyd () {
 /dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf&>/dev/null</dev/null 2>/dev/null
 }
+
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
+if [ "$alsa" = orig ]; then
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
+elif [ "$alsa" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+ rm -rf /dev/snd/*c /dev/snd/by* || true
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+else
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+fi
+
+mknod -m 644 /dev/shm/mixer p
 
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2
@@ -146,6 +146,9 @@ done
 
 ### Spotifyd
 [ "$spotify" = on ] && spotify
+
+### myMPD
+mympd&>/dev/null</dev/null 2>/dev/null #
 
 ### Taskset
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do

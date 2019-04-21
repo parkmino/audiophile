@@ -127,6 +127,28 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	#//192.168.0.x/Music /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
 	#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
 
+### myMPD
+
+	# printf '/home/pi/kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
+	# printf '/home/pi/kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
+	# printf '/home/pi/kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'
+	# printf '/home/pi/kr2mpd mbc4u' > '/etc/mympd/syscmds/4MBC FM4U'
+	# printf '/home/pi/kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'
+	# printf '/home/pi/kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'
+	# touch /etc/mympd/syscmds/7HR
+	# printf 'sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
+	# printf 'sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
+	# touch /etc/mympd/syscmds/10HR
+	# printf 'sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
+	# printf 'sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
+	# touch /etc/mympd/syscmds/13HR
+	# printf 'systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
+	# printf 'systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'
+	# touch /etc/mympd/syscmds/16HR
+	# printf 'reboot'   > '/etc/mympd/syscmds/17Reboot       (다시 시작)'
+	# printf 'poweroff' > '/etc/mympd/syscmds/18Power off    (전원 끄기)'
+	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 ### Roon Bridge
 #### Airplay & Spotifyd
 ### rc.local
