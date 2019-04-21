@@ -90,7 +90,6 @@
 11. Artik 710 Menu
 
 	myMPD
-
 	-------------------------	### Commands
 	KBS 클래식 FM			/root/kr2mpd 1fm
 	KBS 쿨 FM			/root/kr2mpd 2fm
@@ -99,16 +98,17 @@
 	SBS 파워 FM			/root/kr2mpd sbsp
 	SBS 러브 FM			/root/kr2mpd sbsl
 	-------------------------
-	UPnP - DSD over PCM (DoP)	sed -i '/dop/s/^#*//' /etc/mpd.conf.sav
-	UPnP - Native DSD		sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav
+	UPnP - DoP (DSD over PCM)	sed -i '/dop/s/^#*//' /etc/mpd.conf.sav
+	UPnP - Native			sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav
 	-------------------------
 	Roon Bridge - Enable		sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf
 	Roon Bridge - Disable		sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf
 	-------------------------
-	Run SSH				systemctl start openssh
+	SSH - Start			systemctl start openssh
+	SSH - Stop			systemctl stop  openssh
 	-------------------------
-	Reboot      (다시 시작)	reboot
-	Power off   (전원 끄기)	poweroff
+	Reboot       (다시 시작)	reboot
+	Power off    (전원 끄기)	poweroff
 	-------------------------
 
 12. Software volume & Raw PCM option for Artik SSH
@@ -118,9 +118,9 @@
 13. sysctl
 
 	sudo nano /etc/sysctl.conf
-		kernel.sched_latency_ns = 1394059	# 1394058
-		#kernel.sched_migration_cost = 4899007	# 4899006
-		kernel.sched_time_avg_ms = 6288		# 6289
+		kernel.sched_latency_ns = 1394060		# 1394058
+		#kernel.sched_migration_cost = 4899007		# 4899006
+		kernel.sched_time_avg_ms = 6288			# 6289
 
 14. mpd.conf
 
