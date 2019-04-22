@@ -150,7 +150,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 ### Roon Bridge
-#### Airplay & Spotifyd
+### Airplay & Spotifyd
 ### rc.local
 ### sysctl.conf
 ### USB mount
