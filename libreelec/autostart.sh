@@ -1,19 +1,21 @@
 #!/bin/sh
 
+[ -d /storage/.kodi/userdata/playlists/music/ ] && ! ls /storage/.kodi/userdata/playlists/music/*.pls>/dev/null 2>&1 && cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
+
 [ -r /storage/.config/audio.conf ] && . /storage/.config/audio.conf
 
 cp /usr/lib/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+cp /usr/bin/nohup /dev/shm/
+
+mknod -m 644 /dev/shm/mixer p
 
 if [ "$alsa_conf" = min ]; then
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+ rm -rf /dev/snd/*c /dev/snd/by* || true
 else
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
 fi
-
-cp /usr/bin/nohup /dev/shm/
-
-mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
-[ -e /dev/snd/timer ] && rm /dev/snd/timer
+rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
 echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
@@ -33,7 +35,7 @@ m_task=3 # grep -m1 siblings /proc/cpuinfo | grep -o [0-9*] # getconf _NPROCESSO
 
 if [ "$m_task" -ge 1 ]; then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd$|kodi|kodi.bin/ {print $1}'); do
-  taskset -acp 0 $pid || true
+  taskset -acp 0 $pid 2>/dev/null || true
  done
 fi
 
