@@ -179,6 +179,7 @@ swapoff -a
 
 ### myMPD
 mympd&>/dev/null</dev/null 2>/dev/null #
+sleep 1
 
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true

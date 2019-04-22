@@ -149,6 +149,7 @@ done
 
 ### myMPD
 mympd&>/dev/null</dev/null 2>/dev/null #
+sleep 1
 
 ### Taskset
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
