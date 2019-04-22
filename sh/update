@@ -466,7 +466,8 @@ fi
 MESON () {
 printf "• meson\t\t"
 latest=$(curl $curl_opt https://github.com/mesonbuild/meson/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
-current=$(ls -d /home/parkmino/Downloads/meson-* | cut -d\- -f2)
+#current=$(ls --group-directories-first -d1 /home/parkmino/Downloads/meson-* | head -1 | cut -d\- -f2)
+current=$(meson --version)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -477,7 +478,7 @@ else
  echo "  $ cd /home/parkmino/Downloads/meson-$current"
  echo "  $ sudo python3 setup.py install --record files.txt && cat files.txt | xargs sudo rm -rf && cd .. && sudo rm -rf meson-$current"
  echo '  $ curl -s $(curl -s https://github.com/mesonbuild/meson/releases/latest | cut -d\" -f2) | grep -m1 tar.gz | cut -d\" -f2 | wget "https://github.com/$(cat -)"'
- echo "  $ tar -xvzf meson-$latest && cd meson-$latest"
+ echo "  $ tar -xvzf meson-$latest.tar.gz && cd meson-$latest"
  echo "  $ sudo python3 setup.py install"
  echo "  $ meson --version"
 fi
