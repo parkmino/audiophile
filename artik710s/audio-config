@@ -101,9 +101,9 @@ fi
 
 mpd_roon_air () {
 i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 59 3 \
-"upnp"      "Enable UPnP          UPnP 사용" $(grep upnp= /etc/default/audio.conf | cut -d= -f2 | grep -q on - && echo ON || echo OFF) \
-"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep roon= /etc/default/audio.conf | cut -d= -f2 | grep -q on - && echo ON || echo OFF) \
-"airplay"   "Enable AirPlay       에어플레이 사용" $(grep airplay= /etc/default/audio.conf | cut -d= -f2 | grep -q on - && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"upnp"      "Enable UPnP          UPnP 사용" $(grep -q 'upnp=on' $audio_conf && echo ON || echo OFF) \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
+"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
