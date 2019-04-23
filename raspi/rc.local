@@ -188,7 +188,8 @@ for pid in 1 $(pgrep -x rc.local); do
 done
 
 ### Text to Speech
-#tts
+[ "$tts" = on ] && [ "$eng_tts" = on  ] && tts en My I P is $(hostname -I)
+[ "$tts" = on ] && [ "$eng_tts" = off ] && tts
 
 ### Read-only
 #remountro
