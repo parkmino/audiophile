@@ -1,6 +1,5 @@
 [playlist]
-numberofentries=1
-File1=http://8.38.78.173:8045/
+File1=http://198.27.68.65:8541/stream
 Title1=Audiophile Baroque
 Length1=-1
-Version=2
+NumberOfEntries=1
