@@ -38,10 +38,11 @@ $ sudo systemctl mask alsa-restore.service
 $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 $ sudo mkdir /usr/share/alsa
-$ sudo sh -c "pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.0 /dev/null pcm.default /dev/null ctl.default /dev/null' > /usr/share/alsa/alsa.conf.sav"
+$ sudo sh -c "pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.0 /dev/shm/null pcm.default /dev/shm/null ctl.default /dev/shm/null' > /usr/share/alsa/alsa.conf.sav"
 $ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 $ sudo nano /etc/rc.local
+	mknod -m 000 /dev/shm/null p
 	cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 	ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
