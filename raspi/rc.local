@@ -85,7 +85,7 @@ else
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-mknod -m 644 /dev/shm/mixer p
+mknod -m 000 /dev/shm/null p
 
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
