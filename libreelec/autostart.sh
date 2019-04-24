@@ -11,7 +11,6 @@ mknod -m 000 /dev/shm/null p
 
 if [ "$alsa_conf" = min ]; then
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
- rm -rf /dev/snd/*c /dev/snd/by* || true
 else
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
 fi
@@ -79,6 +78,7 @@ echo 4 > /proc/irq/default_smp_affinity || true
 
  taskset -cp $m_task $pgr_kodi
 
+ [ "$alsa_conf" = min ] && rm -rf /dev/snd/*c /dev/snd/by* || true
  [ "$lirc"  = off ] && systemctl stop eventlircd
  [ "$nfs"   = off ] && systemctl stop rpcbind
  [ "$pulse" = off ] && systemctl stop pulseaudio
