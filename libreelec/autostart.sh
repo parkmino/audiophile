@@ -7,7 +7,7 @@
 cp /usr/lib/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
 cp /usr/bin/nohup /dev/shm/
 
-mknod -m 000 /dev/shm/null p
+mknod -m 000 /dev/shm/null b 0 0
 
 if [ "$alsa_conf" = min ]; then
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf

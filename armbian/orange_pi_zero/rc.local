@@ -64,7 +64,7 @@ mpd_bg () {
 #chmod -w /lib/systemd/systemd /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav
 #chmod -R -w /usr/lib/arm-linux-gnueabihf/
 
-mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
+mknod -m 000 /dev/shm/null b 0 0
 
 rm -rf /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer /dev/snd/by* || true
 

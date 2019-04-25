@@ -21,14 +21,14 @@
 #sysctl -w kernel.sched_rt_runtime_us=857422
  sysctl -w kernel.sched_min_granularity_ns=229979
  sysctl -w kernel.sched_wakeup_granularity_ns=388287
- sysctl -w kernel.sched_latency_ns=1394058
+ sysctl -w kernel.sched_latency_ns=1394060
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost_ns=4899006
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window_ns=345995
 #sysctl -w kernel.sched_tunable_scaling=1
- sysctl -w kernel.sched_time_avg_ms=6289
+ sysctl -w kernel.sched_time_avg_ms=6288
  sysctl -w kernel.printk="0 0 0 0"
 
 #sysctl -w vm.dirty_background_ratio=0
@@ -69,7 +69,7 @@
 
 swapoff -a
 
-mknod -m 000 /dev/mixer c 1 2 && chown root:kmem /dev/mixer
+mknod -m 000 /dev/shm/null b 0 0
 
 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
@@ -87,6 +87,8 @@ cp /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
+
+#chmod -w /dev/shm/*
 
 for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
  renice  -2 $pid || true
@@ -129,7 +131,7 @@ fi
 #hdparm -A1 -a1280 -B255 -X64 /dev/sda # -r1
 
 for i in $(ls /dev/snd/); do
- [ ! "$i" = "by-id"  ] && [ ! "$i" = "by-path"  ] && [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -f "/dev/snd/$i"
+ [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"
 done
 #rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 

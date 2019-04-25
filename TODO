@@ -54,7 +54,8 @@
 3. ALSA Mixer
 
 	sudo nano /etc/rc.local
-		mknod -m 000 /dev/shm/null p
+		#mknod -m 000 /dev/shm/null p
+		 mknod -m 000 /dev/shm/null b 0 0
 
 4. File permission
 
@@ -106,22 +107,18 @@
 	Power off    (전원 끄기)	poweroff
 	-------------------------
 
-12. Software volume & Raw PCM option for Artik SSH
-
-	sudo sed -i '/mixer_type/s/".*"/"software"/' /etc/mpd.conf.sav
-
-13. sysctl
+12. sysctl
 
 	sudo nano /etc/sysctl.conf
 		kernel.sched_latency_ns = 1394060		# 1394058
 		#kernel.sched_migration_cost = 4899007		# 4899006
 		kernel.sched_time_avg_ms = 6288			# 6289
 
-14. mpd.conf
+13. mpd.conf
 
 	sudo nano /etc/mpd.conf.sav
-		mixer_device "/dev/null"
-		audio_buffer_size "3684" # for 0.21.x
-		audio_buffer_size "3683" #
-		buffer_before_play "10.5596937298022%" #
-		buffer_before_play "10.55969372980212839891001004021012%" #
+		 mixer_device "/dev/shm/null"
+		#audio_buffer_size "3684" # for 0.21.x
+		 audio_buffer_size "3683" #
+		 buffer_before_play "10.5596937298022%" #
+		#buffer_before_play "10.55969372980212839891001004021012%" #
