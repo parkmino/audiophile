@@ -85,7 +85,7 @@ else
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-mknod -m 000 /dev/shm/null p
+mknod -m 000 /dev/shm/null b 0 0
 
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
@@ -172,7 +172,7 @@ swapoff -a
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Spotify
-[ "$spotify" = on ] && spotify
+[ "$spotify" = on ] && spotifyd
 
 ### Shaiport-sync
 [ "$airplay" = on ] && (shairport_sync &) && sleep 3
