@@ -49,25 +49,41 @@ eol () {
 }
 
 roon_bridge () {
- cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
- cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
- sleep 1
+#cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+#cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+#sleep 1
  systemctl start roonbridge
 }
 
 spotifyd () {
- cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
- cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
- cp /root/spotifyd /root/spotifyd.conf /dev/shm/
- sleep 1
-/dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+#cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
+#cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+#cp /root/spotifyd /root/spotifyd.conf /dev/shm/
+#sleep 1
+/dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null #
 }
 
 shairport_sync () {
- cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
- sleep 1
+#cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
+#sleep 1
  systemctl start avahi-daemon shairport-sync
 }
+
+if [ "$alsa" = orig ]; then
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
+elif [ "$alsa" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+ rm -rf /dev/snd/*c /dev/snd/by* || true
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+else
+ cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+fi
+
+mknod -m 000 /dev/shm/null b 0 0
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
@@ -93,9 +109,6 @@ echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 echo noop > /sys/block/mmcblk0/queue/scheduler
 [ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 
-mknod -m 000 /dev/mixer p
-#rm /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-#
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
 #done
@@ -155,13 +168,13 @@ fi
 swapoff -a
 
 ### Roon Bridge
-#(roon_bridge &) && sleep 3
+[ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Spotify
-#(spotifyd &) && sleep 1
+[ "$spotify" = on ] && spotifyd
 
 ### Shaiport-sync
-###(shairport_sync &) && sleep 1
+[ "$airplay" = on ] && (shairport_sync &) && sleep 3
 
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
@@ -170,13 +183,16 @@ for pid in 1 $(pgrep -x rc.local); do
 done
 
 ### Text to Speech
-#tts
+[ "$tts" = on ] && [ "$eng_tts" = on  ] && tts en My I P is $(hostname -I)
+[ "$tts" = on ] && [ "$eng_tts" = off ] && tts
 
 ### Read-only
 #remountro
 
-musicpd_bg &
-eol &
-/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+if [ "$upnp" = on ]; then
+ musicpd_bg &
+ eol &
+/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null #
+fi
 
 exit 0
