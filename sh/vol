@@ -6,7 +6,11 @@ alsa_orig="/usr/share/alsa/alsa.conf.sav"
 alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -c6) # card=0
 
-sudo sed -i '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+if grep -q ' ctl.default ' $alsa_conf; then
+ sudo sed -i '$ s/ ctl.default.*/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+else
+ sudo sed -i '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+fi
 #sudo sh -c "sed '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf > $alsa_conf.mixer.$card"
 
 amixer_init() {

@@ -36,7 +36,8 @@ quit_network () {
 }
 
 check_wifi () {
- sudo iwlist $wlan scan | grep -qs ESSID:\""$1"\" || read -p "Wi-Fi($1) is not found, press Ctrl+c to exit or any other key to continue" dummy
+ sudo iwlist $wlan scan | grep -qs ESSID:\""$1"\" || read -p "Wi-Fi($1) is not found, continue? [Y/n]" i
+ [ "$i"  = n ] && exit
 }
 
 prepare_wifi () {
