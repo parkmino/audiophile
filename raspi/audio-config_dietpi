@@ -3,6 +3,7 @@
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
 spotifyd_conf=~/spotifyd.conf
+audio_conf=/etc/default/audio.conf
 
 sound_card_initial () {
  sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio\|dtoverlay=justboom\|dtoverlay=rpi-dac/d' /boot/config.txt
@@ -155,14 +156,14 @@ esac
 
 tts () {
 i=$(whiptail --title "IP TTS" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 63 2 \
-"tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q '^tts' /etc/rc.local && echo ON || echo OFF) \
-"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q '^tts en' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
+"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dbus ]] && sed -i 's/dbus #/# dbus/g' /etc/rc.local || sed -i 's/# dbus/dbus #/g' /etc/rc.local
- [[ $i =~ tts  ]] && sed -i '/tts/s/^#//' /etc/rc.local || sed -i '/tts/s/^/#/' /etc/rc.local
- [[ $i =~ eng  ]] && sed -i '/tts/s/.*/tts en My I P is $(hostname -I)/' /etc/rc.local || sed -i '/tts/s/.*/tts/' /etc/rc.local
+ [[ $i =~ tts  ]] && sed -i '/tts=/s/".*"/"on"/' $audio_conf || sed -i '/tts=/s/".*"/"off"/' $audio_conf
+ [[ $i =~ eng  ]] && sed -i '/tts_eng=/s/".*"/"on"/' $audio_conf || sed -i '/tts_eng=/s/".*"/"off"/' $audio_conf
 fi
 }
 
@@ -175,16 +176,20 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 3 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 12 70 5 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^music_directory' $mpd_conf && echo ON || echo OFF) \
-"tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
+"tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
+"pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
+"vol"      "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sed -i '/dop/s/^#*//g' $mpd_conf || sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ folder ]] && sed -i '/^#*music_directory\|^#*db_file/s/^#*//' $mpd_conf || sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
- [[ $i =~ tag    ]] && sed -i '/metadata.*none/s/^/#/' $mpd_conf || sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ folder ]] && sudo sed -i '/^#*music_directory\|^#*db_file/s/^#*//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
+ [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
+ [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
 fi
 }
 
@@ -194,55 +199,52 @@ while true; do
 i=$(whiptail --title "Spotify / Spotify 설정" --menu "\
 Select/선택
 
-     Remove any item to disable the function.
-  한 항목이라도 지우면 그 기능을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 12 60 3 \
-"1"  "Spotify ┬ username      사용자       >" \
-"2"  "        ├ password      비밀번호     >" \
-"3"  "        └ device_name   장치명       >" 3>&1 1>&2 2>&3)
+    To disable spotify, just remove username or password.
+  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 14 66 3 \
+"1"  "Spotify ┬ device name     장치 이름     >" \
+"2"  "        │ username        사용자        >" \
+"3"  "        └ password        비밀번호      >" 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 [ "$exitstatus" != 0 ] && return
 
 case $i in
- 1) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
+ 1) spotify_device=$(grep device_name $spotifyd_conf | cut -d' ' -f3)
+    input_user=$(whiptail --title "Spotify device name / Spotify 장치 이름" --inputbox "\
+
+Input Spotify device name.   Spotify 장치 이름을 입력합니다.\
+
+(without space)              (빈칸 없이)" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 $spotify_device 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_user" ]; then
+      sudo sed -i '/device_name/s/=.*/= '"$input_user"'/' $spotifyd_conf
+     fi
+    fi ;;
+ 2) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
     input_user=$(whiptail --title "Spotify username / Spotify 사용자" --inputbox "\
 
 Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 58 $spotify_user 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
-      sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
-      sed -i '/spotifyd &/s/^#*//' /etc/rc.local
+      sudo sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
+      sudo sed -i '/spotify/s/".*"/"on"/'  $audio_conf
      else
-      sed -i '/spotifyd &/s/^/#/' /etc/rc.local
+      sudo sed -i '/spotify/s/".*"/"off"/' $audio_conf
      fi
     fi ;;
- 2) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
+ 3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
     input_pwd=$(whiptail --title "Spotify password / Spotify 비밀번호" --inputbox "\
 
 Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
-      sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
-      sed -i '/spotifyd &/s/^#*//' /etc/rc.local
+      sudo sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
+      sudo sed -i '/spotify/s/".*"/"on"/'  $audio_conf
      else
-      sed -i '/spotifyd &/s/^/#/' /etc/rc.local
-     fi
-    fi ;;
- 3) spotify_device=$(grep device_name $spotifyd_conf | cut -d' ' -f3)
-    input_device=$(whiptail --title "Spotify device_name / Spotify 장치명" --inputbox "\
-
-Input Spotify device_name.   Spotify 장치명을 입력합니다.\
-
-(without space)              (빈칸 없이)" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 61 $spotify_device 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_device" ]; then
-      sed -i '/device_name/s/=.*/= '"$input_device"'/' $spotifyd_conf
-      sed -i '/spotifyd &/s/^#*//' /etc/rc.local
-     else
-      sed -i '/spotifyd &/s/^/#/' /etc/rc.local
+      sudo sed -i '/spotify/s/".*"/"off"/' $audio_conf
      fi
     fi ;;
  4) qobuz_id=$(grep -A1 qobuz $mpd_conf | tail -1 | cut -d\" -f2)
@@ -252,11 +254,11 @@ Input Qobuz app_id.   Qobuz 앱_id를 입력합니다." --ok-button "OK/확인" 
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_id" ]; then
-      sed -i '/"qobuz"/!b;n;s/".*"/"'"$input_id"'"/' $mpd_conf
-      sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/no/yes/'     $mpd_conf
+      sudo sed -i '/"qobuz"/!b;n;s/".*"/"'"$input_id"'"/' $mpd_conf
+      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/no/yes/'     $mpd_conf
      else
-      sed -i '/"qobuz"/!b;n;s/".*"/""/'              $mpd_conf
-      sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/yes/no/'     $mpd_conf
+      sudo sed -i '/"qobuz"/!b;n;s/".*"/""/'              $mpd_conf
+      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/yes/no/'     $mpd_conf
      fi
     fi ;;
  5) qobuz_sec=$(grep -A2 qobuz $mpd_conf | tail -1 | cut -d\" -f2)
@@ -392,13 +394,13 @@ esac
 }
 
 roon_airplay () {
-i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 8 59 1 \
-"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q '^(roon_bridge' /etc/rc.local && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+i=$(whiptail --title "Roon Bridge / 룬 브리지" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 8 55 1 \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ roon ]] && sed -i '/(roon_bridge/s/^#*//' /etc/rc.local || sed -i '/(roon_bridge/s/^/#/' /etc/rc.local
- [[ $i =~ airplay ]] && sed -i '/(shairport_sync/s/^#*//' /etc/rc.local || sed -i '/(shairport_sync/s/^/#/' /etc/rc.local
+ [[ $i =~ roon ]] && sudo sed -i '/upnp=/s/".*"/"on"/' $audio_conf || sed -i '/upnp=/s/".*"/"off"/' $audio_conf
+ [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/".*"/"on"/' $audio_conf || sed -i '/airplay=/s/".*"/"off"/' $audio_conf
 fi
 }
 
