@@ -14,8 +14,8 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.2 ALSA
 
-	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.sav ../copy/libasound.so.2.0.0.min
-	$ printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default /dev/null' > ../copy/alsa.conf.min
+	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
+	$ printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default /dev/shm/null' > ../copy/alsa.conf.min
 	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
 	$ sed -i '$d' ../copy/alsa.conf.mix
 	$ printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default /dev/shm/null' >> ../copy/alsa.conf.mix
@@ -71,8 +71,6 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	 reboot -f
 	fi
 
-	[ -d /storage/.kodi/userdata/playlists/music/ ] && ! ls /storage/.kodi/userdata/playlists/music/*.pls>/dev/null 2>&1 && cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
-
 	$ echo '[Unit]
 Description=Tuning Audio
 DefaultDependencies=no
@@ -96,7 +94,6 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 	$ rm usr/bin/ps usr/bin/nohup
 	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,inst_addon} usr/bin/
-	$ #cp ../copy/{KBS*,MBC*,SBS*,*.m3u} etc/
 	$ cp ../copy/*.pls etc/
 	$ #cp -r ../../plugin.audio.kr2kodi etc/
 	$ #cp -r ../../{plugin.video.ktv2kodi,plugin.video.kut2kodi} etc/
@@ -107,7 +104,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.service ../tuning_audio.target usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
-	$ [ ! -f usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig ] && mv usr/share/kodi/addons/skin.estuary/xml/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig && cp ../copy/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml
+	$ #[ ! -f usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig ] && mv usr/share/kodi/addons/skin.estuary/xml/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig && cp ../copy/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml
 
   1.6 Korean Transaltion
 
@@ -151,12 +148,3 @@ https://github.com/soju6jan
 
 Screenshots
 Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
-
-# nano KBS\ 1FM.py
-
-import subprocess, xbmc, xbmcgui
-
-url = subprocess.check_output ('/usr/bin/kr2url 1fm' , shell=True)
-
-listitem = xbmcgui.ListItem('KBS Classic FM')
-xbmc.Player().play(url, listitem)
