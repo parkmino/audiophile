@@ -55,7 +55,8 @@
 
 	sudo nano /etc/rc.local
 		#mknod -m 000 /dev/shm/null p
-		 mknod -m 000 /dev/shm/null b 0 0
+		#mknod -m 000 /dev/shm/null b 0 0
+		 mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
 
 4. File permission
 
