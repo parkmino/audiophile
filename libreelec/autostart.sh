@@ -7,8 +7,6 @@
 cp /usr/lib/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
 cp /usr/bin/nohup /dev/shm/
 
-mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
-
 if [ "$alsa_conf" = min ]; then
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 else

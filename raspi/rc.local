@@ -85,8 +85,6 @@ else
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
-
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so
