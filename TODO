@@ -45,27 +45,15 @@
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
 
-	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.0 /dev/shm/null pcm.default /dev/shm/null ctl.default /dev/shm/null' > /usr/share/alsa/alsa.conf.sav"
-
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.0 \"\" pcm.default \"\" ctl.default \"\"' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
-
-	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default /dev/shm/null' > copy/alsa.conf.min
 
 	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default ""' > copy/alsa.conf.min
 
 3. ALSA Mixer
 
 	sudo nano /etc/rc.local
-
-		#mknod -m 000 /dev/shm/null p
-		#mknod -m 000 /dev/shm/null b 0 0
-		 mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
-		 mknod -m 664 /dev/shm/null c 0 0
-		 touch /dev/shm/null && chmod 666 /dev/shm/null
-		 touch /dev/shm/null && chmod 644 /dev/shm/null && chown root:audio /dev/shm/null
-
 		# ... /dev/shm/null ...
 
 4. File permission
@@ -128,7 +116,6 @@
 13. mpd.conf
 
 	sudo nano /etc/mpd.conf.sav
-		#mixer_device "/dev/shm/null"
 		 mixer_device ""
 		#audio_buffer_size "3684" # for 0.21.x
 		 audio_buffer_size "3683" #
