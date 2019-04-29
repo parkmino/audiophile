@@ -74,31 +74,29 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # cat /boot/cmdline.txt /boot/config.txt (???)
 
 # apt-get install bc nano psmisc software-properties-common # ffmpeg libav-tools
-# apt-get install mpd mpc ncmpc
-# nano /etc/mpd.conf
-	#bind_to_address "localhost"
-	device		 "hw:1,0"
-	dop		 "yes"
-# systemctl restart mpd
-# systemctl disable mpd
-
-# add-apt-repository ppa:jean-francois-dockes/upnpp1
-# apt-get update
-# apt-get install upmpdcli
-	checkcontentformat = 0
-	friendlyname = Somewhere over the rainbow
-# systemctl restart upmpdcli
-# systemctl disable upmpdcli
 
 ### ALSA
 	pcm.0.card 1
 # mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.orig
+
 ### MPD binary & mpd.conf
-# nano /etc/mpd.conf.sav
-	decoder {
-	plugin "pcm"
-	enabled "no"
-	}
+## apt-get install mpd mpc ncmpc
+## systemctl restart mpd
+## systemctl disable mpd
+# apt-get install libcue1 libaudiofile1 libavformat56 libflac8 libid3tag0 libmpdclient2 libupnp6
+# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
+# cp mpd /usr/bin/
+# cp mpd.conf /etc/mpd.conf.sav
+# apt-get install mpc ncmpc
+
+### Upmpdcli
+# add-apt-repository ppa:jean-francois-dockes/upnpp1
+# apt-get update
+# apt-get install upmpdcli
+	checkcontentformat = 0
+	friendlyname = Bann Network Player
+# systemctl restart upmpdcli
+# systemctl disable upmpdcli
 
 ### Audio.conf
 # sudo nano /etc/default/audio.conf
@@ -119,7 +117,6 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	wifi=off
 
 ### /etc/fstab
-
 # nano /etc/fstab
 
 	#/dev/sda1         /mnt/usb  vfat    ro 0 0
@@ -128,26 +125,25 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
 
 ### myMPD
-
-	# printf '/home/pi/kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
-	# printf '/home/pi/kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
-	# printf '/home/pi/kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'
-	# printf '/home/pi/kr2mpd mbc4u' > '/etc/mympd/syscmds/4MBC FM4U'
-	# printf '/home/pi/kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'
-	# printf '/home/pi/kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'
-	# touch /etc/mympd/syscmds/7HR
-	# printf 'sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
-	# printf 'sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
-	# touch /etc/mympd/syscmds/10HR
-	# printf 'sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
-	# printf 'sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
-	# touch /etc/mympd/syscmds/13HR
-	# printf 'systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
-	# printf 'systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'
-	# touch /etc/mympd/syscmds/16HR
-	# printf 'reboot'   > '/etc/mympd/syscmds/17Reboot       (다시 시작)'
-	# printf 'poweroff' > '/etc/mympd/syscmds/18Power off    (전원 끄기)'
-	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# printf '/home/pi/kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
+# printf '/home/pi/kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
+# printf '/home/pi/kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'
+# printf '/home/pi/kr2mpd mbc4u' > '/etc/mympd/syscmds/4MBC FM4U'
+# printf '/home/pi/kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'
+# printf '/home/pi/kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'
+# touch /etc/mympd/syscmds/7HR
+# printf 'sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
+# printf 'sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
+# touch /etc/mympd/syscmds/10HR
+# printf 'sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
+# printf 'sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
+# touch /etc/mympd/syscmds/13HR
+# printf 'systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
+# printf 'systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'
+# touch /etc/mympd/syscmds/16HR
+# printf 'reboot'   > '/etc/mympd/syscmds/17Reboot       (다시 시작)'
+# printf 'poweroff' > '/etc/mympd/syscmds/18Power off    (전원 끄기)'
+# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 ### Roon Bridge
 ### Airplay & Spotifyd
