@@ -271,7 +271,7 @@ Audio Render Advanced
 	$ cd myMPD*
 	$ ./mkrelease.sh or ./mkdebian.sh
 
-	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_9.0/armhf/ | grep -o 'mympd_[0-9,.,-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_9.0/armhf/$(cat -)"
+	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_9.0/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_9.0/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 
 	$ sudo systemctl disable mympd
