@@ -140,8 +140,9 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget "$(cat -)" -O ./mympd.zip
 # unzip mympd.zip && rm mympd.zip
 # cd myMPD*
-# nano Change line 67 in src/plugins/mympd_coverextract.cpp # prior to 5.3.1 version
+# nano src/plugins/mympd_coverextract.cpp # prior to 5.3.1 version
 	#67 myfile.open(abs_tmp_file, ofstream::binary); >>> myfile.open(abs_tmp_file.c_str(), ofstream::binary);
+# sed -i 's/<\/span>myMPD<\/a>/<\/span>myMenu<\/a>/' /usr/share/mympd/htdocs/index.html
 # ./mkdebian.sh # ./mkrelease.sh
 # cd ..
 ## apt-get install libmediainfo0v5
