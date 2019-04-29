@@ -140,21 +140,24 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget "$(cat -)" -O ./mympd.zip
 # unzip mympd.zip && rm mympd.zip
 # cd myMPD*
+# nano Change line 67 in src/plugins/mympd_coverextract.cpp # prior to 5.3.1 version
+	#67 myfile.open(abs_tmp_file, ofstream::binary); >>> myfile.open(abs_tmp_file.c_str(), ofstream::binary);
 # ./mkdebian.sh # ./mkrelease.sh
+# cd ..
 ## apt-get install libmediainfo0v5
 # dpkg -i ./mympd*.deb
 # systemctl stop    mympd
 # systemctl disable mympd
 # nano /etc/mympd/mympd.conf
-	host = 127.0.0.1
-	ssl = false
-	loglevel = 0
-	coverimage = true
-	coverimage = cover.jpg
-	stickers = false
-	syscmds = true
-	background = #111
-	coverextract = true
+	#host = 127.0.0.1
+	 ssl = false
+	#loglevel = 0
+	#coverimage = true
+	#coverimage = cover.jpg
+	 stickers = false
+	 syscmds = true
+	 background = #111
+	 coverextract = true
 
 # printf '/home/pi/kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
 # printf '/home/pi/kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
@@ -163,17 +166,17 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # printf '/home/pi/kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'
 # printf '/home/pi/kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'
 # touch /etc/mympd/syscmds/7HR
-# printf 'sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
-# printf 'sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
+# printf 'sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
+# printf 'sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
 # touch /etc/mympd/syscmds/10HR
-# printf 'sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
-# printf 'sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
+# printf 'sudo sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
+# printf 'sudo sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
 # touch /etc/mympd/syscmds/13HR
-# printf 'systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
-# printf 'systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'
+# printf 'sudo systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
+# printf 'sudo systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'
 # touch /etc/mympd/syscmds/16HR
-# printf 'reboot'   > '/etc/mympd/syscmds/17Reboot       (다시 시작)'
-# printf 'poweroff' > '/etc/mympd/syscmds/18Power off    (전원 끄기)'
+# printf 'sudo reboot'   > '/etc/mympd/syscmds/17Reboot (다시 시작)'
+# printf 'sudo poweroff' > '/etc/mympd/syscmds/18Power off (전원 끄기)'
 # echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 ### Roon Bridge
