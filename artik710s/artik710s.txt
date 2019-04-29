@@ -7,7 +7,13 @@ $ ssh root@192.168.0.x
 	password : root
 
 # uname -a; cat /etc/os-release
-	Ubuntu 16.04.3 LTS (Linux artix 4.4.71)
+	Ubuntu 16.04.6 LTS (Linux artix 4.4.113)
+# nano /etc/apt/sources.list
+	...
+	deb http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
+	deb-src http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
+## mv /etc/apt/sources.list.d/artik-e2e-source.list /etc/apt/sources.list.d/artik-e2e-source.list.orig
+## mv /etc/apt/sources.list.d/artik-platform-artik710s-sources.list /etc/apt/sources.list.d/artik-platform-artik710s-sources.list.orig
 # apt-get update
 	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710s
 # apt-get upgrade
@@ -90,9 +96,12 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # apt-get install mpc ncmpc
 
 ### Upmpdcli
-# add-apt-repository ppa:jean-francois-dockes/upnpp1
-# apt-get update
-# apt-get install upmpdcli
+## add-apt-repository ppa:jean-francois-dockes/upnpp1
+## apt-get update
+## apt-get install upmpdcli
+# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli_1.4.1-1~ppa1~xenial1_arm64.deb
+# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/libupnpp5_0.17.0-1~ppa1~xenial1_arm64.deb
+# dpkg -i upmpdcli*.deb libupnpp*.deb
 	checkcontentformat = 0
 	friendlyname = Bann Network Player
 # systemctl restart upmpdcli
@@ -125,6 +134,28 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
 
 ### myMPD
+# apt-get update
+# apt-get install build-essential debhelper fakeroot libmpdclient-dev cmake libssl-dev unzip
+# apt-get install libmediainfo-dev
+# wget https://github.com/jcorporation/myMPD/archive/v5.3.1.zip -O mympd.zip
+# unzip mympd.zip && rm mympd.zip
+# cd myMPD*
+# ./mkdebian.sh # ./mkrelease.sh
+## apt-get install libmediainfo0v5
+# dpkg -i ./mympd*.deb
+# systemctl stop    mympd
+# systemctl disable mympd
+# nano /etc/mympd/mympd.conf
+	host = 127.0.0.1
+	ssl = false
+	loglevel = 0
+	coverimage = true
+	coverimage = cover.jpg
+	stickers = false
+	syscmds = true
+	background = #111
+	coverextract = true
+
 # printf '/home/pi/kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
 # printf '/home/pi/kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
 # printf '/home/pi/kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'
