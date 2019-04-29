@@ -119,4 +119,4 @@
 		 mixer_device ""
 		#audio_buffer_size "3684" # for 0.21.x
 		 audio_buffer_size "3683" #
-		 buffer_before_play "10.5596937298023%" #
+		 buffer_before_play "10.5596937298022%" #
