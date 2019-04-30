@@ -209,6 +209,9 @@ Audio Render Advanced
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 		#ExecStart=nohup /opt/RoonBridge/Bridge/RoonBridge>/dev/null</dev/null 2>/dev/null
+	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
+		exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server>/dev/null</dev/null 2>/dev/null #
+		exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null #
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
