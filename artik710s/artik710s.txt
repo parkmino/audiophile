@@ -137,7 +137,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # apt-get update
 # apt-get install build-essential debhelper fakeroot libmpdclient-dev cmake libssl-dev unzip
 # apt-get install libmediainfo-dev
-# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget "$(cat -)" -O ./mympd.zip
+## curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget "$(cat -)" -O ./mympd.zip
+# wget https://github.com/jcorporation/myMPD/archive/master.zip -O ./mympd.zip
 # unzip mympd.zip && rm mympd.zip
 # cd myMPD*
 # nano src/plugins/mympd_coverextract.cpp # prior to 5.3.1 version
@@ -186,6 +187,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### sysctl.conf
 ### USB mount
 ### Internet radio (kr2mpd, ut2mpd, *.m3u8/pls)
+# mpd update
 ### audio-config
 
 ### Back up
