@@ -640,6 +640,32 @@ if [ -n "$count" ] && [ "$count" -ne 0 2>/dev/null ]; then
 fi
 }
 
+TTYD () {
+printf "• ttyd\t\t"
+url="https://github.com/tsl0922/ttyd/releases/latest"
+latest=$(curl $curl_opt "$url" | cut -d'/' -f8 | cut -d'"' -f1)
+current=$(ttyd --version | cut -d" " -f3)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+elif [ "$latest" = "$current" ]; then
+ printf "최신판\n"
+else
+ printf "판올림 ($latest)\n"
+ read -p "  Update ttyd? [Y/n]" answer
+ if [ "$answer" != n ]; then
+  printf '  '
+  #curl -s "$url" | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.x86_64/' | wget "$(cat -)" -P /home/parkmino/Downloads/
+  #curl -s $(curl -s "$url" | cut -d\" -f2) | grep -m1 x86_64 | cut -d\" -f2 | wget "https://github.com/$(cat -)" -P /home/parkmino/Downloads/
+  printf '  '
+  chmod +x /home/parkmino/Downloads/ttyd_linux.x86_64
+  printf '  '
+  sudo mv /home/parkmino/Downloads/ttyd_linux.x86_64 /usr/bin/ttyd
+  printf "  $(ttyd --version)\n"
+ fi
+fi
+}
+
 UBUNTU () {
 printf "• Ubuntu\t"
 latest="$(curl $curl_opt https://changelogs.ubuntu.com/meta-release-lts | grep ^Version | tail -1 | cut -d' ' -f2-)"
@@ -699,6 +725,7 @@ CREATE_AP
 GOOGLER
 #MESON
 MINIDLNA
+TTYD
 YOUTUBE_DL
 #APCAST
 ANDROID_X86

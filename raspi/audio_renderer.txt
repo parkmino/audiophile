@@ -302,8 +302,10 @@ Audio Render Advanced
 	$ sudo sh -c "printf 'sudo sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'"
 	$ sudo sh -c "printf 'sudo sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'"
 	$ sudo touch /etc/mympd/syscmds/13HR
-	$ sudo sh -c "printf 'sudo systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'"
-	$ sudo sh -c "printf 'sudo systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'"
+	$ #sudo sh -c "printf 'sudo systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'"
+	$ #sudo sh -c "printf 'sudo systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'"
+	$ sudo sh -c "printf 'ttyd -p 8080 dash' > '/etc/mympd/syscmds/14Web Terminal - Start'"
+	$ sudo sh -c "printf 'pkill ttyd' > '/etc/mympd/syscmds/15Web Terminal - Stop'"
 	$ sudo touch /etc/mympd/syscmds/16HR
 	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/17Reboot       (다시 시작)'"
 	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/18Power off    (전원 끄기)'"
@@ -317,7 +319,13 @@ Audio Render Advanced
 	# ln -s /root/audio-config /usr/bin/
 	$ audio-config
 
-22. Web interface
+22. ttyd
+
+	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
+	$ chmod +x ~/ttyd_linux.armhf
+	$ sudo mv ~/ttyd_linux.armhf /usr/bin/ttyd
+
+23. Web interface
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
@@ -341,7 +349,7 @@ Audio Render Advanced
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-23. Read-only (Just for reference)
+24. Read-only (Just for reference)
 	cp remountro remountrw ~/
 	chmod +x remountro remountrw
 	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
@@ -351,7 +359,7 @@ Audio Render Advanced
 	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
 	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
 
-24. audio.conf
+25. audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		# audio.conf
@@ -377,7 +385,7 @@ Audio Render Advanced
 		 [ "$tts_eng" = on ] && tts en My I P is $(hostname -I) || tts
 		fi
 
-25. Make Image
+26. Make Image
 
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get update
