@@ -176,7 +176,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # touch /etc/mympd/syscmds/13HR
 ## printf 'sudo systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
 ## printf 'sudo systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - St
-# printf 'sudo ttyd -p 8080 dash' > '/etc/mympd/syscmds/14Web Terminal - Start'"
+# printf 'sudo ttyd -p 8080 dash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal - Start'"
 # printf 'sudo pkill ttyd' > '/etc/mympd/syscmds/14Web Terminal - Stop'"
 # touch /etc/mympd/syscmds/16HR
 # printf 'sudo reboot'   > '/etc/mympd/syscmds/17Reboot (다시 시작)'
