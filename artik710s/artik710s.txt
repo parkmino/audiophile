@@ -161,12 +161,12 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	 background = #111
 	 coverextract = true
 
-# printf '/home/pi/kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
-# printf '/home/pi/kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
-# printf '/home/pi/kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'
-# printf '/home/pi/kr2mpd mbc4u' > '/etc/mympd/syscmds/4MBC FM4U'
-# printf '/home/pi/kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'
-# printf '/home/pi/kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'
+# printf 'kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
+# printf 'kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
+# printf 'kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'
+# printf 'kr2mpd mbc4u' > '/etc/mympd/syscmds/4MBC FM4U'
+# printf 'kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'
+# printf 'kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'
 # touch /etc/mympd/syscmds/7HR
 # printf 'sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
 # printf 'sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
@@ -176,8 +176,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # touch /etc/mympd/syscmds/13HR
 ## printf 'sudo systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
 ## printf 'sudo systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - St
-# printf 'sudo ttyd -p 8080 dash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal - Start'"
-# printf 'sudo pkill ttyd' > '/etc/mympd/syscmds/14Web Terminal - Stop'"
+# printf 'ttyd -p 8080 dash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal - Start'"
+# printf 'pkill ttyd' > '/etc/mympd/syscmds/14Web Terminal - Stop'"
 # touch /etc/mympd/syscmds/16HR
 # printf 'sudo reboot'   > '/etc/mympd/syscmds/17Reboot (다시 시작)'
 # printf 'sudo poweroff' > '/etc/mympd/syscmds/18Power off (전원 끄기)'
