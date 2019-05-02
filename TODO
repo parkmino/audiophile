@@ -99,8 +99,7 @@
 	Roon Bridge - Enable		sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf
 	Roon Bridge - Disable		sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf
 	-------------------------
-	SSH - Start			systemctl start openssh
-	SSH - Stop			systemctl stop  openssh
+	Web Terminal			ttyd -o -p 8080 dash
 	-------------------------
 	Reboot       (다시 시작)	reboot
 	Power off    (전원 끄기)	poweroff
@@ -120,7 +119,3 @@
 		#audio_buffer_size "3684" # for 0.21.x
 		 audio_buffer_size "3683" #
 		 buffer_before_play "10.5596937298022%" #
-
-14. ttyd (Web Terminal)
-
-	https://github.com/tsl0922/ttyd
