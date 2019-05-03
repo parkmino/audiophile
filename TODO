@@ -51,38 +51,30 @@
 
 	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default ""' > copy/alsa.conf.min
 
-3. ALSA Mixer
-
-	sudo nano /etc/rc.local
-		# ... /dev/shm/null ...
-
-4. File permission
+3. ALSA library file permission
 
 	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
 
-5. sudo nano /etc/rc.local
+4. sudo nano /etc/rc.local
 
-	cp /usr/bin/nohup /dev/shm/
-	/dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null #
-	taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
+	 cp /usr/bin/nohup /dev/shm/
+	 /dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null #
+	 taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
+	#mknod ... /dev/shm/null ...
 
-6. Disable syslog in mpd and /dev/null log in mpd.conf
+5. sudo nano /etc/mpd.conf.sav
+	 state_file "/var/lib/mpd/state"
+	 log_file "/dev/null"
+	 mixer_device ""
+	#audio_buffer_size "3684" # for 0.21.x
+	 audio_buffer_size "3683" #
+	 buffer_before_play "10.5596937298022%" #
 
-7. Try /dev/shm/nohup and null in/output for RoonBridge
+6. Try /dev/shm/nohup and null in/output for RoonBridge
 
-8. Update kr2mpd
+7. Update kr2mpd
 
-9. Hdparm
-	sudo nano /etc/hdparm.conf
-		read_ahead_sect = 1288
-	sudo hdparm -a 1288 /dev/sda
-
-10. Enable MPD status for audio renderer
-
-	sudo nano /etc/mpd.conf.sav
-		state_file "/var/lib/mpd/state"
-
-11. Artik 710 Menu
+8. Artik 710 Menu
 
 	myMPD
 	-------------------------	### Commands
@@ -105,17 +97,7 @@
 	Power off    (전원 끄기)	poweroff
 	-------------------------
 
-12. sysctl
-
-	sudo nano /etc/sysctl.conf
-		kernel.sched_latency_ns = 1394060		# 1394058
-		#kernel.sched_migration_cost = 4899007		# 4899006
-		kernel.sched_time_avg_ms = 6288			# 6289
-
-13. mpd.conf
-
-	sudo nano /etc/mpd.conf.sav
-		 mixer_device ""
-		#audio_buffer_size "3684" # for 0.21.x
-		 audio_buffer_size "3683" #
-		 buffer_before_play "10.5596937298022%" #
+9. sudo nano /etc/sysctl.conf
+	 kernel.sched_latency_ns = 1394060		# 1394058
+	#kernel.sched_migration_cost = 4899007		# 4899006
+	 kernel.sched_time_avg_ms = 6288		# 6289
