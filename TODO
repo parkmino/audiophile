@@ -91,7 +91,7 @@
 	Roon Bridge - Enable		sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf
 	Roon Bridge - Disable		sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf
 	-------------------------
-	Web Terminal			ttyd -o -p 8080 dash
+	Web Terminal			ttyd -o -O -p 8080 dash
 	-------------------------
 	Reboot       (다시 시작)	reboot
 	Power off    (전원 끄기)	poweroff
