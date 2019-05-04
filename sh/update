@@ -73,7 +73,7 @@ fi
 }
 
 ALILEO () {
-printf "• 알릴레오\t"
+printf "• 알릴레오\t\t\t\t\t"
 url="https://www.youtube.com/playlist?list=PLtAbTqMyJif9KRRd8f1o3JQUHvsqvWacq"
 days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
 if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
@@ -83,17 +83,17 @@ if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
 fi
 [ "$days" = "1일 전" ] && days="어제"
 if [ -z "$days" ]; then
- printf "\t\t\t\t정보 없음\n"
+ printf "정보 없음\n"
 else
- printf "\t\t\t\t$days\n"
+ printf "$days\n"
  [ -z "${days##*오늘*}" ] && last=2
  [ "$days" = "어제" ]     && last=1
  if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
   for i in $(seq 1 $last); do
    printf '  '
    curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|고칠레오\)'.* | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
-   printf '   https://youtu.be/'
-   curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|고칠레오\)'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|고칠레오\)'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
   done
  fi
 fi
@@ -235,7 +235,7 @@ fi
 }
 
 DAS () {
-printf "• 다스 뵈이다\t"
+printf "• 다스 뵈이다\t\t\t\t\t"
 url="https://www.youtube.com/playlist?list=UUxvU6bRtYhNLvZleAIGa-FQ"
 days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
 if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
@@ -245,17 +245,18 @@ if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
 fi
 [ "$days" = "1일 전" ] && days="어제"
 if [ -z "$days" ]; then
- printf "\t\t\t\t정보 없음\n"
+ printf "정보 없음\n"
 else
- printf "\t\t\t\t$days\n"
+ printf "$days\n"
  [ -z "${days##*오늘*}" ] && last=2
  [ "$days" = "어제" ]     && last=1
  if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
   for i in $(seq 1 $last); do
    printf '  '
    curl $curl_opt "$url" | grep -m$i -o 'data-title="김어준'.* | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
-   printf '   https://youtu.be/'
-   curl $curl_opt "$url" | grep -m$i -o 'data-title="김어준'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1
+   #printf '   https://youtu.be/'
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="김어준'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
   done
  fi
 fi
