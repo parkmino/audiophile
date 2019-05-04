@@ -17,7 +17,7 @@
 
 ### Torrenthaja
 
-url="https://torrenthaja.com"
+url="https://torrenthaja1.com"
 
 printf "\n%s\n\n" $url
 wget --spider -q "$url" 2>&1 || (echo "Not connected and exit!" && exit)
@@ -25,5 +25,5 @@ wget --spider -q "$url" 2>&1 || (echo "Not connected and exit!" && exit)
 for i in $(seq 1 10); do # upto 15
 #curl -s "$url" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
  printf "%2d.%s\n" $i "$(curl -s "$url" | grep '<strong>' | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
- printf "    $(curl -s "$url" | grep -m$i -o "https://torrenthaja.com/torrent_.*.html" | tail -1)\n"
+ printf "    $(curl -s "$url" | grep -m$i -o "$url/torrent_.*.html" | tail -1)\n"
 done
