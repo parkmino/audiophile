@@ -99,6 +99,9 @@ sed -i '/1024,/a\                                         128,' src/command/Part
 sed -i '/unsigned _buffer_chunks,/a\                             unsigned _buffered_before_play,'  src/player/Control.cxx
 sed -i '/const unsigned buffer_chunks;/a\\n        const unsigned buffered_before_play;' src/player/Control.hxx
 
+### Customized value for buffer_before_play
+sed -i 's/unsigned buffer_before_play;/float buffer_before_play = 0.105596937298022;/; /const size_t buffer_before_play_size/,+5d' src/player/Thread.cxx
+
 ### Yan's patch
 https://skydrive.live.com/?cid=CE384832F08DA832&id=CE384832F08DA832%21105
 cd mpd
