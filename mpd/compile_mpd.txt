@@ -84,7 +84,7 @@ https://github.com/MusicPlayerDaemon/MPD/commit/8c638c50a31b8931acded3ddf6300420
 sed -i 's/unsigned buffer_before_play;/float buffer_before_play = 0.105596937298022;/; /const size_t buffer_before_play_size/,+5d' src/player/Thread.cxx
 
 ### Duration time tuning for buffer_before_play
-sed -i 's/(buffer_before_play_duration);/(buffer_before_play_duration) * 0.8970089098;/' src/player/Thread.cxx
+sed -i 's/(buffer_before_play_duration);/(buffer_before_play_duration) * 0.897008909767;/' src/player/Thread.cxx
 
 ### Yan's patch
 https://skydrive.live.com/?cid=CE384832F08DA832&id=CE384832F08DA832%21105
