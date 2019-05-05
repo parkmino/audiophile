@@ -80,7 +80,7 @@ sudo mv /usr/local/bin/mpd /usr/local/bin/mpd.0.21.4
 https://github.com/MusicPlayerDaemon/MPD/commit/5b2374b9495bb9da4b07d03328c1ecac204af8d4
 https://github.com/MusicPlayerDaemon/MPD/commit/8c638c50a31b8931acded3ddf6300420ce6e91f6
 
-sed -i 's/buffer_before_play.*/buffer_before_play }/' src/config/Templates.cxx
+sed -i 's/buffer_before_play.*/buffer_before_play" },/' src/config/Templates.cxx
 
 sed -i '/static.*buffer_before_play_duration/d' src/player/Thread.cxx
 sed -i 's/unsigned buffer_before_play;/const unsigned buffer_before_play;/' src/player/Thread.cxx
@@ -88,16 +88,25 @@ sed -i '/buffer(_buffer)/a\                 buffer_before_play(pc.buffered_befor
 sed -i '/const size_t buffer_before_play_size/,+5d' src/player/Thread.cxx
 
 sed -i '/64 \* KILOBYTE)/a\\nstatic constexpr unsigned DEFAULT_BUFFER_BEFORE_PLAY = 10;' src/Main.cxx
-https://github.com/MusicPlayerDaemon/MPD/commit/8c638c50a31b8931acded3ddf6300420ce6e91f6#diff-4716386af2ad6dc86cad888b514023b3
 sed -i '/buffered_chunks,/a\                                          buffered_before_play,' src/Main.cxx
+mousepad src/Main.cxx
+	https://github.com/MusicPlayerDaemon/MPD/commit/8c638c50a31b8931acded3ddf6300420ce6e91f6#diff-4716386af2ad6dc86cad888b514023b3
 
 sed -i 's/outputs, buffer_chunks,/outputs, buffer_chunks, buffered_before_play,/' src/Partition.cxx
+sed -i '/unsigned buffer_chunks,/a\                     unsigned buffered_before_play,' src/Partition.cxx
+
 sed -i '/unsigned buffer_chunks,/a\                  unsigned buffered_before_play,' src/Partition.hxx
 
 sed -i '/1024,/a\                                         128,' src/command/PartitionCommands.cxx
 
 sed -i '/unsigned _buffer_chunks,/a\                             unsigned _buffered_before_play,'  src/player/Control.cxx
+sed -i '/buffer_chunks(_buffer_chunks),/a\         buffered_before_play(_buffered_before_play),' src/player/Control.cxx
+
 sed -i '/const unsigned buffer_chunks;/a\\n        const unsigned buffered_before_play;' src/player/Control.hxx
+sed -i '/unsigned buffer_chunks,/a\                      unsigned buffered_before_play,'  src/player/Control.hxx
+
+### Customized value for buffer_before_play
+sed -i 's/unsigned buffer_before_play;/float buffer_before_play = 0.105596937298023;/; /const size_t buffer_before_play_size/,+5d' src/player/Thread.cxx
 
 ### Customized value for buffer_before_play
 sed -i 's/unsigned buffer_before_play;/float buffer_before_play = 0.105596937298022;/; /const size_t buffer_before_play_size/,+5d' src/player/Thread.cxx
