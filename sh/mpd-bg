@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mpd_ver=$(/usr/bin/mpd --version | head -1 | cut -d. -f2)
+
 sec=0
 until [ "$(pgrep -x mpd)" -gt 0 ] 2>/dev/null; do
  sleep 1
@@ -8,16 +10,16 @@ until [ "$(pgrep -x mpd)" -gt 0 ] 2>/dev/null; do
 done
 
 sleep 1
-#mpc add Etc/blank.mp3 && mpc play $(mpc playlist | wc -l)
+[ "$mpd_ver" -ge 21 ] && mpc add Etc/blank.mp3 && mpc play $(mpc playlist | wc -l)
 
 sec=0
 until [ "$(pgrep -x mpd)" -gt 0 ] 2>/dev/null && $(pstree -npt "$(pgrep -x mpd)" 2>/dev/null | grep -q output); do
- #mpc play $(mpc playlist | wc -l)
+ [ "$mpd_ver" -ge 21 ] && mpc play $(mpc playlist | wc -l)
  sec=$(($sec+1))
  [ "$sec" -ge 5 ] && printf "\nNo MPD audio output and exit!\n" && exit
 done
 
-#mpc del $(mpc playlist | wc -l)
+[ "$mpd_ver" -ge 21 ] && mpc del $(mpc playlist | wc -l)
 
 m_task=$(($(nproc --all)-1))
 [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
