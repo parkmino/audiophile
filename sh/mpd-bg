@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mpd_ver=$(/usr/bin/mpd --version | head -1 | cut -d. -f2)
+mpd_ver=$(/dev/shm/mpd --version | head -1 | cut -d. -f2)
 
 sec=0
 until [ "$(pgrep -x mpd)" -gt 0 ] 2>/dev/null; do
