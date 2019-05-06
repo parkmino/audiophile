@@ -85,6 +85,7 @@ sed -i 's/unsigned buffer_before_play;/float buffer_before_play = 0.105596937298
 
 ### Duration time tuning for buffer_before_play
 sed -i 's/(buffer_before_play_duration);/(buffer_before_play_duration) * 0.897008909767;/' src/player/Thread.cxx
+sed -i 's/\/ sizeof(MusicChunk::data);/\/ sizeof(MusicChunk::data) * 0.877836786088;/' src/player/Thread.cxx
 
 ### Yan's patch
 https://skydrive.live.com/?cid=CE384832F08DA832&id=CE384832F08DA832%21105
