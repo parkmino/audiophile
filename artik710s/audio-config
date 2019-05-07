@@ -2,7 +2,7 @@
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-spotifyd_conf=~/spotifyd.conf
+spotifyd_conf=/etc/spotifyd.conf
 audio_conf=/etc/default/audio.conf
 
 ethernet_ip () {
@@ -82,9 +82,8 @@ esac
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 12 70 5 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 70 4 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
-"folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^music_directory' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
 "pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
 "vol"      "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
@@ -99,7 +98,7 @@ if [ "$exitstatus" = 0 ]; then
 fi
 }
 
-mpd_roon_air () {
+upnp_roon_air () {
 i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 59 3 \
 "upnp"      "Enable UPnP          UPnP 사용" $(grep -q 'upnp=on' $audio_conf && echo ON || echo OFF) \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
@@ -174,9 +173,9 @@ while true; do
  i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 15 70 7 \
 "1"  "Ethernet IP                   유선 IP 설정                 >" \
 "2"  "Wi-Fi client                  무선 연결                    >" \
-"3"  "UPnP, Roon Bridge, Airplay    UPnP, 룬 브리지, 에어플레이  >" \
-"4"  "Spotify                       스포티파이                   >" \
-"5"  "MPD options                   MPD 옵션                     >" \
+"3"  "MPD options                   MPD 옵션                     >" \
+"4"  "UPnP, Roon Bridge, Airplay    UPnP, 룬 브리지, 에어플레이  >" \
+"5"  "Spotify                       스포티파이                   >" \
 "6"  "Reboot                        다시 시작" \
 "7"  "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
 
@@ -186,9 +185,9 @@ while true; do
  case $i in
   1) ethernet_ip ;;
   2) wifi_client ;;
-  3) mpd_roon_air ;;
-  4) spotifyd ;;
-  5) mpd_options ;;
+  3) mpd_options ;;
+  4) upnp_roon_air ;;
+  5) spotifyd ;;
   6) reboot ;;
   7) poweroff ;;
  esac
