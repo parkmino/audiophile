@@ -2,7 +2,7 @@
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-spotifyd_conf=~/spotifyd.conf
+spotifyd_conf=/home/pi/spotifyd.conf
 audio_conf=/etc/default/audio.conf
 
 sound_card_initial () {
@@ -177,9 +177,8 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 12 70 5 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 70 4 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
-"folder"   "Enable Music Folder         음악 폴더 사용" $(grep -q '^music_directory' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
 "pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
 "vol"      "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
@@ -194,7 +193,7 @@ if [ "$exitstatus" = 0 ]; then
 fi
 }
 
-spotify_qobuz_tidal () {
+spotify_conf () {
 while true; do
 
 i=$(whiptail --title "Spotify / Spotify 설정" --menu "\
@@ -248,136 +247,6 @@ Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button 
       sudo sed -i '/spotify/s/".*"/"off"/' $audio_conf
      fi
     fi ;;
- 4) qobuz_id=$(grep -A1 qobuz $mpd_conf | tail -1 | cut -d\" -f2)
-    input_id=$(whiptail --title "Qobuz app_id / Qobuz 앱_id" --inputbox "\
-
-Input Qobuz app_id.   Qobuz 앱_id를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 51 $qobuz_id 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_id" ]; then
-      sudo sed -i '/"qobuz"/!b;n;s/".*"/"'"$input_id"'"/' $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/no/yes/'     $mpd_conf
-     else
-      sudo sed -i '/"qobuz"/!b;n;s/".*"/""/'              $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/yes/no/'     $mpd_conf
-     fi
-    fi ;;
- 5) qobuz_sec=$(grep -A2 qobuz $mpd_conf | tail -1 | cut -d\" -f2)
-    input_sec=$(whiptail --title "Qobuz app_secret / Qobuz 앱_secret" --inputbox "\
-
-Input Qobuz app_secret.   Qobuz 앱_secret를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 59 $qobuz_sec 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_sec" ]; then
-      sudo sed -i '/"qobuz"/!b;n;n;s/".*"/"'"$input_sec"'"/' $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/no/yes/'        $mpd_conf
-     else
-      sudo sed -i '/"qobuz"/!b;n;n;s/".*"/""/'               $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/yes/no/'        $mpd_conf
-     fi
-    fi ;;
- 6) qobuz_user=$(grep -A3 qobuz $mpd_conf | tail -1 | cut -d\" -f2)
-    input_user=$(whiptail --title "Qobuz app_username / Qobuz 사용자" --inputbox "\
-
-Input Qobuz app_username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 58 $qobuz_user 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_user" ]; then
-      sudo sed -i '/"qobuz"/!b;n;n;n;s/".*"/"'"$input_user"'"/' $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/no/yes/'           $mpd_conf
-     else
-      sudo sed -i '/"qobuz"/!b;n;n;n;s/".*"/""/'                $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/yes/no/'           $mpd_conf
-     fi
-    fi ;;
- 7) qobuz_pwd=$(grep -A4 qobuz $mpd_conf | tail -1 | cut -d\" -f2)
-    input_pwd=$(whiptail --title "Qobuz app_password / Qobuz 비밀번호" --inputbox "\
-
-Input Qobuz app_password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 60 $qobuz_pwd 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_pwd" ]; then
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;s/".*"/"'"$input_pwd"'"/' $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/no/yes/'            $mpd_conf
-     else
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;s/".*"/""/'               $mpd_conf
-      sudo sed -i '/"qobuz"/!b;n;n;n;n;n;n;s/yes/no/'            $mpd_conf
-     fi
-    fi ;;
- 8) qobuz_fmt=$(grep format_id $mpd_conf | cut -d\" -f2)
-    i=$(whiptail --title "Qobuz format_id / Qobuz 포맷" --radiolist "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 57 4 \
-"5"    "MP3 320"                                 $([ "$qobuz_fmt" -eq 5 ]  && echo ON || echo OFF) \
-"6"    "FLAC Lossless"                           $([ "$qobuz_fmt" -eq 6 ]  && echo ON || echo OFF) \
-"7"    "FLAC Hi-Res 24 bit =< 96kHz"             $([ "$qobuz_fmt" -eq 7 ]  && echo ON || echo OFF) \
-"27"   "FLAC Hi-Res 24 bit >96 kHz & =< 192 kHz" $([ "$qobuz_fmt" -eq 27 ] && echo ON || echo OFF) 3>&1 1>&2 2>&3)
-
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     case $i in
-      5)  sudo sed -i '/format_id/s/".*"/"5"/'  $mpd_conf ;;
-      6)  sudo sed -i '/format_id/s/".*"/"6"/'  $mpd_conf ;;
-      7)  sudo sed -i '/format_id/s/".*"/"7"/'  $mpd_conf ;;
-      27) sudo sed -i '/format_id/s/".*"/"27"/' $mpd_conf ;;
-     esac
-    fi ;;
- 9) tidal_token=$(grep -A1 tidal $mpd_conf | tail -1 | cut -d\" -f2)
-    input_token=$(whiptail --title "Tidal token / Tidal 토큰" --inputbox "\
-
-Input Tidal token.   Tidal 토큰을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 49 $tidal_token 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_token" ]; then
-      sudo sed -i '/"tidal"/!b;n;s/".*"/"'"$input_token"'"/' $mpd_conf
-      sudo sed -i '/"tidal"/!b;n;n;n;n;n;s/no/yes/'          $mpd_conf
-     else
-      sudo sed -i '/"tidal"/!b;n;s/".*"/""/'                 $mpd_conf
-      sudo sed -i '/"tidal"/!b;n;n;n;n;n;s/yes/no/'          $mpd_conf
-     fi
-    fi ;;
- 10) tidal_user=$(grep -A2 tidal $mpd_conf | tail -1 | cut -d\" -f2)
-    input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
-
-Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 54 $tidal_user 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_user" ]; then
-      sudo sed -i '/"tidal"/!b;n;n;s/".*"/"'"$input_user"'"/' $mpd_conf
-      sudo sed -i '/"tidal"/!b;n;n;n;n;n;s/no/yes/'           $mpd_conf
-     else
-      sudo sed -i '/"tidal"/!b;n;n;s/".*"/""/'                $mpd_conf
-      sudo sed -i '/"tidal"/!b;n;n;n;n;n;s/yes/no/'           $mpd_conf
-     fi
-    fi ;;
- 11) tidal_pwd=$(grep -A3 tidal $mpd_conf | tail -1 | cut -d\" -f2)
-    input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
-
-Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 56 $tidal_pwd 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_pwd" ]; then
-      sudo sed -i '/"tidal"/!b;n;n;n;s/".*"/"'"$input_pwd"'"/' $mpd_conf
-      sudo sed -i '/"tidal"/!b;n;n;n;n;n;s/no/yes/'            $mpd_conf
-     else
-      sudo sed -i '/"tidal"/!b;n;n;n;s/".*"/""/'               $mpd_conf
-      sudo sed -i '/"tidal"/!b;n;n;n;n;n;s/yes/no/'            $mpd_conf
-     fi
-    fi ;;
- 12) tidal_aq=$(grep audioquality $mpd_conf | cut -d\" -f2)
-    i=$(whiptail --title "Tidal audioquality / Tidal 오디오 품질" --radiolist "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 46 4 \
-"1"   "HI_RES"    $([ "$tidal_aq" = HI_RES ]   && echo ON || echo OFF) \
-"2"   "LOSSELESS" $([ "$tidal_aq" = LOSELESS ] && echo ON || echo OFF) \
-"3"   "HIGH"      $([ "$tidal_aq" = HIGH ]     && echo ON || echo OFF) \
-"4"   "LOW"       $([ "$tidal_aq" = LOW ]      && echo ON || echo OFF) 3>&1 1>&2 2>&3)
-
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     case $i in
-      1) sudo sed -i '/audioquality/s/".*"/"HI_RES"/'   $mpd_conf ;;
-      2) sudo sed -i '/audioquality/s/".*"/"LOSELESS"/' $mpd_conf ;;
-      3) sudo sed -i '/audioquality/s/".*"/"HIGH"/'     $mpd_conf ;;
-      4) sudo sed -i '/audioquality/s/".*"/"LOW"/'      $mpd_conf ;;
-     esac
-    fi ;;
 esac
 
 done
@@ -407,19 +276,18 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 20 61 12 \
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 19 61 11 \
  "1"  "Audio device           오디오 장치            >" \
  "2"  "USB signal & power     USB 신호와 전원        >" \
  "3"  "MPD options            MPD 옵션               >" \
  "4"  "Renderer name          렌더러 이름 바꾸기     >" \
- "5"  "Ethernet IP            유선 IP 설정           >" \
- "6"  "IP TTS, DBus           IP TTS와 DBus          >" \
- "7"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
- "8"  "Spotify                Spotify 설정           >" \
- "9"  "SSH turn-off           SSH 사용 안 함" \
-"10"  "Raspbian update        Raspbian 업데이트" \
-"11"  "Reboot                 재시작" \
-"12"  "Power off              전원 끄기" 3>&1 1>&2 2>&3)
+ "5"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
+ "6"  "Spotify                Spotify 설정           >" \
+ "7"  "Ethernet IP            유선 IP 설정           >" \
+ "8"  "IP TTS, DBus           IP TTS와 DBus          >" \
+ "9"  "Raspbian update        Raspbian 업데이트" \
+"10"  "Reboot                 재시작" \
+"11"  "Power off              전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
@@ -429,15 +297,14 @@ while true; do
   2)  usb_signal_power ;;
   3)  mpd_options ;;
   4)  renderer_name ;;
-  5)  ethernet_ip ;;
-  6)  dbus_tts ;;
-  7)  roon_airplay ;;
-  8)  spotify_qobuz_tidal ;;
-  9)  sudo touch /boot/.nossh ;;
-  10) sudo apt-get update
+  5)  roon_airplay ;;
+  6)  spotify_conf ;;
+  7)  ethernet_ip ;;
+  8)  dbus_tts ;;
+  9)  sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
-  11) sudo reboot ;;
-  12) sudo poweroff ;;
+  10) sudo reboot ;;
+  11) sudo poweroff ;;
  esac
 done
