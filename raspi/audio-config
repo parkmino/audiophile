@@ -286,7 +286,7 @@ while true; do
  "7"  "Ethernet IP            유선 IP 설정           >" \
  "8"  "IP TTS, DBus           IP TTS와 DBus          >" \
  "9"  "Raspbian update        Raspbian 업데이트" \
-"10"  "Reboot                 재시작" \
+"10"  "Reboot                 다시 시작" \
 "11"  "Power off              전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
