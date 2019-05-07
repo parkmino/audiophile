@@ -7,21 +7,21 @@ $ #export CFLAGS="-march=native -O2" ; export CXXFLAGS="-march=native -O2" ; exp
 $ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 $ ./configure --help
 
-### Normal
+## Normal
 $ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
 
-### Minmal with mixer
+## Minimal with mixer
 $ ./configure --disable-aload --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
 
-### Minimal
+## Minimal
 $ ./configure --disable-aload --disable-mixer --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw #--disable-thread-safety
 
 $ sudo make install
 
 $ sudo chmod -x /usr/lib/libasound.so.2.0.0
 $ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
-$ sudo cp /usr/lib/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav
-$ sudo cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+$ sudo cp /usr/lib/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min
+$ sudo cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
 
 ### ALSA.CONF
 
@@ -31,21 +31,17 @@ $ ls /usr/lib/*/alsa-lib/
 $ sudo rm -rf /usr/lib/*/alsa-lib/
 $ #sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
 
-$ sudo rm -rf /usr/share/alsa.orig
+$ [ -d /usr/share/alsa.org ] && sudo rm -rf /usr/share/alsa.orig
 $ sudo mv /usr/share/alsa /usr/share/alsa.orig
 $ sudo systemctl mask alsa-store.service
 $ sudo systemctl mask alsa-restore.service
 $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 $ sudo mkdir /usr/share/alsa
-$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.0 \"\" pcm.default \"\" ctl.default \"\"' > /usr/share/alsa/alsa.conf.sav"
-$ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.0 \"\" pcm.default \"\" ctl.default \"\"' > /usr/share/alsa/alsa.conf.min"
+$ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-$ sudo nano /etc/rc.local
-	mknod -m 000 /dev/shm/null p
-	cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
-	ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
 $ sudo find /usr/lib/*/alsa-lib/ -name '*.sav' -exec rename -v -f 's/.sav$//' '{}' \;
-$ sudo mv /usr/share/alsa     /usr/share/alsa.tweak
+$ sudo mv /usr/share/alsa      /usr/share/alsa.tweak
 $ sudo mv /usr/share/alsa.orig /usr/share/alsa
