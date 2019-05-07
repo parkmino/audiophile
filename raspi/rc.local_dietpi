@@ -44,7 +44,6 @@ eol () {
  echo none > /sys/class/leds/led0/trigger
  echo 0    > /sys/class/leds/led0/brightness
  [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
- pkill cron
  pkill rc.local
 }
 
@@ -55,25 +54,25 @@ roon_bridge () {
  systemctl start roonbridge
 }
 
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
 if [ "$alsa" = orig ]; then
- cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-elif [ "$alsa" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
- cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+elif [ "$alsa" = min ] && [ "$roonbridge" = off ] && [ "$spotify" = off ]; then
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 else
- cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so
-cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
@@ -159,6 +158,10 @@ swapoff -a
 
 ### Shaiport-sync
 [ "$airplay" = on ] && systemctl start avahi-daemon shairport-sync
+
+### myMPD
+mympd&>/dev/null</dev/null 2>/dev/null #
+sleep 1
 
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
