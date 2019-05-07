@@ -192,7 +192,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### rc.local
 ### sysctl.conf
 ### USB mount
-### Internet radio (kr2mpd, ut2mpd, *.m3u8/pls)
+### Internet radio (mv kr2mpd, ut2mpd, *.m3u8/pls)
 # mpd update
 ### audio-config
 
