@@ -184,14 +184,6 @@ Audio Render Advanced
 	$ #chmod +x roonbridge-installer-linuxarmv8.sh
 	$ #sudo ./roonbridge-installer-linuxarmv8.sh
 
-	# nano /DietPi/dietpi/dietpi-software
-		aSOFTWARE_WHIP_NAME[$software_id]='Shairport Sync'
-		...
-		aSOFTWARE_REQUIRES_ALSA[$software_id]=0
-	# dietpi-software
-		Software Optimized >> Media Systems >> 37 Shairport Sync
-	# systemctl disable avahi-daemon shairport-sync
-
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 		ExecStart=/dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge #
@@ -228,6 +220,16 @@ Audio Render Advanced
 	$ sudo apt-get install shairport-sync
 	$ wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.2.2-1+b2_armhf.deb
 	$ sudo dpkg -i shairport*.deb
+
+	# nano /DietPi/dietpi/dietpi-software
+		aSOFTWARE_WHIP_NAME[$software_id]='Shairport Sync'
+		...
+		aSOFTWARE_REQUIRES_ALSA[$software_id]=0
+	# dietpi-software
+		Software Optimized >> Media Systems >> 37 Shairport Sync
+	# systemctl unmask  udev
+	# systemctl disable avahi-daemon shairport-sync
+
 	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"";/' /etc/shairport-sync.conf
 	$ #sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
 	$ sudo sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' /etc/shairport-sync.conf
