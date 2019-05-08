@@ -164,6 +164,14 @@ Audio Render Advanced
 
 17. Roon Bridge
 
+	# dietpi-services status
+	# nano /DietPi/dietpi/.dietpi-services_include_exclude
+		- avahi-daemon
+		- mpd
+		- mympd
+		- roonbridge
+		- shairport-sync
+
 	https://kb.roonlabs.com/LinuxInstall
 
 	$ sudo apt update
@@ -192,14 +200,6 @@ Audio Render Advanced
 		exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null #
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
-
-	# dietpi-services
-	# nano /DietPi/dietpi/.dietpi-services_include_exclude
-		- avahi-daemon
-		- mpd
-		- mympd
-		- roonbridge
-		- shairport-sync
 
 18. Spotifyd
 
