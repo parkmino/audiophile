@@ -65,7 +65,7 @@ spotifyd () {
 if [ "$alsa" = orig ]; then
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-elif [ "$alsa" = min ] && [ "$roonbridge" = off ] && [ "$spotify" = off ]; then
+elif [ "$alsa" = min ] && [ "$roonbridge" = off ] && [ "$spotify" = off ] && [ "$airplay" = off ]; then
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -186,6 +186,8 @@ if [ "$upnp" = on ]; then
  musicpd_bg &
  eol &
 /dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null #
+else
+ pkill rc.local
 fi
 
 exit 0

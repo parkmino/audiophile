@@ -166,10 +166,7 @@ Audio Render Advanced
 
 	https://kb.roonlabs.com/LinuxInstall
 
-	$ sudo ntpdate pool.ntp.org
 	$ sudo apt update
-	$ sudo apt upgrade
-	$ sudo apt dist-upgrade
 
 	$ curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv7hf.sh
 	$ chmod +x roonbridge-installer-linuxarmv7hf.sh
@@ -177,7 +174,15 @@ Audio Render Advanced
 
 	$ #curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv8.sh
 	$ #chmod +x roonbridge-installer-linuxarmv8.sh
-	$ #sudo ./roonbridge-installer-linuxarmv8.sh	
+	$ #sudo ./roonbridge-installer-linuxarmv8.sh
+
+	# nano /DietPi/dietpi/dietpi-software
+		aSOFTWARE_WHIP_NAME[$software_id]='Shairport Sync'
+		...
+		aSOFTWARE_REQUIRES_ALSA[$software_id]=0
+	# dietpi-software
+		Software Optimized >> Media Systems >> 37 Shairport Sync
+	# systemctl disable avahi-daemon shairport-sync
 
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
@@ -190,6 +195,7 @@ Audio Render Advanced
 
 	# dietpi-services
 	# nano /DietPi/dietpi/.dietpi-services_include_exclude
+		- avahi-daemon
 		- mpd
 		- mympd
 		- roonbridge

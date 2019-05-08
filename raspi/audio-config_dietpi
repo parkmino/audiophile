@@ -258,8 +258,8 @@ i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --c
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ roon ]] && sed -i '/upnp=/s/=.*/=on/' $audio_conf || sed -i '/upnp=/s/=.*/=off/' $audio_conf
- [[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
+ [[ $i =~ roon ]] && sed -i '/roon=/s/=.*/=on/' $audio_conf || sed -i '/roon=/s/=.*/=off/' $audio_conf
+#[[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
 
