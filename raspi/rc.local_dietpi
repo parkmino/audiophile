@@ -54,6 +54,12 @@ roon_bridge () {
  systemctl start roonbridge
 }
 
+spotifyd () {
+ cp /root/spotifyd /root/spotifyd.conf /dev/shm/
+ sleep 1
+/dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null #
+}
+
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = orig ]; then
@@ -151,10 +157,10 @@ fi
 swapoff -a
 
 ### Roon Bridge
-[ "$roon" = on ] && (roon_bridge &) && sleep 3
+[ "$roonbridge" = on ] && (roon_bridge &) && sleep 3
 
 ### Spotify
-[ "$spotify" = on ] && /dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null #
+[ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### Shaiport-sync
 [ "$airplay" = on ] && systemctl start avahi-daemon shairport-sync

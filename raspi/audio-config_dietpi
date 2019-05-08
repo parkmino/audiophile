@@ -157,13 +157,13 @@ esac
 tts_conf () {
 i=$(whiptail --title "IP TTS" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 63 2 \
 "tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
-"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dbus ]] && sed -i 's/dbus #/# dbus/g' /etc/rc.local || sed -i 's/# dbus/dbus #/g' /etc/rc.local
- [[ $i =~ tts  ]] && sed -i '/tts=/s/".*"/"on"/' $audio_conf || sed -i '/tts=/s/".*"/"off"/' $audio_conf
- [[ $i =~ eng  ]] && sed -i '/tts_eng=/s/".*"/"on"/' $audio_conf || sed -i '/tts_eng=/s/".*"/"off"/' $audio_conf
+ [[ $i =~ tts  ]] && sed -i '/tts=/s/=.*/=on/' $audio_conf || sed -i '/tts=/s/=.*/=off/' $audio_conf
+ [[ $i =~ eng  ]] && sed -i '/tts_eng=/s/=.*/=on/' $audio_conf || sed -i '/tts_eng=/s/=.*/=off/' $audio_conf
 fi
 }
 
@@ -228,9 +228,9 @@ Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
       sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
-      sed -i '/spotify/s/".*"/"on"/'  $audio_conf
+      sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
-      sed -i '/spotify/s/".*"/"off"/' $audio_conf
+      sed -i '/spotify/s/=.*/=off/' $audio_conf
      fi
     fi ;;
  3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
@@ -241,9 +241,9 @@ Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button 
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
       sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
-      sed -i '/spotify/s/".*"/"on"/'  $audio_conf
+      sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
-      sed -i '/spotify/s/".*"/"off"/' $audio_conf
+      sed -i '/spotify/s/=.*/=off/' $audio_conf
      fi
     fi ;;
 esac
@@ -258,8 +258,8 @@ i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --c
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ roon ]] && sed -i '/upnp=/s/".*"/"on"/' $audio_conf || sed -i '/upnp=/s/".*"/"off"/' $audio_conf
- [[ $i =~ airplay ]] && sed -i '/airplay=/s/".*"/"on"/' $audio_conf || sed -i '/airplay=/s/".*"/"off"/' $audio_conf
+ [[ $i =~ roon ]] && sed -i '/upnp=/s/=.*/=on/' $audio_conf || sed -i '/upnp=/s/=.*/=off/' $audio_conf
+ [[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
 

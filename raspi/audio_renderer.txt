@@ -162,39 +162,7 @@ Audio Render Advanced
 
 	$ sudo apt-get install mpg123 sox libttspico-utils
 
-17. Spotifyd
-
-	https://github.com/Spotifyd/spotifydf
-	https://github.com/Spotifyd/spotifyd/releases/latest
-
-	$ #wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
-	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
-	$ unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
-	$ sudo nano /etc/rc.local
-
-	spotifyd () {
-	cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
-	cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
-	sleep 1
-	/dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf&> /dev/null
-	}
-	...
-	#spotifyd &
-
-	$ nano ~/spotifyd.conf
-
-	[global]
-	username = USER
-	password = PASS
-	backend = alsa
-	device = pcm.0
-	mixer =
-	device_name = Spotifyd
-	bitrate = 320
-
-	$ sed -i '/device_name/s/=.*/= 장치명; /username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' ~/spotifyd.conf
-
-18. Roon Bridge
+17. Roon Bridge
 
 	https://kb.roonlabs.com/LinuxInstall
 
@@ -213,12 +181,40 @@ Audio Render Advanced
 
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
-		#ExecStart=nohup /opt/RoonBridge/Bridge/RoonBridge>/dev/null</dev/null 2>/dev/null
+		ExecStart=/dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge #
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
-		exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server>/dev/null</dev/null 2>/dev/null #
+		exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null #
 		exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null #
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
+
+	# dietpi-services
+	# nano /DietPi/dietpi/.dietpi-services_include_exclude
+		- mpd
+		- mympd
+		- roonbridge
+		- shairport-sync
+
+18. Spotifyd
+
+	https://github.com/Spotifyd/spotifydf
+	https://github.com/Spotifyd/spotifyd/releases/latest
+
+	$ #wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
+	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
+	$ unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
+	$ nano ~/spotifyd.conf
+
+	[global]
+	username = USER
+	password = PASS
+	backend = alsa
+	device = pcm.0
+	mixer =
+	device_name = Spotifyd
+	bitrate = 320
+
+	$ sed -i '/device_name/s/=.*/= 장치명; /username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' ~/spotifyd.conf
 
 19. Shairport-sync (AirPlay)
 
@@ -346,13 +342,6 @@ Audio Render Advanced
 
 	$ sudo systemctl disable sshd
 	# dietpi-services disable dropbear
-
-	# dietpi-services
-	# nano /DietPi/dietpi/.dietpi-services_include_exclude
-		- mpd
-		- mympd
-		- roonbridge
-		- shairport-sync
 
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get update

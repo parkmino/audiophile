@@ -106,9 +106,9 @@ i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "Check/확인" --o
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ upnp ]] && sed -i '/upnp=/s/".*"/"on"/' $audio_conf || sed -i '/upnp=/s/".*"/"off"/' $audio_conf
- [[ $i =~ roon ]] && sed -i '/roon=/s/".*"/"on"/' $audio_conf || sed -i '/roon=/s/".*"/"off"/' $audio_conf
- [[ $i =~ airplay ]] && sed -i '/airplay=/s/".*"/"on"/' $audio_conf || sed -i '/airplay=/s/".*"/"off"/' $audio_conf
+ [[ $i =~ upnp ]] && sed -i '/upnp=/s/=.*/=on/' $audio_conf || sed -i '/upnp=/s/=.*/=off/' $audio_conf
+ [[ $i =~ roon ]] && sed -i '/roon=/s/=.*/=on/' $audio_conf || sed -i '/roon=/s/=.*/=off/' $audio_conf
+ [[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
 
@@ -146,9 +146,9 @@ Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
       sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
-      sed -i '/spotify/s/".*"/"on"/'  $audio_conf
+      sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
-      sed -i '/spotify/s/".*"/"off"/' $audio_conf
+      sed -i '/spotify/s/=.*/=off/' $audio_conf
      fi
     fi ;;
  3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
@@ -159,9 +159,9 @@ Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button 
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
       sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
-      sed -i '/spotify/s/".*"/"on"/'  $audio_conf
+      sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
-      sed -i '/spotify/s/".*"/"off"/' $audio_conf
+      sed -i '/spotify/s/=.*/=off/' $audio_conf
      fi
     fi ;;
 esac
