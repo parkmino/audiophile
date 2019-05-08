@@ -80,15 +80,21 @@ Audio Render Advanced
 
 7. ALSA
 
+	$ sudo sh -c "cat /usr/share/alsa.orig/alsa.conf > /usr/share/alsa/alsa.conf.mix"
+	$ sudo sed -i 's/^[ \t]*//; /^$/d' /usr/share/alsa/alsa.conf.mix
+	$ head -20 /usr/share/alsa/alsa.conf.mix
+	$ sudo nano /usr/share/alsa/alsa.conf.mix
+	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.min >> /usr/share/alsa/alsa.conf.mix"
+
 	# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix}
 
 8. MPD
 
-	sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libid3tag0 libmpdclient2 libupnp6
-	sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
-	sudo mv mpd /usr/bin/
-	sudo mv mpd.conf /etc/mpd.conf.sav
-	sudo apt-get install mpc ncmpc
+	$ sudo apt-get install libcue1 libaudiofile1 libavformat57 libflac8 libid3tag0 libmpdclient2 libupnp6
+	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
+	$ sudo mv mpd /usr/bin/
+	$ sudo mv mpd.conf /etc/mpd.conf.sav
+	$ sudo apt-get install mpc ncmpc
 
 9. Upmpdcli
 
@@ -96,10 +102,10 @@ Audio Render Advanced
 
 10. CIFS & NFS mounting
 
-	#sudo apt-get install cifs-utils nfs-common
-	sudo mkdir /mnt/cifs /mnt/nfs
-	sudo ln -s /mnt/ /var/lib/mpd/music
-	sudo nano /etc/fstab
+	$ #sudo apt-get install cifs-utils nfs-common
+	$ sudo mkdir /mnt/cifs /mnt/nfs
+	$ sudo ln -s /mnt/ /var/lib/mpd/music
+	$ sudo nano /etc/fstab
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
 		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
@@ -112,13 +118,13 @@ Audio Render Advanced
 
 12. Edit /etc/rc.local
 
-	sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
-	sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
 	
 13. Sysctl Configuration
 
-	sudo nano /etc/sysctl.conf
-	sudo sysctl -p /etc/sysctl.conf
+	$ sudo nano /etc/sysctl.conf
+	$ sudo sysctl -p /etc/sysctl.conf
 
 14. Disabel swap
 
@@ -132,23 +138,23 @@ Audio Render Advanced
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
-	sudo mkdir /mnt/usb
-	sudo nano /etc/fstab
+	$ sudo mkdir /mnt/usb
+	$ sudo nano /etc/fstab
 		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
 		#/dev/sda1 /mnt/usb vfat    ro 0 0
 		#/dev/sda1 /mnt/usb ntfs-3g ro 0 0
-	sudo nano /etc/rc.local
+	$ sudo nano /etc/rc.local
 		systemd-udevd
-	sudo systemctl daemon-reload
-	sudo systemctl restart remote-fs.target
-	sudo systemctl restart local-fs.target
+	$ sudo systemctl daemon-reload
+	$ sudo systemctl restart remote-fs.target
+	$ sudo systemctl restart local-fs.target
 
 16. Internet Radio & TTS (Text to Speech)
 
 	$ sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	$ sudo chmod a+rx /usr/local/bin/youtube-dl
 	$ sudo ln -sf /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts /usr/bin/
-	# mv /root/kr2mpd /root/sbs_dec.py /root/ut2mpd /root/tts /usr/bin/
+	# mv /root/kr2mpd /root/sbs_dec.py /root/ut2mpd /root/tts /usr/bin/ # /usr/local/bin/
 	$ sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
 	$ sudo mkdir /var/lib/mpd/music/webradio
 	$ sudo mv *.pls /var/lib/mpd/music/webradio
@@ -182,15 +188,11 @@ Audio Render Advanced
 	password = PASS
 	backend = alsa
 	device = pcm.0
-	mixer = /dev/mixer
+	mixer =
 	device_name = Spotifyd
 	bitrate = 320
 
-	nano audio-config
-
-	sudo sed -i '/spotifyd &/s/^#*//' /etc/rc.local
-	sudo sed -i '/spotifyd &/s/^/#/'  /etc/rc.local
-	sed -i '/username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' ~/spotifyd.conf
+	$ sed -i '/device_name/s/=.*/= 장치명; /username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' ~/spotifyd.conf
 
 18. Roon Bridge
 
@@ -218,56 +220,18 @@ Audio Render Advanced
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
-	$ sudo sh -c "cat /usr/share/alsa.org/alsa.conf > /usr/share/alsa/alsa.conf.roon"
-	$ sudo sed -i 's/^[ \t]*//; /^$/d' /usr/share/alsa/alsa.conf.roon
-	$ head -20 /usr/share/alsa/alsa.conf.roon
-	$ sudo nano /usr/share/alsa/alsa.conf.roon
-	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.sav >> /usr/share/alsa/alsa.conf.roon"
-
-	$ sudo nano /etc/rc.local
-
-	roon_bridge () {
-	#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
-	#cp -r /opt/roon /dev/shm/
-	#ln -sf /dev/shm/roon /opt/RoonBridge
-	 cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
-	 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
-	 sleep 1
-	 systemctl start roonbridge
-	}
-	...
-	### Roon Bridge
-	#(roon_bridge &) && sleep 3
-
-	$ nano ~/audio-config
-
-	sudo sed -i '/roon_bridge &/s/^#*//' /etc/rc.local
-	sudo sed -i '/roon_bridge &/s/^/#/' /etc/rc.local
-
 19. Shairport-sync (AirPlay)
 
 	$ sudo apt-get update
 	$ sudo apt-get install shairport-sync
 	$ wget http://archive.raspbian.org/raspbian/pool/main/s/shairport-sync/shairport-sync_3.2.2-1+b2_armhf.deb
 	$ sudo dpkg -i shairport*.deb
-	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"\/dev\/null";/' /etc/shairport-sync.conf
-	$ sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
+	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"";/' /etc/shairport-sync.conf
+	$ #sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
 	$ sudo sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' /etc/shairport-sync.conf
 	$ sudo sed -i '/convolution =\|loudness =/s/^\/*//; /convolution =\|loudness =/s/".*"/"no"/' /etc/shairport-sync.conf
+	$ sudo systemctl stop    avahi-daemon shairport-sync
 	$ sudo systemctl disable avahi-daemon shairport-sync
-	$ sudo nano /etc/rc.local
-
-	#service avahi-daemon stop
-	shairport_sync () {
-	 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0_old /dev/shm/libasound.so.2.0.0
-	 sleep 1
-	 systemctl start avahi-daemon shairport-sync
-	}
-	...
-	### Shaiport-sync
-	#(shairport_sync &) && sleep 3
-
-	$ nano ~/audio-config
 
 20. myMPD
 
@@ -283,16 +247,16 @@ Audio Render Advanced
 
 	$ #sudo systemctl disable mympd
 	$ sudo nano /etc/mympd/mympd.conf
-		host = 127.0.0.1
-		ssl = false
+		 host = 127.0.0.1
+		 ssl = false
 		#loglevel = 0
-		user = pi # dietpi
-		coverimage = true
+		 user = pi # dietpi
+		 coverimage = true
 		#coverimage = cover.jpg
-		stickers = false
-		syscmds = true
-		background = #111
-		coverextract = true
+		 stickers = false
+		 syscmds = true
+		 background = #111
+		 coverextract = true
 
 	$ sudo sh -c "printf 'kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'"
 	$ sudo sh -c "printf 'kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'"
@@ -307,8 +271,6 @@ Audio Render Advanced
 	$ sudo sh -c "printf 'sudo sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'"
 	$ sudo sh -c "printf 'sudo sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'"
 	$ sudo touch /etc/mympd/syscmds/13HR
-	$ #sudo sh -c "printf 'sudo systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'"
-	$ #sudo sh -c "printf 'sudo systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'"
 	$ sudo sh -c "printf 'ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal'"
 	# "printf 'sudo ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal'
 	$ sudo touch /etc/mympd/syscmds/15HR
@@ -349,22 +311,12 @@ Audio Render Advanced
 23. audio-config
 
 	$ cp audio-config ~/
-	# cp audio-config_dietpi /root
-	$ sudo ln -s /home/pi/audio-config /usr/bin/
-	# ln -s /root/audio-config /usr/bin/
+	# cp audio-config_dietpi /root/
+	$ sudo ln -sf /home/pi/audio-config /usr/bin/
+	# mv /root/audio-config_dietpi /usr/bin/
 	$ audio-config
 
-24. Read-only (Just for reference)
-	cp remountro remountrw ~/
-	chmod +x remountro remountrw
-	sudo ln -s /home/pi/remountro /home/pi/remountrw /usr/bin/
-	sudo nano /etc/rc.local
-		### Read-only
-		#remountro
-	sudo chmod -w /lib/systemd/systemd /etc/rc.local /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav /usr/bin/upmpdcli /etc/upmpdcli.conf
-	sudo chmod -R -w /usr/lib/arm-linux-gnueabihf
-
-25. audio.conf
+24. audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		# audio.conf
@@ -390,7 +342,7 @@ Audio Render Advanced
 		 [ "$tts_eng" = on ] && tts en My I P is $(hostname -I) || tts
 		fi
 
-26. Make Image
+25. Make Image
 
 	$ sudo systemctl disable sshd
 	# dietpi-services disable dropbear
@@ -426,11 +378,3 @@ Audio Render Advanced
 	$ sudo mv pishrink.sh /usr/local/bin
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
-
-cf)
-
-sudo sed -i 's/raspbian.raspberrypi.org/mirrordirector.raspberrypi.org/' /etc/apt/sources.list
-sudo sed -i 's/http:\/\/raspbian.raspberrypi.org/ftp:\/\/ftp.neowiz.com\/raspbian/' /etc/apt/sources.list
-sudo sed -i 's/archive.raspberrypi.org/.../' /etc/apt/sources.list.d/raspi.list
-
-https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md
