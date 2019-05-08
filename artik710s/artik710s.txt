@@ -82,8 +82,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # apt-get install bc nano psmisc software-properties-common # ffmpeg libav-tools
 
 ### ALSA
-	pcm.0.card 1
-# mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.orig
+# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix}
 
 ### MPD binary & mpd.conf
 ## apt-get install mpd mpc ncmpc
@@ -154,7 +153,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	#host = 127.0.0.1
 	 ssl = false
 	#loglevel = 0
-	#coverimage = true
+	#user = mympd
+	 coverimage = true
 	#coverimage = cover.jpg
 	 stickers = false
 	 syscmds = true
@@ -174,8 +174,6 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # printf 'sudo sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
 # printf 'sudo sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
 # touch /etc/mympd/syscmds/13HR
-## printf 'sudo systemctl start openssh' > '/etc/mympd/syscmds/14SSH - Start'
-## printf 'sudo systemctl stop  openssh' > '/etc/mympd/syscmds/15SSH - Stop'
 # printf 'ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal'"
 # touch /etc/mympd/syscmds/15HR
 # printf 'sudo reboot'   > '/etc/mympd/syscmds/16Reboot (다시 시작)'
@@ -187,14 +185,18 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # chmod +x ~/ttyd_linux.aarch64
 # mv ~/ttyd_linux.aarch64 /usr/bin/ttyd
 
-### Roon Bridge
-### Airplay & Spotifyd
 ### rc.local
 ### sysctl.conf
 ### USB mount
 ### Internet radio (mv kr2mpd, ut2mpd, *.m3u8/pls)
 # mpd update
 ### audio-config
+### Roon Bridge
+### Spotifyd
+### Shairport-sync (Airplay)
+# add-apt-repository ppa:dantheperson/shairplay-sync
+# apt-get update
+# apt-get install shairport-sync
 
 ### Back up
 https://davidgs.com/2017/how-to-save-your-artik-520-backup/
@@ -203,6 +205,7 @@ https://github.com/davidgs/ARTIK-5-backup
 # apt-get update
 # apt-get upgrade
 # apt-get dist-upgrade
+# systemctl disable sshd
 # systemctl daemon-reload
 # youtube-dl --update
 # echo "* Audio Renderer 19.04" > ~/release
