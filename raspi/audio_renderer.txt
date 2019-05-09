@@ -214,7 +214,20 @@ Audio Render Advanced
 
 	$ sed -i '/device_name/s/=.*/= 장치명; /username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' ~/spotifyd.conf
 
-19. Shairport-sync (AirPlay)
+19. AirConnect (AirPlay)
+
+	https://github.com/philippe44/AirConnect
+
+	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-arm     -P ~/
+	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-aarch64 -P ~/
+	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64  -P ~/
+
+	$ chmod +x ~/airupnp*
+	$ sudo nano /etc/rc.local
+		cp ~/airupnp-arm /dev/shm/
+		[ "$upnp" = on ] && [ "$airplay" = on ] && /dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null #
+
+20. Shairport-sync (AirPlay)
 
 	$ sudo apt-get update
 	$ sudo apt-get install shairport-sync
@@ -237,7 +250,7 @@ Audio Render Advanced
 	$ sudo systemctl stop    avahi-daemon shairport-sync
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
-20. myMPD
+21. myMPD
 
 	$ sudo apt-get install libmediainfo-dev libmediainfo0v5
 
@@ -282,13 +295,13 @@ Audio Render Advanced
 	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17Power off    (전원 끄기)'"
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 
-21. ttyd
+22. ttyd
 
 	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
 	$ chmod +x ~/ttyd_linux.armhf
 	$ sudo mv ~/ttyd_linux.armhf /usr/bin/ttyd
 
-22. Web interface
+23. Web interface
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
@@ -312,7 +325,7 @@ Audio Render Advanced
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-23. audio-config
+24. audio-config
 
 	$ cp audio-config ~/
 	# cp audio-config_dietpi /root/
@@ -320,7 +333,7 @@ Audio Render Advanced
 	# mv /root/audio-config_dietpi /usr/bin/
 	$ audio-config
 
-24. audio.conf
+25. audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		# audio.conf
@@ -346,7 +359,7 @@ Audio Render Advanced
 		 [ "$tts_eng" = on ] && tts en My I P is $(hostname -I) || tts
 		fi
 
-25. Make Image
+26. Make Image
 
 	$ sudo systemctl disable sshd
 	# dietpi-services disable dropbear

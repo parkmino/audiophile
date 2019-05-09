@@ -40,6 +40,8 @@ eol () {
  done
  sleep 1
  taskset -acp $s_task $(pgrep -x upmpdcli) || true
+ ### AirConnect
+ [ "$airplay" = on ] && (airconnect &) && sleep 5
  /root/llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
  echo 0    > /sys/class/leds/led0/brightness
@@ -60,12 +62,17 @@ spotifyd () {
 /dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null #
 }
 
+airconnect () {
+ cp /root/airupnp-arm /dev/shm/
+/dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null #
+}
+
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = orig ]; then
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-elif [ "$alsa" = min ] && [ "$roonbridge" = off ] && [ "$spotify" = off ] && [ "$airplay" = off ]; then
+elif [ "$alsa" = min ] && [ "$roonbridge" = off ] && [ "$spotify" = off ]; then
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -159,11 +166,8 @@ swapoff -a
 ### Roon Bridge
 [ "$roonbridge" = on ] && (roon_bridge &) && sleep 3
 
-### Spotify
+### Spotifyd
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
-
-### Shaiport-sync
-[ "$airplay" = on ] && systemctl start avahi-daemon shairport-sync
 
 ### myMPD
 mympd&>/dev/null</dev/null 2>/dev/null #

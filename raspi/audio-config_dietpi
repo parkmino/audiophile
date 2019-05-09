@@ -157,7 +157,7 @@ esac
 tts_conf () {
 i=$(whiptail --title "IP TTS" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 63 2 \
 "tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
-"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)a
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -259,7 +259,7 @@ i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --c
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ roon ]] && sed -i '/roon=/s/=.*/=on/' $audio_conf || sed -i '/roon=/s/=.*/=off/' $audio_conf
-#[[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
+ [[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
 
