@@ -51,9 +51,9 @@ eol () {
 }
 
 roon_bridge () {
-#cp /usr/share/alsa/alsa.conf.roon /dev/shm/alsa.conf
-#cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.norm /dev/shm/libasound.so.2.0.0
-#sleep 1
+#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
+#cp -r /opt/roon /dev/shm/
+#ln -sf /dev/shm/roon /opt/RoonBridge
  systemctl start roonbridge
 }
 
