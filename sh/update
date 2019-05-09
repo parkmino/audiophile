@@ -52,6 +52,31 @@ msg () {
 
 curl_opt="-s -m12"
 
+AIRCONNECT () {
+printf "• AirConnect\t"
+url="https://github.com/philippe44/AirConnect/tree/master/bin"
+latest=$(curl $curl_opt "$url" | grep -A 4 \"airupnp-x86-64\" | tail -1 | cut -d\" -f4)
+current=$(airupnp-x86-64 --help | head -1 | cut -dv -f2 | cut -d' ' -f1)
+printf "$current\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+elif [ "$latest" = "$current" ]; then
+ printf "최신판\n"
+else
+ printf "판올림 ($latest)\n"
+ read -p "  Update AirConnect? [Y/n]" answer
+ if [ "$answer" != n ]; then
+  printf '  '
+  wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64 -P /home/parkmino/Downloads/
+  printf '  '
+  chmod +x /home/parkmino/Downloads/airupnp-x86-64
+  printf '  '
+  sudo mv /home/parkmino/Downloads/airupnp-x86-64 /usr/bin/
+  printf "  $(airupnp-x86-64 --help | head -1 | cut -d' ' -f1)\n"
+ fi
+fi
+}
+
 ADOBE_FLASH () {
 printf "• Adobe Flash\t"
 latest=$(curl $curl_opt 'http://get.adobe.com/kr/flashplayer/about/' | sed -n '/Linux/,+15p' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
@@ -657,7 +682,7 @@ else
  if [ "$answer" != n ]; then
   printf '  '
   #curl -s "$url" | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.x86_64/' | wget "$(cat -)" -P /home/parkmino/Downloads/
-  #curl -s $(curl -s "$url" | cut -d\" -f2) | grep -m1 x86_64 | cut -d\" -f2 | wget "https://github.com/$(cat -)" -P /home/parkmino/Downloads/
+  curl -s $(curl -s "$url" | cut -d\" -f2) | grep -m1 x86_64 | cut -d\" -f2 | wget "https://github.com/$(cat -)" -P /home/parkmino/Downloads/
   printf '  '
   chmod +x /home/parkmino/Downloads/ttyd_linux.x86_64
   printf '  '
@@ -720,6 +745,7 @@ UPMPDCLI
 #OPERA
 #UBUNTU
 ADOBE_FLASH
+#AIRCONNECT
 #LIBFFMPEG
 CELLULOID
 CREATE_AP
