@@ -62,7 +62,8 @@ Linux
  Debian : Debian, Ubuntu, Mint, Elementary, Zorin, deepin
           Armbian, Raspbian for SBC
 
- Linux GUI = XWindows(Wayland) + Window Manager + Desktop Environment
+ Linux GUI = XWindows/Wayland + Window Manager + Desktop Environment
+  DM	 : nodm, XDM, SLiM, LXDM, LightDM, GDM, KDM, SDDM
   WM     : DWM, Openbox, MIWM, Sawfish
   DE(WM) : Cinnamon, GNOME(Metacity), LXDE(Openbox), MATE, KDE(KWin), Unity(Compiz), Xfce(Xfwm)
 
@@ -201,7 +202,14 @@ Tuning
 	Liquorix Kernel
 		http://liquorix.net/
 		$ sudo apt-get install linux-image-liquorix-amd64 linux-headers-liquorix-amd64
-3.3 Install GUI with Window Manager and Desktop Environments.
+3.3 Install GUI with Display Manager, Window Manager and Desktop Environments.
+	Light Display Managers.
+		$ sudo apt-get install nodm xdm lxdm lightdm
+		$ sudo dpkg-reconfigure xdm
+		$ nano ~/.xinitrc
+			#!/usr/bin/env bash
+			exec sawfish
+		$ ln -s ~/.xinitrc ~/.xsession
 	Minimal Window Managers.
 		$ sudo apt-get install miwm dwm sawfish openbox ...
 		$ startx /usr/bin/miwm dwm sawfish
