@@ -81,7 +81,7 @@ elif [ "$alsa" = min ] && [ "$roonbridge" = off ] && [ "$spotify" = off ]; then
 else
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
- rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
