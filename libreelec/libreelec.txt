@@ -4,9 +4,12 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
-	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-9.0.0.img.gz
-	$ cp SYSTEM Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0
-	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0
+	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-9.0.2.img.gz
+	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2
+	$ gzip -d LibreELEC-RPi2.arm-9.0.2.img.gz
+	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2
+	$ mv LibreELEC-RPi2.arm-9.0.2.img ~/Downloads/libreelec/ && rm LibreELEC-RPi2.arm-9.0.2.img.gz
+	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -15,10 +18,10 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
   1.2 ALSA
 
 	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
-	$ printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default /dev/shm/null' > ../copy/alsa.conf.min
+	$ printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759' > ../copy/alsa.conf.min
 	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
 	$ sed -i '$d' ../copy/alsa.conf.mix
-	$ printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default /dev/shm/null' >> ../copy/alsa.conf.mix
+	$ printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759' >> ../copy/alsa.conf.mix
 
 	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
 	$ cp ../copy/libasound.so.2.0.0.min usr/lib/
@@ -122,10 +125,10 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0/LibreELEC-RPi2.arm-9.0.0.img of=/dev/sdc
+	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2.img of=/dev/sdc
 	$ sync
 	$ mv /media/parkmino/LIBREELEC/SYSTEM /media/parkmino/LIBREELEC/SYSTEM.orig
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.0/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
+	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
 	$ sync
 	$ sudo umount /dev/sdc?
 

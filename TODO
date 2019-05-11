@@ -2,12 +2,12 @@
 
 	sudo nano /etc/default/audio.conf
 
-		alsa=mix # min or mix or orig
-		airplay=off
-		roon=off
-		spotify=off
-		ssh=off
-		wifi=off
+		 alsa=min	# min/mix/orig
+		 upnp=on
+		 roon=off
+		 spotify=off
+		 airplay=off
+		#wifi=off	# LibreELEC
 
 	sudo nano /etc/rc.local
 
@@ -24,32 +24,16 @@
 		else
 		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
 		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
-		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		fi
-
-		if [ "$alsa" = orig ]; then
-		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-		elif [ "$alsa" = mix ] || [ "roon" = on ] || [ "airplay" = on ] || [ "spotify" = on ]; then
-		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
-		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		else
-		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
-		 rm -rf /dev/snd/*c /dev/snd/by* || true
-		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 		fi
 
 2. ALSA configuration
 
-	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2757' > /usr/share/alsa/alsa.conf.sav"
-
-	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.0 \"\" pcm.default \"\" ctl.default \"\"' > /usr/share/alsa/alsa.conf.sav"
+	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759' > /usr/share/alsa/alsa.conf.sav"
 
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
-	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default ""' > copy/alsa.conf.min
+	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759' > copy/alsa.conf.min
 
 3. ALSA library file permission
 
@@ -60,12 +44,12 @@
 	 cp /usr/bin/nohup /dev/shm/
 	 /dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null #
 	 taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
-	#mknod ... /dev/shm/null ...
+	#mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
 
 5. sudo nano /etc/mpd.conf.sav
 	 state_file "/var/lib/mpd/state"
 	 log_file "/dev/null"
-	 mixer_device ""
+	 mixer_device "null"
 	#audio_buffer_size "3684" # for 0.21.x
 	 audio_buffer_size "3683" #
 	 buffer_before_play "10.5596937298022%" #
@@ -99,8 +83,9 @@
 
 9. sudo nano /etc/sysctl.conf
 	 kernel.sched_latency_ns = 1394060		# 1394058
-	#kernel.sched_migration_cost = 4899007		# 4899006
 	 kernel.sched_time_avg_ms = 6288		# 6289
 
-cf) ttyd -o -O -p 8080 dash -c 'echo "Welcome to Web SSH Terminal! / 웹 SSH 터미널에서 환영합니다!"; bash'
+cf)
+
+ttyd -o -O -p 8080 dash -c 'echo "Welcome to Web SSH Terminal! / 웹 SSH 터미널에서 환영합니다!"; bash'
 ttyd -o -O -p 8080 dash -c 'printf "Welcome to Web SSH Terminal!\nRun \"exit\", reload or close this tab in your browser to finish.\n웹 SSH 터미널에서 환영합니다!\n빠져나가려면 \"exit\"을 입력하거나, 브라우저의 현재 탭을 새로 고치거나 닫으면 됩니다.\n"; bash'
