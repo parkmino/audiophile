@@ -35,7 +35,7 @@ musicpd_bg () {
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
-/dev/shm/nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null #
+/dev/shm/nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
 }
 
 eol () {
@@ -62,12 +62,12 @@ roon_bridge () {
 spotifyd () {
  cp /root/spotifyd /root/spotifyd.conf /dev/shm/
  sleep 1
-/dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null #
+/dev/shm/nohup /dev/shm/spotifyd --no-daemon -c /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
 }
 
 airconnect () {
  cp /root/airupnp-arm /dev/shm/
-/dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null #
+/dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
@@ -146,7 +146,7 @@ done
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### myMPD
-mympd&>/dev/null</dev/null 2>/dev/null #
+mympd&>/dev/null</dev/null 2>/dev/null
 sleep 1
 
 ### Taskset
@@ -161,7 +161,7 @@ done
 if [ "$upnp" = on ]; then
  musicpd_bg &
  eol &
-/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null #
+/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 else
  pkill rc.local
 fi

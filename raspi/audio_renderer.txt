@@ -225,7 +225,7 @@ Audio Render Advanced
 	$ chmod +x ~/airupnp*
 	$ sudo nano /etc/rc.local
 		cp ~/airupnp-arm /dev/shm/
-		[ "$upnp" = on ] && [ "$airplay" = on ] && /dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null #
+		[ "$upnp" = on ] && [ "$airplay" = on ] && /dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 
 20. Shairport-sync (AirPlay)
 
