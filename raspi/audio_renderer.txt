@@ -208,7 +208,7 @@ Audio Render Advanced
 	password = PASS
 	backend = alsa
 	device = pcm.0
-	mixer =
+	mixer = ctl.9
 	device_name = Spotifyd
 	bitrate = 320
 
@@ -243,7 +243,7 @@ Audio Render Advanced
 	# systemctl unmask  udev
 	# systemctl disable avahi-daemon shairport-sync
 
-	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"";/' /etc/shairport-sync.conf
+	$ sudo sed -i '/_device =/s/^\/*//; /output_device =/s/".*";/"pcm.0";/; /mixer_device =/s/".*";/"ctl.9";/' /etc/shairport-sync.conf
 	$ #sudo sed -i '/_format =/s/^\/*//; /output_format =/s/".*";/"S24";/' /etc/shairport-sync.conf   # 24Bit Only
 	$ sudo sed -i '/interpolation =/s/^\/*//; /interpolation =/s/".*";/"soxr";/' /etc/shairport-sync.conf
 	$ sudo sed -i '/convolution =\|loudness =/s/^\/*//; /convolution =\|loudness =/s/".*"/"no"/' /etc/shairport-sync.conf

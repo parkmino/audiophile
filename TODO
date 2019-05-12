@@ -31,9 +31,11 @@
 
 	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759' > /usr/share/alsa/alsa.conf.sav"
 
+	sudo sh -c "printf 'pcm.0.type hw pcm.-0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759' > /usr/share/alsa/alsa.conf.sav"
+
 	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 
-	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759' > copy/alsa.conf.min
+	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 pcm.default ctl.9' > copy/alsa.conf.min
 
 3. ALSA library file permission
 
@@ -42,14 +44,14 @@
 4. sudo nano /etc/rc.local
 
 	 cp /usr/bin/nohup /dev/shm/
-	 /dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null #
+	 /dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null
 	 taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
 	#mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
 
 5. sudo nano /etc/mpd.conf.sav
 	 state_file "/var/lib/mpd/state"
 	 log_file "/dev/null"
-	 mixer_device "null"
+	 mixer_device "ctl.9"
 	#audio_buffer_size "3684" # for 0.21.x
 	 audio_buffer_size "3683" #
 	 buffer_before_play "10.5596937298022%" #
