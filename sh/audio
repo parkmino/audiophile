@@ -28,8 +28,8 @@ case $1 in
    sudo cp $alsa_orig $alsa_conf
   fi
 
-  if grep -q ' ctl.default ' $alsa_conf; then
-   sudo sed -i '$ s/ ctl.default.*/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+  if grep -q ' \?ctl.default' $alsa_conf; then
+   sudo sed -i '$ s/ \?ctl.*/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
   else
    sudo sed -i '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
   fi

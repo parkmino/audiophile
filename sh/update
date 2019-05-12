@@ -162,7 +162,7 @@ ALSA () {
 
 ANDROID_X86 () {
 printf "• Android-x86\t"
-latest=$(curl $curl_opt http://www.android-x86.org | grep -m1 -i "android-x86.*released" | sed 's/.*droid-x86.//; s/.released.*//')
+latest=$(curl $curl_opt https://www.android-x86.org/releases.html | grep -o "ReleaseNote [0-9.rcRC-]*" | head -1 | cut -d' ' -f2-)
 current=$(ls -d /home/parkmino/Downloads/android*/ | head -1 | cut -d\/ -f5 | cut -d\- -f3-)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
@@ -751,7 +751,7 @@ CELLULOID
 CREATE_AP
 GOOGLER
 #MESON
-MINIDLNA
+#MINIDLNA
 TTYD
 YOUTUBE_DL
 #APCAST

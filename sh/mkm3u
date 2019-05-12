@@ -39,9 +39,7 @@ echo "rtmp://imbconairtv.imbc.com/imbc_onairtv/_definst_/onairtv_500k.stream?id=
 http://media.kjmbc.co.kr:1935/live/stream/playlist.m3u8#MBC광주
 http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8#국악방송 HD
 http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8#국악방송 라디오
-http://122.202.129.136:1935/live/ch5/playlist.m3u8#KCTV제주방송
-http://ytnmmd.mmdlive.lldns.net/ytnmmd/9484b70302db4786886ae40308bf45a1/playlist.m3u8#YTN Korean
-http://d1cdshhn0sj9xt.cloudfront.net/529/QualityLevels(2628000,as=video)/Fragments(video=i,format=hls).m3u8#MNet HD" >> $lst
+https://5b99fdb0a9492.streamlock.net/LIVE/ch7/playlist.m3u8#KCTV제주방송" >> $lst
 
 grep youtu.be/ $utube | sort | while read line ; do
  des=$(echo "$line" | cut -d "=" -f1)
@@ -188,7 +186,7 @@ http://edge2.everyon.tv/etv2/phd883/playlist.m3u8#GS홈쇼핑 HD
 http://edge2.everyon.tv/etv2/phd901/playlist.m3u8#홈&쇼핑
 http://edge2.everyon.tv/etv2sb/phd1198/playlist.m3u8#대체화면용
 http://edge2.everyon.tv/etv2/phd1328/playlist.m3u8#GS홈쇼핑
-http://edge1.everyon.tv/etv1/phd1382/playlist.m3u8#NTV HD" >> $lst
+http://edge1.everyon.tv/etv1/phd1382/playlist.m3u8#NTV HD" > /dev/null # >> $lst
 
 cat -n $lst
 
