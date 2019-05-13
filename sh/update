@@ -192,7 +192,7 @@ ver=$(curl $curl_opt https://docs.armbian.com/Release_Changelog/ | grep -m1 v[0-
 month=$(echo $dmy | cut -d'.' -f2)
   day=$(echo $dmy | cut -d'.' -f1)
  date="$year-$month-$day"
-if [ -z "$day" ]; then
+if [ -z "$day" ] || [ "$day" = "$dmy" ] ; then
  printf "\t\t\t\t정보 없음\n"
 else
  printf "$(echo $ver | cut -d' ' -f1) ($date)\t\t"
