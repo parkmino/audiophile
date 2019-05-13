@@ -30,6 +30,7 @@ case $i in
  6) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
  7) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
  8) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
+ *) exit ;;
 esac
 
 utube="/home/parkmino/mpvrun"
