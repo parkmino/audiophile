@@ -90,9 +90,9 @@ else
  if [ "$current" != "$latest" ]; then
   echo "  Adboe Flash Player $latest download link"
   echo "  https://get.adobe.com/flashplayer/otherversions/"
-  #echo "  $ sudo tar --overwrite -C /usr/lib/PepperFlash/ -zxvf ~/Downloads/flash_player_ppapi_*.tar.gz"
+ #echo "  $ sudo tar --overwrite -C /usr/lib/PepperFlash/ -zxvf ~/Downloads/flash_player_ppapi_*.tar.gz"
   echo "  $ sudo tar --overwrite -C /usr/lib/firefox-addons/plugins/ -zxvf ~/Downloads/flash_player_npapi_*.tar.gz libflashplayer.so readme.txt"
-  echo "  $ rm -rf /home/parkmino/.config/google-chrome/PepperFlash"
+ #echo "  $ rm -rf /home/parkmino/.config/google-chrome/PepperFlash"
  fi
 fi
 }
@@ -741,31 +741,31 @@ ALSA
 MPD_CANTATA_MYMPD
 MALP
 UPMPDCLI
+KODI
+LIBREELEC
 #ASSETUPNP
 #OPERA
 #UBUNTU
 ADOBE_FLASH
+ANDROID_X86
 #AIRCONNECT
-#LIBFFMPEG
+BUBBLEUPNP
 CELLULOID
 CREATE_AP
 GOOGLER
+H3DROID
+#LIBFFMPEG
 #MESON
 #MINIDLNA
 TTYD
 YOUTUBE_DL
 #APCAST
-ANDROID_X86
-BUBBLEUPNP
-H3DROID
-KODI
-LIBREELEC
 HIFIBERRY
 IPTIME
 NAGGOPBSAL
 NEWSTAPA
 #GHLIGHTCLUB
-DAS
 ALILEO
 #BUNKER1
+DAS
 TELEGRAM
