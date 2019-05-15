@@ -186,10 +186,12 @@ Audio Render Advanced
 
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
-		ExecStart=/dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge #
+		ExecStart=/dev/shm/nohup /opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
-		exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null #
-		exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null #
+		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
+		#exec /bin/bash -c "exec -a /dev/shm/nohup $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
+		 exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		#exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
@@ -288,8 +290,8 @@ Audio Render Advanced
 	$ #sudo sh -c "printf 'sudo sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'"
 	$ #sudo sh -c "printf 'sudo sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'"
 	$ #sudo touch /etc/mympd/syscmds/13HR
-	$ sudo sh -c "printf 'ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal'"
-	# "printf 'sudo ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal'
+	$ sudo sh -c "printf 'ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14Web Terminal'"
+	# "printf 'sudo ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14Web Terminal'
 	$ sudo touch /etc/mympd/syscmds/15HR
 	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/16Reboot       (다시 시작)'"
 	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17Power off    (전원 끄기)'"
