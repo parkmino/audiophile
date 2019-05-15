@@ -139,6 +139,9 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 4. More tweaks
 
+	$ sed -i '/\/dev\/shm\/nohup/s/^/exec /' squashfs-root/usr/lib/kodi/kodi.sh
+	$ sudo mksquashfs squashfs-root SYSTEM.tweak
+
 	$ nano /flash/cmdline.txt
 	$ nano /storage/.config/audio.conf
 	$ nano /storage/.config/autostart.sh
