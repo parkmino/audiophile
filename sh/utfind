@@ -10,14 +10,14 @@
 [ "$1" = rtv         ] && i=8
 
 if [ -z "$i" ]; then
- echo 'Input number to find youtube or any other key to quit
-(1) JTBC 뉴스
+ echo '(1) JTBC 뉴스
 (2) KBS 뉴스
 (3) tbs TV
 (4) 연합뉴스TV
 (5) YTN LIVE
 (6) YTN 라이프
-(7) YTN 사이언스' # (8) RTV 시민방송
+(7) YTN 사이언스
+ * Input number to find YouTube or any other key to quit' # (8) RTV 시민방송
  read -p " " i
 fi
 

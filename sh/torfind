@@ -1,31 +1,25 @@
 #!/bin/sh
-echo 'Input number to find torrents or any other key to quit
-(1) JTBC 뉴스룸
-(2) 랜선라이프
-(3) 이규연의 스포트라이트
-(4) 슈퍼밴드
-(5) 그것이 알고싶다
-(6) 썰전'
+echo '(1) JTBC 뉴스룸
+(2) 이규연의 스포트라이트
+(3) 슈퍼밴드
+(4) 그것이 알고싶다
+ * Input number to find the torrent or any other key to quit'
 read -p " " i
 case $i in
  1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30"
     title="JTBC 뉴스룸" ;;
- 2) time="last tuesday 23:59"
-    title="랜선라이프" ;;
- 3) [ $(date +%u) -eq 4 ] && [ $(date +%k) -ge 23 ] && time="today 22:50" || time="last thursday 22:50"
+ 2) [ $(date +%u) -eq 4 ] && [ $(date +%k) -ge 23 ] && time="today 22:50" || time="last thursday 22:50"
     title="이규연의 스포트라이트" ;;
- 4) time="last friday 23:00"
-    title="슈퍼밴드" ;;
- 5) time="last saturday 23:59"
-    title="그것이 알고싶다" ;;
- 6) time="last sunday 22:30"
-    title="썰전" ;;
- 7) time="last friday 23:00"
+ a) time="last friday 23:00"
     title="비긴 어게인 시즌2" ;;
- 8) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 23 ] && time="today 23:00" || time="last friday 23:00"
-    title="팬텀싱어2" ;;
- 9) time="last saturday 20:00"
+ 3) time="last friday 23:00"
+    title="슈퍼밴드" ;;
+ b) time="last saturday 20:00"
     title="더 팬" ;;
+ 4) time="last saturday 23:59"
+    title="그것이 알고싶다" ;;
+ c) time="last sunday 22:30"
+    title="썰전" ;;
  *) exit ;;
 esac
 hour=$((($(date +%s)-$(date +%s -d "$time"))/3600))
