@@ -73,7 +73,7 @@ airconnect () {
 if [ "$alsa" = orig ]; then
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-elif [ "$alsa" = min ] && [ "$roonbridge" = off ] && [ "$spotify" = off ]; then
+elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -165,7 +165,7 @@ fi
 swapoff -a
 
 ### Roon Bridge
-[ "$roonbridge" = on ] && (roon_bridge &) && sleep 3
+[ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Spotify
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
