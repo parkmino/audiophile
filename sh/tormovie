@@ -1,43 +1,35 @@
 #!/bin/sh
 
-### Torrentkim
-#
-#url="https://torrentkim.org/torrent_movie/torrent1.htm"
-#str=$(curl -s -m12 $url | grep 인기자료 -A2 | tail -1)
-#j=0
-#
-#printf "\n%s\n\n" $url
-#[ -z "$str" ] && echo "Not connected and exit!" && exit
-#
-#for i in 5 8 11 14 17 22 25 28 31 34; do
-# j=$(($j+1))
-# printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
-# printf "    $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
-#done
+[ -n "$1" ] && torrent="$1" || torrent=torrenthaja #torrentkim torrenthaja torrentboja
 
-### Torrenthaja
-#
-#url="https://torrenthaja1.com"
-#
-#printf "\n%s\n\n" $url
-#! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
-#
-#for i in $(seq 1 10); do # upto 15
-##curl -s "$url" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
-# printf "%2d.%s\n" $i "$(curl -s "$url" | grep '<strong>' | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
-# printf "    $(curl -s "$url" | grep -m$i -o "$url/torrent_.*.html" | tail -1)\n"
-#done
-
-### Torrentboja
-
-url1="https://torrentboza.net"
-url2="https://torrentboza.net/bbs/board.php?bo_table=movie"
-
-printf "\n%s\n\n" "$url1"
-! wget --spider -q "$url1" 2>&1 && echo "Not connected and exit!" && exit
-
-for i in $(seq 1 10); do
-#curl -s "$url2" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
- printf "%2d.%s\n" $i "$(curl -s "$url2" | grep -A 60 best-post-addon | grep -o '\[.*' | head -$i | tail -1 | cut -d'<' -f1 | sed 's/$[ \t]*//; s/&lt;/</; s/&gt;/>/')"
- printf "    $(curl -s "$url2" | grep -A 60 best-post-addon | grep -m$i "href" | tail -1 | cut -d\" -f2 | sed 's/amp;//')\n"
-done
+if [ $torrent = torrentkim ]; then
+ url="https://torrentkim.org/torrent_movie/torrent1.htm"
+ str=$(curl -s -m12 $url | grep 인기자료 -A2 | tail -1)
+ j=0
+ printf "\n%s\n\n" $url
+ [ -z "$str" ] && echo "Not connected and exit!" && exit
+ for i in 5 8 11 14 17 22 25 28 31 34; do
+  j=$(($j+1))
+  printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
+  printf "    $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
+ done
+elif [ $torrent = torrenthaja ]; then
+ url="https://torrenthaja1.com"
+ printf "\n%s\n\n" $url
+ ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
+ for i in $(seq 1 10); do # upto 15
+ #curl -s "$url" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
+  printf "%2d.%s\n" $i "$(curl -s "$url" | grep '<strong>' | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
+  printf "    $(curl -s "$url" | grep -m$i -o "/torrent_.*.html" | tail -1 | echo "$url$(cat -)")\n"
+ done
+elif [ $torrent = torrentboja ]; then
+ url1="https://torrentboza.net"
+ url2="https://torrentboza.net/bbs/board.php?bo_table=movie"
+ printf "\n%s\n\n" "$url1"
+ ! wget --spider -q "$url1" 2>&1 && echo "Not connected and exit!" && exit
+ for i in $(seq 1 10); do
+ #curl -s "$url2" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
+  printf "%2d.%s\n" $i "$(curl -s "$url2" | grep -A 60 best-post-addon | grep -o '\[.*' | head -$i | tail -1 | cut -d'<' -f1 | sed 's/$[ \t]*//; s/&lt;/</; s/&gt;/>/')"
+  printf "    $(curl -s "$url2" | grep -A 60 best-post-addon | grep -m$i "href" | tail -1 | cut -d\" -f2 | sed 's/amp;//')\n"
+ done
+fi
