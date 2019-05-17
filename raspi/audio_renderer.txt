@@ -25,7 +25,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
 
-	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python3-crypto
+	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-crypto
 	# apt-get install openssh-client libusb-0.1-4
 	$ scp rc.local alsa.conf.* libasound.so.2.0.0.* mpd mpd.conf icon.png hub-ctrl llctl audio-config kr2mpd sbs_dec.py ut2mpd tts *.pls audio-config pi@192.168.0.3:/home/pi/
 
