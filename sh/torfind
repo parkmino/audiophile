@@ -1,9 +1,9 @@
 #!/bin/sh
-echo '(1) JTBC 뉴스룸
+echo "\
+(1) JTBC 뉴스룸
 (2) 이규연의 스포트라이트
 (3) 슈퍼밴드
-(4) 그것이 알고싶다
- * Input number to find the torrent or any other key to quit'
+(4) 그것이 알고싶다"
 read -p " " i
 case $i in
  1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30"
