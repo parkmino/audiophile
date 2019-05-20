@@ -74,7 +74,7 @@ airconnect () {
 
 if [ "$alsa" = orig ]; then
  cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
- cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
+ cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
 elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
  cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
