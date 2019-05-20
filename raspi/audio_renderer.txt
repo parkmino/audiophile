@@ -274,17 +274,17 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ #sudo systemctl disable mympd
 	$ sudo nano /etc/mympd/mympd.conf
-		 host = 127.0.0.1
-		 ssl = false
-		#loglevel = 0
-		 user = pi # dietpi
-		 localplay = false
-		 coverimage = true
-		#coverimage = cover.jpg
-		 stickers = false
-		 syscmds = true
-		 background = #111
+		  host = 127.0.0.1
+		  ssl = false
+		 #loglevel = 0
+		  user = pi # dietpi
+		  syscmds = true
 		 coverextract = true
+		##localplay = false
+		##coverimage = true
+		##coverimage = cover.jpg
+		##stickers = false
+		##background = #111
 	$ sudo chown -R pi /var/lib/mympd # dietpi
 	$ #sudo adduser pi mympd # dietpi
 	$ #sudo chomod -R 775 /var/lib/mympd
