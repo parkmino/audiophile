@@ -208,7 +208,7 @@ Tuning
 		$ sudo dpkg-reconfigure xdm
 		$ nano ~/.xinitrc
 			#!/usr/bin/env bash
-			exec sawfish
+			exec /dev/shm/nohup sawfish
 		$ ln -s ~/.xinitrc ~/.xsession
 	Minimal Window Managers.
 		$ sudo apt-get install miwm dwm sawfish openbox ...
