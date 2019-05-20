@@ -285,6 +285,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		 syscmds = true
 		 background = #111
 		 coverextract = true
+	$ sudo chown -R pi /var/lib/mympd # dietpi
 
 	$ sudo sh -c "printf 'kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'"
 	$ sudo sh -c "printf 'kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'"
