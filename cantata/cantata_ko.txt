@@ -3,9 +3,10 @@
 * 바뀐 점
 
 1. 오디오 CD 읽기 오프셋 지원.
-2. 비트 정보 표시.
-3. Last.fm 대신 FanArt.tv 연주자 이미지 지원.
-4. TuneIn 라디오 지원 강화.
+2. Community Radio Browser 검색 지원 (http://www.radio-browser.info)
+3. 비트 정보 표시.
+4. Last.fm 대신 FanArt.tv 연주자 이미지 지원.
+5. TuneIn 라디오 지원 강화.
 
 * 번역
 
