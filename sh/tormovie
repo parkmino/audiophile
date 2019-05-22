@@ -32,4 +32,6 @@ elif [ $torrent = torrentboja ]; then
   printf "%2d.%s\n" $i "$(curl -s "$url2" | grep -A 60 best-post-addon | grep -o '\[.*' | head -$i | tail -1 | cut -d'<' -f1 | sed 's/$[ \t]*//; s/&lt;/</; s/&gt;/>/')"
   printf "    $(curl -s "$url2" | grep -A 60 best-post-addon | grep -m$i "href" | tail -1 | cut -d\" -f2 | sed 's/amp;//')\n"
  done
+else
+ echo "$1 is not supported"
 fi
