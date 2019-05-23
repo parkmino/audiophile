@@ -97,7 +97,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
 
 	$ rm usr/bin/ps usr/bin/nohup
-	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,inst_addon} usr/bin/
+	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,inst_addon,kodi-config} usr/bin/
 	$ cp ../copy/*.pls etc/
 	$ #cp -r ../../plugin.audio.kr2kodi etc/
 	$ #cp -r ../../{plugin.video.ktv2kodi,plugin.video.kut2kodi} etc/
