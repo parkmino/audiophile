@@ -16,4 +16,4 @@ else
  queue="tl=ko&q=$*"
 fi
 
-mpc add $(echo "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&$queue" | sed 's/ /%20/g') && mpc play $(mpc playlist | wc -l) && mpc current --wait && mpc del $(mpc playlist | wc -l)
+mpc add $(echo "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&$queue" | sed 's/ /+/g') && mpc play $(mpc playlist | wc -l) && mpc current --wait && mpc del $(mpc playlist | wc -l)
