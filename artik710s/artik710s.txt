@@ -171,10 +171,10 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # printf 'sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
 # printf 'sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
 # touch /etc/mympd/syscmds/10HR
-# printf 'sudo sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
-# printf 'sudo sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
+# printf 'sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
+# printf 'sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
 # touch /etc/mympd/syscmds/13HR
-# printf 'ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null #' > '/etc/mympd/syscmds/14Web Terminal'"
+# printf 'ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14Web Terminal'"
 # touch /etc/mympd/syscmds/15HR
 # printf 'sudo reboot'   > '/etc/mympd/syscmds/16Reboot (다시 시작)'
 # printf 'sudo poweroff' > '/etc/mympd/syscmds/17Power off (전원 끄기)'
