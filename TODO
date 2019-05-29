@@ -62,28 +62,30 @@
 
 	myMPD
 	-------------------------	### Commands
-	KBS 클래식 FM			/root/kr2mpd 1fm
-	KBS 쿨 FM			/root/kr2mpd 2fm
-	MBC FM				/root/kr2mpd mbcfm
-	MBC FM4U			/root/kr2mpd mbc4u
-	SBS 파워 FM			/root/kr2mpd sbsp
-	SBS 러브 FM			/root/kr2mpd sbsl
+	KBS 클래식 FM			kr2mpd 1fm
+	KBS 쿨 FM			kr2mpd 2fm
+	MBC FM				kr2mpd mbcfm
+	MBC FM4U			kr2mpd mbc4u
+	SBS 파워 FM			kr2mpd sbsp
+	SBS 러브 FM			kr2mpd sbsl
 	-------------------------
-	UPnP - DoP (DSD over PCM)	sed -i '/dop/s/^#*//' /etc/mpd.conf.sav
-	UPnP - Native			sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav
+	UPnP - DoP (DSD over PCM)	sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav
+	UPnP - Native			sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav
 	-------------------------
-	Roon Bridge - Enable		sed -i '/roon/s/=.*/=on/'  /etc/default/audio.conf
-	Roon Bridge - Disable		sed -i '/roon/s/=.*/=off/' /etc/default/audio.conf
+	Roon Bridge - Enable		sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf
+	Roon Bridge - Disable		sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf
 	-------------------------
-	Web Terminal			ttyd -o -O -p 8080 dash
+	Web Terminal			ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null
 	-------------------------
-	Reboot       (다시 시작)	reboot
-	Power off    (전원 끄기)	poweroff
+	Reboot       (다시 시작)	sudo reboot
+	Power off    (전원 끄기)	sudo poweroff
 	-------------------------
 
 9. sudo nano /etc/sysctl.conf
 	 kernel.sched_latency_ns = 1394060		# 1394058
 	 kernel.sched_time_avg_ms = 6288		# 6289
+
+10. tts2mpd in place of tts, it should be placed after mpd.
 
 cf)
 
