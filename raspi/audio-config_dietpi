@@ -88,12 +88,12 @@ Select/선택
 "4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sed -i '/hub-ctrl -h 0 -P [2-5]/s/^/#/g'   /etc/rc.local ;;
- 2) sed -i '/hub-ctrl -h 0 -P [2-5]/s/^#*//g'  /etc/rc.local ;;
- 3) sed -i '/hub-ctrl -h 0 -P [4-5]/s/^#*//g'  /etc/rc.local
-    sed -i '/hub-ctrl -h 0 -P [2-3]/s/^/#/g'   /etc/rc.local ;;
- 4) sed -i '/hub-ctrl -h 0 -P [24-5]/s/^#*//g' /etc/rc.local
-    sed -i '/hub-ctrl -h 0 -P 3/s/^/#/g'       /etc/rc.local ;;
+ 1) sed -i '/usb[2-5]=/s/=.*/=on/g'   $audio_conf ;;
+ 2) sed -i '/usb[2-5]=/s/=.*/=off/g'  $audio_conf ;;
+ 3) sed -i '/usb[4-5]=/s/=.*/=off/g'  $audio_conf
+    sed -i '/usb[2-3]=/s/=.*/=on/g'   $audio_conf ;;
+ 4) sed -i '/usb[24-5]=/s/=.*/=off/g' $audio_conf
+    sed -i '/usb3=/s/=.*/=on/g'       $audio_conf ;;
 esac
 }
 

@@ -43,13 +43,9 @@ fi
 #[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 #
 ### Turn off USBs
-#if lsusb -d 0424:9514; then
-#hub-ctrl -h 0 -P 5 -p 0
-#hub-ctrl -h 0 -P 4 -p 0
-#fi
-#hub-ctrl -h 0 -P 3 -p 0
-#hub-ctrl -h 0 -P 2 -p 0 # USB power  off
-#hub-ctrl -h 0 -P 1 -p 0 # LAN signal off
+for i in $(seq 2 5); do
+ [ usb$i = off ] && hub-ctrl -h 0 -P $i -p 0
+done
 
 ### Remove modules
  modprobe -r 8021q || true
