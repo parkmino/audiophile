@@ -1,11 +1,11 @@
 #!/bin/sh
-#complete -W '1fm 2fm 1r 2r 3r dmb scr rki mbcm mbc4u mbcfm sbsp sbsl cbs tbs tbse gugak stop' kr2mpd ./kr2mpd \~/kr2mpd
+#complete -W '1fm 2fm 1r 2r 3r scr rki mbcm mbc4u mbcfm sbsp sbsl cbs tbs tbse gugak stop' kr2mpd ./kr2mpd \~/kr2mpd
 
  host="127.0.0.1"
 #host="192.168.0.3"
 
 usage () {
- echo "Usage: $(basename "$0") 1fm,2fm,1r,2r,3r,dmb,scr,rki(KBS라디오)"
+ echo "Usage: $(basename "$0") 1fm,2fm,1r,2r,3r,scr,rki(KBS라디오)"
  echo "   or: $(basename "$0") mbcm(MBC Channel M),mbc4u(MBC FM4U),mbcfm(MBC FM)"
  echo "   or: $(basename "$0") sbsp(SBS파워FM),sbsl(SBS러브FM)"
  echo "   or: $(basename "$0") cbs(CBS음악FM),tbs(tbsFM),tbse(tbseFM),gugak(국악방송)"
@@ -20,8 +20,14 @@ pls () {
 kbsr () {
 #url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
 #pls $(curl -s "http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1" | cut -d\" -f16)
- if [ "$1" = 24 ]; then
-  pls $(curl -s http://serpent0.duckdns.org:8088/kbsfm.pls | head -2 | tail -1 | cut -d\= -f2-)
+ if   [ "$1" = 21 ]; then
+  pls $(curl -s http://serpent0.duckdns.org:8088/kbs1radio.pls | head -2 | tail -1 | cut -d\= -f2-)
+ elif [ "$1" = 22 ]; then
+  pls $(curl -s http://serpent0.duckdns.org:8088/kbs2radio.pls | head -2 | tail -1 | cut -d\= -f2-)
+ elif [ "$1" = 24 ]; then
+  pls $(curl -s http://serpent0.duckdns.org:8088/kbs1fm.pls | head -2 | tail -1 | cut -d\= -f2-)
+  #http://kong.kbskme.gscdn.com/pckong_1fm/_definst_/pckong_1fm.stream/chunklist_w1562647729.m3u8?tid=c686d5f623370a2b4a2eb8940c22c251
+  #pls $(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1) && url=$(echo "$url" | sed 's/1fm/pckong_1fm/g') && sleep 1
  else
   pls $(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
  fi
@@ -36,7 +42,6 @@ sbsr () {
 #api=$(curl -s "http://apis.sbs.co.kr/play-api/1.0/onair/channel/S$1?v_type=2&platform=pcweb&protocol=hls" | grep -o 'mediaurl.*' | cut -d\" -f3)
 #url=$(curl -s "$api" | tail -1)
  api=$(curl -s "http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channelPath=$1&streamName=$2.stream&playerType=mobile")
- echo "$api" && exit
  url=$(curl -s $(sbs_dec.py "$api") | tail -1)
 }
 
@@ -56,9 +61,6 @@ case $1 in
  3r)    #kbsr 5
 	kbsr 23
 	;;
-#dmb)   #kbsr 6
-#	kbsr dmb
-#	;;
  scr)   #kbsr 7
 	kbsr I26
 	;;
