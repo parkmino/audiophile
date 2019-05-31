@@ -27,7 +27,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-crypto
 	# apt-get install openssh-client libusb-0.1-4
-	$ scp rc.local alsa.conf.* libasound.so.2.0.0.* mpd mpd.conf icon.png hub-ctrl llctl audio-config kr2mpd sbs_dec.py ut2mpd tts *.pls audio-config pi@192.168.0.3:/home/pi/
+	$ scp rc.local alsa.conf.* libasound.so.2.0.0.* mpd mpd.conf icon.png hub-ctrl llctl audio-config kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls audio-config pi@192.168.0.3:/home/pi/
 
 2. Configuration file
 
@@ -157,19 +157,19 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	$ sudo chmod a+rx /usr/local/bin/youtube-dl
-	$ sudo ln -sf /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts /usr/bin/
-	# mv /root/kr2mpd /root/sbs_dec.py /root/ut2mpd /root/tts /usr/local/bin/
+	$ sudo ln -sf /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts2mpd /usr/bin/
+	# mv /root/kr2mpd /root/sbs_dec.py /root/ut2mpd /root/tts2mpd /usr/local/bin/
 	$ sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
 	$ sudo mkdir /var/lib/mpd/music/webradio
 	$ sudo mv *.pls /var/lib/mpd/music/webradio
 	$ mpc update
 
-	$ sudo apt-get install mpg123 sox libttspico-utils
+	$ #sudo apt-get install mpg123 sox libttspico-utils
 
-	# mv /usr/share/alsa /usr/share/alsa.orig
-	# mkdir /usr/share/alsa
-	# mv /usr/share/alsa.orig/alsa.conf.{min,mix,orig,plug} /usr/share/alsa/
-	# mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
+	# #mv /usr/share/alsa /usr/share/alsa.orig
+	# #mkdir /usr/share/alsa
+	# #mv /usr/share/alsa.orig/alsa.conf.{min,mix,orig,plug} /usr/share/alsa/
+	# #mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
 
 17. Roon Bridge
 
