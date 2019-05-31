@@ -32,6 +32,9 @@ musicpd_bg () {
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
+ ### Text to Speech
+ [ "$tts" = on ] && [ "$eng_tts" = on  ] && tts2mpd en My I P is $(hostname -I)
+ [ "$tts" = on ] && [ "$eng_tts" = off ] && tts2mpd
 /dev/shm/nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
 }
 
@@ -180,8 +183,8 @@ for pid in 1 $(pgrep -x rc.local); do
 done
 
 ### Text to Speech
-[ "$tts" = on ] && [ "$eng_tts" = on  ] && tts en My I P is $(hostname -I)
-[ "$tts" = on ] && [ "$eng_tts" = off ] && tts
+#[ "$tts" = on ] && [ "$eng_tts" = on  ] && tts en My I P is $(hostname -I)
+#[ "$tts" = on ] && [ "$eng_tts" = off ] && tts
 
 ### Read-only
 #remountro
