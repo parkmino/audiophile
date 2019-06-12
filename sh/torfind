@@ -3,7 +3,8 @@ echo "\
 (1) JTBC 뉴스룸
 (2) 이규연의 스포트라이트
 (3) 슈퍼밴드
-(4) 그것이 알고싶다"
+(4) 그것이 알고싶다
+(5) 멜론"
 read -p " " i
 case $i in
  1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30"
@@ -20,6 +21,8 @@ case $i in
     title="그것이 알고싶다" ;;
  c) time="last sunday 22:30"
     title="썰전" ;;
+ 5) time="yesterday"
+    title="멜론" ;;
  *) exit ;;
 esac
 hour=$((($(date +%s)-$(date +%s -d "$time"))/3600))

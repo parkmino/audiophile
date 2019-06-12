@@ -561,7 +561,7 @@ MALP () {
  if [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
-  printf "$(curl $curl_opt https://gitlab.com/gateship-one/malp/tags | grep -m1 item-title | cut -d'>' -f2 | cut -d'<' -f1) ($(date -d "$date" +%F))\t\t"
+  printf "$(curl $curl_opt https://gitlab.com/gateship-one/malp/-/tags | grep -m1 item-title | cut -d'>' -f2 | cut -d'<' -f1) ($(date -d "$date" +%F))\t\t"
   days_diff
   if [ "$days" -le 1 2>/dev/null ]; then
    for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
@@ -756,7 +756,7 @@ CELLULOID
 CREATE_AP
 GOOGLER
 #H3DROID
-#LIBFFMPEG
+LIBFFMPEG
 #MESON
 #MINIDLNA
 TTYD
@@ -764,7 +764,7 @@ YOUTUBE_DL
 #APCAST
 HIFIBERRY
 IPTIME
-NAGGOPBSAL
+#NAGGOPBSAL
 NEWSTAPA
 #GHLIGHTCLUB
 ALILEO
