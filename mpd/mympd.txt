@@ -7,22 +7,21 @@ $ git clone https://github.com/parkmino/myMPD
 $ cd myMPD
 $ git remote add mympd https://github.com/jcorporation/myMPD
 $ git remote -v
-$ git checkout -b develop
-$ git branch
 
+$ git checkout -b dev
+$ git branch
 $ #sed -i '/de-DE/a\\t"ko-KR": ""' htdocs/js/i18n.js
 $ nano src/i18n/ko-KR.txt
-
-$ git add htdocs/js/i18n.js
+$ git add src/i18n/ko-KR.txt
 $ git commit -m "Update Korean translation"
-$ git push origin develop
+$ git push origin dev
 
 https://github.com/parkmino/myMPD > "Compare & pull request"
 
 $ git checkout master
 $ git pull mympd master
 $ git push origin master
-$ git branch -D develop
+$ git branch -D dev
 
 ### Ubuntu PPA
 
