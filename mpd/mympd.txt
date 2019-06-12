@@ -1,3 +1,10 @@
+### Korean Translation
+
+$ sed -i '/de-DE/a\\t"ko-KR": ""' htdocs/js/i18n.js
+$ nano htdocs/js/i18n.js
+
+### Ubuntu PPA
+
 https://help.ubuntu.com/community/GnuPrivacyGuardHowto
 
 $ cd ~/Downloads/mpd/mympd/
@@ -9,6 +16,6 @@ $ tar -zcvf mympd-5.4.0.orig.tar.gz myMPD-5.4.0
 $ cat myMPD-5.4.0/debian/source/format
 $ #sed -i 's/stabe/bionice/g' myMPD-5.4.0/debian/changelog
 $ cd myMPD-5.4.0
-$ debuild -S -k433D8977
+$ debuild -S -k433D8977 # -sd
 $ cd ..
 $ dput ppa:parkmino/mympd mympd*source.changes
