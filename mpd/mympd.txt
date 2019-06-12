@@ -10,8 +10,8 @@ $ git remote -v
 $ git checkout -b develop
 $ git branch
 
-$ sed -i '/de-DE/a\\t"ko-KR": ""' htdocs/js/i18n.js
-$ nano htdocs/js/i18n.js
+$ #sed -i '/de-DE/a\\t"ko-KR": ""' htdocs/js/i18n.js
+$ nano src/i18n/ko-KR.txt
 
 $ git add htdocs/js/i18n.js
 $ git commit -m "Update Korean translation"
