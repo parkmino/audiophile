@@ -19,8 +19,10 @@ $ git push origin develop
 
 https://github.com/parkmino/myMPD > "Compare & pull request"
 
-$ git pull mympd
-$ git branch -d develop
+$ git checkout master
+$ git pull mympd master
+$ git push origin master
+$ git branch -D develop
 
 ### Ubuntu PPA
 
