@@ -135,7 +135,7 @@ for i in $(ls /dev/snd/); do
 done
 #rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
-#modprobe -r psmouse
+modprobe -r psmouse
 
 /home/parkmino/Downloads/uhubctl-master/uhubctl -a 0 -l 2-1 -p 1-6
 /home/parkmino/Downloads/uhubctl-master/uhubctl -a 0 -l 1-1 -p 3-6
