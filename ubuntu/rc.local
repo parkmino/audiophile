@@ -137,7 +137,7 @@ done
 
 modprobe -r psmouse
 
-/home/parkmino/Downloads/uhubctl-master/uhubctl -a 0 -l 2-1 -p 1-6
-/home/parkmino/Downloads/uhubctl-master/uhubctl -a 0 -l 1-1 -p 3-6
+uhubctl -a 0 -l 2-1 -p 1-6
+uhubctl -a 0 -l 1-1 -p 3-6
 
 exit 0
