@@ -158,6 +158,9 @@ for pid in 1 $(pgrep -x rc.local); do
  taskset -cp $m_task $pid || true
 done
 
+### uhubctl
+uhubctl -a 0 -p 1,3 || true
+
 if [ "$upnp" = on ]; then
  musicpd_bg &
  eol &
