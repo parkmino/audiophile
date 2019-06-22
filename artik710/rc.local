@@ -66,8 +66,8 @@ spotifyd () {
 }
 
 airconnect () {
- cp /root/airupnp-arm /dev/shm/
-/dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
+ cp /root/airupnp-aarch64 /dev/shm/
+/dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-aarch64 -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
@@ -130,13 +130,13 @@ fi
 swapoff -a
 
 ### Remove services
-for i in getty@tty1 serial-getty@ttySAC3
+for i in serial-getty@ttySAC3
 do
- service $i stop
+ service $i stop || true
 done
-for i in hciattach tzdaemon # bluetoothd
+for i in hciattach
 do
- pkill $i
+ pkill $i || true
 done
 
 ### Roon Bridge
@@ -146,8 +146,7 @@ done
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### myMPD
-mympd&>/dev/null</dev/null 2>/dev/null
-sleep 1
+systemctl start mympd
 
 ### Taskset
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
