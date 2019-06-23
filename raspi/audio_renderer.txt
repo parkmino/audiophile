@@ -296,16 +296,16 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "printf 'kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'"
 	$ sudo sh -c "printf 'kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'"
 	$ sudo touch /etc/mympd/syscmds/7HR
-	$ sudo sh -c "printf 'sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'"
-	$ sudo sh -c "printf 'sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'"
-	$ sudo touch /etc/mympd/syscmds/10HR
-	$ sudo sh -c "printf 'sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'"
-	$ sudo sh -c "printf 'sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'"
-	$ sudo touch /etc/mympd/syscmds/13HR
-	$ sudo sh -c "printf 'ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 터미널 (Web Terminal)'"
+	$ #sudo sh -c "printf 'sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'"
+	$ #sudo sh -c "printf 'sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'"
+	$ #sudo touch /etc/mympd/syscmds/10HR
+	$ #sudo sh -c "printf 'sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'"
+	$ #sudo sh -c "printf 'sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'"
+	$ #sudo touch /etc/mympd/syscmds/13HR
+	$ sudo sh -c "printf 'ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 터미널 - Web Terminal'"
 	$ sudo touch /etc/mympd/syscmds/15HR
-	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/16다시 시작 (Reboot)'"
-	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17전원 끄기 (Power off)'"
+	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/16다시 시작 - Reboot'"
+	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17전원 끄기 - Power off'"
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 
 22. ttyd
