@@ -685,9 +685,7 @@ else
   printf '  '
   #curl -s "$url" | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.x86_64/' | wget "$(cat -)" -P /home/parkmino/Downloads/
   curl -s $(curl -s "$url" | cut -d\" -f2) | grep -m1 x86_64 | cut -d\" -f2 | wget "https://github.com/$(cat -)" -P /home/parkmino/Downloads/
-  printf '  '
   chmod +x /home/parkmino/Downloads/ttyd_linux.x86_64
-  printf '  '
   sudo mv /home/parkmino/Downloads/ttyd_linux.x86_64 /usr/bin/ttyd
   printf "  $(ttyd --version)\n"
  fi
