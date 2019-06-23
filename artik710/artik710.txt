@@ -235,6 +235,13 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ## apt-get update
 ## apt-get install shairport-sync
 
+### MicroSD mount
+# apt-get install exfat-fuse exfat-utils # microSDXC
+# mkdir /mnt/microSD
+# nano /etc/fstab
+	/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
+# ln -sf /mnt/microSD /var/lib/mpd/music
+
 # systemctl disable sshd
 
 ### Back up
