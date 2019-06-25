@@ -37,7 +37,7 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.3 Kodi.bin
 
-	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/a/dev/shm/nohup /usr/lib/kodi/kodi.bin $SAVED_ARGS>/dev/null</dev/null 2>/dev/null' usr/lib/kodi/kodi.sh
+	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/aexec /dev/shm/nohup /usr/lib/kodi/kodi.bin $SAVED_ARGS>/dev/null</dev/null 2>/dev/null' usr/lib/kodi/kodi.sh
 	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/s/^/#/' usr/lib/kodi/kodi.sh
 	$ nano usr/lib/kodi/kodi.sh
 
@@ -92,12 +92,12 @@ Requires=tuning_audio.service
 After=tuning_audio.service
 AllowIsolate=yes' > ../tuning_audio.target
 
-	$ cp bin/ps usr/bin/{chrt,nohup,taskset,inst_addon} hub-ctrl llctl ../copy/
+	$ cp bin/ps usr/bin/{chrt,nohup,taskset,inst_addon} hub-ctrl uhubctl llctl ../copy/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.6.0.0 ../copy/libprocps.so.6
 	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
 
 	$  rm usr/bin/ps usr/bin/nohup
-	$  cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,llctl,kodi-config} usr/bin/
+	$  cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,uhubctl,llctl,kodi-config} usr/bin/
 	$  cp ../copy/*.pls etc/
 	$ #cp -r ../../plugin.audio.kr2kodi etc/
 	$ #cp -r ../../kodi/plugin.video.{ktv2kodi,kut2kodi} etc/
@@ -138,9 +138,6 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ ssh root@192.168.0.x (password: libreelec)
 
 4. More tweaks
-
-	$ sed -i '/\/dev\/shm\/nohup/s/^/exec /' squashfs-root/usr/lib/kodi/kodi.sh
-	$ sudo mksquashfs squashfs-root SYSTEM.tweak
 
 	$ nano /flash/cmdline.txt
 	$ nano /storage/.config/audio.conf
