@@ -27,15 +27,15 @@ $ git branch -D dev
 
 https://help.ubuntu.com/community/GnuPrivacyGuardHowto
 
-$ cd ~/Downloads/mpd/mympd/
-$ nano myMPD-5.4.0/debian/changelog
-	mympd (5.4.0-1) bionic; urgency=medium
-$ nano myMPD-5.4.0/debian/control
-	Section: misc
-$ tar -zcvf mympd-5.4.0.orig.tar.gz myMPD-5.4.0
-$ cat myMPD-5.4.0/debian/source/format
-$ #sed -i 's/stabe/bionice/g' myMPD-5.4.0/debian/changelog
-$ cd myMPD-5.4.0
+$ cd ~/Downloads/ppa/mympd/
+$ nano myMPD-5.5.0/debian/changelog
+	mympd (5.5.0-1) bionic; urgency=medium
+$ nano myMPD-5.5.0/debian/control
+	Section: sound
+$ tar -zcvf mympd_5.5.0.orig.tar.gz myMPD-5.5.0
+$ cat myMPD-5.5.0/debian/source/format
+$ #sed -i 's/stabe/bionic/g' myMPD-5.5.0/debian/changelog
+$ cd myMPD-5.5.0
 $ debuild -S -k433D8977 # -sd
 $ cd ..
 $ dput ppa:parkmino/mympd mympd*source.changes
