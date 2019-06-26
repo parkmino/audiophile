@@ -93,7 +93,7 @@ After=tuning_audio.service
 AllowIsolate=yes' > ../tuning_audio.target
 
 	$ cp bin/ps usr/bin/{chrt,nohup,taskset,inst_addon} hub-ctrl uhubctl llctl ../copy/
-	$ cp lib/arm-linux-gnueabihf/libprocps.so.6.0.0 ../copy/libprocps.so.6
+	$ cp lib/arm-linux-gnueabihf/libprocps.so.7.1.0 ../copy/libprocps.so.7
 	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
 
 	$  rm usr/bin/ps usr/bin/nohup
@@ -103,7 +103,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ #cp -r ../../kodi/plugin.video.{ktv2kodi,kut2kodi} etc/
 	$  cp ../../../kodi/plugin.{audio.kr2kodi,audio.kpodcast,video.klive}.zip etc/
 	$ #cp ../../kodi/plugin.video.{ktv2kodi,kut2kodi}.zip etc/
-	$  cp ../copy/libprocps.so.6 usr/lib/
+	$  cp ../copy/libprocps.so.7 usr/lib/
 	$  cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
 	$  cp ../tuning_audio usr/lib/libreelec/
 	$  cp ../tuning_audio.{service,target} usr/lib/systemd/system/
@@ -120,7 +120,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 	$ cd ..
 	$ [ -f SYSTEM ] && rm -f SYSTEM
-	$ sudo mksquashfs squashfs-root SYSTEM
+	$ sudo mksquashfs squashfs-root SYSTEM -all-root -noappend
 
 2. Flashing
 
