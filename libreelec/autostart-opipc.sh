@@ -58,10 +58,11 @@ swapoff -a
 echo 4 > /proc/irq/default_smp_affinity || true
 
 (
- until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q complet); do
+#until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q complet); do
+ until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null; do
   sleep 1
  done
- sleep 1
+ sleep 3
 
  pgr_kodi=$(pgrep kodi.bin)
  ppid=$pgr_kodi
