@@ -485,7 +485,9 @@ date=$(curl $curl_opt "$url" | grep -m1 datetime | sed 's/.*datetime//' | cut -d
 if [ -z "$date" ]; then
  printf "\t\t\t\t정보 없음\n"
 else
- printf "$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d\/ -f6 | cut -d\" -f1) ($(echo $date | cut -d'T' -f1))\t\t"
+ ver=$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d\/ -f6 | cut -d\" -f1)
+ printf "$ver ($(echo $date | cut -d'T' -f1))"
+ [ ${#ver} -ge 10 ] && printf "\t" || printf "\t\t"
  days_diff
 fi
 #current=$(ls -d /home/parkmino/Downloads/Libre* | sed 's/.*arm.//')
