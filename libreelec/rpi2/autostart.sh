@@ -43,9 +43,10 @@ fi
 #[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 #
 ### Turn off USBs
-for i in $(seq 2 5); do
- [ usb$i = off ] && hub-ctrl -h 0 -P $i -p 0
-done
+#for i in $(seq 2 5); do
+# [ usb$i = off ] && hub-ctrl -h 0 -P $i -p 0
+#done
+[ -n "$usb" ] && uhubctl -a 0 -p "$usb"
 
 ### Remove modules
  modprobe -r 8021q || true
@@ -55,6 +56,12 @@ done
 swapoff -a
 
 echo 4 > /proc/irq/default_smp_affinity || true
+
+[ "$alsa_conf" = min ] && rm -rf /dev/snd/*c /dev/snd/by* || true
+[ "$lirc"  = off ] && systemctl stop eventlircd
+[ "$nfs"   = off ] && systemctl stop rpcbind
+[ "$pulse" = off ] && systemctl stop pulseaudio
+[ "$wpa"   = off ] && systemctl stop wpa_supplicant
 
 (
  until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q complet); do
@@ -71,12 +78,6 @@ echo 4 > /proc/irq/default_smp_affinity || true
  done
 
  taskset -cp $m_task $pgr_kodi
-
- [ "$alsa_conf" = min ] && rm -rf /dev/snd/*c /dev/snd/by* || true
- [ "$lirc"  = off ] && systemctl stop eventlircd
- [ "$nfs"   = off ] && systemctl stop rpcbind
- [ "$pulse" = off ] && systemctl stop pulseaudio
- [ "$wpa"   = off ] && systemctl stop wpa_supplicant
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
