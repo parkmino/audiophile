@@ -75,6 +75,10 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	domain your.domain.name
 ## resolvconf -u
 # hostnamectl
+# nano /etc/avahi/avahi-daemon.conf
+	host-name=BannNetPlayer
+	domain-name=local
+# systemctl restart avahi-daemon
 
 ### SSH message
 # ls /etc/update-motd.d/*
@@ -83,8 +87,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # systemctl list-unit-files | grep enabled
 # apt-get remove zigbeed
 # apt-get autoremove
-# systemctl stop    avahi-daemon ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 serial-getty@ttySAC3
-# systemctl disable avahi-daemon ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 serial-getty@ttySAC3
+# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 serial-getty@ttySAC3 # avahi-daemon
+# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 serial-getty@ttySAC3 # avahi-daemon
 # systemctl mask wpa_supplicant
 # pkill hciattach; pkill tzdaemon
 
