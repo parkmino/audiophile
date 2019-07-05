@@ -1,93 +1,6 @@
-1. ALSA compatibility for Airplay, Roon and Spotify
+1. tts2mpd in place of tts, it should be placed after mpd.
 
-	sudo nano /etc/default/audio.conf
-
-		 alsa=min	# min/mix/orig
-		 upnp=on
-		 roon=off
-		 spotify=off
-		 airplay=off
-		#wifi=off	# LibreELEC
-
-	sudo nano /etc/rc.local
-
-		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
-		...
-		if [ "$alsa" = orig ]; then
-		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
-		elif [ "$alsa" = min ] && [ "roon" = off ] && [ "spotify" = off ]; then
-		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
-		 rm -rf /dev/snd/*c /dev/snd/by* || true
-		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		else
-		 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
-		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
-		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		fi
-
-2. ALSA configuration
-
-	sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759,' > /usr/share/alsa/alsa.conf.sav"
-
-	sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
-
-	printf 'pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 pcm.default ctl.9,' > copy/alsa.conf.min
-
-3. ALSA library file permission
-
-	sudo chmod -x /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
-
-4. sudo nano /etc/rc.local
-
-	 cp /usr/bin/nohup /dev/shm/
-	 /dev/shm/nohup ...>/dev/null</dev/null 2>/dev/null
-	 taskset -acp 0 $pid 2>/dev/null || true # Suppress error messages
-	#mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
-
-5. sudo nano /etc/mpd.conf.sav
-	 state_file "/var/lib/mpd/state"
-	 log_file "/dev/null"
-	 mixer_device "ctl.9"
-	#audio_buffer_size "3684" # for 0.21.x
-	 audio_buffer_size "3683" #
-	 buffer_before_play "10.5596937298022%" #
-
-6. Try /dev/shm/nohup and null in/output for RoonBridge
-
-7. Update kr2mpd
-
-8. Artik 710 Menu
-
-	myMPD
-	-------------------------	### Commands
-	KBS 클래식 FM			kr2mpd 1fm
-	KBS 쿨 FM			kr2mpd 2fm
-	MBC FM				kr2mpd mbcfm
-	MBC FM4U			kr2mpd mbc4u
-	SBS 파워 FM			kr2mpd sbsp
-	SBS 러브 FM			kr2mpd sbsl
-	-------------------------
-	UPnP - DoP (DSD over PCM)	sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav
-	UPnP - Native			sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav
-	-------------------------
-	Roon Bridge - Enable		sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf
-	Roon Bridge - Disable		sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf
-	-------------------------
-	Web Terminal			ttyd -o -O -p 8080 dash&>/dev/null</dev/null 2>/dev/null
-	-------------------------
-	Reboot       (다시 시작)	sudo reboot
-	Power off    (전원 끄기)	sudo poweroff
-	-------------------------
-
-9. sudo nano /etc/sysctl.conf
-	 kernel.sched_latency_ns = 1394060		# 1394058
-	 kernel.sched_time_avg_ms = 6288		# 6289
-
-10. tts2mpd in place of tts, it should be placed after mpd.
-
-11. usb configs in audio.conf
+2. usb configs in audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		...
@@ -105,7 +18,7 @@
 		...
 		sudo sed -i '/usb[2-5]=/s/=.*/=off/g' $audio_conf ;;
 
-12. uhubctl in audio.conf
+3. uhubctl in audio.conf
 
 	$ sudo apt-get install uhubctl
 	$ sudo cp uhubctl /root/
@@ -119,7 +32,25 @@
 	$ nano ~/audio-config
 		sudo sed -i '/usb=/s/=.*/=4,5/' $audio_conf ;;
 
-cf)
+4. ttyd message
+	$ ttyd -o -O -p 8080 dash -c 'echo "Welcome to Web SSH Terminal! / 웹 SSH 터미널에서 환영합니다!"; bash'
+	$ ttyd -o -O -p 8080 dash -c 'printf "Welcome to Web SSH Terminal!\nRun \"exit\", reload or close this tab in your browser to finish.\n웹 SSH 터미널에서 환영합니다!\n빠져나가려면 \"exit\"을 입력하거나, 브라우저의 현재 탭을 새로 고치거나 닫으면 됩니다.\n"; bash'
 
-ttyd -o -O -p 8080 dash -c 'echo "Welcome to Web SSH Terminal! / 웹 SSH 터미널에서 환영합니다!"; bash'
-ttyd -o -O -p 8080 dash -c 'printf "Welcome to Web SSH Terminal!\nRun \"exit\", reload or close this tab in your browser to finish.\n웹 SSH 터미널에서 환영합니다!\n빠져나가려면 \"exit\"을 입력하거나, 브라우저의 현재 탭을 새로 고치거나 닫으면 됩니다.\n"; bash'
+5. Taskset for roon, spotifyd, airupnp and networkaudiod(hqplyaer naa)
+
+	$ sudo nano /etc/rc.local
+
+		... awk '$2 !~ /migration/ && $2 !~ /mpd/ && $2 !~ /networkaudiod/ {print $1}'
+
+		### Takset
+		#for i in RoonBridge spotifyd airupnp-arm airupnp-aarch64 networkaudiod; do
+		#	proc=$(pidof $i)
+		#	if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
+		#	 taskset -acp 1-$m_task $proc # $h_task
+		#	fi
+		#done
+		#
+		#proc=$(pgrep mympd)
+		#[ $proc -gt 1 ] && taskset -acp $o_task $proc
+
+		Place mympd ahead of the main taskset
