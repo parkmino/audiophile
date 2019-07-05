@@ -113,10 +113,23 @@ for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
 done
 
-for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ && $3 !~ /mpd/ {print $1}'); do
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$2 !~ /migration/ && $2 !~ /mpd/ && $2 !~ /networkaudiod/ {print $1}'); do
  chrt -op 0 $i
  renice  -3 $i
 done
+
+### Remove services
+for i in serial-getty@ttySAC3
+do
+ service $i stop || true
+done
+for i in hciattach
+do
+ pkill $i || true
+done
+
+### myMPD
+systemctl start mympd
 
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
@@ -129,24 +142,11 @@ fi
 
 swapoff -a
 
-### Remove services
-for i in serial-getty@ttySAC3
-do
- service $i stop || true
-done
-for i in hciattach
-do
- pkill $i || true
-done
-
 ### Roon Bridge
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Spotifyd
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
-
-### myMPD
-systemctl start mympd
 
 ### Taskset
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do

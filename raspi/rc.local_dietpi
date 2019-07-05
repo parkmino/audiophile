@@ -122,11 +122,24 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ &&
  renice  -3 $i
 done
 
+### Remove services
+#for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
+#do
+# service $i stop
+#done
+#pkill plymouthd
+#[ -f /boot/.nossh ] && service dropbear stop
+#renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
+swapoff -a
+
+### myMPD
+mympd&>/dev/null</dev/null 2>/dev/null
+
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd$/ {print $1}'); do
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd$/ && $2 !~ /networkaudiod/ {print $1}'); do
   taskset -acp 0 $pid 2>/dev/null || true
  done
 fi
@@ -152,25 +165,11 @@ done
 /opt/vc/bin/tvservice -o
 #service getty@tty1 stop
 
-### Remove services
-#for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
-#do
-# service $i stop
-#done
-#pkill plymouthd
-#[ -f /boot/.nossh ] && service dropbear stop
-#renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
-swapoff -a
-
 ### Roon Bridge
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Spotifyd
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
-
-### myMPD
-mympd&>/dev/null</dev/null 2>/dev/null
-sleep 1
 
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
