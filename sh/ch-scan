@@ -1,0 +1,193 @@
+#!/bin/sh
+#complete -W 'lgu+ip lgu+ etv lgetv1 etv12' ch-scan ./ch-scan \~/ch-scan
+
+# Everyon TV
+# http://www.everyon.tv
+# http://www.everyon.tv/main/schedule.etv?chNum=xxx
+
+usage () {
+#echo "Usage: $(basename $0) lgu+ip"
+#echo "   or: $(basename $0) lgu+   [START] [END] (def.3000~9000)"
+ echo "Usage: $(basename $0) etv    [START] [END] (def.1~1400)"
+#echo "   or: $(basename $0) lgetv1 [START] [END] (def.1100~1400)"
+ echo "   or: $(basename $0) etv12  [START] [END] (def.1~1400)"
+ echo "Scan the iptv channels"
+}
+
+init_lst () {
+ file="/home/parkmino/$(basename "$0")-$1($2-$3).lst"
+ [ -f "$file" ] && truncate -s 0 "$file" || touch "$file"
+}
+
+show_lst () {
+ printf "\33[2K\r"
+#cat -n "$file"
+}
+
+mkm3u="/home/parkmino/mkm3u"
+
+case $1 in
+ lgu+ip)
+  start=0
+  end=255
+  [ "$2" -gt 0 2>/dev/null ] &&  start=$2
+  [ "$3" -gt $start 2>/dev/null ] && end=$3
+  init_lst $1 $start $end
+  ip_root="$(grep -m1 /vod/ $mkm3u | grep -o '[0-9]*\.[0-9]*\.[0-9]*\.')"
+ #ip_root=211.36.155.
+  ch="$(grep -m1 /vod/ $mkm3u | sed 's/.*\/vod\///' | cut -d'.' -f1)"
+  for i in $(seq $start $end); do
+   ip="$ip_root$i"
+   printf "\33[2K\r🖧  $ip\t($(($(cat $file | wc -l)+1)))"
+   if ping -w2 -c1 $ip >/dev/null; then
+    url="http://$ip/vod/$ch.m3u8"
+    curl -m2 -s "$url" | grep -qs 'EXTM3U' && echo "$ip" >> $file && printf "\n"
+   fi
+  done
+  printf "\33[2K\r🖧  IP\n"
+  for i in $(seq $start $end); do
+   if ! grep -qs "\.$(($i-1))$" $file && grep -qs "\.$i$" $file; then
+    start="$ip_root$i"
+    printf "\33[2K\r🖧  $start"
+   fi
+   if grep -qs "\.$(($i-1))$" $file; then
+    if grep -qs "\.$i$" $file; then
+     printf "\33[2K\r🖧  $start-$i"
+     [ $i -eq $end ] && printf \\n
+    else
+     printf \\n
+    fi
+   fi
+  done ;;
+ lgu+)
+  start=3000
+  end=9000
+  [ "$2" -gt 0 2>/dev/null ] &&  start=$2
+  [ "$3" -ge $start 2>/dev/null ] && end=$3
+  init_lst $1 $start $end
+  for i in $(seq $start 10 $end); do
+   for j in 1 4; do
+    url="http://1.214.67.29/vod/${i}${j}.m3u8" # 1.214.67.15~24|27~40|79~104|201~210|233~240
+    printf "\33[2K\r$url\t($(($(cat $file | wc -l)+1)))"
+    curl -s "$url" | grep -qs 'EXTM3U' && echo "$url#" >> "$file" && printf "\n" # && mpv "$url"
+   done
+  done
+  show_lst
+  echo "📺"
+  while read line; do
+   if ! grep -qs "$(echo $line | cut -d'/' -f4-)" $mkm3u; then
+    printf "$(echo $line | cut -d'#' -f1)\tNew"
+    for i in 39701 39801 39901 50101 50201 50301 50401 61201 61501 62101 62301 62401 62601; do
+     echo $line | grep -qs "/$i." && printf " │ Unavailable"
+    done
+    if grep -qs "$(echo $line | sed 's/01.m3u8/04.m3u8/')" $mkm3u; then
+     printf " │ HD preferred"
+    fi
+    printf \\n
+   fi
+  done < $file ;;
+ etv)
+  start=1
+  end=1400
+  [ "$2" -gt 0 2>/dev/null ] &&  start=$2
+  [ "$3" -ge $start 2>/dev/null ] && end=$3
+  init_lst $1 $start $end
+  for i in $(seq $start $end); do
+   lines=$(curl -s http://www.everyon.tv/main/schedule.etv?chNum=$i | wc -l)
+   printf "\33[2K\rCH.$i\t($(($(cat $file | wc -l)+1)))"
+   [ "$lines" -gt 64 ] && printf \\n && echo "CH.$i" >> "$file"
+  done
+  printf "\33[2K\r📺\n"
+  while read line; do
+   if ! grep -qs "phd$(echo $line | cut -d'.' -f2)/" $mkm3u; then
+    printf "$line\tNew"
+    for i in 29 58 61 62 315 325 343 407 497 499 501 581 613 707 765 766 771 772 897 927 928 986 1002 1005 1006 1008 1013 1021 1043 1053 1079 1081 1082 1083 1084 1086 1087 1088 1089 1154 1156 1160 1161 1162 1163 1164 1167 1169 1170 1187 1191 1192 1193 1200 1274 1278 1302 1331 1370 1372 1374 1384; do
+     echo $line | grep -qs "\.$i$" && printf " │ Unavailable"
+    done
+    printf \\n
+   fi
+  done < $file
+  echo
+  echo "* Following channels are not detected"
+  while read line; do
+   ch=$(echo $line | grep -o phd[0-9].*/ | tr -d 'phd' | tr -d '/')
+   if ! grep -qs "CH.$ch" $file && echo $line | grep -v -qs -e lgetv1 -e HCN -e phd1326 -e phd1328 && [ "$ch" -ge "$start" ] && [ "$ch" -le "$end" ] ; then
+    printf "$line\n"
+     #for i in 1106 1107 1108 1109 1110 1111 1112 1113 1114 1115 1116 1117 1118 1119 1120 1121 1122 1123 1124 1125 1126 1127 1128 1129 1130 1131 1132 1133 1134 1136 1138 1141 1142 1143 1144 1145 1148 1149 1150 1183 1190 1280 1281 1283 1305 1306 1307 1330 1354 1355 ; do
+      #[ "$ch" -eq "$i" ] && printf "\33[2K\r"
+     #done
+    #printf \\n
+   fi
+  done < $mkm3u ;;
+ lgetv1)
+  start=1100
+  end=1400
+  init_lst $1 $start $end
+  for i in $(seq $start $end); do
+   url="http://lgedge1.everyon.tv/$1/phd$i/playlist.m3u8"
+   printf "\33[2K\r$url \t($(($(cat $file | wc -l)+1)))"
+   if curl -s "$url" | grep -qs 'EXTM3U'; then
+    v_res=$(curl --connect-timeout 5 -m5 -s "$url" | grep RESOLUTION | tr x \\n  | tail -1)
+    [ "$v_res" -ge 720 2>/dev/null ] && echo "$url#HD" >> "$file" || echo "$url#" >> "$file"
+    printf "\n"
+   #mpv "$url"
+   fi
+  done
+  show_lst
+  echo "📺"
+  while read line; do
+   grep -qs "$(echo $line | cut -d'/' -f5)/" $mkm3u || printf "📺  $(echo $line | cut -d'#' -f1)\tNew\n"
+  done < $file
+  echo
+  echo "* Following channels are not detected"
+  while read line; do
+   ch=$(echo $line | grep -o phd.*/ | tr -d 'phd'| tr -d '/')
+   if ! grep -qs "CH.$ch" $file && echo $line | grep -qs lgetv1 && [ "$ch" -ge "$start" ] && [ "$ch" -le "$end" ] 2>/dev/null; then
+    printf "$line\n"
+   fi
+  done < $mkm3u ;;
+ etv12)
+  if [ "$#" -le 3 ]; then
+   start=1
+   end=1400
+   [ "$2" -gt 0 2>/dev/null ] && start=$2
+   [ "$3" -ge $start 2>/dev/null ] && end=$3
+   init_lst $1 $start $end
+   seq=$(seq $start $end)
+  else
+   init_lst $1 $(echo "$@" | sed 's/\s/\n/g' | sed '1d' | sort -n | head -1) $(echo "$@" | sed 's/\s/\n/g' | sed '1d' | sort -n | tail -1)
+   shift
+   seq=$@
+  fi
+  for i in $seq; do
+   for j in edge1.everyon.tv/etv1 edge2.everyon.tv/etv2 edge2.everyon.tv/etv2sb edge1.everyon.tv/etv1sb; do
+    url="http://$j/phd$i/playlist.m3u8"
+    printf "\33[2K\r$url \t($(($(cat $file | wc -l)+1)))"
+    #lines=$(curl -s http://www.everyon.tv/main/schedule.etv?chNum=$i | wc -l)
+    #[ "$lines" -le 64 ] && break
+    #grep -qs /lgetv1/phd$i/ $mkm3u && break
+    if curl -s "$url" | grep -qs 'EXTM3U'; then
+     v_res=$(curl --connect-timeout 5 -m5 -s "$url" | grep RESOLUTION | tr x \\n  | tail -1)
+     [ "$v_res" -ge 720 2>/dev/null ] && echo "$url#HD" >> "$file" || echo "$url#" >> "$file"
+     printf "\n"
+     #mpv "$url"
+     break
+    fi
+   done
+  done
+  show_lst
+  echo "📺"
+  while read line; do
+   grep -qs "$(echo $line | cut -d'/' -f5)/" "$mkm3u" || printf "$(echo $line | cut -d'#' -f1)\tNew\n"
+  done < "$file"
+  echo
+  echo "* Following channels are not detected"
+  while read line; do
+   ch=$(echo $line | grep -o phd.*/ | tr -d 'phd'| tr -d '/')
+   #if ! grep -qs "CH.$ch" "$file" && echo $line | grep -qs lgetv1 && [ "$ch" -ge "$start" ] && [ "$ch" -le "$end" ] ; then
+   if ! grep -qs "CH.$ch" "$file" && echo $line | grep -qs '/etv1\|/etv2' && [ "$ch" -ge "$start" ] && [ "$ch" -le "$end" ] ; then
+    printf "$line\n"
+   fi
+  done < $mkm3u ;;
+ *) usage ; exit ;;
+esac
