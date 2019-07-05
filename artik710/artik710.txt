@@ -76,7 +76,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ## resolvconf -u
 # hostnamectl
 # nano /etc/avahi/avahi-daemon.conf
-	host-name=BannNetPlayer
+	host-name=bann
 	domain-name=local
 # systemctl restart avahi-daemon
 
@@ -238,6 +238,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ## add-apt-repository ppa:dantheperson/shairplay-sync
 ## apt-get update
 ## apt-get install shairport-sync
+
+### HQPlayer NAA
+## wget https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
+## dpkg -i networkaudiod*.deb
+## sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
 ### MicroSD mount
 # apt-get install exfat-fuse exfat-utils # microSDXC
