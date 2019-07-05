@@ -305,9 +305,13 @@ Tuning
 3.12 Unmount and Shut down data HDD during Playback
 	$ df -hT && sudo umount /dev/sdb1 && sudo hdparm -Y /dev/sdb
 	$ play *.wav
-	$ sudo mount /dev/sdb1	
+	$ sudo mount /dev/sdb1
 
-3.13 Options.
+3.13 Disable xfce4 services
+	$ sudo mv /usr/share/dbus-1/services/org.xfce.xfce4-notifyd.Notifications.service /usr/share/dbus-1/services/org.xfce.xfce4-notifyd.Notifications.service.disabled
+	$ sudo mv /usr/share/dbus-1/services/org.xfce.Xfconf.service /usr/share/dbus-1/services/org.xfce.Xfconf.service.disabled
+
+3.14 Options.
 
 	-. Kernel Options
 		# sudo gedit /etc/default/grub
