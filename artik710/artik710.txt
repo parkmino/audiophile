@@ -240,7 +240,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ## apt-get install shairport-sync
 
 ### HQPlayer NAA
-## wget https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
+## wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
 ## dpkg -i networkaudiod*.deb
 ## sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
