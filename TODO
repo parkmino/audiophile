@@ -40,17 +40,22 @@
 
 	$ sudo nano /etc/rc.local
 
-		... awk '$2 !~ /migration/ && $2 !~ /mpd/ && $2 !~ /networkaudiod/ {print $1}'
+		... awk '$2 !~ /migration|mpd|networkaudiod/ {print $1}'
 
-		### Takset
-		#for i in RoonBridge spotifyd airupnp-arm airupnp-aarch64 networkaudiod; do
-		#	proc=$(pidof $i)
-		#	if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
-		#	 taskset -acp 1-$m_task $proc # $h_task
-		#	fi
-		#done
-		#
-		#proc=$(pgrep mympd)
-		#[ $proc -gt 1 ] && taskset -acp $o_task $proc
+		### Taskset for Raspi
+		for i in RoonBridge spotifyd airupnp-arm networkaudiod; do
+			proc=$(pidof $i)
+			if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
+			 taskset -acp 1-$m_task $proc	# $h_task in place of $m_task
+			fi
+		done
+
+		### Taskset for Artik710
+		for i in RoonBridge spotifyd airupnp-aarch64 networkaudiod; do
+			proc=$(pidof $i)
+			if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
+			 taskset -acp 4-7 $proc		# 4-6 in place of 4-7
+			fi
+		done
 
 		Place mympd ahead of the main taskset
