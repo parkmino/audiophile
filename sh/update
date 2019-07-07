@@ -189,8 +189,8 @@ printf "• Armbian\t"
 ver=$(curl $curl_opt https://docs.armbian.com/Release_Changelog/ | grep -m1 v[0-9]*\\.[0-9]* | cut -d'>' -f3 | cut -d'<' -f1)
   dmy=$(echo $ver | cut -d' ' -f3)
  year=$(echo $dmy | cut -d'.' -f3)
-month=$(echo $dmy | cut -d'.' -f2)
-  day=$(echo $dmy | cut -d'.' -f1)
+month=$(printf "%02d" $(echo $dmy | cut -d'.' -f2))
+  day=$(printf "%02d" $(echo $dmy | cut -d'.' -f1))
  date="$year-$month-$day"
 if [ -z "$ver" ]; then
  printf "\t\t\t\t정보 없음\n"
