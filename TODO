@@ -59,4 +59,16 @@
 			fi
 		done
 
+		### Taskset for LibreELEC
+		until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q ActiveAE); do
+
+		[ $m_task -ge 2 ] && taskset -acp 1-$(($m_task-1)) $pgr_kodi
+		for i in $(pstree -p $pgr_kodi | grep ActiveAE | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1); do
+		 taskset -cp $m_task $i
+		done
+
 		Place mympd ahead of the main taskset
+
+6. Taskset for mpd
+
+		taskset -pc $s_task $pgr_mpd	# m_task to s_task
