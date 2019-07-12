@@ -189,15 +189,15 @@ printf "• Armbian\t"
 ver=$(curl $curl_opt https://docs.armbian.com/Release_Changelog/ | grep -m1 v[0-9]*\\.[0-9]* | cut -d'>' -f3 | cut -d'<' -f1)
   dmy=$(echo $ver | cut -d' ' -f3)
  year=$(echo $dmy | cut -d'.' -f3)
-month=$(printf "%02d" $(echo $dmy | cut -d'.' -f2))
-  day=$(printf "%02d" $(echo $dmy | cut -d'.' -f1))
+month=$(echo $dmy | cut -d'.' -f2)
+  day=$(echo $dmy | cut -d'.' -f1)
  date="$year-$month-$day"
 if [ -z "$ver" ]; then
  printf "\t\t\t\t정보 없음\n"
 elif [ "$day" = "$dmy" ]; then
  printf "$(echo $ver | cut -d' ' -f1)\t\t\t\t$day\n"
 else
- printf "$(echo $ver | cut -d' ' -f1) ($date)\t\t"
+ printf "$(echo $ver | cut -d' ' -f1) ($(date --date=$date +%Y-%m-%d))\t\t"
  days_diff
 fi
 }
@@ -708,7 +708,8 @@ fi
 
 UPMPDCLI () {
 printf "• Upmpdcli\t"
-latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/downloads/ | sed -n 's/.*upmpdcli-//p' | sort | cut -d'.' -f1-3 | tail -1)
+#latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/downloads/ | sed -n 's/.*upmpdcli-//p' | sort | cut -d'.' -f1-3 | tail -1)
+latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/downloads.html | grep -o 'upmpdcli.*.tar.*"' | grep -o [0-9.]*[0-9])
 current=$(upmpdcli -v | cut -d' ' -f2)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
@@ -729,8 +730,8 @@ if [ -z "$latest" ]; then
 elif [ "$latest" = "$current" ]; then
  printf "최신판\n"
 else
- printf "판올림 ($(date -d $(echo $latest | cut -d'.' -f1-3 | tr . -) +%F))\n"
-#printf "판올림 ($latest)\n"
+#printf "판올림 ($(date -d $(echo $latest | cut -d'.' -f1-3 | tr . -) +%F))\n"
+ printf "판올림 ($latest)\n"
  read -p "  Update youtube-dl? [Y/n]" answer
  [ "$answer" != n ] && printf '  ' && youtube-dl --update
 fi

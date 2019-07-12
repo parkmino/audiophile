@@ -21,19 +21,19 @@ done
 sleep 1
 
 #echo
-taskset -pc 3 $pgr_mpv
+taskset -pc 1-2 $pgr_mpv
 
 echo "$(pstree -npt $pgr_mpv)" | while read line; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
   mpv/terminal|mpv/lua*|mpv/cache|mpv/demix|pool)
-   taskset -pc 1   $proc_nr ;;
+   taskset -pc 1-2   $proc_nr ;;
   mpv/vo|mpv)
-   taskset -pc 0,2 $proc_nr ;;
+   taskset -pc 1-2 $proc_nr ;;
   mpv/ao)
    taskset -pc 3   $proc_nr ;;
   *)
-   taskset -pc 1   $proc_nr ;;
+   taskset -pc 1-2 $proc_nr ;;
  esac
 done
