@@ -709,7 +709,7 @@ fi
 UPMPDCLI () {
 printf "• Upmpdcli\t"
 #latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/downloads/ | sed -n 's/.*upmpdcli-//p' | sort | cut -d'.' -f1-3 | tail -1)
-latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/downloads.html | grep -o 'upmpdcli.*.tar.*"' | grep -o [0-9.]*[0-9])
+latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/releases.html | grep -o -m1 'upmpdcli [0-9.]*' | cut -d' ' -f2)
 current=$(upmpdcli -v | cut -d' ' -f2)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
