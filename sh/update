@@ -733,7 +733,7 @@ else
 #printf "판올림 ($(date -d $(echo $latest | cut -d'.' -f1-3 | tr . -) +%F))\n"
  printf "판올림 ($latest)\n"
  read -p "  Update youtube-dl? [Y/n]" answer
- [ "$answer" != n ] && printf '  ' && youtube-dl --update
+ [ "$answer" != n ] && printf '  ' && sudo youtube-dl --update
 fi
 }
 

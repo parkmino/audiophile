@@ -26,7 +26,7 @@ m_task=$(($(nproc --all)-1))
 
 pgr_mpd=$(pgrep -nx mpd)
 
-taskset -pc $m_task $pgr_mpd
+taskset -pc $s_task $pgr_mpd
 
 echo "$(pstree -npt $pgr_mpd)" | while read line ; do
  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
