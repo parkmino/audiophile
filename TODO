@@ -1,6 +1,6 @@
 1. tts2mpd in place of tts, it should be placed after mpd.
 
-2. usb configs in audio.conf
+2. hub-ctrl in audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		...
@@ -77,9 +77,8 @@
 7. alsa.conf
 
 	$ #sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759,' > /usr/share/alsa/alsa.conf.sav"
-	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2772' > /usr/share/alsa/alsa.conf.sav"
-	$ sudo sed -i '$s/minperiodtime 2[0-9]*.$/minperiodtime 2772/' /usr/share/alsa/alsa.conf.min*
-	$ sudo cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2773' > /usr/share/alsa/alsa.conf.min"
+	$ sudo sed -i '$s/minperiodtime 2[0-9]*.$/minperiodtime 2773/' /usr/share/alsa/alsa.conf.mi*
 
 8. sysctl.conf
 
@@ -91,5 +90,5 @@
 
 9. mpd.conf
 
-	$ nano ~/.config/mpv/mpv.conf
-		audio-buffer=0.199454499096314000575654505469
+	$ sudo nano /etc/mpd.conf.sav
+		buffer_before_play "10.5596937298023%"
