@@ -64,7 +64,7 @@ echo 4 > /proc/irq/default_smp_affinity || true
 [ "$wpa"   = off ] && systemctl stop wpa_supplicant
 
 (
- until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q complet); do
+ until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q ActiveAE); do
   sleep 1
  done
  sleep 1
@@ -77,7 +77,10 @@ echo 4 > /proc/irq/default_smp_affinity || true
   taskset -cp $m_task $ppid
  done
 
- taskset -cp $m_task $pgr_kodi
+ [ $m_task -ge 2 ] && taskset -acp 1-$(($m_task-1)) $pgr_kodi
+ for i in $(pstree -p $pgr_kodi | grep ActiveAE | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1); do
+  taskset -cp $m_task $i
+ done
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
