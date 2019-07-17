@@ -16,7 +16,7 @@ musicpd_bg () {
  done
  sleep 1
  pgr_mpd=$(pgrep -x mpd)
- taskset -pc $m_task $pgr_mpd
+ taskset -pc $s_task $pgr_mpd
  #renice -1 -p       $pgr_mpd
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
