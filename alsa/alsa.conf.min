@@ -1,1 +1,1 @@
-pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759,
+pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2773
