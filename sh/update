@@ -44,9 +44,9 @@ days_diff () {
 
 msg () {
  if [ "$current" = "$latest" ]; then
-  printf "최신판\n"
+  printf "신판\n"
  else
-  printf "판올림 (${latest})\n"
+  printf "구판 (${latest})\n"
  fi
 }
 
@@ -61,9 +61,9 @@ printf "$current\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
 elif [ "$latest" = "$current" ]; then
- printf "최신판\n"
+ printf "신판\n"
 else
- printf "판올림 ($latest)\n"
+ printf "구판 ($latest)\n"
  read -p "  Update AirConnect? [Y/n]" answer
  if [ "$answer" != n ]; then
   printf '  '
@@ -383,9 +383,9 @@ printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
 elif [ "$latest" = "$current" ]; then
- printf "최신판\n"
+ printf "신판\n"
 else
- printf "판올림 ($latest)\n"
+ printf "구판 ($latest)\n"
  read -p "  Update googler? [Y/n]" answer
  [ "$answer" != n ] && printf '  ' && sudo googler -u
 fi
@@ -502,9 +502,9 @@ printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
 elif [ "$latest" = "$current" ]; then
- printf "최신판\n"
+ printf "신판\n"
 else
- printf "판올림 ($latest)\n"
+ printf "구판 ($latest)\n"
  echo "  $ cd /home/parkmino/Downloads/meson-$current"
  echo "  $ sudo python3 setup.py install --record files.txt && cat files.txt | xargs sudo rm -rf && cd .. && sudo rm -rf meson-$current"
  echo '  $ curl -s $(curl -s https://github.com/mesonbuild/meson/releases/latest | cut -d\" -f2) | grep -m1 tar.gz | cut -d\" -f2 | wget "https://github.com/$(cat -)"'
@@ -679,9 +679,9 @@ printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
 elif [ "$latest" = "$current" ]; then
- printf "최신판\n"
+ printf "신판\n"
 else
- printf "판올림 ($latest)\n"
+ printf "구판 ($latest)\n"
  read -p "  Update ttyd? [Y/n]" answer
  if [ "$answer" != n ]; then
   printf '  '
@@ -728,10 +728,10 @@ current=$(youtube-dl --version)
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
 elif [ "$latest" = "$current" ]; then
- printf "최신판\n"
+ printf "신판\n"
 else
-#printf "판올림 ($(date -d $(echo $latest | cut -d'.' -f1-3 | tr . -) +%F))\n"
- printf "판올림 ($latest)\n"
+#printf "구판 ($(date -d $(echo $latest | cut -d'.' -f1-3 | tr . -) +%F))\n"
+ printf "구판 ($latest)\n"
  read -p "  Update youtube-dl? [Y/n]" answer
  [ "$answer" != n ] && printf '  ' && sudo youtube-dl --update
 fi
