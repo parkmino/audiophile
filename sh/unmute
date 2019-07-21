@@ -1,4 +1,0 @@
-#!/bin/sh
-vol unmute
-[ "$1" -gt 0 ] 2>/dev/null && sleep "$1" && vol mute
-vol stat
