@@ -1,16 +1,6 @@
 #!/bin/sh
 
-[ "$1" = jtbc        ] && i=1
-[ "$1" = kbs_news    ] && i=2
-[ "$1" = tbs         ] && i=3
-[ "$1" = yonhap      ] && i=4
-[ "$1" = ytn         ] && i=5
-[ "$1" = ytn_life    ] && i=6
-[ "$1" = ytn_science ] && i=7
-[ "$1" = rtv         ] && i=8
-
-if [ -z "$i" ]; then
- echo "\
+echo "\
 (1) JTBC 뉴스
 (2) KBS 뉴스
 (3) tbs TV
@@ -18,8 +8,8 @@ if [ -z "$i" ]; then
 (5) YTN LIVE
 (6) YTN 라이프
 (7) YTN 사이언스" # (8) RTV 시민방송
- read -p " " i
-fi
+
+read -p " " i
 
 case $i in
  1) ch=jtbc        ; url="https://www.youtube.com/user/JTBC10news"                  ;;
@@ -36,3 +26,16 @@ esac
 url=$(curl -s "$url" | grep -m1 -o data-context-item-id.* | cut -d\" -f2)
  [ -n "$url" ] && echo "https://youtu.be/$url"
 #[ -n "$url" ] && echo "plugin://plugin.video.youtube/play/?video_id=$url"
+
+if [ "$ch" = jtbc ]; then
+ echo "You will watch it for 7 seconds"
+ mpv --length=7 https://youtu.be/$url
+ read -p "* Update $ch live? [Y/n]" answer
+ if [ "$answer" != n ]; then
+ #sed -i '/'"$ch"'=/s/[0-9a-zA-Z_-]\{11\}/'"$url"'"/' $utube
+ #grep $ch= $utube
+  sed -i '$s/[0-9a-zA-Z_-]\{11\}$/'"$url"'/' $jtbc_m3u && echo "$ch live url was updated as $(tail -1 $jtbc_m3u)"
+ else
+  echo "$ch live was not updated"
+ fi
+fi
