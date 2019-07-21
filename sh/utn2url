@@ -27,6 +27,8 @@ url=$(curl -s "$url" | grep -m1 -o data-context-item-id.* | cut -d\" -f2)
  [ -n "$url" ] && echo "https://youtu.be/$url"
 #[ -n "$url" ] && echo "plugin://plugin.video.youtube/play/?video_id=$url"
 
+m3u_dir="/home/parkmino/Videos"
+
 if [ "$ch" = jtbc ]; then
  echo "You will watch it for 7 seconds"
  mpv --length=7 https://youtu.be/$url
@@ -34,8 +36,10 @@ if [ "$ch" = jtbc ]; then
  if [ "$answer" != n ]; then
  #sed -i '/'"$ch"'=/s/[0-9a-zA-Z_-]\{11\}/'"$url"'"/' $utube
  #grep $ch= $utube
-  sed -i '$s/[0-9a-zA-Z_-]\{11\}$/'"$url"'/' $jtbc_m3u && echo "$ch live url was updated as $(tail -1 $jtbc_m3u)"
+  sed -i '$s/[0-9a-zA-Z_-]\{11\}$/'"$url"'/' $m3u_dir/jtbc.m3u && echo "$ch live url was updated as $(tail -1 $jtbc_m3u)"
  else
   echo "$ch live was not updated"
  fi
+else
+ printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$url\n" > $m3u_dir/$ch.m3u
 fi
