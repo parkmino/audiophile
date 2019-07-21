@@ -7,6 +7,7 @@ usage () {
 
 [ -z "$1" ] && usage && exit
 
+m3u_dir="/home/parkmino/Videos"
 fd=16
 
 case $1 in
@@ -35,6 +36,8 @@ api="$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code
 url="$(echo "$api" | grep -o '.*/')$(curl -s "$api" | tail -1)"
 
 echo "$url"
+
+printf "#EXTM3U\n#EXTINF:-1,KBS $(echo "$1" | tr a-z A-Z)\n$url\n" > $m3u_dir/kbs.m3u
 
 #case $ch in
 # 1[1,2,4]|81|N9[1-6]) mpv "$url" ;;
