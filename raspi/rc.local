@@ -140,7 +140,7 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod/ {print $1}'); do
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod|squeezelite/ {print $1}'); do
   taskset -acp 0 $pid 2>/dev/null || true
  done
 fi
