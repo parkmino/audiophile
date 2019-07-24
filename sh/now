@@ -14,7 +14,7 @@ fi
 printf "$charge%%"
 
 if [ $charge -lt 20 ] && [ $status != Charging ]; then
- printf " 😀"
+ printf " 🙂️"
 #else
 # printf " 😓"
 fi
