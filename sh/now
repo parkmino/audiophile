@@ -1,7 +1,7 @@
 #!/bin/sh
 charge=$(cat /sys/class/power_supply/BAT1/capacity)
 status=$(cat /sys/class/power_supply/BAT1/status)
-printf "$(date +'%Y-%-m-%-d(%a) %p%-I:%M:%S') |"
+printf "$(date +'%Y년%-m월%-d일(%a) %p%-I:%M:%S') |"
 
 if [ "$status" = "Charging" ]; then
  printf " 🔌  "
@@ -14,9 +14,9 @@ fi
 printf "$charge%%"
 
 if [ $charge -lt 20 ] && [ $status != Charging ]; then
- printf " ☹"
+ printf " 😀"
 #else
-# printf " ☻"
+# printf " 😓"
 fi
 
 ut=$(cat /proc/uptime | cut -d'.' -f1)

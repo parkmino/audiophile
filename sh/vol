@@ -11,7 +11,6 @@ if grep -q ' \?ctl.default' $alsa_conf; then
 else
  sudo sed -i '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
 fi
-#sudo sh -c "sed '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf > $alsa_conf.mixer.$card"
 
 amixer_init() {
  mixer="
@@ -75,6 +74,4 @@ case $1 in
  *) chrt -i 0 nice -n 19 ionice -c 3 taskset -c 0 alsamixer -V all ;;
 esac
 
-#sudo sed -i 's/ ctl.*//' $alsa_conf
 sudo cp $alsa_orig $alsa_conf
-#sudo chmod -w $alsa_conf

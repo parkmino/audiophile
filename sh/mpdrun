@@ -17,7 +17,7 @@ mpd_bg () {
 
  pgr_mpd=$(pgrep -x mpd)
 
-  taskset -pc $m_task $pgr_mpd
+  taskset -pc $s_task $pgr_mpd
 
 # n=0
 # echo "$(chrt -ap $(pgrep -x mpd))" | cut -d' ' -f2 | uniq | cut -d\' -f1 | while read line; do

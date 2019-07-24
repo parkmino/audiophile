@@ -13,7 +13,7 @@ done
 #sudo nmap -p $port --open ${ip_root}.1-254 && printf \\n
 
 echo "$(fping -a -q -r0 -g ${ip_root}.1 ${ip_root}.254 | sort -V)" | while read ip; do
- printf "\33[2K\r🖧  $ip "
+ printf "\33[2K\r💻 $ip "
  if   [ "${#ip}" -eq 11 ]; then
   printf "  "
  elif [ "${#ip}" -eq 12 ]; then
