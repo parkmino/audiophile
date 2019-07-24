@@ -244,6 +244,10 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ## dpkg -i networkaudiod*.deb
 ## sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
+### Squeezelite
+## apt-get install squeezelite
+## sed -i '/^SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
+
 ### MicroSD mount
 # apt-get install exfat-fuse exfat-utils # microSDXC
 # mkdir /mnt/microSD

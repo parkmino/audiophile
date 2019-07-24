@@ -260,6 +260,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl stop    avahi-daemon shairport-sync
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
+21. HQPlayer NAA
+	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
+	$ sudo dpkg -i networkaudiod*.deb
+	$ sudo sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
+
+22. Squeezelite
+	$ sudo apt-get install squeezelite
+	$ sudo sed -i '/^SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
+
 21. myMPD
 
 	$ sudo apt-get install libmediainfo-dev libmediainfo0v5
