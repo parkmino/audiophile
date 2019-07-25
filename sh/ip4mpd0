@@ -8,7 +8,7 @@ ip_root=$(echo $(hostname -I) | cut -d'.' -f1-3)
 
 for i in $(seq 1 254); do
  ip="$ip_root.$i"
- printf "\33[2K\r💻 $ip "
+ printf "\33[2K\r💻️ $ip "
  if   [ "${#i}" -eq 1 ]; then
   printf "  "
  elif [ "${#i}" -eq 2 ]; then
