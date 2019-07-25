@@ -267,9 +267,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 22. Squeezelite
 	$ sudo apt-get install squeezelite
-	$ sudo sed -i '/^SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
+	$ sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
 
-21. myMPD
+23. myMPD
 
 	$ sudo apt-get install libmediainfo-dev libmediainfo0v5
 
@@ -317,7 +317,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17전원 끄기 - Power off'"
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 
-22. ttyd
+24. ttyd
 
 	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
 	$ chmod +x ~/ttyd_linux.armhf
@@ -327,7 +327,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	# systemctl stop    getty@tty1.service
 	# systemctl disable getty@tty1.service
 
-23. Web interface
+25. Web interface
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
@@ -351,13 +351,13 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-24. audio-config
+26. audio-config
 
 	$ sudo ln -sf /home/pi/audio-config /usr/bin/
 	# mv /root/audio-config_dietpi /usr/bin/audio-config
 	$ audio-config
 
-25. audio.conf
+27. audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		# audio.conf
@@ -376,7 +376,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		tts=on
 		tts_eng=off
 
-26. Make Image
+28. Make Image
 
 	$ sudo systemctl disable sshd
 	# #dietpi-services disable dropbear
