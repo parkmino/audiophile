@@ -20,6 +20,7 @@ def kbs_func(code):
     url = Temp_Web_URL[0].split('\\', 1)[0]
     ### Double query
     #url_root = url.rsplit('/', 1)[0]
+    #url_root = re.sub('_[0-4].stream', '_5.stream', url_root)
     #M3U = url_func(url)
     #M3U = re.compile('.*m3u.*').findall(M3U)[0]
     #url = url_root + '/' + M3U
@@ -59,15 +60,15 @@ def sbs_func(code1, code2):
 
 def ch_func(ch):
     if   ch == chs[0]:
-        url = kbs_func('11')
+        url = 'http://live.kbskme.gscdn.com/www_1tv/_definst_/1tv_5.stream/playlist.m3u8'
     elif ch == chs[1]:
-        url = kbs_func('12')
+        url = 'http://live.kbskme.gscdn.com/www_2tv/_definst_/2tv_5.stream/playlist.m3u8'
     elif ch == chs[2]:
-        url = kbs_func('14')
+        url = 'http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8'
     elif ch == chs[3]:
         url = kbs_func('81')
     elif ch == chs[4]:
-        url = kbs_func('N95')
+        url = 'http://live.kbskme.gscdn.com/www_kbsn_sports/_definst_/kbsn_sports_5.stream/playlist.m3u8'
     elif ch == chs[5]:
         url = kbs_func('N91')
     elif ch == chs[6]:
@@ -117,6 +118,5 @@ add_func('EBSi',  'http://ebsonair.ebs.co.kr/plus1familypc/familypc1m/playlist.m
 add_func('EBS+2', 'http://ebsonair.ebs.co.kr/plus2familypc/familypc1m/playlist.m3u8')
 add_func('EBSe',  'http://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8')
 add_func('국악 TV', 'http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8')
-add_func('MNet',  'http://d1cdshhn0sj9xt.cloudfront.net/529/QualityLevels(2628000,as=video)/Fragments(video=i,format=hls).m3u8')
 
 xbmcplugin.endOfDirectory(addon_handle)
