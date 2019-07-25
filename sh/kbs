@@ -33,8 +33,7 @@ esac
 
 #api="$(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$ch | cut -d\" -f$fd)"
 api="$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch&ch_type=radioList" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)"
-url="$(echo "$api" | grep -o '.*/')$(curl -s "$api" | tail -1)"
-url="$(echo "$url" | sed 's/_[0-4].stream/_5.stream/')"
+url="$(echo "$api" | grep -o '.*/' | sed 's/_[0-4].stream/_5.stream/')$(curl -s "$api" | tail -1)"
 
 echo "$url"
 
