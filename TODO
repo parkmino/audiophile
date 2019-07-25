@@ -92,3 +92,9 @@
 
 	$ sudo nano /etc/mpd.conf.sav
 		buffer_before_play "10.5596937298023%"
+
+10. addon.py in plugin.video.kt2kodi
+
+	$ nano addon.py
+		def kbs_func(code):
+		 url = re.sub('_[0-4].stream', '_5.stream', url)
