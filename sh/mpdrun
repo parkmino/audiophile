@@ -12,12 +12,12 @@ mpd_bg () {
  done
  sleep 1
 
- m_task=$(($(nproc --all)-1))
- [ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
  pgr_mpd=$(pgrep -x mpd)
 
-  taskset -pc $s_task $pgr_mpd
+ taskset -pc $s_task $pgr_mpd
 
 # n=0
 # echo "$(chrt -ap $(pgrep -x mpd))" | cut -d' ' -f2 | uniq | cut -d\' -f1 | while read line; do
@@ -29,7 +29,7 @@ mpd_bg () {
 #  [ "$n" -eq 5 ] && echo "output is $line"    # output
 # done
 
- echo "$(pstree -np $pgr_mpd)" | while read line ; do
+ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d'{' -f2 | cut -d'}' -f1 | cut -d':' -f1)
  #proc=$(echo "$line" | sed 's/.*{//; s/}.*//; s/:.*//')
  #proc=$(echo "$line" | awk -F '[{,:,}]' '{ print $2 }')
@@ -38,7 +38,7 @@ mpd_bg () {
  #proc_nr=$(echo "$line" | sed 's/.*(//; s/)//')
  #proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
   case $proc in
-   mpd)		 taskset -cp $s_task $proc_nr ;;
+   mpd)		 taskset -cp $h_task $proc_nr ;;
    io)		 taskset -cp $s_task $proc_nr ;;
    player)	 taskset -cp $s_task $proc_nr ;;
    decoder)	 taskset -cp $s_task $proc_nr ;;

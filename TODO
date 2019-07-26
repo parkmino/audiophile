@@ -92,3 +92,7 @@
 
 	$ sudo nano /etc/mpd.conf.sav
 		buffer_before_play "10.5596937298023%"
+
+10. upmpdcli
+
+	from $s_task to $h_task
