@@ -96,3 +96,14 @@
 10. upmpdcli
 
 	from $s_task to $h_task
+
+11. mpd
+
+	$ sudo nano /etc/rc.local
+		mpd) taskset -cp $h_task $proc_nr ;;
+		io)  taskset -cp $h_task $proc_nr ;;
+
+12. hdparm.conf
+
+	$ sudo nano /etc/hdparm.conf
+		read_ahead_sect = 1280 # 1288
