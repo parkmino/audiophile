@@ -1,12 +1,5 @@
 #!/bin/sh
 
-ptzzz1 () {
- echo -n "."
- sleep 1
-}
-
-#ptzzz1
-
 pgr_mpv=$(pgrep -nx mpv)
 
 [ "$pgr_mpv" = "" ] && echo "Error: mpv is not running" && exit
@@ -20,20 +13,22 @@ until pstree -pt $pgr_mpv | grep -q mpv/ao; do
 done
 sleep 1
 
-#echo
-taskset -pc 1-2 $pgr_mpv
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
+taskset -pc $s_task $pgr_mpv
 
 echo "$(pstree -npt $pgr_mpv)" | while read line; do
-    proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+    proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  mpv/terminal|mpv/lua*|mpv/cache|mpv/demix|pool)
-   taskset -pc 1-2   $proc_nr ;;
-  mpv/vo|mpv)
-   taskset -pc 1-2 $proc_nr ;;
+  mpv/demix)
+   taskset -pc $s_task $proc_nr ;;
+  mpv/vo)
+   taskset -pc $h_task $proc_nr ;;
   mpv/ao)
-   taskset -pc 3   $proc_nr ;;
+   taskset -pc $m_task $proc_nr ;;
   *)
-   taskset -pc 1-2 $proc_nr ;;
+   taskset -pc $h_task $proc_nr ;;
  esac
 done
