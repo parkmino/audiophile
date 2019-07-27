@@ -84,7 +84,8 @@
 
 	$ sudo nano /etc/sysctl.conf
 		kernel.sched_wakeup_granularity_ns=388288
-		kernel.sched_migration_cost=4899007
+		kernel.sched_latency_ns=1394061
+		kernel.sched_migration_cost=4899006
 		kernel.sched_time_avg=6287
 		kernel.sched_shares_window=345996	# only when applicable
 
@@ -102,8 +103,3 @@
 	$ sudo nano /etc/rc.local
 		mpd) taskset -cp $h_task $proc_nr ;;
 		io)  taskset -cp $h_task $proc_nr ;;
-
-12. hdparm.conf
-
-	$ sudo nano /etc/hdparm.conf
-		read_ahead_sect = 1280 # 1288
