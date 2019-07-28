@@ -12,14 +12,14 @@
 # By default this script does nothing.
 
 musicpd_bg () {
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
  done
  sleep 1
  pgr_mpd=$(pgrep -x mpd)
  taskset -pc $s_task $pgr_mpd
  #renice -1 -p       $pgr_mpd
- echo "$(pstree -np $pgr_mpd)" | while read line ; do
+ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
@@ -43,7 +43,7 @@ eol () {
   sleep 1
  done
  sleep 1
- taskset -acp $s_task $(pgrep -x upmpdcli) || true
+ taskset -acp $h_task $(pgrep -x upmpdcli) || true
  ### AirConnect
  [ "$airplay" = on ] && (airconnect &) && sleep 5
  /home/pi/llctl f0 l0 d0
@@ -68,7 +68,7 @@ spotifyd () {
 
 airconnect () {
  cp /root/airupnp-arm /dev/shm/
-/dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
+/dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
@@ -158,9 +158,7 @@ fi
 #amixer -D control set 'Digital',0 67% || true # 40@67% 60@81%
 
 ### Turn off USBs
-for i in $(seq 2 5); do
- [ usb$i = off ] && /home/pi/hub-ctrl -h 0 -P $i -p 0
-done
+[ -n "$usb" ] && uhubctl -a 0 -p "$usb"
 
 ### Turn off HDMI
 /opt/vc/bin/tvservice -o
@@ -179,6 +177,13 @@ done
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
 for pid in 1 $(pgrep -x rc.local); do
  taskset -acp $m_task $pid || true
+done
+
+for i in RoonBridge spotifyd airupnp-arm networkaudiod squeezelite; do
+ proc=$(pidof $i)
+ if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
+  taskset -acp 1-$m_task $proc
+ fi
 done
 
 ### Text to Speech
