@@ -32,22 +32,18 @@
 	$ nano ~/audio-config
 		sudo sed -i '/usb=/s/=.*/=4,5/' $audio_conf ;;
 
-4. ttyd message
-	$ ttyd -o -O -p 8080 dash -c 'echo "Welcome to Web SSH Terminal! / 웹 SSH 터미널에서 환영합니다!"; bash'
-	$ ttyd -o -O -p 8080 dash -c 'printf "Welcome to Web SSH Terminal!\nRun \"exit\", reload or close this tab in your browser to finish.\n웹 SSH 터미널에서 환영합니다!\n빠져나가려면 \"exit\"을 입력하거나, 브라우저의 현재 탭을 새로 고치거나 닫으면 됩니다.\n"; bash'
-
-5. Taskset for roon, spotifyd, airupnp and networkaudiod(hqplyaer naa)
+4. Taskset for roon, spotifyd, airupnp and networkaudiod(hqplyaer naa)
 
 	$ sudo nano /etc/rc.local
 
 		... awk '$2 !~ /migration|mpd|networkaudiod|squeezelite/ {print $1}'
 
 		### Taskset for Raspi
-		for i in RoonBridge spotifyd airupnp-arm networkaudiod; do
-			proc=$(pidof $i)
-			if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
-			 taskset -acp 1-$m_task $proc		# $h_task in place of $m_task
-			fi
+		for i in RoonBridge spotifyd airupnp-arm networkaudiod squeezelite; do
+		 proc=$(pidof $i)
+		 if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
+		  taskset -acp 1-$m_task $proc		# $h_task in place of $m_task
+		 fi
 		done
 
 		### Taskset for Artik710
@@ -69,16 +65,25 @@
 
 		Place mympd ahead of the main taskset
 
-6. Taskset for mpd
+5. alsa.conf
 
-	$ sudo nano /etc/rc.local
-		taskset -pc $s_task $pgr_mpd	# m_task to s_task
-
-7. alsa.conf
-
-	$ #sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2759,' > /usr/share/alsa/alsa.conf.sav"
 	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2773' > /usr/share/alsa/alsa.conf.min"
 	$ sudo sed -i '$s/minperiodtime 2[0-9]*.$/minperiodtime 2773/' /usr/share/alsa/alsa.conf.mi*
+
+
+
+6. mpd.conf
+
+	$ sudo nano /etc/mpd.conf.sav
+		buffer_before_play "10.5596937298023%"
+
+7. mpd & upmpdcli
+
+	$ sudo nano /etc/rc.local
+		taskset -pc $s_task $pgr_mpd
+		mpd) taskset -cp $h_task $proc_nr ;;
+		io)  taskset -cp $h_task $proc_nr ;;
+		taskset -acp $h_task $(pgrep -x upmpdcli) || true
 
 8. sysctl.conf
 
@@ -88,18 +93,3 @@
 		kernel.sched_migration_cost=4899006
 		kernel.sched_time_avg=6287
 		kernel.sched_shares_window=345996	# only when applicable
-
-9. mpd.conf
-
-	$ sudo nano /etc/mpd.conf.sav
-		buffer_before_play "10.5596937298023%"
-
-10. upmpdcli
-
-	from $s_task to $h_task
-
-11. mpd
-
-	$ sudo nano /etc/rc.local
-		mpd) taskset -cp $h_task $proc_nr ;;
-		io)  taskset -cp $h_task $proc_nr ;;
