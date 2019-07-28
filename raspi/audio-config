@@ -88,12 +88,10 @@ Select/선택
 "4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/usb[2-5]=/s/=.*/=on/g'   $audio_conf ;;
- 2) sudo sed -i '/usb[2-5]=/s/=.*/=off/g'  $audio_conf ;;
- 3) sudo sed -i '/usb[4-5]=/s/=.*/=off/g'  $audio_conf
-    sudo sed -i '/usb[2-3]=/s/=.*/=on/g'   $audio_conf ;;
- 4) sudo sed -i '/usb[24-5]=/s/=.*/=off/g' $audio_conf
-    sudo sed -i '/usb3=/s/=.*/=on/g'       $audio_conf ;;
+ 1) sudo sed -i '/usb=/s/=.*/=/'      $audio_conf ;;
+ 2) sudo sed -i '/usb=/s/=.*/=2-5/'   $audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=4,5/'   $audio_conf ;;
+ 4) sudo sed -i '/usb=/s/=.*/=2,4,5/' $audio_conf ;;
 esac
 }
 
@@ -250,17 +248,6 @@ Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button 
 esac
 
 done
-}
-
-read_only () {
-i=$(whiptail --title "MicroSD Read-only / MicroSD 읽기 전용" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 72 2 \
-"1" "MicroSD Read-only                 MicroSD 읽기 전용" \
-"2" "MicroSD Read-Write (Default)      MicroSD 읽고 쓰기 (기본값)" 3>&1 1>&2 2>&3)
-
-case $i in
- 1) sudo sed -i '/remountro/s/^#*//' /etc/rc.local ;;
- 2) sudo sed -i '/remountro/s/^/#/'  /etc/rc.local ;;
-esac
 }
 
 roon_airplay () {
