@@ -264,31 +264,30 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 18 61 10 \
- "1"  "Audio device           오디오 장치            >" \
- "2"  "USB signal & power     USB 신호와 전원        >" \
- "3"  "MPD options            MPD 옵션               >" \
- "4"  "Renderer name          렌더러 이름 바꾸기     >" \
- "5"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
- "6"  "Spotify                Spotify 설정           >" \
- "7"  "IP TTS                 IP TTS                 >" \
- "8"  "DietPi update          DietPi 업데이트" \
- "9"  "Reboot                 다시 시작" \
-"10"  "Power off              전원 끄기" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 17 61 9 \
+ "1"  "USB signal & power     USB 신호와 전원        >" \
+ "2"  "MPD options            MPD 옵션               >" \
+ "3"  "Renderer name          렌더러 이름 바꾸기     >" \
+ "4"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
+ "5"  "Spotify                Spotify 설정           >" \
+ "6"  "IP TTS                 IP TTS                 >" \
+ "7"  "DietPi update          DietPi 업데이트" \
+ "8"  "Reboot                 다시 시작" \
+ "9"  "Power off              전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && exit
 
  case $i in
-  1)  sound_card ;;
-  2)  usb_signal_power ;;
-  3)  mpd_options ;;
-  4)  renderer_name ;;
-  5)  roon_airplay ;;
-  6)  spotify_conf ;;
-  7)  tts_conf ;;
-  8)  dietpi-update ;;
-  9)  reboot ;;
-  10) poweroff ;;
+  10) sound_card ;;
+  1)  usb_signal_power ;;
+  2)  mpd_options ;;
+  3)  renderer_name ;;
+  4)  roon_airplay ;;
+  5)  spotify_conf ;;
+  6)  tts_conf ;;
+  7)  dietpi-update ;;
+  8)  reboot ;;
+  9)  poweroff ;;
  esac
 done
