@@ -40,19 +40,17 @@
 
 		### Taskset for Raspi
 		for i in RoonBridge spotifyd airupnp-arm networkaudiod squeezelite; do
-		 proc=$(pidof $i)
-		 if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
-		  taskset -acp 1-$m_task $proc		# $h_task in place of $m_task
+		 if [ $m_task -ge 1 ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
+		  taskset -acp 1-$m_task $(pidof $i) || true		# $h_task in place of $m_task
 		 fi
 		done
 
 		### Taskset for Artik710
 		for i in RoonBridge spotifyd airupnp-aarch64 networkaudiod; do
-			proc=$(pidof $i)
-			if [ $m_task -gt $s_task ] && [ $proc -ge 1 ] 2>/dev/null; then
-			 taskset -acp $s_task-$m_task $proc	# $h_task in place of $m_task
-			#taskset -acp 4-7 $proc			# 4-6 in place of 4-7
-			fi
+		 if [ $m_task -gt $s_task ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
+		  taskset -acp $s_task-$m_task $(pidof $i) || true	# $h_task in place of $m_task
+		 #taskset -acp 4-7 $(pidof $i) || true			# 4-6 in place of 4-7
+		 fi
 		done
 
 		### Taskset for LibreELEC
@@ -69,8 +67,6 @@
 
 	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2773' > /usr/share/alsa/alsa.conf.min"
 	$ sudo sed -i '$s/minperiodtime 2[0-9]*.$/minperiodtime 2773/' /usr/share/alsa/alsa.conf.mi*
-
-
 
 6. mpd.conf
 
