@@ -81,8 +81,9 @@
 
 	$ sudo nano /etc/rc.local
 		taskset -pc $s_task $pgr_mpd
-		mpd) taskset -cp $h_task $proc_nr ;;
-		io)  taskset -cp $h_task $proc_nr ;;
+		mpd)     taskset -cp $h_task $proc_nr ;;
+		io)      taskset -cp $h_task $proc_nr ;;
+		decoder) taskset -cp $h_task $proc_nr ;;
 		taskset -acp $h_task $(pgrep -x upmpdcli) || true
 
 8. sysctl.conf
@@ -90,6 +91,6 @@
 	$ sudo nano /etc/sysctl.conf
 		kernel.sched_wakeup_granularity_ns=388288
 		kernel.sched_latency_ns=1394061
-		kernel.sched_migration_cost=4899006
-		kernel.sched_time_avg=6287
+		kernel.sched_migration_cost=4899005
+		kernel.sched_time_avg=6288
 		kernel.sched_shares_window=345996	# only when applicable
