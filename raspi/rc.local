@@ -106,8 +106,8 @@ echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 
-echo noop > /sys/block/mmcblk0/queue/scheduler
-[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
+echo none > /sys/block/mmcblk0/queue/scheduler || true
+[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
@@ -128,9 +128,8 @@ done
 #do
 # service $i stop
 #done
-#pkill plymouthd
-#[ -f /boot/.nossh ] && service sshd stop
-#renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
+pkill rngd || true
+[ "$wifi" = off ] && pkill wpa_supplicant || true
 swapoff -a
 
 ### myMPD
@@ -180,9 +179,8 @@ for pid in 1 $(pgrep -x rc.local); do
 done
 
 for i in RoonBridge spotifyd airupnp-arm networkaudiod squeezelite; do
- proc=$(pidof $i)
- if [ $m_task -ge 1 ] && [ $proc -ge 1 ] 2>/dev/null; then
-  taskset -acp 1-$m_task $proc
+ if [ $m_task -ge 1 ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
+  taskset -acp 1-$m_task $(pidof $i) || true
  fi
 done
 
