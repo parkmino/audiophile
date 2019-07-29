@@ -26,19 +26,19 @@ sound_card () {
 i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 20 55 12 \
 "1"  "USB Audio Class 2.0" \
 "2"  "Allo Boss DAC" \
-"3"  "Allo Boss DAC (Slave mode/종속 모드)" \
-"4"  "Allo Piano DAC" \
-"5"  "Allo Piano DAC+" \
-"6"  "Allo Piano DAC+ (+Kali board)" \
-"7"  "Allo DigiOne" \
-"8"  "Allo Katana DAC" \
-"9"  "ApplePi DAC" \
+"3"  "Allo DigiOne" \
+"4"  "Allo Katana DAC" \
+"5"  "Allo Piano DAC" \
+"6"  "Allo Piano DAC+" \
+"7"  "Allo Piano DAC+ (+Kali board)" \
+"8"  "ApplePi DAC" \
+"9"  "Audiophonics I-SABRE Q2M DAC" \
 "10" "Dion Audio LOCO DAC-AMP" \
 "11" "Dion Audio LOCO-V2 DAC-AMP" \
 "12" "HiFiBerry Amp/Amp+" \
 "13" "HiFiBerry DAC" \
-"14" "HiFiBerry DAC+/DAC+ Pro" \
-"15" "HiFiBerry DAC+ Pro (Slave mode/종속 모드)" \
+"14" "HiFiBerry DAC+ADC" \
+"15" "HiFiBerry DAC+/DAC+ Pro" \
 "16" "HiFiBerry Digi/Digi+" \
 "17" "HiFiBerry Digi+ Pro" \
 "18" "IQaudIO DAC" \
@@ -51,24 +51,25 @@ i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --
 case $i in
  1)  sound_card_initial ;;
  2)  sound_card_selector allo-boss-dac-pcm512x-audio			;;
- 3)  sound_card_selector allo-boss-dac-pcm512x-audio,slave		;;
- 4)  sound_card_selector allo-piano-dac-pcm512x-audio			;;
- 5)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
- 6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
- 7)  sound_card_selector allo-digione					;;
- 8)  sound_card_selector allo-katana-dac-audio				;;
- 9)  sound_card_selector applepi-dac					;;
+ 3)  sound_card_selector allo-digione					;;
+ 4)  sound_card_selector allo-katana-dac-audio				;;
+ 5)  sound_card_selector allo-piano-dac-pcm512x-audio			;;
+ 6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
+ 7)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
+ 8)  sound_card_selector applepi-dac					;;
+ 9)  sound_card_selector i-sabre-q2m					;;
  10) sound_card_selector dionaudio-loco					;;
  11) sound_card_selector dionaudio-loco-v2				;;
  12) sound_card_selector hifiberry-amp					;;
  13) sound_card_selector hifiberry-dac					;;
- 14) sound_card_selector hifiberry-dacplus				;;
- 15) sound_card_selector hifiberry-dacplus,slave			;;
+ 14) sound_card_selector hifiberry-dacplusadc				;;
+ 15) sound_card_selector hifiberry-dacplus				;;
+ # )  sound_card_selector hifiberry-dacplusadcpro			;;
  16) sound_card_selector hifiberry-digi					;;
  17) sound_card_selector hifiberry-digi-pro				;;
  18) sound_card_selector iqaudio-dac			; iqaudio	;;
  19) sound_card_selector iqaudio-dacplus		; iqaudio	;;
- 20) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
+ 29) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
  21) sound_card_selector justboom-dac					;;
  22) sound_card_selector justboom-digi					;;
  23) sound_card_selector rpi-dac					;;
