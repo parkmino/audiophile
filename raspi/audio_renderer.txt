@@ -8,15 +8,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
 	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/raspi/2019-07-10-raspbian-buster-lite.img of=/dev/sdc
-	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/raspi/DietPi_RPi-ARMv6-Stretch.img         of=/dev/sdc
+	$# sudo dd status=progress bs=4M if=/home/parkmino/Downloads/raspi/DietPi_RPi-ARMv6-Stretch.img of=/dev/sdc
 	$ sync
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
 
-	$ ssh pi@rpi_ip
+	$ ssh pi@raspbian_ip
 	  password: raspberry
-	$ ssh root@dietpi_ip
+	$# ssh root@dietpi_ip
 	  password: dietpi
 
 1. Update & upgrade
@@ -24,10 +24,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get update
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
+	$ sudo apt-get autoremove
 
 	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-crypto uhubctl
 	# apt-get install openssh-client libusb-0.1-4
-	$ scp rc.local alsa.conf.* libasound.so.2.0.0.* mpd mpd.conf icon.png hub-ctrl llctl audio-config kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls audio-config pi@192.168.0.3:/home/pi/
+	$ scp rc.local alsa.conf.* libasound.so.2.0.0.* mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png (hub-ctrl) llctl spotifyd.conf audio.conf audio-config pi@192.168.0.3:/home/pi/
 
 2. Configuration file
 
@@ -159,7 +160,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo chmod a+rx /usr/local/bin/youtube-dl
 	$ sudo ln -sf /home/pi/kr2mpd /home/pi/sbs_dec.py /home/pi/ut2mpd /home/pi/tts2mpd /usr/bin/
 	# mv /root/kr2mpd /root/sbs_dec.py /root/ut2mpd /root/tts2mpd /usr/local/bin/
-	$ sudo nano /var/lib/mpd/playlists/internet\ radio.m3u
+	$ sudo mv internet\ radio.m3u /var/lib/mpd/playlists/
 	$ sudo mkdir /var/lib/mpd/music/webradio
 	$ sudo mv *.pls /var/lib/mpd/music/webradio
 	$ mpc update
@@ -278,7 +279,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ cd myMPD*
 	$ ./mkrelease.sh or ./mkdebian.sh
 
-	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_9.0/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_9.0/armhf/$(cat -)"
+	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 
 	$ #sudo systemctl disable mympd
@@ -368,13 +369,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		# To ignore a feature, comment out the line by '#'
 
 		alsa=min
-		upnpbridge=on
-		roon=on
+		upnp=on
+		roon=off
 		airplay=off
 		spotify=off
 		wifi=off
-		tts=on
+		tts=off
 		tts_eng=off
+		usb=
 
 28. Make Image
 
