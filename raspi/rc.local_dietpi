@@ -32,8 +32,8 @@ musicpd_bg () {
   esac
  done
  ### Text to Speech
- [ "$tts" = on ] && [ "$eng_tts" = on  ] && tts2mpd en My I P is $(hostname -I)
- [ "$tts" = on ] && [ "$eng_tts" = off ] && tts2mpd
+ [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
+ [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
 /dev/shm/nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
 }
 
@@ -45,7 +45,7 @@ eol () {
  taskset -acp $s_task $(pgrep -x upmpdcli) || true
  ### AirConnect
  [ "$airplay" = on ] && (airconnect &) && sleep 5
- /root/llctl f0 l0 d0
+ /root/llctl f0 l0 d0 || true
  echo none > /sys/class/leds/led0/trigger
  echo 0    > /sys/class/leds/led0/brightness
  [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
@@ -178,8 +178,8 @@ for pid in 1 $(pgrep -x rc.local); do
 done
 
 ### Text to Speech
-#[ "$tts" = on ] && [ "$eng_tts" = on  ] && tts en My I P is $(hostname -I)
-#[ "$tts" = on ] && [ "$eng_tts" = off ] && tts
+#[ "$tts" = on ] && [ "$tts_eng" = on  ] && tts en My I P is $(hostname -I)
+#[ "$tts" = on ] && [ "$tts_eng" = off ] && tts
 
 ### Read-only
 #remountro
