@@ -29,6 +29,7 @@ quit_network () {
  [ -n "$usb" ] && sudo ifconfig $usb down
  ifconfig | grep -qs wpa-supplicant && sudo killall wpa_supplicant
     ps ax | grep -qs [d]hclient     && sudo killall dhclient
+    ps ax | grep -qs [a]vahi-daemon && sudo killall avahi-daemon
  for i in $(ps ax | grep -s $wlan | grep -vs grep | awk '{print $1}'); do
   sudo killall $i
  done
