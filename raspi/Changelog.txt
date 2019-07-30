@@ -1,5 +1,19 @@
 -. 바뀐 점
 
+19.08 (19-08-06)
+
+01. 라즈비안 Buster 업그레이드 (라즈베리 파이 4 지원?)
+02. MPD 메인과 io 프로세스 변경.
+03. Upmpdcli 프로세스 변경.
+04. 시스템과 오디오 프로세스 분리 (룬 브리지, 스포티파이, 에어플레이)
+05. 프로세스 분리에 따른 ALSA 설정, MPD 버퍼, 커널 스케줄러 튜닝.
+06. 룬 브리지 실행 스크립트 튜닝. 
+07. tts를 tts2mpd로 대체 (mpd와 구글 번역기 사용)
+08. 인터넷 라디오 주소 업데이트 (Audiophile Baroque/Classical/Jazz)
+09. myMPD 5.2.2. 한글판 업데이트.
+10. hub-ctrl 대신 uhubctl 사용.
+11. Audiophonics I-SABRE Q2M DAC, HiFiBerry DAC+ADC 사운드 카드 추가.
+
 19.05 (19-05-23)
 
  1. ALSA 설정 튜닝.
