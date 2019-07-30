@@ -37,7 +37,7 @@ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
   rtio)		 taskset -cp $s_task $proc_nr
 		 chrt -opv 0	     $proc_nr ;;
   player)	 taskset -cp $s_task $proc_nr ;;
-  decoder)	 taskset -cp $s_task $proc_nr ;;
+  decoder)	 taskset -cp $h_task $proc_nr ;;
   output)	 taskset -cp $m_task $proc_nr
 		 chrt -opv 0	     $proc_nr ;;
  esac
