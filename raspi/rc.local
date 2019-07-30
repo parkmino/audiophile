@@ -67,7 +67,7 @@ spotifyd () {
 }
 
 airconnect () {
- cp /root/airupnp-arm /dev/shm/
+ cp /home/pi/airupnp-arm /dev/shm/
 /dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 }
 
@@ -168,9 +168,6 @@ fi
 
 ### Spotify
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
-
-### Shaiport-sync
-[ "$airplay" = on ] && systemctl start avahi-daemon shairport-sync
 
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
