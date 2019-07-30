@@ -99,6 +99,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mv mpd /usr/bin/
 	$ sudo mv mpd.conf /etc/mpd.conf.sav
 	$ sudo apt-get install mpc ncmpc
+	$ sudo mkdir /etc/ncmpc
+	$ sudo nano /etc/ncmpc/config
 
 9. Upmpdcli
 
@@ -209,7 +211,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	https://github.com/Spotifyd/spotifydf
 	https://github.com/Spotifyd/spotifyd/releases/latest
 
-	$ #wget https://github.com/Spotifyd/spotifyd/releases/download/untagged-4cc466d87efba3c28f5a/spotifyd-2018-05-26-armv6.zip
 	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
 	$ unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
 	$ nano ~/spotifyd.conf
@@ -223,8 +224,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	device_name = Spotifyd
 	bitrate = 320
 
-	$ sed -i '/device_name/s/=.*/= 장치명; /username/s/=.*/= 사용자/; /password/s/=.*/= 비밀번호/' ~/spotifyd.conf
-
 18. AirConnect (AirPlay)
 
 	https://github.com/philippe44/AirConnect
@@ -234,9 +233,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64  -P ~/
 
 	$ chmod +x ~/airupnp*
-	$ sudo nano /etc/rc.local
-		cp ~/airupnp-arm /dev/shm/
-		[ "$upnp" = on ] && [ "$airplay" = on ] && /dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 
 19. Shairport-sync (AirPlay)
 
@@ -284,17 +280,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ #sudo systemctl disable mympd
 	$ sudo nano /etc/mympd/mympd.conf
-		  host = 127.0.0.1
+		 #host = 127.0.0.1
 		  ssl = false
 		 #loglevel = 0
 		  user = pi # dietpi
 		  syscmds = true
-		 coverextract = true
-		##localplay = false
-		##coverimage = true
-		##coverimage = cover.jpg
-		##stickers = false
-		##background = #111
+		  coverextract = true
 	$ sudo chown -R pi /var/lib/mympd # dietpi
 	$ #sudo adduser pi mympd # dietpi
 	$ #sudo chomod -R 775 /var/lib/mympd
@@ -316,7 +307,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo touch /etc/mympd/syscmds/15HR
 	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/16다시 시작 - Reboot'"
 	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17전원 끄기 - Power off'"
-	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+	$ #sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+	$ sudo systemctl disable mympd
 
 23. ttyd
 
@@ -354,8 +346,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 25. audio-config
 
-	$ sudo ln -sf /home/pi/audio-config /usr/bin/
-	# mv /root/audio-config_dietpi /usr/bin/audio-config
+	$ sudo mv audio-config /usr/bin/
 	$ audio-config
 
 26. audio.conf
