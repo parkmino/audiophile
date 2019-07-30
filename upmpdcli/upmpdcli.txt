@@ -1,8 +1,5 @@
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp5/libupnpp5_0.17.1-1~ppa1~stretch_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.4.2-1~ppa1~stretch_armhf.deb
-
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/libu/libupnpp5/libupnpp5_0.17.1-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/pool/main/u/upmpdcli/upmpdcli_1.4.2-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp5/libupnpp5_0.17.1-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.2-1~ppa1~buster_armhf.deb
 
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
@@ -13,13 +10,8 @@ $ gpg --keyserver pool.sks-keyservers.net --recv-key F8E3347256922A8AE767605B780
 $ gpg --export '7808CE96D38B9201' | sudo apt-key add -
 $ sudo nano /etc/apt/sources.list.d/upmpdcli.list
 
-deb http://www.lesbonscomptes.com/upmpdcli/downloads/debian/ stretch main
-deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/debian/ stretch main
-
-or
-
-deb http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/ stretch main
-deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian-stretch/ stretch main
+deb http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/ buster main
+deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/ buster main
 
 $ sudo apt-get update
 $ sudo apt-get install upmpdcli
@@ -30,17 +22,7 @@ $ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= 1/= 0/' /
 $ grep checkcontentformat /etc/upmpdcli.conf
 
 checkcontentformat = 0
-...
-[radio CBS음악FM]
-url = http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
-artUrl = http://cdn-radiotime-logos.tunein.com/s14584q.png
-
-[radio tbsFM]
-url = http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8
-artUrl = http://cdn-radiotime-logos.tunein.com/s3046q.png
 
 $ sudo systemctl disable upmpdcli.service
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
-$ sudo nano /etc/rc.local
-	nohup taskset -ac 1 /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null&>/dev/null</dev/null
