@@ -162,8 +162,8 @@ i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dbus ]] && sudo sed -i 's/dbus #/# dbus/g' /etc/rc.local || sudo sed -i 's/# dbus/dbus #/g' /etc/rc.local
- [[ $i =~ tts  ]] && sudo sed -i '/tts=/s/=.*/=on/' $audio_conf || sed -i '/tts=/s/=.*/=off/' $audio_conf
- [[ $i =~ eng  ]] && sudo sed -i '/tts_eng=/s/=.*/=on/' $audio_conf || sed -i '/tts_eng=/s/=.*/=off/' $audio_conf
+ [[ $i =~ tts  ]] && sudo sed -i '/tts=/s/=.*/=on/' $audio_conf || sudo sed -i '/tts=/s/=.*/=off/' $audio_conf
+ [[ $i =~ eng  ]] && sudo sed -i '/tts_eng=/s/=.*/=on/' $audio_conf || sudo sed -i '/tts_eng=/s/=.*/=off/' $audio_conf
 fi
 }
 
@@ -258,8 +258,8 @@ i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --c
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sed -i '/roon=/s/=.*/=off/' $audio_conf
- [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
+ [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
+ [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
 
