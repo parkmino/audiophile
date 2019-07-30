@@ -221,7 +221,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### USB mount - N.A.
 ### Internet radio (kr2mpd, sbs_dec.py, ut2mpd, tts2mpd)
 # apt-get update
-# apt-get install python-crypto
+# apt-get install python-pycryptodome
 # curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 # chmod a+rx /usr/local/bin/youtube-dl
 # nano /var/lib/mpd/playlists/internet\ radio.m3u
