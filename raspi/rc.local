@@ -68,7 +68,7 @@ spotifyd () {
 
 airconnect () {
  cp /home/pi/airupnp-arm /dev/shm/
-/dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
+taskset -ap $h_task /dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
@@ -175,7 +175,7 @@ for pid in 1 $(pgrep -x rc.local); do
  taskset -acp $m_task $pid || true
 done
 
-for i in RoonBridge spotifyd airupnp-arm networkaudiod squeezelite; do
+for i in RoonBridge spotifyd networkaudiod squeezelite; do
  if [ $m_task -ge 1 ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
   taskset -acp 1-$m_task $(pidof $i) || true
  fi

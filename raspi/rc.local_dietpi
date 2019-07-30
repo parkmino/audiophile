@@ -67,7 +67,7 @@ spotifyd () {
 
 airconnect () {
  cp /root/airupnp-arm /dev/shm/
-/dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
+taskset -ap $h_task /dev/shm/nohup taskset -ac $s_task /dev/shm/airupnp-arm -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
@@ -175,6 +175,12 @@ done
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
 for pid in 1 $(pgrep -x rc.local); do
  taskset -acp $m_task $pid || true
+done
+
+for i in RoonBridge spotifyd networkaudiod squeezelite; do
+ if [ $m_task -ge 1 ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
+  taskset -acp 1-$m_task $(pidof $i) || true
+ fi
 done
 
 ### Text to Speech

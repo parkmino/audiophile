@@ -67,7 +67,7 @@ spotifyd () {
 
 airconnect () {
  cp /root/airupnp-aarch64 /dev/shm/
-/dev/shm/nohup /dev/shm/airupnp-aarch64 -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
+taskset -ap $h_task /dev/shm/nohup /dev/shm/airupnp-aarch64 -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
@@ -149,18 +149,18 @@ swapoff -a
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### Taskset
-for i in RoonBridge spotifyd airupnp-aarch64 networkaudiod; do
- if [ $m_task -gt $s_task ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
-  taskset -acp $s_task-$m_task $(pidof $i) || true
- fi
-done
-
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
  echo "80" > /proc/irq/$i/smp_affinity
 done
 echo "0f" > /proc/irq/default_smp_affinity
 for pid in 1 $(pgrep -x rc.local); do
  taskset -cp $m_task $pid || true
+done
+
+for i in RoonBridge spotifyd airupnp-aarch64 networkaudiod; do
+ if [ $m_task -gt $s_task ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
+  taskset -acp $s_task-$m_task $(pidof $i) || true
+ fi
 done
 
 ### uhubctl
