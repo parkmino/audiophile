@@ -22,7 +22,7 @@ echo "$(pstree -npt $pgr_mpv)" | while read line; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  mpv/demux)
+  mpv/demux|mpv/worker)
    taskset -pc $s_task $proc_nr ;;
   mpv/vo)
    taskset -pc $h_task $proc_nr ;;
