@@ -44,28 +44,28 @@ PC/SBC
 OS+Sound+Application
 
  [Windows]+[Direct X]|[ASIO]|[Kernel Streaming]|[WASAPI]
-          +[Foobar]|[cPlay]|[JRiver MC]|[JPLAY]|[HQPlayer]
+          +[Foobar]|[cPlay]|[JRiver MC]|[JPLAY]|[HQPlayer]|[Roon]
          (+[AudiophileOptimzer]|[Fidelizer]|[Process Lasso])
 
     [OS X]+[CoreAudio]
-          +[Amarra]|[Audirvana]|[Fidelia]|[JRiver MC]|[HQPlayer]
+          +[Amarra]|[Audirvana]|[Fidelia]|[JRiver MC]|[HQPlayer]|[Roon]
 
    [Linux]+[ALSA]|[FFADO]|[OSS]|[PulseAudio]|[GStreamer]|[Xine]|[Phonon]
-          +[Audacious]|[Amarok]|[MPD]|[JRiver MC]|[HQPlayer]
+          +[Audacious]|[Amarok]|[MPD]|[JRiver MC]|[HQPlayer]|[Roon]
 
 Linux
 
  GNU/Linux=[Linux Kernel]+[GNU/Open Source Software]|[Application Packages]
 
- Linux Distros : Debian, openSUSE, Arch, Fedora
+ Linux Distros : Arch, Debian, Fedora, openSUSE
 
- Debian : Debian, Ubuntu, Mint, Elementary, Zorin, deepin
-          Armbian, Raspbian for SBC
+ Debian : Debian, deepin, Elementary, Mint, MX Linux, Ubuntu, Zorin
+          Armbian, DietPi, Raspbian for SBC
 
  Linux GUI = XWindows/Wayland + Window Manager + Desktop Environment
   DM	 : nodm, XDM, SLiM, LXDM, LightDM, GDM, KDM, SDDM
   WM     : DWM, Openbox, MIWM, Sawfish
-  DE(WM) : Cinnamon, GNOME(Metacity), LXDE(Openbox), MATE, KDE(KWin), Unity(Compiz), Xfce(Xfwm)
+  DE(WM) : Cinnamon, GNOME(Mutter), KDE(KWin), LXDE(Openbox), MATE, Xfce(Xfwm)
 
  Sound
  -----------------
@@ -87,20 +87,20 @@ Linux
   Drivers in Kernel, Library for Application, Tools for users
 
  Linux Audio Player
-  - GUI library      : Amarok, Clementine, Exaile, Rhythmbox, Tomahawk
-  - GUI light-weight : Audacious, DeaDBeeF, Qmmp
-  - GUI commercial   : JRiver MC, HQPlayer
-  - CLI              : Cmus, MOC, MPD
+  - CLI (ALSA) : Cmus(file), MOC(file), MPD(library)
+  - GUI file (ALSA) : Audacious, DeaDBeeF, Qmmp
+  - GUI library (non ALSA) : Amarok, Clementine, gnome-music, Lollypop, Quod Libet, Rhythmbox, Sayonara
+  - GUI library (ALSA, Commercial) : HQPlayer, JRiver MC, Roon
 
  MPD
-  [Server:music player daemon]+[Client:mpc,ncmpc,gmpc,sonata,mpdroid,mpod,mpad]
+  [Server:music player daemon]+[Client:cantata,mpc,ncmpc,quimup,sonata,malp,mpdroid,xfmpc]
   Process : [main]+[mpd/upmpdcli]+[io]+[player]+[decoder]+[output]
   Hard to mount local sotrage and show album covers -> UPnP (Upmpdcli)
 
 Tuning
 
  - Original or Personal Sound ?
- - Do not know exactly the direction, what & how to do <- Clues from computer logic, Trial & Error, Convergence
+ - Do not know exactly the direction, what & how to do <- Clues from computer logic, Trial & Error
  - All is connected and complicated, circular reference <- Continuous Review
  - Good Sound <- High Purity + Low Latency + Good System Resource Allocation
 
@@ -117,9 +117,8 @@ Tuning
  Memory
   No SWAP
   Memory Play
-   Large Audio Buffer|Cache
+   Optimized Audio Buffer|Cache
    Local Storage < Network
-   HTTP Proxy Server's memory cache for UPnP (Polipo)
 
  Kernel & System
   Grub kernel option (Ubuntu:/etc/default/grub, Raspbian:/boot/config.txt)
@@ -157,7 +156,7 @@ Tuning
   -----------+-------+---------------+-----+--------+---------+--------
    chrt        other       other      other   other    other    other
   -----------+-------+---------------+-----+--------+---------+--------
-   processor     3           1          1       1        1        3
+   processor     1           2          2       1        2        3
   ---------------------------------------------------------------------
 
  Tuning Procedure
@@ -198,9 +197,11 @@ Tuning
 	$ sudo apt-get update
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
-3.2 Install Alternative Kernels
+3.2 Install Alternative Kernels.
 	Liquorix Kernel
 		http://liquorix.net/
+		$ sudo add-apt-repository ppa:damentz/liquorix
+		$ sudo apt-get update
 		$ sudo apt-get install linux-image-liquorix-amd64 linux-headers-liquorix-amd64
 3.3 Install GUI with Display Manager, Window Manager and Desktop Environments.
 	Light Display Managers.
@@ -222,25 +223,25 @@ Tuning
 	Lightweight X11 Desktop Environment.
 		$ sudo apt-get install lxde-core or lxde
 		Disable unneeded Startup Applications.
-3.4 Install Sound Systems, ALSA or OSS.
+3.4 Install ALSA Sound Systems.
 	Advanced Linux Sound Architecture.
 		$ sudo apt-get install linux-sound-base alsa-base alsa-utils
-		$ speaker-test -c 2 -D plug:iec958 -t sine -r 44100(/48000/96000/192000)
-		$ aplay -D iec958:CARD=ICE1724,DEV=0 *.wav
+		$ speaker-test -c 2 -D hw:0,0 -t sine -r 44100(/48000/96000/192000)
+		$ aplay -D hw:0,0 *.wav
 		$ lsmod | grep snd
 		$ cat /sys/module/snd_usb_audio/parameters/nrpacks
 	Open Sound System - will not be supported any more
 		http://www.opensound.com/oss.html
 		https://help.ubuntu.com/community/OpenSound
 		http://www.4front-tech.com/wiki/index.php/Configuring_Applications_for_OSSv4
-		$ ossinfo -v3 && sudo gedit /etc/rc.local
+		$ ossinfo -v3 && sudo nano /etc/rc.local
 			ln -sf /dev/oss/oss_envy24ht0/spdout /dev/dsp
 		$ osstest && ossplay -d/dev/dsp1 *.wav
 		Reinstallation might be needed after driver expiration or kernel update.
 		$ cat /dev/sndstat
 		$ sudo dpkg -i oss-linux*.deb
 		OSS Configuration
-		$ sudo gedit /usr/lib/oss/conf/osscore.conf
+		$ sudo nano /usr/lib/oss/conf/osscore.conf
 			dma_buffsize=56 # 16 to 128(KB)
 			max_intrate=400
 			#cooked_enable=0
@@ -254,44 +255,44 @@ Tuning
 	Rubyripper
 		https://launchpad.net/~ferramroberto/+archive/extra
 		$ rrip_cli
-	CLI Players, i.e. aplay(alsa), ossplay(oss), play(sox), avplay(ffmpeg), sndfile-play(sndfile), mpg321(mp3), ogg123(ogg/flac), bplay, wavplay, cmus(ncurses), mp3blaster(ncurses), mplayer(av), cvlc(av).
+	CLI Players, i.e. aplay(alsa), ossplay(oss), play(sox), ffplay(ffmpeg), sndfile-play(sndfile), mpg123/321(mp3), ogg123(ogg/flac), bplay, wavplay, cmus(ncurses), mp3blaster(ncurses), mplayer(av), cvlc(av).
 		$ cdparanoia -O48 -S2 -w 1- - (| buffer) | bplay
 		$ sox *.* -t raw - rate -v 96k > /dev/dsp1
 		$ cat output.raw > /dev/dsp1 or dd if=output.raw of=/dev/dsp1
 	Music Player Daemon
-			
+
 3.6 Disable Display Manager such as GDM, KDM, LXDM, XDM and Slim.
-	$ sudo gedit /etc/default/grub
+	$ sudo nano /etc/default/grub
 		GRUB_CMDLINE_LINUX_DEFAULT="... text ..." or "... s ..."
 	$ sudo update-grub2
-	$ gedit ~/.xinitrc
+	$ nano ~/.xinitrc
 		exec startlxde or gnome-session
 	$ startx
 3.7 Disable unneeded TTYs
 	SystemV
-	$ sudo gedit /etc/default/console-setup
+	$ sudo nano /etc/default/console-setup
 		ACTIVE_CONSOLES="/dev/tty[1]"
-	$ sudo gedit /etc/init/tty2~6.conf
+	$ sudo nano /etc/init/tty2~6.conf
 		#respawn
 		#exec /sbin/getty ...
 	Systemd
-	$ sudo gedit /etc/systemd/logind.conf
+	$ sudo nano /etc/systemd/logind.conf
 		NAutoVTs=0
 		ReserveVT=0
 	$ ps -e | grep -e login -e tty
 3.8 Disable Networking, Network Manager or Wicd
 	$ sudo apt-get remove network-manager wicd
-	$ sudo gedit /etc/network/interfaces
+	$ sudo nano /etc/network/interfaces
 		#auto eth0
 	$ ps -e | grep -e dhclient -e NetworkManager -e wicd
 3.9 Diasble APIC, APM, Consoleblank.
-	$ sudo gedit /etc/default/grub
+	$ sudo nano /etc/default/grub
 		GRUB_CMDLINE_LINUX_DEFAULT="... noapic apm=off consoleblank=0 elevator=noop selinux=0"
 	$ sudo update-grub2
 	$ ps -e | grep acpi
 
 3.10 Disable unneeded modules.
-	$ lsmod && sudo gedit /etc/modprobe.d/blacklist.conf
+	$ lsmod && sudo nano /etc/modprobe.d/blacklist.conf
 		blacklist uvcvideo	# Disable web cam driver
 		blacklist btusb		# Disable bluetooth
 
@@ -314,13 +315,13 @@ Tuning
 3.14 Options.
 
 	-. Kernel Options
-		# sudo gedit /etc/default/grub
+		# sudo nano /etc/default/grub
 			GRUB_CMDLINE_LINUX_DEFAULT="noapic apm=off consoleblank=0 elevator=noop selinux=0"
 		# sudo update-grub2
 	-. High Precision Event Timer
 		$ cat /sys/devices/system/clocksource/clocksource0/current_clocksource
 		$ cat /sys/devices/system/clocksource/clocksource0/available_clocksource
-		$ sudo gedit /etc/default/grub
+		$ sudo nano /etc/default/grub
 			#GRUB_CMDLINE_LINUX_DEFAULT="... clocksource=hpet"
 		$ sudo update-grub2
 	-. Timer Frequency
@@ -329,7 +330,7 @@ Tuning
 		$ cat /proc/sys/dev/hpet/max-user-freq
 		$ cat /proc/driver/rtc
 		$ dmesg | grep hpet
-		$ sudo gedit /etc/rc.local
+		$ sudo nano /etc/rc.local
 			echo 4032 > /sys/class/rtc/rtc0/max_user_freq
 			#sysctl -w dev.rtc.max-user-freq=4032
 			sysctl -w dev.hpet.max-user-freq=2147483520 # up to 2147483647
@@ -337,32 +338,24 @@ Tuning
 			taskset -apc 1 `pgrep rtc`
 	-. PCI Latency Timer
 		$ lspci -nn
-		$ sudo gedit /etc/rc.local
+		$ sudo nano /etc/rc.local
 			setpci -v -d 1412:1724 latency_timer=ff
 		$ lspci -v -d 1412:1724
 	-. Swappiness Kernel Parameters
-		$ sudo gedit /etc/sysctl.conf or /etc/rc.local
+		$ sudo nano /etc/sysctl.conf or /etc/rc.local
 		$ cat /proc/sys/vm/swappiness /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
-		$ sudo gedit /etc/fstab
+		$ sudo nano /etc/fstab
 			.../swap.disk none swap sw 0 0
 	-. HDD configuration
 		$ sudo hdparm -A -a -B -M /dev/sda
 		$ cat /sys/block/sd*/queue/scheduler
-		$ sudo gedit /etc/rc.local
+		$ sudo nano /etc/rc.local
 			hdparm -A1 -a1280 -B255 -M0 /dev/sda
 			echo noop > /sys/block/sda/queue/scheduler
-		$ sudo gedit /etc/hdparm.conf
+		$ sudo nano /etc/hdparm.conf
 			read_ahead_sect = 1280
 			lookahead = on
 			apm = 255
-	-. NTFS format & mount
-		$ sudo apt-get install gparted ntfsprogs
-		Unmount the disk and format with GParted
-		$ sudo mkdir /media/MUSIC
-		$ sudo blkid && sudo gedit /etc/fstab
-			UUID=...  /media/MUSIC ntfs-3g defaults 0 0
-		or GUI NTFS mount
-		$ sudo apt-get install ntfs-config && ntfs-config
 	-. ZRAM
 		$ #sudo apt-get install zram-config
 		$ #ls /sys/block && cat /proc/swaps
