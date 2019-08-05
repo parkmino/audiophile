@@ -29,10 +29,7 @@ sbsr () {
 #api=$(curl -s "http://apis.sbs.co.kr/play-api/1.0/onair/channel/S$1?v_type=2&platform=pcweb&protocol=hls" | grep -o 'mediaurl.*' | cut -d\" -f3)
 #url=$(curl -s "$api" | tail -1)
  api=$(curl -s "http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channelPath=$1&streamName=$2.stream&playerType=mobile")
-#url=$(curl -s $(sbs_dec.py "$api") | tail -1)
- url=$(sbs_dec.py "$api")
- url=$(echo "$url" | grep -o [0-9a-zA-Z:/_.?=-]*)
- url=$(curl -s "$url" | tail -1)
+ url=$(curl -s $(sbs_dec.py "$api") | tail -1)
 }
 
 case $1 in
