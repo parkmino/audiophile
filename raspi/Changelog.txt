@@ -13,6 +13,7 @@
 09. myMPD 5.2.2. 한글판 업데이트.
 10. hub-ctrl 대신 uhubctl 사용.
 11. Audiophonics I-SABRE Q2M DAC, HiFiBerry DAC+ADC 사운드 카드 추가.
+12. KBS 라디오 홈페이지의 주소 한 번만 추출.
 
 19.05 (19-05-23)
 
