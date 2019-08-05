@@ -1,0 +1,19 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") file|url"
+}
+
+[ $# -eq 0 ] && usage && exit
+
+pls=/home/parkmino/Videos/mkpls.pls
+
+echo '[playlist]' > $pls
+
+for i in $(seq 1 $#); do
+ echo "File$i=$(eval echo \$$i)" >> $pls
+done
+
+printf "\nNumberOfEntries=$#" >> $pls
+
+#printf "#EXTM3U\n#EXTINF:-1,mkm3u\n""$@" > /home/parkmino/Videos/mkm3u.m3u
