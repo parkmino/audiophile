@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") 1tv|2tv|w(orld)|24|s(ports)|d(rama)|j(oy)|W|l(ife)|k(ids)"
+ echo "Usage: $(basename "$0") 1tv|2tv|w(orld)|24|d(rama)|j(oy)|W|l(ife)|k(ids)"
  echo "   or: $(basename "$0") 1fm|2fm|1r|2r|3r|scr|rki"
 }
 
@@ -15,10 +15,9 @@ case $1 in
  2tv) ch=12  ; fd=40 ;;
  w)   ch=14  ; fd=40 ;;
  24)  ch=81  ;;
- s)   ch=N95 ; fd=40 ;;
  d)   ch=N91 ;;
  j)   ch=N92 ; fd=40 ;;
- W)   ch=N94 ; fd=64 ;;
+ W)   ch=N94 ; fd=40 ;;
  l)   ch=N93 ;;
  k)   ch=N96 ;;
  1fm) ch=24  ;;
@@ -32,8 +31,9 @@ case $1 in
 esac
 
 #api="$(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$ch | cut -d\" -f$fd)"
-api="$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch&ch_type=radioList" | grep service_url | tail -1 | cut -d\" -f$fd | cut -d\\ -f1)"
-url="$(echo "$api" | grep -o '.*/' | sed 's/_[1-4].stream/_5.stream/')$(curl -s "$api" | tail -1)"
+#url="$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep service_url | tail -1 | cut -d\" -f$fd | cut -d\\ -f1)"
+url="$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep -o http://.*Key-Pair-Id=[0-9A-Z]* | cut -d\\ -f1)"
+#url="$(echo "$api" | grep -o '.*/' | sed 's/_[1-4].stream/_5.stream/')$(curl -s "$api" | tail -1)"
 
 echo "$url"
 

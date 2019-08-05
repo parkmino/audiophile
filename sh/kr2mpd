@@ -20,17 +20,15 @@ pls () {
 kbsr () {
 #url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
 #pls $(curl -s "http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1" | cut -d\" -f16)
- if   [ "$1" = 21 ]; then
-  pls $(curl -s http://serpent0.duckdns.org:8088/kbs1radio.pls | head -2 | tail -1 | cut -d\= -f2-)
- elif [ "$1" = 22 ]; then
-  pls $(curl -s http://serpent0.duckdns.org:8088/kbs2radio.pls | head -2 | tail -1 | cut -d\= -f2-)
- elif [ "$1" = 24 ]; then
-  pls $(curl -s http://serpent0.duckdns.org:8088/kbs1fm.pls | head -2 | tail -1 | cut -d\= -f2-)
-  #http://kong.kbskme.gscdn.com/pckong_1fm/_definst_/pckong_1fm.stream/chunklist_w1562647729.m3u8?tid=c686d5f623370a2b4a2eb8940c22c251
-  #pls $(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1) && url=$(echo "$url" | sed 's/1fm/pckong_1fm/g') && sleep 1
- else
-  pls $(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
- fi
+#if   [ "$1" = 21 ]; then
+# pls $(curl -s http://serpent0.duckdns.org:8088/kbs1radio.pls | head -2 | tail -1 | cut -d\= -f2-)
+#elif [ "$1" = 22 ]; then
+# pls $(curl -s http://serpent0.duckdns.org:8088/kbs2radio.pls | head -2 | tail -1 | cut -d\= -f2-)
+#elif [ "$1" = 24 ]; then
+# pls $(curl -s http://serpent0.duckdns.org:8088/kbs1fm.pls | head -2 | tail -1 | cut -d\= -f2-)
+#else
+  url=$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
+#fi
 }
 
 mbcr () {
