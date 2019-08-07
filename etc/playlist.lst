@@ -6,8 +6,6 @@ http://ebsonair.ebs.co.kr/plus2familypc/familypc1m/playlist.m3u8#EBS+2
 http://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8#EBSe
 http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8#EBSradio
 http://newiradio.ebs.co.kr/iradio/iradiolive_m4a/playlist.m3u8#EBSiradio
-http://live.kbskme.gscdn.com/www_1tv/_definst_/1tv_5.stream/playlist.m3u8#KBS1TV
-http://live.kbskme.gscdn.com/www_2tv/_definst_/2tv_5.stream/playlist.m3u8#KBS2TV
 http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8#KBSworld
 http://media.kjmbc.co.kr:1935/live/stream/playlist.m3u8#MBC광주TV
 http://211.117.193.120:1935/fmlive/GWANGJU-MBC-FM/playlist.m3u8#MBC광주FM
@@ -19,7 +17,7 @@ http://119.200.131.11:1935/KBCTV/tv/playlist.m3u8#KBC광주TV
 http://119.200.131.11:1935/KBCFM/kbcra_aac/playlist.m3u8#KBC광주FM
 http://59.25.202.81:1935/live/UBCstream/playlist.m3u8#UBC울산TV
 http://59.25.202.81:1935/live/mp3:UBCfmstream/playlist.m3u8#UBC울산FM
-http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8#국악방송 HD
+http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8#국악방송
 http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8#국악방송 라디오
 https://5b99fdb0a9492.streamlock.net/LIVE/ch7/playlist.m3u8#KCTV제주방송
 http://live.obs.co.kr:1935/live/obs/myStream.sdp/playlist.m3u8#OBS경인방송
