@@ -1,0 +1,81 @@
+1. Locale and timezone
+
+	$ sudo dpkg-reconfigure locales
+	$ sudo dpkg-reconfigure tzdata
+
+2. ALSA
+
+	$ sudo mv /usr/share/alsa /usr/share/alsa.orig
+	$ sudo mkdir /usr/share/alsa
+	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 5 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2773' > /usr/share/alsa/alsa.conf"   # USB DAC
+
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
+	$ sudo mv libasound.so.2.0.0.min /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
+
+3. MPD
+
+	$ sudo nano /etc/mpd.conf
+	$ sudo apt-get install ncmpc
+
+4. Sysctl.conf
+
+	$ sudo nano /etc/sysctl.conf
+
+5. Rc.local
+
+	$ sudo nano /etc/rc.local
+
+echo none > /sys/block/mmcblk0/queue/scheduler || true
+[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
+done
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
+done
+
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod|squeezelite|upmpdcli/ {print $1}'); do
+  taskset -acp 0 $pid 2>/dev/null || true
+ done
+fi
+
+/opt/vc/bin/tvservice -o
+
+[ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
+for pid in 1 $(pgrep -x rc.local); do
+ taskset -acp $m_task $pid || true
+done
+
+until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+ sleep 1
+done
+sleep 1
+pgr_mpd=$(pgrep -x mpd)
+taskset -pc $s_task $pgr_mpd
+#renice -1 -p       $pgr_mpd
+echo "$(pstree -np $pgr_mpd)" | while read line ; do
+ proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ case $proc in
+  mpd)		 taskset -cp $h_task $proc_nr ;;
+  io)		 taskset -cp $h_task $proc_nr ;;
+  player)	 taskset -cp $s_task $proc_nr ;;
+  decoder)	 taskset -cp $h_task $proc_nr ;;
+  output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+ esac
+done
+
+until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+ sleep 1
+done
+sleep 1
+taskset -acp $h_task $(pgrep -x upmpdcli) || true
