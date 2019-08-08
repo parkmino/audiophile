@@ -47,7 +47,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#console=serial0,115200 console=tty1
 		consoleblank=0
 		smsc95xx.turbo_mode=0
-		elevator=noop
+		elevator=none
 		selinux=0
 
 4. Localisation

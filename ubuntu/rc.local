@@ -66,6 +66,7 @@
 
  echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+ echo none > /sys/block/sda/queue/scheduler
 
 swapoff -a
 
