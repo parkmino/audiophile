@@ -17,6 +17,7 @@ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+echo none > /sys/block/mmcblk0/queue/scheduler || true
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i || true
