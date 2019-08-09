@@ -90,3 +90,10 @@
 		kernel.sched_migration_cost=4899005
 		kernel.sched_time_avg=6288
 		kernel.sched_shares_window=345996	# only when applicable
+
+9. None scheduler
+
+	$ sudo nano /boot/cmdline.txt
+		elevator=none
+	$ sudo nano /etc/rc.local
+		echo none | tee /sys/block/*/queue/scheduler
