@@ -94,6 +94,6 @@
 9. None scheduler
 
 	$ sudo nano /boot/cmdline.txt
-		elevator=none
+		elevator=noop
 	$ sudo nano /etc/rc.local
 		echo none | tee /sys/block/*/queue/scheduler
