@@ -185,7 +185,6 @@ i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ folder ]] && sudo sed -i '/^#*music_directory\|^#*db_file/s/^#*//' $mpd_conf || sudo sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
  [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
  [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
  [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
