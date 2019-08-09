@@ -283,10 +283,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		 #host = 127.0.0.1
 		  ssl = false
 		 #loglevel = 0
-		  user = pi # dietpi
+		 #user = mympd # pi / dietpi
 		  syscmds = true
 		  coverextract = true
-	$ sudo chown -R pi /var/lib/mympd # dietpi
+	$ #sudo chown -R pi /var/lib/mympd # dietpi
 	$ #sudo adduser pi mympd # dietpi
 	$ #sudo chomod -R 775 /var/lib/mympd
 
