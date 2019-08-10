@@ -307,7 +307,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo touch /etc/mympd/syscmds/15HR
 	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/16다시 시작 - Reboot'"
 	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17전원 끄기 - Power off'"
-	$ #sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
 
 23. ttyd
