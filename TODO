@@ -96,4 +96,11 @@
 	$ sudo nano /boot/cmdline.txt
 		elevator=noop
 	$ sudo nano /etc/rc.local
-		echo none | tee /sys/block/*/queue/scheduler
+		#echo none | tee /sys/block/*/queue/scheduler
+		for i in $(ls /sys/block/*/queue/scheduler); do
+		 if   echo $(cat $i) | grep -q none; then
+		  echo none > $i
+		 elif echo $(cat $i) | grep -q noop; then
+		  echo noop > $i
+		 fi
+		done

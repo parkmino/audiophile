@@ -101,7 +101,13 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so
 
-echo noop | tee /sys/block/*/queue/scheduler || true
+for i in $(ls /sys/block/*/queue/scheduler); do
+ if   echo $(cat $i) | grep -q none; then
+  echo none > $i
+ elif echo $(cat $i) | grep -q noop; then
+  echo noop > $i
+ fi
+done
 
 #for i in ondemand conservative powersave; do
 # grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"

@@ -17,7 +17,14 @@ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
-echo none | tee /sys/block/*/queue/scheduler || true
+
+for i in $(ls /sys/block/*/queue/scheduler); do
+ if   echo $(cat $i) | grep -q none; then
+  echo none > $i
+ elif echo $(cat $i) | grep -q noop; then
+  echo noop > $i
+ fi
+done
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i || true

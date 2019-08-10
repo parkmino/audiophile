@@ -66,11 +66,16 @@
 
  echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall || true
- echo none | /sys/block/*/queue/scheduler || true
+
+for i in $(ls /sys/block/*/queue/scheduler); do
+ if   echo $(cat $i) | grep -q none; then
+  echo none > $i
+ elif echo $(cat $i) | grep -q noop; then
+  echo noop > $i
+ fi
+done
 
 swapoff -a
-
-#mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
 
 cp /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
@@ -88,8 +93,6 @@ cp /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so.8
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
-
-#chmod -w /dev/shm/*
 
 for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
  renice  -2 $pid || true
