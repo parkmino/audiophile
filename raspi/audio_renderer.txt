@@ -270,7 +270,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo apt-get install libmediainfo-dev libmediainfo0v5
 
-	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget "$(cat -)" -O ./mympd.zip
+	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
 	$ unzip mympd.zip -d ~/ && rm mympd.zip
 	$ cd myMPD*
 	$ ./mkrelease.sh or ./mkdebian.sh
