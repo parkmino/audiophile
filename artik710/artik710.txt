@@ -183,11 +183,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	 ssl = false
 	#loglevel = 0
 	#user = mympd
-	 coverimage = true
-	#coverimage = cover.jpg
-	 stickers = false
+	#mixramp = false
 	 syscmds = true
-	 background = #222
 	 coverextract = true
 
 # printf 'kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
