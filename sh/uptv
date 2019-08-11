@@ -26,8 +26,7 @@ echo "\
 (51) 어린이TV	(52) 키즈	(53) GS샵	(54) 현대쇼핑	(55) CJ오쇼핑
 (56) 롯데쇼핑	(57) NS홈쇼핑	(58) 홈앤쇼핑	(59) GS마이샵	(60) 현대쇼핑+
 (61) W 쇼핑	(62) OGN	(63) 게임즈	(64) EBS1	(65) EBS Kids
-(66) EBSEnglish	(67) EBS+2	(68) EBS+1	(69) JEI 영어	(70) 플레이런TV
-(71) Playboy	(72) 미드나잇	(73) 허니TV"
+(66) EBSEnglish	(67) EBS+2	(68) EBS+1	(69) JEI 영어	(70) 플레이런TV"
 
 read -p " " i
 
@@ -105,7 +104,7 @@ case $i in
  71) ch=629; prog="플레이보이" ;;
  72) ch=628; prog="미드나잇" ;;
  73) ch=743; prog="허니TV" ;;
- *)  exit   ;;
+ *)  exit  ;;
 esac
 
 time=$(date +%Y%m%d%H%M%S)
