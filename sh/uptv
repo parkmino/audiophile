@@ -39,7 +39,7 @@ case $i in
  11) ch=778; prog=OnStyle ;;
  12) ch=606; prog=JTBC2 ;;
  13) ch=662; prog=K스타 ;;
- 14) ch=389; prog=KBSN PLUS ;;
+ 14) ch=389; prog="KBSN PLUS" ;;
  15) ch=603; prog=라이프타임 ;;
  16) ch=690; prog=다이아TV ;;
  17) ch=767; prog=JTBC4 ;;
@@ -86,7 +86,7 @@ case $i in
  58) ch=649; prog=홈앤쇼핑 ;;
  59) ch=740; prog=GS마이샵 ;;
  60) ch=760; prog=현대홈쇼핑+샵 ;;
- 61) ch=813; prog=W 쇼핑 ;;
+ 61) ch=813; prog="W 쇼핑" ;;
  62) ch=681; prog=OGN ;;
  63) ch=727; prog="스포티비 게임즈" ;;
  64) ch=505; prog=EBS1 ;;
