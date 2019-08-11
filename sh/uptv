@@ -3,8 +3,8 @@
 #ch="http://123.140.104.150/api/epg/v1/channel/virtual?access_key=C4A0697007C3548D389B&cp_id=S_LGU_HYUK0920&system_id=HDTV&SA_ID=500053434041&STB_MAC=v000.5343.4041&NSC_TYPE=LTE&BASE_GB=Y&BASE_CD=W172.017&YOUTH_YN=N&ORDER_GB=N&POOQ_YN=N&HDTV_VIEW_GB=R&SID=001010005638&CLIENT_IP=172.17.100.15&OS_INFO=android_4.4.2&NW_INFO=WIFI&APP_TYPE=ROSA&DEV_MODEL=SM-N935F&CARRIER_TYPE=E&UI_VER=04.38.04&NOW_PAGE=25&PRE_PAGE=&MENU_NM=&CONTS_GB=&TERM_BINVER=3.8.118.0106"
 #times=$(curl -s "$ch" | grep -o "<service_id>" | wc -l)
 #for i in $(seq 1 $times); do
-# printf "($i) $(curl -s "$ch" | grep -o "<service_name>...................." | cut -d\> -f2 | cut -d\< -f1 | sed 's/^[ \t]//' | head -$i | tail -1)\t"
-# [ $(expr $i % 5) -eq 0 ] && printf '\n'
+# printf "($i) $(curl -s "$ch" | grep -o "<service_name>...................." | cut -d\> -f2 | cut -d\< -f1 | sed 's/^[ \t]//' | head -$i | tail -1)"
+# [ $(expr $i % 5) -eq 0 ] && printf '\n' || printf '\t'
 #done
 #echo; echo
 #for i in $(seq 1 $times); do
