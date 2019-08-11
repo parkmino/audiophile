@@ -1,0 +1,13 @@
+#!/bin/sh
+
+lst="/home/parkmino/Videos/playlist.lst"
+m3u="/home/parkmino/Videos/playlist.m3u"
+
+[ -e "$lst" ] && echo "#EXTM3U" > $m3u || exit 
+
+cat $lst | while read line ; do
+ url=$(echo "$line" | cut -d\# -f1)
+  ch=$(echo "$line" | cut -d\# -f2)
+ echo "#EXTINF:-1,$ch" >> $m3u
+ echo "$url" >> $m3u
+done
