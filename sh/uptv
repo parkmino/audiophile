@@ -1,0 +1,115 @@
+#!/bin/sh
+
+#http://123.140.104.150/api/epg/v1/channel/virtual?access_key=C4A0697007C3548D389B&cp_id=S_LGU_HYUK0920&system_id=HDTV&SA_ID=500053434041&STB_MAC=v000.5343.4041&NSC_TYPE=LTE&BASE_GB=Y&BASE_CD=W172.017&YOUTH_YN=N&ORDER_GB=N&POOQ_YN=N&HDTV_VIEW_GB=R&SID=001010005638&CLIENT_IP=172.17.100.15&OS_INFO=android_4.4.2&NW_INFO=WIFI&APP_TYPE=ROSA&DEV_MODEL=SM-N935F&CARRIER_TYPE=E&UI_VER=04.38.04&NOW_PAGE=25&PRE_PAGE=&MENU_NM=&CONTS_GB=&TERM_BINVER=3.8.118.0106
+
+usage () {
+ echo "Usage: $(basename "$0") [ch]"
+}
+
+echo "\
+ (1) JTBC	 (2) MBN	 (3) 채널A	 (4) TV조선	 (5) OBS
+ (6) OBS W	 (7) tvN	 (8) 올리브	 (9) O tvN	(10) XtvN
+(11) OnStyle	(12) JTBC2	(13) K스타	(14) KBSN PLUS	(15) 라이프타임
+(16) 다이아TV	(17) JTBC4	(18) 중화TV	(19) 아시아N	(20) 스포티비
+(21) SPOTV2	(22) SPOTV3	(23) SPOTV4	(24) SPOTV5	(25) STN
+(26) MLB1	(27) MLB2	(28) MLB3	(29) JTBC골프	(30) SBS골프
+(31) 스포티비+	(32) JTBC3 FOX	(33) 빌리어즈	(34) YTN	(35) 연합뉴스TV
+(36) CNN Int'l	(37) 토마토TV	(38) CNBC	(39) 엠넷	(40) 가요TV
+(41) GMTV	(42) PLAYY1	(43) PLAYY2	(44) 바둑TV	(45) FTV
+(46) 피싱TV	(47) 폴라리스	(48) 브레인TV	(49) 애니맥스	(50) 애니플러스
+(51) 어린이TV	(52) 키즈	(53) GS샵	(54) 현대쇼핑	(55) CJ오쇼핑
+(56) 롯데쇼핑	(57) NS홈쇼핑	(58) 홈앤쇼핑	(59) GS마이샵	(60) 현대쇼핑+
+(61) W 쇼핑	(62) OGN	(63) 게임즈	(64) EBS1	(65) EBS Kids
+(66) EBSEnglish	(67) EBS+2	(68) EBS+1	(69) JEI 영어	(70) 플레이런TV
+(71) Playboy	(72) 미드나잇	(73) 허니TV"
+
+read -p " " i
+
+case $i in
+ 1)  ch=747; prog=JTBC ;;
+ 2)  ch=750; prog=MBN ;;
+ 3)  ch=749; prog=채널A ;;
+ 4)  ch=746; prog=TV조선 ;;
+ 5)  ch=596; prog=OBS ;;
+ 6)  ch=648; prog="OBS W" ;;
+ 7)  ch=682; prog=tvN ;;
+ 8)  ch=696; prog=올리브 ;;
+ 9)  ch=689; prog="O tvN" ;;
+ 10) ch=671; prog=XtvN ;;
+ 11) ch=778; prog=OnStyle ;;
+ 12) ch=606; prog=JTBC2 ;;
+ 13) ch=662; prog=K스타 ;;
+ 14) ch=389; prog=KBSN PLUS ;;
+ 15) ch=603; prog=라이프타임 ;;
+ 16) ch=690; prog=다이아TV ;;
+ 17) ch=767; prog=JTBC4 ;;
+ 18) ch=725; prog=중화TV ;;
+ 19) ch=658; prog=아시아N ;;
+ 20) ch=667; prog=스포티비 ;;
+ 21) ch=383; prog=SPOTV2 ;;
+ 22) ch=381; prog=SPOTV3 ;;
+ 23) ch=382; prog=SPOTV4 ;;
+ 24) ch=384; prog=SPOTV5 ;;
+ 25) ch=385; prog=STN ;;
+ 26) ch=397; prog=MLB1 ;;
+ 27) ch=398; prog=MLB2 ;;
+ 28) ch=399; prog=MLB3 ;;
+ 29) ch=602; prog=JTBC골프 ;;
+ 30) ch=614; prog=SBS골프 ;;
+ 31) ch=650; prog=스포티비+ ;;
+ 32) ch=795; prog="JTBC3 FOX스포츠" ;;
+ 33) ch=668; prog=빌리어즈TV ;;
+ 34) ch=698; prog=YTN ;;
+ 35) ch=734; prog=연합뉴스TV ;;
+ 36) ch=729; prog="CNN International" ;;
+ 37) ch=771; prog=토마토TV ;;
+ 38) ch=174; prog=CNBC ;;
+ 39) ch=687; prog=엠넷 ;;
+ 40) ch=794; prog=가요TV ;;
+ 41) ch=688; prog=GMTV ;;
+ 42) ch=391; prog=PLAYY프리미엄 ;;
+ 43) ch=392; prog=PLAYY웰메이드 ;;
+ 44) ch=683; prog=바둑TV ;;
+ 45) ch=665; prog=FTV ;;
+ 46) ch=625; prog=피싱TV ;;
+ 47) ch=726; prog=폴라리스TV ;;
+ 48) ch=707; prog=브레인TV ;;
+ 49) ch=703; prog=애니맥스 ;;
+ 50) ch=699; prog=애니플러스 ;;
+ 51) ch=761; prog=어린이TV ;;
+ 52) ch=728; prog=브라보키즈 ;;
+ 53) ch=676; prog=GS샵 ;;
+ 54) ch=675; prog=현대홈쇼핑 ;;
+ 55) ch=672; prog=CJ오쇼핑 ;;
+ 56) ch=674; prog=롯데홈쇼핑 ;;
+ 57) ch=673; prog=NS홈쇼핑 ;;
+ 58) ch=649; prog=홈앤쇼핑 ;;
+ 59) ch=740; prog=GS마이샵 ;;
+ 60) ch=760; prog=현대홈쇼핑+샵 ;;
+ 61) ch=813; prog=W 쇼핑 ;;
+ 62) ch=681; prog=OGN ;;
+ 63) ch=727; prog="스포티비 게임즈" ;;
+ 64) ch=505; prog=EBS1 ;;
+ 65) ch=607; prog="EBS Kids" ;;
+ 66) ch=768; prog=EBSEnglish ;;
+ 67) ch=173; prog=EBS+2 ;;
+ 68) ch=172; prog=EBS+1 ;;
+ 69) ch=793; prog="JEI EnglishTV" ;;
+ 70) ch=175; prog=플레이런TV ;;
+ 71) ch=629; prog=플레이보이 ;;
+ 72) ch=628; prog=미드나잇 ;;
+ 73) ch=743; prog=허니TV ;;
+ *)  exit   ;;
+esac
+
+#[ "$#" -ne 1 ] && usage && exit
+#! [ "$1" -ge 172 ]2>/dev/null || ! [ "$1" -le 813 ] && usage && exit
+#ch=$1
+
+time=$(date +%Y%m%d%H%M%S)
+m3u_dir="/home/parkmino/Videos"
+
+url="http://1.214.67.74:80/${ch}HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
+
+echo "$url"
+printf "#EXTM3U\n#EXTINF:-1,$prog\n$url\n" > $m3u_dir/uptv.m3u
