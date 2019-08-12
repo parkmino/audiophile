@@ -3,14 +3,100 @@
 #ch="http://123.140.104.150/api/epg/v1/channel/virtual?access_key=C4A0697007C3548D389B&cp_id=S_LGU_HYUK0920&system_id=HDTV&SA_ID=500053434041&STB_MAC=v000.5343.4041&NSC_TYPE=LTE&BASE_GB=Y&BASE_CD=W172.017&YOUTH_YN=N&ORDER_GB=N&POOQ_YN=N&HDTV_VIEW_GB=R&SID=001010005638&CLIENT_IP=172.17.100.15&OS_INFO=android_4.4.2&NW_INFO=WIFI&APP_TYPE=ROSA&DEV_MODEL=SM-N935F&CARRIER_TYPE=E&UI_VER=04.38.04&NOW_PAGE=25&PRE_PAGE=&MENU_NM=&CONTS_GB=&TERM_BINVER=3.8.118.0106"
 #times=$(curl -s "$ch" | grep -o "<service_id>" | wc -l)
 #for i in $(seq 1 $times); do
-# printf "($i) $(curl -s "$ch" | grep -o "<service_name>...................." | cut -d\> -f2 | cut -d\< -f1 | sed 's/^[ \t]//' | head -$i | tail -1)"
-# [ $(expr $i % 5) -eq 0 ] && printf '\n' || printf '\t'
+# echo "ch_$i=$(curl -s "$ch" | grep -o "<service_id>[0-9]*" | cut -d\> -f2 | head -$i | tail -1); prog_$i=\"$(curl -s "$ch" | grep -o "<service_name>...................." | cut -d\> -f2 | cut -d\< -f1 | sed 's/^[ \t]//' | head -$i | tail -1)\""
 #done
 #echo; echo
 #for i in $(seq 1 $times); do
-# echo " $i) ch=$(curl -s "$ch" | grep -o "<service_id>[0-9]*" | cut -d\> -f2 | head -$i | tail -1); prog=\"$(curl -s "$ch" | grep -o "<service_name>...................." | cut -d\> -f2 | cut -d\< -f1 | sed 's/^[ \t]//' | head -$i | tail -1)\" ;;"
+# printf "($i) $(curl -s "$ch" | grep -o "<service_name>...................." | cut -d\> -f2 | cut -d\< -f1 | sed 's/^[ \t]//' | head -$i | tail -1)"
+# [ $(expr $i % 5) -eq 0 ] && printf '\n' || printf '\t'
 #done
 #exit
+
+ch_1=747; prog_1="JTBC"
+ch_2=750; prog_2="MBN"
+ch_3=749; prog_3="채널A"
+ch_4=746; prog_4="TV조선"
+ch_5=596; prog_5="OBS"
+ch_6=648; prog_6="OBS W"
+ch_7=682; prog_7="tvN"
+ch_8=696; prog_8="올리브"
+ch_9=689; prog_9="O tvN"
+ch_10=671; prog_10="XtvN"
+ch_11=778; prog_11="OnStyle"
+ch_12=606; prog_12="JTBC2"
+ch_13=662; prog_13="K스타"
+ch_14=389; prog_14="KBSN PLUS"
+ch_15=603; prog_15="라이프타임"
+ch_16=690; prog_16="다이아TV"
+ch_17=767; prog_17="JTBC4"
+ch_18=725; prog_18="중화TV"
+ch_19=658; prog_19="아시아N"
+ch_20=667; prog_20="스포티비"
+ch_21=383; prog_21="SPOTV2"
+ch_22=381; prog_22="SPOTV3"
+ch_23=382; prog_23="SPOTV4"
+ch_24=384; prog_24="SPOTV5"
+ch_25=385; prog_25="STN"
+ch_26=397; prog_26="MLB1"
+ch_27=398; prog_27="MLB2"
+ch_28=399; prog_28="MLB3"
+ch_29=602; prog_29="JTBC골프"
+ch_30=614; prog_30="SBS골프"
+ch_31=650; prog_31="스포티비+"
+ch_32=795; prog_32="JTBC3 FOX스포츠"
+ch_33=668; prog_33="빌리어즈TV"
+ch_34=698; prog_34="YTN"
+ch_35=734; prog_35="연합뉴스TV"
+ch_36=729; prog_36="CNN International"
+ch_37=771; prog_37="토마토TV"
+ch_38=174; prog_38="CNBC"
+ch_39=687; prog_39="엠넷"
+ch_40=794; prog_40="가요TV"
+ch_41=688; prog_41="GMTV"
+ch_42=391; prog_42="PLAYY프리미엄"
+ch_43=392; prog_43="PLAYY웰메이드"
+ch_44=683; prog_44="바둑TV"
+ch_45=665; prog_45="FTV"
+ch_46=625; prog_46="피싱TV"
+ch_47=726; prog_47="폴라리스TV"
+ch_48=707; prog_48="브레인TV"
+ch_49=703; prog_49="애니맥스"
+ch_50=699; prog_50="애니플러스"
+ch_51=761; prog_51="어린이TV"
+ch_52=728; prog_52="브라보키즈"
+ch_53=676; prog_53="GS샵"
+ch_54=675; prog_54="현대홈쇼핑"
+ch_55=672; prog_55="CJ오쇼핑"
+ch_56=674; prog_56="롯데홈쇼핑"
+ch_57=673; prog_57="NS홈쇼핑"
+ch_58=649; prog_58="홈앤쇼핑"
+ch_59=740; prog_59="GS마이샵"
+ch_60=760; prog_60="현대홈쇼핑+샵"
+ch_61=813; prog_61="W 쇼핑"
+ch_62=681; prog_62="OGN"
+ch_63=727; prog_63="스포티비 게임즈"
+ch_64=505; prog_64="EBS1"
+ch_65=607; prog_65="EBS Kids"
+ch_66=768; prog_66="EBSEnglish"
+ch_67=173; prog_67="EBS+2"
+ch_68=172; prog_68="EBS+1"
+ch_69=793; prog_69="JEI EnglishTV"
+ch_70=175; prog_70="플레이런TV"
+ch_71=629; prog_71="플레이보이"
+ch_72=628; prog_72="미드나잇"
+ch_73=743; prog_73="허니TV"
+
+time=$(date +%Y%m%d%H%M%S)
+m3u_dir="/home/parkmino/Videos"
+
+if [ "$1" = all ]2>/dev/null; then
+ printf "#EXTM3U\n" > $m3u_dir/uptv.m3u
+ for i in $(seq 1 73); do
+  url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
+  printf "#EXTINF:-1,$(eval echo \$prog_$i)\n$url\n" >> $m3u_dir/uptv.m3u
+ done
+ exit
+fi
 
 echo "\
  (1) JTBC	 (2) MBN	 (3) 채널A	 (4) TV조선	 (5) OBS
@@ -31,86 +117,10 @@ echo "\
 read -p " " i
 
 case $i in
-  1) ch=747; prog="JTBC" ;;
-  2) ch=750; prog="MBN" ;;
-  3) ch=749; prog="채널A" ;;
-  4) ch=746; prog="TV조선" ;;
-  5) ch=596; prog="OBS" ;;
-  6) ch=648; prog="OBS W" ;;
-  7) ch=682; prog="tvN" ;;
-  8) ch=696; prog="올리브" ;;
-  9) ch=689; prog="O tvN" ;;
- 10) ch=671; prog="XtvN" ;;
- 11) ch=778; prog="OnStyle" ;;
- 12) ch=606; prog="JTBC2" ;;
- 13) ch=662; prog="K스타" ;;
- 14) ch=389; prog="KBSN PLUS" ;;
- 15) ch=603; prog="라이프타임" ;;
- 16) ch=690; prog="다이아TV" ;;
- 17) ch=767; prog="JTBC4" ;;
- 18) ch=725; prog="중화TV" ;;
- 19) ch=658; prog="아시아N" ;;
- 20) ch=667; prog="스포티비" ;;
- 21) ch=383; prog="SPOTV2" ;;
- 22) ch=381; prog="SPOTV3" ;;
- 23) ch=382; prog="SPOTV4" ;;
- 24) ch=384; prog="SPOTV5" ;;
- 25) ch=385; prog="STN" ;;
- 26) ch=397; prog="MLB1" ;;
- 27) ch=398; prog="MLB2" ;;
- 28) ch=399; prog="MLB3" ;;
- 29) ch=602; prog="JTBC골프" ;;
- 30) ch=614; prog="SBS골프" ;;
- 31) ch=650; prog="스포티비+" ;;
- 32) ch=795; prog="JTBC3 FOX스포츠" ;;
- 33) ch=668; prog="빌리어즈TV" ;;
- 34) ch=698; prog="YTN" ;;
- 35) ch=734; prog="연합뉴스TV" ;;
- 36) ch=729; prog="CNN International" ;;
- 37) ch=771; prog="토마토TV" ;;
- 38) ch=174; prog="CNBC" ;;
- 39) ch=687; prog="엠넷" ;;
- 40) ch=794; prog="가요TV" ;;
- 41) ch=688; prog="GMTV" ;;
- 42) ch=391; prog="PLAYY프리미엄" ;;
- 43) ch=392; prog="PLAYY웰메이드" ;;
- 44) ch=683; prog="바둑TV" ;;
- 45) ch=665; prog="FTV" ;;
- 46) ch=625; prog="피싱TV" ;;
- 47) ch=726; prog="폴라리스TV" ;;
- 48) ch=707; prog="브레인TV" ;;
- 49) ch=703; prog="애니맥스" ;;
- 50) ch=699; prog="애니플러스" ;;
- 51) ch=761; prog="어린이TV" ;;
- 52) ch=728; prog="브라보키즈" ;;
- 53) ch=676; prog="GS샵" ;;
- 54) ch=675; prog="현대홈쇼핑" ;;
- 55) ch=672; prog="CJ오쇼핑" ;;
- 56) ch=674; prog="롯데홈쇼핑" ;;
- 57) ch=673; prog="NS홈쇼핑" ;;
- 58) ch=649; prog="홈앤쇼핑" ;;
- 59) ch=740; prog="GS마이샵" ;;
- 60) ch=760; prog="현대홈쇼핑+샵" ;;
- 61) ch=813; prog="W 쇼핑" ;;
- 62) ch=681; prog="OGN" ;;
- 63) ch=727; prog="스포티비 게임즈" ;;
- 64) ch=505; prog="EBS1" ;;
- 65) ch=607; prog="EBS Kids" ;;
- 66) ch=768; prog="EBSEnglish" ;;
- 67) ch=173; prog="EBS+2" ;;
- 68) ch=172; prog="EBS+1" ;;
- 69) ch=793; prog="JEI EnglishTV" ;;
- 70) ch=175; prog="플레이런TV" ;;
- 71) ch=629; prog="플레이보이" ;;
- 72) ch=628; prog="미드나잇" ;;
- 73) ch=743; prog="허니TV" ;;
- *)  exit  ;;
+ [1-9]|[1-6][0-9]|7[0-3])
+    url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
+    echo "$url"
+    prog=$(eval echo \$prog_$i)
+    printf "#EXTM3U\n#EXTINF:-1,$prog\n$url\n" > $m3u_dir/$prog.m3u ;;
+ *) exit ;;
 esac
-
-time=$(date +%Y%m%d%H%M%S)
-m3u_dir="/home/parkmino/Videos"
-
-url="http://1.214.67.74:80/${ch}HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
-
-echo "$url"
-printf "#EXTM3U\n#EXTINF:-1,$prog\n$url\n" > $m3u_dir/uptv.m3u
