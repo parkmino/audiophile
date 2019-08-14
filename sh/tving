@@ -1,0 +1,9 @@
+#!/bin/sh
+
+for i in $(seq -w 00001 39999); do # 500~
+ url="http://www.tving.com/tv/player/C$i"
+ ch_name="$(curl -s "$url" | grep -o '"name":.*' | cut -d\" -f8)"
+ printf "\r\033[2K$url"\#"$ch_name"
+ [ -n "$ch_name" ] && printf \\n
+ [ $i -eq 99999 ] && ! [ -n "$ch_name" ] && printf "\r\033[2K"
+done
