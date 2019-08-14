@@ -648,6 +648,22 @@ else
 fi
 }
 
+STRAWBERRY () {
+printf "• Strawberry\t"
+url="https://github.com/jonaski/strawberry/releases/latest"
+latest=$(curl $curl_opt "$url" | cut -d\/ -f8 | cut -d\" -f1)
+current=$(strawberry --version | cut -d\  -f2 | cut -d\- -f1)
+printf "$current\t\t\t\t"
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+elif [ "$latest" = "$current" ]; then
+ printf "신판\n"
+else
+ printf "구판 ($latest)\n"
+ read -p "  Update ttyd? [Y/n]" answer
+fi
+}
+
 TELEGRAM () {
 printf "• Telegram\t"
 ver=$(dpkg -l telegram-cli | tail -1 | cut -d' ' -f6 | cut -d'e' -f1)
@@ -673,7 +689,7 @@ fi
 TTYD () {
 printf "• ttyd\t\t"
 url="https://github.com/tsl0922/ttyd/releases/latest"
-latest=$(curl $curl_opt "$url" | cut -d'/' -f8 | cut -d'"' -f1)
+latest=$(curl $curl_opt "$url" | cut -d\/ -f8 | cut -d\" -f1)
 current=$(ttyd --version | cut -d" " -f3)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
@@ -760,6 +776,7 @@ GOOGLER
 LIBFFMPEG
 #MESON
 #MINIDLNA
+STRAWBERRY
 TTYD
 YOUTUBE_DL
 #APCAST
