@@ -104,3 +104,12 @@
 		  echo noop > $i
 		 fi
 		done
+
+10. systemd
+
+	# nano .config/autostart.sh
+		taskset -cp 1-$(($m_task-1)) $ppid # $m_task
+	$ sudo nano /etc/rc.local
+		for pid in 1 $(pgrep -x rc.local); do
+		 taskset -acp $s_task $pid || true # $m_task
+		done
