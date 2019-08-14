@@ -375,6 +375,21 @@ else
 fi
 }
 
+EXTINF () {
+printf "• EXTINF\t"
+latest=$(curl $curl_opt https://www.extinf.com/category/korean/ | grep -m1 -o "extinf.com/korea[a-z0-9년월일-]*" | head -1 | cut -d\/ -f2)
+current=$(echo https://www.extinf.com/korean-iptv-31/ | cut -d\/ -f4)
+printf "$current"
+printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+elif [ "$latest" = "$current" ]; then
+ printf "신판\n"
+else
+ printf "구판 ($latest)\n"
+fi
+}
+
 GOOGLER () {
 printf "• Googler\t"
 latest=$(curl $curl_opt https://github.com/jarun/googler/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
@@ -771,6 +786,7 @@ ANDROID_X86
 BUBBLEUPNP
 CELLULOID
 CREATE_AP
+EXTINF
 GOOGLER
 #H3DROID
 LIBFFMPEG
