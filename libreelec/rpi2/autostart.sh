@@ -82,7 +82,7 @@ echo 4 > /proc/irq/default_smp_affinity || true
 
  until [ $ppid -eq 1 ]; do
   ppid=$(ps -o ppid= -p $ppid)
-  taskset -cp $m_task $ppid
+  taskset -cp 1-$(($m_task-1)) $ppid
  done
 
  [ $m_task -ge 2 ] && taskset -acp 1-$(($m_task-1)) $pgr_kodi

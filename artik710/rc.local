@@ -160,7 +160,7 @@ for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
 done
 echo "0f" > /proc/irq/default_smp_affinity
 for pid in 1 $(pgrep -x rc.local); do
- taskset -cp $m_task $pid || true
+ taskset -cp $s_task $pid || true
 done
 
 for i in RoonBridge spotifyd airupnp-aarch64 networkaudiod; do

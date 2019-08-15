@@ -29,16 +29,16 @@
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
- sysctl -w kernel.sched_min_granularity_ns=229980
- sysctl -w kernel.sched_wakeup_granularity_ns=388286
- sysctl -w kernel.sched_latency_ns=1394058
+ sysctl -w kernel.sched_min_granularity_ns=229979
+ sysctl -w kernel.sched_wakeup_granularity_ns=388288
+ sysctl -w kernel.sched_latency_ns=1394061
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost=4899005
  sysctl -w kernel.sched_nr_migrate=0
 #sysctl -w kernel.sched_rr_timeslice_ms=1
- sysctl -w kernel.sched_shares_window=345995
+ sysctl -w kernel.sched_shares_window=345996
 #sysctl -w kernel.sched_tunable_scaling=1
- sysctl -w kernel.sched_time_avg=6289
+ sysctl -w kernel.sched_time_avg=6288
  sysctl -w kernel.printk="0 0 0 0"
 
 #sysctl -w net.core.rmem_max=12582912
@@ -88,15 +88,15 @@ done
 #for irq in $(cat /proc/interrupts | awk '$6 ~ /Level/ && $7 ~ /rtc|sata|timer0|sunxi-mmc|dma/ {print +$1}') ; do
 # echo 2 > /proc/irq/$irq/smp_affinity
 #done
-
+#
 for i in systemd-udevd # cron ntp lirc rsyslog systemd-journald systemd-udevd systemd-logind dbus haveged sshd getty@tty1 # serial-getty@ttyS0
 do
  service $i stop
 done
 
 #echo ondemand | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
- echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
- echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 #echo none > /sys/class/leds/orangepi\:green\:usr/trigger
 
  echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
@@ -109,7 +109,7 @@ done
 #done
 #[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
- taskset -acp 1 1
+ taskset -acp 0 1
 #renice +1 -p   1
 
 (

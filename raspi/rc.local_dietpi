@@ -180,7 +180,7 @@ done
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
 for pid in 1 $(pgrep -x rc.local); do
- taskset -acp $m_task $pid || true
+ taskset -acp $s_task $pid || true
 done
 
 for i in RoonBridge spotifyd networkaudiod squeezelite; do

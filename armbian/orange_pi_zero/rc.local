@@ -27,17 +27,17 @@ mpd_bg () {
 
  pgr_mpd=$(pgrep -x mpd)
 
- taskset -pc $m_task $pgr_mpd
+ taskset -pc $s_task $pgr_mpd
 #renice -1 -p       $pgr_mpd
 
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		 taskset -cp $s_task $proc_nr ;;
-   io)		 taskset -cp $s_task $proc_nr ;;
+   mpd)		 taskset -cp $h_task $proc_nr ;;
+   io)		 taskset -cp $h_task $proc_nr ;;
    player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $h_task $proc_nr ;;
    output)	 taskset -cp $m_task $proc_nr
 		#ionice -c 2 -n 7 -p $proc_nr
 		#ionice -c 0      -p $proc_nr
@@ -64,9 +64,9 @@ mpd_bg () {
 #chmod -w /lib/systemd/systemd /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav
 #chmod -R -w /usr/lib/arm-linux-gnueabihf/
 
-mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
-
-rm -rf /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer /dev/snd/by* || true
+#mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
+rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+rm -rf /dev/snd/by* || true
 
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
@@ -134,7 +134,7 @@ echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
 #done
 
 ### Init
-taskset -cp $m_task 1
+taskset -cp $s_task 1
 
 ### MicroSD Read-only
 #sync
