@@ -1,13 +1,9 @@
 #!/bin/sh
 
-#-H 'Accept-Encoding: gzip, deflate, sdch' -H 'Accept-Language: ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Connection: keep-alive' -H 'Cache-Control: max-age=0' –compressed
-
 ch="http://ichannela.com/com/cmm/onair.do"
-curl='-H '"'Accept-Encoding: gzip, deflate, sdch'"' -H '"'Accept-Language: ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4'"' -H '"'Upgrade-Insecure-Requests: 1'"' -H '"'User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'"''
 m3u_dir="/home/parkmino/Videos"
 
-cmd="curl -s $ch $curl | grep vUrl | head -1 | cut -d"\\"\" -f4"
-url=$(eval $cmd)
+url=$(curl -s $ch -H 'Accept-Language: en-US,en;q=0.5' | grep vUrl | head -1 | cut -d\" -f4)
 
 echo "$url"
 printf "#EXTM3U\n#EXTINF:-1,채널A $1\n$url\n" > $m3u_dir/채널A.m3u
