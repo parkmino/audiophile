@@ -383,7 +383,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" > ~/release
 	$ cat ~/release
 	$ mpc clear
-	$ sudo rm -rf /var/roon/*
+	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
 	$ sudo poweroff
 

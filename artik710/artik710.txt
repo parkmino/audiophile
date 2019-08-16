@@ -266,7 +266,7 @@ https://github.com/davidgs/ARTIK-5-backup
 # youtube-dl --update
 # echo "* Audio Renderer 19.04" > ~/release
 # mpc clear
-# rm -rf /var/roon/*
+# rm -rf /var/roon/* /var/lib/mympd/covercache/*
 # cat /lib/systemd/system/sshd.service
 # rm /etc/systemd/system/*/sshd.service
 # rm -f /root/.bash_history ~/.bash_history ; history -c
