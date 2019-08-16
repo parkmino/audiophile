@@ -42,7 +42,7 @@ eol () {
   sleep 1
  done
  sleep 1
- taskset -acp $s_task $(pgrep -x upmpdcli) || true
+ taskset -acp $h_task $(pgrep -x upmpdcli) || true
  ### AirConnect
  [ "$airplay" = on ] && (airconnect &) && sleep 5
  /root/llctl f0 l0 d0 || true

@@ -46,7 +46,7 @@ eol () {
   [ "$sec" -ge 10 ] && break
  done
  sleep 1
- taskset -acp $s_task $(pgrep -x upmpdcli) || true
+ taskset -acp $h_task $(pgrep -x upmpdcli) || true
  ### AirConnect
  [ "$airplay" = on ] && (airconnect &) && sleep 5
  pkill rc.local
