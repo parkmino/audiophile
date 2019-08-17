@@ -113,3 +113,8 @@
 		for pid in 1 $(pgrep -x rc.local); do
 		 taskset -acp $s_task $pid || true # $m_task
 		done
+
+11. Artik
+
+	# nano /etc/rc.local
+		mympd&</dev/null 2>/dev/null # systemctl start mympd
