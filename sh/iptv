@@ -1,0 +1,16 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") ch|ls" 
+}
+
+
+[ "$#" -lt 1 ] && usage && exit
+
+if [ "$1" = ls ]; then
+ ls -1 Videos/iptv/channels_* | cut -d_ -f2 | cut -d. -f-4 > /home/parkmino/Videos/iptv/tvheadend.txt
+else
+ for i in $(seq 1 $#); do
+  grep -i -A1 "$(eval echo "\$$i")" /home/parkmino/Videos/iptv/channels_* | grep -v -e -- | cut -d, -f2- | cut -d- -f2 | cut -d? -f1
+ done
+fi
