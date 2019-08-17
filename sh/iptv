@@ -1,16 +1,23 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") ch|ls" 
+ echo "Usage: $(basename "$0") ch|ck|ls" 
 }
-
 
 [ "$#" -lt 1 ] && usage && exit
 
+folder="/home/parkmino/Videos/iptv"
+
 if [ "$1" = ls ]; then
- ls -1 Videos/iptv/channels_* | cut -d_ -f2 | cut -d. -f-4 > /home/parkmino/Videos/iptv/tvheadend.txt
+ ls -1 Videos/iptv/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.txt
+elif [ "$1" = ck ]; then
+ echo "$(ls -1 $folder/channels*.m3u)" | while read line; do
+  file="$(echo $line | cut -d/ -f6-)"
+  printf "$(echo "$file" | cut -d_ -f2- | cut -d. -f1-4)"
+  ffprobe -v quiet $(cat "$line" | grep -m1 http://) && printf "\tOK\n" || printf "\n"
+ done
 else
  for i in $(seq 1 $#); do
-  grep -i -A1 "$(eval echo "\$$i")" /home/parkmino/Videos/iptv/channels_* | grep -v -e -- | cut -d, -f2- | cut -d- -f2 | cut -d? -f1
+  grep -i -A1 "$(eval echo "\$$i")" $folder/channels_* | grep -v -e -- | cut -d, -f2- | cut -d- -f2 | cut -d? -f1
  done
 fi
