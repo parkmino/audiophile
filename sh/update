@@ -2,7 +2,7 @@
 
 usage () {
  echo "Usage: $(basename $0)"
- echo "   or: $(basename $0) [ch|check]"
+ echo "   or: $(basename $0) [ck|check]"
  echo "   or: $(basename $0) [all]"
  echo "Update system or check packages"
 }
@@ -20,7 +20,7 @@ if [ -z "$1" ]; then
 elif [ "$1" = all ]; then
  upd
  printf \\n
-elif [ "$1" != ch ] && [ "$1" != check ]; then
+elif [ "$1" != ck ] && [ "$1" != check ]; then
  usage
  exit
 fi
