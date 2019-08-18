@@ -16,7 +16,7 @@ elif [ "$1" = ck ]; then
   printf "$line\t"
   file=$folder/channels_$line.m3u
   curl -s -o /dev/null --connect-timeout 2 -m 3 http://$line:9981/playlist && printf "playlist "
-  if ffprobe -v quiet $(grep -m1 http:// $file); then
+  if ffprobe -v quiet $(grep -m1 ^http:// $file); then
    printf "stream\n"
    ln -sf $file $folder/available/
   else
