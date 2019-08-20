@@ -85,11 +85,12 @@
 8. sysctl.conf
 
 	$ sudo nano /etc/sysctl.conf
+		kernel.sched_min_granularity_ns=229978
 		kernel.sched_wakeup_granularity_ns=388288
-		kernel.sched_latency_ns=1394061
+		kernel.sched_latency_ns=1394062
 		kernel.sched_migration_cost=4899005
 		kernel.sched_time_avg=6288
-		kernel.sched_shares_window=345996	# only when applicable
+		kernel.sched_shares_window=345997	# only when applicable
 
 9. None scheduler
 
