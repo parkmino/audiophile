@@ -277,7 +277,7 @@ while true; do
 "11"  "Power off              전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
- [ "$exitstatus" != 0 ] && exit
+ [ "$exitstatus" != 0 ] && break
 
  case $i in
   1)  sound_card ;;
@@ -295,3 +295,7 @@ while true; do
   11) sudo poweroff ;;
  esac
 done
+
+printf '\n* 바뀐 설정을 적용하려면, 시스템을 다시 시작해야 합니다.\n* 시스템을 다시 시작할까요?\n\n* To take effect, reboot is necessary.\n* Reboot this system?\n\n'
+read -p '[Y/n]' ans
+[ "$ans" = n ] 2>/dev/null || sudo reboot
