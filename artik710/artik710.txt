@@ -200,10 +200,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ## printf 'sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
 ## printf 'sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
 ## touch /etc/mympd/syscmds/13HR
-# printf 'sudo ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 터미널 - Web Terminal'
-# touch /etc/mympd/syscmds/15HR
-# printf 'sudo reboot'   > '/etc/mympd/syscmds/16다시 시작 - Reboot'
-# printf 'sudo poweroff' > '/etc/mympd/syscmds/17전원 끄기 - Power off'
+# printf 'sudo ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 설정 - Web Settings'
+# printf 'sudo ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/15웹 터미널 - Web Terminal'
+# touch /etc/mympd/syscmds/16HR
+# printf 'sudo reboot'   > '/etc/mympd/syscmds/17다시 시작 - Reboot'
+# printf 'sudo poweroff' > '/etc/mympd/syscmds/18전원 끄기 - Power off'
 # echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 ### ttyd

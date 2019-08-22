@@ -290,6 +290,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ #sudo adduser pi mympd # dietpi
 	$ #sudo chomod -R 775 /var/lib/mympd
 
+	$ sudo touch /etc/mympd/syscmds/0HR
 	$ sudo sh -c "printf 'kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'"
 	$ sudo sh -c "printf 'kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'"
 	$ sudo sh -c "printf 'kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'"
@@ -303,10 +304,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ #sudo sh -c "printf 'sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'"
 	$ #sudo sh -c "printf 'sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'"
 	$ #sudo touch /etc/mympd/syscmds/13HR
-	$ sudo sh -c "printf 'ttyd -o -O -p 8080 dash -c "cd /home/pi; bash"&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 터미널 - Web Terminal'"
-	$ sudo touch /etc/mympd/syscmds/15HR
-	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/16다시 시작 - Reboot'"
-	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/17전원 끄기 - Power off'"
+	$ sudo sh -c "printf 'ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 설정 - Web Settings'"
+	$ #printf 'ttyd -o -O -p 8080 dash -c "/home/parkmino/git/audiophile/raspi/audio-config; printf '"'\n* 바뀐 설정을 적용하려면, 시스템을 다시 시작해야 합니다.\n* 시스템을 다시 시작할까요?\n\n* To take effect, reboot is necessary.\n* Reboot this system?\n\n'"'; read -p '"'  [Y/n]'"' yn; [ \$yn = n ] 2>/dev/null || sudo reboot"&' | sudo tee '/etc/mympd/syscmds/14웹 설정 - Web Settings'
+	$ sudo sh -c "printf 'ttyd -o -O -p 8080 dash -c \"cd /home/pi; bash\"&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/15웹 터미널 - Web Terminal'"
+	$ sudo touch /etc/mympd/syscmds/16HR
+	$ sudo sh -c "printf 'sudo reboot'   > '/etc/mympd/syscmds/17다시 시작 - Reboot'"
+	$ sudo sh -c "printf 'sudo poweroff' > '/etc/mympd/syscmds/18전원 끄기 - Power off'"
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
 

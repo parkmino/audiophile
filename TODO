@@ -119,3 +119,8 @@
 
 	# nano /etc/rc.local
 		mympd&</dev/null 2>/dev/null # systemctl start mympd
+
+12. myMPD
+
+	$ sudo touch /etc/mympd/syscmds/0HR
+	$ sudo sh -c "printf 'ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 설정 - Web Settings'"
