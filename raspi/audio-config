@@ -297,5 +297,5 @@ while true; do
 done
 
 printf '\n* 바뀐 설정을 적용하려면, 시스템을 다시 시작해야 합니다.\n* 시스템을 다시 시작할까요?\n\n* To take effect, reboot is necessary.\n* Reboot this system?\n\n'
-read -p '[Y/n]' ans
+read -p '  다시 시작 - Reboot [Y/n]' ans
 [ "$ans" = n ] 2>/dev/null || sudo reboot
