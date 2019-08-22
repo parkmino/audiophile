@@ -8,7 +8,7 @@ if [ "$status" = "Charging" ]; then
 elif [ "$status" = "Discharging" ]; then
  printf " 🔋  "
 else
- printf " ❓ "
+ printf " ❔️ "
 fi
 
 printf "$charge%%"
