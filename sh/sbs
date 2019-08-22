@@ -28,10 +28,9 @@ api=$(curl -s "http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channe
 url=$(curl -s $(sbs_dec.py "$api") | tail -1)
 
 [ -z "$url" ] && echo "$(basename "$0") "$*" stream is not available!" && exit
-echo $url
-#echo $url | xclip -selection c
-#/dev/shm/nohup mpv  $url
 
-url=$(echo $url | cut -d'%' -f1)
+echo $url
 
 printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\n$url\n" > /home/parkmino/Videos/sbs.m3u
+
+#echo $url | xclip -selection c
