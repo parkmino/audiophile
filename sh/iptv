@@ -9,7 +9,7 @@ usage () {
 folder="/home/parkmino/Videos/iptv"
 
 if [ "$1" = ls ]; then
- ls -1 Videos/iptv/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.txt
+ ls -1 $folder/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.txt
 elif [ "$1" = ck ]; then
  rm -f $folder/available/*
  echo "$(cat $folder/tvheadend.txt)" | while read line; do
