@@ -17,19 +17,25 @@ until pstree -p $pgr_mpv | grep -q mpv/ao; do
 done
 sleep 1
 
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
 echo
-taskset -pc 3 $pgr_mpv
+taskset -pc $s_task $pgr_mpv
 
 echo "$(pstree -np $pgr_mpv)" | while read line; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  dconf*|gmain|gdbus|pool|mpv/lua*|mpv/cache|mpv/demux) taskset -pc 1 $proc_nr ;;
-  mpv/vo|mpv|mpv/mpv*) taskset -pc 0,2 $proc_nr ;;
+  dconf*|gmain|gdbus|gnome*)
+   taskset -pc $h_task $proc_nr ;;
+  mpv/demux|mpv/worker)
+   taskset -pc $s_task $proc_nr ;;
+  mpv/vo)
+   taskset -pc $h_task $proc_nr ;;
   mpv/ao)
-   taskset -pc 3 $proc_nr
-   #sudo renice -1 -p $proc_nr
-   ionice -c 2 -n 7 -p $proc_nr ;;
-  *) taskset -pc 1 $proc_nr ;;
+   taskset -pc $m_task $proc_nr ;;
+  *)
+   taskset -pc $h_task $proc_nr ;;
  esac
 done
