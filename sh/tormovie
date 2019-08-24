@@ -37,8 +37,8 @@ elif [ $torrent = torrentwal ]; then
  printf "\n%s\n\n" $url
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
  for i in $(seq 1 10); do
-  printf "%2d.%s\n" $i "$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
-  printf "    $url$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
+  printf "%2d.%s\n" $i "$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')"
+  printf "    $url$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
  done
 else
  echo "$1 is not supported"
