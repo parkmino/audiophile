@@ -15,7 +15,7 @@ sound_card_selector () {
 }
 
 iqaudio () {
- if (whiptail --title "Unmute IQaudIO / IQaudIO 음소거 제거" --yesno "   Unmute IQaudIO?   IQaudIO 음소거를 제거할까요?" --yes-button "Yes/예" --no-button "No/아니오" 8 56) then
+ if (whiptail --title "Unmute IQaudIO / IQaudIO 음소거 제거" --yesno "   Unmute IQaudIO?   IQaudIO 음소거를 제거할까요?" --yes-button "Yes/예" --no-button "No/아니오" 8 56); then
   sudo sed -i '/\/sys\/class\/gpio/s/^#*//g' /etc/rc.local
  else
   sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
@@ -296,6 +296,9 @@ while true; do
  esac
 done
 
-printf '\n* 바뀐 설정을 적용하려면, 시스템을 다시 시작해야 합니다.\n* 시스템을 다시 시작할까요?\n\n* To take effect, reboot is necessary.\n* Reboot this system?\n\n'
-read -p '  다시 시작 - Reboot [Y/n]' ans
-[ "$ans" = n ] 2>/dev/null || sudo reboot
+if (whiptail --title "Reboot / 다시 시작" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+  reboot is necessary.    다시 시작해야 합니다.
+
+  Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
+ sudo reboot
+fi
