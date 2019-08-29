@@ -24,5 +24,55 @@ $ grep checkcontentformat /etc/upmpdcli.conf
 checkcontentformat = 0
 
 $ sudo systemctl disable upmpdcli.service
+$ sudo nano /etc/upmpdcli.conf
+
+[radio KBS 클래식 FM]
+url = http://serpent0.duckdns.org:8088/kbsfm.pls
+artUrl = http://padmin.s3-website.ap-northeast-2.amazonaws.com/live/2018/4/3/1522738651266_70243.png
+
+[radio KBS 쿨 FM]
+url = http://serpent0.duckdns.org:8088/kbs2fm.pls
+artUrl = http://padmin.s3-website.ap-northeast-2.amazonaws.com/live/2018/4/3/1522738651354_70254.png
+
+[radio KBS 1라디오]
+url = http://serpent0.duckdns.org:8088/kbs1radio.pls
+artUrl = http://padmin.s3-website.ap-northeast-2.amazonaws.com/live/2018/4/3/1522738651015_70210.png
+
+[radio KBS 해피 FM]
+url = http://serpent0.duckdns.org:8088/kbs2radio.pls
+artUrl = http://padmin.s3-website.ap-northeast-2.amazonaws.com/live/2018/4/3/1522738651113_70221.png
+
+[radio MBC FM4U]
+url = http://serpent0.duckdns.org:8088/mbcfm.pls
+artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm4u.png
+
+[radio MBC 표준FM]
+url = http://serpent0.duckdns.org:8088/mbcsfm.pls
+artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm.png
+
+[radio SBS 파워 FM]
+url = http://serpent0.duckdns.org:8088/sbsfm.pls
+artUrl = https://img.pooq.co.kr/BMS/Channelimage30/image/S07_8.jpg
+
+[radio SBS 러브 FM]
+url = http://serpent0.duckdns.org:8088/sbs2fm.pls
+artUrl = https://img.pooq.co.kr/BMS/Channelimage30/image/S08_8.jpg
+
+[radio CBS 음악FM]
+url = http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
+artUrl = http://img.cbs.co.kr/cbs/common/top/cbs_ci_main.gif
+
+[radio EBS FM]
+url = http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8
+artUrl = http://static.ebs.co.kr/www/common/img/global/menu/head_logo_main.gif
+
+[radio tbsFM]
+url = http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8
+artUrl = http://tbs.seoul.kr/common/images/gnb/logo.gif
+
+[radio 국악방송]
+url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
+artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png
+
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
