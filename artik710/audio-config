@@ -226,9 +226,9 @@ Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/
 "3" "27 - hi-res" 3>&1 1>&2 2>&3)
 
     case $i in
-     1) sudo sed -i '/qobuzformatid =/s/=.*/= 5/'  $upmpdcli_conf ;;
-     2) sudo sed -i '/qobuzformatid =/s/=.*/= 7/'  $upmpdcli_conf ;;
-     3) sudo sed -i '/qobuzformatid =/s/=.*/= 27/' $upmpdcli_conf ;;
+     1) sudo sed -i '/qobuzformatid =/s/^#*//; /qobuzformatid =/s/=.*/= 5/'  $upmpdcli_conf ;;
+     2) sudo sed -i '/qobuzformatid =/s/^#*//; /qobuzformatid =/s/=.*/= 7/'  $upmpdcli_conf ;;
+     3) sudo sed -i '/qobuzformatid =/s/^#*//; /qobuzformatid =/s/=.*/= 27/' $upmpdcli_conf ;;
     esac ;;
 esac
 
@@ -285,9 +285,9 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
 "3" "loseless" 3>&1 1>&2 2>&3)
 
     case $i in
-     1) sudo sed -i '/tidalquality =/s/=.*/= low/'      $upmpdcli_conf ;;
-     2) sudo sed -i '/tidalquality =/s/=.*/= high/'     $upmpdcli_conf ;;
-     3) sudo sed -i '/tidalquality =/s/=.*/= loseless/' $upmpdcli_conf ;;
+     1) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= low/'      $upmpdcli_conf ;;
+     2) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= high/'     $upmpdcli_conf ;;
+     3) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= loseless/' $upmpdcli_conf ;;
     esac ;;
 esac
 
