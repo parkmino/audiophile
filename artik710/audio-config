@@ -176,29 +176,151 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
  [ "$i" != $current_name ] && [ "$i" != "" ] && sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
 }
 
+upmpd_qobuz () {
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 15 70 8 \
+
+i=$(whiptail --title "Upmpdcli Qobuz / Qobuz 설정" --menu "\
+Select/선택
+
+    To disable Qobuz, just remove username or password.
+   사용자나 비밀번호를 지우면 Qobuz를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 14 63 3 \
+"1"  "Qobuz ┬ username        사용자        >" \
+"2"  "      │ password        비밀번호      >" \
+"3"  "      └ Format ID       포맷 ID       >" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+[ "$exitstatus" != 0 ] && return
+
+case $i in
+ 1) qobuz_user=$(grep "qobuzuser =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_user=$(whiptail --title "Qobuz username / Qobuz 사용자" --inputbox "\
+
+Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 54 "$qobuz_user" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_user" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Installing upmpdcli-qobuz..." && sudo dpkg -i /home/pi/upmpdcli-qobuz*.deb
+      sudo sed -i '/qobuzuser =/s/^#*//; /qobuzuser =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/qobuzuser =/s/^/#/; /qobuzuser =/s/=.*/=/' $audio_conf
+      [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r /home/pi/upmpdcli-qobuz*.deb
+     fi
+    fi ;;
+ 2) qobuz_pwd=$(grep "qobuzpass =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_pwd=$(whiptail --title "Qobuz password / Qobuz 비밀번호" --inputbox "\
+
+Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 56 "$qobuz_pwd" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_pwd" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Installing upmpdcli-qobuz..." && sudo dpkg -i /home/pi/upmpdcli-qobuz*.deb
+      sudo sed -i '/qobuzpass =/s/^#*//; /qobuzpass =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/qobuzpass =/s/^/#/; /qobuzpass =/s/=.*/=/' $audio_conf
+      [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r /home/pi/upmpdcli-qobuz*.deb
+     fi
+    fi ;;
+ 3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 52 3 \
+"1" " 5 - mp3/320" \
+"2" " 7 - FLAC" \
+"3" "27 - hi-res" 3>&1 1>&2 2>&3)
+
+    case $i in
+     1) sudo sed -i '/qobuzformatid =/s/=.*/= 5/'  $upmpdcli_conf ;;
+     2) sudo sed -i '/qobuzformatid =/s/=.*/= 7/'  $upmpdcli_conf ;;
+     3) sudo sed -i '/qobuzformatid =/s/=.*/= 27/' $upmpdcli_conf ;;
+    esac ;;
+esac
+
+done
+}
+
+upmpd_tidal () {
+while true; do
+
+i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
+Select/선택
+
+    To disable Tidal, just remove username or password.
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 14 63 3 \
+"1"  "Tidal ┬ username        사용자        >" \
+"2"  "      │ password        비밀번호      >" \
+"3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+[ "$exitstatus" != 0 ] && return
+
+case $i in
+ 1) tidal_user=$(grep "tidaluser =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
+
+Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_user" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+      sudo sed -i '/tidaluser =/s/^#*//; /tidaluser =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/tidaluser =/s/^/#/; /tidaluser =/s/=.*/=/' $audio_conf
+      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r /home/pi/upmpdcli-tidal*.deb
+     fi
+    fi ;;
+ 2) tidal_pwd=$(grep "tidalpass =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
+
+Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_pwd" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+      sudo sed -i '/tidalpass =/s/^#*//; /tidalpass =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/tidalpass =/s/^/#/; /tidalpass =/s/=.*/=/' $audio_conf
+      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r /home/pi/upmpdcli-tidal*.deb
+     fi
+    fi ;;
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 52 3 \
+"1" "low" \
+"2" "high" \
+"3" "loseless" 3>&1 1>&2 2>&3)
+
+    case $i in
+     1) sudo sed -i '/tidalquality =/s/=.*/= low/'      $upmpdcli_conf ;;
+     2) sudo sed -i '/tidalquality =/s/=.*/= high/'     $upmpdcli_conf ;;
+     3) sudo sed -i '/tidalquality =/s/=.*/= loseless/' $upmpdcli_conf ;;
+    esac ;;
+esac
+
+done
+}
+
+while true; do
+ i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 17 70 10 \
 "1"  "Ethernet IP                   유선 IP 설정                 >" \
 "2"  "Wi-Fi client                  무선 연결                    >" \
 "3"  "MPD options                   MPD 옵션                     >" \
 "4"  "UPnP, Roon Bridge, Airplay    UPnP, 룬 브리지, 에어플레이  >" \
 "5"  "Spotify                       스포티파이                   >" \
-"6"  "Change renderer name          렌더러 이름 바꾸기           >" \
-"7"  "Reboot                        다시 시작" \
-"8"  "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
+"6"  "Upmpdcli Qobuz                Qobuz 설정                   >" \
+"7"  "Upmpdcli Tidal                Tidal 설정                   >" \
+"8"  "Change renderer name          렌더러 이름 바꾸기           >" \
+"9"  "Reboot                        다시 시작" \
+"10" "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
 
  case $i in
-  1) ethernet_ip ;;
-  2) wifi_client ;;
-  3) mpd_options ;;
-  4) upnp_roon_air ;;
-  5) spotifyd ;;
-  6) renderer_name ;;
-  7) reboot ;;
-  8) poweroff ;;
+  1)  ethernet_ip ;;
+  2)  wifi_client ;;
+  3)  mpd_options ;;
+  4)  upnp_roon_air ;;
+  5)  spotifyd ;;
+  6)  upmpd_qobuz ;;
+  7)  upmpd_tidal ;;
+  8)  renderer_name ;;
+  9)  reboot ;;
+  10) poweroff ;;
  esac
 done
 
