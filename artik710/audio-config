@@ -199,11 +199,11 @@ Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
-      ! [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Installing upmpdcli-qobuz..." && sudo dpkg -i /home/pi/upmpdcli-qobuz*.deb
+      ! [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Installing upmpdcli-qobuz..." && sudo dpkg -i /root/upmpdcli-qobuz*.deb
       sudo sed -i '/qobuzuser =/s/^#*//; /qobuzuser =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
      else
       sudo sed -i '/qobuzuser =/s/^/#/; /qobuzuser =/s/=.*/=/' $audio_conf
-      [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r /home/pi/upmpdcli-qobuz*.deb
+      [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r /root/upmpdcli-qobuz*.deb
      fi
     fi ;;
  2) qobuz_pwd=$(grep "qobuzpass =" $upmpdcli_conf | cut -d' ' -f3-)
@@ -213,11 +213,11 @@ Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
-      ! [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Installing upmpdcli-qobuz..." && sudo dpkg -i /home/pi/upmpdcli-qobuz*.deb
+      ! [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Installing upmpdcli-qobuz..." && sudo dpkg -i /root/upmpdcli-qobuz*.deb
       sudo sed -i '/qobuzpass =/s/^#*//; /qobuzpass =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
      else
       sudo sed -i '/qobuzpass =/s/^/#/; /qobuzpass =/s/=.*/=/' $audio_conf
-      [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r /home/pi/upmpdcli-qobuz*.deb
+      [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r /root/upmpdcli-qobuz*.deb
      fi
     fi ;;
  3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 52 3 \
