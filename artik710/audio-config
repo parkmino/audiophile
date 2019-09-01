@@ -220,7 +220,7 @@ Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r upmpdcli-qobuz
      fi
     fi ;;
- 3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 52 3 \
+ 3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" --default-item 3 11 52 3 \
 "1" " 5 - mp3/320" \
 "2" " 7 - FLAC" \
 "3" "27 - hi-res" 3>&1 1>&2 2>&3)
@@ -279,7 +279,7 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
      fi
     fi ;;
- 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 52 3 \
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" --default-item 3 11 52 3 \
 "1" "low" \
 "2" "high" \
 "3" "loseless" 3>&1 1>&2 2>&3)
@@ -324,7 +324,7 @@ while true; do
  esac
 done
 
-if (whiptail --title "Reboot / 다시 시작" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+if (whiptail --title "Reboot / 다시 시작" --backtitle "Audio-config" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
   reboot is necessary.    다시 시작해야 합니다.
 
   Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
