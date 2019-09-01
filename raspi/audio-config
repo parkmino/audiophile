@@ -23,7 +23,7 @@ iqaudio () {
 }
 
 sound_card () {
-i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 20 55 12 \
+i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 20 55 12 \
 "1"  "USB Audio Class 2.0" \
 "2"  "Allo Boss DAC" \
 "3"  "Allo DigiOne" \
@@ -82,7 +82,7 @@ Select/선택
                 [USB ] [USB4]
           [LAN] [USB3] [USB5]
          =====================(Back Port/뒷면)
-         USB3 is recommended for DAC    DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 16 75 4 \
+         USB3 is recommended for DAC    DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 16 75 4 \
 "1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
 "2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \
 "3" "Disable USB 4/5 signal              USB 4/5 신호만 끄기" \
@@ -97,7 +97,7 @@ esac
 }
 
 ethernet_ip () {
-i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
@@ -112,7 +112,7 @@ case $i in
 
 Input Static IP address to use.       사용할 수동 IP를 입력합니다.
 Current IP is listed below.           아래는 현재 주소입니다.
-Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -z "$user_ip" ]; then
@@ -147,14 +147,14 @@ My assumption may be wrong, please edit with the following command.
 -----------------------
 
 $(cat /etc/network/interfaces)" > ~/static_ip.txt
-     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "Audio-config" 18 75
+     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "audio-config" 18 75
     fi
     ;;
 esac
 }
 
 dbus_tts () {
-i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 63 3 \
+i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 63 3 \
 "tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
 "eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) \
 "dbus"   "Enable DBus             DBus 사용" $(grep -q '# dbus' /etc/rc.local && echo OFF || echo ON) 3>&1 1>&2 2>&3)
@@ -171,12 +171,12 @@ renderer_name () {
  current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3)
  i=$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
 
-Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 9 67 $current_name 3>&1 1>&2 2>&3)
+Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 67 $current_name 3>&1 1>&2 2>&3)
  [ "$i" != $current_name ] && [ "$i" != "" ] && sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 70 4 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 70 4 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
 "pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
@@ -198,7 +198,7 @@ i=$(whiptail --title "Spotify / Spotify 설정" --menu "\
 Select/선택
 
     To disable spotify, just remove username or password.
-  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 14 66 3 \
+  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 14 66 3 \
 "1"  "Spotify ┬ device name     장치 이름     >" \
 "2"  "        │ username        사용자        >" \
 "3"  "        └ password        비밀번호      >" 3>&1 1>&2 2>&3)
@@ -212,7 +212,7 @@ case $i in
 
 Input Spotify device name.   Spotify 장치 이름을 입력합니다.\
 
-(without space)              (빈칸 없이)" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 64 $spotify_device 3>&1 1>&2 2>&3)
+(without space)              (빈칸 없이)" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 64 $spotify_device 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_device" ]; then
@@ -222,7 +222,7 @@ Input Spotify device name.   Spotify 장치 이름을 입력합니다.\
  2) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
     input_user=$(whiptail --title "Spotify username / Spotify 사용자" --inputbox "\
 
-Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 58 $spotify_user 3>&1 1>&2 2>&3)
+Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 58 $spotify_user 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
@@ -235,7 +235,7 @@ Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK
  3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
     input_pwd=$(whiptail --title "Spotify password / Spotify 비밀번호" --inputbox "\
 
-Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
+Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
@@ -251,7 +251,7 @@ done
 }
 
 roon_airplay () {
-i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 9 59 2 \
+i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 59 2 \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
@@ -269,7 +269,7 @@ i=$(whiptail --title "Upmpdcli Qobuz / Qobuz 설정" --menu "\
 Select/선택
 
     To disable Qobuz, just remove username or password.
-   사용자나 비밀번호를 지우면 Qobuz를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 14 63 3 \
+   사용자나 비밀번호를 지우면 Qobuz를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 14 63 3 \
 "1"  "Qobuz ┬ username        사용자        >" \
 "2"  "      │ password        비밀번호      >" \
 "3"  "      └ Format ID       포맷 ID       >" 3>&1 1>&2 2>&3)
@@ -281,7 +281,7 @@ case $i in
  1) qobuz_user=$(grep "qobuzuser =" $upmpdcli_conf | cut -d' ' -f3-)
     input_user=$(whiptail --title "Qobuz username / Qobuz 사용자" --inputbox "\
 
-Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 54 "$qobuz_user" 3>&1 1>&2 2>&3)
+Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 54 "$qobuz_user" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
@@ -295,7 +295,7 @@ Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확
  2) qobuz_pwd=$(grep "qobuzpass =" $upmpdcli_conf | cut -d' ' -f3-)
     input_pwd=$(whiptail --title "Qobuz password / Qobuz 비밀번호" --inputbox "\
 
-Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 56 "$qobuz_pwd" 3>&1 1>&2 2>&3)
+Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 56 "$qobuz_pwd" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
@@ -306,7 +306,7 @@ Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r upmpdcli-qobuz
      fi
     fi ;;
- 3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" --default-item 3 11 52 3 \
+ 3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" --default-item 3 11 52 3 \
 "1" " 5 - mp3/320" \
 "2" " 7 - FLAC" \
 "3" "27 - hi-res" 3>&1 1>&2 2>&3)
@@ -328,7 +328,7 @@ i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
 Select/선택
 
     To disable Tidal, just remove username or password.
-   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 14 63 3 \
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 14 63 3 \
 "1"  "Tidal ┬ username        사용자        >" \
 "2"  "      │ password        비밀번호      >" \
 "3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
@@ -340,7 +340,7 @@ case $i in
  1) tidal_user=$(grep "tidaluser =" $upmpdcli_conf | cut -d' ' -f3-)
     input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
 
-Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
+Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
@@ -354,7 +354,7 @@ Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확
  2) tidal_pwd=$(grep "tidalpass =" $upmpdcli_conf | cut -d' ' -f3-)
     input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
 
-Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
+Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
@@ -365,7 +365,7 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
      fi
     fi ;;
- 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" --default-item 3 11 52 3 \
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" --default-item 3 11 52 3 \
 "1" "low" \
 "2" "high" \
 "3" "loseless" 3>&1 1>&2 2>&3)
@@ -381,7 +381,7 @@ done
 }
 
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 19 61 11 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 19 61 11 \
  "1"  "Audio device           오디오 장치            >" \
  "2"  "USB signal & power     USB 신호와 전원        >" \
  "3"  "MPD options            MPD 옵션               >" \
@@ -414,7 +414,7 @@ while true; do
  esac
 done
 
-if (whiptail --title "Reboot / 다시 시작" --backtitle "Audio-config" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+if (whiptail --title "Reboot / 다시 시작" --backtitle "audio-config" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
   reboot is necessary.    다시 시작해야 합니다.
 
   Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
