@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mpd_ver=$(/dev/shm/mpd --version | head -1 | cut -d. -f2)
+mpd_ver=$(/dev/shm/mpd --version | head -1 | cut -d. -f2 | cut -d~ -f1)
 
 sec=0
 until [ "$(pgrep -x mpd)" -gt 0 ] 2>/dev/null; do
@@ -34,7 +34,7 @@ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
  case $proc in
   mpd)		 taskset -cp $h_task $proc_nr ;;
   io)		 taskset -cp $h_task $proc_nr ;;
-  rtio)		 taskset -cp $s_task $proc_nr
+  rtio)		 taskset -cp $h_task $proc_nr
 		 chrt -opv 0	     $proc_nr ;;
   player)	 taskset -cp $s_task $proc_nr ;;
   decoder)	 taskset -cp $h_task $proc_nr ;;
