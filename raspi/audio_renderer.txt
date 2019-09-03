@@ -327,7 +327,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
 	$ sudo sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
 	$ sudo sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
-	$ sudo sh -c "printf '[end]#' >> /etc/mympd.conf"
+	$ sudo sh -c "printf '#' >> /etc/mympd.conf"
 
 	$ sudo sh -c "printf 'HR =
 KBS 클래식 FM = kr2mpd 1fm
@@ -342,7 +342,7 @@ HR =
 HR =
 다시 시작 - Reboot    = sudo reboot
 전원 끄기 - Power off = sudo poweroff
-[end]#' >> /etc/mympd.conf"
+#' >> /etc/mympd.conf"
 
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
