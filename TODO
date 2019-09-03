@@ -71,7 +71,7 @@
 6. mpd.conf
 
 	$ sudo nano /etc/mpd.conf.sav
-		buffer_before_play "10.5596937298023%"
+		buffer_before_play "10.5596937298022%" # space at the end and no linefeed
 
 7. mpd & upmpdcli
 
