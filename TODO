@@ -68,6 +68,7 @@
 	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2773#' > /usr/share/alsa/alsa.conf.min"
 	$ sudo sed -i '$s/minperiodtime 2[0-9]*.$/minperiodtime 2773/' /usr/share/alsa/alsa.conf.mi*
 	$ sed '$s/$/#/' /usr/share/alsa/alsa.conf.mi*
+	$ truncate -s -1 ddd && sed -i '$s/$/#/' ddd
 
 6. mpd.conf
 

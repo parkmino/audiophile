@@ -203,6 +203,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		 exec /bin/bash -c "exec -a $SCRIPT /dev/shm/nohup \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
 		 exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		fi# # no linefeed at the end
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
