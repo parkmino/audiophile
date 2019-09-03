@@ -326,7 +326,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 dash -c \"cd /var/lib/mympd; bash\"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
 	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
 	$ sudo sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
-	$ sudo sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
+	$ sudo sh -c "printf '전원 끄기 - Power off = sudo poweroff #' >> /etc/mympd.conf"
 	
 	$ sudo sh -c "printf 'HR =
 KBS 클래식 FM = kr2mpd 1fm
@@ -340,7 +340,7 @@ HR =
 웹 터미널 - Web Terminal = ttyd -o -O -p 8080 dash -c \"cd /var/lib/mympd; bash\"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
+전원 끄기 - Power off = sudo poweroff #' >> /etc/mympd.conf"
 
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
