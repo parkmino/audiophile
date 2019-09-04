@@ -1,9 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename $0)"
- echo "   or: $(basename $0) [ck|check]"
- echo "   or: $(basename $0) [all]"
+ echo "Usage: $(basename $0) [all|ck|check|fix]"
  echo "Update system or check packages"
 }
 
@@ -14,8 +12,16 @@ upd () {
  sudo apt-get clean
 }
 
+upd_fix () {
+ sudo rm -rf /var/lib/apt/lists/partial
+ sudo apt-get update -o Acquire::CompressionTypes::Order::=gz
+}
+
 if [ -z "$1" ]; then
  upd
+ exit
+elif [ "$1" = fix ]; then
+ upd_fix
  exit
 elif [ "$1" = all ]; then
  upd
@@ -378,7 +384,7 @@ EXTINF () {
 printf "• EXTINF\t"
 url="https://www.extinf.com/category/korean/"
 latest=$(curl $curl_opt "$url" | grep -m1 -o "article id=\"post-[0-9]*" | cut -d\- -f2)
-current="67703"
+current="67826"
 printf "$current"
 printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
 if [ -z "$latest" ]; then
