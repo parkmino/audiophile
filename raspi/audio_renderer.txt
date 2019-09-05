@@ -224,6 +224,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	mixer = ctl.9
 	device_name = Spotifyd
 	bitrate = 320
+	#
 
 18. AirConnect (AirPlay)
 
