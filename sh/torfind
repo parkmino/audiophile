@@ -17,7 +17,7 @@ read -p " " i
 case $i in
  1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30" ;;
  2) [ $(date +%u) -eq 4 ] && [ $(date +%k) -ge 23 ] && time="today 22:50" || time="last thursday 22:50" ;;
- 3) time="last friday 23:00"	;;
+ 3) time="last friday 22:30"	;;
  4) time="last saturday 23:59"	;;
  5) time="yesterday"		;;
  a) time="last saturday 23:59"	;;
