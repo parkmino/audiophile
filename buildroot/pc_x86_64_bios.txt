@@ -7,7 +7,7 @@ https://buildroot.org/download.html
 http://git.buildroot.net/buildroot/
 https://github.com/buildroot/buildroot
 
-$ cd buildroot-2018.08/
+$ cd buildroot-2019.05.2/
 $ make help
 $ make list-defconfigs (184 pre-defined boards for Buildroot 2018.8)
 $ make menuconfig
@@ -17,8 +17,8 @@ PC x86 64 bios
 
 $ cd ../
 $ mkdir pc_x86_64_bios && cd pc_x86_64_bios && mkdir rootfs-overlay
-$ cp ../buildroot-2018.08/configs/pc_x86_64_bios_defconfig .config
-$ make -C ../buildroot-2018.08 O=$(pwd) menuconfig
+$ cp ../buildroot-2019.05.2/configs/pc_x86_64_bios_defconfig .config
+$ make -C ../buildroot-2019.05.2 O=$(pwd) menuconfig
 $ make # BR2_PACKAGE_COREUTILS=y BR2_PACKAGE_PROCPS_NG=y BR2_PACKAGE_ALSA_LIB_MIXER=
 
 1. Menuconfig
@@ -36,6 +36,8 @@ Toolchain --->
  [*] Enable C++ support
 
 System configuration --->
+ /dev management (Dynamic using devtmpfs + mdev) --->
+  (X) Dynamic using devtmpfs + mdev
  [*] Enable root login with password
  () Root password
  [*] Run a getty (login prompt) after boot ---
@@ -45,6 +47,16 @@ System configuration --->
 
 Target packages --->
  [*] Show packages that are also provided by busybox
+ Hardware handling --->
+  Firmware --->
+   [*] linux-firmware
+    WiFi firmware --->
+ Networking applications  --->
+  [*] connman
+   [ ] enable WiFi support
+  [*] crda
+  [*] wpa_supplicant
+   [*] Enable nl80211 support
  coreutils, procps_ng, psmisc
  System tools --->
   -*- util-linux --->
@@ -60,6 +72,9 @@ Filesystem images --->
 $ make linux-menuconfig
 
 Device Drivers --->
+ [*] Network device support --->
+  [*]   Wireless LAN --->
+   <M> Intel Wireless WiFi DVM Firmware support
  <*> Sound card support --->
   <*> Advanced Linux Sound Architecture --->
    HD-Audio --->
@@ -74,9 +89,9 @@ coreutils, procps_ng, psmisc, dropbear(SSH), ca_certificates
 alsa_lib, mpd, mpd_mpc, ncmpc, upmpdcli
 curl, nano, bc
 
-$ grep 'CONFIG_IONICE\|CONFIG_TASKSET' ../buildroot-2018.08/package/busybox/busybox.config
-$ sed -i 's/.*CONFIG_IONICE.*/CONFIG_IONICE=y/; s/.*CONFIG_TASKSET.*/CONFIG_TASKSET=y/' ../buildroot-2018.08/package/busybox/busybox.config
-$ grep 'CONFIG_IONICE\|CONFIG_TASKSET' ../buildroot-2018.08/package/busybox/busybox.config
+$ grep 'CONFIG_IONICE\|CONFIG_TASKSET' ../buildroot-2019.05.2/package/busybox/busybox.config
+$ sed -i 's/.*CONFIG_IONICE.*/CONFIG_IONICE=y/; s/.*CONFIG_TASKSET.*/CONFIG_TASKSET=y/' ../buildroot-2019.05.2/package/busybox/busybox.config
+$ grep 'CONFIG_IONICE\|CONFIG_TASKSET' ../buildroot-2019.05.2/package/busybox/busybox.config
 
 CONFIG_IONICE=y
 CONFIG_TASKSET=y
@@ -305,8 +320,8 @@ $ nano rootfs-overlay/etc/audio.conf
 # audio.conf
 #
 # To enable a feature, set feature=on.
-# To disable a feature, set feature=off
-# To ignore a feature, comment out the line by '#'
+# To disable a feature, set feature=off.
+# To ignore a feature, comment out the line by '#'.
 # log, ssh and upnp is enabled while airplay and spotify is disabled by default.
 
 log=off
@@ -431,19 +446,49 @@ $ zip ../images/buildroot_renderer_$(date +"%y.%m").zip ../images/buildroot_rend
 
 7.1 Blacklist Modules
 
-$ nano /etc/modprobe.conf
+# nano /etc/modprobe.conf
 
 blacklist ...
 
 7.2 Static IP
 
-$ nano /etc/network/interfaces
+# mv /etc/init.d/S45connman /etc/
+# nano /etc/network/interfaces
 
-iface eth0 inet static
+auto enp3s0
+iface enp3s0 inet static
 address 192.168.0.10
 netmask 255.255.255.0
 gateway 192.168.0.1
 dns-nameservers 8.8.8.8
+
+7.3 Wi-Fi
+
+/lib/modules/4.18.10/kernel/drivers/net/wireless/intel/iwlwifi/dvm/iwldvm.ko
+
+# nano /etc/wpa_supplicant.conf
+
+ctrl_interface=/var/run/wpa_supplicant
+ap_scan=1
+
+network={
+   ssid="ssid"
+   psk="pass"
+}
+
+# nano /etc/network/interfaces
+
+auto enp3s0
+iface enp3s0 inet dhcp
+
+#auto wlp2s0
+iface wlp2s0 inet dhcp
+ pre-up wpa_supplicant -B -Dnl80211 -iwlp2s0 -c/etc/wpa_supplicant.conf
+ post-down killall -q wpa_supplicant
+ 
+# mv /etc/init.d/S45connman /etc/
+
+# ifup wlp2s0
 
 8. Spotifyd
 
