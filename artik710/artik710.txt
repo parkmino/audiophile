@@ -183,7 +183,6 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	 ssl = false
 	#loglevel = 1
 	#user = mympd
-	 mixramp = false
 	 syscmds = true
 	 coverextract = true
 

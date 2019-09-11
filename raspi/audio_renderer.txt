@@ -286,7 +286,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		  ssl = false
 		 #loglevel = 1
 		 #user = mympd # pi / dietpi
-		  mixramp = false
 		  syscmds = true
 		  coverextract = true
 	$ #sudo chown -R pi /var/lib/mympd # dietpi
