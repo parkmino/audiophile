@@ -75,7 +75,7 @@ artUrl = http://tbs.seoul.kr/common/images/gnb/logo.gif
 
 [radio 국악방송]
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
-artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png# # No linefeed at the end
+artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png # No linefeed at the end
 
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
