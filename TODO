@@ -65,12 +65,12 @@
 
 5. alsa.conf
 
-	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2773' > /usr/share/alsa/alsa.conf.min"
+	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2771' > /usr/share/alsa/alsa.conf.min"
 
 6. mpd.conf
 
 	$ sudo nano /etc/mpd.conf.sav
-		buffer_before_play "10.5596937298022%" # no char at the end file and no linefeed
+		buffer_before_play "10.5596937298020%" # no char at the end file and no linefeed
 
 7. mpd & upmpdcli
 
@@ -87,7 +87,7 @@
 		kernel.sched_min_granularity_ns=229978
 		kernel.sched_wakeup_granularity_ns=388288
 		kernel.sched_latency_ns=1394062
-		kernel.sched_migration_cost=4899005
+		kernel.sched_migration_cost=4899004
 		kernel.sched_time_avg=6288
 		kernel.sched_shares_window=345997	# only when applicable
 
