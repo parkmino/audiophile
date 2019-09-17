@@ -28,15 +28,17 @@ $ git branch -D dev
 https://help.ubuntu.com/community/GnuPrivacyGuardHowto
 https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
 
-$ cd ~/Downloads/ppa/mympd/
-$ nano myMPD-5.5.2/debian/changelog
-	mympd (5.5.2-1ppa1) bionic; urgency=medium
-$ nano myMPD-5.5.2/debian/control
+$ cd /home/parkmino/Downloads/ppa/mympd/
+$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
+$ export ver=$(curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/.*\/v//')
+$ tar -xvzf mympd.tar.gz
+$ mv mympd.tat.gz mympd_$ver.orig.tar.gz
+$ mv myMPD-$ver/contrib/packaging/debian myMPD-$ver
+$ sed -i '1s/-1)/-1ppa1)/; 1s/unstable/bionic/' debian/changelog
+	mympd ($ver-1ppa1) bionic; urgency=medium
+$#sed -i 's/^Section: .*/Section: sound/' debian/control
 	Section: sound
-$ tar -zcvf mympd_5.5.2.orig.tar.gz myMPD-5.5.2
-$ cat myMPD-5.5.2/debian/source/format
-$ #sed -i 's/stabe/bionic/g' myMPD-5.5.2/debian/changelog
-$ cd myMPD-5.5.2
+$ cd myMPD-$ver
 $ debuild -S -k433D8977 # -sd
 $ cd ..
-$ dput ppa:parkmino/mympd mympd*source.changes
+$ dput ppa:parkmino/mympd mympd_$ver-1ppa1_source.changes
