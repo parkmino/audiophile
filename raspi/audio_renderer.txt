@@ -84,7 +84,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "cat /usr/share/alsa.orig/alsa.conf > /usr/share/alsa/alsa.conf.mix"
 	$ sudo sed -i 's/^[ \t]*//; /^$/d' /usr/share/alsa/alsa.conf.mix
 	$ head -20 /usr/share/alsa/alsa.conf.mix
-	$ sudo nano /usr/share/alsa/alsa.conf.mix
+	$ sudo nano -L /usr/share/alsa/alsa.conf.mix
 	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.min >> /usr/share/alsa/alsa.conf.mix"
 
 	# mv libasound.so.2.0.0.* /usr/lib/arm-linux-gnueabihf/
@@ -214,7 +214,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
 	$ unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
-	$ nano ~/spotifyd.conf
+	$ nano -L ~/spotifyd.conf
 
 	[global]
 	username = USER
@@ -359,7 +359,7 @@ HR =
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
-	$ sudo nano /etc/lighttpd/lighttpd.conf
+	$ sudo nano -L /etc/lighttpd/lighttpd.conf
 		server.modules = (
 			...
 			"mod_cgi",

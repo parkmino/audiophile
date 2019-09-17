@@ -75,7 +75,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	domain your.domain.name
 ## resolvconf -u
 # hostnamectl
-# nano /etc/avahi/avahi-daemon.conf
+# nano -L /etc/avahi/avahi-daemon.conf
 	host-name=bann
 	domain-name=local
 # systemctl restart avahi-daemon
@@ -114,7 +114,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/libupnpp5_0.17.1-1~ppa1~xenial1_arm64.deb
 # apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp1 python3 python3-requests
 # dpkg -i upmpdcli*.deb libupnpp*.deb
-# nano /etc/upmpdcli.conf
+# nano -L /etc/upmpdcli.conf
 	friendlyname = Bann Network Player
 	checkcontentformat = 0
 ## wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png

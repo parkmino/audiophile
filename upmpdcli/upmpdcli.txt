@@ -1,8 +1,8 @@
 $ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp5/libupnpp5_0.17.1-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.2-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-qobuz_1.4.2-1~ppa1~buster_all.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-spotify_1.4.2-1~ppa1~buster_all.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.2-1~ppa1~buster_all.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.4-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-qobuz_1.4.4-1~ppa1~buster_all.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-spotify_1.4.4-1~ppa1~buster_all.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.4-1~ppa1~buster_all.deb
 
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
 $ sudo dpkg -i libupnpp*.deb upmpdcli*.deb
@@ -27,7 +27,7 @@ $ grep checkcontentformat /etc/upmpdcli.conf
 checkcontentformat = 0
 
 $ sudo systemctl disable upmpdcli.service
-$ sudo nano /etc/upmpdcli.conf
+$ sudo nano -L /etc/upmpdcli.conf
 
 [radio KBS 클래식 FM]
 url = http://serpent0.duckdns.org:8088/kbsfm.pls
@@ -75,7 +75,7 @@ artUrl = http://tbs.seoul.kr/common/images/gnb/logo.gif
 
 [radio 국악방송]
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
-artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png # No linefeed at the end
+artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png # No new line at the end
 
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
