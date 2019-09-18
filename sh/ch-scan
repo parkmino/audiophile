@@ -1,7 +1,0 @@
-#!/bin/sh
-
-for i in $(seq 10000000 20000000); do
- url="http://221.151.151.195:9981/stream/channelid/$i"
- printf "$url"
- curl -s "$url" | head -1 | grep -q HTML && printf "\r\033[2K" || printf '\n'
-done
