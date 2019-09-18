@@ -303,6 +303,8 @@ Tuning
 		$ ps aux && cd /usr/sbin && sudo chmod -x -v acpid anacron atd ...
 		Systemd
 		$ sudo systemctl disable ...
+	$ sudo nano /etc/environment
+		NO_AT_BRIDGE=1
 3.12 Unmount and Shut down data HDD during Playback
 	$ df -hT && sudo umount /dev/sdb1 && sudo hdparm -Y /dev/sdb
 	$ play *.wav
