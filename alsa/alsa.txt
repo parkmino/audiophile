@@ -39,7 +39,7 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 $ sudo mkdir /usr/share/alsa
 $ cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
-$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.nonblock 1 defaults.pcm.minperiodtime 2771' > /usr/share/alsa/alsa.conf.min"
+$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2771' > /usr/share/alsa/alsa.conf.min"
 $ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
