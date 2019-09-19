@@ -169,7 +169,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # ./mkdebian.sh # ./mkrelease.sh
 # cd ..
 
-# apt-get install libmediainfo0v5
+# apt-get install libmediainfo0v5 lrzsz
 # dpkg -i ./mympd*.deb
 # systemctl stop    mympd
 # systemctl disable mympd
@@ -230,7 +230,7 @@ SBS 파워 FM   = kr2mpd sbsp
 SBS 러브 FM   = kr2mpd sbsl
 HR =
 웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-웹 터미널 - Web Terminal = ttyd -o -O -p 8080 dash -c \"cd /var/lib/mympd; bash\"&>/dev/null</dev/null 2>/dev/null
+웹 터미널 - Web Terminal = ttyd -o -O -p 8080 dash -c "cd /var/lib/mympd; bash"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
 전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"

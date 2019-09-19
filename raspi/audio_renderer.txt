@@ -270,7 +270,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 22. myMPD
 
-	$ sudo apt-get install libmediainfo-dev libmediainfo0v5
+	$ sudo apt-get install libmediainfo-dev libmediainfo0v5 lrzsz
 
 	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
 	$ unzip mympd.zip -d ~/ && rm mympd.zip
@@ -337,7 +337,7 @@ SBS 파워 FM   = kr2mpd sbsp
 SBS 러브 FM   = kr2mpd sbsl
 HR =
 웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-웹 터미널 - Web Terminal = ttyd -o -O -p 8080 dash -c \"cd /var/lib/mympd; bash\"&>/dev/null</dev/null 2>/dev/null
+웹 터미널 - Web Terminal = ttyd -o -O -p 8080 dash -c "cd /var/lib/mympd; bash"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
 전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
