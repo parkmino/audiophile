@@ -23,8 +23,8 @@ $ ssh root@192.168.0.x
 	...
 	deb http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
 	deb-src http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
-## mv /etc/apt/sources.list.d/artik-e2e-source.list /etc/apt/sources.list.d/artik-e2e-source.list.orig
-## mv /etc/apt/sources.list.d/artik-platform-artik710s-sources.list /etc/apt/sources.list.d/artik-platform-artik710s-sources.list.orig
+# mv /etc/apt/sources.list.d/artik-e2e-source.list /etc/apt/sources.list.d/artik-e2e-source.list.orig
+# mv /etc/apt/sources.list.d/artik-platform-artik710s-sources.list /etc/apt/sources.list.d/artik-platform-artik710s-sources.list.orig
 # apt-get update
 	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710s
 # apt-get upgrade
