@@ -187,26 +187,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	 syscmds = true
 	 coverextract = true
 
-# printf 'kr2mpd 1fm'   > '/etc/mympd/syscmds/1KBS 클래식 FM'
-# printf 'kr2mpd 2fm'   > '/etc/mympd/syscmds/2KBS 쿨 FM'
-# printf 'kr2mpd mbcm'  > '/etc/mympd/syscmds/3MBC FM'
-# printf 'kr2mpd mbc4u' > '/etc/mympd/syscmds/4MBC FM4U'
-# printf 'kr2mpd sbsp'  > '/etc/mympd/syscmds/5SBS 파워 FM'
-# printf 'kr2mpd sbsl'  > '/etc/mympd/syscmds/6SBS 러브 FM'
-# touch /etc/mympd/syscmds/7HR
-## printf 'sudo sed -i '/dop/s/^#*//' /etc/mpd.conf.sav' > '/etc/mympd/syscmds/8UPnP - DoP (DSD over PCM)'
-## printf 'sudo sed -i '/dop/s/^/#/'  /etc/mpd.conf.sav' > '/etc/mympd/syscmds/9UPnP - Native'
-## touch /etc/mympd/syscmds/10HR
-## printf 'sudo sed -i '/roon=/s/=.*/=on/'  /etc/default/audio.conf' > '/etc/mympd/syscmds/11Roon Bridge - Enable'
-## printf 'sudo sed -i '/roon=/s/=.*/=off/' /etc/default/audio.conf' > '/etc/mympd/syscmds/12Roon Bridge - Disable'
-## touch /etc/mympd/syscmds/13HR
-# printf 'sudo ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 설정 - Web Settings'
-# printf 'sudo ttyd -o -O -p 8080 bash&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/15웹 터미널 - Web Terminal'
-# touch /etc/mympd/syscmds/16HR
-# printf 'sudo reboot'   > '/etc/mympd/syscmds/17다시 시작 - Reboot'
-# printf 'sudo poweroff' > '/etc/mympd/syscmds/18전원 끄기 - Power off'
-
 # sed -i '/\[syscmds\]/q' /etc/mympd.conf
+
 # sh -c "echo 'HR =' >> /etc/mympd.conf"
 # sh -c "echo 'KBS 클래식 FM = kr2mpd 1fm' >> /etc/mympd.conf"
 # sh -c "echo 'KBS 쿨 FM     = kr2mpd 2fm' >> /etc/mympd.conf"
