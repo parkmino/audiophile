@@ -682,7 +682,6 @@ elif [ "$latest" = "$current" ]; then
  printf "신판\n"
 else
  printf "구판 ($latest)\n"
- read -p "  Update ttyd? [Y/n]" answer
 fi
 }
 
