@@ -25,6 +25,7 @@ elif [ "$1" = ck ]; then
  done
 else
  for i in $(seq 1 $#); do
-  grep -i -A1 "$(eval echo "\$$i")" $folder/available/channels_* | grep -v -e -- | cut -d, -f2- | cut -d- -f2 | cut -d? -f1
+ #grep -i -A1 "$(eval echo "\$$i")" $folder/available/channels_* | grep -v -e -- | cut -d, -f2- | cut -d- -f2 | cut -d? -f1
+  grep -i -A1 "$(eval echo "\$$i")" $folder/available/channels_* | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
  done
 fi
