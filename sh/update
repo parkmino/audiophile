@@ -753,7 +753,11 @@ printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
 else
- msg
+ if [ "$current" = "$(printf ""$current"\n"$latest"" | sort -V | tail -1)" ]; then
+  printf "신판\n"
+ else
+  printf "구판 ("$latest")\n"
+ fi
 fi
 }
 
