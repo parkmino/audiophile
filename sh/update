@@ -130,6 +130,33 @@ else
 fi
 }
 
+ALILEO_LIVE () {
+printf "• 알릴레오 라이브\t\t\t\t"
+url="https://www.youtube.com/playlist?list=PLtAbTqMyJif8u6stf-Rj_zFcj63m6E7mE"
+days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
+ date=$(echo $days | tr -d '.' | tr ' ' '-')
+ diff=$(($(date +%s)-$(date -ud "$date" +%s)))
+ days="$(($diff/60/60/24))일 전"
+fi
+[ "$days" = "1일 전" ] && days="어제"
+if [ -z "$days" ]; then
+ printf "정보 없음\n"
+else
+ printf "$days\n"
+ [ -z "${days##*오늘*}" ] && last=2
+ [ "$days" = "어제" ]     && last=1
+ if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
+  for i in $(seq 1 $last); do
+   printf '  '
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\알릴레오 라이브'.* | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+   printf '   '
+   curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\알릴레오 라이브'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
+  done
+ fi
+fi
+}
+
 ALILEO_PODBBANG () {
 printf "• 알릴레오\t"
 url="http://www.podbbang.com/ch/1769580"
@@ -823,6 +850,7 @@ fi
  DAS		# 다스뵈이다
 #BUNKER1	# 벙커1
  ALILEO		# 알릴레오
+ ALILEO_LIVE	# 알릴레오 라이브
 
 ### Telegram
  TELEGRAM
