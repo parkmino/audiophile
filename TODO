@@ -65,13 +65,14 @@
 
 5. alsa.conf
 
-	$ sudo sh -c "printf 'pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime=2772,#' > /usr/share/alsa/alsa.conf.min"
+	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime=2772  ' > /usr/share/alsa/alsa.conf.min"
 
 6. mpd.conf
 
 	$ sudo nano /etc/mpd.conf.sav
-		#log_file "/dev/null"				# Remove this line
-		 buffer_before_play "10.5596937298022%"#	# no new line
+		#log_file "/dev/null"			# Remove this line
+		 buffer_before_play "10.5596937298022%"	# no new line
+		 ...__					# no new line after two spaces '  '
 
 7. mpd & upmpdcli
 
@@ -128,6 +129,4 @@
 13. Configuration files (mympd, roonbridge, spotifyd, upmpdcli)
 
 	myMPD, RoonBridge, Upmpdcli
-	$ truncate -s -1 ... && sudo sed -i '$s/$/#/' ...
-	Spotifyd
-	$ sed -i '$s/$/\n#/' ...
+	...__	# no new line after two spaces '  '
