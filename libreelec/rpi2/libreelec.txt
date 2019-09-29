@@ -132,6 +132,17 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
 	$ sync
 	$ sudo umount /dev/sdc?
+	
+	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2-patched.img
+	$ sudo fdisk -l /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2-patch.img
+	$ sudo mkdir /mnt/le
+	$ sudo mount -o loop,offset=$(echo $((512*8192))) /home/parkmino/Downloads/LibreELEC-RPi2.arm-9.0.2-patch.img /mnt/le
+	$ sudo rm /mnt/le/SYSTEM*
+	$ sudo cp SYSTEM /mnt/le
+	$ sync
+	$ sudo umount /mnt/le
+	$ sudo rm -rf /mnt/le
+	$ mv 
 
 3. SSH login
 
