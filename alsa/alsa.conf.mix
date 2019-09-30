@@ -73,4 +73,4 @@ type hw
 card $CARD
 hint.description "Direct control device"
 }
-pcm.0{card 0 device 0 subdevice 0 type hw}  defaults.pcm.minperiodtime 2772
+pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772

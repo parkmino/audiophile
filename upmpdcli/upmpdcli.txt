@@ -27,7 +27,7 @@ $ grep checkcontentformat /etc/upmpdcli.conf
 checkcontentformat = 0
 
 $ sudo systemctl disable upmpdcli.service
-$ sudo nano -L /etc/upmpdcli.conf
+$ sudo nano /etc/upmpdcli.conf
 
 [radio KBS 클래식 FM]
 url = http://serpent0.duckdns.org:8088/kbsfm.pls
@@ -75,7 +75,7 @@ artUrl = http://tbs.seoul.kr/common/images/gnb/logo.gif
 
 [radio 국악방송]
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
-artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png  # No new line after two spaces '  '
+artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png  # New line at the end
 
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
