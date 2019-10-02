@@ -48,7 +48,8 @@ eol () {
  sleep 1
  taskset -acp $h_task $(pgrep -x upmpdcli) || true
  ### AirConnect
- [ "$airplay" = on ] && (airconnect &) && sleep 5
+ [ "$airplay" = on ] && airconnect
+ taskset -acp $h_task $(pidof airupnp-aarch64)
  pkill rc.local
 }
 
@@ -67,7 +68,7 @@ spotifyd () {
 
 airconnect () {
  cp /root/airupnp-aarch64 /dev/shm/
-taskset -ap $h_task /dev/shm/nohup /dev/shm/airupnp-aarch64 -l 1000:2000 -Z>/dev/null</dev/null 2>/dev/null
+ /dev/shm/nohup /dev/shm/airupnp-aarch64 -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
