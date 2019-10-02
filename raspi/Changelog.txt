@@ -18,7 +18,7 @@
 14. Upmpdcli OpenHome 국내 라디오 추가.
 15. Upmpdcli Qobuz, Tidal 메뉴 추가.
 16. Z 모뎀 lrzsz 패키지 설치.
-17. airupnp 데몬 실행 (안정성과 속도 개선)
+17. airupnp 데몬 실행 (안정성과 부팅 속도 개선)
 
 19.08 (19-08-06)
 
