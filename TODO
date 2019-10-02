@@ -1,89 +1,26 @@
-1. tts2mpd in place of tts, it should be placed after mpd.
-
-2. hub-ctrl in audio.conf
-
-	$ sudo nano /etc/default/audio.conf
-		...
-		usb2=on
-		usb3=on
-		usb4=on
-		usb5=on
-
-	$ sudo nano /etc/rc.local
-		for i in $(seq 2 5); do
-		 [ usb$i = off ] && /root/hub-ctrl -h 0 -P $i -p 0
-		done
-
-	$ nano ~/audio-config
-		...
-		sudo sed -i '/usb[2-5]=/s/=.*/=off/g' $audio_conf ;;
-
-3. uhubctl in audio.conf
-
-	$ sudo apt-get install uhubctl
-	$ sudo cp uhubctl /root/
-
-	$ sudo nano /etc/default/audio.conf
-		usb=
-
-	$ sudo nano /etc/rc.local
-		[ -n "$usb" ] && /root/uhubctl -a 0 -p "$usb"
-
-	$ nano ~/audio-config
-		sudo sed -i '/usb=/s/=.*/=4,5/' $audio_conf ;;
-
-4. Taskset for roon, spotifyd, airupnp and networkaudiod(hqplyaer naa)
-
-	$ sudo nano /etc/rc.local
-
-		... awk '$2 !~ /migration|mpd|networkaudiod|squeezelite/ {print $1}'
-
-		### Taskset for Raspi
-		for i in RoonBridge spotifyd airupnp-arm networkaudiod squeezelite; do
-		 if [ $m_task -ge 1 ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
-		  taskset -acp 1-$m_task $(pidof $i) || true		# $h_task in place of $m_task
-		 fi
-		done
-
-		### Taskset for Artik710
-		for i in RoonBridge spotifyd airupnp-aarch64 networkaudiod; do
-		 if [ $m_task -gt $s_task ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
-		  taskset -acp $s_task-$m_task $(pidof $i) || true	# $h_task in place of $m_task
-		 #taskset -acp 4-7 $(pidof $i) || true			# 4-6 in place of 4-7
-		 fi
-		done
-
-		### Taskset for LibreELEC
-		until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q ActiveAE); do
-
-		[ $m_task -ge 2 ] && taskset -acp 1-$(($m_task-1)) $pgr_kodi
-		for i in $(pstree -p $pgr_kodi | grep ActiveAE | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1); do
-		 taskset -cp $m_task $i
-		done
-
-		Place mympd ahead of the main taskset
-
-5. alsa.conf
+1. alsa.conf
 
 	$ sudo sh -c "echo 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772' > /usr/share/alsa/alsa.conf.min"
 
-6. mpd.conf
+2. mpd.conf
 
 	$ sudo nano /etc/mpd.conf.sav
 		#log_file "/dev/null"
 		 buffer_before_play "10.5596937298022%"
 		# no new line at the end
 
-7. mpd & upmpdcli
+3. mpd & upmpdcli
 
 	$ sudo nano /etc/rc.local
 		taskset -pc $s_task $pgr_mpd
 		mpd)     taskset -cp $h_task $proc_nr ;;
 		io)      taskset -cp $h_task $proc_nr ;;
+		player)  taskset -cp $s_task $proc_nr ;;
 		decoder) taskset -cp $h_task $proc_nr ;;
+		output)  taskset -cp $m_task $proc_nr ;;
 		taskset -acp $h_task $(pgrep -x upmpdcli) || true
 
-8. sysctl.conf
+4. sysctl.conf
 
 	$ sudo nano /etc/sysctl.conf
 		kernel.sched_min_granularity_ns=229978
@@ -93,43 +30,7 @@
 		kernel.sched_time_avg=6288
 		kernel.sched_shares_window=345997	# only when applicable
 
-9. None scheduler
+5. myMPD
 
-	$ sudo nano /boot/cmdline.txt
-		elevator=noop
 	$ sudo nano /etc/rc.local
-		#echo none | tee /sys/block/*/queue/scheduler
-		for i in $(ls /sys/block/*/queue/scheduler); do
-		 if   echo $(cat $i) | grep -q none; then
-		  echo none > $i
-		 elif echo $(cat $i) | grep -q noop; then
-		  echo noop > $i
-		 fi
-		done
-
-10. systemd
-
-	# nano .config/autostart.sh
-		taskset -cp 1-$(($m_task-1)) $ppid # $m_task
-	$ sudo nano /etc/rc.local
-		for pid in 1 $(pgrep -x rc.local); do
-		 taskset -acp $s_task $pid || true # $m_task
-		done
-
-11. Artik
-
-	# nano /etc/rc.local
 		mympd&</dev/null 2>/dev/null # systemctl start mympd
-
-12. myMPD
-
-	$ sudo touch /etc/mympd/syscmds/0HR
-	$ sudo sh -c "printf 'ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' > '/etc/mympd/syscmds/14웹 설정 - Web Settings'"
-
-13. Spotifyd
-
-	$ sudo sed -i '/shm\/spotifyd/s/-c/--config-path/' /etc/rc.local
-
-14. Configuration files (mympd, roonbridge, spotifyd, upmpdcli)
-
-	# no new line at the end
