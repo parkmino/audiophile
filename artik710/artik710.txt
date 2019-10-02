@@ -179,11 +179,12 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # systemctl daemon-reload
 
 # nano /etc/mympd.conf
-	#host = 127.0.0.1
+	 host = 127.0.0.1
+	 port = 6600
+	 music_directory = /var/lib/mpd/music/
 	 ssl = false
 	#loglevel = 1
 	#user = mympd
-	 mixramp = false
 	 syscmds = true
 	 coverextract = true
 

@@ -43,11 +43,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 3. Kernel option
 
 	$ sudo nano /boot/cmdline.txt
-		root=/dev/mmcblk0p2
+		#root=/dev/mmcblk0p2
 		#console=serial0,115200 console=tty1
+		elevator=noop
 		consoleblank=0
 		smsc95xx.turbo_mode=0
-		elevator=noop
 		selinux=0
 
 4. Localisation
@@ -95,16 +95,17 @@ UPnP/DLNA Audio Render for Raspberry Pi
 8. MPD
 
 	$ sudo apt-get install libcue2 libaudiofile1 libavformat58 libflac8 libid3tag0 libmpdclient2 libupnp13 libcurl3-gnutls
-	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
+	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
 	$ sudo mv mpd /usr/bin/
 	$ sudo mv mpd.conf /etc/mpd.conf.sav
 	$ sudo apt-get install mpc ncmpc
 	$ sudo mkdir /etc/ncmpc
 	$ sudo nano /etc/ncmpc/config
+		host = 127.0.0.1
 
 9. Upmpdcli
 
-10. CIFS & NFS mounting
+10. CIFS & NFS & USB mounting
 
 	$ #sudo apt-get install cifs-utils nfs-common
 	$ sudo mkdir /mnt/cifs /mnt/nfs
@@ -135,14 +136,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ cat /proc/swaps
 	$ sudo systemctl disable dphys-swapfile
-	$ sudo reboot
+	$ sudo swapoff -a
 	$ sudo rm /var/swap
 	# nano /etc/fstab
 		#/var/swap ...
 	# swapoff -a
 	# rm /var/swap
 
-14. USB Mount
+14. USB Mount (Obsolete)
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -234,7 +235,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ chmod +x ~/airupnp*
 
-19. Shairport-sync (AirPlay)
+19. Shairport-sync (AirPlay - Obsolete)
 
 	$ sudo apt-get update
 	$ sudo apt-get install shairport-sync
@@ -282,12 +283,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ #sudo systemctl disable mympd
 	$ sudo nano /etc/mympd.conf
-		 #host = 127.0.0.1
-		  ssl = false
-		 #loglevel = 1
-		 #user = mympd # pi / dietpi
-		  syscmds = true
-		  coverextract = true
+		 host = 127.0.0.1
+		 port = 6600
+		 music_directory = /var/lib/mpd/music/
+		 ssl = false
+		#loglevel = 1
+		#user = mympd
+		 syscmds = true
+		 coverextract = true
 	$ #sudo chown -R pi /var/lib/mympd # dietpi
 	$ #sudo adduser pi mympd # dietpi
 	$ #sudo chomod -R 775 /var/lib/mympd
@@ -303,7 +306,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "echo 'SBS 러브 FM   = kr2mpd sbsl' >> /etc/mympd.conf"
 	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
 	$ sudo sh -c "echo '웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
-	$ sudo sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /home/pi; sudo su pi"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
+	$ sudo sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /home/pi; sudo su pi\"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
 	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
 	$ sudo sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
 	$ sudo sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
@@ -317,7 +320,7 @@ SBS 파워 FM   = kr2mpd sbsp
 SBS 러브 FM   = kr2mpd sbsl
 HR =
 웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /home/pi; sudo su pi"&>/dev/null</dev/null 2>/dev/null
+웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /home/pi; sudo su pi\"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
 전원 끄기 - Power off = sudo poweroff
@@ -336,7 +339,7 @@ HR =
 	# systemctl stop    getty@tty1.service
 	# systemctl disable getty@tty1.service
 
-24. Web interface
+24. Web interface (Obsolete)
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
