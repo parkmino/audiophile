@@ -1,26 +1,14 @@
 1. alsa.conf
 
-	$ sudo sh -c "echo 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772' > /usr/share/alsa/alsa.conf.min"
+	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772\n,#' > /usr/share/alsa/alsa.conf.min"
 
 2. mpd.conf
 
 	$ sudo nano /etc/mpd.conf.sav
 		#log_file "/dev/null"
 		 buffer_before_play "10.5596937298022%"
-		# no new line at the end
 
-3. mpd & upmpdcli
-
-	$ sudo nano /etc/rc.local
-		taskset -pc $s_task $pgr_mpd
-		mpd)     taskset -cp $h_task $proc_nr ;;
-		io)      taskset -cp $h_task $proc_nr ;;
-		player)  taskset -cp $s_task $proc_nr ;;
-		decoder) taskset -cp $h_task $proc_nr ;;
-		output)  taskset -cp $m_task $proc_nr ;;
-		taskset -acp $h_task $(pgrep -x upmpdcli) || true
-
-4. sysctl.conf
+3. sysctl.conf
 
 	$ sudo nano /etc/sysctl.conf
 		kernel.sched_min_granularity_ns=229978
@@ -30,7 +18,11 @@
 		kernel.sched_time_avg=6288
 		kernel.sched_shares_window=345997	# only when applicable
 
-5. myMPD
+4. myMPD
 
 	$ sudo nano /etc/rc.local
 		mympd&</dev/null 2>/dev/null # systemctl start mympd
+
+5. config files
+
+	others    ' #'	# at the end without new line (mpd, upmpdcli, mympd, roon, spotifyd)

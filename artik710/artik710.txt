@@ -202,7 +202,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /root; sudo su\"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
 # sh -c "echo 'HR =' >> /etc/mympd.conf"
 # sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
-# sh -c "printf '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
+# sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
+# sh -c "printf ' #' >> /etc/mympd.conf"
 	
 # sh -c "printf 'HR =
 KBS 클래식 FM = kr2mpd 1fm
@@ -216,7 +217,8 @@ HR =
 웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
+전원 끄기 - Power off = sudo poweroff
+ #' >> /etc/mympd.conf"
 
 # echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 

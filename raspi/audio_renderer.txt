@@ -204,6 +204,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		 exec /bin/bash -c "exec -a $SCRIPT /dev/shm/nohup \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
 		 exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		 fi
+		  #
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
@@ -224,6 +226,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	mixer = ctl.9
 	device_name = Spotifyd
 	bitrate = 320
+	 #
 
 18. AirConnect (AirPlay)
 
@@ -310,6 +313,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
 	$ sudo sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
 	$ sudo sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
+	$ sudo sh -c "printf ' #' >> /etc/mympd.conf"
 
 	$ sudo sh -c "printf 'HR =
 KBS 클래식 FM = kr2mpd 1fm
@@ -324,7 +328,7 @@ HR =
 HR =
 다시 시작 - Reboot    = sudo reboot
 전원 끄기 - Power off = sudo poweroff
-' >> /etc/mympd.conf"
+ #' >> /etc/mympd.conf"
 
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
