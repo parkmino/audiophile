@@ -7,18 +7,19 @@
 03. ALSA 설정 오버홀.
 04. MPD 로그 사용 안 함.
 05. MPD 설정 파일 튜닝.
-06. 커널 스케줄러 튜닝.
-07. audio-config의 '=~ folder' 줄 삭제.
-08. mympd 기본 사용자 사용 (USB 음반 표지 지원)
-09. mympd 5.6.1 업데이트 (긴 주소 깨짐 수정, http://mympd_ip/library/ 음원 파일 지원)
-10. mympd에 오디오 설정(audio-config) 메뉴 추가.
-11. 오디오 설정에 리부팅 옵션 추가.
-12. SBS 라디오 주소 언패드 추가.
-13. 파티션에 PARTUUID 사용.
-14. Upmpdcli OpenHome 국내 라디오 추가.
-15. Upmpdcli Qobuz, Tidal 메뉴 추가.
-16. Z 모뎀 lrzsz 패키지 설치.
-17. airupnp 데몬 실행 (안정성과 부팅 속도 개선)
+06. 설정 파일 튜닝 (upmpdcli, mympd, roon, spotifyd)
+07. 커널 스케줄러 튜닝.
+08. audio-config의 '=~ folder' 줄 삭제.
+09. mympd 기본 사용자 사용 (USB 음반 표지 지원)
+10. mympd 5.6.1 업데이트 (긴 주소 깨짐 수정, http://mympd_ip/library/ 음원 파일 지원)
+11. mympd에 오디오 설정(audio-config) 메뉴 추가.
+12. 오디오 설정에 리부팅 옵션 추가.
+13. SBS 라디오 주소 언패드 추가.
+14. 파티션에 PARTUUID 사용.
+15. Upmpdcli OpenHome 국내 라디오 추가.
+16. Upmpdcli Qobuz, Tidal 메뉴 추가.
+17. Z 모뎀 lrzsz 패키지 설치.
+18. airupnp 데몬 실행 (안정성과 부팅 속도 개선)
 
 19.08 (19-08-06)
 
