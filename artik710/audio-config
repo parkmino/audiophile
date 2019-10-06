@@ -295,32 +295,31 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Bann" 17 70 10 \
-"1"  "Ethernet IP                   유선 IP 설정                 >" \
-"2"  "Wi-Fi client                  무선 연결                    >" \
-"3"  "MPD options                   MPD 옵션                     >" \
-"4"  "UPnP, Roon Bridge, Airplay    UPnP, 룬 브리지, 에어플레이  >" \
-"5"  "Spotify                       스포티파이                   >" \
-"6"  "Upmpdcli Qobuz                Qobuz 설정                   >" \
-"7"  "Upmpdcli Tidal                Tidal 설정                   >" \
-"8"  "Change renderer name          렌더러 이름 바꾸기           >" \
-"9"  "Reboot                        다시 시작" \
-"10" "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Bann" 16 70 9 \
+"1" "Ethernet IP                   유선 IP 설정                 >" \
+"2" "Wi-Fi client                  무선 연결                    >" \
+"3" "MPD options                   MPD 옵션                     >" \
+"4" "UPnP, Roon Bridge, Airplay    UPnP, 룬 브리지, 에어플레이  >" \
+"5" "Spotify                       스포티파이                   >" \
+"6" "Upmpdcli Tidal                Tidal 설정                   >" \
+"7" "Change renderer name          렌더러 이름 바꾸기           >" \
+"8" "Reboot                        다시 시작" \
+"9" "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
 
  case $i in
-  1)  ethernet_ip ;;
-  2)  wifi_client ;;
-  3)  mpd_options ;;
-  4)  upnp_roon_air ;;
-  5)  spotifyd ;;
-  6)  upmpd_qobuz ;;
-  7)  upmpd_tidal ;;
-  8)  renderer_name ;;
-  9)  reboot ;;
-  10) poweroff ;;
+  1) ethernet_ip ;;
+  2) wifi_client ;;
+  3) mpd_options ;;
+  4) upnp_roon_air ;;
+  5) spotifyd ;;
+  q) upmpd_qobuz ;;
+  6) upmpd_tidal ;;
+  7) renderer_name ;;
+  8) reboot ;;
+  9) poweroff ;;
  esac
 done
 

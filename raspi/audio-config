@@ -381,18 +381,17 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 19 61 11 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 18 61 10 \
  "1"  "Audio device           오디오 장치            >" \
  "2"  "USB signal & power     USB 신호와 전원        >" \
  "3"  "MPD options            MPD 옵션               >" \
  "4"  "Renderer name          렌더러 이름 바꾸기     >" \
  "5"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
  "6"  "Spotify                Spotify 설정           >" \
- "7"  "Upmpdcli Qobuz         Qobuz 설정             >" \
- "8"  "Upmpdcli Tidal         Tidal 설정             >" \
- "9"  "Ethernet IP            유선 IP 설정           >" \
- "10" "IP TTS, DBus           IP TTS와 DBus          >" \
- "11" "Raspbian update        Raspbian 업데이트" 3>&1 1>&2 2>&3)
+ "7"  "Upmpdcli Tidal         Tidal 설정             >" \
+ "8"  "Ethernet IP            유선 IP 설정           >" \
+ "9"  "IP TTS, DBus           IP TTS와 DBus          >" \
+ "10" "Raspbian update        Raspbian 업데이트" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
@@ -404,11 +403,11 @@ while true; do
   4)  renderer_name ;;
   5)  roon_airplay ;;
   6)  spotify_conf ;;
-  7)  upmpd_qobuz ;;
-  8)  upmpd_tidal ;;
-  9)  ethernet_ip ;;
-  10) dbus_tts ;;
-  11) sudo apt-get update
+  q)  upmpd_qobuz ;;
+  7)  upmpd_tidal ;;
+  8)  ethernet_ip ;;
+  9)  dbus_tts ;;
+  10) sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
  esac
