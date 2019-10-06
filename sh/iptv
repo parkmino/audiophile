@@ -24,23 +24,25 @@ if [ "$1" = ip ]; then
   done
  done
 elif [ "$1" = ls ]; then
- ls -1 $folder/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.txt
+ ls -1 $folder/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.ls
 elif [ "$1" = ck ]; then
- rm -f $folder/available/*
- echo "$(cat $folder/tvheadend.txt)" | while read line; do
+ rm -f $folder/tvheadend.avl
+ echo "$(cat $folder/tvheadend.ls)" | while read line; do
   printf "$line\t"
   file=$folder/channels_$line.m3u
   curl -s -o /dev/null --connect-timeout 2 -m 3 http://$line:9981/playlist && printf "playlist "
   if ffprobe -v quiet $(grep -m1 ^http:// $file); then
    printf "stream\n"
-   ln -sf $file $folder/available/
+   echo "$file" >> $folder/tvheadend.avl
   else
    printf "\n"
   fi
  done
 else
  for i in $(seq 1 $#); do
- #grep -i -A1 "$(eval echo "\$$i")" $folder/available/channels_* | grep -v -e -- | cut -d, -f2- | cut -d- -f2 | cut -d? -f1
-  grep -i -A1 "$(eval echo "\$$i")" $folder/available/channels_* | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
+  echo "$(cat $folder/tvheadend.avl)" | while read line; do
+  #grep -i -A1 "$(eval echo "\$$i")" "$line" | grep -v -e -- | cut -d, -f2- | cut -d- -f2 | cut -d? -f1
+   grep -i -A1 "$(eval echo "\$$i")" "$line" | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
+  done
  done
 fi
