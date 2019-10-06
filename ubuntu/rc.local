@@ -21,12 +21,12 @@
 #sysctl -w kernel.sched_rt_runtime_us=857422
  sysctl -w kernel.sched_min_granularity_ns=229978
  sysctl -w kernel.sched_wakeup_granularity_ns=388288
- sysctl -w kernel.sched_latency_ns=1394062
+ sysctl -w kernel.sched_latency_ns=1394063
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost_ns=4899004
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
-#sysctl -w kernel.sched_shares_window_ns=345996
+#sysctl -w kernel.sched_shares_window_ns=345997
 #sysctl -w kernel.sched_tunable_scaling=1
 #sysctl -w kernel.sched_time_avg_ms=6288
  sysctl -w kernel.printk="0 0 0 0"
