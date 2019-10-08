@@ -48,8 +48,10 @@ eol () {
  sleep 1
  taskset -acp $h_task $(pgrep -x upmpdcli) || true
  ### AirConnect
- [ "$airplay" = on ] && airconnect
- taskset -acp $h_task $(pidof airupnp-aarch64)
+ if [ "$airplay" = on ]; then
+  airconnect
+  [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-aarch64) || true
+ fi
  pkill rc.local
 }
 
