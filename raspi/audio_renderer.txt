@@ -84,7 +84,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "cat /usr/share/alsa.orig/alsa.conf > /usr/share/alsa/alsa.conf.mix"
 	$ sudo sed -i 's/^[ \t]*//; /^$/d' /usr/share/alsa/alsa.conf.mix
 	$ head -20 /usr/share/alsa/alsa.conf.mix
-	$ sudo nano /usr/share/alsa/alsa.conf.mix
+	$ sudo nano -L /usr/share/alsa/alsa.conf.mix
 	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.min >> /usr/share/alsa/alsa.conf.mix"
 
 	# mv libasound.so.2.0.0.* /usr/lib/arm-linux-gnueabihf/
@@ -197,15 +197,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ #chmod +x roonbridge-installer-linuxarmv8.sh
 	$ #sudo ./roonbridge-installer-linuxarmv8.sh
 
-	$ sudo nano /etc/systemd/system/roonbridge.service
+	$ sudo nano -L /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		 exec /bin/bash -c "exec -a $SCRIPT /dev/shm/nohup \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
 		 exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
-		 fi
-		  #
+		 fi#  
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
@@ -216,7 +215,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
 	$ unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
-	$ nano ~/spotifyd.conf
+	$ nano -L ~/spotifyd.conf
 
 	[global]
 	username = USER
@@ -226,7 +225,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	mixer = ctl.9
 	device_name = Spotifyd
 	bitrate = 320
-	 #
+	#  
 
 18. AirConnect (AirPlay)
 
@@ -313,7 +312,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
 	$ sudo sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
 	$ sudo sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
-	$ sudo sh -c "printf ' #' >> /etc/mympd.conf"
+	$ sudo sh -c "printf '#  ' >> /etc/mympd.conf"
 
 	$ sudo sh -c "printf 'HR =
 KBS 클래식 FM = kr2mpd 1fm
@@ -327,8 +326,7 @@ HR =
 웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /home/pi; sudo su pi\"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff
- #' >> /etc/mympd.conf"
+전원 끄기 - Power off = sudo poweroff#  ' >> /etc/mympd.conf"
 
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
