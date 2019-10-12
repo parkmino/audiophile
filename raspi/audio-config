@@ -38,15 +38,16 @@ i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --
 "12" "HiFiBerry Amp/Amp+" \
 "13" "HiFiBerry DAC" \
 "14" "HiFiBerry DAC+ADC" \
-"15" "HiFiBerry DAC+/DAC+ Pro" \
-"16" "HiFiBerry Digi/Digi+" \
-"17" "HiFiBerry Digi+ Pro" \
-"18" "IQaudIO DAC" \
-"19" "IQaudIO DAC+" \
-"20" "IQaudIO Digi+" \
-"21" "JustBoom DAC" \
-"22" "JustBoom Digi" \
-"23" "RPi DAC" 3>&1 1>&2 2>&3)
+"15" "HifiBerry DAC+ADC Pro" \
+"16" "HiFiBerry DAC+/DAC+ Pro" \
+"17" "HiFiBerry Digi/Digi+" \
+"18" "HiFiBerry Digi+ Pro" \
+"19" "IQaudIO DAC" \
+"20" "IQaudIO DAC+" \
+"21" "IQaudIO Digi+" \
+"22" "JustBoom DAC" \
+"23" "JustBoom Digi" \
+"24" "RPi DAC" 3>&1 1>&2 2>&3)
 
 case $i in
  1)  sound_card_initial ;;
@@ -63,16 +64,16 @@ case $i in
  12) sound_card_selector hifiberry-amp					;;
  13) sound_card_selector hifiberry-dac					;;
  14) sound_card_selector hifiberry-dacplusadc				;;
- 15) sound_card_selector hifiberry-dacplus				;;
- # )  sound_card_selector hifiberry-dacplusadcpro			;;
- 16) sound_card_selector hifiberry-digi					;;
- 17) sound_card_selector hifiberry-digi-pro				;;
- 18) sound_card_selector iqaudio-dac			; iqaudio	;;
- 19) sound_card_selector iqaudio-dacplus		; iqaudio	;;
- 29) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
- 21) sound_card_selector justboom-dac					;;
- 22) sound_card_selector justboom-digi					;;
- 23) sound_card_selector rpi-dac					;;
+ 15) sound_card_selector hifiberry-dacplusadcpro			;;
+ 16) sound_card_selector hifiberry-dacplus				;;
+ 17) sound_card_selector hifiberry-digi					;;
+ 18) sound_card_selector hifiberry-digi-pro				;;
+ 19) sound_card_selector iqaudio-dac			; iqaudio	;;
+ 20) sound_card_selector iqaudio-dacplus		; iqaudio	;;
+ 21) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
+ 22) sound_card_selector justboom-dac					;;
+ 23) sound_card_selector justboom-digi					;;
+ 24) sound_card_selector rpi-dac					;;
 esac
 }
 
