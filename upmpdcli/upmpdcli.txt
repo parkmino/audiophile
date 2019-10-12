@@ -79,7 +79,7 @@ artUrl = http://m.tbs.seoul.kr/common/images/default/tbs_logo.jpg
 
 [radio 국악방송]
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
-artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png#  
+artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png	   
 
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
