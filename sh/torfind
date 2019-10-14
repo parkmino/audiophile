@@ -27,7 +27,14 @@ esac
 
 prog=$(eval echo \$prog_$i)
 
-hour=$((($(date +%s)-$(date +%s -d "$time"))/3600))
-[ $hour -le 0 ] && hour=1
-echo +googler --colorize -t h$hour -n 9 --np "$prog $(date +%y%m%d -d "$time") 토렌트"
-googler --colorize -t h$hour -n 9 --np "$prog $(date +%y%m%d -d "$time") 토렌트" | more
+if [ "$i" -eq 5 ]; then
+ hour=24
+ find="$prog 토렌트"
+else
+ hour=$((($(date +%s)-$(date +%s -d "$time"))/3600))
+ [ $hour -le 0 ] && hour=1
+ find="$prog $(date +%y%m%d -d "$time") 토렌트"
+fi
+
+echo +googler --colorize -t h$hour -n 9 --np "$find"
+googler --colorize -t h$hour -n 9 --np "$find" | more

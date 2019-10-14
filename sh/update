@@ -252,7 +252,7 @@ printf "• BubbleUPnP\t"
 #latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
 latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
 #current=$(date -d "2018-3-6" +%F)
- current=3.3.3
+ current=3.3.4
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -412,7 +412,7 @@ EXTINF () {
 printf "• EXTINF\t"
 url="https://www.extinf.com/category/korean/"
 latest=$(curl $curl_opt "$url" | grep -m1 -o "article id=\"post-[0-9]*" | cut -d\- -f2)
-current="68512"
+current="68676"
 printf "$current"
 printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
 if [ -z "$latest" ]; then
