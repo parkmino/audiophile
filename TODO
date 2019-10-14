@@ -1,8 +1,14 @@
 1. alsa.conf
 
-	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772\t, ' > /usr/share/alsa/alsa.conf.min"
-
 	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772;   ' > /usr/share/alsa/alsa.conf.min"
+
+	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772 ;  ' > /usr/share/alsa/alsa.conf.min" (O)
+
+	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772,   ' > /usr/share/alsa/alsa.conf.min"
+
+	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772 ,  ' > /usr/share/alsa/alsa.conf.min"
+
+	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772#     ' > /usr/share/alsa/alsa.conf.min"
 
 2. Config files
 
@@ -11,3 +17,7 @@
 		tab+triple-space at the end without new line
 
 		line feed+triple-space at the end without new line
+
+		space+line feed+double-space at the end without new line (O)
+
+		#+quintuple-space at the end without new line
