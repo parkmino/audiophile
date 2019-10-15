@@ -270,7 +270,37 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get install squeezelite
 	$ sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
 
-22. myMPD
+22. Plexdrive (Google Drive)
+
+	https://github.com/dweidenfeld/plexdrive
+	https://github.com/dweidenfeld/plexdrive/releases/latest
+
+	$ curl -s $(curl -s https://github.com/dweidenfeld/plexdrive/releases/latest | cut -d\" -f2) | grep -m1 arm7 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
+	$ chomd +x plexdrive-linux-arm7
+	$ sudo mv ./plexdrive-linux-arm7 /usr/bin/plexdrive
+	$ sudo nano /etc/systemd/system/plexdrive.service
+
+	[Unit]
+	Description=Plexdrive
+	AssertPathIsDirectory=/mnt/plexdrive
+	After=network-online.target
+
+	[Service]
+	Type=simple
+	ExecStart=/usr/bin/plexdrive mount -o allow_other -v 2 /mnt/plexdrive
+	ExecStop=/bin/fusermount -u /mnt/plexdrive
+	Restart=on-abort
+
+	[Install]
+	WantedBy=default.target
+	
+	$ sudo systemctl daemon-reload
+	
+	$ sudo mkdir /mnt/plexdrive
+	$ sudo systemctl start plexdrive.service
+	$ sudo systemctl enable plexdrive.service
+
+23. myMPD
 
 	$ sudo apt-get install libmediainfo-dev libmediainfo0v5 lrzsz
 
@@ -331,7 +361,7 @@ HR =
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
 
-23. ttyd
+24. ttyd
 
 	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
 	$ chmod +x ~/ttyd_linux.armhf
@@ -341,7 +371,7 @@ HR =
 	# systemctl stop    getty@tty1.service
 	# systemctl disable getty@tty1.service
 
-24. Web interface (Obsolete)
+25. Web interface (Obsolete)
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
@@ -365,12 +395,12 @@ HR =
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-25. audio-config
+26. audio-config
 
 	$ sudo mv audio-config /usr/bin/
 	$ audio-config
 
-26. audio.conf
+27. audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		# audio.conf
@@ -390,7 +420,7 @@ HR =
 		tts_eng=off
 		usb=
 
-27. Make Image
+28. Make Image
 
 	$ sudo systemctl disable sshd
 	# #dietpi-services disable dropbear
