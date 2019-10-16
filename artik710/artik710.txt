@@ -110,13 +110,17 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ## add-apt-repository ppa:jean-francois-dockes/upnpp1
 ## apt-get update
 ## apt-get install upmpdcli
-# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli_1.4.1-1~ppa1~xenial1_arm64.deb
-# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/libupnpp5_0.17.1-1~ppa1~xenial1_arm64.deb
+# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/libupnpp5_0.17.2-1~ppa1~xenial1_arm64.deb
+# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli_1.4.5-1~ppa1~xenial1_arm64.deb
+##wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli-qobuz_1.4.5-1~ppa1~xenial1_all.deb
+# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli-tidal_1.4.5-1~ppa1~xenial1_all.deb
 # apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp1 python3 python3-requests
-# dpkg -i upmpdcli*.deb libupnpp*.deb
+# dpkg -i libupnpp*.deb upmpdcli_*.deb
 # nano -L /etc/upmpdcli.conf
 	friendlyname = Bann Network Player
 	checkcontentformat = 0
+	[radio ...]
+	...
 ## wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
 # mv ./icon.png /usr/share/upmpdcli/icon.png
 # systemctl restart upmpdcli
