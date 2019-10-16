@@ -251,8 +251,7 @@ BUBBLEUPNP () {
 printf "• BubbleUPnP\t"
 #latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
 latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
-#current=$(date -d "2018-3-6" +%F)
- current=3.3.4
+ current=3.3.5.1
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -647,7 +646,8 @@ fi
 NEWSTAPA () {
 printf "• 뉴스타파\t"
  url="http://download.newstapa.org/api/podcast.xml"
- date=$(curl $curl_opt "$url" | grep -m$((0+2)) '<pubDate>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ')
+ date=$(curl $curl_opt "$url" | grep -m1 '<pubDate>' | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ')
+#date=$(curl $curl_opt "$url" | grep -m$((0+2)) '<pubDate>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ')
 #date=$(curl $curl_opt https://newstapa.org/feed | grep -m1 '<lastBuildDate>' | tail -1 | sed 's/.*<lastBuildDate>//; s/+0000/+0900/' | cut -d\< -f1)
 #date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m1 -A14 preview-title | tail -1 | cut -d\" -f4)
 #date=$(curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m1 pubdate | cut -d\' -f4)
