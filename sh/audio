@@ -22,21 +22,22 @@ case $1 in
   fi
 
   if [ "$1" = hdmi ] || [ "$1" = usb ]; then
-   sudo sed -i '1s/.card../.card.'"$card"'/'    $alsa_conf
-   sudo sed -i '1s/.device../.device.'"$dev"'/' $alsa_conf
+   sudo sed -i '1s/.card../.card '"$card"'/'    $alsa_conf
+   sudo sed -i '1s/.device../.device '"$dev"'/' $alsa_conf
   else
    sudo cp $alsa_orig $alsa_conf
   fi
 
   if grep -q ' \?ctl.default' $alsa_conf; then
-   sudo sed -i '$ s/ \?ctl.*/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+   sudo sed -i '$ s/ \?ctl.*/\nctl.default.type hw ctl.default.card '"$card"'' $alsa_conf
   else
-   sudo sed -i '$ s/$/\nctl.default.type hw ctl.default.card '"$card"'/' $alsa_conf
+   sudo sed -i '1ictl.default.type hw ctl.default.card '"$card"'' $alsa_conf
   fi
-
+  
   amixer -q set IEC958 $IEC958
   echo "* IEC985 is $(amixer get IEC958 | tail -1 | cut -d '[' -f2 | cut -d ']' -f1)"
-  sudo cp $alsa_orig $alsa_conf
+  
+  sudo sed -i '/^ctl.default/d' $alsa_conf
 
   for i in $(awk '/'"$irq"'/{print +$1}' /proc/interrupts); do
    proc="/proc/irq/$i/smp_affinity"

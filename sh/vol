@@ -12,7 +12,7 @@ else
  sudo sed -i '1ictl.default.type hw ctl.default.card '"$card"'' $alsa_conf
 fi
 
-amixer_init() {
+amixer_int_init() {
  mixer="
    'Speaker'		mute
    'Speaker'		0
@@ -22,6 +22,22 @@ amixer_init() {
    'IEC958'		mute
    'Master'		87
    'Master'		unmute
+   'Auto-Mute Mode'	Disabled
+   'Loopback Mixing'	Disabled"
+  #'PCM'		0
+  echo $mixer | xargs -n2 amixer -q set
+}
+
+amixer_hdmi_init() {
+ mixer="
+   'Speaker'		mute
+   'Speaker'		0
+   'Headphone'		mute
+   'Headphone'		0
+   'Bass Speaker'	mute
+   'IEC958'		unmute
+   'Master'		0
+   'Master'		mute
    'Auto-Mute Mode'	Disabled
    'Loopback Mixing'	Disabled"
   #'PCM'		0
@@ -38,7 +54,8 @@ amixer_snd12_set() {
 }
 
 case $1 in
- init) amixer_init ;;
+ int)  amixer_int_init ;;
+ hdmi) amixer_hdmi_init ;;
  mute|unmute|toggle)
   for i in Speaker "Bass Speaker" Master; do
    amixer -q set "$i" $1
@@ -67,7 +84,7 @@ case $1 in
     done
    done
   else
-   amixer_init
+   amixer_int_init
    amixer_snd12_set unmute
    amixer_snd1_set $(echo $vol | cut -d ' ' -f $(($1+1)))
   fi ;;
@@ -75,4 +92,4 @@ case $1 in
 esac
 
 #sudo cp $alsa_orig $alsa_conf
-sudo sed -i '/ctl.default/d' $alsa_conf
+sudo sed -i '/^ctl.default/d' $alsa_conf
