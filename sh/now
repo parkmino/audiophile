@@ -19,11 +19,11 @@ else
  printf " ❔️ "
 fi
 
-printf "$charge%%"
+printf "$charge%%\n"
 
-if [ $charge -lt 20 ] && [ $status != Charging ]; then
- printf " 🙂️\n"
-else
-# printf " 😓"
- printf "\n"
-fi
+#if [ $charge -lt 20 ] && [ $status != Charging ]; then
+# printf " 😓\n"
+#else
+## printf " 🙂️"
+# printf "\n"
+#fi

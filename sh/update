@@ -411,7 +411,7 @@ EXTINF () {
 printf "• EXTINF\t"
 url="https://www.extinf.com/category/korean/"
 latest=$(curl $curl_opt "$url" | grep -m1 -o "article id=\"post-[0-9]*" | cut -d\- -f2)
-current="68709"
+current="68763"
 printf "$current"
 printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
 if [ -z "$latest" ]; then
@@ -850,8 +850,8 @@ fi
  NEWSTAPA	# 뉴스타파
  DAS		# 다스뵈이다
 #BUNKER1	# 벙커1
+ ALILEO_LIVE	# 알릴레오 라이브 (알라뷰)
  ALILEO		# 알릴레오
- ALILEO_LIVE	# 알릴레오 라이브
 
 ### Telegram
  TELEGRAM
