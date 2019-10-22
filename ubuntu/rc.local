@@ -137,7 +137,7 @@ fi
 for i in $(ls /dev/snd/); do
  [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"
 done
-#rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
 modprobe -r psmouse
 
