@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") [blank|dark|bright|0.96|mute|unmute|toggle]"
+ echo "Usage: $(basename "$0") [bl 0~4882|blank|dark|bright|0.96|mute|unmute|toggle]"
 }
 
 [ -z "$1" ] && usage && exit
@@ -10,6 +10,12 @@ monitor=$(xrandr -q | sed -n 2p | cut -d " " -f1)
 vol=Master
 
 case $1 in
+ bl)
+  if [ "$2" -ge 0 ] 2>/dev/null && [ "$2" -le 4882 ] 2>/dev/null; then
+   sudo sh -c "echo $2 > /sys/class/backlight/intel_backlight/brightness"
+  else
+   usage
+  fi ;;
  blank)	  xset dpms force off			     ;;
  dark)	  xrandr --output $monitor --brightness 0.7  ;;
  bright)  xrandr --output $monitor --brightness 1    ;;
