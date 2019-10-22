@@ -209,7 +209,35 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
-17. Spotifyd
+17. Librespot
+
+	https://github.com/librespot-org/librespot
+
+	$ sudo ntpdate pool.ntp.org
+	$ sudo apt-get install build-essential cargo libasound2-dev
+	$ wget https://github.com/librespot-org/librespot/archive/master.zip
+	$ unzip master.zip && rm master.zip
+	$ cd librespot-master
+	$ nano Cargo.toml
+		default = ["librespot-playback/alsa-backend"]
+	$ cargo build --release
+	$ ./target/release/librespot -n Librespot --backend ?
+
+	$ cp ./target/release/librespot /home/pi/
+	$ sudo nano /etc/rc.local
+		 cp /home/pi/librespot /dev/shm/
+		/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.0 --mixer alsa --mixer-card ctl.9 -u USER -p PASS &
+		...
+		for i in RoonBridge librespot spotifyd networkaudiod squeezelite; do
+	$ sudo nano /usr/bin/audio-config
+		spotify_device=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f3)
+		sudo sed -i '/\/dev\/shm\/librespot/s/ -n.*-b / -n '"$input_device"' -b /' /etc/rc.local
+		spotify_user=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f15)
+		sudo sed -i '/\/dev\/shm\/librespot/s/ -u.*-p / -u '"$input_user"' -p /' /etc/rc.local
+		spotify_pwd=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f17)
+		sudo sed -i '/\/dev\/shm\/librespot/s/ -p .*/ -p '"$input_pwd"' \&/' /etc/rc.local
+
+18. Spotifyd
 
 	https://github.com/Spotifyd/spotifydf
 	https://github.com/Spotifyd/spotifyd/releases/latest
@@ -228,7 +256,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	bitrate = 320    
 	  
 
-18. AirConnect (AirPlay)
+19. AirConnect (AirPlay)
 
 	https://github.com/philippe44/AirConnect
 
@@ -238,7 +266,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ chmod +x ~/airupnp*
 
-19. Shairport-sync (AirPlay - Obsolete)
+20. Shairport-sync (AirPlay - Obsolete)
 
 	$ sudo apt-get update
 	$ sudo apt-get install shairport-sync
@@ -261,16 +289,16 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl stop    avahi-daemon shairport-sync
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
-20. HQPlayer NAA
+21. HQPlayer NAA
 	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
 	$ sudo dpkg -i networkaudiod*.deb
 	$ sudo sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
-21. Squeezelite
+22. Squeezelite
 	$ sudo apt-get install squeezelite
 	$ sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
 
-22. Plexdrive (Google Drive)
+23. Plexdrive (Google Drive)
 
 	https://github.com/dweidenfeld/plexdrive
 	https://github.com/dweidenfeld/plexdrive/releases/latest
@@ -300,7 +328,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl start plexdrive.service
 	$ sudo systemctl enable plexdrive.service
 
-23. myMPD
+24. myMPD
 
 	$ sudo apt-get install libmediainfo-dev libmediainfo0v5 lrzsz
 
@@ -361,7 +389,7 @@ HR =
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo systemctl disable mympd
 
-24. ttyd
+25. ttyd
 
 	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
 	$ chmod +x ~/ttyd_linux.armhf
@@ -371,7 +399,7 @@ HR =
 	# systemctl stop    getty@tty1.service
 	# systemctl disable getty@tty1.service
 
-25. Web interface (Obsolete)
+26. Web interface (Obsolete)
 
 	$ sudo apt-get install lighttpd
 	$ #sudo systemctl disable lighttpd.service
@@ -395,12 +423,12 @@ HR =
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-26. audio-config
+27. audio-config
 
 	$ sudo mv audio-config /usr/bin/
 	$ audio-config
 
-27. audio.conf
+28. audio.conf
 
 	$ sudo nano /etc/default/audio.conf
 		# audio.conf
@@ -420,7 +448,7 @@ HR =
 		tts_eng=off
 		usb=
 
-28. Make Image
+29. Make Image
 
 	$ sudo systemctl disable sshd
 	# #dietpi-services disable dropbear
