@@ -117,7 +117,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp1 python3 python3-requests
 # dpkg -i libupnpp*.deb upmpdcli_*.deb
 # nano -L /etc/upmpdcli.conf
-	friendlyname = Bann Network Player
+	friendlyname = Bann Audio Sylphid Network Player
 	checkcontentformat = 0
 	[radio ...]
 	...
