@@ -1,9 +1,0 @@
-#!/bin/sh
-
-for i in $(seq 1 600); do
- url="http://www.everyon.tv/main/out_video.etv?chNum=$i"
- ch_name="$(curl -s "$url" | grep -m1 ch_name | cut -d\" -f2)"
- printf "\33[2K\r$url"\#"$ch_name"
- [ -n "$ch_name" ] && printf \\n
- [ $i -eq 600 ] && ! [ -n "$ch_name" ] && printf "\r\033[2K"
-done

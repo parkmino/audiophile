@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -n "$1" ] && torrent="$1" || torrent=torrentwal #torrentkim torrenthaja torrentboja torrentwal
+[ -n "$1" ] && torrent="$1" || torrent=torrentqq #torrentkim torrenthaja torrentboja torrentwal torrentqq
 
 if [ $torrent = torrentkim ]; then
  url="https://torrentkim.org/torrent_movie/torrent1.htm"
@@ -39,6 +39,15 @@ elif [ $torrent = torrentwal ]; then
  for i in $(seq 1 10); do
   printf "%2d.%s\n" $i "$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')"
   printf "    $url$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
+ done
+elif [ $torrent = torrentqq ]; then
+ url="https://torrentqq4.com"
+ printf "\n%s\n\n" $url
+ ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
+ url="https://torrentqq4.com/torrent/mov.html"
+ for i in $(seq 1 10); do
+  printf "%2d.%s\n" $i "$(curl -s "$url" | grep -o '주간 인기순위.*' | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)"
+ printf "    $(curl -s "$url" | grep -o '주간 인기순위.*' | sed 's/<a href=/\n/g' | head -$((i+2)) | tail -1 | cut -d\" -f2)\n"
  done
 else
  echo "$1 is not supported"

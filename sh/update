@@ -196,7 +196,7 @@ ALSA () {
 ANDROID_X86 () {
 printf "• Android-x86\t"
 latest=$(curl $curl_opt https://www.android-x86.org/releases.html | grep -o "ReleaseNote [0-9.rcRC-]*" | head -1 | cut -d' ' -f2-)
-current=$(ls -d /home/parkmino/Downloads/android*/ | head -1 | cut -d\/ -f5 | cut -d\- -f3-)
+current=$(ls -d /home/parkmino/Downloads/android*/ | tail -1 | cut -d\/ -f5 | cut -d\- -f3-)
 printf "$current\t\t\t\t"
 if [ -z "$latest" ]; then
  printf "정보 없음\n"
@@ -411,7 +411,7 @@ EXTINF () {
 printf "• EXTINF\t"
 url="https://www.extinf.com/category/korean/"
 latest=$(curl $curl_opt "$url" | grep -m1 -o "article id=\"post-[0-9]*" | cut -d\- -f2)
-current="68843"
+current="68967"
 printf "$current"
 printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
 if [ -z "$latest" ]; then
