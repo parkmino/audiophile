@@ -64,11 +64,9 @@ roon_bridge () {
 }
 
 spotifyd () {
-#cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
-#sleep 1
-#/dev/shm/nohup /dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
- cp /home/pi/librespot /dev/shm/
-/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.0 --mixer alsa --mixer-card ctl.9 &
+ cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
+ sleep 1
+/dev/shm/nohup /dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
 }
 
 airconnect () {
@@ -178,7 +176,7 @@ fi
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Spotify
-[ "$spotify" = on ] && (spotifyd &) # && sleep 3
+[ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### Taskset
 [ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
@@ -186,7 +184,7 @@ for pid in 1 $(pgrep -x rc.local); do
  taskset -acp $s_task $pid || true
 done
 
-for i in RoonBridge librespot spotifyd networkaudiod squeezelite; do
+for i in RoonBridge spotifyd networkaudiod squeezelite; do
  if [ $m_task -ge 1 ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
   taskset -acp 1-$m_task $(pidof $i) || true
  fi

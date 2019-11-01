@@ -208,7 +208,7 @@ exitstatus=$?
 [ "$exitstatus" != 0 ] && return
 
 case $i in
- 1) spotify_device=$(grep device_name $spotifyd_conf | cut -d' ' -f3)
+ 1) spotify_device=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f3)
     input_device=$(whiptail --title "Spotify device name / Spotify 장치 이름" --inputbox "\
 
 Input Spotify device name.   Spotify 장치 이름을 입력합니다.\
@@ -217,30 +217,30 @@ Input Spotify device name.   Spotify 장치 이름을 입력합니다.\
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_device" ]; then
-      sudo sed -i '/device_name/s/=.*/= '"$input_device"'/' $spotifyd_conf
+      sudo sed -i '/\/dev\/shm\/librespot/s/ -n.*-b / -n '"$input_device"' -b /' /etc/rc.local
      fi
     fi ;;
- 2) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
+ 2) spotify_user=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f15)
     input_user=$(whiptail --title "Spotify username / Spotify 사용자" --inputbox "\
 
 Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 58 $spotify_user 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
-      sudo sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
+      sudo sed -i '/\/dev\/shm\/librespot/s/ -u.*-p / -u '"$input_user"' -p /' /etc/rc.local
       sudo sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
       sudo sed -i '/spotify/s/=.*/=off/' $audio_conf
      fi
     fi ;;
- 3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
+ 3) spotify_pwd=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f17)
     input_pwd=$(whiptail --title "Spotify password / Spotify 비밀번호" --inputbox "\
 
 Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
-      sudo sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
+      sudo sed -i '/\/dev\/shm\/librespot/s/ -p .*/ -p '"$input_pwd"' \&/' /etc/rc.local
       sudo sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
       sudo sed -i '/spotify/s/=.*/=off/' $audio_conf
@@ -251,16 +251,14 @@ esac
 done
 }
 
-roon_spotify_airplay () {
-i=$(whiptail --title "Roon, Spotify, AirPlay / 룬, 스포티파이, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 3 \
+roon_airplay () {
+i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 59 2 \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
-"spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
- [[ $i =~ spotify ]] && sudo sed -i '/spotify=/s/=.*/=on/' $audio_conf || sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf
  [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
@@ -384,16 +382,17 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 17 62 9 \
- "1"  "Audio device             오디오 장치                 >" \
- "2"  "USB signal & power       USB 신호와 전원             >" \
- "3"  "MPD options              MPD 옵션                    >" \
- "4"  "Renderer name            렌더러 이름 바꾸기          >" \
- "5"  "Roon, Spotify, AirPlay   룬, 스포티파이, 에어플레이  >" \
- "6"  "Upmpdcli Tidal           Tidal 설정                  >" \
- "7"  "Ethernet IP              유선 IP 설정                >" \
- "8"  "IP TTS, DBus             IP TTS와 DBus               >" \
- "9"  "Raspbian update          Raspbian 업데이트" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 18 61 10 \
+ "1"  "Audio device           오디오 장치            >" \
+ "2"  "USB signal & power     USB 신호와 전원        >" \
+ "3"  "MPD options            MPD 옵션               >" \
+ "4"  "Renderer name          렌더러 이름 바꾸기     >" \
+ "5"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
+ "6"  "Spotify                Spotify 설정           >" \
+ "7"  "Upmpdcli Tidal         Tidal 설정             >" \
+ "8"  "Ethernet IP            유선 IP 설정           >" \
+ "9"  "IP TTS, DBus           IP TTS와 DBus          >" \
+ "10" "Raspbian update        Raspbian 업데이트" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
@@ -403,13 +402,13 @@ while true; do
   2)  usb_signal_power ;;
   3)  mpd_options ;;
   4)  renderer_name ;;
-  5)  roon_spotify_airplay ;;
-  s)  spotify_conf ;;
+  5)  roon_airplay ;;
+  6)  spotify_conf ;;
   q)  upmpd_qobuz ;;
-  6)  upmpd_tidal ;;
-  7)  ethernet_ip ;;
-  8)  dbus_tts ;;
-  9)  sudo ntpdate pool.ntp.org
+  7)  upmpd_tidal ;;
+  8)  ethernet_ip ;;
+  9)  dbus_tts ;;
+  10) sudo ntpdate pool.ntp.org
       sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;

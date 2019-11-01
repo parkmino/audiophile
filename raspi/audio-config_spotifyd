@@ -251,16 +251,14 @@ esac
 done
 }
 
-roon_spotify_airplay () {
-i=$(whiptail --title "Roon, Spotify, AirPlay / 룬, 스포티파이, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 3 \
+roon_airplay () {
+i=$(whiptail --title "Roon Bridge, AirPlay / 룬 브리지, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 59 2 \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
-"spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
- [[ $i =~ spotify ]] && sudo sed -i '/spotify=/s/=.*/=on/' $audio_conf || sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf
  [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
@@ -384,16 +382,17 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 17 62 9 \
- "1"  "Audio device             오디오 장치                 >" \
- "2"  "USB signal & power       USB 신호와 전원             >" \
- "3"  "MPD options              MPD 옵션                    >" \
- "4"  "Renderer name            렌더러 이름 바꾸기          >" \
- "5"  "Roon, Spotify, AirPlay   룬, 스포티파이, 에어플레이  >" \
- "6"  "Upmpdcli Tidal           Tidal 설정                  >" \
- "7"  "Ethernet IP              유선 IP 설정                >" \
- "8"  "IP TTS, DBus             IP TTS와 DBus               >" \
- "9"  "Raspbian update          Raspbian 업데이트" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 18 61 10 \
+ "1"  "Audio device           오디오 장치            >" \
+ "2"  "USB signal & power     USB 신호와 전원        >" \
+ "3"  "MPD options            MPD 옵션               >" \
+ "4"  "Renderer name          렌더러 이름 바꾸기     >" \
+ "5"  "Roon Bridge, AirPlay   룬 브리지, 에어플레이  >" \
+ "6"  "Spotify                Spotify 설정           >" \
+ "7"  "Upmpdcli Tidal         Tidal 설정             >" \
+ "8"  "Ethernet IP            유선 IP 설정           >" \
+ "9"  "IP TTS, DBus           IP TTS와 DBus          >" \
+ "10" "Raspbian update        Raspbian 업데이트" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
@@ -403,13 +402,13 @@ while true; do
   2)  usb_signal_power ;;
   3)  mpd_options ;;
   4)  renderer_name ;;
-  5)  roon_spotify_airplay ;;
-  s)  spotify_conf ;;
+  5)  roon_airplay ;;
+  6)  spotify_conf ;;
   q)  upmpd_qobuz ;;
-  6)  upmpd_tidal ;;
-  7)  ethernet_ip ;;
-  8)  dbus_tts ;;
-  9)  sudo ntpdate pool.ntp.org
+  7)  upmpd_tidal ;;
+  8)  ethernet_ip ;;
+  9)  dbus_tts ;;
+  10) sudo ntpdate pool.ntp.org
       sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
