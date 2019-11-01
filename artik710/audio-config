@@ -6,7 +6,7 @@ spotifyd_conf=/etc/spotifyd.conf
 audio_conf=/etc/default/audio.conf
 
 ethernet_ip () {
-i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 45 2 \
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
@@ -18,7 +18,7 @@ case $i in
 
 Input Static IP address to use.       사용할 수동 IP를 입력합니다.
 Current IP is listed below.           아래는 현재 주소입니다.
-Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -z "$user_ip" ]; then
@@ -46,7 +46,7 @@ esac
 }
 
 wifi_client () {
-i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 50 2 \
+i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 50 2 \
 "1" "Enable  Wi-Fi       무선 연결        >" \
 "2" "Disable Wi-Fi       무선 연결 안 함" 3>&1 1>&2 2>&3)
 #"0" "Scan    Wi-Fi       무선 검색" \
@@ -55,11 +55,11 @@ i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Select/선택" --ok-
 
 case $i in
  0) wpa_cli -iwlan0 scan && echo "$(wpa_cli scan_results)" > ~/scan_wifi.txt
-    whiptail --title "Scan Wi-Fi / 무선 검색" --scrolltext --textbox ~/scan_wifi.txt --ok-button "OK/확인" --backtitle "Bann" 18 75 ;;
+    whiptail --title "Scan Wi-Fi / 무선 검색" --scrolltext --textbox ~/scan_wifi.txt --ok-button "OK/확인" --backtitle "Bann Audio Sylphid Network Player" 18 75 ;;
  1) wifi=$(whiptail --title "Wi-Fi Client / 무선 연결" --inputbox "\
 
 Input AP and password to use.   공유기와 비밀번호를 입력합니다.
-Use space in between.           사이에 빈 칸을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 11 67 "AP password" 3>&1 1>&2 2>&3)
+Use space in between.           사이에 빈 칸을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 11 67 "AP password" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      ap=$(echo "$wifi" | cut -d " " -f1)
@@ -82,7 +82,7 @@ esac
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 11 70 4 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 11 70 4 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
 "pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
@@ -97,17 +97,15 @@ if [ "$exitstatus" = 0 ]; then
 fi
 }
 
-upnp_roon_air () {
-i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 59 3 \
-"upnp"      "Enable UPnP          UPnP 사용" $(grep -q 'upnp=on' $audio_conf && echo ON || echo OFF) \
-"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
-"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+airplay_roon () {
+i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 9 59 2 \
+"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ upnp ]] && sed -i '/upnp=/s/=.*/=on/' $audio_conf || sed -i '/upnp=/s/=.*/=off/' $audio_conf
- [[ $i =~ roon ]] && sed -i '/roon=/s/=.*/=on/' $audio_conf || sed -i '/roon=/s/=.*/=off/' $audio_conf
  [[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
+ [[ $i =~ roon ]] && sed -i '/roon=/s/=.*/=on/' $audio_conf || sed -i '/roon=/s/=.*/=off/' $audio_conf
 fi
 }
 
@@ -118,7 +116,7 @@ i=$(whiptail --title "Spotify / Spotify 설정" --menu "\
 Select/선택
 
     To disable spotify, just remove username or password.
-  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 14 66 3 \
+  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 14 66 3 \
 "1"  "Spotify ┬ device name     장치 이름     >" \
 "2"  "        │ username        사용자        >" \
 "3"  "        └ password        비밀번호      >" 3>&1 1>&2 2>&3)
@@ -130,7 +128,7 @@ case $i in
  1) spotify_device=$(grep device_name $spotifyd_conf | cut -d' ' -f3)
     input_device=$(whiptail --title "Spotify device name / Spotify 장치 이름" --inputbox "\
 
-Input Spotify device name.   Spotify 장치 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 64 $spotify_device 3>&1 1>&2 2>&3)
+Input Spotify device name.   Spotify 장치 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 64 $spotify_device 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_device" ]; then
@@ -140,7 +138,7 @@ Input Spotify device name.   Spotify 장치 이름을 입력합니다." --ok-but
  2) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
     input_user=$(whiptail --title "Spotify username / Spotify 사용자" --inputbox "\
 
-Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 58 $spotify_user 3>&1 1>&2 2>&3)
+Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 58 $spotify_user 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
@@ -153,7 +151,7 @@ Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK
  3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
     input_pwd=$(whiptail --title "Spotify password / Spotify 비밀번호" --inputbox "\
 
-Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
+Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
@@ -172,7 +170,7 @@ renderer_name () {
  current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3)
  i=$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
 
-Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 9 67 $current_name 3>&1 1>&2 2>&3)
+Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 9 67 $current_name 3>&1 1>&2 2>&3)
  [ "$i" != $current_name ] && [ "$i" != "" ] && sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
 }
 
@@ -183,7 +181,7 @@ i=$(whiptail --title "Upmpdcli Qobuz / Qobuz 설정" --menu "\
 Select/선택
 
     To disable Qobuz, just remove username or password.
-   사용자나 비밀번호를 지우면 Qobuz를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 14 63 3 \
+   사용자나 비밀번호를 지우면 Qobuz를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 14 63 3 \
 "1"  "Qobuz ┬ username        사용자        >" \
 "2"  "      │ password        비밀번호      >" \
 "3"  "      └ Format ID       포맷 ID       >" 3>&1 1>&2 2>&3)
@@ -195,7 +193,7 @@ case $i in
  1) qobuz_user=$(grep "qobuzuser =" $upmpdcli_conf | cut -d' ' -f3-)
     input_user=$(whiptail --title "Qobuz username / Qobuz 사용자" --inputbox "\
 
-Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 54 "$qobuz_user" 3>&1 1>&2 2>&3)
+Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 54 "$qobuz_user" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
@@ -209,7 +207,7 @@ Input Qobuz username.   Qobuz 사용자를 입력합니다." --ok-button "OK/확
  2) qobuz_pwd=$(grep "qobuzpass =" $upmpdcli_conf | cut -d' ' -f3-)
     input_pwd=$(whiptail --title "Qobuz password / Qobuz 비밀번호" --inputbox "\
 
-Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 56 "$qobuz_pwd" 3>&1 1>&2 2>&3)
+Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 56 "$qobuz_pwd" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
@@ -220,7 +218,7 @@ Input Qobuz password.   Qobuz 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/qobuz/qobuz-app.py ] && echo "Uninstalling upmpdcli-qobuz..." && sudo dpkg -r upmpdcli-qobuz
      fi
     fi ;;
- 3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" --default-item 3 11 52 3 \
+ 3) i=$(whiptail --title "Qobuz format ID / Qobuz 포맷 ID" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" --default-item 3 11 52 3 \
 "1" " 5 - mp3/320" \
 "2" " 7 - FLAC" \
 "3" "27 - hi-res" 3>&1 1>&2 2>&3)
@@ -242,7 +240,7 @@ i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
 Select/선택
 
     To disable Tidal, just remove username or password.
-   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 14 63 3 \
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 14 63 3 \
 "1"  "Tidal ┬ username        사용자        >" \
 "2"  "      │ password        비밀번호      >" \
 "3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
@@ -254,7 +252,7 @@ case $i in
  1) tidal_user=$(grep "tidaluser =" $upmpdcli_conf | cut -d' ' -f3-)
     input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
 
-Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
+Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
@@ -268,7 +266,7 @@ Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확
  2) tidal_pwd=$(grep "tidalpass =" $upmpdcli_conf | cut -d' ' -f3-)
     input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
 
-Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
+Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
@@ -279,7 +277,7 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
      fi
     fi ;;
- 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann" --default-item 3 11 52 3 \
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" --default-item 3 11 52 3 \
 "1" "low" \
 "2" "high" \
 "3" "loseless" 3>&1 1>&2 2>&3)
@@ -295,35 +293,31 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Bann" 16 70 9 \
-"1" "Ethernet IP                   유선 IP 설정                 >" \
-"2" "Wi-Fi client                  무선 연결                    >" \
-"3" "MPD options                   MPD 옵션                     >" \
-"4" "UPnP, Roon Bridge, Airplay    UPnP, 룬 브리지, 에어플레이  >" \
-"5" "Spotify                       스포티파이                   >" \
-"6" "Upmpdcli Tidal                Tidal 설정                   >" \
-"7" "Change renderer name          렌더러 이름 바꾸기           >" \
-"8" "Reboot                        다시 시작" \
-"9" "Power off                     전원 끄기" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Bann Audio Sylphid Network Player" 14 60 6 \
+"1" "MPD options            MPD 옵션               >" \
+"2" "Change renderer name   렌더러 이름 바꾸기     >" \
+"3" "AirPlay, Roon Bridge   에어플레이, 룬 브리지  >" \
+"4" "Spotify                스포티파이             >" \
+"5" "Upmpdcli Tidal         Upmpdcli 타이달 설정   >" \
+"6" "Power off              전원 끄기" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
 
  case $i in
-  1) ethernet_ip ;;
-  2) wifi_client ;;
-  3) mpd_options ;;
-  4) upnp_roon_air ;;
-  5) spotifyd ;;
+  e) ethernet_ip ;;
+  w) wifi_client ;;
+  1) mpd_options ;;
+  2) renderer_name ;;
+  3) airplay_roon ;;
+  4) spotifyd ;;
   q) upmpd_qobuz ;;
-  6) upmpd_tidal ;;
-  7) renderer_name ;;
-  8) reboot ;;
-  9) poweroff ;;
+  5) upmpd_tidal ;;
+  6) poweroff ;;
  esac
 done
 
-if (whiptail --title "Reboot / 다시 시작" --backtitle "Bann" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+if (whiptail --title "Reboot / 다시 시작" --backtitle "Bann Audio Sylphid Network Player" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
   reboot is necessary.    다시 시작해야 합니다.
 
   Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
