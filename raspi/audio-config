@@ -82,7 +82,7 @@ i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
 Select/선택
                 [USB ] [USB4]
           [LAN] [USB3] [USB5]
-         =====================(RasPi 1B+|2B|3B|3B+ Back Port/뒷면)
+         =====================(RasPi 1B+|2B|3B Back Port/뒷면)
          USB3 is recommended for DAC    DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 16 75 4 \
 "1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
 "2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \

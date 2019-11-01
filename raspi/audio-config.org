@@ -139,7 +139,7 @@ echo -n "
 
         {USB } {USB4}
   {LAN} {USB3} {USB5}
- =====================[RasPi 1B+|2B|3B|3B+ Back Port/뒷면]
+ =====================[RasPi 1B+|2B|3B Back Port/뒷면]
      USB3 is recommended for DAC/DAC은 USB3을 추천합니다
 
 (1) Enable  All USB Signal & Power  (1) 모든 USB 신호와 전원 켜기 (기본값)
