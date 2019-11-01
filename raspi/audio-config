@@ -192,76 +192,17 @@ if [ "$exitstatus" = 0 ]; then
 fi
 }
 
-spotify_conf () {
-while true; do
-
-i=$(whiptail --title "Spotify / Spotify 설정" --menu "\
-Select/선택
-
-    To disable spotify, just remove username or password.
-  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 14 66 3 \
-"1"  "Spotify ┬ device name     장치 이름     >" \
-"2"  "        │ username        사용자        >" \
-"3"  "        └ password        비밀번호      >" 3>&1 1>&2 2>&3)
-
-exitstatus=$?
-[ "$exitstatus" != 0 ] && return
-
-case $i in
- 1) spotify_device=$(grep device_name $spotifyd_conf | cut -d' ' -f3)
-    input_device=$(whiptail --title "Spotify device name / Spotify 장치 이름" --inputbox "\
-
-Input Spotify device name.   Spotify 장치 이름을 입력합니다.\
-
-(without space)              (빈칸 없이)" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 64 $spotify_device 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_device" ]; then
-      sudo sed -i '/device_name/s/=.*/= '"$input_device"'/' $spotifyd_conf
-     fi
-    fi ;;
- 2) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
-    input_user=$(whiptail --title "Spotify username / Spotify 사용자" --inputbox "\
-
-Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 58 $spotify_user 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_user" ]; then
-      sudo sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
-      sudo sed -i '/spotify/s/=.*/=on/'  $audio_conf
-     else
-      sudo sed -i '/spotify/s/=.*/=off/' $audio_conf
-     fi
-    fi ;;
- 3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
-    input_pwd=$(whiptail --title "Spotify password / Spotify 비밀번호" --inputbox "\
-
-Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 60 $spotify_pwd 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_pwd" ]; then
-      sudo sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
-      sudo sed -i '/spotify/s/=.*/=on/'  $audio_conf
-     else
-      sudo sed -i '/spotify/s/=.*/=off/' $audio_conf
-     fi
-    fi ;;
-esac
-
-done
-}
-
-roon_spotify_airplay () {
-i=$(whiptail --title "Roon, Spotify, AirPlay / 룬, 스포티파이, 에어플레이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 3 \
+airplay_roon_spotify () {
+i=$(whiptail --title "AirPlay, Roon, Spotify / 에어플레이, 룬, 스포티파이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 3 \
+"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
-"spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) \
-"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
  [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
  [[ $i =~ spotify ]] && sudo sed -i '/spotify=/s/=.*/=on/' $audio_conf || sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf
- [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
 fi
 }
 
@@ -389,7 +330,7 @@ while true; do
  "2"  "USB signal & power       USB 신호와 전원             >" \
  "3"  "MPD options              MPD 옵션                    >" \
  "4"  "Renderer name            렌더러 이름 바꾸기          >" \
- "5"  "Roon, Spotify, AirPlay   룬, 스포티파이, 에어플레이  >" \
+ "5"  "Airplay, Roon, Spotify   에어플레이, 룬, 스포티파이  >" \
  "6"  "Upmpdcli Tidal           Tidal 설정                  >" \
  "7"  "Ethernet IP              유선 IP 설정                >" \
  "8"  "IP TTS, DBus             IP TTS와 DBus               >" \
@@ -403,8 +344,7 @@ while true; do
   2)  usb_signal_power ;;
   3)  mpd_options ;;
   4)  renderer_name ;;
-  5)  roon_spotify_airplay ;;
-  s)  spotify_conf ;;
+  5)  airplay_roon_spotify ;;
   q)  upmpd_qobuz ;;
   6)  upmpd_tidal ;;
   7)  ethernet_ip ;;
