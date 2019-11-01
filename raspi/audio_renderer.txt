@@ -197,9 +197,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ #chmod +x roonbridge-installer-linuxarmv8.sh
 	$ #sudo ./roonbridge-installer-linuxarmv8.sh
 
-	$ sudo nano -L /etc/systemd/system/roonbridge.service
+	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
-	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
+	$ sudo nano -L /opt/RoonBridge/Bridge/RoonBridge
 		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		 exec /bin/bash -c "exec -a $SCRIPT /dev/shm/nohup \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
@@ -477,3 +477,8 @@ HR =
 	$ sudo mv pishrink.sh /usr/local/bin
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
+
+30. Disable Bluetooth UART for RPI3
+
+	 $ sudo systemctl disable hciuart
+	#$ printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
