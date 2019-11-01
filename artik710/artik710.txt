@@ -296,3 +296,12 @@ cf)
 https://oinkzwurgl.org/hacking/bash_cgi/
 http://www.team2053.org/docs/bashcgi/postdata.html
 https://marc.waeckerlin.org/computer/blog/parsing_of_query_string_in_bash_cgi_scripts
+
+LED
+https://developer.artik.io/documentation/artik/tutorials/blink-an-led.html
+– Red  LED : sysfs GPIO 28 on ARTIK 530/710 (LED400)
+– Blue LED : sysfs GPIO 38 on ARTIK 530/710 (LED401)
+# echo 38 > /sys/class/gpio/export
+# ls ls /sys/class/gpio
+# echo out > /sys/class/gpio/gpio38/direction
+# echo 1 > /sys/class/gpio/gpio38/value
