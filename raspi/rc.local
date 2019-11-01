@@ -52,6 +52,7 @@ eol () {
  /home/pi/llctl f0 l0 d0 || true
  echo none > /sys/class/leds/led0/trigger
  echo 0    > /sys/class/leds/led0/brightness
+ sleep 1
  [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
  pkill rc.local
 }
