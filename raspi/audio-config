@@ -325,16 +325,16 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 17 62 9 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 17 66 9 \
  "1"  "Audio device             오디오 장치                 >" \
  "2"  "USB signal & power       USB 신호와 전원             >" \
  "3"  "MPD options              MPD 옵션                    >" \
- "4"  "Renderer name            렌더러 이름 바꾸기          >" \
+ "4"  "Change renderer name     렌더러 이름 바꾸기          >" \
  "5"  "Airplay, Roon, Spotify   에어플레이, 룬, 스포티파이  >" \
- "6"  "Upmpdcli Tidal           Tidal 설정                  >" \
+ "6"  "Upmpdcli Tidal           Upmpdcli 타이달  설정       >" \
  "7"  "Ethernet IP              유선 IP 설정                >" \
  "8"  "IP TTS, DBus             IP TTS와 DBus               >" \
- "9"  "Raspbian update          Raspbian 업데이트" 3>&1 1>&2 2>&3)
+ "9"  "Raspbian update          라즈비안 업데이트" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
