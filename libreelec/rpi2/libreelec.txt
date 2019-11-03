@@ -101,7 +101,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$  cp ../copy/*.pls etc/
 	$ #cp -r ../../plugin.audio.kr2kodi etc/
 	$ #cp -r ../../kodi/plugin.video.{ktv2kodi,kut2kodi} etc/
-	$  cp ../../../kodi/plugin.{audio.kr2kodi,audio.kpodcast,video.klive}.zip etc/
+	$  cp ../../kodi/plugin.{audio.kr2kodi,audio.kpodcast,video.klive}.zip etc/
 	$ #cp ../../kodi/plugin.video.{ktv2kodi,kut2kodi}.zip etc/
 	$  cp ../copy/libprocps.so.7 usr/lib/
 	$  cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
