@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -n "$1" ] && torrent="$1" || torrent=torrentqq #torrentkim torrenthaja torrentboja torrentwal torrentqq
+[ -n "$1" ] && torrent="$1" || torrent=torrentwal #torrentkim torrenthaja torrentboja torrentwal torrentqq
 
 if [ $torrent = torrentkim ]; then
  url="https://torrentkim.org/torrent_movie/torrent1.htm"
