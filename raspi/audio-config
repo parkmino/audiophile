@@ -155,7 +155,7 @@ esac
 }
 
 dbus_tts () {
-i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 63 3 \
+i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 63 3 \
 "tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
 "eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) \
 "dbus"   "Enable DBus             DBus 사용" $(grep -q '# dbus' /etc/rc.local && echo OFF || echo ON) 3>&1 1>&2 2>&3)
@@ -327,13 +327,13 @@ done
 while true; do
  i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 17 66 9 \
  "1"  "Audio device             오디오 장치                 >" \
- "2"  "USB signal & power       USB 신호와 전원             >" \
- "3"  "MPD options              MPD 옵션                    >" \
- "4"  "Change renderer name     렌더러 이름 바꾸기          >" \
- "5"  "Airplay, Roon, Spotify   에어플레이, 룬, 스포티파이  >" \
- "6"  "Upmpdcli Tidal           Upmpdcli 타이달  설정       >" \
+ "2"  "MPD options              MPD 옵션                    >" \
+ "3"  "Change renderer name     렌더러 이름 바꾸기          >" \
+ "4"  "Airplay, Roon, Spotify   에어플레이, 룬, 스포티파이  >" \
+ "5"  "Upmpdcli Tidal           Upmpdcli 타이달  설정       >" \
+ "6"  "IP TTS, DBus             IP TTS와 DBus               >" \
  "7"  "Ethernet IP              유선 IP 설정                >" \
- "8"  "IP TTS, DBus             IP TTS와 DBus               >" \
+ "8"  "USB signal & power       USB 신호와 전원             >" \
  "9"  "Raspbian update          라즈비안 업데이트" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
@@ -341,14 +341,14 @@ while true; do
 
  case $i in
   1)  sound_card ;;
-  2)  usb_signal_power ;;
-  3)  mpd_options ;;
-  4)  renderer_name ;;
-  5)  airplay_roon_spotify ;;
+  2)  mpd_options ;;
+  3)  renderer_name ;;
+  4)  airplay_roon_spotify ;;
   q)  upmpd_qobuz ;;
-  6)  upmpd_tidal ;;
+  5)  upmpd_tidal ;;
+  6)  dbus_tts ;;
   7)  ethernet_ip ;;
-  8)  dbus_tts ;;
+  8)  usb_signal_power ;;
   9)  sudo ntpdate pool.ntp.org
       sudo apt-get update
       sudo apt-get upgrade
