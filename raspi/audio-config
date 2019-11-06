@@ -44,10 +44,11 @@ i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --
 "18" "HiFiBerry Digi+ Pro" \
 "19" "IQaudIO DAC" \
 "20" "IQaudIO DAC+" \
-"21" "IQaudIO Digi+" \
-"22" "JustBoom DAC" \
-"23" "JustBoom Digi" \
-"24" "RPi DAC" 3>&1 1>&2 2>&3)
+"21" "IQaudIO DigiAMP+" \
+"22" "IQaudIO Digi+" \
+"23" "JustBoom DAC" \
+"24" "JustBoom Digi" \
+"25" "RPi DAC" 3>&1 1>&2 2>&3)
 
 case $i in
  1)  sound_card_initial ;;
@@ -68,12 +69,13 @@ case $i in
  16) sound_card_selector hifiberry-dacplus				;;
  17) sound_card_selector hifiberry-digi					;;
  18) sound_card_selector hifiberry-digi-pro				;;
- 19) sound_card_selector iqaudio-dac			; iqaudio	;;
- 20) sound_card_selector iqaudio-dacplus		; iqaudio	;;
- 21) sound_card_selector iqaudio-digi-wm8804-audio	; iqaudio	;;
- 22) sound_card_selector justboom-dac					;;
- 23) sound_card_selector justboom-digi					;;
- 24) sound_card_selector rpi-dac					;;
+ 19) sound_card_selector iqaudio-dac					;;
+ 20) sound_card_selector iqaudio-dacplus				;;
+ 21) sound_card_selector iqaudio-dacplus,unmute_amp			;;
+ 22) sound_card_selector iqaudio-digi-wm8804-audio			;;
+ 23) sound_card_selector justboom-dac					;;
+ 24) sound_card_selector justboom-digi					;;
+ 25) sound_card_selector rpi-dac					;;
 esac
 }
 
