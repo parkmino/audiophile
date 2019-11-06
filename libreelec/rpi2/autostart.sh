@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -d /storage/.kodi/userdata/playlists/music/ ] && ! ls /storage/.kodi/userdata/playlists/music/*.pls>/dev/null 2>&1 && cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
+[ -d /storage/.kodi/userdata/playlists/music/ ] && ! ls /storage/.kodi/userdata/playlists/music/*.pls>/dev/null 2>&1 && cp /etc/*.pls /storage/.kodi/userdata/playlists/music/ && cp /etc/playlist.m3u /storage/.kodi/userdata/playlists/mixed/
 
 [ -r /storage/.config/audio.conf ] && . /storage/.config/audio.conf
 
