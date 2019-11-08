@@ -72,7 +72,7 @@ rm -rf ~/Downloads/mpd/cantata-master && unzip master.zip -d ~/Downloads/mpd && 
 ### Build ###
 
 #cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_AVAHI=OFF
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_AVAHI=OFF -DENABLE_LIBVLC=ON
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_AVAHI=OFF -DENABLE_LIBVLC=ON -DENABLE_CATEGORIZED_VIEW=ON
 
 make -j4 && sudo make install
 
