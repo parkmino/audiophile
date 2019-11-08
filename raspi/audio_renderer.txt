@@ -387,7 +387,13 @@ HR =
 전원 끄기 - Power off = sudo poweroff    \n  ' >> /etc/mympd.conf"
 
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+	$ sudo cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
+	$ sudo nano /etc/systemd/system/mympd.service
+		#Requires=network.target local-fs.target mpd.service
+		#After=mpd.service
 	$ sudo systemctl disable mympd
+	$ sudo systemctl daemon-reload
+	$ systemctl status mympd
 
 25. ttyd
 
