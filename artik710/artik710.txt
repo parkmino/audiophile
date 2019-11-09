@@ -225,6 +225,13 @@ HR =
  #' >> /etc/mympd.conf"
 
 # echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
+# nano /etc/systemd/system/mympd.service
+	#Requires=network.target local-fs.target mpd.service
+	#After=mpd.service
+# systemctl disable mympd
+# systemctl daemon-reload
+# systemctl status mympd
 
 ### ttyd
 # curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.aarch64/' | wget "$(cat -)" -P ~/
