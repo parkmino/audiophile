@@ -7,3 +7,8 @@
 	$ sudo nano *.conf (mpd, upmpdcli, mympd, roon, spotifyd)
 
 		quadruple-space+line feed+double-space at the end without new line
+
+3. Strip debug
+
+	$ file /usr/bin/mpd /usr/bin/librespot
+	$ sudo strip --strip-debug /usr/bin/mpd /usr/bin/librespot

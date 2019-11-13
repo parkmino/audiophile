@@ -221,6 +221,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ nano Cargo.toml
 		default = ["librespot-playback/alsa-backend"]
 	$ cargo build --release
+	$ file librespot
+	$ strip --strip-debug librespot
 	$ ./target/release/librespot -n Librespot --backend ?
 
 	$ cp ./target/release/librespot /home/pi/
