@@ -18,6 +18,7 @@ $ ./configure --disable-aload --disable-mixer --disable-rawmidi --disable-hwdep 
 
 $ sudo make install
 
+$ ls -al /usr/lib/libasound.so.2.0.0
 $ sudo chmod -x /usr/lib/libasound.so.2.0.0
 $ file /usr/lib/libasound.so.2.0.0
 $ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0
@@ -33,14 +34,14 @@ $ ls /usr/lib/*/alsa-lib/
 $ sudo rm -rf /usr/lib/*/alsa-lib/
 $ #sudo find /usr/lib/*/alsa-lib/ -name '*.so' -exec rename -v -f 's/.so$/.so.sav/' '{}' \;
 
-$ [ -d /usr/share/alsa.org ] && sudo rm -rf /usr/share/alsa.orig
+$ [ -d /usr/share/alsa.orig ] && sudo rm -rf /usr/share/alsa.orig
 $ sudo mv /usr/share/alsa /usr/share/alsa.orig
 $ sudo systemctl mask alsa-store.service
 $ sudo systemctl mask alsa-restore.service
 $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 $ sudo mkdir /usr/share/alsa
-$ cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+$ sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 $ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772    ;  ' > /usr/share/alsa/alsa.conf.min"
 $ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
