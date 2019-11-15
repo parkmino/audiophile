@@ -10,5 +10,5 @@
 
 3. Strip debug
 
-	$ file /usr/bin/mpd /usr/bin/librespot
-	$ sudo strip --strip-debug /usr/bin/mpd /usr/bin/librespot
+	$ file /usr/bin/mpd /usr/bin/librespot /usr/lib/.../libasound.so.2.0.0.min{n,x}
+	$ sudo strip --strip-debug /usr/bin/mpd /usr/bin/librespot /usr/lib/.../libasound.so.2.0.0.min{n,x}
