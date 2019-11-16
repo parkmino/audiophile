@@ -121,7 +121,8 @@ read -p " " i
 
 case $i in
  [1-9]|[1-6][0-9]|7[0-3])
-    url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
+   #url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
+    url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time"
     echo "$url"
     prog=$(eval echo \$prog_$i)
     printf "#EXTM3U\n#EXTINF:-1,$prog\n$url\n" > $m3u_dir/$prog.m3u ;;
