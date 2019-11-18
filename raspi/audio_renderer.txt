@@ -456,7 +456,45 @@ HR =
 		tts_eng=off
 		usb=
 
-29. Make Image
+29. Build libaudiofile libFLAC
+
+	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6.orig.tar.gz
+	$ tar xvzf audiofile_0.3.6.orig.tar.gz
+	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6-5.debian.tar.xz
+	$ tar xvf  audiofile_0.3.6-5.debian.tar.xz
+	$ cp debian/patches/* audiofile-0.3.6/
+	$ rm -rf debian/
+	$ cd audiofile-0.3.6/
+	$ for i in *.patch; do patch -p1 < $i; done
+	$ ./configure
+	$ make
+	$ sudo make install
+	$ ls -al /usr/local/lib/libaudiofile.so.1.0.0
+	$ sudo chmod -x /usr/local/lib/libaudiofile.so.1.0.0
+	$ sudo strip --strip-debug /usr/local/lib/libaudiofile.so.1.0.0
+	$ ls -al /usr/local/lib/libaudiofile.so.1.0.0
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0(.sav) /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
+	$ sudo cp /usr/local/lib/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav
+
+	$ wget http://deb.debian.org/debian/pool/main/f/flac/flac_1.3.3.orig.tar.xz
+	$ tar xvf flac_1.3.3.orig.tar.xz
+	$ wget http://deb.debian.org/debian/pool/main/f/flac/flac_1.3.3-1.debian.tar.xz
+	$ tar xvf flac_1.3.3-1.debian.tar.xz
+	$ cp debian/patches/* flac-1.3.3/
+	$ rm -rf debian/
+	$ cd flac-1.3.3/
+	$ for i in *.patch; do patch -p1 < $i; done
+	$ ./configure
+	$ make
+	$ sudo make install
+	$ ls -al /usr/local/lib/libFLAC.so.8.3.0
+	$ sudo chmod -x /usr/local/lib/libFLAC.so.8.3.0
+	$ sudo strip --strip-debug /usr/local/lib/libFLAC.so.8.3.0
+	$ ls -al /usr/local/lib/libFLAC.so.8.3.0
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0(.sav) /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.orig
+	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
+
+30. Make Image
 
 	$ sudo systemctl disable sshd
 	# #dietpi-services disable dropbear
@@ -486,7 +524,7 @@ HR =
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
-30. Disable Bluetooth UART for RPI3
+31. Disable Bluetooth UART for RPI3
 
 	 $ sudo systemctl disable hciuart
 	#$ printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
