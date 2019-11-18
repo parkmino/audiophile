@@ -458,6 +458,9 @@ HR =
 
 29. Build libaudiofile libFLAC
 
+	$ sudo apt-get update
+	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
+
 	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6.orig.tar.gz
 	$ tar xvzf audiofile_0.3.6.orig.tar.gz
 	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6-5.debian.tar.xz
