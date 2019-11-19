@@ -1,0 +1,109 @@
+#!/bin/bash
+
+musicpd_bg () {
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+ sleep 1
+ pgr_mpd=$(pgrep -x mpd)
+ taskset -pc $s_task $pgr_mpd
+ #renice -1 -p       $pgr_mpd
+ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   mpd)		 taskset -cp $h_task $proc_nr ;;
+   io)		 taskset -cp $h_task $proc_nr ;;
+   player)	 taskset -cp $s_task $proc_nr ;;
+   decoder)	 taskset -cp $h_task $proc_nr ;;
+   output)	 taskset -cp $m_task $proc_nr
+		#renice -1 -p	     $proc_nr
+		 chrt -op 0	     $proc_nr ;;
+  esac
+ done
+ echo 0 > /sys/class/leds/orangepi\:green\:pwr/brightness
+ pkill rc.local
+}
+
+cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+rm -rf /dev/snd/*c /dev/snd/by* || true
+rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
+ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
+cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
+cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
+
+echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+
+for i in $(ls /sys/block/*/queue/scheduler); do
+ if   echo $(cat $i) | grep -q none; then
+  echo none > $i
+ elif echo $(cat $i) | grep -q noop; then
+  echo noop > $i
+ fi
+done
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice  -2 $i
+done
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
+done
+
+m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
+[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+
+if [ "$m_task" -ge 1 ];then
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod|squeezelite/ {print $1}'); do
+  taskset -acp 0 $pid 2>/dev/null || true
+ done
+fi
+
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
+systemctl stop dbus.service dbus.socket haveged polkit systemd-udevd
+
+[ "$ssh" = off ]    && systemctl stop sshd
+[ "$serial" = off ] && systemctl stop serial-getty@ttyS0
+
+swapoff -a
+
+### CPU Affinity
+until $(grep -q usb1 /proc/interrupts); do
+ sleep 1
+done
+sleep 1
+for i in $(awk '/gmac|mmc|usb2/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$h_task" | bc) > /proc/irq/$i/smp_affinity
+done
+for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
+done
+echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
+
+### Taskset
+#for pid in 1 $(pgrep -x rc.local); do
+# taskset -acp $m_task $pid || true
+#done
+
+### Init
+taskset -cp $s_task 1
+
+musicpd_bg &
+/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+
+exit 0
