@@ -74,7 +74,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 6. Disable services
 
-	$ sudo systemctl disable getty@tty1 cron rsyslog systemd-timesyncd triggerhappy avahi-daemon hciuart
+	$ sudo systemctl disable getty@tty1 cron rsyslog systemd-resolved systemd-timesyncd triggerhappy avahi-daemon hciuart
 	$ #sudo systemctl mask systemd-journald systemd-logind dbus.service dbus.socket
 	$ #sudo systemctl mask systemd-journal-flush.service systemd-journald.service
 	# dietpi-services disable cron
