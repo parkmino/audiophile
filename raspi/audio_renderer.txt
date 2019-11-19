@@ -28,7 +28,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-pycryptodome uhubctl libusb-0.1-4
 	# apt-get install openssh-client libusb-0.1-4
-	$ scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png (hub-ctrl) llctl spotifyd.conf audio.conf audio-config pi@192.168.0.3:/home/pi/
+	$ scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png (hub-ctrl) llctl spotifyd.conf audio.conf audio-config pi@192.168.0.3:/home/pi/
 
 2. Configuration file
 
@@ -124,9 +124,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mv rc.local /etc/
 	# mv rc.local_dietpi /etc/rc.local
 	$ sudo mv audio.conf /etc/default/
-	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
-	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
-	
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.orig
+	$ sudo mv libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.orig
+	$ sudo mv libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
+
 12. Sysctl Configuration
 
 	$ sudo nano /etc/sysctl.conf
