@@ -320,8 +320,6 @@ Orange Pi Mini II
 		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
 	# nano ~/.bashrc
 
-		export MPD_HOST=192.168.0.3
-
 		#chrt -aip 0 	 `pgrep -ox systemd`
 		#chrt -aip 0 	 `pgrep -ox login`
 		#chrt -aip 0 	 `pgrep -ox bash`
@@ -337,7 +335,10 @@ Orange Pi Mini II
 		#taskset -acp 0  `pgrep -ox systemd`
 		 taskset -acp 0  `pgrep -ox login`
 		 taskset -acp 0  `pgrep -ox bash`
+		 
+		 export MPD_HOST=192.168.0.10
 
+		 stty rows 47 cols 199 
 
 14. Serial Console
 
