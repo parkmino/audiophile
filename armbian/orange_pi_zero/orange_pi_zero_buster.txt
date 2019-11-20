@@ -30,6 +30,9 @@
 	# dpkg-reconfigure locales
 	# dpkg-reconfigure tzdata
 
+	# update-locale LC_ALL=ko_KR.UTF-8 LANG=ko_KR.UTF-8 LANGUAGE=ko_KR.UTF-8 LC_MESSAGES=ko_KR.UTF-8
+	# cat /etc/default/locale
+
 03. Kernel Option
 
 	# cat  /boot/boot.cmd
