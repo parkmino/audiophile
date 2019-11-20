@@ -4,11 +4,21 @@
 
 2. Config files
 
-	$ sudo nano *.conf (mpd, upmpdcli, mympd, roon, spotifyd)
+	mpd.conf, upmpdcli.conf, mympd.conf, roon
 
-		quadruple-space+line feed+double-space at the end without new line
+	$ sudo nano *.conf (mpd, upmpdcli, mympd, roon, spotifyd)
+	quadruple-space+line feed+double-space at the end without new line
 
 3. Strip debug
 
+	libasound, libaudiofile, libFLAC, mpd, librespot
+
 	$ file /usr/bin/mpd /usr/bin/librespot /usr/lib/.../libasound.so.2.0.0.min{n,x}
 	$ sudo strip --strip-debug /usr/bin/mpd /usr/bin/librespot /usr/lib/.../libasound.so.2.0.0.min{n,x}
+
+4. Build libaudiofile & libFLAC
+
+5. Disable systemd-journald & systemd-logind
+
+	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
+	$ sudo systemctl mask systemd-logind
