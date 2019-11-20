@@ -8,15 +8,16 @@
 	http://www.orangepi.org/orangepizero/
 	http://linux-sunxi.org/Xunlong_Orange_Pi_Zero
 
+02. Armbian Buster
+
 	https://www.armbian.com/
 	https://www.armbian.com/orange-pi-zero/
 	https://docs.armbian.com
-
-02. Armbian Buster
+	https://dl.armbian.com/orangepizero/
 	
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59/Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/armbian/Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59/Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59.img of=/dev/sdc
 	$ sync
 	$ ssh root@192.168.0.x password:1234
 	  Change to new password
@@ -29,33 +30,32 @@
 	# dpkg-reconfigure locales
 	# dpkg-reconfigure tzdata
 
-04. Kernel Option
+03. Kernel Option
 
 	# cat  /boot/boot.cmd
 	# nano /boot/armbianEnv.txt
-		#verbosity=1
 		 console=serial
 		#overlays=usbhost2 usbhost3
 		 extraargs="elevator=noop consoleblank=0 selinux=0"
 	# reboot
 
-05. /etc/fstab
+04. /etc/fstab
 
-	# cat nano /etc/fstab
+	# cat /etc/fstab
 
-06. Remove modules
+05. Remove modules
 
 	# lsmod
 	# nano /etc/modprobe.d/orangepizero.conf
 		blacklist xradio_wlan
 		blacklist g_serial
 
-07. Remove service
+06. Remove service
 
 	# systemctl disable cron getty@tty1 ntp polkit wpa_supplicant armbian-zram-config # haveged serial-getty@ttyS0 
 	# systemctl mask cron rsyslog systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # dbus dbus.socket
 
-08. Install Pakages
+07. Install Pakages
 
 	# apt-get install bc ntpdate uhubctl 
 
@@ -69,19 +69,17 @@
 		ssh=off
 		serial=on
 
-10. ALSA
+11. ALSA
 
-	# nano /usr/share/alsa/alsa.conf
-		pcm.sound.card 1
-		ctl.control.card 1
+	# mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
 	# cp libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav
 
-11. libaudiofile & libflac
+12. libaudiofile & libflac
 
 	# cp libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
 	# cp libFLAC.so.8.3.0      /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
 
-11. MPD
+13. MPD
 	# nano -L /etc/mpd.conf.sav
 		#music_directory "/var/lib/mpd/music"
 		#playlist_directory "/var/lib/mpd/playlists"
@@ -91,7 +89,7 @@
 		plugin "upnp"
 		}
 
-13. USB IRQ
+14. USB IRQ
 
 	# cat /proc/interrupts
 	# nano /etc/rc.local
@@ -122,5 +120,3 @@
 		dns-nameservers 210.220.163.82
 		dns-nameservers 219.250.36.130
 	# systemctl disable network-manager.service
-
-cf) stty rows 24 cols 80
