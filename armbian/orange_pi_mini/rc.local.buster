@@ -90,7 +90,7 @@ swapoff -a
 ### Init
 taskset -cp $s_task 1
 
-for i in /usr/bin/nohup /usr/bin/rygel /etc/rygel.conf /usr/sbin/minidlnad /etc/minidlan.conf; do
+for i in /usr/bin/nohup /usr/bin/rygel /etc/rygel.conf /usr/sbin/minidlnad /etc/minidlna.conf; do
  [ -e $i ] && cp $i /dev/shm/
 done
 
@@ -122,10 +122,10 @@ done
  taskset -acp $m_task $(pgrep -x minidlnad)
  taskset -acp $m_task $minidlna_sub
 
- pkill rc.local
+#pkill rc.local
 ) &
 
 #/dev/shm/nohup /dev/shm/rygel -c /dev/shm/rygel.conf>/dev/null</dev/null 2>/dev/null
-#/dev/shm/nohup /dev/shm/minidlnad -f /dev/shm/minidlna.conf>/dev/null</dev/null 2>/dev/null
+/dev/shm/nohup /dev/shm/minidlnad -f /dev/shm/minidlna.conf>/dev/null</dev/null 2>/dev/null
 
 exit 0
