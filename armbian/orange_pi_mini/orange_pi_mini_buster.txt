@@ -88,8 +88,8 @@
 		monitor-changes=false
 
 	# nano ~/.bashrc
-		 taskset -acp 0  `pgrep -ox login`
-		 taskset -acp 0  `pgrep -ox bash`
+		 taskset -acp 0  $(pgrep -ox login)
+		 taskset -acp 0  $(pgrep -ox [b,d]ash)
 		 export MPD_HOST=192.168.0.10
 		 stty rows 47 cols 199
 	
@@ -126,3 +126,10 @@
 		#dns-nameservers 210.220.163.82
 		#dns-nameservers 219.250.36.130
 	# systemctl disable network-manager.service
+
+12. Replace bash with dash
+
+	# nano ~/.bash
+		taskset -acp 0  $(pgrep -ox [b,d]ash)
+	# cp ~/.bash ~/.dash
+	# sed -i '/^root/s/bash/dash/' /etc/passwd
