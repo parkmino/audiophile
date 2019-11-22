@@ -462,6 +462,7 @@ HR =
 
 	$ sudo apt-get update
 	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
+	$ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 
 	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6.orig.tar.gz
 	$ tar xvzf audiofile_0.3.6.orig.tar.gz
