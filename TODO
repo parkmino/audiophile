@@ -22,3 +22,5 @@
 
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
 	$ sudo systemctl mask systemd-logind
+
+6. Improve blacklist & cpu affinity for artik710
