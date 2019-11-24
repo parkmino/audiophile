@@ -50,8 +50,27 @@
 
 	# lsmod
 	# nano /etc/modprobe.d/orangepizero.conf
-		blacklist xradio_wlan
+		blacklist cpufreq_dt
 		blacklist g_serial
+		blacklist gpu_sched
+		blacklist industrialio
+		blacklist ip_tables
+		blacklist lima
+		blacklist snd_pcm_dmaengine
+		blacklist snd_soc_core
+		blacklist snd_soc_simple_card
+		blacklist snd_soc_simple_card_utils
+		blacklist sun4i_gpadc_iio
+		blacklist sun4i_i2s
+		blacklist sun8i_adda_pr_regmap
+		blacklist sun8i_codec_analog
+		blacklist sun8i_ths
+		blacklist thermal_sys
+		blacklist ttm
+		blacklist uio
+		blacklist uio_pdrv_genirq
+		blacklist x_tables
+		blacklist xradio_wlan
 
 06. Remove service
 
@@ -88,6 +107,7 @@
 		#playlist_directory "/var/lib/mpd/playlists"
 		#db_file "/var/lib/mpd/database"
 		#state_file "/var/lib/mpd/state"
+		bind_to_address "192.168.0.x"
 		database {
 		plugin "upnp"
 		}

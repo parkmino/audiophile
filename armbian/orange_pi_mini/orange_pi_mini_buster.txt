@@ -50,13 +50,28 @@
 
 	# lsmod
 	# nano /etc/modprobe.d/orangepimini.conf
-		blacklist evdev
-		blacklist brcmfmac
-		blacklist sun4i_ts
-		blacklist sun4i_ss
-		blacklist cpufreq_dt
-		blacklist thermal_sys
+		blacklist axp20x_adc
+		blacklist axp20x_battery
+		blacklist axp20x_usb_power
 		blacklist bonding
+		blacklist brcmfmac
+		blacklist cpufreq_dt
+		blacklist evdev
+		blacklist gpu_sched
+		blacklist industrialio
+		blacklist ip_tables
+		blacklist lima
+		blacklist pinctrl_axp209
+		blacklist sun4i_codec
+		blacklist sun4i_gpadc
+		blacklist sun4i_gpadc_iio
+		blacklist sun4i_ss
+		blacklist sun4i_ts
+		blacklist sunxi_cir
+		blacklist thermal_sys
+		blacklist uio
+		blacklist uio_pdrv_genirq
+		blacklist x_tables
 
 06. Remove service
 
