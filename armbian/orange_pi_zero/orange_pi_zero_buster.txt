@@ -79,7 +79,17 @@
 
 07. Install Pakages
 
-	# apt-get install bc ntpdate uhubctl 
+	# apt-get install bc ntpdate uhubctl mpc ncmpc
+
+	# mkdir ~/.ncmpc
+	# nano ~/.ncmpc/config
+		host = 192.168.0.10
+		enable-mouse = no
+		#display-time = yes
+		enable-colors = yes
+
+	# nano ~/.profile
+		 export MPD_HOST=192.168.0.10
 
 08. /etc/sysctl.conf
 
