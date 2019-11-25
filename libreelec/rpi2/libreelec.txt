@@ -4,12 +4,12 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
-	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-9.0.2.img.gz
-	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2
-	$ gzip -d LibreELEC-RPi2.arm-9.0.2.img.gz
-	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2
-	$ mv LibreELEC-RPi2.arm-9.0.2.img ~/Downloads/libreelec/ && rm LibreELEC-RPi2.arm-9.0.2.img.gz
-	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2
+	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-9.2.0.img.gz
+	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0
+	$ gzip -d LibreELEC-RPi2.arm-9.2.0.img.gz
+	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0
+	$ mv LibreELEC-RPi2.arm-9.2.0.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/ && rm LibreELEC-RPi2.arm-9.2.0.img.gz
+	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -24,12 +24,11 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ printf 'pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.type hw defaults.pcm.minperiodtime 2772 ctl.default ctl.9    ;  ' >> ../copy/alsa.conf.mix
 
 	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
-	$ cp ../copy/libasound.so.2.0.0.min usr/lib/
+	$ cp ../copy/libasound.so.2.0.0.min ../copy/libasound.so.2.0.0.mix usr/lib/
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
-	$ mv usr/share/alsa usr/share/alsa.orig
-	$ mkdir usr/share/alsa
+	$ rm -rf usr/share/alsa && mkdir usr/share/alsa
 	$ cp ../copy/alsa.conf.min ../copy/alsa.conf.mix usr/share/alsa/
 	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
 	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
@@ -92,7 +91,7 @@ Requires=tuning_audio.service
 After=tuning_audio.service
 AllowIsolate=yes' > ../tuning_audio.target
 
-	$ cp bin/ps usr/bin/{chrt,nohup,taskset,inst_addon} hub-ctrl uhubctl llctl ../copy/
+	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl uhubctl llctl ../copy/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.7.1.0 ../copy/libprocps.so.7
 	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
 
@@ -101,7 +100,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$  cp ../copy/*.pls ../copy/*.m3u etc/
 	$ #cp -r ../../plugin.audio.kr2kodi etc/
 	$ #cp -r ../../kodi/plugin.video.{ktv2kodi,kut2kodi} etc/
-	$  cp ../../kodi/plugin.{audio.kr2kodi,audio.kpodcast,video.klive}.zip etc/
+	$  cp ../../kodi/plugin.{audio.kr2kodi,video.klive}.zip etc/
 	$ #cp ../../kodi/plugin.video.{ktv2kodi,kut2kodi}.zip etc/
 	$  cp ../copy/libprocps.so.7 usr/lib/
 	$  cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
@@ -122,27 +121,27 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ [ -f SYSTEM ] && rm -f SYSTEM
 	$ sudo mksquashfs squashfs-root SYSTEM -all-root -noappend
 
-2. Flashing
-
-	$ sudo fdisk -l
-	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2.img of=/dev/sdc
-	$ sync
-	$ mv /media/parkmino/LIBREELEC/SYSTEM /media/parkmino/LIBREELEC/SYSTEM.orig
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
-	$ sync
-	$ sudo umount /dev/sdc?
+  1.8 Make image
 	
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2-patched.img
-	$ sudo fdisk -l /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.0.2/LibreELEC-RPi2.arm-9.0.2-patch.img
+	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img
+	$ fdisk -l /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img
 	$ sudo mkdir /mnt/le
-	$ sudo mount -o loop,offset=$(echo $((512*8192))) /home/parkmino/Downloads/LibreELEC-RPi2.arm-9.0.2-patch.img /mnt/le
+	$ sudo mount -o loop,offset=$(echo $((512*8192))) /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img /mnt/le
 	$ sudo rm /mnt/le/SYSTEM*
 	$ sudo cp SYSTEM /mnt/le
 	$ sync
 	$ sudo umount /mnt/le
 	$ sudo rm -rf /mnt/le
-	$ mv 
+
+2. Flashing
+
+	$ sudo fdisk -l
+	$ sudo umount /dev/sdc?
+	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img of=/dev/sdc
+	$ sync
+	
+	$ mv /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").img
+	$ zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").img
 
 3. SSH login
 
@@ -150,10 +149,13 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 4. More tweaks
 
-	$ nano /flash/cmdline.txt
-	$ nano /storage/.config/audio.conf
-	$ nano /storage/.config/autostart.sh
+	$ audio-config
 	$ cp -r ../video/* /storage/.kodi/userdata/playlists/video/
+
+	$ mount -o remount,rw /flash
+	$ nano /flash/cmdline.txt
+		... toram
+	$ reboot
 
 cf)
 
@@ -161,5 +163,6 @@ https://notepad-plus-plus.org/
 
 https://github.com/soju6jan
 
-Screenshots
+Screenshots : kodi-send --action="TakeScreenshot"
+
 Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
