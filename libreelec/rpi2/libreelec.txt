@@ -163,6 +163,4 @@ https://notepad-plus-plus.org/
 
 https://github.com/soju6jan
 
-Screenshots : kodi-send --action="TakeScreenshot"
-
-Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
+Screenshots : Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
