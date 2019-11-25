@@ -118,18 +118,21 @@ if [ "$m_task" -ge 1 ];then
  sleep 1
 
  for i in $(awk '/snd/{print +$1}' /proc/interrupts); do
-  proc_snd="/proc/irq/$i/smp_affinity"
-  echo $(echo "2^$m_task" | bc) > $proc_snd
-  echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
-  echo " $(cat $proc_snd)"
+  proc="/proc/irq/$i/smp_affinity"
+  echo $(echo "2^$m_task" | bc) > $proc || true
+  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
  done
- for i in $(awk '/enp3s0|iwlwifi|1f.2/{print +$1}' /proc/interrupts); do
-  proc_lan="/proc/irq/$i/smp_affinity"
-  echo $(echo "2^$h_task" | bc) > $proc_lan
-  echo "$proc_snd ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
-  echo " $(cat $proc_snd)"
+ for i in $(awk '/enp3s0|1f.2/{print +$1}' /proc/interrupts); do
+  proc="/proc/irq/$i/smp_affinity"
+  echo $(echo "2^$s_task" | bc) > $proc || true
+  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
  done
- echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
+ for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
+  proc="/proc/irq/$i/smp_affinity"
+  echo $(echo "2^$m_task" | bc) > $proc || true
+  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+ done
+ echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
 fi
 
 #hdparm -A1 -a1280 -B255 -X64 /dev/sda # -r1
