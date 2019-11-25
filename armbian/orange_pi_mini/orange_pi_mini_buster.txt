@@ -103,10 +103,12 @@
 		monitor-changes=false
 
 	# nano ~/.profile
-		 taskset -acp 0  $(pgrep -ox login)
-		 taskset -acp 0  $(pgrep -ox [b,d]ash)
-		 export MPD_HOST=192.168.0.10
-		 stty rows 47 cols 199
+		rmmod axp20x_usb_power industrialio pinctrl_axp209 sun4i_gpadc
+		systemctl stop systemd-udevd
+		taskset -acp 0  $(pgrep -ox login)
+		taskset -acp 0  $(pgrep -ox [b,d]ash)
+		export MPD_HOST=192.168.0.10
+		stty rows 47 cols 199
 
 	# nano /lib/systemd/system/getty@.service
 		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
