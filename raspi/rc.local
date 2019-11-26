@@ -169,7 +169,7 @@ fi
 #amixer -D control set 'Digital',0 67% || true # 40@67% 60@81%
 
 ### Turn off USBs
-[ -n "$usb" ] && uhubctl -a 0 -p "$usb"
+[ "$usb"  = "on" ] || uhubctl -a 0 -p "$usb"
 
 ### Turn off HDMI
 /opt/vc/bin/tvservice -o

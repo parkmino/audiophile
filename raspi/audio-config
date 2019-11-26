@@ -94,7 +94,7 @@ Select/선택
 "4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/usb=/s/=.*/=/'      $audio_conf ;;
+ 1) sudo sed -i '/usb=/s/=.*/=on/'      $audio_conf ;;
  2) sudo sed -i '/usb=/s/=.*/=2-5/'   $audio_conf ;;
  3) sudo sed -i '/usb=/s/=.*/=4,5/'   $audio_conf ;;
  4) sudo sed -i '/usb=/s/=.*/=2,4,5/' $audio_conf ;;
