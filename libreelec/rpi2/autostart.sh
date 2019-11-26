@@ -90,6 +90,9 @@ echo 4 > /proc/irq/default_smp_affinity || true
  for i in $(pstree -p $pgr_kodi | grep ActiveAE | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1); do
   taskset -cp $m_task $i
  done
+ 
+ #systemctl stop systemd-journald systemd-logind || true
+ #pkill hciattach || true
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger

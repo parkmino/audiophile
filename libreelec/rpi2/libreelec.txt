@@ -149,18 +149,15 @@ AllowIsolate=yes' > ../tuning_audio.target
 
 4. More tweaks
 
-	$ audio-config
-	$ cp -r ../video/* /storage/.kodi/userdata/playlists/video/
+	$ audio-config			# Disable USB signal & power
+	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind
 
 	$ mount -o remount,rw /flash
-	$ nano /flash/cmdline.txt
-		... toram
+	$ sed -i '1s/$/toram/' /flash/cmdline.txt
+	$ cat /flash/cmdline.txt
 	$ reboot
 
 cf)
 
-https://notepad-plus-plus.org/
-
 https://github.com/soju6jan
-
 Screenshots : Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
