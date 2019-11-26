@@ -8,19 +8,11 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
   echo 0 > /sys/devices/virtual/graphics/fbcon/cursor_blink
  fi
  echo "Audio tunings will be applied and reboot..."
-#sed -i '/boot=/s/quiet $/quiet consoleblank=0 elevator=noop selinux=0/' /flash/cmdline.txt
-#sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
  printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > /storage/.config/modprobe.d/libreelec-blacklist.conf
  cp /etc/sysctl.conf /storage/.config/sysctl.d/
  cp /etc/audio.conf /etc/autostart.sh /storage/.config/
-#mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
-#cp /etc/*.py /etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
-#cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
-#cp -r /etc/plugin.* /storage/.kodi/addons/
  cp /etc/plugin.*.zip /storage/backup/
  touch /storage/.config/audio_patched
-#read -p "* Reboot to apply the audio tunings? [Y/n]" answer
-#[ "$answer" != n ] && reboot
  sync
  sleep 1
  reboot -f

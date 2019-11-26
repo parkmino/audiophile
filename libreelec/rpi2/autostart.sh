@@ -5,7 +5,6 @@
 [ -r /storage/.config/audio.conf ] && . /storage/.config/audio.conf
 
 cp /usr/bin/nohup /dev/shm/
-
 if [ "$alsa_conf" = min ]; then
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  cp /usr/lib/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
@@ -13,6 +12,7 @@ else
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
  cp /usr/lib/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
 fi
+
 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
 echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
@@ -55,7 +55,7 @@ fi
 #for i in $(seq 2 5); do
 # [ usb$i = off ] && hub-ctrl -h 0 -P $i -p 0
 #done
-[ "$usb"  = "on" ] || uhubctl -a 0 -p "$usb"
+[ "$usb" = "on" ] || uhubctl -a 0 -p "$usb"
 
 ### Remove modules
  modprobe -r 8021q || true

@@ -31,6 +31,7 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ rm -rf usr/share/alsa && mkdir usr/share/alsa
 	$ cp ../copy/alsa.conf.min ../copy/alsa.conf.mix usr/share/alsa/
 	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
+	
 	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
 	$ nano usr/lib/modprobe.d/alsa-base.conf
 
@@ -42,55 +43,6 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.4 Patch
 
-	$ nano ../tuning_audio
-
-	#!/bin/sh
-
-	# Audio patch
-
-	if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /storage/.config/modprobe.d/ ] && [ -d /storage/.config/sysctl.d/ ]; then
-	 echo -en "\033[?25l"
-	 if [ -f /sys/devices/virtual/graphics/fbcon/cursor_blink ] ; then
-	  echo 0 > /sys/devices/virtual/graphics/fbcon/cursor_blink
-	 fi
-	 echo "Audio tunings will be applied and reboot..."
-	#sed -i '/boot=/s/quiet $/quiet consoleblank=0 elevator=noop selinux=0/' /flash/cmdline.txt
-	#sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
-	 printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > /storage/.config/modprobe.d/libreelec-blacklist.conf
-	 cp /etc/sysctl.conf /storage/.config/sysctl.d/
-	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
-	#mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
-	#cp /etc/*.py /etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
-	#cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
-	#cp -r /etc/plugin.* /storage/.kodi/addons/
-	 cp /etc/plugin.*.zip /storage/backup/
-	 touch /storage/.config/audio_patched
-	#read -p "* Reboot to apply the audio tunings? [Y/n]" answer
-	#[ "$answer" != n ] && reboot
-	 sync
-	 sleep 1
-	 reboot -f
-	fi
-
-	$ chmod +x ../tuning_audio
-
-	$ echo '[Unit]
-Description=Tuning Audio
-DefaultDependencies=no
-
-[Service]
-Type=idle
-ExecStart=/usr/lib/libreelec/tuning_audio
-StandardInput=tty-force
-StandardOutput=inherit
-StandardError=inherit' > ../tuning_audio.service
-
-	$ echo '[Unit]
-Description=Tuning Audio
-Requires=tuning_audio.service
-After=tuning_audio.service
-AllowIsolate=yes' > ../tuning_audio.target
-
 	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl uhubctl llctl ../copy/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.7.1.0 ../copy/libprocps.so.7
 	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
@@ -98,10 +50,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$  rm usr/bin/ps usr/bin/nohup
 	$  cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,uhubctl,llctl,audio-config} usr/bin/
 	$  cp ../copy/*.pls ../copy/*.m3u etc/
-	$ #cp -r ../../plugin.audio.kr2kodi etc/
-	$ #cp -r ../../kodi/plugin.video.{ktv2kodi,kut2kodi} etc/
 	$  cp ../../kodi/plugin.{audio.kr2kodi,video.klive}.zip etc/
-	$ #cp ../../kodi/plugin.video.{ktv2kodi,kut2kodi}.zip etc/
 	$  cp ../copy/libprocps.so.7 usr/lib/
 	$  cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
 	$  cp ../tuning_audio usr/lib/libreelec/
@@ -141,7 +90,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ sync
 	
 	$ mv /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").img
-	$ zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").img
+	$ zip -j /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").img
 
 3. SSH login
 
@@ -153,7 +102,7 @@ AllowIsolate=yes' > ../tuning_audio.target
 	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind
 
 	$ mount -o remount,rw /flash
-	$ sed -i '1s/$/toram/' /flash/cmdline.txt
+	$ sed -i '1s/$/toram /' /flash/cmdline.txt
 	$ cat /flash/cmdline.txt
 	$ reboot
 
