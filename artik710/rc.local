@@ -56,9 +56,13 @@ eol () {
 }
 
 roon_bridge () {
-#[ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
-#cp -r /opt/roon /dev/shm/
-#ln -sf /dev/shm/roon /opt/RoonBridge
+ if [ "$roontoram" = on ]; then
+  [ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
+  cp -r /opt/roon /dev/shm/
+  ln -sf /dev/shm/roon /opt/RoonBridge
+ else
+  [ -d /opt/roon ] && [ -L /opt/RoonBridge ] && rm /opt/RoonBridge && mv /opt/roon /opt/RoonBridge
+ fi
  systemctl start roonbridge
 }
 

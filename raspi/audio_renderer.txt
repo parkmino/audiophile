@@ -74,9 +74,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 6. Disable services
 
-	$ sudo systemctl disable getty@tty1 cron rsyslog systemd-timesyncd triggerhappy avahi-daemon hciuart # systemd-resolved
-	$ #sudo systemctl mask systemd-journald systemd-logind dbus.service dbus.socket
-	$ #sudo systemctl mask systemd-journal-flush.service systemd-journald.service
+	$ sudo systemctl disable getty@tty1 cron rsyslog systemd-timesyncd triggerhappy avahi-daemon hciuart # systemd-resolved dbus.service dbus.socket
+	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind
 	# dietpi-services disable cron
 
 7. ALSA
@@ -207,7 +206,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
 		 exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
 		 fi    
-		      
+		   
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
 
@@ -334,8 +333,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 24. myMPD
 
-	$ sudo apt-get install libmediainfo-dev libmediainfo0v5 lrzsz
-
+	$ sudo apt-get install cmake perl
 	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
 	$ unzip mympd.zip -d ~/ && rm mympd.zip
 	$ cd myMPD*
@@ -343,6 +341,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ./build.sh install
 	$ ./build.sh pkgdebian
 
+	$ sudo apt-get install libid3tag0 lrzsz libmediainfo0v5 # openssl
 	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 
@@ -451,6 +450,7 @@ HR =
 		alsa=min
 		upnp=on
 		roon=off
+		roontoram=off
 		airplay=off
 		spotify=off
 		wifi=off

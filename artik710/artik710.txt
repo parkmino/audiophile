@@ -145,6 +145,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	alsa=min
 	airplay=off
 	roon=on
+	roontoram=off
 	spotify=off
 	ssh=off
 	upnp=on
