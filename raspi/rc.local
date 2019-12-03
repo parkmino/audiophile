@@ -144,7 +144,8 @@ done
 #do
 # service $i stop
 #done
-pkill rngd || true
+pkill alsactl || true
+pkill rngd    || true
 [ "$wifi" = off ] && pkill wpa_supplicant || true
 swapoff -a
 
