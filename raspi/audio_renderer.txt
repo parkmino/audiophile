@@ -63,8 +63,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ lsmod
 	$ sudo nano /etc/modprobe.d/raspi-blacklist.conf
-		#blacklist uio
-		#blacklist uio-pdrv-genirq
+		#blacklist 8021q
+		blacklist bcm2835_codec
+		blacklist bcm2835_v4l2
+		blacklist ip_tables
+		blacklist raspberrypi_hwmon
+		blacklist uio
+		blacklist uio-pdrv-genirq
+		blacklist vc_sm_cma
+		blacklist x_tables
 		#blacklist cfg80211
 		#blacklist bcm2835_gpiomem
 		#blacklist fixed
@@ -114,13 +121,13 @@ UPnP/DLNA Audio Render for Raspberry Pi
 10. CIFS & NFS & USB mounting
 
 	$ #sudo apt-get install cifs-utils nfs-common
-	$ sudo mkdir /mnt/cifs /mnt/nfs
+	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
 	$ sudo ln -s /mnt/ /var/lib/mpd/music
 	$ sudo nano /etc/fstab
 		/dev/mmcblk0p1  /boot           vfat    defaults          0       2
 		/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
 		#/var/swap
-		/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
+		/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
 		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
