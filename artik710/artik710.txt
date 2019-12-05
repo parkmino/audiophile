@@ -87,8 +87,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # systemctl list-unit-files | grep enabled
 # apt-get remove zigbeed
 # apt-get autoremove
-# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 # serial-getty@ttySAC3 avahi-daemon systemd-resolved
-# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 # serial-getty@ttySAC3 avahi-daemon systemd-resolved
+# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
+# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
+# rm   /etc/resolv.conf
+# nano /etc/resolv.conf
+	nameserver 8.8.8.8
 # systemctl mask wpa_supplicant
 # pkill hciattach; pkill tzdaemon
 
