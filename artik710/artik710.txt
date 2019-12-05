@@ -83,6 +83,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### SSH message
 # ls /etc/update-motd.d/*
 
+### Remove modules
+# lsmod
+# nano /etc/modprobe.d/artik710.conf
+	blacklist ...
+
 ### Remove services
 # systemctl list-unit-files | grep enabled
 # apt-get remove zigbeed
@@ -92,7 +97,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # rm   /etc/resolv.conf
 # nano /etc/resolv.conf
 	nameserver 8.8.8.8
-# systemctl mask wpa_supplicant
+# systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
+# systemctl mask systemd-logind wpa_supplicant
 # pkill hciattach; pkill tzdaemon
 
 ### Kernel option - N.A.
