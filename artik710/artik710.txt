@@ -87,8 +87,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # systemctl list-unit-files | grep enabled
 # apt-get remove zigbeed
 # apt-get autoremove
-# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 serial-getty@ttySAC3 # avahi-daemon systemd-resolved
-# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 serial-getty@ttySAC3 # avahi-daemon systemd-resolved
+# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 # serial-getty@ttySAC3 avahi-daemon systemd-resolved
+# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 # serial-getty@ttySAC3 avahi-daemon systemd-resolved
 # systemctl mask wpa_supplicant
 # pkill hciattach; pkill tzdaemon
 
@@ -280,7 +280,7 @@ HR =
 	/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 # ln -sf /mnt/microSD /var/lib/mpd/music
 
-# systemctl disable sshd
+# systemctl disable serial-getty@ttySAC3 sshd
 
 ### Back up
 https://davidgs.com/2017/how-to-save-your-artik-520-backup/
