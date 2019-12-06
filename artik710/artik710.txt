@@ -291,8 +291,7 @@ HR =
 # ln -sf /mnt/microSD /var/lib/mpd/music
 
 # systemctl disable sshd
-# nano /etc/default/audio.conf
-	serial=off
+# sed -i '/^serial/s/on/off/' /etc/default/audio.conf
 
 ### Back up
 https://davidgs.com/2017/how-to-save-your-artik-520-backup/
