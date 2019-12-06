@@ -141,7 +141,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # nano /etc/rc.local
 	uhubctl -a 0 -p 1,3
 
-### Audio.conf
+### audio.conf
 # nano /etc/default/audio.conf
 
 	# audio.conf
@@ -159,6 +159,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	ssh=off
 	upnp=on
 	wifi=off
+	serial=on
 
 ### /etc/fstab
 # nano /etc/fstab
@@ -289,7 +290,9 @@ HR =
 	/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 # ln -sf /mnt/microSD /var/lib/mpd/music
 
-# systemctl disable serial-getty@ttySAC3 sshd
+# systemctl disable sshd
+# nano /etc/default/audio.conf
+	serial=off
 
 ### Back up
 https://davidgs.com/2017/how-to-save-your-artik-520-backup/

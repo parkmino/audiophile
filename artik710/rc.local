@@ -52,6 +52,7 @@ eol () {
   airconnect
   [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-aarch64) || true
  fi
+ [ "$serial" = off ] && systemctl stop serial-getty@ttySAC3
  pkill rc.local
 }
 
