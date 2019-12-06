@@ -23,12 +23,16 @@
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
 	$ sudo systemctl mask systemd-logind
 
-6. Improve blacklist & cpu affinity for artik710
-
-7. Disable systemd-resolved
+6. Disable systemd-resolved
 
 	$ sudo systemctl stop    systemd-resolved
 	$ sudo systemctl disable systemd-resolved
 	$ sudo rm   /etc/resolv.conf
 	$ sudo nano /etc/resolv.conf
 		nameserver 1.1.1.1
+
+7. Artik710
+
+	-. Disable connman
+	-. Blacklist modules
+	-. CPU affinity for IRQ
