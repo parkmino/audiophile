@@ -80,7 +80,7 @@
 
 07. Install Pakages
 
-	# apt-get install hdparm rygel bc ntpdate uhubctl mpc ncmpc sysv-rc-conf
+	# apt-get install hdparm minidlna rygel bc ntpdate uhubctl mpc ncmpc sysv-rc-conf
 
 	# nano /etc/hdparm.conf
 		read_ahead_sect = 1280
@@ -95,7 +95,9 @@
 		#display-time = yes
 		enable-colors = yes
 
-	# sudo systemctl disable minidlnad
+	# systemctl disable minidlnad
+	# mv /usr/sbin/minidlnad /usr/sbin/minidlnad
+	# mv ~/minidlnad /usr/sbin/minidlnad
 
 	# nano /etc/rygel.conf
 		uris=/mnt/Music
@@ -143,6 +145,8 @@
 		#dns-nameservers 210.220.163.82
 		#dns-nameservers 219.250.36.130
 	# systemctl disable network-manager.service
+	# nano /etc/resolv.conf
+		nameserver 127.0.0.1
 
 12. Replace bash with dash
 
