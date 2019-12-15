@@ -50,12 +50,12 @@ artUrl = https://i.imgur.com/NyGnXcp.png
 
 [radio MBC 표준FM]
 url = http://serpent0.duckdns.org:8088/mbcsfm.pls
-artUrl = https://i.imgur.com/R3u7M9h.png
+artUrl = https://i.imgur.com/ymwqEZ9.png
 #artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm.png
 
 [radio MBC FM4U]
 url = http://serpent0.duckdns.org:8088/mbcfm.pls
-artUrl = https://i.imgur.com/w9dDBgb.png
+artUrl = https://i.imgur.com/XsUtjRb.png
 #artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm4u.png
 
 [radio SBS 파워 FM]
