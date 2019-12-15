@@ -48,13 +48,15 @@ url = http://serpent0.duckdns.org:8088/kbs2radio.pls
 artUrl = https://i.imgur.com/NyGnXcp.png
 #artUrl = http://padmin.s3-website.ap-northeast-2.amazonaws.com/live/2018/4/3/1522738651113_70221.png
 
-[radio MBC FM4U]
-url = http://serpent0.duckdns.org:8088/mbcfm.pls
-artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm4u.png
-
 [radio MBC 표준FM]
 url = http://serpent0.duckdns.org:8088/mbcsfm.pls
-artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm.png
+artUrl = https://i.imgur.com/R3u7M9h.png
+#artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm.png
+
+[radio MBC FM4U]
+url = http://serpent0.duckdns.org:8088/mbcfm.pls
+artUrl = https://i.imgur.com/w9dDBgb.png
+#artUrl = http://img.imbc.com/commons/2018/image/radio/logo-fm4u.png
 
 [radio SBS 파워 FM]
 url = http://serpent0.duckdns.org:8088/sbsfm.pls
@@ -79,7 +81,7 @@ artUrl = http://m.tbs.seoul.kr/common/images/default/tbs_logo.jpg
 
 [radio 국악방송]
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
-artUrl = http://www.gugakfm.co.kr/gugak_web/thd_img/common/logo.png    
+artUrl = https://pbs.twimg.com/profile_images/883196509982011392/l7yA_yVP_400x400.jpg    
   
 
 $ sudo nano /etc/environment
