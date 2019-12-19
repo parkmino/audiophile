@@ -30,17 +30,17 @@ https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
 
 $ cd /home/parkmino/Downloads/ppa/mympd/
 $ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
-$ export ver=$(curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/.*\/v.//')
+$ export ver=$(curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/.*\/v//')
 $ tar -xvzf mympd.tar.gz
 $ mv mympd.tar.gz mympd_$ver.orig.tar.gz
-$ mv myMPD-v.$ver/contrib/packaging/debian myMPD-v.$ver
-$ sed -i '1s/-1)/-1ppa1)/; 1s/unstable/bionic/' myMPD-v.$ver/debian/changelog
+$ mv myMPD-$ver/contrib/packaging/debian myMPD-$ver
+$ sed -i '1s/-1)/-1ppa1)/; 1s/unstable/bionic/' myMPD-$ver/debian/changelog
+$ cat myMPD-$ver/debian/changelog
 	mympd ($ver-1ppa1) bionic; urgency=medium
-$ cat myMPD-v.$ver/debian/changelog
-$#sed -i 's/^Section: .*/Section: sound/' myMPD-v.$ver/debian/control
+$#sed -i 's/^Section: .*/Section: sound/' myMPD-$ver/debian/control
 	Section: sound
-$#cat myMPD-v.$ver/debian/control
-$ cd myMPD-v.$ver
+$#cat myMPD-$ver/debian/control
+$ cd myMPD-$ver
 $ debuild -S -k433D8977 # -sd
 $ cd ..
 $ dput ppa:parkmino/mympd mympd_$ver-1ppa1_source.changes
