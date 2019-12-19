@@ -354,8 +354,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ./build.sh install
 	$ ./build.sh pkgdebian
 
-	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz
-	$ sudo apt-get install libmediainfo0v5
+	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz # libmediainfo0v5
 	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 
