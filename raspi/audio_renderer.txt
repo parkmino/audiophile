@@ -472,7 +472,13 @@ HR =
 		tts_eng=off
 		usb=on
 
-29. Build libaudiofile libFLAC
+29. resolv.conf
+
+	$ sudo nano -L /etc/resolv.conf
+		nameserver 1.1.1.1    
+		  
+
+30. Build libaudiofile libFLAC
 
 	$ sudo apt-get update
 	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
@@ -514,7 +520,7 @@ HR =
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.orig
 	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
 
-30. Make Image
+31. Make Image
 
 	$ sudo systemctl disable sshd
 	##dietpi-services disable dropbear
@@ -544,7 +550,7 @@ HR =
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
-31. Disable Bluetooth UART for RPI3
+32. Disable Bluetooth UART for RPI3
 
 	$ sudo systemctl disable hciuart
 	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt

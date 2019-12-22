@@ -6,7 +6,7 @@
 
 	mpd.conf, upmpdcli.conf, mympd.conf, roon
 
-	$ sudo nano *.conf (mpd, upmpdcli, mympd, roon, spotifyd)
+	$ sudo nano *.conf (mpd, upmpdcli, mympd, roon, spotifyd, resolve)
 	quadruple-space+line feed+double-space at the end without new line
 
 3. Strip debug
