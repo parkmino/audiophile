@@ -283,7 +283,17 @@ Tuning
 3.8 Disable Networking, Network Manager or Wicd
 	$ sudo apt-get remove network-manager wicd
 	$ sudo nano /etc/network/interfaces
-		#auto eth0
+		#auto enp3s0
+		#iface enp3s0 inet dhcp
+		iface enp3s0 inet static
+		address 192.168.0.x
+		netmask 255.255.255.0
+		gateway 192.168.0.1    
+	$ sudo systemctl disable systemd-resolved
+	$ sudo rm /etc/resolv.conf
+	$ sudo nano -L /etc/resolv.conf
+		nameserver 1.1.1.1    
+		  	  
 	$ ps -e | grep -e dhclient -e NetworkManager -e wicd
 3.9 Diasble APIC, APM, Consoleblank.
 	$ sudo nano /etc/default/grub
@@ -306,7 +316,8 @@ Tuning
 		$ sudo systemctl disable systemd-resolved
 		$ sudo rm   /etc/resolv.conf
 		$ sudo nano /etc/resolv.conf
-			nameserver 1.1.1.1
+			nameserver 1.1.1.1    
+			  
 	$ sudo nano /etc/environment
 		NO_AT_BRIDGE=1
 3.12 Unmount and Shut down data HDD during Playback
@@ -355,13 +366,17 @@ Tuning
 	-. HDD configuration
 		$ sudo hdparm -A -a -B -M /dev/sda
 		$ cat /sys/block/sd*/queue/scheduler
-		$ sudo nano /etc/rc.local
-			hdparm -A1 -a1280 -B255 -M0 /dev/sda
-			echo none > /sys/block/sda/queue/scheduler
 		$ sudo nano /etc/hdparm.conf
-			read_ahead_sect = 1280
+			read_ahead_sect = 1904
 			lookahead = on
-			apm = 255
+			apm = 255    
+			  
+		$ sudo cp /sbin/hdparm /usr/bin/
+		$ sudo apt-get remove hdparm
+		$ sudo nano /etc/rc.local
+			hdparm -A1 -a1904 -B255 /dev/sda # -M0
+			echo none > /sys/block/sda/queue/scheduler
+		  
 	-. ZRAM
 		$ #sudo apt-get install zram-config
 		$ #ls /sys/block && cat /proc/swaps

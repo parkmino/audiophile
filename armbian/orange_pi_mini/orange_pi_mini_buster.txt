@@ -82,11 +82,10 @@
 
 	# apt-get install hdparm minidlna rygel bc ntpdate uhubctl mpc ncmpc sysv-rc-conf
 
-	# nano /etc/hdparm.conf
-		read_ahead_sect = 1280
-		lookahead = on
-		apm = 255
-	# hdparm -A -a -B /dev/sda
+	# cp /sbin/hdparm /usr/bin/
+	# apt-get remove hdparm
+	# nano /etc/rc.local
+		hdparm -A1 -a1904 -B255 /dev/sda
 
 	# mkdir ~/.ncmpc
 	# nano ~/.ncmpc/config
@@ -140,13 +139,12 @@
 		#iface eth0 inet manual
 		iface eth0 inet static
 		address		192.168.0.5
-		netmask		255.255.255.0
-		#gateway	192.168.0.1
-		#dns-nameservers 210.220.163.82
-		#dns-nameservers 219.250.36.130
+		netmask		255.255.255.0    
+		  
 	# systemctl disable network-manager.service
 	# nano /etc/resolv.conf
-		nameserver 127.0.0.1
+		nameserver 127.0.0.1    
+		  
 
 12. Replace bash with dash
 
