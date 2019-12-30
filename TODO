@@ -31,7 +31,14 @@
 	$ sudo nano /etc/resolv.conf
 		nameserver 1.1.1.1
 
-7. Artik710
+7. /etc/sysctl.conf
+
+	$ sudo nano /etc/sysctl.conf
+		kernel.sched_wakeup_granularity_ns = 388289	# 388288
+		kernel.sched_latency_ns = 1394064		# 1394063
+		kernel.sched_migration_cost_ns = 4899005	# 4899004
+
+8. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
