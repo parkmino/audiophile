@@ -136,10 +136,10 @@
 		iface lo inet loopback
 		
 		auto  eth0
-		#iface eth0 inet manual
+		#iface eth0 inet dhcp
 		iface eth0 inet static
-		address		192.168.0.5
-		netmask		255.255.255.0    
+		address	192.168.0.5
+		netmask	255.255.255.0    
 		  
 	# systemctl disable network-manager.service
 	# nano /etc/resolv.conf
