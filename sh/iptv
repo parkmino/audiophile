@@ -39,10 +39,14 @@ elif [ "$1" = ck ]; then
   fi
  done
 else
- for i in $(seq 1 $#); do
-  echo "$(cat $folder/tvheadend.avl)" | while read line; do
-   grep -i -A1 "$(eval echo "\$$i")" $folder/channels_$line.m3u | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
+ if [ -e $folder/tvheadend.avl ]; then
+  for i in $(seq 1 $#); do
+   echo "$(cat $folder/tvheadend.avl)" | while read line; do
+    grep -i -A1 "$(eval echo "\$$i")" $folder/channels_$line.m3u | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
+   done
+  grep -i -A1 "$(eval echo "\$$i")" -h /home/parkmino/Videos/uptv.m3u | grep -v -e -- -e EXTINF
   done
- grep -i -A1 "$(eval echo "\$$i")" -h /home/parkmino/Videos/uptv.m3u | grep -v -e -- -e EXTINF
- done
+ else
+  echo "$folder/tvheadend.avl does not exist"
+ fi
 fi

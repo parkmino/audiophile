@@ -1,8 +1,8 @@
 #!/bin/sh
 
-[ -n "$1" ] && torrent="$1" || torrent=torrentwal #torrentkim torrenthaja torrentboja torrentwal torrentqq
+[ -n "$1" ] && torrent="$1" || torrent=wal # kim haja boja wal qq
 
-if [ $torrent = torrentkim ]; then
+if [ $torrent = kim ]; then
  url="https://torrentkim.org/torrent_movie/torrent1.htm"
  str=$(curl -s -m12 $url | grep 인기자료 -A2 | tail -1)
  j=0
@@ -13,7 +13,7 @@ if [ $torrent = torrentkim ]; then
   printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
   printf "    $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
  done
-elif [ $torrent = torrenthaja ]; then
+elif [ $torrent = haja ]; then
  url="https://torrenthaja4.com"
  printf "\n%s\n\n" $url
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
@@ -22,7 +22,7 @@ elif [ $torrent = torrenthaja ]; then
   printf "%2d.%s\n" $i "$(curl -s "$url" | grep '<strong>' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
   printf "    $(curl -s "$url" | grep -m$i -o "/torrent_.*.html" | tail -1 | echo "$url$(cat -)")\n"
  done
-elif [ $torrent = torrentboja ]; then
+elif [ $torrent = boja ]; then
  url1="https://torrentboza.net"
  url2="https://torrentboza.net/bbs/board.php?bo_table=movie"
  printf "\n%s\n\n" "$url1"
@@ -32,19 +32,19 @@ elif [ $torrent = torrentboja ]; then
   printf "%2d.%s\n" $i "$(curl -s "$url2" | grep -A 60 best-post-addon | grep -o '\[.*' | head -$i | tail -1 | cut -d'<' -f1 | sed 's/$[ \t]*//; s/&lt;/</; s/&gt;/>/')"
   printf "    $(curl -s "$url2" | grep -A 60 best-post-addon | grep -m$i "href" | tail -1 | cut -d\" -f2 | sed 's/amp;//')\n"
  done
-elif [ $torrent = torrentwal ]; then
- url="https://torrentwal.com"
+elif [ $torrent = wal ]; then
+ url="https://torrentwal2.com"
  printf "\n%s\n\n" $url
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
  for i in $(seq 1 10); do
   printf "%2d.%s\n" $i "$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')"
   printf "    $url$(curl -s "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
  done
-elif [ $torrent = torrentqq ]; then
- url="https://torrentqq4.com"
+elif [ $torrent = qq ]; then
+ url="https://torrentqq10.com"
  printf "\n%s\n\n" $url
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
- url="https://torrentqq4.com/torrent/mov.html"
+ url="https://torrentqq10.com/torrent/mov.html"
  for i in $(seq 1 10); do
   printf "%2d.%s\n" $i "$(curl -s "$url" | grep -o '주간 인기순위.*' | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)"
  printf "    $(curl -s "$url" | grep -o '주간 인기순위.*' | sed 's/<a href=/\n/g' | head -$((i+2)) | tail -1 | cut -d\" -f2)\n"
