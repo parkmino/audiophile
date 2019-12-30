@@ -19,10 +19,10 @@
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
  sysctl -w kernel.sched_min_granularity_ns=229978
- sysctl -w kernel.sched_wakeup_granularity_ns=388288
- sysctl -w kernel.sched_latency_ns=1394063
+ sysctl -w kernel.sched_wakeup_granularity_ns=388289
+ sysctl -w kernel.sched_latency_ns=1394064
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899004
+ sysctl -w kernel.sched_migration_cost_ns=4899005
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window=345997
