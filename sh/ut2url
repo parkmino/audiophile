@@ -1,27 +1,29 @@
 #!/bin/sh
 
 echo "\
-(1) JTBC 뉴스
-(2) KBS 뉴스
-(3) tbs TV
-(4) 연합뉴스TV
-(5) YTN LIVE
-(6) YTN 라이프
-(7) YTN 사이언스
-(k) 김기열" # (8) RTV 시민방송
+(j) JTBC 뉴스
+(k) KBS 뉴스
+(m) MBC 뉴스
+(s) SBS 뉴스
+(t) tbs TV
+(y) 연합뉴스TV
+(v) YTN LIVE
+(f) YTN 라이프
+(s) YTN 사이언스" # (r) RTV 시민방송
 
 read -p " " i
 
 case $i in
- 1) ch=jtbc        ; url="https://www.youtube.com/user/JTBC10news"                  ;;
- 2) ch=kbsnews     ; url="https://www.youtube.com/user/NewsKBS"                     ;;
- 3) ch=tbs         ; url="https://www.youtube.com/user/seoultbstv/featured"         ;;
- 4) ch=yonhap      ; url="https://www.youtube.com/channel/UCTHCOPwqNfZ0uiKOvFyhGwg" ;;
- 5) ch=ytn         ; url="https://www.youtube.com/user/ytnnews24"                   ;;
- 6) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
- 7) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
- 8) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
- k) ch=kiyul       ; url="https://www.youtube.com/channel/UCf8xJL-CznwfW7W2LO3y_EQ" ;;
+ j) ch=jtbcnews    ; url="https://www.youtube.com/user/JTBC10news"                  ;;
+ k) ch=kbsnews     ; url="https://www.youtube.com/user/NewsKBS"                     ;;
+ m) ch=mbcnews     ; url="https://www.youtube.com/channel/UCF4Wxdo3inmxP-Y59wXDsFw" ;;
+ s) ch=sbsnews     ; url="https://www.youtube.com/channel/UCkinYTS9IHqOEwR1Sze2JTw" ;;
+ t) ch=tbs         ; url="https://www.youtube.com/user/seoultbstv/featured"         ;;
+ y) ch=yonhap      ; url="https://www.youtube.com/channel/UCTHCOPwqNfZ0uiKOvFyhGwg" ;;
+ v) ch=ytn         ; url="https://www.youtube.com/user/ytnnews24"                   ;;
+ f) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
+ s) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
+ r) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
  *) exit ;;
 esac
 
