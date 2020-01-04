@@ -1,44 +1,25 @@
-1. alsa.conf
-
-	$ sudo sh -c "printf 'pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 pcm.0.type hw defaults.pcm.minperiodtime 2772    ;  ' > /usr/share/alsa/alsa.conf.min"
-
-2. Config files
-
-	mpd.conf, upmpdcli.conf, mympd.conf, roon
-
-	$ sudo nano *.conf (mpd, upmpdcli, mympd, roon, spotifyd, hdparm, resolve, /etc/network/interfaces)
-	quadruple-space+line feed+double-space at the end without new line
-
-3. Strip debug
-
-	libasound, libaudiofile, libFLAC, mpd, librespot
-
-	$ file /usr/bin/mpd /usr/bin/librespot /usr/lib/.../libasound.so.2.0.0.min{n,x}
-	$ sudo strip --strip-debug /usr/bin/mpd /usr/bin/librespot /usr/lib/.../libasound.so.2.0.0.min{n,x}
-
-4. Build libaudiofile & libFLAC
-
-5. Disable systemd-journald & systemd-logind
+1. Disable systemd-journald & systemd-logind
 
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
 	$ sudo systemctl mask systemd-logind
 
-6. Disable systemd-resolved
+2. Disable systemd-resolved
 
 	$ sudo systemctl stop    systemd-resolved
 	$ sudo systemctl disable systemd-resolved
 	$ sudo rm   /etc/resolv.conf
 	$ sudo nano /etc/resolv.conf
-		nameserver 1.1.1.1
+		nameserver 1.1.1.1    
+		  
 
-7. /etc/sysctl.conf
+3. /etc/sysctl.conf
 
 	$ sudo nano /etc/sysctl.conf
 		kernel.sched_wakeup_granularity_ns = 388289	# 388288
 		kernel.sched_latency_ns = 1394064		# 1394063
 		kernel.sched_migration_cost_ns = 4899005	# 4899004
 
-8. Artik710
+4. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
