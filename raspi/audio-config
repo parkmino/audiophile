@@ -334,7 +334,7 @@ while true; do
  "2"  "MPD options              MPD 옵션                    >" \
  "3"  "Change renderer name     렌더러 이름 바꾸기          >" \
  "4"  "Airplay, Roon, Spotify   에어플레이, 룬, 스포티파이  >" \
- "5"  "Upmpdcli Tidal           Upmpdcli 타이달  설정       >" \
+ "5"  "Upmpdcli Tidal           Upmpdcli 타이달 설정        >" \
  "6"  "IP TTS, DBus             IP TTS와 DBus               >" \
  "7"  "Ethernet IP              유선 IP 설정                >" \
  "8"  "USB signal & power       USB 신호와 전원             >" \
