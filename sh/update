@@ -18,19 +18,13 @@ upd_fix () {
  upd
 }
 
-if [ -z "$1" ]; then
- upd
- exit
-elif [ "$1" = fix ]; then
- upd_fix
- exit
-elif [ "$1" = all ]; then
- upd
- printf \\n
-elif [ "$1" != ck ] && [ "$1" != check ]; then
- usage
- exit
-fi
+case "$1" in 
+ "")       upd ; exit ;;
+ all)      upd ; echo ;;
+ check|ck) ;;
+ fix)      upd_fix ; exit ;;
+ *)        usage ; exit ;;
+esac
 
 days_diff () {
  [ -z "${date##*x*}" ] && printf "\n" && return
@@ -50,11 +44,13 @@ days_diff () {
 }
 
 msg () {
- if [ "$current" = "$latest" ]; then
-  printf "신판\n"
- else
-  printf "구판 (${latest})\n"
- fi
+if [ -z "$latest" ]; then
+ printf "정보 없음\n"
+elif [ "$latest" = "$current" ]; then
+ printf "신판\n"
+else
+ printf "구판 ($latest)\n"
+fi
 }
 
 curl_opt="-s -m12"
@@ -65,12 +61,8 @@ url="https://github.com/philippe44/AirConnect/tree/master/bin"
 latest=$(curl $curl_opt "$url" | grep -A 4 \"airupnp-x86-64\" | tail -1 | cut -d\" -f4)
 current=$(airupnp-x86-64 --help | head -1 | cut -dv -f2 | cut -d' ' -f1)
 printf "$current\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-elif [ "$latest" = "$current" ]; then
- printf "신판\n"
-else
- printf "구판 ($latest)\n"
+msg
+if [ "$latest" != "$current" ]; then
  read -p "  Update AirConnect? [Y/n]" answer
  if [ "$answer" != n ]; then
   printf '  '
@@ -89,17 +81,13 @@ printf "• Adobe Flash\t"
 latest=$(curl $curl_opt 'http://get.adobe.com/kr/flashplayer/about/' | sed -n '/Linux/,+15p' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
 current=$(grep -m1 ^Version /usr/lib/firefox-addons/plugins/readme.txt | cut -d' ' -f2)
 printf "$current\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
- if [ "$current" != "$latest" ]; then
-  echo "  Adboe Flash Player $latest download link"
-  echo "  https://get.adobe.com/flashplayer/otherversions/"
- #echo "  $ sudo tar --overwrite -C /usr/lib/PepperFlash/ -zxvf ~/Downloads/flash_player_ppapi_*.tar.gz"
-  echo "  $ sudo tar --overwrite -C /usr/lib/firefox-addons/plugins/ -zxvf ~/Downloads/flash_player_npapi_*.tar.gz libflashplayer.so readme.txt"
- #echo "  $ rm -rf /home/parkmino/.config/google-chrome/PepperFlash"
- fi
+msg
+if [ "$current" != "$latest" ]; then
+ echo "  Adboe Flash Player $latest download link"
+ echo "  https://get.adobe.com/flashplayer/otherversions/"
+#echo "  $ sudo tar --overwrite -C /usr/lib/PepperFlash/ -zxvf ~/Downloads/flash_player_ppapi_*.tar.gz"
+ echo "  $ sudo tar --overwrite -C /usr/lib/firefox-addons/plugins/ -zxvf ~/Downloads/flash_player_npapi_*.tar.gz libflashplayer.so readme.txt"
+#echo "  $ rm -rf /home/parkmino/.config/google-chrome/PepperFlash"
 fi
 }
 
@@ -189,36 +177,27 @@ ALSA () {
  else
  #printf "$(curl $curl_opt "$url" | grep -om1 "alsa.*release" | cut -d" " -f2) ($date)\t\t"
  printf "$(curl $curl_opt "$url" | grep -m1 'releases/tag' | cut -d\/ -f6 | cut -d\" -f1) ($(date -d "$date" +%F))\t\t"
-  days_diff
+ days_diff
  fi
 }
 
 ANDROID_X86 () {
 printf "• Android-x86\t"
-latest=$(curl $curl_opt https://www.android-x86.org/releases.html | grep -o "ReleaseNote [0-9][0-9.rcRC-]*" | head -1 | cut -d' ' -f2-)
+url="https://www.android-x86.org/releases.html"
+latest=$(curl $curl_opt $url | grep -o "ReleaseNote [0-9][0-9.rcRC-]*" | head -1 | cut -d' ' -f2-)
 current=$(ls -d /home/parkmino/Downloads/android*/ | tail -1 | cut -d\/ -f5 | cut -d\- -f3-)
+latest=$(printf ""$current"\n"$latest"" | sort -V | tail -1)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- if [ "$current" = "$(printf ""$current"\n"$latest"" | sort -V | tail -1)" ]; then
-  printf "신판\n"
- else
-  printf "구판 ("$latest")\n"
- fi
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 APCAST () {
 printf "• APCast\t"
-latest=$(curl $curl_opt http://indiwork.co.kr/apcast-firmware/ | grep -m1 'Firmware Upgrade' | cut -d'<' -f1 | sed 's/.*→ //; s/[ \t]*$//')
+url="http://indiwork.co.kr/apcast-firmware/"
+latest=$(curl $curl_opt $url | grep -m1 'Firmware Upgrade' | cut -d'<' -f1 | sed 's/.*→ //; s/[ \t]*$//')
 current="45M"
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 ARMBIAN () {
@@ -241,28 +220,21 @@ fi
 
 ASSETUPNP () {
 printf "• AssetUPnP\t"
-latest=$(curl $curl_opt http://www.dbpoweramp.com/asset-upnp-dlna.htm | sed -n 's/.*Intel 64 bit Release //p' | cut -d'<' -f1)
+url="http://www.dbpoweramp.com/asset-upnp-dlna.htm"
+latest=$(curl $curl_opt $url | sed -n 's/.*Intel 64 bit Release //p' | cut -d'<' -f1)
 current=$(cat '/home/parkmino/Downloads/AssetUPnP/Versions/Asset-UPnP.txt' | cut -c2-)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 BUBBLEUPNP () {
 printf "• BubbleUPnP\t"
-#latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
-latest=$(curl $curl_opt 'https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp&hl=en' | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
- current=3.4.1
+url="https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp"
+#latest=$(curl $curl_opt "$url&hl=en" | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
+latest=$(curl $curl_opt "$url&hl=en" | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
+current=3.4.1
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- #latest=$(date -d "$latest" +%F)
- msg
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 BUNKER1 () {
@@ -287,14 +259,11 @@ fi
 
 CREATE_AP () {
 printf "• Create_ap\t"
-latest=$(curl $curl_opt https://github.com/oblique/create_ap/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+url="https://github.com/oblique/create_ap/releases/latest"
+latest=$(curl $curl_opt $url | cut -d'/' -f8 | cut -d'"' -f1)
 current=v$(create_ap --version)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 DAS () {
@@ -352,12 +321,8 @@ printf "• DietPi\t"
 #latest=$(curl $curl_opt "$url" | grep -m1 -o 'DietPi v[0-9]*.[0-9]*' | cut -d" " -f2)
 #current=v6.17
 #printf "$current\t\t\t\t"
-#if [ -z "$latest" ]; then
-# printf "정보 없음\n"
-#else
-# msg
-# echo "  $(echo "$url" | cut -d"/" -f1-4)$(curl -s "$url" | grep -m1 'DietPi v[0-9]*.[0-9]*' | cut -d\" -f2 | cut -d"." -f2- | sed 's/\&amp;/\&/g')"
-#fi
+#msg
+#echo "  $(echo "$url" | cut -d"/" -f1-4)$(curl -s "$url" | grep -m1 'DietPi v[0-9]*.[0-9]*' | cut -d\" -f2 | cut -d"." -f2- | sed 's/\&amp;/\&/g')"
  ver=$(curl $curl_opt "$url" | grep -m1 -o 'DietPi v[0-9]*.[0-9]*' | cut -d" " -f2)
  date="$(curl -s $url | grep -m1 -A2 'DietPi v[0-9]*.[0-9]*' | tail -1 | cut -d">" -f4 | cut -d"<" -f1)"
  if [ -z "$date" ]; then
@@ -401,14 +366,11 @@ fi
 
 CELLULOID () {
 printf "• Celluloid\t"
-latest=$(curl $curl_opt https://github.com/celluloid-player/celluloid/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+url="https://github.com/celluloid-player/celluloid/releases/latest"
+latest=$(curl $curl_opt $url | cut -d'/' -f8 | cut -d'"' -f1)
 current=v$(celluloid --version | cut -d' ' -f2)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 EXTINF () {
@@ -418,13 +380,7 @@ latest=$(curl $curl_opt "$url" | grep -m1 -o "article id=\"post-[0-9]*" | cut -d
 current="69890"
 printf "$current"
 printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-elif [ "$latest" = "$current" ]; then
- printf "신판\n"
-else
- printf "구판 ($latest)\n  $url\n  sed -i 's/current=\"$current\"/current=\"$latest\"/' $0\n"
-fi
+msg && [ "$current" != "$latest" ] && printf "  $url\n  sed -i 's/current=\"$current\"/current=\"$latest\"/' $0\n"
 }
 
 GOOGLER () {
@@ -432,12 +388,8 @@ printf "• Googler\t"
 latest=$(curl $curl_opt https://github.com/jarun/googler/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
 current=v$(googler --version)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-elif [ "$latest" = "$current" ]; then
- printf "신판\n"
-else
- printf "구판 ($latest)\n"
+msg
+if [ "$current" != "$latest" ]; then
  read -p "  Update googler? [Y/n]" answer
  [ "$answer" != n ] && printf '  ' && sudo googler -u
 fi
@@ -445,16 +397,10 @@ fi
 
 H3DROID () {
 printf "• H3Droid\t"
-latest=$(curl $curl_opt https://h3droid.com/download | grep -m1 'Version [0-9]' | cut -d'>' -f2 | cut -d':' -f1 | cut -d' ' -f2)
-#current=$(ls -d /home/parkmino/Downloads/h3droid* | cut -d'-' -f2 | sort -Vr | head -1)
-#[ -z $current ] && current=1.3.3
-current=1.3.4
-printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
+url="https://h3droid.com/download"
+latest=$(curl $curl_opt $url | grep -m1 'Version [0-9]' | cut -d'>' -f2 | cut -d':' -f1 | cut -d' ' -f2)
+current=1.3.5
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 HIFIBERRY () {
@@ -512,20 +458,16 @@ printf "• Libffmeg\t"
 latest=$(curl $curl_opt https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases | grep -m1 linux-x64 | cut -d'/' -f6)
 current=$(ls /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip | head -1 | cut -d'/' -f6 | cut -d'-' -f1)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
- url="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases/download/$latest/$latest-linux-x64.zip"
- if [ "$current" != "$latest" ] && curl -IL -s $url | grep -qs '302 Found'; then
-  read -p "  Update libffmpeg.so? [Y/n]" answer
-  if [ "$answer" != n ]; then
-   printf '  '
-   sudo rm -f /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip
-   sudo curl -s -L $url -o /usr/lib/x86_64-linux-gnu/opera/$latest-linux-x64.zip
-   sudo unzip -o /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip -d /usr/lib/x86_64-linux-gnu/opera/
-   #sudo unzip -o /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip -d /opt/vivaldi/lib/
-  fi
+msg
+url="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases/download/$latest/$latest-linux-x64.zip"
+if [ "$current" != "$latest" ] && curl -IL -s $url | grep -qs '302 Found'; then
+ read -p "  Update libffmpeg.so? [Y/n]" answer
+ if [ "$answer" != n ]; then
+  printf '  '
+  sudo rm -f /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip
+  sudo curl -s -L $url -o /usr/lib/x86_64-linux-gnu/opera/$latest-linux-x64.zip
+  sudo unzip -o /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip -d /usr/lib/x86_64-linux-gnu/opera/
+  #sudo unzip -o /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip -d /opt/vivaldi/lib/
  fi
 fi
 }
@@ -542,7 +484,6 @@ else
  [ ${#ver} -ge 10 ] && printf "\t" || printf "\t\t"
  days_diff
 fi
-#current=$(ls -d /home/parkmino/Downloads/Libre* | sed 's/.*arm.//')
 }
 
 MESON () {
@@ -551,12 +492,8 @@ latest=$(curl $curl_opt https://github.com/mesonbuild/meson/releases/latest | cu
 #current=$(ls --group-directories-first -d1 /home/parkmino/Downloads/meson-* | head -1 | cut -d\- -f2)
 current=$(meson --version)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-elif [ "$latest" = "$current" ]; then
- printf "신판\n"
-else
- printf "구판 ($latest)\n"
+msg
+if [ "$current" != "$latest" ]; then
  echo "  $ cd /home/parkmino/Downloads/meson-$current"
  echo "  $ sudo python3 setup.py install --record files.txt && cat files.txt | xargs sudo rm -rf && cd .. && sudo rm -rf meson-$current"
  echo '  $ curl -s $(curl -s https://github.com/mesonbuild/meson/releases/latest | cut -d\" -f2) | grep -m1 tar.gz | cut -d\" -f2 | wget "https://github.com/$(cat -)"'
@@ -568,15 +505,12 @@ fi
 
 MINIDLNA () {
 printf "• MiniDLNA\t"
+url="https://sourceforge.net/projects/minidlna/files/minidlna/"
 #latest=$(curl $curl_opt 'https://sourceforge.net/projects/minidlna/files/latest/download?source=files' | grep 'resource was found at' | cut -d'/' -f7)
-latest=$(curl $curl_opt https://sourceforge.net/projects/minidlna/files/minidlna/ | grep 'Click to enter' | head -1 | cut -d\" -f2 | cut -d' ' -f4)
+latest=$(curl $curl_opt $url | grep 'Click to enter' | head -1 | cut -d\" -f2 | cut -d' ' -f4)
 current=$(ls -d /home/parkmino/Downloads/minidlna* | cut -d'-' -f2)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 MPD_CANTATA_MYMPD () {
@@ -680,15 +614,11 @@ fi
 
 OPERA () {
 printf "• Opera\t\t"
-latest=$(curl $curl_opt "https://blogs.opera.com/desktop/changelog-for-54/" | grep -m1 'blog post' | sed 's/.*content="//; s/[ \t].*//')
+url="https://blogs.opera.com/desktop/changelog-for-65/"
+latest=$(curl $curl_opt $url | grep -m1 'blog post' | sed 's/.*content="//; s/[ \t].*//')
 current=$(opera --version)
 printf "$current\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
-#current=52.0.2871.40
- msg
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 RASPBIAN () {
@@ -708,13 +638,7 @@ url="https://github.com/jonaski/strawberry/releases/latest"
 latest=$(curl $curl_opt "$url" | cut -d\/ -f8 | cut -d\" -f1)
 current=$(strawberry --version | cut -d\  -f2 | cut -d\- -f1)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-elif [ "$latest" = "$current" ]; then
- printf "신판\n"
-else
- printf "구판 ($latest)\n"
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 TELEGRAM () {
@@ -745,12 +669,8 @@ url="https://github.com/tsl0922/ttyd/releases/latest"
 latest=$(curl $curl_opt "$url" | cut -d\/ -f8 | cut -d\" -f1)
 current=$(ttyd --version | cut -d" " -f3)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-elif [ "$latest" = "$current" ]; then
- printf "신판\n"
-else
- printf "구판 ($latest)\n"
+msg
+if [ "$latest" != "$current" ]; then
  read -p "  Update ttyd? [Y/n]" answer
  if [ "$answer" != n ]; then
   printf '  '
@@ -768,11 +688,7 @@ printf "• Ubuntu\t"
 latest="$(curl $curl_opt https://changelogs.ubuntu.com/meta-release-lts | grep ^Version | tail -1 | cut -d' ' -f2-)"
 current=$(grep ^PRETTY_NAME= /etc/os-release | cut -d\" -f2 | cut -d' ' -f2-)
 printf "$current\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- msg
-fi
+msg
 }
 
 UPMPDCLI () {
@@ -781,15 +697,7 @@ printf "• Upmpdcli\t"
 latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/releases.html | grep -o -m1 'upmpdcli [0-9.]*' | cut -d' ' -f2)
 current=$(upmpdcli -v | cut -d' ' -f2)
 printf "$current\t\t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-else
- if [ "$current" = "$(printf ""$current"\n"$latest"" | sort -V | tail -1)" ]; then
-  printf "신판\n"
- else
-  printf "구판 ("$latest")\n"
- fi
-fi
+msg && [ "$current" != "$latest" ] && echo "  $url"
 }
 
 YOUTUBE_DL () {
@@ -798,13 +706,8 @@ latest=$(curl $curl_opt https://github.com/ytdl-org/youtube-dl/releases/latest |
 current=$(youtube-dl --version)
 #printf "$current ($(date -d $(echo $current | cut -d'.' -f1-3 | tr . -) +%F))\t\t"
  printf "$current \t\t\t"
-if [ -z "$latest" ]; then
- printf "정보 없음\n"
-elif [ "$latest" = "$current" ]; then
- printf "신판\n"
-else
-#printf "구판 ($(date -d $(echo $latest | cut -d'.' -f1-3 | tr . -) +%F))\n"
- printf "구판 ($latest)\n"
+msg
+if [ "$latest" != "$current" ]; then
  read -p "  Update youtube-dl? [Y/n]" answer
  [ "$answer" != n ] && printf '  ' && sudo youtube-dl --update
 fi
