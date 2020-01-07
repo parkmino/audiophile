@@ -5,3 +5,10 @@ echo "\
   http://c4.inlive.co.kr:8250 (AAC 325kbps@96kHz)"
 url="http://saycast.sayclub.com/station/home/index/hifi"
 curl -s $url | grep -m1 "<div id=\"moreMusic\">" | cut -d\> -f2- | cut -d\< -f1
+
+if [ "$1" = play ]; then
+ echo
+ host="127.0.0.1"
+ url="http://c4.inlive.co.kr:8250"
+ mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
+fi
