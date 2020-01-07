@@ -23,6 +23,12 @@ $ git pull mympd master
 $ git push origin master
 $ git branch -D dev
 
+$ git remote -V
+$ git fetch mympd
+$ git ckeckout master
+$ git merge mympd/master
+$ git push origin master
+
 ### Ubuntu PPA
 
 https://help.ubuntu.com/community/GnuPrivacyGuardHowto
