@@ -548,3 +548,9 @@ HR =
 
 	$ sudo systemctl disable hciuart
 	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
+
+32. Shirnk Image
+
+	http://aoakley.com/articles/2015-10-09-resizing-sd-images.php
+	https://github.com/Drewsif/PiShrink
+	https://github.com/dydgns2017/raspberrypi_img_backup_script
