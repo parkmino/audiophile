@@ -1,8 +1,8 @@
 #!/bin/sh
 echo "\
-* 클래식HiFi
-  http://hifi.saycast.com     (MP3 320kbps@48kHz)
-  http://c4.inlive.co.kr:8250 (AAC 325kbps@96kHz)"
+* ClassicHiFi
+  http://hifi.saycast.com (MP3 320kbps@48kHz)
+  http://hificlass.inlive.co.kr http://c4.inlive.co.kr:8250 (AAC 325kbps@96kHz)"
 url="http://saycast.sayclub.com/station/home/index/hifi"
 curl -s $url | grep -m1 "<div id=\"moreMusic\">" | cut -d\> -f2- | cut -d\< -f1
 
