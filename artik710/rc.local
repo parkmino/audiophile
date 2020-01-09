@@ -52,7 +52,7 @@ eol () {
   airconnect
   [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-aarch64) || true
  fi
- [ "$serial" = off ] && systemctl stop serial-getty@ttySAC3
+ [ "$serial" = on ] || systemctl stop serial-getty@ttySAC3
  pkill rc.local
 }
 
@@ -142,9 +142,10 @@ do
  pkill $i || true
 done
 
-### myMPD
-#systemctl start mympd
-mympd&</dev/null 2>/dev/null
+### myMPD & SSH
+#[ "$mympd"  = on ] && systemctl start mympd
+[ "$mympd"  = on ] && mympd&</dev/null 2>/dev/null
+[ "$ssh"    = on ] && systemctl start ssh
 
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))

@@ -19,6 +19,17 @@
 		kernel.sched_latency_ns = 1394064		# 1394063
 		kernel.sched_migration_cost_ns = 4899005	# 4899004
 
+4. Optional mympd & ssh & serial console
+
+	$ sudo nano /etc/default/audio.conf
+		mympd=on
+		ssh=off
+		serial=off
+	$ sudo nano /etc/rc.local
+		[ "$mympd"  = on ] && mympd&...
+		[ "$ssh"    = on ] && systemctl start ssh
+		[ "$serial" = on ] || systemctl stop serial-getty@ttySAC3
+
 4. Artik710
 
 	-. Disable connman

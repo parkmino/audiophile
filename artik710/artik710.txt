@@ -159,6 +159,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	ssh=off
 	upnp=on
 	wifi=off
+	mympd=on
+	ssh=off
 	serial=on
 
 ### /etc/fstab
