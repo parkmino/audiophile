@@ -27,10 +27,10 @@ case $i in
  *) exit ;;
 esac
 
-url=$(curl -s "$url" | grep -m1 -o data-context-item-id.* | cut -d\" -f2)
- [ -n "$url" ] && echo "https://youtu.be/$url"
-#[ -n "$url" ] && echo "plugin://plugin.video.youtube/play/?video_id=$url"
+uturl=$(curl -s "$url" | grep -m1 -o data-context-item-id.* | cut -d\" -f2)
+ [ -n "$uturl" ] && printf "  $ch - https://youtu.be/$uturl\n( $url )\n"
+#[ -n "$uturl" ] && printf "  $ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n( $url )\n"
 
 m3u_dir="/home/parkmino/Videos"
 
-printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$url\n" > $m3u_dir/$ch.m3u
+printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > $m3u_dir/$ch.m3u
