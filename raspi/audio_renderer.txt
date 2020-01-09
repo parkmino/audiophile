@@ -72,13 +72,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		blacklist uio-pdrv-genirq
 		blacklist vc_sm_cma
 		blacklist x_tables
-		#blacklist cfg80211
 		#blacklist bcm2835_gpiomem
 		#blacklist fixed
 		#blacklist ip_tables
 		###Disable RPi3 Wi-Fi
 		#blacklist brcmfmac
-		#blacklist brcmutil
 		###Disable RPi3 Bluetooth
 		#blacklist btbcm
 		#blacklist hci_uart
