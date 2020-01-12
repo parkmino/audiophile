@@ -13,16 +13,22 @@ folder="/home/parkmino/Videos/iptv"
 if [ "$1" = ip ]; then
  printf "$url"
  ! curl $curl_opt "${url}" >/dev/null && printf " is not available!\n" && exit
+ page=$(curl $curl_opt "${url}" | grep -o "Page 1 of [0-9]*" | cut -d' ' -f4)
  echo
- for i in $(curl $curl_opt "${url}" | grep -o http://[0-9]*.[0-9]*.[0-9]*.[0-9]*:9981/ | uniq); do
-  curl $curl_opt "${i}playlist" >/dev/null && echo "${i}playlist"
+ for i in $(curl $curl_opt "${url}" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
+   iptv_url=$(curl $curl_opt "$i" | grep -o http://[0-9]*.[0-9]*.[0-9]*.[0-9]*:[0-9]*/[a-z0-9/]* | head -1)
+   printf "\33[2K\r$i\t(Page 1 of $page)"
+   ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
  done
- for i in $(seq 2 30); do
-  curl $curl_opt "${url}page/$i/" >/dev/null || break
-  for j in $(curl $curl_opt "${url}page/$i/" | grep -o http://[0-9]*.[0-9]*.[0-9]*.[0-9]*:9981/ | uniq); do
-   curl $curl_opt "${j}playlist" >/dev/null && printf "${j}playlist\t($i)\n"
+ for i in $(seq 2 $page); do
+  for j in $(curl $curl_opt "${url}page/$i/" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
+   iptv_url=$(curl $curl_opt "$j" | grep -o http://[0-9]*.[0-9]*.[0-9]*.[0-9]*:[0-9]*/[a-z0-9/]* | head -1)
+   [ "$j" = "https://www.extinf.com/korea-30/" ] && break
+   printf "\33[2K\r$j\t(Page $i of $page)"
+   ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$j\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
   done
  done
+ printf "\33[2K"
 elif [ "$1" = ls ]; then
  ls -1 $folder/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.ls
 elif [ "$1" = ck ]; then
@@ -30,7 +36,7 @@ elif [ "$1" = ck ]; then
  echo "$(cat $folder/tvheadend.ls)" | while read line; do
   printf "$line\t"
   file=$folder/channels_$line.m3u
-  curl -s -o /dev/null --connect-timeout 2 -m 3 http://$line:9981/playlist && printf "playlist "
+  curl -s -o /dev/null --connect-timeout 2 -m 3 http://$line/playlist && printf "playlist "
   if ffprobe -v quiet $(grep -m1 ^http:// $file); then
    printf "stream\n"
    echo "$line" >> $folder/tvheadend.avl
