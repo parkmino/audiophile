@@ -16,19 +16,20 @@ if [ "$1" = ip ]; then
  page=$(curl $curl_opt "${url}" | grep -o "Page 1 of [0-9]*" | cut -d' ' -f4)
  echo
  for i in $(curl $curl_opt "${url}" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
-   iptv_url=$(curl $curl_opt "$i" | grep -o http://[0-9]*.[0-9]*.[0-9]*.[0-9]*:[0-9]*/[a-z0-9/]* | head -1)
-   printf "\33[2K\r$i\t(Page 1 of $page)"
+   [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] && continue
+   iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
+   printf "\33[2K\r$i (Page 1 of $page)"
    ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
  done
- for i in $(seq 2 $page); do
-  for j in $(curl $curl_opt "${url}page/$i/" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
-   iptv_url=$(curl $curl_opt "$j" | grep -o http://[0-9]*.[0-9]*.[0-9]*.[0-9]*:[0-9]*/[a-z0-9/]* | head -1)
-   [ "$j" = "https://www.extinf.com/korea-30/" ] && break
-   printf "\33[2K\r$j\t(Page $i of $page)"
-   ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$j\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
+ for h in $(seq 2 $page); do
+  for i in $(curl $curl_opt "${url}page/$h/" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
+   [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] && continue
+   iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
+   printf "\33[2K\r$i (Page $h of $page)"
+   ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
   done
  done
- printf "\33[2K"
+ printf "\33[2K\r"
 elif [ "$1" = ls ]; then
  ls -1 $folder/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.ls
 elif [ "$1" = ck ]; then
@@ -37,7 +38,7 @@ elif [ "$1" = ck ]; then
   printf "$line\t"
   file=$folder/channels_$line.m3u
   curl -s -o /dev/null --connect-timeout 2 -m 3 http://$line/playlist && printf "playlist "
-  if ffprobe -v quiet $(grep -m1 ^http:// $file); then
+  if ffprobe -v quiet $(grep -m1 "^https\?://" $file); then
    printf "stream\n"
    echo "$line" >> $folder/tvheadend.avl
   else
