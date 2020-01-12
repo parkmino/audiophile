@@ -9,6 +9,14 @@ usage () {
 url="https://www.extinf.com/category/korean/"
 curl_opt="-s -m9 --connect-timeout 9"
 folder="/home/parkmino/Videos/iptv"
+h=1
+
+url_probe () {
+ [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] && continue
+ iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
+ printf "\33[2K\r$i (Page $h of $page)"
+ ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
+}
 
 if [ "$1" = ip ]; then
  printf "$url"
@@ -16,17 +24,11 @@ if [ "$1" = ip ]; then
  page=$(curl $curl_opt "${url}" | grep -o "Page 1 of [0-9]*" | cut -d' ' -f4)
  echo
  for i in $(curl $curl_opt "${url}" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
-   [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] && continue
-   iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
-   printf "\33[2K\r$i (Page 1 of $page)"
-   ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
+  url_probe
  done
  for h in $(seq 2 $page); do
   for i in $(curl $curl_opt "${url}page/$h/" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
-   [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] && continue
-   iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
-   printf "\33[2K\r$i (Page $h of $page)"
-   ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
+   url_probe
   done
  done
  printf "\33[2K\r"
