@@ -12,7 +12,7 @@ folder="/home/parkmino/Videos/iptv"
 h=1
 
 url_probe () {
- [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] && continue
+ [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] || [ "$i" = "https://www.extinf.com/korea-iptv-15/" ] && continue
  iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
  printf "\33[2K\r$i (Page $h of $page)"
  ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"

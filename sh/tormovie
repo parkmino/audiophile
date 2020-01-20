@@ -33,7 +33,7 @@ elif [ $torrent = boja ]; then
   printf "    $(curl -s "$url" | grep -A 60 best-post-addon | grep -m$i "href" | tail -1 | cut -d\" -f2 | sed 's/amp;//')\n"
  done
 elif [ $torrent = wal ]; then
- url="https://torrentwal2.com"
+ url="https://torrentwal.com"
  printf "\n%s\n\n" $url
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
  for i in $(seq 1 10); do
