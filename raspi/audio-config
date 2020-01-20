@@ -23,7 +23,7 @@ iqaudio () {
 }
 
 sound_card () {
-i=$(whiptail --title "Audio device / 오디오 장치" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 20 55 12 \
+i=$(whiptail --title "Audio device / 오디오 장치" --menu "Audio device / 오디오 장치" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 19 55 12 \
 "1"  "USB Audio Class 2.0" \
 "2"  "Allo Boss DAC" \
 "3"  "Allo DigiOne" \
@@ -81,20 +81,19 @@ esac
 
 usb_signal_power () {
 i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
-Select/선택
 
               [USB ]      [USB4]
    [LAN]      [USB3]      [USB5]
   =============================== 
     RasPi 1B+/2B/3B Back Port           라즈베리 파이 1B+/2B/3B 뒷면
-    USB3 is recommended for DAC         DAC은 USB3을 추천합니다" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 18 75 4 \
+    USB3 is recommended for DAC         DAC은 USB3을 추천합니다" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 18 75 4 \
 "1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
 "2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \
 "3" "Disable USB 4/5 signal              USB 4/5 신호만 끄기" \
 "4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/usb=/s/=.*/=on/'      $audio_conf ;;
+ 1) sudo sed -i '/usb=/s/=.*/=on/'    $audio_conf ;;
  2) sudo sed -i '/usb=/s/=.*/=2-5/'   $audio_conf ;;
  3) sudo sed -i '/usb=/s/=.*/=4,5/'   $audio_conf ;;
  4) sudo sed -i '/usb=/s/=.*/=2,4,5/' $audio_conf ;;
@@ -102,7 +101,7 @@ esac
 }
 
 ethernet_ip () {
-i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 45 2 \
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 9 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
@@ -159,7 +158,7 @@ esac
 }
 
 dbus_tts () {
-i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 63 3 \
+i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "IP TTS, DBus / IP TTS와 DBus" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 63 3 \
 "tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
 "eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) \
 "dbus"   "Enable DBus             DBus 사용" $(grep -q '# dbus' /etc/rc.local && echo OFF || echo ON) 3>&1 1>&2 2>&3)
@@ -181,7 +180,7 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 70 4 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 70 4 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
 "pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
@@ -197,7 +196,7 @@ fi
 }
 
 airplay_roon_spotify () {
-i=$(whiptail --title "AirPlay, Roon, Spotify / 에어플레이, 룬, 스포티파이" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 3 \
+i=$(whiptail --title "AirPlay, Roon, Spotify / 에어플레이, 룬, 스포티파이" --checklist "AirPlay, Roon, Spotify" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 59 3 \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
 "spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
@@ -273,10 +272,9 @@ upmpd_tidal () {
 while true; do
 
 i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
-Select/선택
 
     To disable Tidal, just remove username or password.
-   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 14 63 3 \
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 13 63 3 \
 "1"  "Tidal ┬ username        사용자        >" \
 "2"  "      │ password        비밀번호      >" \
 "3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
@@ -313,7 +311,7 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
      fi
     fi ;;
- 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" --default-item 3 11 52 3 \
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Tidal quality / Tidal 품질" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" --default-item 3 10 50 3 \
 "1" "low" \
 "2" "high" \
 "3" "loseless" 3>&1 1>&2 2>&3)
@@ -329,7 +327,7 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "audio-config" 17 66 9 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "audio-config" 16 66 9 \
  "1"  "Audio device             오디오 장치                 >" \
  "2"  "MPD options              MPD 옵션                    >" \
  "3"  "Change renderer name     렌더러 이름 바꾸기          >" \

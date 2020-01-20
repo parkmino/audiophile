@@ -6,7 +6,7 @@ spotifyd_conf=/etc/spotifyd.conf
 audio_conf=/etc/default/audio.conf
 
 ethernet_ip () {
-i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 45 2 \
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Bann Audio Sylphid Network Player" 9 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
@@ -46,7 +46,7 @@ esac
 }
 
 wifi_client () {
-i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 50 2 \
+i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Wi-Fi Client / 무선 연결" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Bann Audio Sylphid Network Player" 9 50 2 \
 "1" "Enable  Wi-Fi       무선 연결        >" \
 "2" "Disable Wi-Fi       무선 연결 안 함" 3>&1 1>&2 2>&3)
 #"0" "Scan    Wi-Fi       무선 검색" \
@@ -82,7 +82,7 @@ esac
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 11 70 4 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 70 4 \
 "dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
 "pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
@@ -98,7 +98,7 @@ fi
 }
 
 airplay_roon () {
-i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 9 59 2 \
+i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "UPnP, Roon Bridge, AirPlay" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 8 59 2 \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
@@ -113,10 +113,9 @@ spotifyd () {
 while true; do
 
 i=$(whiptail --title "Spotify / Spotify 설정" --menu "\
-Select/선택
 
     To disable spotify, just remove username or password.
-  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 14 66 3 \
+  사용자나 비밀번호를 지우면 스포티파이를 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Bann Audio Sylphid Network Player" 13 66 3 \
 "1"  "Spotify ┬ device name     장치 이름     >" \
 "2"  "        │ username        사용자        >" \
 "3"  "        └ password        비밀번호      >" 3>&1 1>&2 2>&3)
@@ -237,10 +236,9 @@ upmpd_tidal () {
 while true; do
 
 i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
-Select/선택
 
     To disable Tidal, just remove username or password.
-   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 14 63 3 \
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Bann Audio Sylphid Network Player" 13 63 3 \
 "1"  "Tidal ┬ username        사용자        >" \
 "2"  "      │ password        비밀번호      >" \
 "3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
@@ -277,7 +275,7 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
      fi
     fi ;;
- 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Select/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" --default-item 3 11 52 3 \
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Tidal quality / Tidal 품질" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Bann Audio Sylphid Network Player" --default-item 3 10 52 3 \
 "1" "low" \
 "2" "high" \
 "3" "loseless" 3>&1 1>&2 2>&3)
@@ -293,7 +291,7 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Bann Audio Sylphid Network Player" 14 60 6 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Bann Audio Sylphid Network Player" 13 60 6 \
 "1" "MPD options            MPD 옵션               >" \
 "2" "Change renderer name   렌더러 이름 바꾸기     >" \
 "3" "AirPlay, Roon Bridge   에어플레이, 룬 브리지  >" \
