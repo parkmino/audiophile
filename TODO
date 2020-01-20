@@ -30,7 +30,12 @@
 		[ "$ssh"    = on ] && systemctl start ssh
 		[ "$serial" = on ] || systemctl stop serial-getty@ttySAC3
 
-4. Artik710
+5. Wonder Shaper
+
+	https://github.com/magnific0/wondershaper
+	https://github.com/magnific0/wondershaper/archive/master.zip
+
+6. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
