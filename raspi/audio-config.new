@@ -1,0 +1,313 @@
+#!/bin/bash
+
+[ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
+[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
+spotifyd_conf=/home/pi/spotifyd.conf
+audio_conf=/etc/default/audio.conf
+
+sound_card_initial () {
+ sudo sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio\|dtoverlay=justboom\|dtoverlay=rpi-dac/d' /boot/config.txt
+}
+
+sound_card_selector () {
+ sound_card_initial
+ sudo sed -i '$adtoverlay='"$1"'' /boot/config.txt
+}
+
+iqaudio () {
+ if (whiptail --title "Unmute IQaudIO / IQaudIO 음소거 제거" --yesno "   Unmute IQaudIO?   IQaudIO 음소거를 제거할까요?" --yes-button "Yes/예" --no-button "No/아니오" 8 56); then
+  sudo sed -i '/\/sys\/class\/gpio/s/^#*//g' /etc/rc.local
+ else
+  sudo sed -i '/\/sys\/class\/gpio/s/^echo/#echo/g' /etc/rc.local
+ fi
+}
+
+sound_card () {
+i=$(whiptail --title "Audio device / 오디오 장치" --menu "Audio device / 오디오 장치" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 19 55 12 \
+"1"  "USB Audio Class 2.0" \
+"2"  "Allo Boss DAC" \
+"3"  "Allo DigiOne" \
+"4"  "Allo Katana DAC" \
+"5"  "Allo Piano DAC" \
+"6"  "Allo Piano DAC+" \
+"7"  "Allo Piano DAC+ (+Kali board)" \
+"8"  "ApplePi DAC" \
+"9"  "Audiophonics I-SABRE Q2M DAC" \
+"10" "Dion Audio LOCO DAC-AMP" \
+"11" "Dion Audio LOCO-V2 DAC-AMP" \
+"12" "HiFiBerry Amp/Amp+" \
+"13" "HiFiBerry DAC" \
+"14" "HiFiBerry DAC+ADC" \
+"15" "HifiBerry DAC+ADC Pro" \
+"16" "HiFiBerry DAC+/DAC+ Pro" \
+"17" "HiFiBerry Digi/Digi+" \
+"18" "HiFiBerry Digi+ Pro" \
+"19" "IQaudIO DAC" \
+"20" "IQaudIO DAC+" \
+"21" "IQaudIO DigiAMP+" \
+"22" "IQaudIO Digi+" \
+"23" "JustBoom DAC" \
+"24" "JustBoom Digi" \
+"25" "RPi DAC" 3>&1 1>&2 2>&3)
+
+case $i in
+ 1)  sound_card_initial ;;
+ 2)  sound_card_selector allo-boss-dac-pcm512x-audio			;;
+ 3)  sound_card_selector allo-digione					;;
+ 4)  sound_card_selector allo-katana-dac-audio				;;
+ 5)  sound_card_selector allo-piano-dac-pcm512x-audio			;;
+ 6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
+ 7)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
+ 8)  sound_card_selector applepi-dac					;;
+ 9)  sound_card_selector i-sabre-q2m					;;
+ 10) sound_card_selector dionaudio-loco					;;
+ 11) sound_card_selector dionaudio-loco-v2				;;
+ 12) sound_card_selector hifiberry-amp					;;
+ 13) sound_card_selector hifiberry-dac					;;
+ 14) sound_card_selector hifiberry-dacplusadc				;;
+ 15) sound_card_selector hifiberry-dacplusadcpro			;;
+ 16) sound_card_selector hifiberry-dacplus				;;
+ 17) sound_card_selector hifiberry-digi					;;
+ 18) sound_card_selector hifiberry-digi-pro				;;
+ 19) sound_card_selector iqaudio-dac					;;
+ 20) sound_card_selector iqaudio-dacplus				;;
+ 21) sound_card_selector iqaudio-dacplus,unmute_amp			;;
+ 22) sound_card_selector iqaudio-digi-wm8804-audio			;;
+ 23) sound_card_selector justboom-dac					;;
+ 24) sound_card_selector justboom-digi					;;
+ 25) sound_card_selector rpi-dac					;;
+esac
+}
+
+usb_signal_power () {
+i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
+
+              [USB ]      [USB4]
+   [LAN]      [USB3]      [USB5]
+  =============================== 
+    RasPi 1B+/2B/3B Back Port           라즈베리 파이 1B+/2B/3B 뒷면
+    USB3 is recommended for DAC         DAC은 USB3을 추천합니다" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 17 75 4 \
+"1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
+"2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \
+"3" "Disable USB 4/5 signal              USB 4/5 신호만 끄기" \
+"4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
+
+case $i in
+ 1) sudo sed -i '/usb=/s/=.*/=on/'    $audio_conf ;;
+ 2) sudo sed -i '/usb=/s/=.*/=2-5/'   $audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=4,5/'   $audio_conf ;;
+ 4) sudo sed -i '/usb=/s/=.*/=2,4,5/' $audio_conf ;;
+esac
+}
+
+ethernet_ip () {
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 9 45 2 \
+"1" "Dynamic IP (DHCP)       자동 IP" \
+"2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
+
+eth=$(ifconfig | grep -m1 ^en | cut -d':' -f1)
+
+case $i in
+ 1) sudo sed -i '/iface '"$eth"' inet manual/s/^#*//' /etc/network/interfaces
+    sudo sed -i '/iface '"$eth"' inet static/,+6d'    /etc/network/interfaces
+    cat /etc/network/interfaces
+    sudo systemctl enable dhcpcd.service ;;
+ 2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "\
+
+Input Static IP address to use.       사용할 수동 IP를 입력합니다.
+Current IP is listed below.           아래는 현재 주소입니다.
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -z "$user_ip" ]; then
+      ip_1st=$(echo "$(hostname -I)" | cut -d "." -f1)
+      ip_2nd=$(echo "$(hostname -I)" | cut -d "." -f2)
+      ip_3rd=$(echo "$(hostname -I)" | cut -d "." -f3)
+      ip_4th=$(echo "$(hostname -I)" | cut -d "." -f4)
+     else
+      ip_1st=$(echo "$user_ip" | cut -d "." -f1)
+      ip_2nd=$(echo "$user_ip" | cut -d "." -f2)
+      ip_3rd=$(echo "$user_ip" | cut -d "." -f3)
+      ip_4th=$(echo "$user_ip" | cut -d "." -f4)
+     fi
+     if [ "$ip_1st" -ge "1" ] 2>/dev/null && [ "$ip_1st" -le "254" ] 2>/dev/null && [ "$ip_1st" -ne "127" ] 2>/dev/null && [ "$ip_2nd" -ge "0" ] 2>/dev/null && [ "$ip_2nd" -le "255" ] 2>/dev/null && [ "$ip_3rd" -ge "0" ] 2>/dev/null && [ "$ip_3rd" -le "255" ] 2>/dev/null && [ "$ip_4th" -ge "2" ] 2>/dev/null && [ "$ip_4th" -le "254" ] 2>/dev/null ; then
+      ip=$ip_1st.$ip_2nd.$ip_3rd
+      ip_all=$ip_1st.$ip_2nd.$ip_3rd.$ip_4th
+     else
+      ip=192.168.0
+      ip_all=192.168.0.9
+     fi
+     sudo sed -i '/iface '"$eth"' inet manual/s/^/#/' /etc/network/interfaces
+     sudo sed -i '/iface '"$eth"' inet static/,$d'    /etc/network/interfaces
+     sudo sed -i "\$aiface '"$eth"' inet static\n address\t\t$ip_all\n netmask\t\t255.255.255.0\n broadcast\t\t$ip.255\n network\t\t$ip.0\n gateway\t\t$ip.1\n#dns-nameservers\t168.126.63.1" /etc/network/interfaces
+     sudo systemctl disable dhcpcd.service
+     echo "\
+My assumption may be wrong, please edit with the following command.
+'sudo nano /etc/network/interfaces'
+제 추정은 틀릴 수 있으므로, 위 명령어로 직접 수정하시기 바랍니다.
+
+-----------------------
+/etc/network/interfaces
+-----------------------
+
+$(cat /etc/network/interfaces)" > ~/static_ip.txt
+     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "audio-config" 18 75
+    fi
+    ;;
+esac
+}
+
+dbus_tts () {
+i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "IP TTS, DBus / IP TTS와 DBus" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 63 3 \
+"tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
+"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) \
+"dbus"   "Enable DBus             DBus 사용" $(grep -q 'dbus=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ dbus ]] && sudo sed -i '/dbus=/s/=.*/=on/' $audio_conf || sudo sed -i '/dbus=/s/=.*/=off/' $audio_conf
+ [[ $i =~ tts  ]] && sudo sed -i '/tts=/s/=.*/=on/' $audio_conf || sudo sed -i '/tts=/s/=.*/=off/' $audio_conf
+ [[ $i =~ eng  ]] && sudo sed -i '/tts_eng=/s/=.*/=on/' $audio_conf || sudo sed -i '/tts_eng=/s/=.*/=off/' $audio_conf
+fi
+}
+
+renderer_name () {
+ current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3)
+ i=$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
+
+Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 67 $current_name 3>&1 1>&2 2>&3)
+ [ "$i" != $current_name ] && [ "$i" != "" ] && sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
+}
+
+mpd_options () {
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 70 4 \
+"dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
+"tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
+"pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
+"vol"      "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
+ [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+fi
+}
+
+features () {
+i=$(whiptail --title "AirPlay, Roon, Spotify, Tidal" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 4 \
+"airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
+"spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) \
+"tidal"     "Enable Tidal         타이달 사용" $(grep -q 'tidal=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
+ [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
+ [[ $i =~ spotify ]] && sudo sed -i '/spotify=/s/=.*/=on/' $audio_conf || sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf
+ if [[ $i =~ tidal ]]; then
+  ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+  sudo sed -i '/tidal=/s/=.*/=on/' $audio_conf
+ else
+  [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
+  sudo sed -i '/tidal=/s/=.*/=off/' $audio_conf
+ fi
+fi
+}
+
+upmpd_tidal () {
+while true; do
+
+i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
+
+    To disable Tidal, just remove username or password.
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 13 63 3 \
+"1"  "Tidal ┬ username        사용자        >" \
+"2"  "      │ password        비밀번호      >" \
+"3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+[ "$exitstatus" != 0 ] && return
+
+case $i in
+ 1) tidal_user=$(grep "tidaluser =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
+
+Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_user" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+      sudo sed -i '/tidaluser =/s/^#*//; /tidaluser =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/tidaluser =/s/^/#/; /tidaluser =/s/=.*/=/' $upmpdcli_conf
+      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
+     fi
+    fi ;;
+ 2) tidal_pwd=$(grep "tidalpass =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
+
+Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_pwd" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+      sudo sed -i '/tidalpass =/s/^#*//; /tidalpass =/s/=.*/= '"$input_pwd"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/tidalpass =/s/^/#/; /tidalpass =/s/=.*/=/' $upmpdcli_conf
+      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
+     fi
+    fi ;;
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Tidal quality / Tidal 품질" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" --default-item 3 10 50 3 \
+"1" "low" \
+"2" "high" \
+"3" "loseless" 3>&1 1>&2 2>&3)
+
+    case $i in
+     1) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= low/'      $upmpdcli_conf ;;
+     2) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= high/'     $upmpdcli_conf ;;
+     3) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= loseless/' $upmpdcli_conf ;;
+    esac ;;
+esac
+
+done
+}
+
+while true; do
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "audio-config" 15 77 8 \
+ "1"  "Audio device                   오디오 장치                        >" \
+ "2"  "MPD options                    MPD 옵션                           >" \
+ "3"  "Change renderer name           렌더러 이름 바꾸기                 >" \
+ "4"  "Airplay, Roon, Spotify, Tidal  에어플레이, 룬, 스포티파이, 타이달 >" \
+ "5"  "IP TTS, DBus                   IP TTS와 DBus                      >" \
+ "6"  "Ethernet IP                    유선 IP 설정                       >" \
+ "7"  "USB signal & power             USB 신호와 전원                    >" \
+ "8"  "Raspbian update                라즈비안 업데이트" 3>&1 1>&2 2>&3)
+
+ exitstatus=$?
+ [ "$exitstatus" != 0 ] && break
+
+ case $i in
+  1)  sound_card ;;
+  2)  mpd_options ;;
+  3)  renderer_name ;;
+  4)  features ;;
+  t)  upmpd_tidal ;;
+  5)  dbus_tts ;;
+  6)  ethernet_ip ;;
+  7)  usb_signal_power ;;
+  8)  sudo ntpdate pool.ntp.org
+      sudo apt-get update
+      sudo apt-get upgrade
+      sudo apt-get dist-upgrade ;;
+ esac
+done
+
+if (whiptail --title "Reboot / 다시 시작" --backtitle "audio-config" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+  reboot is necessary.    다시 시작해야 합니다.
+
+  Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
+ sudo reboot
+fi
