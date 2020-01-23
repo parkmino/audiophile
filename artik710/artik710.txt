@@ -152,12 +152,13 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	# To ignore a feature, comment out the line by '#'
 
 	alsa=min
+	upnp=on
 	airplay=off
 	roon=on
 	roontoram=off
 	spotify=off
-	ssh=off
-	upnp=on
+	tidal=off
+	dbus=on
 	wifi=off
 	mympd=on
 	ssh=off

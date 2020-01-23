@@ -141,6 +141,7 @@ for i in hciattach
 do
  pkill $i || true
 done
+[ "$dbus" = off ] && systemctl stop dbus  || true
 
 ### myMPD & SSH
 #[ "$mympd"  = on ] && systemctl start mympd
