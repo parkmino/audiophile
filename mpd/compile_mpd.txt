@@ -27,7 +27,7 @@ Files:
 
 ### Install build packages
 sudo apt-get install autoconf automake build-essential
-sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libmad0-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libmpg123-dev libboost-dev libmms-dev # libsystemd-dev
+sudo apt-get install libglib2.0-dev libcue-dev libcurl4-gnutls-dev libaudiofile-dev libasound2-dev libflac-dev libid3tag0-dev libavformat-dev libsndfile1-dev libmpdclient-dev libboost-dev # libmad0-dev libmpg123-dev libmms-dev libsystemd-dev
 sudo apt-get install libexpat1-dev libupnp-dev
 
 ### Download & Compile
