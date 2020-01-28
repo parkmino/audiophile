@@ -228,6 +228,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get install build-essential cargo libasound2-dev
 	$ wget https://github.com/librespot-org/librespot/archive/master.zip
+	$ wget https://github.com/librespot-org/librespot/archive/v0.1.0.zip
 	$ unzip master.zip && rm master.zip
 	$ cd librespot-master
 	$ nano Cargo.toml
@@ -364,7 +365,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#loglevel = 1
 		#user = mympd
 		 syscmds = true
-		 coverextract = true
 	$#sudo chown -R pi /var/lib/mympd # dietpi
 	$#sudo adduser pi mympd # dietpi
 	$#sudo chomod -R 775 /var/lib/mympd
@@ -451,24 +451,7 @@ HR =
 
 28. audio.conf
 
-	$ sudo nano /etc/default/audio.conf
-		# audio.conf
-		#
-		# alsa has the options of min(imal), mix(er) and orig(inal).
-		# To enable a feature, set feature=on.
-		# To disable a feature, set feature=off
-		# To ignore a feature, comment out the line by '#'
-
-		alsa=min
-		upnp=on
-		roon=off
-		roontoram=off
-		airplay=off
-		spotify=off
-		wifi=off
-		tts=off
-		tts_eng=off
-		usb=on
+	$ cp audio.conf /etc/default/audio.conf
 
 29. Build libaudiofile libFLAC
 
