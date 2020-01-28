@@ -13,7 +13,7 @@ i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유�
 [ -n "$(which connmanctl)" ] && eth=$(connmanctl services | grep -om1 ethernet.*)
 
 case $i in
- 1) connmanctl config $eth --ipv4 dhcp ;;
+ 1) sudo connmanctl config $eth --ipv4 dhcp ;;
  2) user_ip=$(whiptail --title "Ethernet IP / 유선 IP 설정" --inputbox "\
 
 Input Static IP address to use.       사용할 수동 IP를 입력합니다.
@@ -39,8 +39,8 @@ Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다."
       ip=192.168.0
       ip_all=192.168.0.9
      fi
-     connmanctl config $eth --ipv4 manual $ip_all 255.255.255.0 $ip.1
-     systemctl disable dhcpcd.service
+     sudo connmanctl config $eth --ipv4 manual $ip_all 255.255.255.0 $ip.1
+     sudo systemctl disable dhcpcd.service
     fi ;;
 esac
 }
@@ -66,18 +66,18 @@ Use space in between.           사이에 빈 칸을 입력합니다." --ok-butt
      pass=$(echo "$wifi" | rev | cut -d " " -f1 | rev)
     fi
     if [ -n "$ap" ] && [ -n "$pass" ]; then
-     wpa_passphrase $ap $pass >> /etc/wpa_supplicant/wpa_supplicant.conf
-     systemctl unmask wpa_supplicant
-     systemctl start  wlan_dhcp
-     systemctl start  wpa_supplicant
-     systemctl enable wlan_dhcp
-     systemctl enable wpa_supplicant
-     dhclient wlan0
+     sudo wpa_passphrase $ap $pass >> /etc/wpa_supplicant/wpa_supplicant.conf
+     sudo systemctl unmask wpa_supplicant
+     sudo systemctl start  wlan_dhcp
+     sudo systemctl start  wpa_supplicant
+     sudo systemctl enable wlan_dhcp
+     sudo systemctl enable wpa_supplicant
+     sudo dhclient wlan0
     fi ;;
- 2) sed -i '/^network={/,$d' /etc/wpa_supplicant/wpa_supplicant.conf
-    systemctl disable wpa_supplicant
-    systemctl disable wlan_dhcp
-    systemctl mask    wpa_supplicant ;;
+ 2) sudo sed -i '/^network={/,$d' /etc/wpa_supplicant/wpa_supplicant.conf
+    sudo systemctl disable wpa_supplicant
+    sudo systemctl disable wlan_dhcp
+    sudo systemctl mask    wpa_supplicant ;;
 esac
 }
 
@@ -90,10 +90,10 @@ i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD �
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sed -i '/dop/s/^#*//g' $mpd_conf || sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ tag    ]] && sed -i '/metadata.*none/s/^/#/' $mpd_conf || sed -i '/metadata.*none/s/^#*//' $mpd_conf
- [[ $i =~ pcm    ]] && sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
- [[ $i =~ vol    ]] && sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+ [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
+ [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
 fi
 }
 
@@ -104,8 +104,8 @@ i=$(whiptail --title "UPnP, Roon Bridge, AirPlay" --checklist "UPnP, Roon Bridge
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ airplay ]] && sed -i '/airplay=/s/=.*/=on/' $audio_conf || sed -i '/airplay=/s/=.*/=off/' $audio_conf
- [[ $i =~ roon ]] && sed -i '/roon=/s/=.*/=on/' $audio_conf || sed -i '/roon=/s/=.*/=off/' $audio_conf
+ [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
+ [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
 fi
 }
 
@@ -131,7 +131,7 @@ Input Spotify device name.   Spotify 장치 이름을 입력합니다." --ok-but
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_device" ]; then
-      sed -i '/device_name/s/=.*/= '"$input_device"'/' $spotifyd_conf
+      sudo sed -i '/device_name/s/=.*/= '"$input_device"'/' $spotifyd_conf
      fi
     fi ;;
  2) spotify_user=$(grep username $spotifyd_conf | cut -d' ' -f3)
@@ -141,10 +141,10 @@ Input Spotify username.   Spotify 사용자를 입력합니다." --ok-button "OK
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
-      sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
-      sed -i '/spotify/s/=.*/=on/'  $audio_conf
+      sudo sed -i '/username/s/=.*/= '"$input_user"'/' $spotifyd_conf
+      sudo sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
-      sed -i '/spotify/s/=.*/=off/' $audio_conf
+      sudo sed -i '/spotify/s/=.*/=off/' $audio_conf
      fi
     fi ;;
  3) spotify_pwd=$(grep password $spotifyd_conf | cut -d' ' -f3)
@@ -154,10 +154,10 @@ Input Spotify password.   Spotify 비밀번호를 입력합니다." --ok-button 
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
-      sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
-      sed -i '/spotify/s/=.*/=on/'  $audio_conf
+      sudo sed -i '/password/s/=.*/= '"$input_pwd"'/' $spotifyd_conf
+      sudo sed -i '/spotify/s/=.*/=on/'  $audio_conf
      else
-      sed -i '/spotify/s/=.*/=off/' $audio_conf
+      sudo sed -i '/spotify/s/=.*/=off/' $audio_conf
      fi
     fi ;;
 esac
