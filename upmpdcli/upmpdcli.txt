@@ -24,6 +24,7 @@ $ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= 1/= 0/' /
 $ grep checkcontentformat /etc/upmpdcli.conf
 
 checkcontentformat = 0
+tidalquality = lossless
 
 $ sudo systemctl disable upmpdcli.service
 $ sudo nano -L /etc/upmpdcli.conf
