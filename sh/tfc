@@ -1,0 +1,12 @@
+#!/bin/sh
+
+opt=add
+qdisc=pfifo_fast
+
+[ "$1" = del ] && opt=del && qdisc=
+
+echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
+ sudo tc qdisc $opt dev $dev root $qdisc
+ sudo tc qdisc $opt dev $dev ingress
+ tc -s -d qdisc show dev $dev
+done
