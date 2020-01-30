@@ -101,7 +101,7 @@ ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0
@@ -151,7 +151,7 @@ pkill rngd    || true
 swapoff -a
 
 ### myMPD & SSH
-[ "$mympd"  = on ] && mympd&</dev/null 2>/dev/null
+[ "$mympd"  = on ] && /dev/shm/mympd /dev/shm/mympd.conf&</dev/null 2>/dev/null
 [ "$ssh"    = on ] && systemctl start ssh
 
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
