@@ -30,12 +30,36 @@
 		[ "$ssh"    = on ] && systemctl start ssh
 		[ "$serial" = on ] || systemctl stop serial-getty@ttySAC3
 
-5. Wonder Shaper
+5. myMPD to ram
 
-	https://github.com/magnific0/wondershaper
-	https://github.com/magnific0/wondershaper/archive/master.zip
+	$ sudo nano /etc/rc.local
+		cp /usr/bin/mympd /dev/shm/
+		/dev/shm/mympd ...
 
-6. Artik710
+6. Traffic Control
+
+	$ sudo tc qdisc add dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1) root pfifo_fast
+	$ sudo tc qdisc add dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1) ingress
+	$ tc -s -d qdisc show dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1)
+	
+	$ sudo nano /etc/default/audio.conf
+		tfc=on
+	$ sudo nano /etc/rc.local
+		if [ "$tfc" = on ]; then
+		 echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
+		  tc qdisc add dev $dev root pfifo_fast
+		  tc qdisc add dev $dev ingress
+		 #tc -s -d qdisc show dev $dev
+		 done
+		fi
+
+7. Tidal quiality
+
+	$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
+	$ grep tidalquality /etc/upmpdcli.conf
+		tidalquality = lossless
+
+8. Artik710
 
 	-. Disable connman
 	-. Blacklist modules

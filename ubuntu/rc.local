@@ -67,6 +67,12 @@
  echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall || true
 
+echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
+ sudo tc qdisc add dev $dev root pfifo_fast
+ sudo tc qdisc add dev $dev ingress
+#tc -s -d qdisc show dev $dev
+done
+
 for i in $(ls /sys/block/*/queue/scheduler); do
  if   echo $(cat $i) | grep -q none; then
   echo none > $i
