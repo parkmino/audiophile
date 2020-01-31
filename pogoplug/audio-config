@@ -1,23 +1,132 @@
 #!/bin/bash
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
-[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
+[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/usr/local/etc/upmpdcli.conf.sav || upmpdcli_conf=/usr/local/etc/upmpdcli.conf
+audio_conf=/etc/default/audio.conf
 
-static_ip () {
-i=$(whiptail --title "IP address / IP 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 45 2 \
+mpd_options () {
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 10 70 4 \
+"dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
+"tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
+"pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
+"vol"      "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
+ [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+fi
+}
+
+features () {
+i=$(whiptail --title "AirPlay / 에어플레이" --checklist "UPnP, Roon Bridge, AirPlay" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 7 55 1 \
+"airplay"   "Enable AirPlay   에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
+fi
+}
+
+renderer_name () {
+ current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3)
+ i=$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
+
+Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 9 67 $current_name 3>&1 1>&2 2>&3)
+ [ "$i" != $current_name ] && [ "$i" != "" ] && sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
+}
+
+upmpd_tidal () {
+while true; do
+
+i=$(whiptail --title "Upmpdcli Tidal / 타이달 설정" --menu "\
+
+    To disable Tidal, just remove username or password.
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Pogoplug" 13 63 3 \
+"1"  "Tidal ┬ username        사용자        >" \
+"2"  "      │ password        비밀번호      >" \
+"3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+[ "$exitstatus" != 0 ] && return
+
+case $i in
+ 1) tidal_user=$(grep "tidaluser =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
+
+Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_user" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /root/upmpdcli-tidal*.deb
+      sudo sed -i '/tidaluser =/s/^#*//; /tidaluser =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/tidaluser =/s/^/#/; /tidaluser =/s/=.*/=/' $upmpdcli_conf
+      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
+     fi
+    fi ;;
+ 2) tidal_pwd=$(grep "tidalpass =" $upmpdcli_conf | cut -d' ' -f3-)
+    input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
+
+Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ "$exitstatus" = 0 ]; then
+     if [ -n "$input_pwd" ]; then
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /root/upmpdcli-tidal*.deb
+      sudo sed -i '/tidalpass =/s/^#*//; /tidalpass =/s/=.*/= '"$input_pwd"'/' $upmpdcli_conf
+     else
+      sudo sed -i '/tidalpass =/s/^/#/; /tidalpass =/s/=.*/=/' $upmpdcli_conf
+      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
+     fi
+    fi ;;
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Tidal quality / Tidal 품질" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Pogoplug" --default-item 3 10 52 3 \
+"1" "low" \
+"2" "high" \
+"3" "loseless" 3>&1 1>&2 2>&3)
+
+    case $i in
+     1) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= low/'      $upmpdcli_conf ;;
+     2) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= high/'     $upmpdcli_conf ;;
+     3) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= loseless/' $upmpdcli_conf ;;
+    esac ;;
+esac
+
+done
+}
+
+functions () {
+i=$(whiptail --title "myMPD, NFS, SSH" --checklist "myMPD, NFS, SSH" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 9 46 3 \
+"mympd"   "Enable myMPD   myMPD 사용" $(grep -q 'mympd=on' $audio_conf && echo ON || echo OFF) \
+"nfs"   "Enable NFS     NFS   사용" $(grep -q 'nfs=on' $audio_conf && echo ON || echo OFF) \
+"ssh"   "Enable SSH     SSH   사용" $(grep -q 'ssh=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ mympd ]] && sudo sed -i '/mympd=/s/=.*/=on/' $audio_conf || sudo sed -i '/mympd=/s/=.*/=off/' $audio_conf
+ [[ $i =~ nfs ]] && sudo sed -i '/nfs=/s/=.*/=on/' $audio_conf || sudo sed -i '/nfs=/s/=.*/=off/' $audio_conf
+ [[ $i =~ ssh ]] && sudo sed -i '/ssh=/s/=.*/=on/' $audio_conf || sudo sed -i '/ssh=/s/=.*/=off/' $audio_conf
+fi
+}
+
+ethernet_ip () {
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Pogoplug" 9 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
+eth=$(ifconfig | grep -m1 ^en | cut -d':' -f1)
+
 case $i in
- 1) sed -i '/iface eth0 inet manual/s/^#*//' /etc/network/interfaces
-    sed -i '/iface eth0 inet static/,+6d'    /etc/network/interfaces
+ 1) sudo sed -i '/iface '"$eth"' inet manual/s/^#*//' /etc/network/interfaces
+    sudo sed -i '/iface '"$eth"' inet static/,+6d'    /etc/network/interfaces
     cat /etc/network/interfaces
-    update-rc.d -f dhcpcd enable ;;
+    sudo systemctl enable dhcpcd.service ;;
  2) user_ip=$(whiptail --title "Static IP / 수동 IP" --inputbox "\
 
 Input Static IP address to use.       사용할 수동 IP를 입력합니다.
 Current IP is listed below.           아래는 현재 주소입니다.
-Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -z "$user_ip" ]; then
@@ -38,13 +147,13 @@ Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다."
       ip=192.168.0
       ip_all=192.168.0.9
      fi
-     sed -i '/iface eth0 inet manual/s/^/#/' /etc/network/interfaces
-     sed -i '/iface eth0 inet static/,$d'    /etc/network/interfaces
-     sed -i "\$aiface eth0 inet static\n address\t\t$ip_all\n netmask\t\t255.255.255.0\n broadcast\t\t$ip.255\n network\t\t$ip.0\n gateway\t\t$ip.1\n#dns-nameservers\t168.126.63.1" /etc/network/interfaces
-     update-rc.d -f dhcpcd remove
+     sudo sed -i '/iface '"$eth"' inet manual/s/^/#/' /etc/network/interfaces
+     sudo sed -i '/iface '"$eth"' inet static/,$d'    /etc/network/interfaces
+     sudo sed -i "\$aiface '"$eth"' inet static\n address\t\t$ip_all\n netmask\t\t255.255.255.0\n broadcast\t\t$ip.255\n network\t\t$ip.0\n gateway\t\t$ip.1\n#dns-nameservers\t168.126.63.1" /etc/network/interfaces
+     sudo systemctl disable dhcpcd.service
      echo "\
 My assumption may be wrong, please edit with the following command.
-'nano /etc/network/interfaces'
+'sudo nano /etc/network/interfaces'
 제 추정은 틀릴 수 있으므로, 위 명령어로 직접 수정하시기 바랍니다.
 
 -----------------------
@@ -52,68 +161,36 @@ My assumption may be wrong, please edit with the following command.
 -----------------------
 
 $(cat /etc/network/interfaces)" > ~/static_ip.txt
-     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "Audio-config" 18 75
+     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "Pogoplug" 18 75
     fi
     ;;
 esac
 }
 
-ip_tts () {
-i=$(whiptail --title "IP TTS" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 10 63 2 \
-"tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" OFF \
-"eng"    "Enable English IP TTS   영어 IP TTS 사용" OFF 3>&1 1>&2 2>&3)
-
-exitstatus=$?
-if [ "$exitstatus" = 0 ]; then
- [[ $i =~ tts  ]] && sed -i '/tts/s/^#//' /etc/rc.local || sed -i '/tts/s/^/#/' /etc/rc.local
- [[ $i =~ eng  ]] && sed -i '/tts/s/.*/tts en My I P is $(hostname -I)/' $mpd_conf || sed -i '/tts/s/.*/tts/' $mpd_conf
-fi
-}
-
-renderer_name () {
- current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3)
- i=$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
-
-Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 9 67 $current_name 3>&1 1>&2 2>&3)
- [ "$i" != $current_name ] && [ "$i" != "" ] && sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf
-}
-
-mpd_settings () {
-i=$(whiptail --title "MPD settings / MPD 설정" --checklist "Check/확인" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Audio-config" 11 64 3 \
-"dop"      "Enable DoP (DSD over PCM)   DoP 사용" ON \
-"folder"   "Enable Music Folder         음악 폴더 사용" ON \
-"tag"      "Enable Metadata             태그 사용" OFF 3>&1 1>&2 2>&3)
-
-exitstatus=$?
-if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sed -i '/dop/s/^#*//g' $mpd_conf || sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ folder ]] && sed -i '/^#music_directory\|^#db_file/s/^#//' $mpd_conf || sed -i '/^music_directory\|^db_file/s/^/#/g' $mpd_conf
- [[ $i =~ tag    ]] && sed -i '/metadata.*none/s/^/#/' $mpd_conf || sed -i '/metadata.*none/s/^#*//' $mpd_conf
-fi
-}
-
 while true; do
- i=$(whiptail --title "Audio-config / 오디오 설정" --menu "Choose/선택" --ok-button "OK/확인" --cancel-button "Exit/나가기" --backtitle "Audio-config" 14 61 7 \
- "1"  "MPD settings              MPD 설정             >" \
- "2"  "Renderer name             렌더러 이름 바꾸기   >" \
- "3"  "IP address                IP 설정              >" \
- "4"  "IP TTS                    IP TTS               >" \
- "5"  "Debian update             데비안 업데이트" \
- "6"  "Reboot                    재시작" \
- "7"  "Power off                 전원 끄기" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Pogoplug" 12 60 5 \
+"1" "MPD options            MPD 옵션               >" \
+"2" "Change renderer name   렌더러 이름 바꾸기     >" \
+"3" "AirPlay                에어플레이             >" \
+"4" "myMPD, NFS, SSH        myMPD, NFS, SSH 설정   >" \
+"5" "Ethernet IP            유선 IP 설정           >" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
- [ "$exitstatus" != 0 ] && exit
+ [ "$exitstatus" != 0 ] && break
 
  case $i in
-  1) mpd_settings ;;
+  1) mpd_options ;;
   2) renderer_name ;;
-  3) static_ip ;;
-  4) ip_tts ;;
-  5) apt-get update
-     apt-get upgrade
-     apt-get dist-upgrade ;;
-  6) reboot ;;
-  7) poweroff ;;
+  3) features ;;
+  t) upmpd_tidal ;;
+  4) functions ;;
+  5) ethernet_ip ;;
  esac
 done
+
+if (whiptail --title "Reboot / 다시 시작" --backtitle "Pogoplug" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+  reboot is necessary.    다시 시작해야 합니다.
+
+  Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
+ sudo reboot
+fi

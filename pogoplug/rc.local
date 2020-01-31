@@ -11,8 +11,6 @@
 #
 # By default this script does nothing.
 
-# turn on LED
-
 musicpd_bg () {
 
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
@@ -21,26 +19,15 @@ musicpd_bg () {
 
  sleep 1
 
- pgr_mpd=$(pgrep -x mpd)
-
- taskset -pc $m_task $pgr_mpd
- #renice -1 -p       $pgr_mpd
-
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		 taskset -cp $s_task $proc_nr ;;
-   io)		 taskset -cp $s_task $proc_nr ;;
-   player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $s_task $proc_nr ;;
-   output)	 taskset -cp $m_task $proc_nr
-		#renice -1 -p	     $proc_nr
-		 chrt -op 0	     $proc_nr ;;
+   output) chrt -op 0 $proc_nr ;;
   esac
  done
 
-nohup /tmp/upmpdcli -c /tmp/upmpdcli.conf&>/dev/null</dev/null
+/run/shm/nohup /run/shm/upmpdcli -c /run/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
 
 }
 
@@ -108,29 +95,68 @@ fi
 until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
  sleep 1
 done
+
+### AirConnect
+if [ "$airplay" = on ]; then
+ cp /usr/bin/airupnp-arm5 /run/shm/
+ /run/shm/nohup /run/shm/airupnp-arm5 -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
+fi
+
 sleep 1
-taskset -acp $s_task $(pgrep -x upmpdcli) || true
-pkill startpar
+pkill startpar || true
 sleep 1
-pkill rc.local
+pkill rc.local || true
 
 }
 
-cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.sav /tmp/libasound.so.2.0.0
-ln -sf /tmp/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
-ln -sf /tmp/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
-cp /usr/share/alsa/alsa.conf.sav /tmp/alsa.conf
-ln -sf /tmp/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /tmp/
-cp /etc/mpd.conf.sav /tmp/mpd.conf
-cp /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0.sav /tmp/libaudiofile.so.1.0.0
-ln -sf /tmp/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1
-ln -sf /tmp/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so
-cp /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.sav /tmp/libFLAC.so.8.3.0
-ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8
-ln -sf /tmp/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
-echo noop > /sys/block/sda/queue/scheduler
+mount -o remount,exec /run/shm
+
+if [ "$alsa" = orig ]; then
+ cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.orig /run/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.plug /run/shm/alsa.conf
+elif [ "$alsa" = min ]; then
+ cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.min /run/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.min /run/shm/alsa.conf
+ rm -rf /dev/snd/*c /dev/snd/by* || true
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+else
+ cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.mix /run/shm/libasound.so.2.0.0
+ cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+fi
+
+ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0
+ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
+ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
+ln -sf /run/shm/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/nohup /usr/local/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /usr/bin/mympd /usr/etc/mympd.conf /run/shm/
+cp /etc/mpd.conf.sav /run/shm/mpd.conf
+cp /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1.0.0
+ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0
+ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1
+ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so
+cp /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8.3.0
+ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0
+ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8
+ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so
+
+for i in $(ls /sys/block/*/queue/scheduler); do
+ if   echo $(cat $i) | grep -q none; then
+  echo none > $i
+ elif echo $(cat $i) | grep -q noop; then
+  echo noop > $i
+ fi
+done
+
+if [ "$tfc" = on ]; then
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
+ #tc qdisc add dev $dev root pfifo_fast
+  tc qdisc add dev $dev ingress
+ #tc -s -d qdisc show dev $dev
+ done
+fi
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
@@ -141,35 +167,32 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration/ &&
  renice  -3 $i
 done
 
-m_task=$(($(nproc --all)-1))
-[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
-
-#if [ "$m_task" -ge 1 ];then
-# for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd/ && $2 !~ /systemd/ {print $1}'); do
-#  taskset -acp 0 $pid || true
-# done
-#fi
-#
 ### Remove services
 #for i in dbus # sshd
 #do
 # service $i stop
 #done
-#renice +1 -p $(pgrep -w ssh) $(pgrep -w dbus) $(pgrep -w dh) $(pgrep -w rpc)
+
 swapoff -a
 
-### Init
-#taskset -cp $m_task 1
+[ "$dbus" = off ] && service dbus stop || true
+[ "$mympd" = on ] && /run/shm/mympd /run/shm/mympd.conf&</dev/null 2>/dev/null
+[ "$ssh" = off ] && service sshd stop || true
+[ "$usb" = on ] || uhubctl -a 0 -p "$usb"
 
-### Unmounted NFS
-if [ -z "$(mount | grep 'type nfs')" ]; then
+### NFS
+if [ "$nfs" = off ]; then
  for i in rpcbind rpc.statd rpc.idmapd; do
   pkill $i || true
  done
 fi
 
-musicpd_bg &
-eol &
-nohup /tmp/mpd --no-daemon /tmp/mpd.conf&>/dev/null</dev/null
+if [ "$upnp" = on ]; then
+ musicpd_bg &
+ eol &
+/run/shm/nohup /run/shm/mpd /run/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+else
+ pkill rc.local
+fi
 
 exit 0
