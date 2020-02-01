@@ -99,7 +99,8 @@
 
 	# nano /etc/default/audio.conf
 		ssh=off
-		serial=on
+		serial=off
+		tfc=on
 
 11. ALSA
 

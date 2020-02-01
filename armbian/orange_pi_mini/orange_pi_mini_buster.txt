@@ -126,6 +126,7 @@
 	# nano /etc/default/audio.conf
 		ssh=off
 		serial=on
+		tfc=on
 
 11. Static IP
 

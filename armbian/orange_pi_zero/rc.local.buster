@@ -25,6 +25,8 @@ musicpd_bg () {
  pkill rc.local
 }
 
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
 cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -55,6 +57,14 @@ for i in $(ls /sys/block/*/queue/scheduler); do
  fi
 done
 
+if [ "$tfc" = on ]; then
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy0)" | while read dev ; do
+  tc qdisc add dev $dev root pfifo_fast
+  tc qdisc add dev $dev ingress
+ #tc -s -d qdisc show dev $dev
+ done
+fi
+
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice  -2 $i
 done
@@ -72,8 +82,6 @@ if [ "$m_task" -ge 1 ];then
   taskset -acp 0 $pid 2>/dev/null || true
  done
 fi
-
-[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 systemctl stop dbus.service dbus.socket haveged polkit systemd-udevd
 
