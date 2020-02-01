@@ -1,12 +1,29 @@
 #!/bin/sh
 
-opt=add
-qdisc=pfifo_fast
+usage () {
+ echo "Usage: $(basename "$0") [add qdisc|del|st]"
+}
 
-[ "$1" = del ] && opt=del && qdisc=
-
-echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
- sudo tc qdisc $opt dev $dev root $qdisc
- sudo tc qdisc $opt dev $dev ingress
- tc -s -d qdisc show dev $dev
-done
+case $1 in
+ add)
+  [ -z "$2" ] && usage && exit
+  echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
+   echo "# $dev #"
+   sudo tc qdisc add dev $dev root $2
+   sudo tc qdisc add dev $dev ingress
+   tc -s -d qdisc show dev $dev
+  done ;;
+ del)
+  echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
+   echo "# $dev #"
+   sudo tc qdisc del dev $dev root
+   sudo tc qdisc del dev $dev ingress
+   tc -s -d qdisc show dev $dev
+  done ;;
+ st)
+  echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
+   echo "# $dev #"
+   tc -s -d qdisc show dev $dev
+  done ;;
+ *) usage; exit ;;
+esac
