@@ -58,7 +58,7 @@ for i in $(ls /sys/block/*/queue/scheduler); do
 done
 
 if [ "$tfc" = on ]; then
- echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy0)" | while read dev ; do
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
   tc qdisc add dev $dev root pfifo_fast
   tc qdisc add dev $dev ingress
  #tc -s -d qdisc show dev $dev
