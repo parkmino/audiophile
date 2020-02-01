@@ -1,128 +1,129 @@
-==============
-Orange Pi Zero
-==============
+==================================
+ Orange Pi Zero for Debian Buster
+==================================
 
 01. Orange Pi
 
 	http://www.orangepi.org/
 	http://www.orangepi.org/orangepizero/
 	http://linux-sunxi.org/Xunlong_Orange_Pi_Zero
-	http://linux-sunxi.org/Fex_Guide
 
-02. Armbian or DietPi
+02. Armbian Buster
 
 	https://www.armbian.com/
 	https://www.armbian.com/orange-pi-zero/
 	https://docs.armbian.com
+	https://dl.armbian.com/orangepizero/
+	
 	$ sudo fdisk -l
-	$ sudo dd if=Armbian_5.25_Orangepizero_Ubuntu_xenial_default_3.4.113.img of=/dev/sdb
+	$ sudo umount /dev/sdc?
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/armbian/Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59/Armbian_5.91_Orangepizero_Debian_buster_next_4.19.59.img of=/dev/sdc
 	$ sync
 	$ ssh root@192.168.0.x password:1234
-	Change password to "orangepi"
-	# apt-get purge unattended-upgrades
+	  Change to new password
+
 	# apt-get update
+	# apt-get remove --auto-remove unattended-upgrades
 	# apt-get upgrade
 	# apt-get dist-upgrade
-	# apt-get autoremove
 
-03. DietPi
+	# dpkg-reconfigure locales
+	# dpkg-reconfigure tzdata
 
-	http://www.dietpi.com
-	http://dietpi.com/phpbb/viewtopic.php?f=8&t=9#p9
-	http://dietpi.com/downloads/images/DietPi_OrangePiZero-armv7-(Jessie).7z
-	$ sudo fdisk -l
-	$ sudo dd if=DietPi_v145_OrangePiZero-armv7-(Jessie).img of=/dev/sdb
-	$ sync
-	$ ssh root@192.168.0.x password:dietpi
+	# update-locale LC_ALL=ko_KR.UTF-8 LANG=ko_KR.UTF-8 LANGUAGE=ko_KR.UTF-8 LC_MESSAGES=ko_KR.UTF-8
+	# cat /etc/default/locale
 
-03. Initial Configuration
+03. Kernel Option
 
-	$ ssh root@192.168.0.x password:1234
-	Change password to "orangepi"
-	# apt-get purge unattended-upgrades
-	# apt-get update
-	# apt-get upgrade
-	# apt-get dist-upgrade
-	# apt-get autoremove
-	# dpkg-reconfigure tzdata	
-
-04. Kernel Option
-
-	# ls /boot/script.bin
-
-	Armbian
-	# cd /boot/bin
-	# cp orangepizero.bin custom.bin
-	# bin2fex custom.bin custom.fex
-	# nano custom.fex
-	# fex2bin custom.fex custom.bin
-	# cd /boot
-	# ln -sf /boot/bin/custom.bin /boot/script.bin
-
-	DiePi
-	# cd /boot
-	# bin2fex script.bin script.fex
-	# mv script.bin script.orig
-	# nano script.fex
-	# fex2bin script.fex script.bin
-
-	# cat boot.cmd
-	# nano armbianEnv.txt
-		verbosity=1
-		console=none
-		extraargs="elevator=noop selinux=0"
+	# cat  /boot/boot.cmd
+	# nano /boot/armbianEnv.txt
+		 console=serial
+		#overlays=usbhost2 usbhost3
+		 extraargs="elevator=noop consoleblank=0 selinux=0"
 	# reboot
 
-05. Edit fstab
+04. /etc/fstab
 
-	# nano /etc/fstab
-		/dev/sda1 /mnt ext4 ro 0 0
-		#tmpfs /tmp tmpfs defaults,nosuid 0 0
-		#/var/swap none swap sw 0 0
-	# swapon -s
+	# cat /etc/fstab
 
-06. Remove modules
+05. Remove modules
 
 	# lsmod
 	# nano /etc/modprobe.d/orangepizero.conf
-		blacklist pcf8591
-		blacklist bmp085
-		blacklist xradio_wlan
+		blacklist cpufreq_dt
 		blacklist g_serial
-		#blacklist btrfs
+		blacklist gpu_sched
+		blacklist industrialio
+		blacklist ip_tables
+		blacklist lima
+		blacklist snd_pcm_dmaengine
+		blacklist snd_soc_core
+		blacklist snd_soc_simple_card
+		blacklist snd_soc_simple_card_utils
+		blacklist sun4i_gpadc_iio
+		blacklist sun4i_i2s
+		blacklist sun8i_adda_pr_regmap
+		blacklist sun8i_codec_analog
+		blacklist sun8i_ths
+		blacklist thermal_sys
+		blacklist ttm
+		blacklist uio
+		blacklist uio_pdrv_genirq
+		blacklist x_tables
+		blacklist xradio_wlan
 
-07. Remove service
+06. Remove service
 
-	# systemctl disable cron getty@tty1 serial-getty@ttyS0
-	# systemctl mask cron dbus dbus.socket rsyslog systemd-journald-dev-log.socket systemd-journald systemd-journald.socket systemd-journal-flush systemd-logind
+	# systemctl disable cron getty@tty1 ntp polkit wpa_supplicant armbian-zram-config # haveged serial-getty@ttyS0 
+	# systemctl mask cron rsyslog systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # dbus dbus.socket
+
+07. Install Pakages
+
+	# apt-get install bc ntpdate uhubctl mpc ncmpc
+
+	# mkdir ~/.ncmpc
+	# nano ~/.ncmpc/config
+		host = 192.168.0.10
+		enable-mouse = no
+		#display-time = yes
+		enable-colors = yes
+
+	# nano ~/.profile
+		 export MPD_HOST=192.168.0.10
 
 08. /etc/sysctl.conf
 
 09. /etc/rc.local
 
-10. ALSA
+10. /etc/default/audio.conf
 
-	# nano /usr/share/alsa/alsa.conf
-		pcm.sound.card 1
-		ctl.control.card 1
-	# mv libasound.so.2 libasound.so.2.sav
-	# mv libasound.so.2.0.0 libasound.so.2.0.0.sav
-	# ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
+	# nano /etc/default/audio.conf
+		ssh=off
+		serial=off
+		tfc=on
 
-11. MPD
+11. ALSA
 
-	$ sudo cp mpd /usr/bin
-	$ sudo cp icon.png /root
+	# mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
+	# cp libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav
 
-	# apt-get install mpc ncmpc
-	# mv mpd /usr/bin/ && mv mpd.conf /etc/
-	# nano /etc/mpd.conf
+12. libaudiofile & libflac
 
-	# apt-get install libcue1 libaudiofile1 libavformat-dev libflac8 libmad0 libid3tag0 libmpdclient2 libupnp6
+	# cp libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
+	# cp libFLAC.so.8.3.0      /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
 
-12. Upmpdcli
+13. MPD
+	# nano -L /etc/mpd.conf.sav
+		#music_directory "/var/lib/mpd/music"
+		#playlist_directory "/var/lib/mpd/playlists"
+		#db_file "/var/lib/mpd/database"
+		#state_file "/var/lib/mpd/state"
+		bind_to_address "192.168.0.x"
+		database {
+		plugin "upnp"
+		}
 
-13. USB IRQ
+14. USB IRQ
 
 	# cat /proc/interrupts
 	# nano /etc/rc.local
@@ -135,48 +136,21 @@ Orange Pi Zero
 		  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
 		 done
 
-14. USB auto mount
-
-	https://wiki.archlinux.org/index.php/Fstab#External_devices
-
-	# mkdir /mnt/usb
-	# ln -s /mnt /var/lib/mpd/music
-	# nano /etc/fstab
-		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
-		#/dev/sda1 /mnt/usb vfat    ro 0 0
-		#/dev/sda1 /mnt/usb ntfs-3g ro 0 0
-	# nano /etc/rc.local
-		systemd-udevd
-	# systemctl daemon-reload
-	# systemctl restart remote-fs.target
-	# systemctl restart local-fs.target
-
 15. Static IP
 
 	# cp /etc/network/interfaces.default /etc/network/interfaces
 	# nano /etc/network/interfaces
+		#source /etc/network/interfaces.d/*
+		# Network is managed by Network manager
+		auto lo
+		iface lo inet loopback
+		
 		auto  eth0
-		#iface eth0 inet manual
+		#iface eth0 inet dhcp
 		iface eth0 inet static
-			address		192.168.0.3
-			netmask		255.255.255.0
-			broadcast	192.168.0.255
-			network		192.168.0.0
-			gateway		192.168.0.1 
-			dns-nameservers 168.126.63.1
+		address	192.168.0.10
+		netmask	255.255.255.0    
+		  
 	# systemctl disable network-manager.service
-
-16. Show release
-
-	# echo "* Mino's UPnP Audio Renderer for Orang Pi Zero 17.06" > release
-
-17. Make Image
-
-	# nano ~/release
-	# mpc clear
-	# rm -f ~/.bash_history ; history -c
-	# poweroff
-
-	$ sudo fdisk -l
-	$ sudo dd bs=4M if=/dev/sdb of=orange_pi_zero_audio_renderer_17.06.img
-	$ zip orange_pi_zero_audio_renderer_17.06.zip orange_pi_zero_audio_renderer_17.06.img
+	# nano /etc/resolv.conf
+		nameserver 127.0.0.1

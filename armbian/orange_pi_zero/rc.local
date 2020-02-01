@@ -1,36 +1,14 @@
 #!/bin/bash
-#Precaution: Wait for DietPi Ramdisk to finish
-while [ ! -f /DietPi/.ramdisk ]
-do
 
-    /DietPi/dietpi/func/dietpi-notify 2 "Waiting for DietPi-RAMDISK to finish mounting DietPi to RAM..."
-    sleep 1
-
-done
-
-echo -e "$(cat /proc/uptime | awk '{print $1}') Seconds" > /var/log/boottime
-if (( $(cat /DietPi/dietpi/.install_stage) == 1 )); then
-
-    /DietPi/dietpi/dietpi-services start
-
-fi
-/DietPi/dietpi/dietpi-banner 0
-echo -e " Default Login:\n Username = root\n Password = dietpi\n"
-
-mpd_bg () {
-
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+musicpd_bg () {
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
  done
-
  sleep 1
-
  pgr_mpd=$(pgrep -x mpd)
-
  taskset -pc $s_task $pgr_mpd
-#renice -1 -p       $pgr_mpd
-
- echo "$(pstree -np $pgr_mpd)" | while read line ; do
+ #renice -1 -p       $pgr_mpd
+ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
@@ -39,51 +17,53 @@ mpd_bg () {
    player)	 taskset -cp $s_task $proc_nr ;;
    decoder)	 taskset -cp $h_task $proc_nr ;;
    output)	 taskset -cp $m_task $proc_nr
-		#ionice -c 2 -n 7 -p $proc_nr
-		#ionice -c 0      -p $proc_nr
 		#renice -1 -p	     $proc_nr
 		 chrt -op 0	     $proc_nr ;;
   esac
  done
-
-#/dev/shm/nohup taskset -ac $s_task /usr/bin/upmpdcli -c /etc/upmpdcli.conf&>/dev/null</dev/null
-
- ### MicroSD Read-only
- #sync
- #sleep 1
- #mount -o remount,ro /
-
- echo none > /sys/class/leds/green_led/trigger
-
+ echo 0 > /sys/class/leds/orangepi\:green\:pwr/brightness
  pkill rc.local
-
 }
 
-#sysctl -w kernel.modules_disabled=1
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
-#chmod -w /lib/systemd/systemd /usr/share/alsa/alsa.conf.sav /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /usr/bin/mpd /etc/mpd.conf.sav
-#chmod -R -w /usr/lib/arm-linux-gnueabihf/
+cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+rm -rf /dev/snd/*c /dev/snd/by* || true
+rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
-#mknod -m 644 /dev/shm/null c 0 0 && chown root:audio /dev/shm/null
-rm /dev/snd/*C0* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-rm -rf /dev/snd/by* || true
-
-cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
 ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
-cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0
 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
 cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0
 ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
 
-#chmod -w /dev/shm/mpd.conf
+echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 
- echo noop > /sys/block/mmcblk0/queue/scheduler
- echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance
-#echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall
+for i in $(ls /sys/block/*/queue/scheduler); do
+ if   echo $(cat $i) | grep -q none; then
+  echo none > $i
+ elif echo $(cat $i) | grep -q noop; then
+  echo noop > $i
+ fi
+done
+
+if [ "$tfc" = on ]; then
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy0)" | while read dev ; do
+  tc qdisc add dev $dev root pfifo_fast
+  tc qdisc add dev $dev ingress
+ #tc -s -d qdisc show dev $dev
+ done
+fi
 
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice  -2 $i
@@ -98,21 +78,16 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd|mpd/ {print $1}'); do
-  taskset -acp 0 $pid || true
+ for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod|squeezelite/ {print $1}'); do
+  taskset -acp 0 $pid 2>/dev/null || true
  done
 fi
 
-### Remove services
-for i in systemd-udevd # cron systemd-journald systemd-logind dbus getty@tty1 serial-getty@ttyS0 systemd-udevd
-do
- service $i stop
-done
-[ -f /boot/.nossh ] && service dropbear stop && pkill dropbear
-for i in dbus-daemon ntpd; do
- pkill $i
-done
-#renice +1 -p $(pgrep -w sshd) $(pgrep -w dbus-daemon) $(pgrep -w dhcpd)
+systemctl stop dbus.service dbus.socket haveged polkit systemd-udevd
+
+[ "$ssh" = off ]    && systemctl stop sshd
+[ "$serial" = off ] && systemctl stop serial-getty@ttyS0
+
 swapoff -a
 
 ### CPU Affinity
@@ -120,13 +95,16 @@ until $(grep -q usb1 /proc/interrupts); do
  sleep 1
 done
 sleep 1
-for i in $(awk '/gmac|mmc|usb2/{print +$1}' /proc/interrupts); do
- echo $(echo "2^$h_task" | bc) > /proc/irq/$i/smp_affinity
+for i in $(awk '/usb3/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity || true
 done
-for i in $(awk '/usb1/{print +$1}' /proc/interrupts); do
- echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity
+for i in $(awk '/dmam|eth|rtc/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$s_task" | bc) > /proc/irq/$i/smp_affinity || true
 done
-echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
+for i in $(awk '/mmc|musb|usb[1,2,4]|tty/{print +$1}' /proc/interrupts); do
+ echo $(echo "2^$h_task" | bc) > /proc/irq/$i/smp_affinity || true
+done
+echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity || true
 
 ### Taskset
 #for pid in 1 $(pgrep -x rc.local); do
@@ -136,12 +114,7 @@ echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity
 ### Init
 taskset -cp $s_task 1
 
-### MicroSD Read-only
-#sync
-#sleep 1
-#mount -o remount,ro /
-
-mpd_bg &
+musicpd_bg &
 /dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 
 exit 0

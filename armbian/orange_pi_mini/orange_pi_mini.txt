@@ -1,352 +1,152 @@
-================
-Orange Pi Mini I
-================
+==================================
+ Orange Pi Mini for Debian Buster
+==================================
 
-1. Orange Pi
+01. Orange Pi
 
 	http://www.orangepi.org/
-	http://www.orangepi.org/orangepimini/index.html
-	Orange Pi vs Raspberry Pi 2
-		High performance GPU, RAM, LAN
-		Additional Wireless LAN, SATA(to USB), Microphone, IR, OTG
-		Dedicated IRQs for LAN and USB
+	http://www.orangepi.org/orangepimini/
+	http://linux-sunxi.org/Xunlong_Orange_Pi_Mini
 
-2. Orange Pi Download
+02. Armbian Buster
 
-	http://www.orangepi.org/downloadresources/
+	https://www.armbian.com/
+	https://www.armbian.com/orange-pi-mini/
+	https://docs.armbian.com
+	https://dl.armbian.com/bananapi/
 
-3. Armbian Install (Debian Wheezy,Jessie and Ubuntu Trusty by Igor Pečovnik)
+	$ sudo fdisk -l
+	$ sudo umount /dev/sdc?
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/armbian/Armbian_5.91_Bananapi_Debian_buster_next_4.19.59/Armbian_5.91_Bananapi_Debian_buster_next_4.19.59.img of=/dev/sdc
+	$ sync
+	$ ssh root@192.168.0.x password:1234
+	  Change to new password
 
-	http://www.armbian.com/
-	http://www.armbian.com/orange-pi-mini/
-	http://www.armbian.com/documentation/
-	https://github.com/igorpecovnik/lib/blob/second/documentation/user-faq.md
-	# cat /proc/partitions
-	# sudo fdisk -l
-	# unzip Armbian_4.2_Orangepi_Debian_jessie_4.1.6.zip
-	# sudo dd bs=4M if='Armbian_4.2_Orangepi_Debian_jessie_4.1.6.raw' of=/dev/sdb
-	# sync
-
-4. Initial Configuration
-
-	"First run"
-	Wait around three minutes to reboot after package list updates, swap partitioning, SSH key generation and partition expansion
-	Reboot
-	# ssh root@192.168.0.5 password:1234
-	Change password
-	USB Tweak for Orane Pi Mini
-	# lsusb && cat /proc/interrupts | grep usb
-	# mv /boot/dtb/sun7i-a20-orangepi.dtb /boot/dtb/sun7i-a20-orangepi.dtb.org
-	# cp /boot/dtb/sun7i-a20-orangepi-mini.dtb /boot/dtb/sun7i-a20-orangepi.dtb
 	# apt-get update
+	# apt-get remove --auto-remove unattended-upgrades alsa-utils
 	# apt-get upgrade
-	# (apt-get dist-upgrade)
+	# apt-get dist-upgrade
+
 	# dpkg-reconfigure locales
 	# dpkg-reconfigure tzdata
-	# lsmod
-	# nano /etc/modprobe.d/opi-blacklist.conf
-		blacklist evbug
-		blacklist evdev
-		blacklist r8188eu
-		blacklist input_leds
-		blacklist sun4i_ts
-	# mv /etc/bash.bashrc.custom /etc/bash.bashrc.custom.org
-	# systemctl disable lirc.service
-	# (systemctl disable cron.service)	
-	# nano /etc/fstab
-		tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		tmpfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
-	# cat /proc/interrupts
-	# cat /etc/fstab
 	
-5. NFS Server
+	# update-locale LC_ALL=ko_KR.UTF-8 LANG=ko_KR.UTF-8 LANGUAGE=ko_KR.UTF-8 LC_MESSAGES=ko_KR.UTF-8
+	# cat /etc/default/locale
 
-	# fdisk -l
-	# apt-get install nfs-kernel-server (nfs-common portmap)
-	# (mkdir /mnt/Music)
-	# (chown nobody:nogroup /mnt/Music)
-	# (chmod -R 777 /mnt/Music)
+03. Kernel Option
+
+	# cat  /boot/boot.cmd
+	# nano /boot/armbianEnv.txt
+		 console=serial
+		 extraargs="elevator=noop consoleblank=0 selinux=0"
+	# reboot
+
+04. /etc/fstab
+
 	# nano /etc/fstab
 		/dev/sda1 /mnt ext4 ro 0 0
-	# nano /etc/exports
-		/mnt/Music 192.168.0.5/(ro,no_subtree_check,no_root_squash)
-	# reboot (/etc/init.d/nfs-kernel-server restart)
-	# (/etc/init.d/portmap restart)
-	# rpcinfo -p
 
-	Raspberry Pi 2
+05. Remove modules
 
-	$ sudo nano /etc/fstab
-		192.168.0.5:/mnt/Music /mnt/Music nfs ro,sync,hard,intr,rsize=8192,iocharset=utf8 0 0
+	# lsmod
+	# nano /etc/modprobe.d/orangepimini.conf
+		blacklist axp20x_adc
+		blacklist axp20x_battery
+		blacklist axp20x_usb_power
+		blacklist bonding
+		blacklist brcmfmac
+		blacklist cpufreq_dt
+		blacklist evdev
+		blacklist gpu_sched
+		blacklist industrialio
+		blacklist ip_tables
+		blacklist lima
+		blacklist pinctrl_axp209
+		blacklist sun4i_codec
+		blacklist sun4i_gpadc
+		blacklist sun4i_gpadc_iio
+		blacklist sun4i_ss
+		blacklist sun4i_ts
+		blacklist sunxi_cir
+		blacklist thermal_sys
+		blacklist uio
+		blacklist uio_pdrv_genirq
+		blacklist x_tables
 
-6. Hdparm
+06. Remove service
 
-	# nano /etc/hdparm.conf
-		read_ahead_sect = 1096
-		lookahead = on
-		apm = 255
-	# hdparm -A -a -B /dev/sda
+	# systemctl disable cron getty@tty1 ntp polkit wpa_supplicant armbian-zram-config # haveged serial-getty@ttyS0 
+	# systemctl mask cron rsyslog systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # dbus dbus.socket
 
-7. Swap
+07. Install Pakages
 
-	# swapon -s
-	# nano /etc/fstab
-		/var/swap none swap sw 0 0
-		
-8. Masking store/restore alsa mixer
+	# apt-get install hdparm minidlna rygel bc ntpdate uhubctl mpc ncmpc sysv-rc-conf
 
-	# systemctl mask alsa-store.service
-	# systemctl mask alsa-restore.service
-	
-9. MPD CLI Clients
+	# cp /sbin/hdparm /usr/bin/
+	# apt-get remove hdparm
+	# nano /etc/rc.local
+		hdparm -A1 -a1904 -B255 /dev/sda
 
-	# apt-get install mpc ncmpc fbterm unifont
-	# nano /etc/profile.d/export.sh
-		#!/bin/bash
-		export MPD_HOST=192.168.0.3
 	# mkdir ~/.ncmpc
 	# nano ~/.ncmpc/config
-		host = 192.168.0.3
+		host = 192.168.0.10
 		enable-mouse = no
 		#display-time = yes
 		enable-colors = yes
 
-10. Wireless Bridge Mode
+	# systemctl disable minidlnad
+	# mv /usr/sbin/minidlnad /usr/sbin/minidlnad
+	# mv ~/minidlnad /usr/sbin/minidlnad
 
-	/usr/sbin/hostapd(-rt)
-	/etc/hostapd.conf(-rt)
-	# ln -sf /etc/network/interfaces.hostapd /etc/network/interfaces
-	# nano /etc/network/interfaces
-		auto  lo br0
-		iface lo inet loopback
-		
-		allow-hotplug eth0
-		iface eth0 inet manual
-		
-		allow-hotplug wlan0
-		iface wlan0 inet manual
-
-		iface br0 inet static
-			bridge_ports	eth0 wlan0
-			address 	192.168.0.5
-			netmask 	255.255.255.0
-			broadcast 	192.168.0.255
-			network 	192.168.0.0
-			gateway 	192.168.0.1 
-			dns-nameservers 168.126.63.1
-	# nano /etc/init.d/hostapd
-		DAEMON_SBIN=/usr/sbin/hostapd-rt
-		DAEMON_CONF=/etc/hostapd.conf-rt
-	# nano /etc/hostapd.conf-rt
-		ssid=*****
-		wpa_passphrase=********
-		
-11. Remove unnecessary services
-
-	# systemctl disable rpcbind cron ntp rsyslog
-	# nano /etc/rc.local
-		service systemd-journald stop
-		service systemd-udevd stop
-		service systemd-logind stop
-		service dbus stop
-		service haveged stop
-		service	sshd stop
-		service getty@tty1 stop
-
-12. Auto login and run scripts
-
-	# nano /lib/systemd/system/getty@.service
-		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
-	# nano ~/.bashrc
-		#chrt -aip 0 	 `pgrep -ox systemd`
-		 chrt -aip 0 	 `pgrep -ox login`
-		 chrt -aip 0 	 `pgrep -ox bash`
-
-		#ionice -c 3 -p  `pgrep -ox systemd`
-		#ionice -c 3 -p  `pgrep -ox login`
-		#ionice -c 3 -p  `pgrep -ox bash`
-
-		#renice -n 19 -p `pgrep -ox systemd`
-		 renice -n 19 -p `pgrep -ox login`
-		 renice -n 19 -p `pgrep -ox bash`
-
-		#taskset -acp 0  `pgrep -ox systemd`
-		 taskset -acp 0  `pgrep -ox login`
-		 taskset -acp 0  `pgrep -ox bash`
-
-=================
-Orange Pi Mini II
-=================
-
-1. Orange Pi
-
-	http://www.orangepi.org/
-	http://www.orangepi.org/orangepimini/index.html
-	http://www.orangepi.org/downloadresources/
-
-2. Armbian
-
-	http://www.armbian.com/
-	http://www.armbian.com/orange-pi-mini/
-	http://www.armbian.com/documentation/
-	https://github.com/igorpecovnik/lib/blob/second/documentation/user-faq.md
-	$ cat /proc/partitions
-	$ sudo fdisk -l
-	$ sudo apt-get install p7zip
-	$ 7zr e Armbian_5.10_Orangepi_Debian_jessie_4.5.2.7z
-	$ sudo dd bs=2M if=Armbian_5.10_Orangepi_Debian_jessie_4.5.2.raw of=/dev/sdb
-	$ sync
-
-3. Initial Configuration
-
-	$ ssh root@192.168.0.x password:1234
-	Change password to "orangepi"
-	# apt-get update
-	# apt-get upgrade
-	# apt-get dist-upgrade
-	# apt-get autoremove
-	# dpkg-reconfigure locales # Add ko_KR.UTF-8 UTF-8
-	# dpkg-reconfigure tzdata	
-	USB Tweak for Orange Pi Mini
-	# lsusb && cat /proc/interrupts | grep usb
-	# mv /boot/dtb/sun7i-a20-orangepi.dtb /boot/dtb/sun7i-a20-orangepi.dtb.org
-	# cp /boot/dtb/sun7i-a20-orangepi-mini.dtb /boot/dtb/sun7i-a20-orangepi.dtb
-
-4. Kernel Option
-
-	# cd /boot
-	# cp boot.cmd boot.cmd.org
-	# cp boot.scr boot.scr.org
-	# nano boot.cmd
-		... elevator=noop selinux=0
-	# mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
-
-5. Edit fstab
-
-	# nano /etc/fstab
-		/dev/sda1 /mnt ext4 ro 0 0
-		#tmpfs /tmp       tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		#tmpfs /var/cache tmpfs nosuid,nodev,noatime,nodiratime 0 0
-		#tmpfs /var/log   tmpfs nosuid,nodev,noatime,nodiratime 0 0
-
-6. Rygel
-
-	# apt-get install rygel
 	# nano /etc/rygel.conf
 		uris=/mnt/Music
 		interface=eth0
 		monitor-changes=false
 
-7. MPD clients
-
-	# apt-get install mpc ncmpc fbterm unifont
-	# mkdir ~/.ncmpc
-	# nano  ~/.ncmpc/config
-		host = 192.168.0.3
-		enable-mouse = no
-		#display-time = yes
-		enable-colors = yes
-
-8. Remove modules
-
-	# lsmod
-	# nano /etc/modprobe.d/opi-blacklist.conf
-		blacklist r8188eu
-		blacklist cfg80211
-		blacklist input_leds
-		blacklist rfkill
-		blacklist evdev
-		blacklist sun4i_ts
-		blacklist nvmem_sunxi_sid
-		blacklist nvmem_core
-		blacklist sun4i_ss
-		blacklist cpufreq_dt
-		blacklist thermal_sys
-		blacklist bonding
-	# nano /etc/modprobe.d/opi-blacklist.conf
-		blacklist a20_tp
-		blacklist 8021q
-		blacklist sunxi_ir
-		blacklist hidp
-		blacklist rfcomm
-		blacklist hci_uart
-		blacklist cpufreq_userspace
-	# chmod -x /etc/update-motd.d/40-updates
-
-9. Remove services
-
-	# ps ax
-	# systemctl disable lirc cron ntp rsyslog
-	# systemctl disable cron ntp lirc haveged ssh getty@tty1
-	# systemctl mask dbus dbus.socket rsyslog systemd-journald-dev-log.socket systemd-journald systemd-journald.socket systemd-journal-flush systemd-logind
-	# systemctl mask alsa-store.service
-	# systemctl mask alsa-restore.service
-
-10. Static IP
-
-	# nano /etc/network/interfaces
-		auto  eth0
-		iface eth0 inet static
-			address		192.168.0.5
-			netmask		255.255.255.0
-			broadcast	192.168.0.255
-			network		192.168.0.0
-			gateway		192.168.0.1 
-			dns-nameservers 168.126.63.1
-	# systemctl disable dhcpcd
-
-11. Swap
-
-	# swapon -s
-	# nano /etc/fstab
-		/var/swap none swap sw 0 0
-	# nano /etc/sysctl.conf
-		#vm.swappiness=0
-
-12. Hdparm
-
-	# nano /etc/hdparm.conf
-		read_ahead_sect = 1088
-		lookahead = on
-		apm = 255
-	# hdparm -A -a -B /dev/sda
-		
-13. Edit rc.local
-
-14. Auto login and run scripts
+	# nano ~/.profile
+		rmmod axp20x_usb_power industrialio pinctrl_axp209 sun4i_gpadc
+		systemctl stop systemd-udevd
+		taskset -acp 0  $(pgrep -ox login)
+		taskset -acp 0  $(pgrep -ox [bd]ash)
+		export MPD_HOST=192.168.0.10
+		stty rows 47 cols 199
 
 	# nano /lib/systemd/system/getty@.service
 		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
-	# nano ~/.bashrc
 
-		#chrt -aip 0 	 `pgrep -ox systemd`
-		#chrt -aip 0 	 `pgrep -ox login`
-		#chrt -aip 0 	 `pgrep -ox bash`
+	# sysv-rc-conf
+		Disable minidlna
 
-		#ionice -c 3 -p  `pgrep -ox systemd`
-		#ionice -c 3 -p  `pgrep -ox login`
-		#ionice -c 3 -p  `pgrep -ox bash`
+08. /etc/sysctl.conf
 
-		#renice -n 19 -p `pgrep -ox systemd`
-		#renice -n 19 -p `pgrep -ox login`
-		#renice -n 19 -p `pgrep -ox bash`
+09. /etc/rc.local
 
-		#taskset -acp 0  `pgrep -ox systemd`
-		 taskset -acp 0  `pgrep -ox login`
-		 taskset -acp 0  `pgrep -ox bash`
-		 
-		 export MPD_HOST=192.168.0.10
+10. /etc/default/audio.conf
 
-		 stty rows 47 cols 199 
+	# nano /etc/default/audio.conf
+		ssh=off
+		serial=on
+		tfc=on
 
-14. Serial Console
+11. Static IP
 
-	# cp /boot/boot.cmd /boot/boot.cmd.org
-	# cp /boot/boot.scr /boot/boot.scr.org
-	# nano /boot/boot.cmd
-		setenv bootargs "console=ttyS0,115200 ..."
-	# mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
-	# nano /etc/rc.local
-		#service serial-getty@ttyS0 stop
-		service getty@tty1 stop
+	# nano /etc/network/interfaces
+		#source /etc/network/interfaces.d/*
+		# Network is managed by Network manager
+		auto lo
+		iface lo inet loopback
+		
+		auto  eth0
+		#iface eth0 inet dhcp
+		iface eth0 inet static
+		address	192.168.0.5
+		netmask	255.255.255.0    
+		  
+	# systemctl disable network-manager.service
+	# nano /etc/resolv.conf
+		nameserver 127.0.0.1    
+		  
+
+12. Replace bash with dash
+
+	# sed -i '/^root/s/bash/dash/' /etc/passwd
