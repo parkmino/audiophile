@@ -1,7 +1,7 @@
 #!/bin/bash
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
-[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/usr/local/etc/upmpdcli.conf.sav || upmpdcli_conf=/usr/local/etc/upmpdcli.conf
+[ -e /usr/local/etc/upmpdcli.conf.sav ] && upmpdcli_conf=/usr/local/etc/upmpdcli.conf.sav || upmpdcli_conf=/usr/local/etc/upmpdcli.conf
 audio_conf=/etc/default/audio.conf
 
 mpd_options () {
