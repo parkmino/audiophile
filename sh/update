@@ -112,7 +112,7 @@ ADOBE_FLASH () {
 ALILEO () {
  printf "• 알릴레오\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLtAbTqMyJif9KRRd8f1o3JQUHvsqvWacq"
- days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+ days=$(curl $curl_opt "$url" | grep -m1 업데이트: | sed 's/.*업데이트: //' | cut -d'<' -f1)
  if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
   date=$(echo $days | tr -d '.' | tr ' ' '-')
   diff=$(($(date +%s)-$(date -ud "$date" +%s)))
@@ -139,7 +139,7 @@ ALILEO () {
 ALILEO_LIVE () {
  printf "• 알라뷰\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLtAbTqMyJif8u6stf-Rj_zFcj63m6E7mE"
- days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+ days=$(curl $curl_opt "$url" | grep -m1 업데이트: | sed 's/.*업데이트: //' | cut -d'<' -f1)
  if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
   date=$(echo $days | tr -d '.' | tr ' ' '-')
   diff=$(($(date +%s)-$(date -ud "$date" +%s)))
@@ -266,7 +266,7 @@ CREATE_AP () {
 DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=UUxvU6bRtYhNLvZleAIGa-FQ"
- days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+ days=$(curl $curl_opt "$url" | grep -m1 업데이트: | sed 's/.*업데이트: //' | cut -d'<' -f1)
  if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
   date=$(echo $days | tr -d '.' | tr ' ' '-')
   diff=$(($(date +%s)-$(date -ud "$date" +%s)))
@@ -337,7 +337,7 @@ GHLIGHTCLUB () {
  printf "• 관훈라이트\t"
  url="https://www.youtube.com/playlist?list=PLe85dIAhn3aiJfY-37fJzXuBH6WhG3qvE"
  episodes=#$(curl $curl_opt "$url" | grep -m1 '관훈라이트.* #' | cut -d'#' -f2 | cut -d' ' -f1)
- days=$(curl $curl_opt "$url" | grep -m1 업데이트 | sed 's/.*업데이트: //' | cut -d'<' -f1)
+ days=$(curl $curl_opt "$url" | grep -m1 업데이트: | sed 's/.*업데이트: //' | cut -d'<' -f1)
  if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
   date=$(echo $days | tr -d '.' | tr ' ' '-')
   diff=$(($(date +%s)-$(date -ud "$date" +%s)))
