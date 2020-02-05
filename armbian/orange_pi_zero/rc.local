@@ -83,7 +83,8 @@ if [ "$m_task" -ge 1 ];then
  done
 fi
 
-systemctl stop dbus.service dbus.socket haveged polkit systemd-udevd
+systemctl stop chronyd dbus.service dbus.socket haveged polkit systemd-udevd
+pkill rngd || true
 
 [ "$ssh" = off ]    && systemctl stop sshd
 [ "$serial" = off ] && systemctl stop serial-getty@ttyS0
