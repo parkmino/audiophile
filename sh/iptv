@@ -8,14 +8,21 @@ usage () {
 
 url="https://www.extinf.com/category/korean/"
 curl_opt="-s -m9 --connect-timeout 9"
+curl_chk="-s -o /dev/null --connect-timeout 2 -m 3"
+ffprobe_opt="-timeout 5 -listen_timeout 5 -v quiet"
 folder="/home/parkmino/Videos/iptv"
 h=1
 
 url_probe () {
- [ "$i" = "https://www.extinf.com/korea-30/" ] || [ "$i" = "https://www.extinf.com/korean-44/" ] || [ "$i" = "https://www.extinf.com/korean-2-3/" ] || [ "$i" = "https://www.extinf.com/korea-27/" ] || [ "$i" = "https://www.extinf.com/korea-10-2/" ] || [ "$i" = "https://www.extinf.com/korea-iptv-15/" ] && continue
+ [ "$i" = "https://www.extinf.com/korea-30/" ] || \
+ [ "$i" = "https://www.extinf.com/korean-45/" ] || \
+ [ "$i" = "https://www.extinf.com/korean-42/" ] || \
+ [ "$i" = "https://www.extinf.com/korean-2-3/" ] && continue
  iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
+ pls="$(echo "$iptv_url" | cut -d\/ -f-3)/playlist"
+ curl $curl_chk $pls || continue
  printf "\33[2K\r$i (Page $h of $page)"
- ffprobe -v quiet "$iptv_url" && printf "\33[2K\r$i\n$(echo "$iptv_url" | cut -d\/ -f-3)/playlist\n"
+ ffprobe $ffprobe_opt "$iptv_url" && printf "\33[2K\r$i\n$pls\n"
 }
 
 if [ "$1" = ip ]; then
@@ -39,8 +46,8 @@ elif [ "$1" = ck ]; then
  echo "$(cat $folder/tvheadend.ls)" | while read line; do
   printf "$line\t"
   file=$folder/channels_$line.m3u
-  curl -s -o /dev/null --connect-timeout 2 -m 3 http://$line/playlist && printf "playlist "
-  if ffprobe -v quiet $(grep -m1 "^https\?://" $file); then
+  curl $curl_chk http://$line/playlist && printf "playlist "
+  if ffprobe $ffprobe_opt $(grep -m1 "^https\?://" $file); then
    printf "stream\n"
    echo "$line" >> $folder/tvheadend.avl
   else
