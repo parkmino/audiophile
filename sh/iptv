@@ -14,10 +14,10 @@ folder="/home/parkmino/Videos/iptv"
 h=1
 
 url_probe () {
- [ "$i" = "https://www.extinf.com/korea-30/" ] || \
  [ "$i" = "https://www.extinf.com/korean-45/" ] || \
- [ "$i" = "https://www.extinf.com/korean-42/" ] || \
- [ "$i" = "https://www.extinf.com/korean-2-3/" ] && continue
+ [ "$i" = "https://www.extinf.com/korean-2-3/" ] || \
+ [ "$i" = "https://www.extinf.com/korea-30/" ] || \
+ && continue
  iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
  pls="$(echo "$iptv_url" | cut -d\/ -f-3)/playlist"
  curl $curl_chk $pls || continue
