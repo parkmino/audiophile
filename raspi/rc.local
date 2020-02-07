@@ -134,6 +134,14 @@ for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
 done
 
+if [ "$tfc" = on ]; then
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
+  tc qdisc add dev $dev root pfifo_fast
+  tc qdisc add dev $dev ingress
+ #tc -s -d qdisc show dev $dev
+ done
+fi
+
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
  chrt -op 0 $i
  renice  -3 $i
