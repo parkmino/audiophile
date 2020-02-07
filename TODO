@@ -15,22 +15,14 @@
 3. /etc/sysctl.conf
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_wakeup_granularity_ns = 388289	# 388288
-		kernel.sched_latency_ns = 1394064		# 1394063
-		kernel.sched_migration_cost_ns = 4899005	# 4899004
-		
-		net.ipv4.tcp_rmem = 4096 88180 3345648		# 4096 131072 6291456 - ubuntu
-		 						# 4096 87380 5985376 - armbian
-		net.ipv4.tcp_wmem = 4096 89850 3455468		# 4096 16384 4194304 - ubuntu & armbian		net.ipv4.udp_mem = 46422 57908 87610		# 88248 117664 176496 - ubuntu
-		 						# 17535 23380 35070 - armbian
-		net.core.rmem_default = 210998			# 212992
-		net.core.rmem_max = 210998			# 212992
-		net.core.wmem_default = 210998			# 212992
-		net.core.wmem_max = 210998			# 212992
 
-		# echo "4096 65536 3145728" > /proc/sys/net/ipv4/tcp_rmem
-		# echo "4096 16384 2097152" > /proc/sys/net/ipv4/tcp_wmem
-		# echo "44124 58832 88248" > /proc/sys/net/ipv4/udp_mem
+		 kernel.sched_wakeup_granularity_ns = 388289	# 388288
+		 kernel.sched_latency_ns = 1394064		# 1394063
+		 kernel.sched_migration_cost_ns = 4899005	# 4899004
+		
+		 net.ipv4.tcp_rmem = 4520 88168 3345648
+		 net.ipv4.tcp_wmem = 4448 89848 3455464
+		 net.ipv4.udp_mem = 46424 57912 87608
 
 4. Optional mympd & ssh & serial console
 

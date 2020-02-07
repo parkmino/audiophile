@@ -44,18 +44,18 @@
  sysctl -w vm.swappiness=0
  sysctl -w vm.vfs_cache_pressure=0
 
- sysctl -w net.core.rmem_default=210998
- sysctl -w net.core.rmem_max=210998
- sysctl -w net.core.wmem_max=210998
- sysctl -w net.core.wmem_default=210998
+#sysctl -w net.core.rmem_default=211000
+#sysctl -w net.core.rmem_max=211000
+#sysctl -w net.core.wmem_max=211000
+#sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4096 88180 3345648'
- sysctl -w net.ipv4.tcp_wmem='4096 89850 3455468'
+ sysctl -w net.ipv4.tcp_rmem='4520 88168 3345648'
+ sysctl -w net.ipv4.tcp_wmem='4448 89848 3455464'
 #sysctl -w net.ipv4.tcp_timestamps=0
 #sysctl -w net.ipv4.tcp_window_scaling=1
  sysctl -w net.ipv4.tcp_sack=0
  sysctl -w net.ipv4.tcp_no_metrics_save=1
- sysctl -w net.ipv4.udp_mem='46422 57908 87610'
+ sysctl -w net.ipv4.udp_mem='46424 57912 87608'
 #sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
