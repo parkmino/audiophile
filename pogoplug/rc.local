@@ -177,7 +177,7 @@ swapoff -a
 
 [ "$dbus" = off ] && service dbus stop || true
 [ "$mympd" = on ] && /run/shm/mympd /run/shm/mympd.conf&</dev/null 2>/dev/null
-[ "$ssh" = off ] && service sshd stop || true
+[ "$ssh" = off ] && pkill sshd || true
 [ "$usb" = on ] || uhubctl -a 0 -p "$usb"
 
 ### NFS
