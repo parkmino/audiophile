@@ -1,5 +1,21 @@
 -. 바뀐 점
 
+19.12 (19-12-12)
+
+01. ALSA 설정 파일 튜닝.
+02. 설정 파일 튜닝 (MPD, Upmpdcli, myMPD, Roon)
+03. wave와 flac 디코더 빌드.
+04. 빌드 파일 디버그 정보 삭제 (ALSA 라이브러리, MPD, librespot, libaudiofile, libFLAC)
+05. 모듈과 프로세스 최소화.
+06. Upmpdcli Qobuz 메뉴 지움 (더 이상 사용할 수 없음)
+07. roontoram 옵션 추가.
+08. Spotifyd 대신 Libresot 사용.
+09. Spotify 로그인 필요 없음.
+10. USB 자동 마운트 오류 수정.
+11. 라즈베리 파이 3 전원 LED 밝기 확인.
+12. 라즈베리 파이 3 hciuart 사용 안 함.
+13. mympd v5.7.2 버전 업데이트.
+
 19.10.1 (19-10-08)
 
 01. airupnp 코어 할당 오류 수정.
