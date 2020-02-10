@@ -119,6 +119,9 @@
 
 08. /etc/sysctl.conf
 
+	#kernel.printk =
+	#vm.swappiness=
+
 09. /etc/rc.local
 
 10. /etc/default/audio.conf
