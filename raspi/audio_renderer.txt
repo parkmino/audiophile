@@ -58,7 +58,17 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo dpkg-reconfigure locales
 	$ sudo dpkg-reconfigure tzdata
-	
+
+	$ locale
+	$ locale -a
+	$ locale -a -v
+	$ ls -al /var/lib/locales/supported.d/
+	$ sudo nano /var/lib/locales/supported.d/en
+		en_US UTF-8
+	$ sudo rm -rfv /usr/lib/locale/*
+	$ sudo locale-gen
+	$ locale -a -v
+
 5. Disable modules
 
 	$ lsmod
