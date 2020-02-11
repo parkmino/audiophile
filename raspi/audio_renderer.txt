@@ -544,14 +544,14 @@ HR =
 	$ sudo fdisk -l
 	$ sudo dd bs=4M status=progress if=/dev/sdc of=raspi_audio_renderer_$(date +"%y.%m").img
 	$ sync
-	$ zip raspi_audio_renderer_$(date +"%y.%m").zip raspi_audio_renderer_$(date +"%y.%m").img
+	$ zip -dd raspi_audio_renderer_$(date +"%y.%m").zip raspi_audio_renderer_$(date +"%y.%m").img
 
 	https://github.com/Drewsif/PiShrink
 	$ wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
 	$ chmod +x pishrink.sh
 	$ sudo mv pishrink.sh /usr/local/bin
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
-	$ zip raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
+	$ zip -dd raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
 32. Disable Bluetooth UART for RPI3
 

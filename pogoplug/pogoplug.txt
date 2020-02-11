@@ -331,19 +331,19 @@ $ sudo nano /dest/etc/fstab
 
 $ sudo fdisk -l
 $ sudo dd bs=4M status=progress if=/dev/sdc of=pogo_e02_audio_renderer_$(date +"%y.%m").img
-$ zip pogo_e02_audio_renderer_$(date +"%y.%m").zip pogo_e02_audio_renderer_$(date +"%y.%m").img
+$ zip -dd pogo_e02_audio_renderer_$(date +"%y.%m").zip pogo_e02_audio_renderer_$(date +"%y.%m").img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.e02
 $ sudo mv /media/parkmino/rootfs/boot/uImage.v4 /media/parkmino/rootfs/boot/uImage
 $ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M if=/dev/sdc of=pogo_v4_audio_renderer_$(date +"%y.%m").img
-$ zip pogo_v4_audio_renderer_$(date +"%y.%m").zip pogo_v4_audio_renderer_$(date +"%y.%m").img
+$ sudo dd bs=4M status=progress if=/dev/sdc of=pogo_v4_audio_renderer_$(date +"%y.%m").img
+$ zip -dd pogo_v4_audio_renderer_$(date +"%y.%m").zip pogo_v4_audio_renderer_$(date +"%y.%m").img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.v4
 $ sudo mv /media/parkmino/rootfs/boot/uImage.orig /media/parkmino/rootfs/boot/uImage
 $ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M if=/dev/sdc of=kirkwood_audio_renderer_$(date +"%y.%m").img
-$ zip kirkwood_audio_renderer_$(date +"%y.%m").zip kirkwood_audio_renderer_$(date +"%y.%m").img
+$ sudo dd bs=4M status=progress if=/dev/sdc of=kirkwood_audio_renderer_$(date +"%y.%m").img
+$ zip -dd kirkwood_audio_renderer_$(date +"%y.%m").zip kirkwood_audio_renderer_$(date +"%y.%m").img
 
 $ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.orig
 $ sudo mv /media/parkmino/rootfs/boot/uImage.e02 /media/parkmino/rootfs/boot/uImage
