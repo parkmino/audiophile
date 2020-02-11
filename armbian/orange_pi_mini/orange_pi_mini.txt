@@ -97,6 +97,9 @@
 	# systemctl disable minidlnad
 	# mv /usr/sbin/minidlnad /usr/sbin/minidlnad
 	# mv ~/minidlnad /usr/sbin/minidlnad
+	# nano /etc/minidlna.conf
+		media_dir=A,...
+		resize_covers=no
 
 	# nano /etc/rygel.conf
 		uris=/mnt/Music
@@ -160,8 +163,9 @@
 	$ wget https://sourceforge.net/projects/minidlna/files/minidlna/1.2.1/minidlna-1.2.1.tar.gz
 	$ tar xvzf minidlna-1.2.1.tar.gz
 	$ cd minidlna-1.2.1
-	$ mv ~/minidlna-1.2.1-add-support-dsd.patch ./
+	$ cp minidlna-1.2.1-add-support-dsd.patch minidlna-1.2.1-cover-resize.patch ./
 	$ patch -p1 < minidlna-1.2.1-add-support-dsd.patch
+	$ patch -p1 < minidlna-1.2.1-cover-resize.patch
 	$ sudo apt-get install autopoint debhelper dh-autoreconf libavcodec-dev libavformat-dev libavutil-dev libexif-dev libflac-dev libid3tag0-dev libjpeg-dev libogg-dev libsqlite3-dev libvorbis-dev
 	$ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 	$ ./configure
@@ -171,3 +175,5 @@
 	$ file /usr/local/sbin/minidlnad
 	$ sudo strip --strip-debug /usr/local/sbin/minidlnad
 	$ ls -al /usr/local/sbin/minidlnad
+	$ minidlnad -V
+	$ sudo cp ./minidlna.conf /etc/
