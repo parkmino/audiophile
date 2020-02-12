@@ -23,6 +23,7 @@
 		 net.ipv4.tcp_rmem = 4520 88168 3345648
 		 net.ipv4.tcp_wmem = 4448 89848 3455464
 		 net.ipv4.udp_mem = 46424 57912 87614
+		 net.ipv4.tcp_timestamps = 0
 
 4. Optional mympd & ssh & serial console
 
