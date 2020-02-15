@@ -236,31 +236,17 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	https://github.com/librespot-org/librespot
 
 	$ sudo ntpdate pool.ntp.org
-	$ sudo apt-get install build-essential cargo libasound2-dev
-	$ wget https://github.com/librespot-org/librespot/archive/master.zip
-	$ wget https://github.com/librespot-org/librespot/archive/v0.1.0.zip
-	$ unzip master.zip && rm master.zip
-	$ cd librespot-master
-	$ nano Cargo.toml
-		default = ["librespot-playback/alsa-backend"]
-	$ cargo build --release
-	$ file librespot
-	$ strip --strip-debug librespot
-	$ ./target/release/librespot -n Librespot --backend ?
+	$ wget https://github.com/librespot-org/librespot/archive/v0.1.1.tar.gz
+	$ tar xvzf v0.1.1.tar.gz && rm v0.1.1.tar.gz
+	$ cd librespot-0.1.1
+	$ cargo build --release --no-default-features --features alsa-backend
 
-	$ cp ./target/release/librespot /home/pi/
-	$ sudo nano /etc/rc.local
-		 cp /home/pi/librespot /dev/shm/
-		/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.0 --mixer alsa --mixer-card ctl.9 -u USER -p PASS &
-		...
-		for i in RoonBridge librespot spotifyd networkaudiod squeezelite; do
-	$ sudo nano /usr/bin/audio-config
-		spotify_device=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f3)
-		sudo sed -i '/\/dev\/shm\/librespot/s/ -n.*-b / -n '"$input_device"' -b /' /etc/rc.local
-		spotify_user=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f15)
-		sudo sed -i '/\/dev\/shm\/librespot/s/ -u.*-p / -u '"$input_user"' -p /' /etc/rc.local
-		spotify_pwd=$(grep -om1 "librespot -n.*" /etc/rc.local | cut -d' ' -f17)
-		sudo sed -i '/\/dev\/shm\/librespot/s/ -p .*/ -p '"$input_pwd"' \&/' /etc/rc.local
+	$ target/release/librespot -n Librespot --backend ?
+	$ ls -al target/release/librespot
+	$ file target/release/librespot
+	$ strip --strip-debug target/release/librespot
+	$ ls -al target/release/librespot
+	$ cp target/release/librespot /home/pi/
 
 18. Spotifyd
 
