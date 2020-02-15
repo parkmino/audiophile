@@ -228,21 +228,26 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # cd myMPD*
 # ENABLE_SSL="OFF" ./build.sh releaseinstall
 
-# apt-get install build-essential fakeroot lintian
+# apt-get install build-essential fakeroot
 # apt-get install -t trusty-backports debhelper
 # sed -i '120,122p' CMakeLists.txt
 # ./build.sh pkgdebian
 # ls -al package/mympd*.deb
 
-# apt-get install libc6 libid3tag0 libflac8 lrzsz # libmediainfo0v5 openssl
+# apt-get install libc6 libid3tag0 libflac8 lrzsz openssl # libmediainfo0v5
 
 # dpkg -i ./mympd*.deb
-# cp mympd /usr/bin/
-# cp mympd.conf /etc/
-# cp mympd.service /lib/systemd/system/
-# mkdir /var/lib/mympd
-# getent group  mympd > /dev/null || groupadd -r mympd
-# getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
+# ls -al /usr/bin/mympd
+# file /usr/bin/mympd
+# strip --strip-debug /usr/bin/mympd
+# ls -al /usr/bin/mympd
+
+##cp mympd /usr/bin/
+##cp mympd.conf /etc/
+##cp mympd.service /lib/systemd/system/
+##mkdir /var/lib/mympd
+##getent group  mympd > /dev/null || groupadd -r mympd
+##getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
 
 # systemctl stop    mympd
 # systemctl disable mympd
