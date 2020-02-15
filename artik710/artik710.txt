@@ -3,6 +3,35 @@ http://developer.artik.io/downloads/artik710-sdfuse-a710-os-18-10-00-img/downloa
 http://developer.artik.io/downloads/artik710s-sdfuse-a710s-os-18-10-00-img/download # Artik 710s
 http://developer.artik.io/documentation/developer-guide/update-image/updating-artik-image.html
 
+1. QEMU
+
+$ sudo apt install qemu-user-static
+$ mkdir /home/parkmino/Downloads/artik710/rootfs
+$ sudo tar xf /home/parkmino/Downloads/artik710/img/rootfs.tar.gz -C /home/parkmino/Downloads/artik710/rootfs
+$ sudo cp /usr/bin/qemu-aarch64-static /home/parkmino/Downloads/artik710/rootfs/usr/bin
+
+$ sudo mount -ro bind /dev /home/parkmino/Downloads/artik710/rootfs/dev/
+$ sudo mount -ro bind /proc /home/parkmino/Downloads/artik710/rootfs/proc/
+$ sudo chmod 777 /home/parkmino/Downloads/artik710/rootfs/tmp
+
+$ sudo mount -o bind /dev /home/parkmino/Downloads/artik710/rootfs/dev/
+$ sudo mount -o bind /proc /home/parkmino/Downloads/artik710/rootfs/proc/
+$ sudo chmod 777 /home/parkmino/Downloads/artik710/rootfs/tmp
+
+$ sudo cp /etc/resolv.conf /home/parkmino/Downloads/artik710/rootfs/etc/.
+
+$ sudo chroot /home/parkmino/Downloads/artik710/rootfs
+
+### Build mpd, libasound, libaudiofile, libflac. mympd, librespot
+
+# exit
+
+$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/dev
+$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/proc
+$ sudo rm /home/parkmino/Downloads/artik710/rootfs/etc/resolv.conf
+
+2. Image
+
 $ sudo fdisk -l
 $ sudo umount /dev/sdc?
 $ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/artik710/artik710_sdfuse-0710GC0F-44U-DJW0-20181030.003001.img of=/dev/sdc
@@ -12,25 +41,43 @@ $ sync
 ### Boot from Micro SD Card
 ### SW402-4 OFF for the ARTIK 530/710 board
 
+3. Login
+
 $ ssh root@192.168.0.x
 	password : root
+
+4. Update
 
 # uname -a; cat /etc/os-release
 	Ubuntu 16.04.5 LTS (Linux artix 4.4.159)
 # apt-get update
-# apt-get install bc nano psmisc software-properties-common # ffmpeg libav-tools
+# apt-get install bc file nano psmisc software-properties-common unzip # ffmpeg libav-tools
 # nano /etc/apt/sources.list
 	...
 	deb http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
 	deb-src http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
-# mv /etc/apt/sources.list.d/artik-e2e-source.list /etc/apt/sources.list.d/artik-e2e-source.list.orig
-# mv /etc/apt/sources.list.d/artik-platform-artik710s-sources.list /etc/apt/sources.list.d/artik-platform-artik710s-sources.list.orig
+# mv /etc/apt/sources.list.d/artik-e2e-sources.list /etc/apt/sources.list.d/artik-e2e-sources.list.orig
+# mv /etc/apt/sources.list.d/artik-platform-artik710-sources.list /etc/apt/sources.list.d/artik-platform-artik710-sources.list.orig
 # apt-get update
-	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710s
+	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710 (X)
 # apt-get upgrade
 # apt-get dist-upgrade
 # apt-get autoremove
+# rm /etc/resolv.conf
+# nano -L /etc/resolv.conf
+	nameserver 1.1.1.1    
+	  
 # dpkg-reconfigure locales
+# locale
+# locale -a
+# locale -a -v
+# ls -al /var/lib/locales/supported.d/
+# nano /var/lib/locales/supported.d/en
+	en_US UTF-8
+# rm -rfv /usr/lib/locale/*
+# locale-gen
+# locale -a -v
+
 # dpkg-reconfigure tzdata
 ## apt-get install update-manager-core
 ## do-release-upgrade
@@ -175,20 +222,26 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 
 ### myMPD
 
-# apt-get update
-# apt-get install build-essential debhelper fakeroot gcc cmake perl libssl-dev libid3tag0-dev libflac-dev unzip # libmpdclient-dev libmediainfo-dev
-## curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget "$(cat -)" -O ./mympd.zip
-# wget https://github.com/jcorporation/myMPD/archive/master.zip -O ./mympd.zip
-# unzip mympd.zip && rm mympd.zip
+# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
+# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
+# unzip mympd.zip -d ~/ && rm mympd.zip
 # cd myMPD*
-# nano src/plugins/mympd_coverextract.cpp # prior to 5.3.1 version
-	#67 myfile.open(abs_tmp_file, ofstream::binary); >>> myfile.open(abs_tmp_file.c_str(), ofstream::binary);
-# sed -i 's/<\/span>myMPD<\/a>/<\/span>myMenu<\/a>/' /usr/share/mympd/htdocs/index.html
-# ./mkdebian.sh # ./mkrelease.sh
-# cd ..
+# ENABLE_SSL="OFF" ./build.sh releaseinstall
 
-# apt-get install libc6 openssl libid3tag0 libflac8 lrzsz # libmediainfo0v5
+# apt-get install build-essential debhelper fakeroot
+# apt-get install -t trusty-backports debhelper
+# ENABLE_SSL="OFF" ./build.sh pkgdebian
+
+# apt-get install libc6 libid3tag0 libflac8 lrzsz # libmediainfo0v5 openssl
+
 # dpkg -i ./mympd*.deb
+# cp mympd /usr/bin/
+# cp mympd.conf /etc/
+# cp mympd.service /lib/systemd/system/
+# mkdir /var/lib/mympd
+# getent group  mympd > /dev/null || groupadd -r mympd
+# getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
+
 # systemctl stop    mympd
 # systemctl disable mympd
 # nano /usr/lib/systemd/system/mympd.service
@@ -200,11 +253,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	 host = 127.0.0.1
 	 port = 6600
 	 music_directory = /var/lib/mpd/music/
-	 ssl = false
-	#loglevel = 1
-	#user = mympd
+	#ssl = false
+	#sslport = 443
+	 loglevel = 1
+	 user = mympd
 	 syscmds = true
-	 coverextract = true
 
 # sed -i '/\[syscmds\]/q' /etc/mympd.conf
 
@@ -242,6 +295,8 @@ HR =
 # nano /etc/systemd/system/mympd.service
 	#Requires=network.target local-fs.target mpd.service
 	#After=mpd.service
+	#Protect
+	#Restrict
 # systemctl disable mympd
 # systemctl daemon-reload
 # systemctl status mympd
