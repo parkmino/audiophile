@@ -7,6 +7,33 @@ http://forum.doozan.com/read.php?2,12096
 Debian 4.4.0 kirkwood rootfs
 Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
+0. QEMU
+
+$ sudo apt install qemu-user-static
+$ mkdir /home/parkmino/Downloads/pogoplug/rootfs
+$ sudo tar -xjf /home/parkmino/Downloads/pogoplug/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2 -C /home/parkmino/Downloads/pogoplug/rootfs
+$ sudo cp /usr/bin/qemu-arm-static /home/parkmino/Downloads/pogoplug/rootfs/usr/bin
+
+$ sudo mount -ro bind /dev /home/parkmino/Downloads/pogoplug/rootfs/dev/
+$ sudo mount -ro bind /proc /home/parkmino/Downloads/pogoplug/rootfs/proc/
+$ sudo chmod 777 /home/parkmino/Downloads/pogoplug/rootfs/tmp
+
+$#sudo mount -o bind /dev /home/parkmino/Downloads/pogoplug/rootfs/dev/
+$#sudo mount -o bind /proc /home/parkmino/Downloads/pogoplug/rootfs/proc/
+$#sudo chmod 777 /home/parkmino/Downloads/pogoplug/rootfs/tmp
+
+$ sudo cp /etc/resolv.conf /home/parkmino/Downloads/pogoplug/rootfs/etc/.
+
+$ sudo chroot /home/parkmino/Downloads/pogoplug/rootfs
+
+### Build mpd, libasound, libaudiofile, libflac. mympd, librespot
+
+# exit
+
+$ sudo umount -A /home/parkmino/Downloads/pogoplug/rootfs/dev
+$ sudo umount -A /home/parkmino/Downloads/pogoplug/rootfs/proc
+$ sudo rm /home/parkmino/Downloads/pogoplug/rootfs/etc/resolv.conf
+
 1. USB Install
 
 $ sudo gparted (a single ext2 partition with 'rootfs' label)
@@ -168,8 +195,7 @@ Do not patch libFLAC for debian
 
 7. myMPD
 
-# ENABLE_SSL="OFF" ./build.sh release
-# ENABLE_SSL="OFF" ./build.sh install
+# ENABLE_SSL="OFF" ./build.sh releaseinstall
 # ls -al /usr/local/bin/mympd
 # file /usr/local/bin/mympd
 # strip --strip-debug /usr/local/bin/mympd
