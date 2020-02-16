@@ -151,7 +151,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### Kernel option - N.A.
 
 ### ALSA
-# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
+##sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug} ### Not for Artik710 Module but for Board
 
 ### MPD binary & mpd.conf
 ## apt-get install mpd mpc ncmpc
@@ -367,7 +367,7 @@ https://github.com/davidgs/ARTIK-5-backup
 # systemctl disable sshd
 # systemctl daemon-reload
 # youtube-dl --update
-# echo "* Audio Renderer 19.04" > ~/release
+# echo "* Bann Audio Sylphid Network Player $(date +"%y.%m")" > ~/release
 # mpc clear
 # rm -rf /var/roon/* /var/lib/mympd/covercache/*
 # cat /lib/systemd/system/sshd.service
