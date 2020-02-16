@@ -230,7 +230,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 
 # apt-get install build-essential fakeroot
 # apt-get install -t trusty-backports debhelper
-# sed -i '120,122p' CMakeLists.txt
+# sed -i '120,123d' CMakeLists.txt
 # ./build.sh pkgdebian
 # ls -al package/mympd*.deb
 
