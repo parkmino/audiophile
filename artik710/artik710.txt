@@ -60,7 +60,7 @@ $ ssh root@192.168.0.x
 # mv /etc/apt/sources.list.d/artik-platform-artik710-sources.list /etc/apt/sources.list.d/artik-platform-artik710-sources.list.orig
 # apt-get update
 	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710 (X)
-# apt-get upgrade
+# apt-get -t xenial-backports upgrade
 # apt-get dist-upgrade
 # apt-get autoremove
 # rm /etc/resolv.conf
