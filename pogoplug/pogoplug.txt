@@ -195,7 +195,8 @@ Do not patch libFLAC for debian
 
 7. myMPD
 
-# ENABLE_SSL="OFF" ./build.sh releaseinstall
+##ENABLE_SSL="OFF" ./build.sh releaseinstall	# Before 6.2.0
+# ./build.sh releaseinstall
 # ls -al /usr/local/bin/mympd
 # file /usr/local/bin/mympd
 # strip --strip-debug /usr/local/bin/mympd

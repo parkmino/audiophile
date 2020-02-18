@@ -226,15 +226,18 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
 # tar xvzf mympd.tar.gz -d ~/ && rm mympd.tar.gz
 # cd myMPD*
-# ENABLE_SSL="OFF" ./build.sh releaseinstall
+##ENABLE_SSL="OFF" ./build.sh release	# Before 6.2.0
+# ./build.sh release
+
+# ./build.sh install
 
 # apt-get install build-essential fakeroot
 # apt-get install -t trusty-backports debhelper
-# sed -i '120,123d' CMakeLists.txt
+##sed -i '120,123d' CMakeLists.txt	# Before 6.2.0
 # ./build.sh pkgdebian
 # ls -al package/mympd*.deb
 
-# apt-get install libc6 libid3tag0 libflac8 lrzsz openssl # libmediainfo0v5
+# apt-get install libc6 libid3tag0 libflac8 lrzsz # libmediainfo0v5 openssl
 
 # dpkg -i ./mympd*.deb
 # ls -al /usr/bin/mympd
