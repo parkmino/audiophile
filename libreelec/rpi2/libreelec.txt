@@ -28,8 +28,9 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
 	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
+	$ cp usr/share/alsa/alsa.conf ../copy/alsa.conf.orig
 	$ rm -rf usr/share/alsa && mkdir usr/share/alsa
-	$ cp ../copy/alsa.conf.min ../copy/alsa.conf.mix usr/share/alsa/
+	$ cp ../copy/alsa.conf.min ../copy/alsa.conf.mix ../copy/alsa.conf.orig usr/share/alsa/
 	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
 	
 	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
@@ -47,30 +48,37 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.7.1.0 ../copy/libprocps.so.7
 	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
 
-	$  rm usr/bin/ps usr/bin/nohup
-	$  cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,uhubctl,llctl,audio-config} usr/bin/
-	$  cp ../copy/*.pls ../copy/*.m3u etc/
-	$  cp ../../kodi/plugin.{audio.kr2kodi,video.klive}.zip etc/
-	$  cp ../copy/libprocps.so.7 usr/lib/
-	$  cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
-	$  cp ../tuning_audio usr/lib/libreelec/
-	$  cp ../tuning_audio.{service,target} usr/lib/systemd/system/
-	$  ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
-	$  #[ ! -f usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig ] && mv usr/share/kodi/addons/skin.estuary/xml/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig && cp ../copy/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml
+	$ rm usr/bin/ps usr/bin/nohup
+	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,uhubctl,llctl,audio-config} usr/bin/
+	$ cp ../copy/*.pls ../copy/*.m3u etc/
+	$ cp ../../kodi/plugin.{audio.kr2kodi,video.klive}.zip etc/
+	$ cp ../copy/libprocps.so.7 usr/lib/
+	$ cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
+	$ cp ../tuning_audio usr/lib/libreelec/
+	$ cp ../tuning_audio.{service,target} usr/lib/systemd/system/
+	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
+	$#[ ! -f usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig ] && mv usr/share/kodi/addons/skin.estuary/xml/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig && cp ../copy/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml
 
   1.6 Korean Transaltion
 
 	$ https://www.transifex.com/libreelec/
-	$ #mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
-	$ #cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
+	$#mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
+	$#cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
 
-  1.7 Mksquashfs
+  1.7 SYSTEM to RAM
+
+	$ mount -o remount,rw /flash
+	$ sed -i '1s/$/toram /' /flash/cmdline.txt
+	$ cat /flash/cmdline.txt
+	$ reboot
+
+  1.8 Mksquashfs
 
 	$ cd ..
 	$ [ -f SYSTEM ] && rm -f SYSTEM
 	$ sudo mksquashfs squashfs-root SYSTEM -all-root -noappend
 
-  1.8 Make image
+  1.9 Make image
 	
 	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img
 	$ fdisk -l /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img
@@ -100,11 +108,6 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
 	$ audio-config			# Disable USB signal & power
 	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind
-
-	$ mount -o remount,rw /flash
-	$ sed -i '1s/$/toram /' /flash/cmdline.txt
-	$ cat /flash/cmdline.txt
-	$ reboot
 
 cf)
 

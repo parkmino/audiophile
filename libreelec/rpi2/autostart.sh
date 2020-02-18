@@ -8,9 +8,12 @@ cp /usr/bin/nohup /dev/shm/
 if [ "$alsa_conf" = min ]; then
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  cp /usr/lib/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
-else
+elif [ "$alsa_conf" = mix ]; then
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
  cp /usr/lib/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+else
+ cp /usr/share/alsa/alsa.conf.orig /dev/shm/alsa.conf
+ cp /usr/lib/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
 fi
 
 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
