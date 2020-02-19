@@ -24,7 +24,7 @@ $ file /usr/lib/libasound.so.2.0.0
 $ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0
 $ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
 $ sudo cp /usr/lib/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min
-$ sudo cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+$ sudo rm /usr/lib/libasound*
 
 ### ALSA.CONF
 

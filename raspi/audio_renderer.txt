@@ -472,6 +472,7 @@ HR =
 	$ ls -al /usr/local/lib/libaudiofile.so.1.0.0
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.orig
 	$ sudo cp /usr/local/lib/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
+	$ sudo rm /usr/local/lib/libaudiofile*
 
 	$ wget http://deb.debian.org/debian/pool/main/f/flac/flac_1.3.3.orig.tar.xz
 	$ tar xvf flac_1.3.3.orig.tar.xz
@@ -490,6 +491,7 @@ HR =
 	$ ls -al /usr/local/lib/libFLAC.so.8.3.0
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.orig
 	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
+	$ sudo rm /usr/local/lib/libFLAC*
 
 30. Wondershaper
 

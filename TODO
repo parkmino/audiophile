@@ -67,7 +67,13 @@
 	$ grep tidalquality /etc/upmpdcli.conf
 		tidalquality = lossless
 
-8. Artik710
+8. Clean up libraries for pogoplug
+
+	# ldconfig -v
+	# ldconfig -v | grep -e libasound* -e libaudiofile* -e libFLAC*
+	# rm /usr/lib/libasound* /usr/local/lib/libFLAC* /usr/local/lib/libaudiofile*
+
+9. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
