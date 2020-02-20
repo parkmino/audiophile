@@ -123,6 +123,14 @@ ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so
 #[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 #echo conservative | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
+if [ "$tfc" = on ]; then
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
+  tc qdisc add dev $dev root pfifo_fast
+  tc qdisc add dev $dev ingress
+ #tc -s -d qdisc show dev $dev
+ done
+fi
+
 for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
  renice -2 $i
 done

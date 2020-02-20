@@ -211,6 +211,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	mympd=on
 	ssh=off
 	serial=on
+	tfc=on
 
 ### /etc/fstab
 # nano /etc/fstab
