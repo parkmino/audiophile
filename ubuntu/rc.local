@@ -55,6 +55,7 @@
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
  sysctl -w net.ipv4.tcp_no_metrics_save=1
+ sysctl -w net.ipv4.tcp_moderate_rcvbuf=0
  sysctl -w net.ipv4.udp_mem='46424 57912 87614'
 #sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
@@ -144,7 +145,7 @@ if [ "$m_task" -ge 1 ];then
  echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
 fi
 
-hdparm -A1 -a1904 -B255 /dev/sda # -M0
+hdparm -A1 -a1912 -B255 /dev/sda # -M0
 
 for i in $(ls /dev/snd/); do
  [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"

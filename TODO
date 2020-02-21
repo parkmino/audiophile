@@ -73,7 +73,11 @@
 	# ldconfig -v | grep -e libasound* -e libaudiofile* -e libFLAC*
 	# rm /usr/lib/libasound* /usr/local/lib/libFLAC* /usr/local/lib/libaudiofile*
 
-9. Artik710
+9. ALSA library update to 1.2.2
+
+10. hdparm -a1912 /dev/sda for ubuntu and armbian # from 1904 to 1912
+
+11. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
