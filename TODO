@@ -8,9 +8,8 @@
 	$ sudo systemctl stop    systemd-resolved
 	$ sudo systemctl disable systemd-resolved
 	$ sudo rm   /etc/resolv.conf
-	$ sudo nano /etc/resolv.conf
-		nameserver 1.1.1.1    
-		  
+	$ sudo nano -L /etc/resolv.conf
+		nameserver 1.1.1.1  # double spaces
 
 3. /etc/sysctl.conf
 
@@ -73,11 +72,18 @@
 	# ldconfig -v | grep -e libasound* -e libaudiofile* -e libFLAC*
 	# rm /usr/lib/libasound* /usr/local/lib/libFLAC* /usr/local/lib/libaudiofile*
 
-9. ALSA library update to 1.2.2
+9. hdparm -a1912 /dev/sda for ubuntu and armbian # from 1904 to 1912
 
-10. hdparm -a1912 /dev/sda for ubuntu and armbian # from 1904 to 1912
+10. ALSA library update to 1.2.2
 
-11. Artik710
+11. Configuration files
+
+	$ sudo nano /usr/share/alsa/alsa.conf.min 
+		pcm.0.type hw pcm.0.card 0 pcm.0.subdevice 0 pcm.0.device 0
+	$ sudo nano /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf
+		}  # double spaces
+
+12. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
