@@ -72,32 +72,55 @@
 	# ldconfig -v | grep -e libasound* -e libaudiofile* -e libFLAC*
 	# rm /usr/lib/libasound* /usr/local/lib/libFLAC* /usr/local/lib/libaudiofile*
 
-9. hdparm -a1912 /dev/sda for ubuntu and armbian # from 1904 to 1912
+9. ALSA library update to 1.2.2
 
-10. ALSA library update to 1.2.2
+10. Configuration files
 
-11. Configuration files
-
-	$ sudo nano -L /usr/share/alsa/alsa.conf.min 
-		pcm.0.type hw pcm.0.card 0 pcm.0.subdevice 0 pcm.0.device 0
-		pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 # single space
-		pcm.0.type hw pcm.0.card 0 defaults.pcm.minperiodtime 2772
+	$ sudo nano -L /usr/share/alsa/alsa.conf.min
+		pcm.0{type hw card 0 device 0 subdevice 0 }
+		pcm.0{type hw card 0 device 0 subdevice 0} # single space
+		pcm.0{type hw card 0 device 0 subdevice 0}defaults.pcm.minperiodtime 2772
+		pcm.0{type hw card 0 device 0 subdevice 0}defaults.pcm.minperiodtime 2772 # single space
+		pcm.0{type hw card 0 device 0 subdevice 0} defaults.pcm.minperiodtime 2772
+		pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime  2772
+		pcm.0.type hw pcm.0.card 0 defaults.pcm.minperiodtime 2772 pcm.0.subdevice 0 pcm.0.device 0   ;   # triple;triple space
+		pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2772   ;   (#) # triple;triple space(#)
+		pcm.0.card 0 pcm.0.type hw pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2772   ;   # triple;triple space
 	$ sudo nano -L /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf
-		}  # double spaces
+		}  # double space
 	$ sudo nano -L /etc/resolv.conf
-		nameserver 1.1.1.1   # triple spaces
+		nameserver 1.1.1.1   # triple space
+		
 	$ sudo nano -L /etc/network/interfaces
-		iface lo inet loopback   # triple spaces
-		   # triple spaces
+		iface lo inet loopback   # triple space
+		    # quad spaces
 
-12. Add /dev/shm/ to library path
+11. Add /dev/shm/ to library path
 
 	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
 		/dev/shm/
 
+	$ ls -al /usr/lib/x86_64-linux-gnu/lib{asound*,audiofile*,FLAC.so.*}
+	$ sudo mv /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.* /usr/lib/x86_64-linux-gnu/libaudiofile.so.1.0.0.* /usr/lib/x86_64-linux-gnu/libFLAC.so.8* /etc/
+
+	$ ls -al /usr/lib/x86_64-linux-gnu/libasound*
+	$ sudo mv /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0* /etc/
+	$ ls -al /usr/lib/x86_64-linux-gnu/libasound*
+	$ sudo rm /usr/lib/x86_64-linux-gnu/libasound*
+	
+	$ ls -al /usr/lib/x86_64-linux-gnu/libaudiofile*
+	$ sudo mv /usr/lib/x86_64-linux-gnu/libaudiofile.so.1.0.0* /etc/
+	$ ls -al /usr/lib/x86_64-linux-gnu/libaudiofile*
+	$ sudo rm /usr/lib/x86_64-linux-gnu/libaudiofile*
+	
+	$ ls -al /usr/lib/x86_64-linux-gnu/libFLAC.so.*
+	$ sudo mv /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.* /etc/
+	$ ls -al /usr/lib/x86_64-linux-gnu/libFLAC.so.*
+	$ sudo rm /usr/lib/x86_64-linux-gnu/libFLAC.so.*
+
 	$ sudo rm /usr/lib/x86_64-linux-gnu/libasound.{so,so.2,so.2.0.0}
 	$ sudo rm /usr/lib/x86_64-linux-gnu/libaudiofile.{so,so.1,so.1.0.0}
-	$ sudo rm /usr/lib/x86_64-linux-gnu/libFLAC.{so,so.8,so.8.3.0}
+	$ sudo rm /usr/lib/x86_64-linux-gnu/.{so,so.8,so.8.3.0}
 
 	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
 	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
@@ -110,14 +133,22 @@
 	$ sudo ldconfig
 	
 	$ sudo nano /etc/rc.local
+	
+		cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 		ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
 		ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
+		cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+		ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+		cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
+		cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+		cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
 		ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
 		ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so
+		cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
 		ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
 		ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so
 
-13. Artik710
+12. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
