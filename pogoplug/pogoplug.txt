@@ -258,14 +258,18 @@ HR =
 # nano /etc/sysctl.conf
 # sysctl -p /etc/sysctl.conf
 
-12. USB Auto Mount
+12. Network configuration
+
+# nano /etc/network/interfaces # Add spaces if ncessary
+
+13. USB Auto Mount
 
 https://www.axllent.org/docs/view/auto-mounting-usb-storage/
 http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 
 # nano /lib/udev/rules.d/11-my-media-automount.rules
 
-13. audio-config
+14. audio-config
 
 # nano /etc/default/audio.conf
 
@@ -288,7 +292,7 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # mv copy/audio-config /usr/bin/
 # audio-config
 
-14. Internet Radio & TTS (Text to Speech)
+15. Internet Radio & TTS (Text to Speech)
 
 # curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 # chmod a+rx /usr/local/bin/youtube-dl
@@ -299,11 +303,11 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # mv copy/*.pls /var/lib/mpd/music/webradio
 # mpc update
 
-15. AirConnect
+16. AirConnect
 
 # mv copy/airupnp-arm5 /usr/bin/
 
-16. Spotifyd (Not available)
+17. Spotifyd (Not Available)
 
 # wget https://github.com/Spotifyd/spotifyd/releases/download/v0.2.19/spotifyd-2019-10-06-armv6-slim.zip
 # unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
@@ -319,11 +323,11 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 	bitrate = 320    
 	  
 
-16. Disabel swap
+18. Disabel swap
 
 # cat /proc/swaps
 
-17. Wi-Fi
+19. Wi-Fi
 
 # wget http://ftp.us.debian.org/debian/pool/non-free/f/firmware-nonfree/firmware-misc-nonfree_20190717-2~bpo10+1_all.deb
 # dpkg -i firmware-misc*.deb
@@ -340,14 +344,14 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # sed -i '/auto wlan0/s/^#*//; s/wpa-ssid.*/wpa-ssid wifi/; s/wpa-psk.*/wpa-psk password/' /etc/network/interfaces
 # sed -i '/auto wlan0/s/^/#/' /etc/network/interfaces
 
-18. Copy to another disk with ext3
+20. Copy to another disk with ext3
 
 https://www.tldp.org/HOWTO/Hard-Disk-Upgrade/copy.html
 $ sudo cp -av /source/. /dest/
 $ sudo nano /dest/etc/fstab
 	LABEL=rootfs / ext3  noatime,errors=remount-ro 0 1
 
-19. Image Build
+21. Image Build
 
 # sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
 # echo "* Mino's UPnP Audio Renderer for Pogoplug $(date +"%y.%m")" > ~/release
