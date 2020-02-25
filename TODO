@@ -78,12 +78,46 @@
 
 11. Configuration files
 
-	$ sudo nano /usr/share/alsa/alsa.conf.min 
+	$ sudo nano -L /usr/share/alsa/alsa.conf.min 
 		pcm.0.type hw pcm.0.card 0 pcm.0.subdevice 0 pcm.0.device 0
-	$ sudo nano /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf
+		pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 # single space
+		pcm.0.type hw pcm.0.card 0 defaults.pcm.minperiodtime 2772
+	$ sudo nano -L /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf
 		}  # double spaces
+	$ sudo nano -L /etc/resolv.conf
+		nameserver 1.1.1.1   # triple spaces
+	$ sudo nano -L /etc/network/interfaces
+		iface lo inet loopback   # triple spaces
+		   # triple spaces
 
-12. Artik710
+12. Add /dev/shm/ to library path
+
+	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
+		/dev/shm/
+
+	$ sudo rm /usr/lib/x86_64-linux-gnu/libasound.{so,so.2,so.2.0.0}
+	$ sudo rm /usr/lib/x86_64-linux-gnu/libaudiofile.{so,so.1,so.1.0.0}
+	$ sudo rm /usr/lib/x86_64-linux-gnu/libFLAC.{so,so.8,so.8.3.0}
+
+	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
+	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
+	$ sudo ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
+	$ sudo ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so
+	$ sudo ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
+	$ sudo ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so
+	
+	$ ls -al /dev/shm/
+	$ sudo ldconfig
+	
+	$ sudo nano /etc/rc.local
+		ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
+		ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
+		ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
+		ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so
+		ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
+		ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so
+
+13. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
