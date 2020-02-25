@@ -27,22 +27,25 @@ musicpd_bg () {
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
-cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 rm -rf /dev/snd/*c /dev/snd/by* || true
 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
-ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
-cp /etc/mpd.conf.sav /dev/shm/mpd.conf
-cp /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
-cp /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
+#ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
+#ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
+ ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
+ ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+ cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
+ cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+ cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+#ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0
+#ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1
+ ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
+ cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+#ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0
+#ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
+ ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
 
 echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
