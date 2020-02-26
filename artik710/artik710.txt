@@ -224,8 +224,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 ### myMPD
 
 # apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
-# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
 # cd /root
+# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
 # tar xvzf mympd.tar.gz && rm mympd.tar.gz
 # cd myMPD*
 ##ENABLE_SSL="OFF" ./build.sh release	# Before 6.2.0
@@ -234,7 +234,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # ./build.sh install
 
 # apt-get install build-essential fakeroot
-# apt-get install -t trusty-backports debhelper
+# apt-get install -t xenial-backports debhelper
 ##sed -i '120,123d' CMakeLists.txt	# Before 6.2.0
 # ./build.sh pkgdebian
 # ls -al package/mympd*.deb
