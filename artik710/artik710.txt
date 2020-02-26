@@ -264,11 +264,16 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # nano /etc/mympd.conf
 	 host = 127.0.0.1
 	 port = 6600
-	 music_directory = /var/lib/mpd/music/
+	 musicdirectory = /var/lib/mpd/music
+	 playlistdirectory = /var/lib/mpd/playlists
 	#ssl = false
 	#sslport = 443
+	 publish = true
+	 webdav = false
 	 loglevel = 1
 	 user = mympd
+	 sticker = false
+	 mixramp = false
 	 syscmds = true
 
 # sed -i '/\[syscmds\]/q' /etc/mympd.conf
