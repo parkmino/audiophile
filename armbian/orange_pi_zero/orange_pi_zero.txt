@@ -174,12 +174,11 @@
 		#iface eth0 inet dhcp
 		iface eth0 inet static
 		address	192.168.0.10
-		netmask	255.255.255.0    
-		  
+		netmask	255.255.255.0   
+		    
 	# systemctl disable network-manager.service
 	# nano -L /etc/resolv.conf
-		nameserver 127.0.0.1    
-		  
+		nameserver 127.0.0.1   
 	# nano -L /etc/mpd.conf.sav
 		bind_to_address "192.168.0.10"
 

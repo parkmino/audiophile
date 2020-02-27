@@ -62,11 +62,7 @@ $ ssh root@192.168.0.x
 	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710 (X)
 # apt-get -t xenial-backports upgrade
 # apt-get dist-upgrade
-# apt-get autoremove
-# rm /etc/resolv.conf
-# nano -L /etc/resolv.conf
-	nameserver 1.1.1.1    
-	  
+# apt-get autoremove   
 # dpkg-reconfigure locales
 # locale
 # locale -a
@@ -143,7 +139,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
 # rm   /etc/resolv.conf
 # nano /etc/resolv.conf
-	nameserver 8.8.8.8
+	nameserver 1.1.1.1   
 # systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
 # systemctl mask systemd-logind wpa_supplicant
 # pkill hciattach; pkill tzdaemon
