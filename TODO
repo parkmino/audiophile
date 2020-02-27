@@ -1,9 +1,9 @@
-1. Disable systemd-journald & systemd-logind
+01. Disable systemd-journald & systemd-logind
 
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
 	$ sudo systemctl mask systemd-logind
 
-2. Disable systemd-resolved
+02. Disable systemd-resolved
 
 	$ sudo systemctl stop    systemd-resolved
 	$ sudo systemctl disable systemd-resolved
@@ -11,7 +11,7 @@
 	$ sudo nano -L /etc/resolv.conf
 		nameserver 1.1.1.1  # double spaces
 
-3. /etc/sysctl.conf
+03. /etc/sysctl.conf
 
 	$ sudo nano /etc/sysctl.conf
 
@@ -26,7 +26,7 @@
 		 net.ipv4.tcp_window_scaling = 0
 		 net.ipv4.tcp_moderate_rcvbuf = 0
 
-4. Optional mympd & ssh & serial console
+04. Optional mympd & ssh & serial console
 
 	$ sudo nano /etc/default/audio.conf
 		mympd=on
@@ -37,13 +37,13 @@
 		[ "$ssh"    = on ] && systemctl start ssh
 		[ "$serial" = on ] || systemctl stop serial-getty@ttySAC3
 
-5. myMPD to ram
+05. myMPD to ram
 
 	$ sudo nano /etc/rc.local
 		cp /usr/bin/mympd /dev/shm/
 		/dev/shm/mympd ...
 
-6. Traffic Control
+06. Traffic Control
 
 	$ sudo tc qdisc add dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1) root pfifo_fast
 	$ sudo tc qdisc add dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1) ingress
@@ -60,32 +60,24 @@
 		 done
 		fi
 
-7. Tidal quiality
+07. Tidal quiality
 
 	$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
 	$ grep tidalquality /etc/upmpdcli.conf
 		tidalquality = lossless
 
-8. Clean up libraries for pogoplug
+08. Clean up libraries for pogoplug
 
 	# ldconfig -v
 	# ldconfig -v | grep -e libasound* -e libaudiofile* -e libFLAC*
 	# rm /usr/lib/libasound* /usr/local/lib/libFLAC* /usr/local/lib/libaudiofile*
 
-9. ALSA library update to 1.2.2
+09. ALSA library update to 1.2.2
 
 10. Configuration files
 
 	$ sudo nano -L /usr/share/alsa/alsa.conf.min
-		pcm.0{type hw card 0 device 0 subdevice 0 }
-		pcm.0{type hw card 0 device 0 subdevice 0} # single space
-		pcm.0{type hw card 0 device 0 subdevice 0}defaults.pcm.minperiodtime 2772
-		pcm.0{type hw card 0 device 0 subdevice 0}defaults.pcm.minperiodtime 2772 # single space
-		pcm.0{type hw card 0 device 0 subdevice 0} defaults.pcm.minperiodtime 2772
-		pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime  2772
-		pcm.0.type hw pcm.0.card 0 defaults.pcm.minperiodtime 2772 pcm.0.subdevice 0 pcm.0.device 0   ;   # triple;triple space
-		pcm.0.type hw pcm.0.card 0 pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2772   ;   (#) # triple;triple space(#)
-		pcm.0.card 0 pcm.0.type hw pcm.0.device 0 pcm.0.subdevice 0 defaults.pcm.minperiodtime 2772   ;   # triple;triple space
+		pcm.0{type hw card 0 subdevice 0 device 0}defaults.pcm{minperiodtime 2772}
 	$ sudo nano -L /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf
 		}  # double space
 	$ sudo nano -L /etc/resolv.conf
@@ -99,28 +91,9 @@
 
 	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
 		/dev/shm/
-
-	$ ls -al /usr/lib/x86_64-linux-gnu/lib{asound*,audiofile*,FLAC.so.*}
-	$ sudo mv /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.* /usr/lib/x86_64-linux-gnu/libaudiofile.so.1.0.0.* /usr/lib/x86_64-linux-gnu/libFLAC.so.8* /etc/
-
-	$ ls -al /usr/lib/x86_64-linux-gnu/libasound*
-	$ sudo mv /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0* /etc/
-	$ ls -al /usr/lib/x86_64-linux-gnu/libasound*
-	$ sudo rm /usr/lib/x86_64-linux-gnu/libasound*
-	
-	$ ls -al /usr/lib/x86_64-linux-gnu/libaudiofile*
-	$ sudo mv /usr/lib/x86_64-linux-gnu/libaudiofile.so.1.0.0* /etc/
-	$ ls -al /usr/lib/x86_64-linux-gnu/libaudiofile*
-	$ sudo rm /usr/lib/x86_64-linux-gnu/libaudiofile*
-	
-	$ ls -al /usr/lib/x86_64-linux-gnu/libFLAC.so.*
-	$ sudo mv /usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.* /etc/
-	$ ls -al /usr/lib/x86_64-linux-gnu/libFLAC.so.*
-	$ sudo rm /usr/lib/x86_64-linux-gnu/libFLAC.so.*
-
-	$ sudo rm /usr/lib/x86_64-linux-gnu/libasound.{so,so.2,so.2.0.0}
-	$ sudo rm /usr/lib/x86_64-linux-gnu/libaudiofile.{so,so.1,so.1.0.0}
-	$ sudo rm /usr/lib/x86_64-linux-gnu/.{so,so.8,so.8.3.0}
+	$#ls -al /usr/lib/x86_64-linux-gnu/lib{asound*,audiofile*,FLAC.so.*}
+	$ sudo mv /usr/lib/x86_64-linux-gnu/{libasound.so.2.0.0.*,libaudiofile.so.1.0.0.*,libFLAC.so.8*} /etc/
+	$ sudo rm -i /usr/lib/x86_64-linux-gnu/{libasound*,libaudiofile*,libFLAC.so.*}
 
 	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
 	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
