@@ -97,10 +97,9 @@
 	# systemctl disable minidlnad
 	# mv /usr/sbin/minidlnad /usr/sbin/minidlnad
 	# mv ~/minidlnad /usr/sbin/minidlnad
-	# nano /etc/minidlna.conf
+	# nano -L /etc/minidlna.conf
 		media_dir=A,...
 		resize_covers=no
-
 	# nano /etc/rygel.conf
 		uris=/mnt/Music
 		interface=eth0
@@ -146,8 +145,7 @@
 		#iface eth0 inet dhcp
 		iface eth0 inet static
 		address	192.168.0.5
-		netmask	255.255.255.0   
-		    
+		netmask	255.255.255.0
 	# systemctl disable network-manager.service
 	# nano /etc/resolv.conf
 		nameserver 127.0.0.1   

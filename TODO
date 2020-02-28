@@ -8,8 +8,8 @@
 	$ sudo systemctl stop    systemd-resolved
 	$ sudo systemctl disable systemd-resolved
 	$ sudo rm   /etc/resolv.conf
-	$ sudo nano -L /etc/resolv.conf
-		nameserver 1.1.1.1  # double spaces
+	$ sudo nano /etc/resolv.conf
+		nameserver 1.1.1.1
 
 03. /etc/sysctl.conf
 
@@ -78,14 +78,13 @@
 
 	$ sudo nano -L /usr/share/alsa/alsa.conf.min
 		pcm.0{type hw card 0 subdevice 0 device 0}defaults.pcm{minperiodtime 2772}
-	$ sudo nano -L /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf
-		}  # double space
-	$ sudo nano -L /etc/resolv.conf
-		nameserver 1.1.1.1   # triple space
-		
-	$ sudo nano -L /etc/network/interfaces
-		iface lo inet loopback   # triple space
-		    # quad spaces
+	$ sudo nano -L /etc/mpd.conf.sav /etc/upmpdcli.conf .config/mpv/mpv.conf
+		}
+	$ sudo nano /etc/mympd.conf
+	$ sudo nano /etc/resolv.conf
+		nameserver 1.1.1.1
+	$ sudo nano /etc/network/interfaces
+		iface lo inet loopback
 
 11. Add /dev/shm/ to library path
 

@@ -96,7 +96,7 @@ artUrl = https://i.imgur.com/ebtVtuV.png
 
 [radio 국악방송]
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
-artUrl = https://pbs.twimg.com/profile_images/883196509982011392/l7yA_yVP_400x400.jpg  
+artUrl = https://pbs.twimg.com/profile_images/883196509982011392/l7yA_yVP_400x400.jpg
 
 $ sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"

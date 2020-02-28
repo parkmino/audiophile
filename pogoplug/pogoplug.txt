@@ -228,7 +228,7 @@ HR =
 웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "sudo su"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff    \n  ' >> /usr/etc/mympd.conf
+전원 끄기 - Power off = sudo poweroff\n' >> /usr/etc/mympd.conf
 # mv copy/ttyd /usr/bin/
 
 8. Remove Services
