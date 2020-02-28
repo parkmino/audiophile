@@ -4,6 +4,7 @@ snd1="Speaker"
 snd2="Bass Speaker"
 alsa_orig="/usr/share/alsa/alsa.conf.sav"
 alsa_conf="/dev/shm/alsa.conf"
+#alsa_conf="/usr/share/alsa/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -c6) # card=0
 
 if grep -q ' \?ctl.default' $alsa_conf; then
