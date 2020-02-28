@@ -173,4 +173,7 @@
 	$ sudo strip --strip-debug /usr/local/sbin/minidlnad
 	$ ls -al /usr/local/sbin/minidlnad
 	$ minidlnad -V
+	$ cp ./minidlna.conf ./minidlna.conf.orig
+	$ nano ./minidlna.conf
+	$ grep -v ^# ./minidlna.conf | sed 's/^[ \t]*//; /^$/d' > 
 	$ sudo cp ./minidlna.conf /etc/
