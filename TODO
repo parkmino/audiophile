@@ -76,15 +76,10 @@
 
 10. Configuration files
 
-	$ sudo nano -L /usr/share/alsa/alsa.conf.min
-		pcm.0{type hw card 0 subdevice 0 device 0}defaults.pcm{minperiodtime 2772}
-	$ sudo nano -L /etc/mpd.conf.sav /etc/upmpdcli.conf .config/mpv/mpv.conf
-		}
-	$ sudo nano /etc/mympd.conf
-	$ sudo nano /etc/resolv.conf
-		nameserver 1.1.1.1
-	$ sudo nano /etc/network/interfaces
-		iface lo inet loopback
+	$ sudo nano /usr/share/alsa/alsa.conf.min
+		defaults.pcm{minperiodtime 2772}
+		pcm.0{type hw card 0 device 0 subdevice 0  }
+	$ sudo nano /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf /etc/resolv.conf /etc/network/interfaces
 
 11. Add /dev/shm/ to library path
 
