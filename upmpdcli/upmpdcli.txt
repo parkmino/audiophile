@@ -39,7 +39,7 @@ checkcontentformat = 0
 tidalquality = lossless
 
 $ sudo systemctl disable upmpdcli.service
-$ sudo nano -L /etc/upmpdcli.conf
+$ sudo nano /etc/upmpdcli.conf
 
 [radio KBS 클래식 FM]
 url = http://serpent0.duckdns.org:8088/kbsfm.pls
