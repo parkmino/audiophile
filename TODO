@@ -90,33 +90,39 @@
 	$ sudo rm -i /usr/lib/x86_64-linux-gnu/{libasound*,libaudiofile*,libFLAC.so.*}
 
 	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
-	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
+	$ sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so
 	$ sudo ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
-	$ sudo ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so
+	$ sudo ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
 	$ sudo ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
-	$ sudo ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so
+	$ sudo ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 	
 	$ ls -al /dev/shm/
 	$ sudo ldconfig
 	
 	$ sudo nano /etc/rc.local
 	
-		cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-		ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
-		ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
-		cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
-		ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-		cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
-		cp /etc/mpd.conf.sav /dev/shm/mpd.conf
-		cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
-		ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
-		ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so
-		cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
-		ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
-		ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so
+		 cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+		 ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
+		#ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so
+		 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
+		 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+		 cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
+		 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+		#cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+		 ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
+		 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
+		 cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+		 ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
+		#ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 
 12. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
 	-. CPU affinity for IRQ
+	
+	# nano myMPD-6.2.2/htdocs/index.html
+		          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>
+	# nano myMPD-6.2.2/src/i18n/ko-KR.txt
+		Web interface
+		웹 인터페이스

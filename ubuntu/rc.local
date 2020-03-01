@@ -89,17 +89,17 @@ swapoff -a
 
 cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
-ln -sf libasound.so.2.0.0 /dev/shm/libasound.so
+ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so
 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
 ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
-ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so
+ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
 cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
 ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
-ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so
+ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 
 for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
  renice  -2 $pid || true
