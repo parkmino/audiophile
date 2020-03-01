@@ -78,7 +78,7 @@
 
 	$ sudo nano /usr/share/alsa/alsa.conf.min
 		defaults.pcm{minperiodtime 2772}
-		pcm.0{type hw card 0 device 0 subdevice 0  }
+		pcm.0{type hw card 0 device 0 subdevice 0; }
 	$ sudo nano /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf /etc/resolv.conf /etc/network/interfaces
 
 11. Add /dev/shm/ to library path
@@ -89,30 +89,42 @@
 	$ sudo mv /usr/lib/x86_64-linux-gnu/{libasound.so.2.0.0.*,libaudiofile.so.1.0.0.*,libFLAC.so.8*} /etc/
 	$ sudo rm -i /usr/lib/x86_64-linux-gnu/{libasound*,libaudiofile*,libFLAC.so.*}
 
-	$ sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
-	$ sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so
+	$ sudo cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
+	$#sudo cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+	$#sudo ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
+	$ sudo cp /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
+	$#sudo ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so
+	$ sudo cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
+	$#sudo cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
+	$#sudo cp /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
 	$ sudo ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
-	$ sudo ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
+	$#sudo ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
+	$ sudo cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
+	$#sudo cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+	$#sudo cp /etc/libFLAC.so.8.3.0.sav /usr/lib/x86_64-linux-gnu/libFLAC.so
 	$ sudo ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
-	$ sudo ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
+	$#sudo ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 	
 	$ ls -al /dev/shm/
 	$ sudo ldconfig
 	
 	$ sudo nano /etc/rc.local
 	
-		 cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
-		 ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
+		 cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
+		#cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
+		#ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
 		#ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so
 		 cp /usr/share/alsa/alsa.conf.sav /dev/shm/alsa.conf
 		 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 		 cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
 		 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+		 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 		#cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
-		 ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
-		 ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
-		 cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
-		 ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
+		#ln -sf libaudiofile.so.1.0.0 /dev/shm/libaudiofile.so.1
+		#ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/x86_64-linux-gnu/libaudiofile.so
+		 cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
+		#cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
+		#ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
 		#ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 
 12. Artik710
