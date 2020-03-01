@@ -224,6 +224,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
 # tar xvzf mympd.tar.gz && rm mympd.tar.gz
 # cd myMPD*
+# nano htdocs/index.html
+	          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>
+# nano src/i18n/ko-KR.txt
+	Web interface
+	웹 인터페이스
 ##ENABLE_SSL="OFF" ./build.sh release	# Before 6.2.0
 # ./build.sh release
 
@@ -286,7 +291,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /root; sudo su\"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
 # sh -c "echo 'HR =' >> /etc/mympd.conf"
 # sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
-# sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
+# sh -c "echo '전원 끄기 - Power off = sudo poweroff    ' >> /etc/mympd.conf"
+# sh -c "printf '  ' >> /etc/mympd.conf"
 	
 # sh -c "printf 'HR =
 KBS 클래식 FM = kr2mpd 1fm
@@ -300,7 +306,7 @@ HR =
 웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff\n' >> /etc/mympd.conf"
+전원 끄기 - Power off = sudo poweroff    \n  ' >> /etc/mympd.conf"
 
 # echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 # cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
