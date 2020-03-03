@@ -225,12 +225,11 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # tar xvzf mympd.tar.gz && rm mympd.tar.gz
 # cd myMPD*
 # sed -i '32,41s/myMPD/Sylphid/' htdocs/index.html
-# grep -n Sylphid htdocs/index.html
+# sed -i '53i\          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
+# grep -n -e Sylphi -e bann htdocs/index.html
 32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> Sylphid
 34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
 41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
-# sed -i '53i\          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
-# grep -n bann htdocs/index.html
 53	          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>
 # nano src/i18n/ko-KR.txt
 	Web interface
