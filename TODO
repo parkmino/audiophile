@@ -77,8 +77,10 @@
 10. Configuration files
 
 	$ sudo nano /usr/share/alsa/alsa.conf.min
-		defaults.pcm { minperiodtime 2772,}
-		pcm.0 { type hw card 0 device 0 subdevice 0,}	
+
+		defaults.pcm{ minperiodtime 2772  ;}
+		pcm.0{ type hw card 0 device 0 subdevice 0  ;}
+
 	$ sudo nano /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf /etc/resolv.conf /etc/network/interfaces
 
 11. Add /dev/shm/ to library path
