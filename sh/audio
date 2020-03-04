@@ -49,7 +49,8 @@ case $1 in
   if ! grep -q 'pcm.default' $alsa_conf; then
   #sudo sed -i 's/pcm.default.*/pcm.default pcm.'"$card"'/' $alsa_conf
   #else
-   sudo sed -i '1s/^/pcm.default pcm.'"$card"' /' $alsa_conf
+  #sudo sed -i '1s/^/pcm.default pcm.'"$card"' /' $alsa_conf
+   sudo sed -i '1ipcm{default pcm.'"$card"'; }' $alsa_conf
   fi ;;
  nodef)
    sudo cp $alsa_orig $alsa_conf ;;

@@ -8,9 +8,9 @@ usage () {
 upd () {
  sudo ntpdate pool.ntp.org
 #sudo rm -rf /var/lib/apt/lists/partial
- sudo apt-get update -o Acquire::CompressionTypes::Order::=gz
- sudo apt-get dist-upgrade
- sudo apt-get clean
+#sudo apt-get update -o Acquire::CompressionTypes::Order::=gz && sudo apt-get dist-upgrade && sudo apt-get clean
+ sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get clean
+
 }
 
 upd_fix () {
@@ -186,7 +186,7 @@ ANDROID_X86 () {
  url="https://www.android-x86.org/releases.html"
  latest=$(curl $curl_opt $url | grep -o "ReleaseNote [0-9][0-9.rcRC-]*" | head -1 | cut -d' ' -f2-)
  current=$(ls -d /home/parkmino/Downloads/android*/ | tail -1 | cut -d\/ -f5 | cut -d\- -f3-)
- latest=$(printf ""$current"\n"$latest"" | sort -V | tail -1)
+#latest=$(printf ""$current"\n"$latest"" | sort -V | tail -1)
  printf "$current\t\t\t\t"
  msg_url
 }
@@ -232,7 +232,7 @@ BUBBLEUPNP () {
  url="https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp"
 #latest=$(curl $curl_opt "$url&hl=en" | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
  latest=$(curl $curl_opt "$url&hl=en" | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
- current=3.4.2
+ current=3.4.3
  printf "$current\t\t\t\t"
  msg_url
 }
