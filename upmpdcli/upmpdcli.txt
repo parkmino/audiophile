@@ -32,11 +32,12 @@ $ sudo apt-get install upmpdcli
 
 $ wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
 $ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
-$ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= 1/= 0/' /etc/upmpdcli.conf
-$ grep checkcontentformat /etc/upmpdcli.conf
+$ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
+$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
+$ grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf
 
-checkcontentformat = 0
-tidalquality = lossless
+	checkcontentformat = 0
+	tidalquality = lossless
 
 $ sudo systemctl disable upmpdcli.service
 $ sudo nano /etc/upmpdcli.conf
