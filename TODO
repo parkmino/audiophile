@@ -134,9 +134,3 @@
 	-. Disable connman
 	-. Blacklist modules
 	-. CPU affinity for IRQ
-	
-	# nano myMPD-6.2.2/htdocs/index.html
-		          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>
-	# nano myMPD-6.2.2/src/i18n/ko-KR.txt
-		Web interface
-		웹 인터페이스

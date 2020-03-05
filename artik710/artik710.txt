@@ -224,6 +224,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
 # tar xvzf mympd.tar.gz && rm mympd.tar.gz
 # cd myMPD*
+
+## Customization
 # sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
 # sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
 # grep -n -e Sylphi -e bann htdocs/index.html
@@ -236,6 +238,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 	...
 	Web interface
 	웹 인터페이스
+
 ##ENABLE_SSL="OFF" ./build.sh release	# < 6.2.0
 # ./build.sh release
 # ./build.sh install
