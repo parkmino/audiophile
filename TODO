@@ -129,7 +129,13 @@
 		#ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
 		#ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/x86_64-linux-gnu/libFLAC.so
 
-12. Artik710
+12. ClasicHiFi
+
+	$ nano ClassicHiFi.pls
+
+		http://c9.inlive.co.kr:5882
+
+13. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
