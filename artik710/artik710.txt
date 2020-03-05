@@ -227,12 +227,12 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 
 ## Customization
 # sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
-# sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
+# sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
 # grep -n -e Sylphi -e bann htdocs/index.html
 32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> Sylphid
 34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
 41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
-53	          <a data-phrase="Web interface" class="dropdown-item text-light featBrowse" href="http://bann.local:8080" target="_blank"></a>
+53	          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
 # printf '\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
 # tail src/i18n/ko-KR.txt
 	...
