@@ -4,12 +4,13 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
-	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-9.2.0.img.gz
-	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0
-	$ gzip -d LibreELEC-RPi2.arm-9.2.0.img.gz
-	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0
-	$ mv LibreELEC-RPi2.arm-9.2.0.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/ && rm LibreELEC-RPi2.arm-9.2.0.img.gz
-	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0
+	$ ver=9.2.0
+	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
+	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
+	$ gzip -d LibreELEC-RPi2.arm-$ver.img.gz
+	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-$ver
+	$ mv LibreELEC-RPi2.arm-$ver.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/ && rm LibreELEC-RPi2.arm-$ver.img.gz
+	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-$ver
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -20,8 +21,9 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
 	$ printf 'ctl { default ctl.9  ;}\ndefaults.pcm { minperiodtime 2772  ;}\npcm.default { type hw card 0 device 0 subdevice 0  ;}\n' > ../copy/alsa.conf.min
 	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
-	$ sed -i '$d' ../copy/alsa.conf.mix
-	$ printf 'ctl { default ctl.9  ;}\ndefaults.pcm { minperiodtime 2772  ;}\npcm.default { type hw card 0 device 0 subdevice 0  ;}\n' >> ../copy/alsa.conf.mix
+	$ sed -i '/minperiodtime/,$d' ../copy/alsa.conf.mix
+	$ cat ../copy/alsa.conf.min >> ../copy/alsa.conf.mix
+	$ tail ../copy/alsa.conf.mix
 
 	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
 	$ cp ../copy/libasound.so.2.0.0.min ../copy/libasound.so.2.0.0.mix usr/lib/
@@ -57,7 +59,6 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.{service,target} usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
-	$#[ ! -f usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig ] && mv usr/share/kodi/addons/skin.estuary/xml/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig && cp ../copy/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml
 
   1.6 Korean Transaltion
 
@@ -80,13 +81,18 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.9 Make image
 	
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img
-	$ fdisk -l /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img
+	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
+	$ fdisk -l /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
 	$ sudo mkdir /mnt/le
-	$ sudo mount -o loop,offset=$(echo $((512*8192))) /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img /mnt/le
+	$ sudo mount -o loop,offset=$(echo $((512*8192))) /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /mnt/le
 	$ sudo rm /mnt/le/SYSTEM*
 	$ sudo cp SYSTEM /mnt/le
 	$ sync
+	
+	## SYSTEM to RAM
+	$ sudo sed -i '1s/$/toram /' /mnt/le/cmdline.txt
+	$ cat /mnt/le/cmdline.txt
+	
 	$ sudo umount /mnt/le
 	$ sudo rm -rf /mnt/le
 
@@ -94,11 +100,11 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img of=/dev/sdc
+	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img of=/dev/sdc
 	$ sync
 	
-	$ mv /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").img
-	$ zip -j /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-9.2.0/LibreELEC-RPi2.arm-9.2.0-audio-$(date +"%y.%m").img
+	$ mv /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
+	$ zip -j /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
 
 3. SSH login
 
