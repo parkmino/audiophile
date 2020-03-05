@@ -130,7 +130,7 @@ Build MPD 0.20.23
 # mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
 # mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
 
-Build ALSA 1.1.5
+Build ALSA library
 
 ##apt-get install alsa-base alsa-utils
 
@@ -163,15 +163,14 @@ Build ALSA 1.1.5
 # cd
 # wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.5-1~ppa1~buster_all.deb
 # dpkg -x upmpdcli-tidal_1.4.5-1~ppa1~buster_all.deb /
+# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /usr/local/etc/upmpdcli.conf
 # sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /usr/local/etc/upmpdcli.conf
-# grep tidalquality /usr/local/etc/upmpdcli.conf
+# grep -e checkcontentformat -e tidalquality /usr/local/etc/upmpdcli.conf
+	checkcontentformat = 0
 	tidalquality = lossless
-
 # adduser upmpdcli
 # mv copy/icon.png /usr/local/share/upmpdcli/
 # cd
-# nano -L /usr/local/etc/upmpdcli.conf
-	checkcontentformat = 0
 
 5. Build libaudiofile libFLAC
 
@@ -184,7 +183,7 @@ Do not patch libFLAC for debian
 # mv /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.orig
 # mv copy/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.sav
 
-6. Uhubctl
+6. Uhubctl (Not Applicable)
 
 # wget https://github.com/mvp/uhubctl/archive/master.zip
 # apt-get install libusb-1.0-0-dev unzip
@@ -195,7 +194,11 @@ Do not patch libFLAC for debian
 
 7. myMPD
 
-##ENABLE_SSL="OFF" ./build.sh releaseinstall	# Before 6.2.0
+# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
+# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
+# unzip mympd.zip -d ~/ && rm mympd.zip
+# cd myMPD*
+##ENABLE_SSL="OFF" ./build.sh releaseinstall	# < 6.2.0
 # ./build.sh releaseinstall
 # ls -al /usr/local/bin/mympd
 # file /usr/local/bin/mympd
@@ -260,7 +263,7 @@ HR =
 
 12. Network configuration
 
-# nano /etc/network/interfaces # Add spaces if ncessary
+# nano /etc/network/interfaces
 
 13. USB Auto Mount
 
@@ -284,7 +287,6 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 	upnp=on
 	airplay=off
 	dbus=on
-	usb=on
 	mympd=on
 	ssh=on
 	nfs=off
