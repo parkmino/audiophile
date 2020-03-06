@@ -83,8 +83,8 @@ airconnect () {
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
-if [ "$alsa" = orig ]; then
- cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig /dev/shm/libasound.so.2.0.0
+if [ "$alsa" = plug ]; then
+ cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.plug /dev/shm/libasound.so.2.0.0
  cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
 elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
  cp /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
