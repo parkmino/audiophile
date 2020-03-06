@@ -89,7 +89,7 @@
 		/dev/shm/
 	$#ls -al /usr/lib/x86_64-linux-gnu/lib{asound*,audiofile*,FLAC.*}
 	$ sudo mv /usr/lib/x86_64-linux-gnu/lib{asound.so.2.0.0.*,audiofile.so.1.0.0.*,FLAC.so.8*} /etc/
-	$ sudo rm -i /usr/lib/x86_64-linux-gnu/lib{asound*,audiofile*,FLAC.so.*}
+	$ sudo rm -i /usr/lib/x86_64-linux-gnu/lib{asound.so*,audiofile.so*,FLAC.so.*}
 	$ sudo cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
 	$ sudo cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 	$ sudo cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
