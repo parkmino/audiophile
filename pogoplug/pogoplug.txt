@@ -172,27 +172,7 @@ Build ALSA library
 # mv copy/icon.png /usr/local/share/upmpdcli/
 # cd
 
-5. Build libaudiofile libFLAC
-
-Do not patch libFLAC for debian
-
-# ls -al /usr/local/lib/lib*
-# rm /usr/local/lib/libFLAC.so* /usr/local/lib/libaudiofile.so*
-# mv /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0.orig
-# mv copy/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0.sav
-# mv /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.orig
-# mv copy/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.sav
-
-6. Uhubctl (Not Applicable)
-
-# wget https://github.com/mvp/uhubctl/archive/master.zip
-# apt-get install libusb-1.0-0-dev unzip
-# unzip master.zip
-# cd uhubctl-master
-# make
-# cp uhubctl /usr/bin/
-
-7. myMPD
+5. myMPD
 
 # apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
 # curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
@@ -234,7 +214,30 @@ HR =
 전원 끄기 - Power off = sudo poweroff\n' >> /usr/etc/mympd.conf
 # mv copy/ttyd /usr/bin/
 
-8. Remove Services
+6. Build libaudiofile libFLAC
+
+Do not patch libFLAC for debian
+
+# ls -al /usr/local/lib/lib*
+# rm /usr/local/lib/libFLAC.so* /usr/local/lib/libaudiofile.so*
+
+# rm /usr/lib/arm-linux-gnueabi/libasound.{so,so.2} /usr/lib/arm-linux-gnueabi/libaudiofile.{so,so.1} /usr/lib/arm-linux-gnueabi/libFLAC.{so,so.8}
+# mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+# echo "/usr/lib/arm-linux-gnueabi/libasound.so /run/shm/libasound.so.2" | xargs -n 1 cp -v copy/libasound.so.2.0.0.min
+# cp copy/libasound.so.2.0.0* /etc/
+# mv /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
+# echo "/etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
+# mv /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
+# echo "/usr/lib/arm-linux-gnueabi/libFLAC.so /etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
+
+# ls -al /run/shm/
+# nano /etc/ld.so.conf.d/run_shm.conf
+	/run/shm/
+# ldconfig 
+
+# nano /etc/rc.local
+
+7. Remove Services
 
 # nano /etc/inittab
 	#... ttyS0
@@ -242,7 +245,7 @@ HR =
 # sysv-rc-conf
 	Remove alsa-utils(S) avahi-daemon(2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5)
 
-9. Fstab
+8. Fstab
 
 # mkdir /mnt/{usb,cifs,nfs}
 # ln -s /mnt /var/lib/mpd/music
@@ -252,27 +255,27 @@ HR =
 	#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 	#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
 
-10. Rc.local
+9. Rc.local
 
 # nano /etc/rc.local
 
-11. Sysctl.conf
+10. Sysctl.conf
 
 # nano /etc/sysctl.conf
 # sysctl -p /etc/sysctl.conf
 
-12. Network configuration
+11. Network configuration
 
 # nano /etc/network/interfaces
 
-13. USB Auto Mount
+12. USB Auto Mount
 
 https://www.axllent.org/docs/view/auto-mounting-usb-storage/
 http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 
 # nano /lib/udev/rules.d/11-my-media-automount.rules
 
-14. audio-config
+13. audio-config
 
 # nano /etc/default/audio.conf
 
@@ -294,7 +297,7 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # mv copy/audio-config /usr/bin/
 # audio-config
 
-15. Internet Radio & TTS (Text to Speech)
+14. Internet Radio & TTS (Text to Speech)
 
 # curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 # chmod a+rx /usr/local/bin/youtube-dl
@@ -305,11 +308,11 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # mv copy/*.pls /var/lib/mpd/music/webradio
 # mpc update
 
-16. AirConnect
+15. AirConnect
 
 # mv copy/airupnp-arm5 /usr/bin/
 
-17. Spotifyd (Not Available)
+16. Spotifyd (Not Available)
 
 # wget https://github.com/Spotifyd/spotifyd/releases/download/v0.2.19/spotifyd-2019-10-06-armv6-slim.zip
 # unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
@@ -325,11 +328,11 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 	bitrate = 320    
 	  
 
-18. Disabel swap
+17. Disabel swap
 
 # cat /proc/swaps
 
-19. Wi-Fi
+18. Wi-Fi
 
 # wget http://ftp.us.debian.org/debian/pool/non-free/f/firmware-nonfree/firmware-misc-nonfree_20190717-2~bpo10+1_all.deb
 # dpkg -i firmware-misc*.deb
@@ -346,14 +349,14 @@ http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
 # sed -i '/auto wlan0/s/^#*//; s/wpa-ssid.*/wpa-ssid wifi/; s/wpa-psk.*/wpa-psk password/' /etc/network/interfaces
 # sed -i '/auto wlan0/s/^/#/' /etc/network/interfaces
 
-20. Copy to another disk with ext3
+19. Copy to another disk with ext3
 
 https://www.tldp.org/HOWTO/Hard-Disk-Upgrade/copy.html
 $ sudo cp -av /source/. /dest/
 $ sudo nano /dest/etc/fstab
 	LABEL=rootfs / ext3  noatime,errors=remount-ro 0 1
 
-21. Image Build
+20. Image Build
 
 # sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
 # echo "* Mino's UPnP Audio Renderer for Pogoplug $(date +"%y.%m")" > ~/release

@@ -113,34 +113,34 @@ pkill rc.local || true
 
 mount -o remount,exec /run/shm
 
-if [ "$alsa" = orig ]; then
- cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.orig /run/shm/libasound.so.2.0.0
+if [ "$alsa" = plug ]; then
+ cp /etc/libasound.so.2.0.0.plug /run/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.plug /run/shm/alsa.conf
 elif [ "$alsa" = min ]; then
- cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.min /run/shm/libasound.so.2.0.0
+ cp /etc/libasound.so.2.0.0.min /run/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.min /run/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 else
- cp /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0.mix /run/shm/libasound.so.2.0.0
- cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+ cp /etc/libasound.so.2.0.0.mix /run/shm/libasound.so.2
+ cp /usr/share/alsa/alsa.conf.mix /run/shm/alsa.conf
 #rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0
-ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
-ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
-ln -sf /run/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/nohup /usr/local/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /usr/bin/mympd /usr/etc/mympd.conf /run/shm/
-cp /etc/mpd.conf.sav /run/shm/mpd.conf
-cp /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1.0.0
-ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0
-ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1
-ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so
-cp /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8.3.0
-ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0
-ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8
-ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so
+#ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0
+#ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
+#ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
+ ln -sf /run/shm/alsa.conf /usr/share/alsa/alsa.conf
+ cp /usr/bin/nohup /usr/local/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /usr/bin/mympd /usr/etc/mympd.conf /run/shm/
+ cp /etc/mpd.conf.sav /run/shm/mpd.conf
+ cp /etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1
+#ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0
+#ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1
+#ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so
+ cp /etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8
+#ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0
+#ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8
+#ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so
 
 for i in $(ls /sys/block/*/queue/scheduler); do
  if   echo $(cat $i) | grep -q none; then
