@@ -518,6 +518,7 @@ HR =
 
 31. Make Image
 
+	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.*,audiofile*,FLAC.*}
 	$ sudo systemctl disable sshd
 	##dietpi-services disable dropbear
 

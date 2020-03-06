@@ -221,21 +221,20 @@ Do not patch libFLAC for debian
 # ls -al /usr/local/lib/lib*
 # rm /usr/local/lib/libFLAC.so* /usr/local/lib/libaudiofile.so*
 
-# rm /usr/lib/arm-linux-gnueabi/libasound.{so,so.2} /usr/lib/arm-linux-gnueabi/libaudiofile.{so,so.1} /usr/lib/arm-linux-gnueabi/libFLAC.{so,so.8}
 # mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
-# echo "/usr/lib/arm-linux-gnueabi/libasound.so /run/shm/libasound.so.2" | xargs -n 1 cp -v copy/libasound.so.2.0.0.min
-# cp copy/libasound.so.2.0.0* /etc/
 # mv /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
-# echo "/etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
 # mv /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
-# echo "/usr/lib/arm-linux-gnueabi/libFLAC.so /etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
+# cp copy/libasound.so.2.0.0* /etc/
+# cp etc/libasound.so.2.0.0.min /run/shm/libasound.so.2
+# echo "/etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
+# echo "/etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
+# rm -i /usr/lib/arm-linux-gnueabi/lib{asound*,audiofile*,FLAC.*}
 
 # ls -al /run/shm/
 # nano /etc/ld.so.conf.d/run_shm.conf
 	/run/shm/
-# ldconfig 
-
-# nano /etc/rc.local
+# ldconfig
+# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.*,audiofile*,FLAC.*}
 
 7. Remove Services
 
@@ -358,6 +357,7 @@ $ sudo nano /dest/etc/fstab
 
 20. Image Build
 
+# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.*,audiofile*,FLAC.*}
 # sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
 # echo "* Mino's UPnP Audio Renderer for Pogoplug $(date +"%y.%m")" > ~/release
 # cat ~/release
