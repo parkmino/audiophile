@@ -498,7 +498,24 @@ HR =
 	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
 	$ sudo rm /usr/local/lib/libFLAC*
 
-30. Wondershaper
+30. Tweak libraries
+
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
+	$ sudo cp copy/libasound.so.2.0.0* /etc/
+	$ sudo cp etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+	$ echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 sudo cp -v copy/libaudiofile.so.1.0.0
+	$ echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v sudo copy/libFLAC.so.8.3.0
+	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*}
+
+	$ ls -al /dev/shm/
+	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
+		/dev/shm/
+	$ sudo ldconfig
+	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*}
+
+31. Wondershaper
 
 	https://github.com/magnific0/wondershaper
 	
@@ -516,7 +533,7 @@ HR =
 		[ "$wondershaper" = on ] && wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 		[ "$wondershaper" = on ] && /home/pi/wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 
-31. Make Image
+32. Make Image
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so*,audiofile.so*,FLAC.so*}
 	$ sudo systemctl disable sshd
@@ -547,12 +564,12 @@ HR =
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip -dd raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
-32. Disable Bluetooth UART for RPI3
+33. Disable Bluetooth UART for RPI3
 
 	$ sudo systemctl disable hciuart
 	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
 
-33. Shirnk Image
+34. Shirnk Image
 
 	http://aoakley.com/articles/2015-10-09-resizing-sd-images.php
 	https://github.com/Drewsif/PiShrink

@@ -81,33 +81,24 @@ airconnect () {
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = plug ]; then
- cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.plug /dev/shm/libasound.so.2.0.0
+ cp /etc/libasound.so.2.0.0.plug /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
 elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
- cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+ cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 else
- cp /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0.mix /dev/shm/libasound.so.2.0.0
+ cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
 #rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so.2
-ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/aarch64-linux-gnu/libasound.so
 ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
-cp /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1.0.0
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so.1
-ln -sf /dev/shm/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so
-cp /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8.3.0
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8
-ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so
+cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
+cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
 
 #for i in $(ls /sys/block/*/queue/scheduler); do
 # if   echo $(cat $i) | grep -q none; then

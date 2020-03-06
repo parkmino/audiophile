@@ -300,8 +300,7 @@ WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 # sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /root; sudo su\"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
 # sh -c "echo 'HR =' >> /etc/mympd.conf"
 # sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
-# sh -c "echo '전원 끄기 - Power off = sudo poweroff    ' >> /etc/mympd.conf"
-# sh -c "printf '  ' >> /etc/mympd.conf"
+# sh -c "echo '전원 끄기 - Power off = sudo poweroff\n' >> /etc/mympd.conf"
 	
 # sh -c "printf 'HR =
 KBS 클래식 FM = kr2mpd 1fm
@@ -315,7 +314,7 @@ HR =
 웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
 HR =
 다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff    \n  ' >> /etc/mympd.conf"
+전원 끄기 - Power off = sudo poweroff\n' >> /etc/mympd.conf"
 
 # echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 # cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
@@ -333,9 +332,16 @@ HR =
 # chmod +x ~/ttyd_linux.aarch64
 # mv ~/ttyd_linux.aarch64 /usr/bin/ttyd
 
-### rc.local
-# mv /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0 /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0.sav
-# mv /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0 /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0.sav
+### Tweak libraries
+# mv /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+# mv /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
+# mv /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
+# cp copy/libasound.so.2.0.0* /etc/
+# cp etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+# echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
+# echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
+# rm -i /usr/lib/aarch64-linux-gnu/lib{asound.so*,audiofile.so*,FLAC.so*}
+
 ### sysctl.conf
 ### USB mount - N.A.
 ### Internet radio (kr2mpd, sbs_dec.py, ut2mpd, tts2mpd)
