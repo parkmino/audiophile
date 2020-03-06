@@ -9,7 +9,7 @@
 	$ sudo systemctl disable systemd-resolved
 	$ sudo rm   /etc/resolv.conf
 	$ sudo nano /etc/resolv.conf
-		nameserver 1.1.1.1
+		nameserver 1.0.0.1
 
 03. /etc/sysctl.conf
 
@@ -111,7 +111,28 @@
 	$ sudo ldconfig
 	
 	$ sudo nano /etc/rc.local
-	
+
+		if [ "$alsa" = plug ]; then
+		 cp /etc/libasound.so.2.0.0.plug /dev/shm/libasound.so.2
+		 cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
+		elif [ "$alsa" = min ]; then
+		 cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+		 rm -rf /dev/snd/*c /dev/snd/by* || true
+		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+		else
+		 cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
+		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+		fi
+
+		ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+		cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /dev/shm/
+		cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+		cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
+		cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
+
+
 		 cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
 		#cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2.0.0
 		#ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
