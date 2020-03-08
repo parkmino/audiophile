@@ -122,7 +122,7 @@ ALILEO () {
   days="$(($diff/60/60/24))일 전"
  fi
  [ "$days" = "1일 전" ] && days="어제"
- if [ -z "$days" ]; then
+ if [ -z "$days" ] || [ ${#days} -gt 12 ]; then
   printf "정보 없음\n"
  else
   printf "$days\n"
@@ -149,7 +149,7 @@ ALILEO_LIVE () {
   days="$(($diff/60/60/24))일 전"
  fi
  [ "$days" = "1일 전" ] && days="어제"
- if [ -z "$days" ]; then
+ if [ -z "$days" ] || [ ${#days} -gt 12 ]; then
   printf "정보 없음\n"
  else
   printf "$days\n"
@@ -276,7 +276,7 @@ DAS () {
   days="$(($diff/60/60/24))일 전"
  fi
  [ "$days" = "1일 전" ] && days="어제"
- if [ -z "$days" ]; then
+ if [ -z "$days" ] || [ ${#days} -gt 12 ]; then
   printf "정보 없음\n"
  else
   printf "$days\n"
