@@ -208,7 +208,7 @@ Tuning
 		$ sudo apt-get install nodm xdm lxdm lightdm
 		$ sudo dpkg-reconfigure xdm
 		$ nano ~/.xinitrc
-			#!/usr/bin/env bash
+			#!/bin/dash
 			exec /dev/shm/nohup sawfish>/dev/null</dev/null 2>/dev/null
 		$ ln -s ~/.xinitrc ~/.xsession
 	Minimal Window Managers.
