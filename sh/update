@@ -598,7 +598,7 @@ NAGGOPBSAL () {
 NEWSTAPA () {
  printf "• 뉴스타파\t"
  url="http://download.newstapa.org/api/podcast.xml"
- date=$(curl $curl_opt "$url" | grep -m1 '<pubDate>' | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ')
+ date=$(curl $curl_opt "$url" | grep '<pubDate>' | head -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ')
 #date=$(curl $curl_opt "$url" | grep -m$((0+2)) '<pubDate>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ')
 #date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m1 -A14 preview-title | tail -1 | cut -d\" -f4)
 #date=$(curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m1 pubdate | cut -d\' -f4)
@@ -610,11 +610,11 @@ NEWSTAPA () {
   if [ "$days" -le 1 2>/dev/null ]; then
    for i in $(seq 1 $(((2-$days)*1))); do
     printf '  '
-     curl $curl_opt "$url" | grep -m$(($i+1)) '<title>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | cut -d'/' -f1
+     curl $curl_opt "$url" | grep '<title>' | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | cut -d'/' -f1
     #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
     #curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
     printf '   '
-     curl $curl_opt "$url" | grep -m$i 'enclosure url=' | tail -1 | cut -d'"' -f2
+     curl $curl_opt "$url" | grep 'enclosure url=' | head -$i | tail -1 | cut -d'"' -f2
     #curl $curl_opt "$url" | grep -m$(($i+2)) '<link>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
     #echo http://youtu.be/$(curl $curl_opt http://newstapa.org/feed | grep -m$i '<iframe src=' | tail -1 | cut -d"/" -f5 | cut -d'?' -f1)
     #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f24  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
