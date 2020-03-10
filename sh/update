@@ -131,9 +131,9 @@ ALILEO () {
   if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
    for i in $(seq 1 $last); do
     printf '  '
-    curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|고칠레오\)'.* | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+    curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|알릴레오\|고칠레오\)'.* | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
     printf '   '
-    curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|고칠레오\)'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
+    curl $curl_opt "$url" | grep -m$i -o 'data-title="\[\(유시민의 알릴레오\|알릴레오\|고칠레오\)'.* | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
    done
   fi
  fi
