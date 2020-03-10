@@ -66,15 +66,9 @@
 	$ grep tidalquality /etc/upmpdcli.conf
 		tidalquality = lossless
 
-08. Clean up libraries for pogoplug
+08. ALSA library update to 1.2.2
 
-	# ldconfig -v
-	# ldconfig -v | grep -e libasound* -e libaudiofile* -e libFLAC*
-	# rm /usr/lib/libasound* /usr/local/lib/libFLAC* /usr/local/lib/libaudiofile*
-
-09. ALSA library update to 1.2.2
-
-10. Configuration files
+09. Configuration files
 
 	$ sudo nano /usr/share/alsa/alsa.conf.min
 
@@ -83,7 +77,7 @@
 
 	$ sudo nano /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf /etc/resolv.conf /etc/network/interfaces
 
-11. Add /dev/shm/ to library path
+10. Add /dev/shm/ to library path
 
 	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
 		/dev/shm/
@@ -119,13 +113,7 @@
 		cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 		cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
 
-12. ClasicHiFi
-
-	$ nano ClassicHiFi.pls
-
-		http://c9.inlive.co.kr:5882
-
-13. Artik710
+11. Artik710
 
 	-. Disable connman
 	-. Blacklist modules
