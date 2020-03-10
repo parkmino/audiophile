@@ -55,6 +55,9 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.{service,target} usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
+	$ sed -i '/qdisc/s/= .*/= pfifo_fast/' usr/lib/sysctl.d/qdisc.conf
+	$ cat usr/lib/sysctl.d/qdisc.conf
+		net.core.default_qdisc = pfifo_fast # fq_codel
 
   1.5 Mksquashfs
 
