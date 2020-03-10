@@ -4,8 +4,8 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
-	$ ver=9.2.0
-	$ wget http://archive.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
+	$ ver=9.2.1
+	$ wget http://releases.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
 	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
 	$ gzip -d LibreELEC-RPi2.arm-$ver.img.gz
 	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-$ver
@@ -18,37 +18,33 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.2 ALSA
 
-	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
+	$ cp ~/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
 	$ printf 'ctl { default ctl.9  ;}\ndefaults.pcm { minperiodtime 2772  ;}\npcm.default { type hw card 0 device 0 subdevice 0  ;}\n' > ../copy/alsa.conf.min
-	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
+	$ cp ~/git/audiophile/alsa/alsa.conf.mix ../copy/
 	$ sed -i '/minperiodtime/,$d' ../copy/alsa.conf.mix
 	$ cat ../copy/alsa.conf.min >> ../copy/alsa.conf.mix
 	$ tail ../copy/alsa.conf.mix
 
-	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
-	$ cp ../copy/libasound.so.2.0.0.min ../copy/libasound.so.2.0.0.mix usr/lib/
-	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
-	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
-	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
-	$ cp usr/share/alsa/alsa.conf ../copy/alsa.conf.orig
+	$ rm usr/lib/libasound.so*
+	$ cp ../copy/libasound.so.2.0.0.min usr/lib/libasound.so
+	$ cp ../copy/libasound.so.2.0.0.min usr/lib/libasound.so.2
 	$ rm -rf usr/share/alsa && mkdir usr/share/alsa
-	$ cp ../copy/alsa.conf.min ../copy/alsa.conf.mix ../copy/alsa.conf.orig usr/share/alsa/
-	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
+	$ cp ../copy/alsa.conf.min usr/share/alsa/alsa.conf
 	
 	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
-	$ nano usr/lib/modprobe.d/alsa-base.conf
+	$ cat usr/lib/modprobe.d/alsa-base.conf
 
   1.3 Kodi.bin
 
-	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/aexec /dev/shm/nohup /usr/lib/kodi/kodi.bin $SAVED_ARGS>/dev/null</dev/null 2>/dev/null' usr/lib/kodi/kodi.sh
+	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/aexec nohup /usr/lib/kodi/kodi.bin $SAVED_ARGS>/dev/null</dev/null 2>/dev/null' usr/lib/kodi/kodi.sh
 	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/s/^/#/' usr/lib/kodi/kodi.sh
-	$ nano usr/lib/kodi/kodi.sh
+	$ grep /usr/lib/kodi/kodi.bin usr/lib/kodi/kodi.sh
 
   1.4 Patch
 
 	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl uhubctl llctl ../copy/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.7.1.0 ../copy/libprocps.so.7
-	$ cp /home/parkmino/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
+	$ cp ~/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
 
 	$ rm usr/bin/ps usr/bin/nohup
 	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,uhubctl,llctl,audio-config} usr/bin/
@@ -60,31 +56,18 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ cp ../tuning_audio.{service,target} usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
 
-  1.6 Korean Transaltion
-
-	$ https://www.transifex.com/libreelec/
-	$#mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
-	$#cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
-
-  1.7 SYSTEM to RAM
-
-	$ mount -o remount,rw /flash
-	$ sed -i '1s/$/toram /' /flash/cmdline.txt
-	$ cat /flash/cmdline.txt
-	$ reboot
-
-  1.8 Mksquashfs
+  1.5 Mksquashfs
 
 	$ cd ..
 	$ [ -f SYSTEM ] && rm -f SYSTEM
 	$ sudo mksquashfs squashfs-root SYSTEM -all-root -noappend
 
-  1.9 Make image
+  1.6 Make image
 	
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
-	$ fdisk -l /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
+	$ cp ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
+	$ fdisk -l ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
 	$ sudo mkdir /mnt/le
-	$ sudo mount -o loop,offset=$(echo $((512*8192))) /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /mnt/le
+	$ sudo mount -o loop,offset=$(echo $((512*8192))) ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /mnt/le
 	$ sudo rm /mnt/le/SYSTEM*
 	$ sudo cp SYSTEM /mnt/le
 	$ sync
@@ -96,26 +79,36 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ sudo umount /mnt/le
 	$ sudo rm -rf /mnt/le
 
-2. Flashing
+2. Flashing & Test
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img of=/dev/sdc
 	$ sync
-	
-	$ mv /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
-	$ zip -j /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").zip /home/parkmino/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
 
-3. SSH login
+3. Release
 
-	$ ssh root@192.168.0.x (password: libreelec)
+	$ mv ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
+	$ zip -j ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").zip ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
 
 4. More tweaks
 
+	$ ssh root@192.168.0.x (password: libreelec)
 	$ audio-config			# Disable USB signal & power
-	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind
+	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind connman-vpnd
 
 cf)
 
 https://github.com/soju6jan
 Screenshots : Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
+
+### Korean Transaltion
+https://www.transifex.com/libreelec/
+$ mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
+$ cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
+
+### SYSTEM to RAM
+$ mount -o remount,rw /flash
+$ sed -i '1s/$/toram /' /flash/cmdline.txt
+$ cat /flash/cmdline.txt
+$ reboot
