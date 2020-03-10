@@ -25,6 +25,7 @@
 		 net.ipv4.tcp_timestamps = 0
 		 net.ipv4.tcp_window_scaling = 0
 		 net.ipv4.tcp_moderate_rcvbuf = 0
+		 net.ipv4.conf.all.promote_secondaries = 0
 
 04. Optional mympd & ssh & serial console
 
