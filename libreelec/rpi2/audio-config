@@ -1,0 +1,175 @@
+#!/bin/bash
+
+#audio_conf=/storage/.config/audio.conf
+audio_conf=/home/parkmino/Downloads/audio.conf
+rc_local=/storage/.config/autostart.sh
+config_txt=/flash/config.txt
+
+sound_card_initial () {
+ mount -o remount,rw /flash
+ sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=i-sabre\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio\|dtoverlay=justboom\|dtoverlay=rpi-dac/d' $config_txt
+}
+
+sound_card_selector () {
+ sound_card_initial
+ sudo sed -i '$adtoverlay='"$1"'' $config_txt
+ mount -o remount,ro /flash
+ grep -e allo -e applepi -e i-sabre -e dionaudio -e hifiberry -e iqaudio -e justboom -e rpi-dac $config_txt
+}
+
+sound_card () {
+clear
+printf "
+ ------------------------------
+  Sound Card / 사운드카드 설정
+ ------------------------------
+
+ (0)  USB Audio Class 2.0\t\t(11) HiFiBerry Amp/Amp+
+ (1)  Allo Boss DAC\t\t\t(12) HiFiBerry DAC
+ (2)  Allo DigiOne\t\t\t(13) HiFiBerry DAC+ADC
+ (3)  Allo Katana DAC\t\t\t(14) HifiBerry DAC+ADC Pro
+ (4)  Allo Piano DAC\t\t\t(15) HiFiBerry DAC+/DAC+ Pro
+ (5)  Allo Piano DAC+\t\t\t(16) HiFiBerry Digi/Digi+
+ (6)  Allo Piano DAC+ (+Kali board)\t(17) HiFiBerry Digi+ Pro
+ (7)  ApplePi DAC\t\t\t(18) IQaudIO DAC
+ (8)  Audiophonics I-SABRE Q2M DAC\t(19) IQaudIO DAC+
+ (9)  Dion Audio LOCO DAC-AMP\t\t(20) IQaudIO DigiAMP+
+ (10) Dion Audio LOCO-V2 DAC-AMP\t(21) IQaudIO Digi+
+\t\t\t\t\t(22) JustBoom DAC
+\t\t\t\t\t(23) JustBoom Digi
+\t\t\t\t\t(24) RPi DAC
+ (m) Main / 주메뉴
+ (q) Quit / 나가기
+
+ * Select / 선택 (0-24|m|q) : "
+read i
+echo
+case $i in
+ 0)  sound_card_initial ; mount -o remount,ro /flash			;;
+ 1)  sound_card_selector allo-boss-dac-pcm512x-audio			;;
+ 2)  sound_card_selector allo-digione					;;
+ 3)  sound_card_selector allo-katana-dac-audio				;;
+ 4)  sound_card_selector allo-piano-dac-pcm512x-audio			;;
+ 5)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
+ 6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
+ 7)  sound_card_selector applepi-dac					;;
+ 8)  sound_card_selector i-sabre-q2m					;;
+ 9)  sound_card_selector dionaudio-loco					;;
+ 10) sound_card_selector dionaudio-loco-v2				;;
+ 11) sound_card_selector hifiberry-amp					;;
+ 12) sound_card_selector hifiberry-dac					;;
+ 13) sound_card_selector hifiberry-dacplusadc				;;
+ 14) sound_card_selector hifiberry-dacplusadcpro			;;
+ 15) sound_card_selector hifiberry-dacplus				;;
+ 16) sound_card_selector hifiberry-digi					;;
+ 17) sound_card_selector hifiberry-digi-pro				;;
+ 18) sound_card_selector iqaudio-dac					;;
+ 19) sound_card_selector iqaudio-dacplus				;;
+ 20) sound_card_selector iqaudio-dacplus,unmute_amp			;;
+ 21) sound_card_selector iqaudio-digi-wm8804-audio			;;
+ 22) sound_card_selector justboom-dac					;;
+ 23) sound_card_selector justboom-digi					;;
+ 24) sound_card_selector rpi-dac					;;
+ m) clear ; return ;;
+ q) exit ;;
+esac
+return
+}
+
+usb_signal_power () {
+clear
+echo -n "
+ --------------------------------------
+  USB Signal & Power / USB 신호와 전원
+ --------------------------------------
+
+              [USB ]      [USB4]
+   [LAN]      [USB3]      [USB5]
+  =============================== 
+  -  RasPi 1B+/2B/3B Back Port        -  라즈베리 파이 1B+/2B/3B 뒷면
+  -  USB3 is recommended for DAC      -  DAC은 USB3을 추천합니다
+
+ (1) Enable  All USB Signal & Power  (1) 모든 USB 신호와 전원 켜기 (기본값)
+ (2) Disable All USB Signal & Power  (2) 모든 USB 신호와 전원 끄기 (I2S DAC)
+ (3) Disable USB 4,5 Signal          (3) USB 4,5 신호만 끄기
+ (4) Disable USB 4,5 Signal & Power  (4) USB 4,5 신호와 전원 끄기
+    (for Powered USB DAC)               (자체 전원 USB DAC)
+
+ (m) Main                            (m) 주메뉴
+ (q) Quit                            (q) 나가기
+
+ * Select / 선택 (1-4|m|q) : "
+read i
+echo
+case $i in
+ 1) sed -i '/usb=/s/=.*/=on/'     $audio_conf ;;
+ 2) sed -i '/usb=/s/=.*/=2,3,4,5/' $audio_conf ;;
+ 3) sed -i '/usb=/s/=.*/=4,5/'     $audio_conf ;;
+ 4) sed -i '/usb=/s/=.*/=2,4,5/'   $audio_conf ;;
+ m) clear ; return ;;
+ q) exit ;;
+esac
+return
+}
+
+until [ "$i" == "q" ] ; do
+ clear
+ for i in lirc nfs pulse vpn wpa; do
+  eval status_$i="$(grep ^$i $audio_conf | cut -d= -f2)"
+ done
+ echo -n "
+ ---------------------------------
+  Audio Main Menu / 오디오 주메뉴
+ ---------------------------------
+
+ (1) Audio Device	      (1) 오디오 장치
+ (2) USB Signal & Power >>    (2) USB 신호와 전원 >>
+
+     Toggle / 바꾸기
+ (3) LIRC       : ${status_lirc^^} (적외선 리모컨)
+ (4) NFS        : ${status_nfs^^}
+ (5) Pulseaudio : ${status_pulse^^}
+ (6) VPN        : ${status_vpn^^}
+ (7) Wi-Fi      : ${status_wpa^^}
+
+ (q) Quit                     (q) 나가기
+ (r) Reboot to apply          (r) 재시작하여 적용
+ (p) Power off                (p) 전원 끄기
+
+ * Select / 선택 (0-9|q|r|p) : "
+ read i
+ echo
+ case $i in
+  1) sound_card ;;
+  2) usb_signal_power	;;
+  3) if [ $status_lirc = off ]; then
+      sed -i '/lirc=/s/=.*/=on/'   $audio_conf
+     else
+      sed -i '/lirc=/s/=.*/=off/'  $audio_conf
+     fi ;;
+  4) if [ $status_nfs = off ]; then
+      sed -i '/nfs=/s/=.*/=on/'    $audio_conf
+     else
+      sed -i '/nfs=/s/=.*/=off/'   $audio_conf
+     fi ;;
+  5) if [ $status_pulse = off ]; then
+      sed -i '/pulse=/s/=.*/=on/'  $audio_conf
+     else
+      sed -i '/pulse=/s/=.*/=off/' $audio_conf
+     fi ;;
+  6) if [ $status_vpn = off ]; then
+      sed -i '/vpn=/s/=.*/=on/'    $audio_conf
+     else
+      sed -i '/vpn=/s/=.*/=off/'   $audio_conf
+     fi ;;
+  7) if [ $status_wpa = off ]; then
+      sed -i '/wpa=/s/=.*/=on/'    $audio_conf
+     else
+      sed -i '/wpa=/s/=.*/=off/'   $audio_conf
+     fi ;;
+  q) exit		;;
+  r) reboot		;;
+  p) poweroff		;;
+  *) clear		;;
+ esac
+done

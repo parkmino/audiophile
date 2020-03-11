@@ -61,6 +61,7 @@ echo 4 > /proc/irq/default_smp_affinity || true
 [ "$lirc"  = off ] && systemctl stop eventlircd
 [ "$nfs"   = off ] && systemctl stop rpcbind
 [ "$pulse" = off ] && systemctl stop pulseaudio
+[ "$vpn"   = off ] && systemctl stop connman-vpn
 [ "$wpa"   = off ] && systemctl stop wpa_supplicant
 
 (
