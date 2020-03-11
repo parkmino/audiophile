@@ -113,7 +113,7 @@ return
 
 until [ "$i" == "q" ] ; do
  clear
- for i in lirc nfs pulse vpn wpa; do
+ for i in lirc nfs pulse vpn wpa tweak; do
   eval status_$i="$(grep ^$i $audio_conf | cut -d= -f2)"
  done
  echo -n "
@@ -125,11 +125,13 @@ until [ "$i" == "q" ] ; do
  (2) USB Signal & Power >>    (2) USB 신호와 전원 >>
 
      Toggle / 바꾸기
- (3) LIRC       : ${status_lirc^^} (적외선 리모컨)
- (4) NFS        : ${status_nfs^^}
- (5) Pulseaudio : ${status_pulse^^}
- (6) VPN        : ${status_vpn^^}
- (7) Wi-Fi      : ${status_wpa^^}
+ (3) LIRC        : ${status_lirc^^} (적외선 리모컨)
+ (4) NFS         : ${status_nfs^^}
+ (5) Pulseaudio  : ${status_pulse^^}
+ (6) VPN         : ${status_vpn^^}
+ (7) Wi-Fi       : ${status_wpa^^}
+ (8) More tweaks : ${status_tweak^^}
+    (Disable systemd-journald+logind, hciattach, net.promote_secondaries)
 
  (q) Quit                     (q) 나가기
  (r) Reboot to apply          (r) 재시작하여 적용
@@ -165,6 +167,11 @@ until [ "$i" == "q" ] ; do
       sed -i '/wpa=/s/=.*/=on/'    $audio_conf
      else
       sed -i '/wpa=/s/=.*/=off/'   $audio_conf
+     fi ;;
+  8) if [ $status_tweak = off ]; then
+      sed -i '/tweak=/s/=.*/=on/'    $audio_conf
+     else
+      sed -i '/tweak=/s/=.*/=off/'   $audio_conf
      fi ;;
   q) exit		;;
   r) reboot		;;

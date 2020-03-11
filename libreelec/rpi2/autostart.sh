@@ -83,9 +83,11 @@ echo 4 > /proc/irq/default_smp_affinity || true
   taskset -cp $m_task $i
  done
 
- #systemctl stop systemd-journald systemd-logind connman-vpn || true
- #pkill hciattach || true
- #sysctl -w net.ipv4.conf.all.promote_secondaries=0
+ if [ "$tweak" = on ]; then
+  systemctl stop systemd-journald systemd-logind || true
+  pkill hciattach || true
+  sysctl -w net.ipv4.conf.all.promote_secondaries=0
+ fi
 
  llctl f0 l0 d0
  echo none > /sys/class/leds/led0/trigger
