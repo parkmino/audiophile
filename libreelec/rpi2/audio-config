@@ -101,7 +101,7 @@ echo -n "
 read i
 echo
 case $i in
- 1) sed -i '/usb=/s/=.*/=on/'     $audio_conf ;;
+ 1) sed -i '/usb=/s/=.*/=on/'      $audio_conf ;;
  2) sed -i '/usb=/s/=.*/=2,3,4,5/' $audio_conf ;;
  3) sed -i '/usb=/s/=.*/=4,5/'     $audio_conf ;;
  4) sed -i '/usb=/s/=.*/=2,4,5/'   $audio_conf ;;
@@ -112,10 +112,10 @@ return
 }
 
 until [ "$i" == "q" ] ; do
- clear
  for i in lirc nfs pulse vpn wpa tweak; do
   eval status_$i="$(grep ^$i $audio_conf | cut -d= -f2)"
  done
+ clear
  echo -n "
  ---------------------------------
   Audio Main Menu / 오디오 주메뉴
@@ -168,9 +168,9 @@ until [ "$i" == "q" ] ; do
       sed -i '/wpa=/s/=.*/=off/'   $audio_conf
      fi ;;
   8) if [ $status_tweak = off ]; then
-      sed -i '/tweak=/s/=.*/=on/'    $audio_conf
+      sed -i '/tweak=/s/=.*/=on/'  $audio_conf
      else
-      sed -i '/tweak=/s/=.*/=off/'   $audio_conf
+      sed -i '/tweak=/s/=.*/=off/' $audio_conf
      fi ;;
   q) exit		;;
   r) reboot		;;
