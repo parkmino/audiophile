@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#audio_conf=/storage/.config/audio.conf
-audio_conf=/home/parkmino/Downloads/audio.conf
+audio_conf=/storage/.config/audio.conf
 rc_local=/storage/.config/autostart.sh
 config_txt=/flash/config.txt
 
