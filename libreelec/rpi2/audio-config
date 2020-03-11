@@ -130,7 +130,7 @@ until [ "$i" == "q" ] ; do
  (5) Pulseaudio  : ${status_pulse^^}
  (6) VPN         : ${status_vpn^^}
  (7) Wi-Fi       : ${status_wpa^^}
- (8) More tweaks : ${status_tweak^^}
+ (8) More tweaks : ${status_tweak^^} (추가 트윅)
     (Disable systemd-journald+logind, hciattach, net.promote_secondaries)
 
  (q) Quit                     (q) 나가기
