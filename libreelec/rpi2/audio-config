@@ -125,13 +125,12 @@ until [ "$i" == "q" ] ; do
  (2) USB Signal & Power >>    (2) USB 신호와 전원 >>
 
      Toggle / 바꾸기
- (3) LIRC        : ${status_lirc^^} (적외선 리모컨)
- (4) NFS         : ${status_nfs^^}
- (5) Pulseaudio  : ${status_pulse^^}
- (6) VPN         : ${status_vpn^^}
- (7) Wi-Fi       : ${status_wpa^^}
- (8) More tweaks : ${status_tweak^^} (추가 트윅)
-    (Disable systemd-journald+logind, hciattach, net.promote_secondaries)
+ (3) [ $([ "$status_lirc"  = off ] && echo X || echo O) ] LIRC
+ (4) [ $([ "$status_nfs"   = off ] && echo X || echo O) ] NFS
+ (5) [ $([ "$status_pulse" = off ] && echo X || echo O) ] Pulseaudio
+ (6) [ $([ "$status_vpn"   = off ] && echo X || echo O) ] VPN
+ (7) [ $([ "$status_wpa"   = off ] && echo X || echo O) ] Wi-Fi
+ (8) [ $([ "$status_tweak" = off ] && echo X || echo O) ] More Tweaks / 추가 트윅
 
  (q) Quit                     (q) 나가기
  (r) Reboot to apply          (r) 재시작하여 적용
