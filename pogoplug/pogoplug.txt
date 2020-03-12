@@ -359,6 +359,7 @@ $ sudo nano /dest/etc/fstab
 
 # ls -al /usr/lib/arm-linux-gnueabi/lib{asound.*,audiofile*,FLAC.*}
 # sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
+# cat /etc/default/audio.conf
 # echo "* Mino's UPnP Audio Renderer for Pogoplug $(date +"%y.%m")" > ~/release
 # cat ~/release
 # mpc clear
