@@ -78,6 +78,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#blacklist 8021q
 		blacklist bcm2835_codec
 		blacklist bcm2835_v4l2
+		blacklist brcmfmac
 		blacklist ip_tables
 		blacklist raspberrypi_hwmon
 		blacklist uio
@@ -302,34 +303,22 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$#sudo chomod -R 775 /var/lib/mympd
 	
 	$ sudo sed -i '/\[syscmds\]/q' /etc/mympd.conf
+	$ sudo nano /etc/mympd.conf
 
-	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'KBS 클래식 FM = kr2mpd 1fm' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'KBS 쿨 FM     = kr2mpd 2fm' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'MBC FM        = kr2mpd mbcm' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'MBC FM4U      = kr2mpd mbc4u' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'SBS 파워 FM   = kr2mpd sbsp' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'SBS 러브 FM   = kr2mpd sbsl' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
-	$ sudo sh -c "echo '웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
-	$ sudo sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /home/pi; sudo su pi\"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
-	$ sudo sh -c "echo 'HR =' >> /etc/mympd.conf"
-	$ sudo sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
-	$ sudo sh -c "echo '전원 끄기 - Power off = sudo poweroff' >> /etc/mympd.conf"
-
-	$ sudo sh -c "printf 'HR =
-KBS 클래식 FM = kr2mpd 1fm
-KBS 쿨 FM     = kr2mpd 2fm
-MBC FM        = kr2mpd mbcm
-MBC FM4U      = kr2mpd mbc4u
-SBS 파워 FM   = kr2mpd sbsp
-SBS 러브 FM   = kr2mpd sbsl
-HR =
-웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /home/pi; sudo su pi\"&>/dev/null</dev/null 2>/dev/null
-HR =
-다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff\n' >> /etc/mympd.conf"
+		[syscmds]
+		HR =
+		KBS 클래식 FM = /home/parkmino/kr2mpd 1fm
+		KBS 쿨 FM     = /home/parkmino/kr2mpd 2fm
+		MBC FM        = /home/parkmino/kr2mpd mbcm
+		MBC FM4U      = /home/parkmino/kr2mpd mbc4u
+		SBS 파워 FM   = /home/parkmino/kr2mpd sbsp
+		SBS 러브 FM   = /home/parkmino/kr2mpd sbsl
+		HR =
+		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
+		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /home/pi; sudo su pi"&>/dev/null</dev/null 2>/dev/null
+		HR =
+		다시 시작 - Reboot    = sudo reboot
+		전원 끄기 - Power off = sudo poweroff
 
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
