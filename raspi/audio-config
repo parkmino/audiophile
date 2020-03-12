@@ -208,7 +208,7 @@ if [ "$exitstatus" = 0 ]; then
  [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
  [[ $i =~ spotify ]] && sudo sed -i '/spotify=/s/=.*/=on/' $audio_conf || sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf
  if [[ $i =~ tidal ]]; then
-  ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+  ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
   sudo sed -i '/tidal=/s/=.*/=on/' $audio_conf
  else
   [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
@@ -239,7 +239,7 @@ Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
-      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
       sudo sed -i '/tidaluser =/s/^#*//; /tidaluser =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
      else
       sudo sed -i '/tidaluser =/s/^/#/; /tidaluser =/s/=.*/=/' $upmpdcli_conf
@@ -253,7 +253,7 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
-      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/upmpdcli-tidal*.deb
+      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
       sudo sed -i '/tidalpass =/s/^#*//; /tidalpass =/s/=.*/= '"$input_pwd"'/' $upmpdcli_conf
      else
       sudo sed -i '/tidalpass =/s/^/#/; /tidalpass =/s/=.*/=/' $upmpdcli_conf
