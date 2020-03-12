@@ -7,13 +7,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/raspi/2019-09-26-raspbian-buster-lite.img of=/dev/sdc
-	$#sudo dd status=progress bs=4M if=/home/parkmino/Downloads/raspi/DietPi_RPi-ARMv6-Stretch.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/raspi/*raspbian-buster-lite.img | tail -1) of=/dev/sdc
+	$#sudo dd status=progress bs=4M if=~/Downloads/raspi/DietPi_RPi-ARMv6-Stretch.img of=/dev/sdc
 	$ sync
 
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
 
+	$ ssh-keygen -f "/home/parkmino/.ssh/known_hosts" -R "192.168.0.32"
 	$ ssh pi@raspbian_ip
 	  password: raspberry
 	$#ssh root@dietpi_ip
@@ -27,10 +28,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get autoremove
 
 	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-pycryptodome uhubctl
+	$ mkdir ~/copy
 	# apt-get install openssh-client libusb-0.1-4
 
-	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config pi@192.168.0.32:/home/pi/
-	$ scp /home/parkmino/Downloads/raspi/copy/* pi@192.168.0.32:/home/pi/
+	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config pi@192.168.0.32:/home/pi/copy/
+	$ scp /home/parkmino/Downloads/raspi/copy/* pi@192.168.0.32:/home/pi/copy/
 
 2. Configuration file
 
@@ -62,16 +64,16 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ locale
 	$ locale -a
 	$ locale -a -v
-	$ ls -al /var/lib/locales/supported.d/
-	$ sudo nano /var/lib/locales/supported.d/en
+	$#ls -al /var/lib/locales/supported.d/
+	$#sudo nano /var/lib/locales/supported.d/en
 		en_US UTF-8
-	$ sudo rm -rfv /usr/lib/locale/*
-	$ sudo locale-gen
-	$ locale -a -v
+	$#sudo rm -rfv /usr/lib/locale/*
+	$#sudo locale-gen
+	$#locale -a -v
 
 5. Disable modules
 
-	$ lsmod
+	$ lsmod | sort
 	$ sudo nano /etc/modprobe.d/raspi-blacklist.conf
 		#blacklist 8021q
 		blacklist bcm2835_codec
@@ -98,106 +100,58 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	# dietpi-services disable cron
 
-7. ALSA
+	$ sync
+	$ sudo reboot
+	$ ssh pi@192.168.0.32
+	$ lsmod | sort
+	$ pstree
 
-	$ sudo sh -c "cat /usr/share/alsa.orig/alsa.conf > /usr/share/alsa/alsa.conf.mix"
-	$ sudo sed -i 's/^[ \t]*//; /^$/d' /usr/share/alsa/alsa.conf.mix
-	$ head -20 /usr/share/alsa/alsa.conf.mix
-	$ sudo nano -L /usr/share/alsa/alsa.conf.mix
-	$ sudo sh -c "cat /usr/share/alsa/alsa.conf.min >> /usr/share/alsa/alsa.conf.mix"
-
-	# mv libasound.so.2.0.0.* /usr/lib/arm-linux-gnueabihf/
-	# mkdir /usr/share/alsa/
-	# mv alsa.conf.* /usr/share/alsa/
-	# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
-
-8. MPD
+7. MPD
 
 	$ sudo apt-get install libcue2 libaudiofile1 libavformat58 libflac8 libid3tag0 libmpdclient2 libupnp13 libcurl3-gnutls
 	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
-	$ sudo mv mpd /usr/bin/
-	$ sudo mv mpd.conf /etc/mpd.conf.sav
+	$ sudo mv copy/mpd /usr/bin/
+	$ sudo mv copy/mpd.conf /etc/mpd.conf.sav
+	$ sudo mpd /etc/mpd.conf.sav
+	  Ctrl+C
+	
 	$ sudo apt-get install mpc ncmpc
 	$ sudo mkdir /etc/ncmpc
 	$ sudo nano /etc/ncmpc/config
 		host = 127.0.0.1
+		color ...
 	$ sudo mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
-	$ sudo mv ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
+	$ sudo mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
 
-9. Upmpdcli
-
-10. CIFS & NFS & USB mounting
-
-	$ #sudo apt-get install cifs-utils nfs-common
-	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
-	$ sudo ln -s /mnt/ /var/lib/mpd/music
-	$ sudo nano /etc/fstab
-		/dev/mmcblk0p1  /boot           vfat    defaults          0       2
-		/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
-		#/var/swap
-		/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
-		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
-		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
-		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
-
-11. Edit /etc/rc.local
-
-	$ sudo mv rc.local /etc/
-	# mv rc.local_dietpi /etc/rc.local
-	$ sudo mv audio.conf /etc/default/
-	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.orig
-	$ sudo mv libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
-	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.orig
-	$ sudo mv libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
-
-12. Sysctl Configuration
-
-	$ sudo nano /etc/sysctl.conf
-	$ sudo sysctl -p /etc/sysctl.conf
-
-13. Disabel swap
-
-	$ cat /proc/swaps
-	$ sudo systemctl disable dphys-swapfile
-	$ sudo swapoff -a
-	$ sudo rm /var/swap
-
-	# nano /etc/fstab
-		#/var/swap ...
-	# swapoff -a
-	# rm /var/swap
-
-14. USB Mount (Obsolete)
-
-	https://wiki.archlinux.org/index.php/Fstab#External_devices
-
-	$ sudo mkdir /mnt/usb
-	$ sudo nano /etc/fstab
-		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
-		#/dev/sda1 /mnt/usb vfat    ro 0 0
-		#/dev/sda1 /mnt/usb ntfs-3g ro 0 0
-	$ sudo nano /etc/rc.local
-		systemd-udevd
-	$ sudo systemctl daemon-reload
-	$ sudo systemctl restart remote-fs.target
-	$ sudo systemctl restart local-fs.target
-
-15. Internet Radio & TTS (Text to Speech)
+8. Internet Radio & TTS (Text to Speech)
 
 	$ sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-	$ sudo chmod a+rx /usr/local/bin/youtube-dl
-	$ sudo mv kr2mpd sbs_dec.py ut2mpd tts2mpd /usr/bin/
-	$ sudo mv internet\ radio.m3u /var/lib/mpd/playlists/
+	$ sudo chmod 755 /usr/local/bin/youtube-dl
+	$ sudo mv copy/{kr2mpd,sbs_dec.py,ut2mpd,tts2mpd} /usr/bin/
+	$ sudo mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
 	$ sudo mkdir /var/lib/mpd/music/webradio
-	$ sudo mv *.pls /var/lib/mpd/music/webradio
-	$ mpc update
+	$ sudo mv copy/*.pls /var/lib/mpd/music/webradio
 
 	##mv /usr/share/alsa /usr/share/alsa.orig
 	##mkdir /usr/share/alsa
 	##mv /usr/share/alsa.orig/alsa.conf.{min,mix,orig,plug} /usr/share/alsa/
 	##mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
 
-16. Roon Bridge
+9. Upmpdcli
+
+	$ sudo apt-get install libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
+	$ sudo dpkg -i copy/lib*upnp*.deb copy/upmpdcli_*.deb
+	$ sudo mv copy/icon.png /usr/share/upmpdcli/icon.png
+	$ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
+	$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
+	$ grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf
+		checkcontentformat = 0
+		tidalquality = lossless
+	$ sudo systemctl disable upmpdcli.service
+	$ sudo nano /etc/upmpdcli.conf
+	  ...
+
+10. Roon Bridge
 
 	# dietpi-services status
 	# nano /DietPi/dietpi/.dietpi-services_include_exclude
@@ -230,8 +184,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		   
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge
+	$ rm roonbridge-installer*
 
-17. Librespot
+11. Librespot
 
 	https://github.com/librespot-org/librespot
 
@@ -247,8 +202,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ strip --strip-debug target/release/librespot
 	$ ls -al target/release/librespot
 	$ cp target/release/librespot /home/pi/
+	
+	$ mv copy/librespot ./
 
-18. Spotifyd
+12. Spotifyd
 
 	https://github.com/Spotifyd/spotifydf
 	https://github.com/Spotifyd/spotifyd/releases/latest
@@ -267,7 +224,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	bitrate = 320    
 	  
 
-19. AirConnect (AirPlay)
+13. AirConnect (AirPlay)
 
 	https://github.com/philippe44/AirConnect
 
@@ -276,8 +233,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64  -P ~/
 
 	$ chmod +x ~/airupnp*
+	
+	$ mv copy/airupnp* ./
 
-20. Shairport-sync (AirPlay - Obsolete)
+14. Shairport-sync (AirPlay - Obsolete)
 
 	$ sudo apt-get update
 	$ sudo apt-get install shairport-sync
@@ -300,46 +259,16 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl stop    avahi-daemon shairport-sync
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
-21. HQPlayer NAA
+15. HQPlayer NAA
 	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
 	$ sudo dpkg -i networkaudiod*.deb
 	$ sudo sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
-22. Squeezelite
+16. Squeezelite
 	$ sudo apt-get install squeezelite
 	$ sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
 
-23. Plexdrive (Google Drive)
-
-	https://github.com/dweidenfeld/plexdrive
-	https://github.com/dweidenfeld/plexdrive/releases/latest
-
-	$ curl -s $(curl -s https://github.com/dweidenfeld/plexdrive/releases/latest | cut -d\" -f2) | grep -m1 arm7 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
-	$ chomd +x plexdrive-linux-arm7
-	$ sudo mv ./plexdrive-linux-arm7 /usr/bin/plexdrive
-	$ sudo nano /etc/systemd/system/plexdrive.service
-
-	[Unit]
-	Description=Plexdrive
-	AssertPathIsDirectory=/mnt/plexdrive
-	After=network-online.target
-
-	[Service]
-	Type=simple
-	ExecStart=/usr/bin/plexdrive mount -o allow_other -v 2 /mnt/plexdrive
-	ExecStop=/bin/fusermount -u /mnt/plexdrive
-	Restart=on-abort
-
-	[Install]
-	WantedBy=default.target
-	
-	$ sudo systemctl daemon-reload
-	
-	$ sudo mkdir /mnt/plexdrive
-	$ sudo systemctl start plexdrive.service
-	$ sudo systemctl enable plexdrive.service
-
-24. myMPD
+17. myMPD
 
 	$ sudo apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
 	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
@@ -352,6 +281,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz # libmediainfo0v5
 	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
+	
+	$ sudo dpkg -i copy/mympd*.deb
 
 	$ sudo nano -L /etc/mympd.conf
 		 host = 127.0.0.1
@@ -411,7 +342,7 @@ HR =
 	$ sudo systemctl daemon-reload
 	$ systemctl status mympd
 
-25. ttyd
+18. ttyd
 
 	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
 	$ chmod +x ~/ttyd_linux.armhf
@@ -420,8 +351,10 @@ HR =
 	# systemctl status  getty@tty1.service
 	# systemctl stop    getty@tty1.service
 	# systemctl disable getty@tty1.service
+	
+	$ sudo mv copy/ttyd /usr/bin/
 
-26. Web interface (Obsolete)
+19. Web interface (Obsolete)
 
 	$ sudo apt-get install lighttpd
 	$#sudo systemctl disable lighttpd.service
@@ -445,16 +378,7 @@ HR =
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-27. audio-config
-
-	$ sudo mv audio-config /usr/bin/
-	$ audio-config
-
-28. audio.conf
-
-	$ cp audio.conf /etc/default/audio.conf
-
-29. Build libaudiofile libFLAC
+20. Build libaudiofile libFLAC
 
 	$ sudo apt-get update
 	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
@@ -498,16 +422,35 @@ HR =
 	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
 	$ sudo rm /usr/local/lib/libFLAC*
 
-30. Tweak libraries
+21. Tweak ALSA
 
+	$ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+	$ sudo mv copy/libasound.so.2.0.0.*  /etc/
+	$ sudo rm /usr/lib/arm-linux-gnueabihf/libasound.so*
+
+	$ sudo cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+
+	$ sudo mv /usr/share/alsa /usr/share/alsa.orig
+	$ sudo systemctl mask alsa-store.service
+	$ sudo systemctl mask alsa-restore.service
+	$ sudo nano /lib/modprobe.d/aliases.conf
+		#options snd-usb-audio index=-2
+	$ sudo mkdir /usr/share/alsa
+	$ sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+	$ sudo mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
+
+	# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
+
+22. Tweak decoder libraries
+
+	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{audiofile,FLAC.so}*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
-	$ sudo cp copy/libasound.so.2.0.0* /etc/
-	$ sudo cp etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
 	$ echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 sudo cp -v copy/libaudiofile.so.1.0.0
-	$ echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v sudo copy/libFLAC.so.8.3.0
-	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*}
+	$ echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 sudo cp -v copy/libFLAC.so.8.3.0
+	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/lib{audiofile.so*,FLAC.so*}
+	$ rm copy/{libaudiofile.so.1.0.0,libFLAC.so.8.3.0}
 
 	$ ls -al /dev/shm/
 	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
@@ -515,7 +458,94 @@ HR =
 	$ sudo ldconfig
 	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*}
 
-31. Wondershaper
+23. Edit /etc/rc.local
+
+	$ mv copy/llctl ./
+	$ sudo nano /etc/rc.local
+
+24. Sysctl Configuration
+
+	$ sudo nano /etc/sysctl.conf
+	$ sudo sysctl -p /etc/sysctl.conf
+
+25. audio-config
+
+	$ sudo mv copy/audio-config /usr/bin/
+	$ sudo mv copy/audio.conf /etc/default/
+	$ audio-config
+
+26. CIFS & NFS & USB mounting
+
+	$ #sudo apt-get install cifs-utils nfs-common
+	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
+	$ sudo ln -s /mnt/ /var/lib/mpd/music
+	$ sudo nano /etc/fstab
+		/dev/mmcblk0p1  /boot           vfat    defaults          0       2
+		/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
+		#/var/swap
+		/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
+		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
+		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
+		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
+
+27. Disabel swap
+
+	$ cat /proc/swaps
+	$ sudo systemctl disable dphys-swapfile
+	$ sudo swapoff -a
+	$ sudo rm /var/swap
+
+	# nano /etc/fstab
+		#/var/swap ...
+	# swapoff -a
+	# rm /var/swap
+
+28. USB Mount (Obsolete)
+
+	https://wiki.archlinux.org/index.php/Fstab#External_devices
+
+	$ sudo mkdir /mnt/usb
+	$ sudo nano /etc/fstab
+		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
+		#/dev/sda1 /mnt/usb vfat    ro 0 0
+		#/dev/sda1 /mnt/usb ntfs-3g ro 0 0
+	$ sudo nano /etc/rc.local
+		systemd-udevd
+	$ sudo systemctl daemon-reload
+	$ sudo systemctl restart remote-fs.target
+	$ sudo systemctl restart local-fs.target
+
+29. Plexdrive (Google Drive)
+
+	https://github.com/dweidenfeld/plexdrive
+	https://github.com/dweidenfeld/plexdrive/releases/latest
+
+	$ curl -s $(curl -s https://github.com/dweidenfeld/plexdrive/releases/latest | cut -d\" -f2) | grep -m1 arm7 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
+	$ chomd +x plexdrive-linux-arm7
+	$ sudo mv ./plexdrive-linux-arm7 /usr/bin/plexdrive
+	$ sudo nano /etc/systemd/system/plexdrive.service
+
+	[Unit]
+	Description=Plexdrive
+	AssertPathIsDirectory=/mnt/plexdrive
+	After=network-online.target
+
+	[Service]
+	Type=simple
+	ExecStart=/usr/bin/plexdrive mount -o allow_other -v 2 /mnt/plexdrive
+	ExecStop=/bin/fusermount -u /mnt/plexdrive
+	Restart=on-abort
+
+	[Install]
+	WantedBy=default.target
+	
+	$ sudo systemctl daemon-reload
+	
+	$ sudo mkdir /mnt/plexdrive
+	$ sudo systemctl start plexdrive.service
+	$ sudo systemctl enable plexdrive.service
+
+30. Wondershaper
 
 	https://github.com/magnific0/wondershaper
 	
@@ -533,7 +563,7 @@ HR =
 		[ "$wondershaper" = on ] && wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 		[ "$wondershaper" = on ] && /home/pi/wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 
-32. Make Image
+31. Make Image
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so*,audiofile.so*,FLAC.so*}
 	$ sudo systemctl disable sshd
@@ -564,12 +594,12 @@ HR =
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip -dd raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
-33. Disable Bluetooth UART for RPI3
+32. Disable Bluetooth UART for RPI3
 
 	$ sudo systemctl disable hciuart
 	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
 
-34. Shirnk Image
+33. Shirnk Image
 
 	http://aoakley.com/articles/2015-10-09-resizing-sd-images.php
 	https://github.com/Drewsif/PiShrink
