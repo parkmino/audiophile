@@ -1,19 +1,19 @@
 #!/bin/sh
 
+audio_conf=/etc/default/audio.conf
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-audio_conf=/etc/default/audio.conf
 
 renderer_name () {
 
  clear
- printf "
+ echo -n "
  --------------------------------------------
   Change Renderer Name / 렌더러 이름 바꾸기
  --------------------------------------------
 
 
- [ $current_name ] Current Name / 현재 이름
+ [ $current_name ] Renderer Name / 렌더러 이름
 
 
  (m) Main / 주메뉴
@@ -49,9 +49,9 @@ until [ "$i" = "q" ] ; do
   Audio Configuration / 오디오 설정
  -----------------------------------
 
- (1) [ $([ "$status_dop"      = off ] && echo X || echo O) ] MPD DoP
- (2) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Metadata
- (3) [ $([ "$status_pcm"      = off ] && echo X || echo O) ] MPD Raw PCM
+ (1) [ $([ "$status_dop"      = off ] && echo X || echo O) ] MPD DoP (DSD over PCM)
+ (2) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Tag Metadata
+ (3) [ $([ "$status_pcm"      = off ] && echo X || echo O) ] MPD PCM Decoder
  (4) [ $([ "$status_vol"      = off ] && echo X || echo O) ] MPD Software Volume
 
  (5) [ $([ "$status_airplay"  = off ] && echo X || echo O) ] Airplay     / 에어플레이
@@ -59,7 +59,7 @@ until [ "$i" = "q" ] ; do
  (7) [ $([ "$status_spotify"  = off ] && echo X || echo O) ] Spotify     / 스포티파이
  (8) [ $([ "$status_tidal"    = off ] && echo X || echo O) ] Tidal       / 타이달
 
- (9) [ $current_name ] Change Renderer Name / 렌더러 이름 바꾸기 >>
+ (9) [ $current_name ] Renderer Name / 렌더러 이름 >>
 
  (q) Quit   / 나가기
  (r) Reboot / 재시작하여 적용
