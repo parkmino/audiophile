@@ -3,408 +3,420 @@ http://developer.artik.io/downloads/artik710-sdfuse-a710-os-18-10-00-img/downloa
 http://developer.artik.io/downloads/artik710s-sdfuse-a710s-os-18-10-00-img/download # Artik 710s
 http://developer.artik.io/documentation/developer-guide/update-image/updating-artik-image.html
 
-1. QEMU
+0. QEMU
 
-$ sudo apt install qemu-user-static
-$ mkdir /home/parkmino/Downloads/artik710/rootfs
-$ sudo tar xf /home/parkmino/Downloads/artik710/img/rootfs.tar.gz -C /home/parkmino/Downloads/artik710/rootfs
-$ sudo cp /usr/bin/qemu-aarch64-static /home/parkmino/Downloads/artik710/rootfs/usr/bin
+	$ sudo apt install qemu-user-static
+	$ mkdir /home/parkmino/Downloads/artik710/rootfs
+	$ sudo tar xf /home/parkmino/Downloads/artik710/img/rootfs.tar.gz -C /home/parkmino/Downloads/artik710/rootfs
+	$ sudo cp /usr/bin/qemu-aarch64-static /home/parkmino/Downloads/artik710/rootfs/usr/bin
 
-$ sudo mount -ro bind /dev /home/parkmino/Downloads/artik710/rootfs/dev/
-$ sudo mount -ro bind /proc /home/parkmino/Downloads/artik710/rootfs/proc/
-$ sudo chmod 777 /home/parkmino/Downloads/artik710/rootfs/tmp
+	$ sudo mount -ro bind /dev /home/parkmino/Downloads/artik710/rootfs/dev/
+	$ sudo mount -ro bind /proc /home/parkmino/Downloads/artik710/rootfs/proc/
+	$ sudo chmod 777 /home/parkmino/Downloads/artik710/rootfs/tmp
 
-$ sudo mount -o bind /dev /home/parkmino/Downloads/artik710/rootfs/dev/
-$ sudo mount -o bind /proc /home/parkmino/Downloads/artik710/rootfs/proc/
-$ sudo chmod 777 /home/parkmino/Downloads/artik710/rootfs/tmp
+	$ sudo mount -o bind /dev /home/parkmino/Downloads/artik710/rootfs/dev/
+	$ sudo mount -o bind /proc /home/parkmino/Downloads/artik710/rootfs/proc/
+	$ sudo chmod 777 /home/parkmino/Downloads/artik710/rootfs/tmp
 
-$ sudo cp /etc/resolv.conf /home/parkmino/Downloads/artik710/rootfs/etc/.
+	$ sudo cp /etc/resolv.conf /home/parkmino/Downloads/artik710/rootfs/etc/.
 
-$ sudo chroot /home/parkmino/Downloads/artik710/rootfs
+	$ sudo chroot /home/parkmino/Downloads/artik710/rootfs
 
-### Build mpd, libasound, libaudiofile, libflac. mympd, librespot
+	### Build mpd, libasound, libaudiofile, libflac. mympd, librespot
 
-# exit
+	# exit
 
-$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/dev
-$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/proc
-$ sudo rm /home/parkmino/Downloads/artik710/rootfs/etc/resolv.conf
+	$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/dev
+	$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/proc
+	$ sudo rm /home/parkmino/Downloads/artik710/rootfs/etc/resolv.conf
 
-2. Image
+1. Flashing
 
-$ sudo fdisk -l
-$ sudo umount /dev/sdc?
-$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/artik710/artik710_sdfuse-0710GC0F-44U-DJW0-20181030.003001.img of=/dev/sdc
-$ sync
+	$ sudo fdisk -l
+	$ sudo umount /dev/sdc?
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/artik710/artik710_sdfuse-0710GC0F-44U-DJW0-20181030.003001.img of=/dev/sdc
+	$ sync
 
-### SW402-4 ON  for the ARTIK 530/710 board
-### Boot from Micro SD Card
-### SW402-4 OFF for the ARTIK 530/710 board
+	### SW402-4 ON  for the ARTIK 530/710 board
+	### Boot from Micro SD Card
+	### SW402-4 OFF for the ARTIK 530/710 board
 
-3. Login
+2. Update
 
-$ ssh root@192.168.0.x
-	password : root
+	$ ssh root@192.168.0.x
+		password : root
 
-4. Update
+	# uname -a; cat /etc/os-release
+		Ubuntu 16.04.5 LTS (Linux artix 4.4.159)
+	# apt-get update
+	# apt-get install bc file nano psmisc software-properties-common unzip
+	# nano /etc/apt/sources.list
+		...
+		deb http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
+		deb-src http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
+	# mv /etc/apt/sources.list.d/artik-e2e-sources.list /etc/apt/sources.list.d/artik-e2e-sources.list.orig
+	# mv /etc/apt/sources.list.d/artik-platform-artik710-sources.list /etc/apt/sources.list.d/artik-platform-artik710-sources.list.orig
+	# apt-get update
+		http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710 (X)
+	# apt-get -t xenial-backports upgrade
+	# apt-get dist-upgrade
+	# apt-get autoremove
+	##apt-get install update-manager-core
+	##do-release-upgrade
 
-# uname -a; cat /etc/os-release
-	Ubuntu 16.04.5 LTS (Linux artix 4.4.159)
-# apt-get update
-# apt-get install bc file nano psmisc software-properties-common unzip # ffmpeg libav-tools
-# nano /etc/apt/sources.list
-	...
-	deb http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
-	deb-src http://ports.ubuntu.com/ubuntu-ports/ xenial-backports main universe
-# mv /etc/apt/sources.list.d/artik-e2e-sources.list /etc/apt/sources.list.d/artik-e2e-sources.list.orig
-# mv /etc/apt/sources.list.d/artik-platform-artik710-sources.list /etc/apt/sources.list.d/artik-platform-artik710-sources.list.orig
-# apt-get update
-	http://repo.artik.cloud/artik/bin/pub/artik-platform/ubuntu/artik710 (X)
-# apt-get -t xenial-backports upgrade
-# apt-get dist-upgrade
-# apt-get autoremove   
-# dpkg-reconfigure locales
-# locale
-# locale -a
-# locale -a -v
-# ls -al /var/lib/locales/supported.d/
-# nano /var/lib/locales/supported.d/en
-	en_US UTF-8
-# rm -rfv /usr/lib/locale/*
-# locale-gen
-# locale -a -v
+	# mkdir /root/copy
+	$ scp copy/* root@192.168.0.x:/root/copy/
 
-# dpkg-reconfigure tzdata
-## apt-get install update-manager-core
-## do-release-upgrade
-# reboot
-# uname -a; cat /etc/os-release
-	Ubuntu 16.04.6 LTS
+3. Localisation
 
-### Wired
-## connmanctl services
-## connmanctl config $eth --ipv4 manual 192.168.0.x 255.255.255.0 192.168.0.1
-## connmanctl config $eth --ipv4 dhcp
-### Wireless
-## wpa_cli -iwlan0 scan && wpa_cli scan_results
-## wpa_passphrase MyAP abcd1234 >> /etc/wpa_supplicant/wpa_supplicant.conf
-## systemctl restart wpa_supplicant
-## dhclient wlan0
+	# dpkg-reconfigure locales
+	# dpkg-reconfigure tzdata
 
-## nano /etc/wpa_supplicant/wpa_supplicant.conf
-	#psk
-	key_mgmt=NONE
-	auth_alg=OPEN
+	# locale
+	# locale -a
+	# locale -a -v
+	# ls -al /var/lib/locales/supported.d/
+	# nano /var/lib/locales/supported.d/en
+		en_US UTF-8
+	# rm -rfv /usr/lib/locale/*
+	# locale-gen
+	# locale -a -v
 
-# echo '[Unit]
-Description=Run dhcp service for wifi interface
-After=wpa_supplicant.service
-Requires=wpa_supplicant.service
-[Service]
-ExecStart=/sbin/dhclient wlan0
-StandardOutput=syslog
-StandardError=syslog
-[Install]
-WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
-## systemctl enable wlan_dhcp
-## systemctl start  wlan_dhcp
+4. Network
 
-### Hostname & Domain name
-# hostname -f
-# nano /etc/hostname
-# nano /etc/hosts
-# hostname $(cat /etc/hostname)
-## /etc/resolvconf/resolv.conf.d/head
-	domain your.domain.name
-## resolvconf -u
-# hostnamectl
-# nano -L /etc/avahi/avahi-daemon.conf
-	host-name=bann
-	domain-name=local
-# systemctl restart avahi-daemon
+	##connmanctl services
+	##connmanctl config $eth --ipv4 manual 192.168.0.x 255.255.255.0 192.168.0.1
+	##connmanctl config $eth --ipv4 dhcp
 
-### SSH message
-# ls /etc/update-motd.d/*
+	##wpa_cli -iwlan0 scan && wpa_cli scan_results
+	##wpa_passphrase MyAP abcd1234 >> /etc/wpa_supplicant/wpa_supplicant.conf
+	##systemctl restart wpa_supplicant
+	##dhclient wlan0
 
-### Remove modules
-# lsmod
-# nano /etc/modprobe.d/artik710.conf
-	blacklist ...
+	##nano /etc/wpa_supplicant/wpa_supplicant.conf
+		#psk
+		key_mgmt=NONE
+		auth_alg=OPEN
 
-### Remove services
-# systemctl list-unit-files | grep enabled
-# apt-get remove zigbeed
-# apt-get autoremove
-# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
-# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
-# rm   /etc/resolv.conf
-# nano /etc/resolv.conf
-	nameserver 1.1.1.1   
-# systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
-# systemctl mask systemd-logind wpa_supplicant
-# pkill hciattach; pkill tzdaemon
+	##echo '[Unit]
+	Description=Run dhcp service for wifi interface
+	After=wpa_supplicant.service
+	Requires=wpa_supplicant.service
+	[Service]
+	ExecStart=/sbin/dhclient wlan0
+	StandardOutput=syslog
+	StandardError=syslog
+	[Install]
+	WantedBy=multi-user.target' > /etc/systemd/system/wlan_dhcp.service
 
-### Kernel option - N.A.
+	##systemctl enable wlan_dhcp
+	##systemctl start  wlan_dhcp
 
-### ALSA
-##sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug} ### Not for Artik710 Module but for Board
+	##hostname -f
+	##nano /etc/hostname
+	##nano /etc/hosts
+	##hostname $(cat /etc/hostname)
+	##/etc/resolvconf/resolv.conf.d/head
+		domain your.domain.name
+	##resolvconf -u
+	##hostnamectl
+	##nano -L /etc/avahi/avahi-daemon.conf
+		host-name=bann
+		domain-name=local
+	##systemctl restart avahi-daemon
 
-### MPD binary & mpd.conf
-## apt-get install mpd mpc ncmpc
-## systemctl restart mpd
-## systemctl disable mpd
-# apt-get install libcue1 libaudiofile1 libavformat-ffmpeg56 libflac8 libid3tag0 libmpdclient2 libupnp6 mpc ncmpc
-# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
-# cp mpd /usr/bin/
-# cp mpd.conf /etc/mpd.conf.sav
+	# ls /etc/update-motd.d/*
 
-### Upmpdcli
-## add-apt-repository ppa:jean-francois-dockes/upnpp1
-## apt-get update
-## apt-get install upmpdcli
-# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/libupnpp5_0.17.2-1~ppa1~xenial1_arm64.deb
-# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli_1.4.5-1~ppa1~xenial1_arm64.deb
-##wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli-qobuz_1.4.5-1~ppa1~xenial1_all.deb
-# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli-tidal_1.4.5-1~ppa1~xenial1_all.deb
-# apt-get install libupnp6 libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp1 python3 python3-requests
-# dpkg -i libupnpp*.deb upmpdcli_*.deb
-# nano -L /etc/upmpdcli.conf
-	friendlyname = Bann Audio Sylphid Network Player
-	checkcontentformat = 0
-	tidalquality = lossless
-	[radio ...]
-	...
-## wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
-# mv ./icon.png /usr/share/upmpdcli/icon.png
-# systemctl restart upmpdcli
-# systemctl disable upmpdcli
+5. Disable modules
 
-### uhubctl
-## apt-get install libusb-1.0-0
-# mv uhubctl /usr/bin/
-# nano /etc/rc.local
-	uhubctl -a 0 -p 1,3
+	# lsmod
+	# nano /etc/modprobe.d/artik710.conf
+		blacklist ...
 
-### audio.conf
-# nano /etc/default/audio.conf
+6. Disable services
 
-	# audio.conf
-	#
-	# alsa has the options of min(imal), mix(er) and orig(inal).
-	# To enable a feature, set feature=on.
-	# To disable a feature, set feature=off
-	# To ignore a feature, comment out the line by '#'
+	# systemctl list-unit-files | grep enabled
+	# apt-get remove zigbeed
+	# apt-get autoremove
+	# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
+	# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
+	# ls -al /etc/resov.conf
+	##rm   /etc/resolv.conf
+	##nano /etc/resolv.conf
+		nameserver 1.1.1.1   
+	# systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
+	# systemctl mask systemd-logind wpa_supplicant
+	# pkill hciattach; pkill tzdaemon
 
-	alsa=min
-	upnp=on
-	airplay=off
-	roon=on
-	roontoram=off
-	spotify=off
-	tidal=off
-	dbus=on
-	wifi=off
-	mympd=on
-	ssh=off
-	serial=on
-	tfc=on
+7. MPD
 
-### /etc/fstab
-# nano /etc/fstab
+	# apt-get install libcue1 libaudiofile1 libavformat-ffmpeg56 libflac8 libid3tag0 libmpdclient2 libupnp6
+	# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
+	# cp copy/mpd /usr/bin/
+	# cp copy/mpd.conf /etc/mpd.conf.sav
+	# mpd /etc/mpd.conf.sav
+		Ctrl+C
 
-	##/dev/sda1         /mnt/usb  vfat    ro 0 0
-	##/dev/sda1         /mnt/usb  ntfs-3g ro 0 0
-	#//192.168.0.x/Music /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
-	#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
-
-### myMPD
-
-# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
-# cd /root
-# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
-# tar xvzf mympd.tar.gz && rm mympd.tar.gz
-# cd myMPD*
-
-## Customization
-# sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
-# sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
-# grep -n -e Sylphi -e bann htdocs/index.html
-32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> Sylphid
-34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
-41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
-53	          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
-# printf '\nInitializing Sylphid\nSylphid 초기화\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
-# tail src/i18n/ko-KR.txt
-	...
-	Initializing Sylphid
-	Sylphid 초기화
+	# apt-get install mpc ncmpc
+	# mkdir /etc/ncmpc
+	# nano /etc/ncmpc/config
+		host = 127.0.0.1
+		color ...
+	# mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
+	# mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
 	
-	Web interface
-	웹 인터페이스
 
-##ENABLE_SSL="OFF" ./build.sh release	# < 6.2.0
-# ./build.sh release
-# ./build.sh install
+8. Internet Radio & TTS
 
-# apt-get install build-essential fakeroot
-# apt-get install -t xenial-backports debhelper
-##sed -i '120,123d' CMakeLists.txt	# < 6.2.0
-# ./build.sh pkgdebian
-# ls -al package/mympd*.deb
+	# apt-get update
+	# apt-get install python-crypto
+	# curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+	# chmod 755 /usr/local/bin/youtube-dl
+	# mv copy/{kr2mpd,sbs_dec.py,ut2mpd,tts2mpd} /usr/bin/
+	# mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
+	# mkdir /var/lib/mpd/music/webradio
+	# mv copy/*.pls /var/lib/mpd/music/webradio
 
-# apt-get install libc6 libid3tag0 libflac8 lrzsz # libmediainfo0v5 openssl
+9. Upmpdcli
 
-# dpkg -i ./mympd*.deb
-# ls -al /usr/bin/mympd
-# file /usr/bin/mympd
-# strip --strip-debug /usr/bin/mympd
-# ls -al /usr/bin/mympd
+	##add-apt-repository ppa:jean-francois-dockes/upnpp1
+	##apt-get update
+	##apt-get install upmpdcli
+	# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/libnpupnp1_2.1.2-1~ppa3~xenial1_arm64.deb
+	# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/libupnpp6_0.18.0-2~ppa1~xenial1_arm64.deb
+	# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli_1.4.7-1~ppa1~xenial1_arm64.deb
+	# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli-tidal_1.4.7-1~ppa1~xenial1_all.deb
 
-##cp mympd /usr/bin/
-##cp mympd.conf /etc/
-##cp mympd.service /lib/systemd/system/
-##mkdir /var/lib/mympd
-##getent group  mympd > /dev/null || groupadd -r mympd
-##getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
+	# apt-get install libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp1 python3 python3-requests
+	# dpkg -i copy/lib*upnp*.deb copy/upmpdcli_*.deb
+	# nano /etc/upmpdcli.conf
+		friendlyname = Bann Audio Sylphid Network Player
+		checkcontentformat = 0
+		tidalquality = lossless
+		[radio ...]
+		...
+	##wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
+	# mv copy/icon.png /usr/share/upmpdcli/
+	# systemctl restart upmpdcli
+	# systemctl disable upmpdcli
 
-# systemctl stop    mympd
-# systemctl disable mympd
-# nano /usr/lib/systemd/system/mympd.service
-	#Requires=network.target local-fs.target mpd.service
-	#After=mpd.service
-# systemctl daemon-reload
+10. Roon Bridge
 
-# nano /etc/mympd.conf
-	 host = 127.0.0.1
-	 port = 6600
-	 musicdirectory = /var/lib/mpd/music
-	 playlistdirectory = /var/lib/mpd/playlists
-	#ssl = false
-	#sslport = 443
-	 publish = true
-	 webdav = false
-	 loglevel = 1
-	 user = mympd
-	 sticker = false
-	 mixramp = false
-	 syscmds = true
+	# curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv8.sh
+	# chmod +x roonbridge-installer-linuxarmv8.sh
+	# ./roonbridge-installer-linuxarmv8.sh
 
-# sed -i '/\[syscmds\]/q' /etc/mympd.conf
+	# nano /etc/systemd/system/roonbridge.service
+		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
+	# nano -L /opt/RoonBridge/Bridge/RoonBridge
+		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
+		 exec /bin/bash -c "exec -a $SCRIPT /dev/shm/nohup \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
+		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		 exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		 fi    
+		   
+	# systemctl daemon-reload
+	# systemctl disable roonbridge
+	# rm roonbridge-installer*
 
-# sh -c "echo 'HR =' >> /etc/mympd.conf"
-# sh -c "echo 'KBS 클래식 FM = kr2mpd 1fm' >> /etc/mympd.conf"
-# sh -c "echo 'KBS 쿨 FM     = kr2mpd 2fm' >> /etc/mympd.conf"
-# sh -c "echo 'MBC FM        = kr2mpd mbcm' >> /etc/mympd.conf"
-# sh -c "echo 'MBC FM4U      = kr2mpd mbc4u' >> /etc/mympd.conf"
-# sh -c "echo 'SBS 파워 FM   = kr2mpd sbsp' >> /etc/mympd.conf"
-# sh -c "echo 'SBS 러브 FM   = kr2mpd sbsl' >> /etc/mympd.conf"
-# sh -c "echo 'HR =' >> /etc/mympd.conf"
-# sh -c "echo '웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
-# sh -c "echo '웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c \"cd /root; sudo su\"&>/dev/null</dev/null 2>/dev/null' >> /etc/mympd.conf"
-# sh -c "echo 'HR =' >> /etc/mympd.conf"
-# sh -c "echo '다시 시작 - Reboot    = sudo reboot' >>   /etc/mympd.conf"
-# sh -c "echo '전원 끄기 - Power off = sudo poweroff\n' >> /etc/mympd.conf"
-	
-# sh -c "printf 'HR =
-KBS 클래식 FM = kr2mpd 1fm
-KBS 쿨 FM     = kr2mpd 2fm
-MBC FM        = kr2mpd mbcm
-MBC FM4U      = kr2mpd mbc4u
-SBS 파워 FM   = kr2mpd sbsp
-SBS 러브 FM   = kr2mpd sbsl
-HR =
-웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
-HR =
-다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff\n' >> /etc/mympd.conf"
+11. Librespot / AirUPnP / ttyd
 
-# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
-# nano /etc/systemd/system/mympd.service
-	#Requires=network.target local-fs.target mpd.service
-	#After=mpd.service
-	#Protect
-	#Restrict
-# systemctl disable mympd
-# systemctl daemon-reload
-# systemctl status mympd
+	# mv copy/librespot copy/airupnp* ./
+	# mv copy/ttyd /usr/bin/
 
-### ttyd
-# curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.aarch64/' | wget "$(cat -)" -P ~/
-# chmod +x ~/ttyd_linux.aarch64
-# mv ~/ttyd_linux.aarch64 /usr/bin/ttyd
+12. HQPlayer NAA
 
-### Tweak libraries
-# mv /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
-# mv /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
-# mv /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
-# cp copy/libasound.so.2.0.0* /etc/
-# cp etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
-# echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
-# echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
-# rm -i /usr/lib/aarch64-linux-gnu/lib{asound.so*,audiofile.so*,FLAC.so*}
+	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
+	# dpkg -i networkaudiod*.deb
+	# sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
-### sysctl.conf
-### USB mount - N.A.
-### Internet radio (kr2mpd, sbs_dec.py, ut2mpd, tts2mpd)
-# apt-get update
-# apt-get install python-crypto
-# curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-# chmod a+rx /usr/local/bin/youtube-dl
-# nano /var/lib/mpd/playlists/internet\ radio.m3u
-# mkdir /var/lib/mpd/music/webradio
-# mv *.pls /var/lib/mpd/music/webradio
-# mpc update
+13. Squeezelite
 
-### audio-config
-### Roon Bridge
-### Spotifyd
-### AirUPnP
+	# apt-get install squeezelite
+	# sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
 
-### Shairport-sync (Airplay)
-## add-apt-repository ppa:dantheperson/shairplay-sync
-## apt-get update
-## apt-get install shairport-sync
+14. uhubctl
 
-### HQPlayer NAA
-## wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
-## dpkg -i networkaudiod*.deb
-## sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
+	# dpkg -i copy/uhubctl_2.1.0-1_arm64.deb
 
-### Squeezelite
-## apt-get install squeezelite
-## sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
+15. myMPD
 
-### MicroSD mount
-# apt-get install exfat-fuse exfat-utils # microSDXC
-# mkdir /mnt/microSD
-# nano /etc/fstab
-	/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
-# ln -sf /mnt/microSD /var/lib/mpd/music
+	# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
+	# cd /root
+	# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
+	# tar xvzf mympd.tar.gz && rm mympd.tar.gz
+	# cd myMPD*
 
-# systemctl disable sshd
-# sed -i '/^serial/s/on/off/' /etc/default/audio.conf
+	# sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
+	# sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
+	# grep -n -e Sylphi -e bann htdocs/index.html
+	32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> Sylphid
+	34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
+	41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
+	53	          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
+	# printf '\nInitializing Sylphid\nSylphid 초기화\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
+	# tail src/i18n/ko-KR.txt
+		...
+		Initializing Sylphid
+		Sylphid 초기화
+		
+		Web interface
+		웹 인터페이스
 
-### Back up
-https://davidgs.com/2017/how-to-save-your-artik-520-backup/
-https://github.com/davidgs/ARTIK-5-backup
+	# apt-get install build-essential fakeroot
+	# apt-get install -t xenial-backports debhelper
+	##sed -i '120,123d' CMakeLists.txt	# < 6.2.0
+	# ./build.sh pkgdebian
+	# ls -al package/mympd*.deb
 
-# apt-get update
-# apt-get upgrade
-# apt-get dist-upgrade
-# systemctl disable sshd
-# systemctl daemon-reload
-# youtube-dl --update
-# echo "* Bann Audio Sylphid Network Player $(date +"%y.%m")" > ~/release
-# mpc clear
-# rm -rf /var/roon/* /var/lib/mympd/covercache/*
-# cat /lib/systemd/system/sshd.service
-# rm /etc/systemd/system/*/sshd.service
-# rm -f /root/.bash_history ~/.bash_history ; history -c
-# tar cf renderer.tar --no-recursion renderer
+	# apt-get install libc6 libid3tag0 libflac8 lrzsz # libmediainfo0v5 openssl
+	# dpkg -i copy/mympd*.deb
+	# ls -al /usr/bin/mympd
+	# file /usr/bin/mympd
+	# strip --strip-debug /usr/bin/mympd
+	# ls -al /usr/bin/mympd
+
+	##cp mympd /usr/bin/
+	##cp mympd.conf /etc/
+	##cp mympd.service /lib/systemd/system/
+	##mkdir /var/lib/mympd
+	##getent group  mympd > /dev/null || groupadd -r mympd
+	##getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
+
+	# systemctl stop    mympd
+	# systemctl disable mympd
+	# nano /usr/lib/systemd/system/mympd.service
+		#Requires=network.target local-fs.target mpd.service
+		#After=mpd.service
+	# systemctl daemon-reload
+
+	# nano /etc/mympd.conf
+		 host = 127.0.0.1
+		 port = 6600
+		 musicdirectory = /var/lib/mpd/music
+		 playlistdirectory = /var/lib/mpd/playlists
+		#ssl = false
+		#sslport = 443
+		 publish = true
+		 webdav = false
+		 loglevel = 1
+		 user = mympd
+		 sticker = false
+		 mixramp = false
+		 syscmds = true
+	# sed -i '/\[syscmds\]/q' /etc/mympd.conf
+	# nano /etc/mympd.conf
+		HR =
+		KBS 클래식 FM = kr2mpd 1fm
+		KBS 쿨 FM     = kr2mpd 2fm
+		MBC FM        = kr2mpd mbcm
+		MBC FM4U      = kr2mpd mbc4u
+		SBS 파워 FM   = kr2mpd sbsp
+		SBS 러브 FM   = kr2mpd sbsl
+		HR =
+		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
+		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
+		HR =
+		다시 시작 - Reboot    = sudo reboot
+		전원 끄기 - Power off = sudo poweroff
+	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+	# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
+	# nano /etc/systemd/system/mympd.service
+		#Requires=network.target local-fs.target mpd.service
+		#After=mpd.service
+		#Protect
+		#Restrict
+	# systemctl disable mympd
+	# systemctl daemon-reload
+	# systemctl status mympd
+	# mympd
+		설정 > 외관 > 알림 > 페이지에 알림
+
+16. Tweak ALSA
+
+	# ls -al /usr/lib/aarch64-linux-gnu/libasound*
+	# mv /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+	# mv copy/libasound.so.2.0.0.*  /etc/
+	# rm /usr/lib/arm-linux-gnueabihf/libasound.so*
+
+	# cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+
+	# mv /usr/share/alsa /usr/share/alsa.orig
+	# systemctl mask alsa-store.service
+	# systemctl mask alsa-restore.service
+	# nano /lib/modprobe.d/aliases.conf
+		#options snd-usb-audio index=-2
+	# mkdir /usr/share/alsa
+	# cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+	# mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
+	##sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}   # Not for Artik710 Module but for Board
+
+17. Tweak decoder libraries
+
+	# ls -al /usr/lib/aarch64-linux-gnu/lib{audiofile,FLAC.so}*
+	# mv /usr/lib/aarch64-linux-gnu/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
+	# mv /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
+	# echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
+	# echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
+	# rm -i /usr/lib/arm-linux-gnueabihf/lib{audiofile.so*,FLAC.so*}
+	# rm copy/{libaudiofile.so.1.0.0,libFLAC.so.8.3.0}
+
+	# ls -al /dev/shm/
+	# nano /etc/ld.so.conf.d/dev_shm.conf
+		/dev/shm/
+	# ldconfig
+	# ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*}
+
+18. Edit /etc/rc.local
+
+	# nano /etc/rc.local
+		uhubctl -a 0 -p 1,3 (?)
+
+19. Edit /etc/sysctl.conf
+	# nano /etc/sysctl.conf
+
+20. audio-config
+	# sudo mv copy/audio-config /usr/bin/
+	# mv copy/audio.conf /etc/default/
+
+21. MicroSD mount
+
+	# apt-get install exfat-fuse exfat-utils # microSDXC
+	# mkdir /mnt/microSD
+	# ln -sf /mnt/microSD /var/lib/mpd/music
+	# nano /etc/fstab
+		/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
+		##/dev/sda1         /mnt/usb  vfat    ro 0 0
+		##/dev/sda1         /mnt/usb  ntfs-3g ro 0 0
+		#//192.168.0.x/Music /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
+		#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
+
+22. Etc
+
+	# systemctl disable sshd
+	# sed -i '/^serial/s/on/off/' /etc/default/audio.conf
+
+23. Back up
+
+	https://davidgs.com/2017/how-to-save-your-artik-520-backup/
+	https://github.com/davidgs/ARTIK-5-backup
+
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# systemctl disable sshd
+	# systemctl daemon-reload
+	# youtube-dl --update
+	# echo "* Bann Audio Sylphid Network Player $(date +"%y.%m")" > ~/release
+	# mpc clear
+	# rm -rf /var/roon/* /var/lib/mympd/covercache/*
+	# cat /lib/systemd/system/sshd.service
+	# rm /etc/systemd/system/*/sshd.service
+	# rm -f /root/.bash_history ~/.bash_history ; history -c
+	# tar cf renderer.tar --no-recursion renderer
 
 cf)
+
 https://oinkzwurgl.org/hacking/bash_cgi/
 http://www.team2053.org/docs/bashcgi/postdata.html
 https://marc.waeckerlin.org/computer/blog/parsing_of_query_string_in_bash_cgi_scripts

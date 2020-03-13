@@ -9,383 +9,373 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 0. QEMU
 
-$ sudo apt install qemu-user-static
-$ mkdir /home/parkmino/Downloads/pogoplug/rootfs
-$ sudo tar -xjf /home/parkmino/Downloads/pogoplug/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2 -C /home/parkmino/Downloads/pogoplug/rootfs
-$ sudo cp /usr/bin/qemu-arm-static /home/parkmino/Downloads/pogoplug/rootfs/usr/bin
+	$ sudo apt install qemu-user-static
+	$ mkdir /home/parkmino/Downloads/pogoplug/rootfs
+	$ sudo tar -xjf /home/parkmino/Downloads/pogoplug/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2 -C /home/parkmino/Downloads/pogoplug/rootfs
+	$ sudo cp /usr/bin/qemu-arm-static /home/parkmino/Downloads/pogoplug/rootfs/usr/bin
 
-$ sudo mount -ro bind /dev /home/parkmino/Downloads/pogoplug/rootfs/dev/
-$ sudo mount -ro bind /proc /home/parkmino/Downloads/pogoplug/rootfs/proc/
-$ sudo chmod 777 /home/parkmino/Downloads/pogoplug/rootfs/tmp
+	$ sudo mount -ro bind /dev /home/parkmino/Downloads/pogoplug/rootfs/dev/
+	$ sudo mount -ro bind /proc /home/parkmino/Downloads/pogoplug/rootfs/proc/
+	$ sudo chmod 777 /home/parkmino/Downloads/pogoplug/rootfs/tmp
 
-$#sudo mount -o bind /dev /home/parkmino/Downloads/pogoplug/rootfs/dev/
-$#sudo mount -o bind /proc /home/parkmino/Downloads/pogoplug/rootfs/proc/
-$#sudo chmod 777 /home/parkmino/Downloads/pogoplug/rootfs/tmp
+	$#sudo mount -o bind /dev /home/parkmino/Downloads/pogoplug/rootfs/dev/
+	$#sudo mount -o bind /proc /home/parkmino/Downloads/pogoplug/rootfs/proc/
+	$#sudo chmod 777 /home/parkmino/Downloads/pogoplug/rootfs/tmp
 
-$ sudo cp /etc/resolv.conf /home/parkmino/Downloads/pogoplug/rootfs/etc/.
+	$ sudo cp /etc/resolv.conf /home/parkmino/Downloads/pogoplug/rootfs/etc/.
 
-$ sudo chroot /home/parkmino/Downloads/pogoplug/rootfs
+	$ sudo chroot /home/parkmino/Downloads/pogoplug/rootfs
 
-### Build mpd, libasound, libaudiofile, libflac. mympd, librespot
+	### Build mpd, libasound, libaudiofile, libflac. mympd, librespot
 
-# exit
+	# exit
 
-$ sudo umount -A /home/parkmino/Downloads/pogoplug/rootfs/dev
-$ sudo umount -A /home/parkmino/Downloads/pogoplug/rootfs/proc
-$ sudo rm /home/parkmino/Downloads/pogoplug/rootfs/etc/resolv.conf
+	$ sudo umount -A /home/parkmino/Downloads/pogoplug/rootfs/dev
+	$ sudo umount -A /home/parkmino/Downloads/pogoplug/rootfs/proc
+	$ sudo rm /home/parkmino/Downloads/pogoplug/rootfs/etc/resolv.conf
 
 1. USB Install
 
-$ sudo gparted (a single ext2 partition with 'rootfs' label)
-$ sudo apt-get install u-boot-tools
-$ sudo su
-# fdisk -l
-# cd /media/parkmino/rootfs
-
-# ls -al
-# rm -rf *
-# sync
-# ls -al
-
-# tar -xjf '/home/parkmino/Downloads/pogoplug/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2'
-# sync
-# nano /media/parkmino/rootfs/etc/fstab
-	/dev/root / ext2  noatime,errors=remount-ro 0 1
-	tmpfs     /tmp tmpfs defaults,noatime       0 0
-
-# cd boot
-# cp -a zImage-4.4.0-kirkwood-tld-1 zImage.fdt
-# cat dts/kirkwood-pogo_e02.dtb >> zImage.fdt
-# mv uImage uImage.orig
-# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt uImage
-# sync
-
-# cp -a zImage-4.4.0-kirkwood-tld-1 zImage.fdt
-# cat dts/kirkwood-pogoplug_v4.dtb >> zImage.fdt
-# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt uImage.v4
-# sync
-
-# exit
-
-2. USB Boot
-
-$ ssh root@192.168.0.x (password: root)
-# rm /etc/ssh/ssh_host*
-# ssh-keygen -A
-# exit
-$ ssh root@192.168.0.x (password: root)
-
-# apt-get update
-# apt-get install debian-archive-keyring
-# apt-get update
-
-##apt-get upgrade	# CAUTION : It may not reboot for some reason !
-  ...
-  update-initramfs: Generating /boot/initrd.img-4.4.0-kirkwood-tld-1
-##cd /boot
-##mkimage -A arm -O linux -T ramdisk -C gzip -a 0x00000000 -e 0x00000000 -n initramfs-4.4.0-kirkwood-tld-1 -d initrd.img-4.4.0-kirkwood-tld-1 uInitrd
-##apt-get dist-upgrade
-
-# apt-get autoremove
-# apt-get clean
-# dpkg-reconfigure tzdata
-# apt-get install locales
-# dpkg-reconfigure locales
-# locale
-# locale -a
-# locale -a -v
-# rm -rfv /usr/lib/locale/*
-# locale-gen
-# nano /etc/default/locale
-	LANG=en_US.UTF-8
-	LANGUAGE=en_US.UTF-8
-	LC_ALL=en_US.UTF-8
-
-# apt-get install bc ca-certificates cifs-utils curl file ntpdate psmisc sudo
-# apt-get install exfat-fuse exfat-utils
-# apt-get install python-crypto whiptail
-
-# mkdir ~/copy
-$ scp /home/parkmino/Downloads/pogoplug/copy/* root@192.168.0.x:/root/copy/
-
-# lsmod
-# nano /etc/modprobe.d/blacklist
-
-# cat /etc/hostname
-# nano /etc/hosts
-	127.0.0.1	debian
-
-3. ALSA & MPD
-
-Build MPD 0.20.23
-
-# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
-# mv copy/mpd /usr/local/bin/
-# mv copy/mpd.conf /etc/mpd.conf.sav
-
-# apt-get install mpc ncmpc
-# mkdir /etc/ncmpc
-# nano /etc/ncmpc/config
-	host = 127.0.0.1
-# mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
-# mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
-
-Build ALSA library
-
-##apt-get install alsa-base alsa-utils
-
-4. Upmpdcli Build
-
-# apt-get install autoconf automake build-essential libtool pkg-config
-# apt-get install libupnp6-dev libexpat1-dev libmpdclient-dev libcurl4-gnutls-dev libmicrohttpd-dev libjsoncpp-dev python3-requests
-# cd
-# wget https://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.2.tar.gz
-# tar -xvf libupnpp-0.17.2.tar.gz
-# cd libupnpp-0.17.2
-# ./configure
-# make
-# make install
-# ls -al /usr/local/lib/libupnpp.so.8.0.2
-# chmod -x /usr/local/lib/libupnpp.so.8.0.2
-# strip --strip-debug /usr/local/lib/libupnpp.so.8.0.2
-# ls -al /usr/local/lib/libupnpp.so.8.0.2
-# cd
-# wget https://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz
-# tar -xvf upmpdcli-1.4.5.tar.gz
-# cd upmpdcli-1.4.5
-# ./configure
-# make
-# make install
-# ls -al /usr/local/bin/upmpdcli
-# file /usr/local/bin/upmpdcli
-# strip --stip-debug /usr/local/bin/upmpdcli
-# ls -al /usr/local/bin/upmpdcli
-# cd
-# wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.5-1~ppa1~buster_all.deb
-# dpkg -x upmpdcli-tidal_1.4.5-1~ppa1~buster_all.deb /
-# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /usr/local/etc/upmpdcli.conf
-# sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /usr/local/etc/upmpdcli.conf
-# grep -e checkcontentformat -e tidalquality /usr/local/etc/upmpdcli.conf
-	checkcontentformat = 0
-	tidalquality = lossless
-# adduser upmpdcli
-# mv copy/icon.png /usr/local/share/upmpdcli/
-# cd
-
-5. myMPD
-
-# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
-# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
-# unzip mympd.zip -d ~/ && rm mympd.zip
-# cd myMPD*
-##ENABLE_SSL="OFF" ./build.sh releaseinstall	# < 6.2.0
-# ./build.sh releaseinstall
-# ls -al /usr/local/bin/mympd
-# file /usr/local/bin/mympd
-# strip --strip-debug /usr/local/bin/mympd
-# ls -al /usr/local/bin/mympd
-# mkdir -p /var/lib/mympd /usr/var/lib/mympd
-# chown -R mympd:mympd /var/lib/mympd /usr/var/lib/mympd
-# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# nano -L /usr/etc/mympd.conf
-	 host = 127.0.0.1
-	 port = 6600
-	 music_directory = /var/lib/mpd/music/
-	#ssl = false
-	#sslport = 443
-	 loglevel = 1
-	#user = mympd
-	 syscmds = true
-	 coverextract = true
-# sed -i '/\[syscmds\]/q' /usr/etc/mympd.conf
-# printf 'HR =
-KBS 클래식 FM = kr2mpd 1fm
-KBS 쿨 FM     = kr2mpd 2fm
-MBC FM        = kr2mpd mbcm
-MBC FM4U      = kr2mpd mbc4u
-SBS 파워 FM   = kr2mpd sbsp
-SBS 러브 FM   = kr2mpd sbsl
-HR =
-웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash -c "LANG=en_US.UTF-8 audio-config"&>/dev/null</dev/null 2>/dev/null
-웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "sudo su"&>/dev/null</dev/null 2>/dev/null
-HR =
-다시 시작 - Reboot    = sudo reboot
-전원 끄기 - Power off = sudo poweroff\n' >> /usr/etc/mympd.conf
-# mv copy/ttyd /usr/bin/
-
-6. Build libaudiofile libFLAC
-
-Do not patch libFLAC for debian
-
-# ls -al /usr/local/lib/lib*
-# rm /usr/local/lib/libFLAC.so* /usr/local/lib/libaudiofile.so*
-
-# mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
-# mv /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
-# mv /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
-# cp copy/libasound.so.2.0.0* /etc/
-# cp etc/libasound.so.2.0.0.min /run/shm/libasound.so.2
-# echo "/etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
-# echo "/etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
-# rm -i /usr/lib/arm-linux-gnueabi/lib{asound*,audiofile*,FLAC.*}
-
-# ls -al /run/shm/
-# nano /etc/ld.so.conf.d/run_shm.conf
-	/run/shm/
-# ldconfig
-# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.*,audiofile*,FLAC.*}
-
-7. Remove Services
-
-# nano /etc/inittab
-	#... ttyS0
-# apt-get install sysv-rc-conf
-# sysv-rc-conf
-	Remove alsa-utils(S) avahi-daemon(2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5)
-
-8. Fstab
-
-# mkdir /mnt/{usb,cifs,nfs}
-# ln -s /mnt /var/lib/mpd/music
-# nano /etc/fstab
-	#/dev/sdb1         /mnt/usb  auto ro 0 0
-	#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
-	#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
-	#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
-
-9. Rc.local
-
-# nano /etc/rc.local
-
-10. Sysctl.conf
-
-# nano /etc/sysctl.conf
-# sysctl -p /etc/sysctl.conf
-
-11. Network configuration
-
-# nano /etc/network/interfaces
-
-12. USB Auto Mount
-
-https://www.axllent.org/docs/view/auto-mounting-usb-storage/
-http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
-
-# nano /lib/udev/rules.d/11-my-media-automount.rules
-
-13. audio-config
-
-# nano /etc/default/audio.conf
-
-	# audio.conf
-	#
-	# alsa has the options of min(imal), mix(er) and orig(inal).
-	# To enable a feature, set feature=on.
-	# To disable a feature, set feature=off
-	# To ignore a feature, comment out the line by '#'
-
-	alsa=min
-	upnp=on
-	airplay=off
-	dbus=on
-	mympd=on
-	ssh=on
-	nfs=off
-	tfc=on
-# mv copy/audio-config /usr/bin/
-# audio-config
-
-14. Internet Radio & TTS (Text to Speech)
-
-# curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-# chmod a+rx /usr/local/bin/youtube-dl
-# mv copy/{kr2mpd,sbs_dec.py,ut2mpd,tts2mpd} /usr/bin/
-# sed -i 's/Cryptodome/Crypto/g' /usr/bin/sbs_dec.py
-# mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
-# mkdir /var/lib/mpd/music/webradio
-# mv copy/*.pls /var/lib/mpd/music/webradio
-# mpc update
-
-15. AirConnect
-
-# mv copy/airupnp-arm5 /usr/bin/
-
-16. Spotifyd (Not Available)
-
-# wget https://github.com/Spotifyd/spotifyd/releases/download/v0.2.19/spotifyd-2019-10-06-armv6-slim.zip
-# unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
-# nano -L ~/spotifyd.conf
-
-	[global]
-	username = USER
-	password = PASS
-	backend = alsa
-	device = pcm.0
-	mixer = ctl.9
-	device_name = Spotifyd
-	bitrate = 320    
-	  
-
-17. Disabel swap
-
-# cat /proc/swaps
-
-18. Wi-Fi
-
-# wget http://ftp.us.debian.org/debian/pool/non-free/f/firmware-nonfree/firmware-misc-nonfree_20190717-2~bpo10+1_all.deb
-# dpkg -i firmware-misc*.deb
-# reboot
-# lsmod
-# ifconfig -a
-# apt-get install wpasupplicant
-# nano /etc/network/interfaces
-	#auto wlan0
-	#allow-hotplug wlan0
-	iface wlan0 inet dhcp
-	wpa-ssid wifi
-	wpa-psk password
-# sed -i '/auto wlan0/s/^#*//; s/wpa-ssid.*/wpa-ssid wifi/; s/wpa-psk.*/wpa-psk password/' /etc/network/interfaces
-# sed -i '/auto wlan0/s/^/#/' /etc/network/interfaces
-
-19. Copy to another disk with ext3
-
-https://www.tldp.org/HOWTO/Hard-Disk-Upgrade/copy.html
-$ sudo cp -av /source/. /dest/
-$ sudo nano /dest/etc/fstab
-	LABEL=rootfs / ext3  noatime,errors=remount-ro 0 1
-
-20. Image Build
-
-# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.*,audiofile*,FLAC.*}
-# sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
-# cat /etc/default/audio.conf
-# echo "* Mino's UPnP Audio Renderer for Pogoplug $(date +"%y.%m")" > ~/release
-# cat ~/release
-# mpc clear
-# rm -f ~/.bash_history /nohup.out; history -c
-# poweroff
-
-$ sudo fdisk -l
-$ sudo dd bs=4M status=progress if=/dev/sdc of=pogo_e02_audio_renderer_$(date +"%y.%m").img
-$ zip -dd pogo_e02_audio_renderer_$(date +"%y.%m").zip pogo_e02_audio_renderer_$(date +"%y.%m").img
-
-$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.e02
-$ sudo mv /media/parkmino/rootfs/boot/uImage.v4 /media/parkmino/rootfs/boot/uImage
-$ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M status=progress if=/dev/sdc of=pogo_v4_audio_renderer_$(date +"%y.%m").img
-$ zip -dd pogo_v4_audio_renderer_$(date +"%y.%m").zip pogo_v4_audio_renderer_$(date +"%y.%m").img
-
-$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.v4
-$ sudo mv /media/parkmino/rootfs/boot/uImage.orig /media/parkmino/rootfs/boot/uImage
-$ ls -al /media/parkmino/rootfs/boot
-$ sudo dd bs=4M status=progress if=/dev/sdc of=kirkwood_audio_renderer_$(date +"%y.%m").img
-$ zip -dd kirkwood_audio_renderer_$(date +"%y.%m").zip kirkwood_audio_renderer_$(date +"%y.%m").img
-
-$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.orig
-$ sudo mv /media/parkmino/rootfs/boot/uImage.e02 /media/parkmino/rootfs/boot/uImage
-$ ls -al /media/parkmino/rootfs/boot
-
-$ sudo fdisk -l
-$ sudo umount /dev/sdc?
-$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/pogoplug/pogo_e02_audio_renderer_$(date +"%y.%m").img of=/dev/sdc
+	$ sudo gparted (a single ext2 partition with 'rootfs' label)
+	$ sudo apt-get install u-boot-tools
+	$ sudo su
+	# fdisk -l
+	# cd /media/parkmino/rootfs
+
+	# ls -al
+	# rm -rf *
+	# sync
+	# ls -al
+
+	# tar -xjf '/home/parkmino/Downloads/pogoplug/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2'
+	# sync
+	# nano /media/parkmino/rootfs/etc/fstab
+		/dev/root / ext2  noatime,errors=remount-ro 0 1
+		tmpfs     /tmp tmpfs defaults,noatime       0 0
+
+	# cd boot
+	# cp -a zImage-4.4.0-kirkwood-tld-1 zImage.fdt
+	# cat dts/kirkwood-pogo_e02.dtb >> zImage.fdt
+	# mv uImage uImage.orig
+	# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt uImage
+	# sync
+
+	# cp -a zImage-4.4.0-kirkwood-tld-1 zImage.fdt
+	# cat dts/kirkwood-pogoplug_v4.dtb >> zImage.fdt
+	# mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n Linux-4.4.0-kirkwood-tld-1 -d zImage.fdt uImage.v4
+	# sync
+
+	# exit
+
+2. Update
+
+	$ ssh root@192.168.0.x (password: root)
+	# rm /etc/ssh/ssh_host*
+	# ssh-keygen -A
+	# exit
+	$ ssh root@192.168.0.x (password: root)
+
+	# apt-get update
+	# apt-get install debian-archive-keyring
+	# apt-get update
+
+	##apt-get upgrade	# CAUTION : It may not reboot for some reason !
+	  ...
+	  update-initramfs: Generating /boot/initrd.img-4.4.0-kirkwood-tld-1
+	##cd /boot
+	##mkimage -A arm -O linux -T ramdisk -C gzip -a 0x00000000 -e 0x00000000 -n initramfs-4.4.0-kirkwood-tld-1 -d initrd.img-4.4.0-kirkwood-tld-1 uInitrd
+	##apt-get dist-upgrade
+
+	# apt-get autoremove
+	# apt-get clean
+	# dpkg-reconfigure tzdata
+	# apt-get install locales
+	# dpkg-reconfigure locales
+	# locale
+	# locale -a
+	# locale -a -v
+	# rm -rfv /usr/lib/locale/*
+	# locale-gen
+	# nano /etc/default/locale
+		LANG=en_US.UTF-8
+		LANGUAGE=en_US.UTF-8
+		LC_ALL=en_US.UTF-8
+
+	# apt-get install bc ca-certificates cifs-utils curl file ntpdate psmisc sudo
+	# apt-get install exfat-fuse exfat-utils
+	# apt-get install python-crypto whiptail
+
+	# mkdir ~/copy
+	$ scp /home/parkmino/Downloads/pogoplug/copy/* root@192.168.0.x:/root/copy/
+
+	# cat /etc/hostname
+	# nano /etc/hosts
+		127.0.0.1	debian
+
+3. Remove moduels & Services
+
+	# lsmod
+	# nano /etc/modprobe.d/blacklist
+
+	# nano /etc/inittab
+		#... ttyS0
+	# apt-get install sysv-rc-conf
+	# sysv-rc-conf
+		Remove alsa-utils(S) avahi-daemon(2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5)
+
+4. MPD
+
+	### Build MPD 0.20.23
+
+	# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
+	# mv copy/mpd /usr/local/bin/
+	# mv copy/mpd.conf /etc/mpd.conf.sav
+
+	# apt-get install mpc ncmpc
+	# mkdir /etc/ncmpc
+	# nano /etc/ncmpc/config
+		host = 127.0.0.1
+	# mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
+	# mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
+
+5. Internet Radio & TTS (Text to Speech)
+
+	# curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+	# chmod a+rx /usr/local/bin/youtube-dl
+	# mv copy/{kr2mpd,sbs_dec.py,ut2mpd,tts2mpd} /usr/bin/
+	# sed -i 's/Cryptodome/Crypto/g' /usr/bin/sbs_dec.py
+	# mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
+	# mkdir /var/lib/mpd/music/webradio
+	# mv copy/*.pls /var/lib/mpd/music/webradio
+	# mpc update
+
+6. Upmpdcli Build
+
+	# apt-get install autoconf automake build-essential libtool pkg-config
+	# apt-get install libupnp6-dev libexpat1-dev libmpdclient-dev libcurl4-gnutls-dev libmicrohttpd-dev libjsoncpp-dev python3-requests
+	# cd
+	# wget https://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.2.tar.gz
+	# tar -xvf libupnpp-0.17.2.tar.gz
+	# cd libupnpp-0.17.2
+	# ./configure
+	# make
+	# make install
+	# ls -al /usr/local/lib/libupnpp.so.8.0.2
+	# chmod -x /usr/local/lib/libupnpp.so.8.0.2
+	# strip --strip-debug /usr/local/lib/libupnpp.so.8.0.2
+	# ls -al /usr/local/lib/libupnpp.so.8.0.2
+	# cd
+	# wget https://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz
+	# tar -xvf upmpdcli-1.4.5.tar.gz
+	# cd upmpdcli-1.4.5
+	# ./configure
+	# make
+	# make install
+	# ls -al /usr/local/bin/upmpdcli
+	# file /usr/local/bin/upmpdcli
+	# strip --stip-debug /usr/local/bin/upmpdcli
+	# ls -al /usr/local/bin/upmpdcli
+	# cd
+	# wget https://www.lesbonscomptes.com/upmpdcli/downloads/debian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.5-1~ppa1~buster_all.deb
+	# dpkg -x upmpdcli-tidal_1.4.5-1~ppa1~buster_all.deb /
+	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /usr/local/etc/upmpdcli.conf
+	# sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /usr/local/etc/upmpdcli.conf
+	# grep -e checkcontentformat -e tidalquality /usr/local/etc/upmpdcli.conf
+		checkcontentformat = 0
+		tidalquality = lossless
+	# adduser upmpdcli
+	# mv copy/icon.png /usr/local/share/upmpdcli/
+	# cd
+
+7. AirConnect & ttyd
+
+	# mv copy/airupnp-arm5 copy/ttyd /usr/bin/
+
+8. Spotifyd (Not Available)
+
+	# wget https://github.com/Spotifyd/spotifyd/releases/download/v0.2.19/spotifyd-2019-10-06-armv6-slim.zip
+	# unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
+	# nano -L ~/spotifyd.conf
+
+		[global]
+		username = USER
+		password = PASS
+		backend = alsa
+		device = pcm.0
+		mixer = ctl.9
+		device_name = Spotifyd
+		bitrate = 320
+
+9. myMPD
+
+	# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
+	# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
+	# unzip mympd.zip -d ~/ && rm mympd.zip
+	# cd myMPD*
+	##ENABLE_SSL="OFF" ./build.sh releaseinstall	# < 6.2.0
+	# ./build.sh releaseinstall
+	# ls -al /usr/local/bin/mympd
+	# file /usr/local/bin/mympd
+	# strip --strip-debug /usr/local/bin/mympd
+	# ls -al /usr/local/bin/mympd
+	# mkdir -p /var/lib/mympd /usr/var/lib/mympd
+	# chown -R mympd:mympd /var/lib/mympd /usr/var/lib/mympd
+	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+	# nano -L /usr/etc/mympd.conf
+		 host = 127.0.0.1
+		 port = 6600
+		 music_directory = /var/lib/mpd/music/
+		#ssl = false
+		#sslport = 443
+		 loglevel = 1
+		#user = mympd
+		 syscmds = true
+		 coverextract = true
+	# sed -i '/\[syscmds\]/q' /usr/etc/mympd.conf
+	# printf 'HR =
+	KBS 클래식 FM = kr2mpd 1fm
+	KBS 쿨 FM     = kr2mpd 2fm
+	MBC FM        = kr2mpd mbcm
+	MBC FM4U      = kr2mpd mbc4u
+	SBS 파워 FM   = kr2mpd sbsp
+	SBS 러브 FM   = kr2mpd sbsl
+	HR =
+	웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash -c "LANG=en_US.UTF-8 audio-config"&>/dev/null</dev/null 2>/dev/null
+	웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "sudo su"&>/dev/null</dev/null 2>/dev/null
+	HR =
+	다시 시작 - Reboot    = sudo reboot
+	전원 끄기 - Power off = sudo poweroff\n' >> /usr/etc/mympd.conf
+
+10. Tweak ALSA
+
+	# ls -al /usr/lib/arm-linux-gnueabi/libasound*
+	# mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+	# mv copy/libasound.so.2.0.0.*  /etc/
+	# rm /usr/lib/arm-linux-gnueabi/libasound.so*
+
+	# cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+
+	# mv /usr/share/alsa /usr/share/alsa.orig
+	# systemctl mask alsa-store.service
+	# systemctl mask alsa-restore.service
+	# nano /lib/modprobe.d/aliases.conf
+		#options snd-usb-audio index=-2
+	# mkdir /usr/share/alsa
+	# cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+	# mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
+
+11. Tweak decoder libraries
+
+	# ls -al /usr/lib/arm-linux-gnueabi/lib{audiofile,FLAC.so}*
+	# mv /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
+	# mv /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
+	# "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 sudo cp -v copy/libaudiofile.so.1.0.0
+	# echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
+	# rm -i /usr/lib/arm-linux-gnueabi/lib{audiofile.so*,FLAC.so*}
+	# rm copy/{libaudiofile.so.1.0.0,libFLAC.so.8.3.0}
+
+	# ls -al /dev/shm/
+	# sudo nano /etc/ld.so.conf.d/dev_shm.conf
+		/dev/shm/
+	# ldconfig
+	# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so*,audiofile.so*,FLAC.so*}
+
+12. Fstab
+
+	# mkdir /mnt/{usb,cifs,nfs}
+	# ln -s /mnt /var/lib/mpd/music
+	# nano /etc/fstab
+		#/dev/sdb1         /mnt/usb  auto ro 0 0
+		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
+		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
+		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
+
+13. Rc.local
+
+	# nano /etc/rc.local
+
+14. Sysctl.conf
+
+	# nano /etc/sysctl.conf
+	# sysctl -p /etc/sysctl.conf
+
+15. Network configuration
+
+	# nano /etc/network/interfaces
+
+16. USB Auto Mount
+
+	https://www.axllent.org/docs/view/auto-mounting-usb-storage/
+	http://kissmyarch.blogspot.kr/2011/10/usb-automount.html
+
+	# nano /lib/udev/rules.d/11-my-media-automount.rules
+
+17. audio-config
+
+	# mv copy/audio-config /usr/bin/
+	# mv copy/audio.conf /etc/default/
+	# audio-config
+
+18. Disabel swap
+
+	# cat /proc/swaps
+
+19. Wi-Fi
+
+	# wget http://ftp.us.debian.org/debian/pool/non-free/f/firmware-nonfree/firmware-misc-nonfree_20190717-2~bpo10+1_all.deb
+	# dpkg -i firmware-misc*.deb
+	##reboot
+	##lsmod
+	##ifconfig -a
+	##apt-get install wpasupplicant
+	##nano /etc/network/interfaces
+		#auto wlan0
+		#allow-hotplug wlan0
+		iface wlan0 inet dhcp
+		wpa-ssid wifi
+		wpa-psk password
+	##sed -i '/auto wlan0/s/^#*//; s/wpa-ssid.*/wpa-ssid wifi/; s/wpa-psk.*/wpa-psk password/' /etc/network/interfaces
+	##sed -i '/auto wlan0/s/^/#/' /etc/network/interfaces
+
+20. Copy to another disk with ext3
+
+	https://www.tldp.org/HOWTO/Hard-Disk-Upgrade/copy.html
+	$ sudo cp -av /source/. /dest/
+	$ sudo nano /dest/etc/fstab
+		LABEL=rootfs / ext3  noatime,errors=remount-ro 0 1
+
+21. Image Build
+
+	# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.*,audiofile*,FLAC.*}
+	# sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
+	# cat /etc/default/audio.conf
+	# echo "* Mino's UPnP Audio Renderer for Pogoplug $(date +"%y.%m")" > ~/release
+	# cat ~/release
+	# mpc clear
+	# rm -f ~/.bash_history /nohup.out; history -c
+	# poweroff
+
+	$ sudo fdisk -l
+	$ sudo dd bs=4M status=progress if=/dev/sdc of=pogo_e02_audio_renderer_$(date +"%y.%m").img
+	$ zip -dd pogo_e02_audio_renderer_$(date +"%y.%m").zip pogo_e02_audio_renderer_$(date +"%y.%m").img
+
+	$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.e02
+	$ sudo mv /media/parkmino/rootfs/boot/uImage.v4 /media/parkmino/rootfs/boot/uImage
+	$ ls -al /media/parkmino/rootfs/boot
+	$ sudo dd bs=4M status=progress if=/dev/sdc of=pogo_v4_audio_renderer_$(date +"%y.%m").img
+	$ zip -dd pogo_v4_audio_renderer_$(date +"%y.%m").zip pogo_v4_audio_renderer_$(date +"%y.%m").img
+
+	$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.v4
+	$ sudo mv /media/parkmino/rootfs/boot/uImage.orig /media/parkmino/rootfs/boot/uImage
+	$ ls -al /media/parkmino/rootfs/boot
+	$ sudo dd bs=4M status=progress if=/dev/sdc of=kirkwood_audio_renderer_$(date +"%y.%m").img
+	$ zip -dd kirkwood_audio_renderer_$(date +"%y.%m").zip kirkwood_audio_renderer_$(date +"%y.%m").img
+
+	$ sudo mv /media/parkmino/rootfs/boot/uImage /media/parkmino/rootfs/boot/uImage.orig
+	$ sudo mv /media/parkmino/rootfs/boot/uImage.e02 /media/parkmino/rootfs/boot/uImage
+	$ ls -al /media/parkmino/rootfs/boot
+
+	$ sudo fdisk -l
+	$ sudo umount /dev/sdc?
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/pogoplug/pogo_e02_audio_renderer_$(date +"%y.%m").img of=/dev/sdc
