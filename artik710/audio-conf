@@ -19,7 +19,7 @@ renderer_name () {
  (m) Main / 주메뉴
  (q) Quit / 나가기
 
-  *  Inpout / 입력 (name|m|q) : "
+  *  Input / 입력 (name|m|q) : "
  read i
  echo
  case $i in
@@ -50,9 +50,9 @@ until [ "$i" = "q" ] ; do
  -----------------------------------
 
  (1) [ $([ "$status_dop"      = off ] && echo X || echo O) ] MPD DoP (DSD over PCM)
- (2) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Tag Metadata
- (3) [ $([ "$status_pcm"      = off ] && echo X || echo O) ] MPD PCM Decoder
- (4) [ $([ "$status_vol"      = off ] && echo X || echo O) ] MPD Software Volume
+ (2) [ $([ "$status_pcm"      = off ] && echo X || echo O) ] MPD PCM Decoder
+ (3) [ $([ "$status_vol"      = off ] && echo X || echo O) ] MPD Software Volume
+ (4) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Tag Metadata
 
  (5) [ $([ "$status_airplay"  = off ] && echo X || echo O) ] Airplay     / 에어플레이
  (6) [ $([ "$status_roon"     = off ] && echo X || echo O) ] Roon Bridge / 룬 브리지
@@ -73,20 +73,20 @@ until [ "$i" = "q" ] ; do
      else
       sudo sed -i '/dop/s/^/#/g'                    $mpd_conf
      fi ;;
-  2) if [ $status_tag = off ]; then
-      sudo sed -i '/metadata.*none/s/^/#/'          $mpd_conf
-     else
-      sudo sed -i '/metadata.*none/s/^#*//'         $mpd_conf
-     fi ;;
-  3) if [ $status_pcm = off ]; then
+  2) if [ $status_pcm = off ]; then
       sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf
      else
       sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  $mpd_conf
      fi ;;
-  4) if [ $status_vol = off ]; then
+  3) if [ $status_vol = off ]; then
       sudo sed -i '/mixer_type/s/".*"/"software"/'  $mpd_conf
      else
       sudo sed -i '/mixer_type/s/".*"/"none"/'      $mpd_conf
+     fi ;;
+  4) if [ $status_tag = off ]; then
+      sudo sed -i '/metadata.*none/s/^/#/'          $mpd_conf
+     else
+      sudo sed -i '/metadata.*none/s/^#*//'         $mpd_conf
      fi ;;
   5) if [ $status_airplay = off ]; then
       sudo sed -i '/airplay=/s/=.*/=on/'            $audio_conf
