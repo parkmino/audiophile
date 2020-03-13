@@ -113,7 +113,7 @@ return
 
 until [ "$i" == "q" ] ; do
  for i in lirc nfs pulse vpn wpa tweak; do
-  eval status_$i="$(grep ^$i $audio_conf | cut -d= -f2)"
+  eval status_$i="$(grep ^$i= $audio_conf | cut -d= -f2)"
  done
  clear
  echo -n "
