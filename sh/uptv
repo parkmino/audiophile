@@ -39,9 +39,9 @@ ch_21=383; prog_21="SPOTV2"
 ch_22=381; prog_22="SPOTV3"
 ch_23=382; prog_23="SPOTV4"
 ch_24=384; prog_24="SPOTV5"
-ch_25=397; prog_26="MLB1"
-ch_26=398; prog_27="MLB2"
-ch_27=399; prog_28="MLB3"
+ch_25=397; prog_26="스프링캠프"
+ch_26=398; prog_27="ABL2"
+ch_27=399; prog_28="ABL3"
 ch_28=602; prog_29="JTBC골프"
 ch_29=614; prog_30="SBS골프"
 ch_30=650; prog_31="스포티비+"
@@ -76,18 +76,17 @@ ch_58=740; prog_59="GS마이샵"
 ch_59=760; prog_60="현대홈쇼핑+샵"
 ch_60=813; prog_61="W 쇼핑"
 ch_61=681; prog_62="OGN"
-ch_62=385; prog_25="LCK"
-ch_63=727; prog_63="스포티비 게임즈"
-ch_64=505; prog_64="EBS1"
-ch_65=607; prog_65="EBS Kids"
-ch_66=768; prog_66="EBSEnglish"
-ch_67=173; prog_67="EBS+2"
-ch_68=172; prog_68="EBS+1"
-ch_69=793; prog_69="JEI EnglishTV"
-ch_70=175; prog_70="플레이런TV"
-ch_71=629; prog_71="플레이보이"
-ch_72=628; prog_72="미드나잇"
-ch_73=743; prog_73="허니TV"
+ch_62=727; prog_63="스포티비 게임즈"
+ch_63=505; prog_64="EBS1"
+ch_64=607; prog_65="EBS Kids"
+ch_65=768; prog_66="EBSEnglish"
+ch_66=173; prog_67="EBS+2"
+ch_67=172; prog_68="EBS+1"
+ch_68=793; prog_69="JEI EnglishTV"
+ch_69=175; prog_70="플레이런TV"
+ch_70=629; prog_71="플레이보이"
+ch_71=628; prog_72="미드나잇"
+ch_72=743; prog_73="허니TV"
 
 time=$(date +%Y%m%d%H%M%S)
 m3u_dir="/home/parkmino/Videos"
@@ -106,16 +105,16 @@ echo "\
  (6) OBS W	 (7) tvN	 (8) 올리브	 (9) O tvN	(10) XtvN
 (11) 온스타일	(12) JTBC2	(13) K스타	(14) KBSN PLUS	(15) 라이프타임
 (16) 다이아TV	(17) JTBC4	(18) 중화TV	(19) 아시아N	(20) 스포티비
-(21) SPOTV2	(22) SPOTV3	(23) SPOTV4	(24) SPOTV5	(25) MLB1
-(26) MLB2	(27) MLB3	(28) JTBC골프	(29) SBS골프	(30) 스포티비+
+(21) SPOTV2	(22) SPOTV3	(23) SPOTV4	(24) SPOTV5	(25) 스프링캠프
+(26) ABL2	(27) ABL3	(28) JTBC골프	(29) SBS골프	(30) 스포티비+
 (31) JTBC3 FOX	(32) 빌리어즈	(33) YTN	(34) 연합뉴스	(35) CNN Int'l
 (36) 토마토TV	(37) CNBC	(38) 엠넷	(39) 가요TV	(40) GMTV
 (41) PLAYY프리	(42) PLAYY웰	(43) 바둑TV	(44) FTV	(45) 피싱TV
 (46) 폴라리스	(47) 브레인TV	(48) 애니맥스	(49) 애니+	(50) 어린이TV
 (51) 키즈	(52) GS샵	(53) 현대쇼핑	(54) CJ오쇼핑	(55) 롯데쇼핑
 (56) NS홈쇼핑	(57) 홈앤쇼핑	(58) GS마이샵	(59) 현대쇼핑+	(60) W 쇼핑
-(61) OGN	(62) LCK	(63) 게임즈	(64) EBS1	(65) EBS Kids
-(66) EBSEnglish	(67) EBS+2	(68) EBS+1	(69) JEI 영어	(70) 플레이런TV"
+(61) OGN	(62) 게임즈	(63) EBS1	(64) EBS Kids	(65) EBSEnglish
+(66) EBS+2	(67) EBS+1	(68) JEI 영어	(69) 플레이런TV"
 
 read -p " " i
 
