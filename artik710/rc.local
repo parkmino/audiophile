@@ -68,9 +68,11 @@ roon_bridge () {
 }
 
 spotifyd () {
- cp /root/spotifyd /root/spotifyd.conf /dev/shm/
- sleep 1
-/dev/shm/nohup /dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+#cp /root/spotifyd /root/spotifyd.conf /dev/shm/
+#sleep 1
+#/dev/shm/nohup /dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+ cp /root/librespot /dev/shm/
+/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.0 --mixer alsa --mixer-card ctl.9 &
 }
 
 airconnect () {
