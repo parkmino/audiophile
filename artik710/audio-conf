@@ -104,13 +104,13 @@ until [ "$i" = "q" ] ; do
       sudo sed -i '/spotify=/s/=.*/=off/'           $audio_conf
      fi ;;
   8) if [ $status_tidal = off ]; then
-      sudo sed -i '/tidal=/s/=.*/=on/'               $audio_conf
+      sudo sed -i '/tidal=/s/=.*/=on/'              $audio_conf
      else
-      sudo sed -i '/tidal=/s/=.*/=off/'              $audio_conf
+      sudo sed -i '/tidal=/s/=.*/=off/'             $audio_conf
      fi ;;
   9) renderer_name ;;
-  q) exit		;;
-  r) sudo reboot	;;
-  *) clear		;;
+  q) exit          ;;
+  r) sudo reboot   ;;
+  *) clear         ;;
  esac
 done
