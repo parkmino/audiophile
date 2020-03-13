@@ -375,8 +375,8 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 19. Edit /etc/sysctl.conf
 	# nano /etc/sysctl.conf
 
-20. audio-config
-	# sudo mv copy/audio-config /usr/bin/
+20. audio-config & audio-conf
+	# sudo mv copy/audio-conf* /usr/bin/
 	# mv copy/audio.conf /etc/default/
 
 21. MicroSD mount

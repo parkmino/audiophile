@@ -1,0 +1,117 @@
+#!/bin/sh
+
+[ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
+[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
+audio_conf=/etc/default/audio.conf
+
+renderer_name () {
+
+ clear
+ printf "
+ --------------------------------------------
+  Change Renderer Name / 렌더러 이름 바꾸기
+ --------------------------------------------
+
+
+ [ $current_name ] Current Name / 현재 이름
+
+
+
+ (m) Main / 주메뉴
+ (q) Quit / 나가기
+
+  * Inpout / 입력 (name|m|q) : "
+ read i
+ echo
+ case $i in
+  m) clear ; return ;;
+  q) exit ;;
+  *) sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf ;;
+ esac
+ return
+}
+
+until [ "$i" = "q" ] ; do
+
+ current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3-)
+
+ status_dop=$(grep -q '^dop' $mpd_conf && echo on || echo off)
+ status_tag=$(grep -q '^metadata.*none' $mpd_conf && echo off || echo on)
+ status_pcm=$(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo on || echo off)
+ status_vol=$(grep -q 'mixer_type.*software' $mpd_conf && echo on || echo off)
+
+ for i in airplay roon spotify tidal; do
+  eval status_$i="$(grep ^$i= $audio_conf | cut -d= -f2)"
+ done
+
+ clear
+ echo -n "
+ -----------------------------------
+  Audio Configuration / 오디오 설정
+ -----------------------------------
+
+ (0) [ $current_name ] Change Renderer Name / 렌더러 이름 바꾸기 >>
+
+ (1) [ $([ "$status_dop"      = off ] && echo X || echo O) ] MPD DoP
+ (2) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Metadata
+ (3) [ $([ "$status_pcm"      = off ] && echo X || echo O) ] MPD Raw PCM
+ (4) [ $([ "$status_vol"      = off ] && echo X || echo O) ] MPD Software Volume
+
+ (5) [ $([ "$status_airplay"  = off ] && echo X || echo O) ] Airplay     / 에어플레이
+ (6) [ $([ "$status_roon"     = off ] && echo X || echo O) ] Roon Bridge / 룬 브리지
+ (7) [ $([ "$status_spotify"  = off ] && echo X || echo O) ] Spotify     / 스포티파이
+ (8) [ $([ "$status_tidal"    = off ] && echo X || echo O) ] Tidal       / 타이달
+
+ (q) Quit   / 나가기
+ (r) Reboot / 재시작하여 적용
+
+  *  Select / 선택 (0-8|q|r) : "
+ read i
+ echo
+ case $i in
+  0) renderer_name ;;
+  1) if [ $status_dop = off ]; then
+      sudo sed -i '/dop/s/^#*//g'                   $mpd_conf
+     else
+      sudo sed -i '/dop/s/^/#/g'                    $mpd_conf
+     fi ;;
+  2) if [ $status_tag = off ]; then
+      sudo sed -i '/metadata.*none/s/^/#/'          $mpd_conf
+     else
+      sudo sed -i '/metadata.*none/s/^#*//'         $mpd_conf
+     fi ;;
+  3) if [ $status_pcm = off ]; then
+      sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf
+     else
+      sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  $mpd_conf
+     fi ;;
+  4) if [ $status_vol = off ]; then
+      sudo sed -i '/mixer_type/s/".*"/"software"/'  $mpd_conf
+     else
+      sudo sed -i '/mixer_type/s/".*"/"none"/'      $mpd_conf
+     fi ;;
+  5) if [ $status_airplay = off ]; then
+      sudo sed -i '/airplay=/s/=.*/=on/'            $audio_conf
+     else
+      sudo sed -i '/airplay=/s/=.*/=off/'           $audio_conf
+     fi ;;
+  6) if [ $status_roon = off ]; then
+      sudo sed -i '/roon=/s/=.*/=on/'               $audio_conf
+     else
+      sudo sed -i '/roon=/s/=.*/=off/'              $audio_conf
+     fi ;;
+  7) if [ $status_spotify = off ]; then
+      sudo sed -i '/spotify=/s/=.*/=on/'            $audio_conf
+     else
+      sudo sed -i '/spotify=/s/=.*/=off/'           $audio_conf
+     fi ;;
+  8) if [ $status_tidal = off ]; then
+      sudo sed -i '/tidal=/s/=.*/=on/'               $audio_conf
+     else
+      sudo sed -i '/tidal=/s/=.*/=off/'              $audio_conf
+     fi ;;
+  q) exit		;;
+  r) sudo reboot	;;
+  *) clear		;;
+ esac
+done
