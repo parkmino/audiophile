@@ -159,9 +159,9 @@ esac
 
 dbus_tts () {
 i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "IP TTS, DBus / IP TTS와 DBus" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 63 3 \
-"tts"    "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
-"eng"    "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) \
-"dbus"   "Enable DBus             DBus 사용" $(grep -q 'dbus=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"tts"  "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
+"eng"  "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) \
+"dbus" "Enable DBus             DBus 사용" $(grep -q 'dbus=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -181,17 +181,17 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 
 mpd_options () {
 i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 70 4 \
-"dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
-"tag"      "Enable Metadata             태그 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) \
-"pcm"      "Enable Raw PCM              Raw PCM 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
-"vol"      "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"dop" "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
+"pcm"      "Enable PCM Decoder          PCM 디코더 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
+"vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) \
+"tag" "Enable Tag Metadata         태그 메타데이터 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
- [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
- [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+ [[ $i =~ dop ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ pcm ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
+ [[ $i =~ vol ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+ [[ $i =~ tag ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
 fi
 }
 
