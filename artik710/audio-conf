@@ -16,11 +16,10 @@ renderer_name () {
  [ $current_name ] Current Name / 현재 이름
 
 
-
  (m) Main / 주메뉴
  (q) Quit / 나가기
 
-  * Inpout / 입력 (name|m|q) : "
+  *  Inpout / 입력 (name|m|q) : "
  read i
  echo
  case $i in
@@ -50,8 +49,6 @@ until [ "$i" = "q" ] ; do
   Audio Configuration / 오디오 설정
  -----------------------------------
 
- (0) [ $current_name ] Change Renderer Name / 렌더러 이름 바꾸기 >>
-
  (1) [ $([ "$status_dop"      = off ] && echo X || echo O) ] MPD DoP
  (2) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Metadata
  (3) [ $([ "$status_pcm"      = off ] && echo X || echo O) ] MPD Raw PCM
@@ -62,14 +59,15 @@ until [ "$i" = "q" ] ; do
  (7) [ $([ "$status_spotify"  = off ] && echo X || echo O) ] Spotify     / 스포티파이
  (8) [ $([ "$status_tidal"    = off ] && echo X || echo O) ] Tidal       / 타이달
 
+ (9) [ $current_name ] Change Renderer Name / 렌더러 이름 바꾸기 >>
+
  (q) Quit   / 나가기
  (r) Reboot / 재시작하여 적용
 
-  *  Select / 선택 (0-8|q|r) : "
+  *  Select / 선택 (1-9|q|r) : "
  read i
  echo
  case $i in
-  0) renderer_name ;;
   1) if [ $status_dop = off ]; then
       sudo sed -i '/dop/s/^#*//g'                   $mpd_conf
      else
@@ -110,6 +108,7 @@ until [ "$i" = "q" ] ; do
      else
       sudo sed -i '/tidal=/s/=.*/=off/'              $audio_conf
      fi ;;
+  9) renderer_name ;;
   q) exit		;;
   r) sudo reboot	;;
   *) clear		;;
