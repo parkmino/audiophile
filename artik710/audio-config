@@ -2,7 +2,6 @@
 
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-spotifyd_conf=/etc/spotifyd.conf
 audio_conf=/etc/default/audio.conf
 
 ethernet_ip () {
@@ -98,7 +97,7 @@ fi
 }
 
 renderer_name () {
- current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3)
+ current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3-)
  i=$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
 
 Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 9 67 $current_name 3>&1 1>&2 2>&3)
