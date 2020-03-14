@@ -19,7 +19,7 @@ renderer_name () {
  (m) Main / 주메뉴
  (q) Quit / 나가기
 
-  *  Input / 입력 (name|m|q) : "
+  * Input / 입력 (name|m|q) : "
  read i
  echo
  case $i in
@@ -54,10 +54,10 @@ until [ "$i" = "q" ] ; do
  (3) [ $([ "$status_vol"      = off ] && echo X || echo O) ] MPD Software Volume
  (4) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Tag Metadata
 
- (5) [ $([ "$status_airplay"  = off ] && echo X || echo O) ] Airplay     / 에어플레이
- (6) [ $([ "$status_roon"     = off ] && echo X || echo O) ] Roon Bridge / 룬 브리지
- (7) [ $([ "$status_spotify"  = off ] && echo X || echo O) ] Spotify     / 스포티파이
- (8) [ $([ "$status_tidal"    = off ] && echo X || echo O) ] Tidal       / 타이달
+ (5) [ $([ "$status_airplay"  = off ] && echo X || echo O) ] Airplay
+ (6) [ $([ "$status_roon"     = off ] && echo X || echo O) ] Roon Bridge
+ (7) [ $([ "$status_spotify"  = off ] && echo X || echo O) ] Spotify
+ (8) [ $([ "$status_tidal"    = off ] && echo X || echo O) ] Tidal
 
  (9) [ $current_name ] Renderer Name / 렌더러 이름 >>
 
