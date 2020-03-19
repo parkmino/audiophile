@@ -15,8 +15,6 @@ http://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8
 http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8
 #EXTINF:-1,EBSiradio
 http://newiradio.ebs.co.kr/iradio/iradiolive_m4a/playlist.m3u8
-#EXTINF:-1,KBSworld
-http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8
 #EXTINF:-1,MBC강원영동TV
 http://123.254.72.24:1935/tvlive/livestream/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM
@@ -30,11 +28,11 @@ http://211.117.193.120:1935/amlive/GWANGJU-MBC-AM/playlist.m3u8
 #EXTINF:-1,MBC광주FM4U
 http://211.117.193.120:1935/fmlive/GWANGJU-MBC-FM/playlist.m3u8
 #EXTINF:-1,MBC대구TV
-http://app.dgmbc.com:1935/live/mp4:live1.stream/playlist.m3u8
+https://5e04aba713813.streamlock.net/live/livetv/playlist.m3u8
 #EXTINF:-1,MBC대구표준FM
-http://app.dgmbc.com:1935/amradio/mp3:amradio.stream/playlist.m3u8
+https://5e04aba713813.streamlock.net/amradio/am/playlist.m3u8
 #EXTINF:-1,MBC대구FM4U
-http://app.dgmbc.com:1935/fmradio/mp3:fmradio.stream/playlist.m3u8
+https://5e04aba713813.streamlock.net/fmradio/fm/playlist.m3u8
 #EXTINF:-1,MBC대전TV
 https://5c482867a8b63.streamlock.net/live/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC대전표준FM
@@ -59,7 +57,7 @@ http://121.160.102.99:1935/jmbc_tv/myStream/playlist.m3u8
 http://121.160.102.99:1935/jmbc_sfm/myStream/playlist.m3u8
 #EXTINF:-1,MBC전주FM4U
 http://121.160.102.99:1935/jmbc_fm4u/myStream/playlist.m3u8
-#EXTINF:-1,MBC제주MBCTV
+#EXTINF:-1,MBC제주TV
 https://5cf58a556f9b2.streamlock.net:443/live/tv_jejumbc/playlist.m3u8
 #EXTINF:-1,MBC제주표준FM
 https://5cf58a556f9b2.streamlock.net:443/live/_definst_/mp3:radio1/playlist.m3u8
@@ -145,6 +143,8 @@ http://slive.ytn.co.kr:1935/dmb/ydlive_20140419_1/playlist.m3u8
 http://slive.ytnweather.co.kr:1935/weather/weather_20140419_1/playlist.m3u8
 #EXTINF:-1,YTNscience
 http://slive.sciencetv.kr:1935/science/yslive_20140419_1/playlist.m3u8
+#EXTINF:-1,YTNRadio
+http://slive.ytn.co.kr:1935/live/fmlive_0624_1.sdp/playlist.m3u
 #EXTINF:-1,연변위성방송
 http://live.ybtvyun.com/video/s10006-cys-sd/index.m3u8
 #EXTINF:-1,연변1채널
