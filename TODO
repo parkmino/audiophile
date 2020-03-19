@@ -1,120 +1,24 @@
-01. Disable systemd-journald & systemd-logind
+01. RoonBridge to ram
 
-	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
-	$ sudo systemctl mask systemd-logind
-
-02. Disable systemd-resolved
-
-	$ sudo systemctl stop    systemd-resolved
-	$ sudo systemctl disable systemd-resolved
-	$ sudo rm   /etc/resolv.conf
-	$ sudo nano /etc/resolv.conf
-		nameserver 1.0.0.1
-
-03. /etc/sysctl.conf
-
-	$ sudo nano /etc/sysctl.conf
-
-		 kernel.sched_wakeup_granularity_ns = 388289	# 388288
-		 kernel.sched_latency_ns = 1394064		# 1394063
-		 kernel.sched_migration_cost_ns = 4899005	# 4899004
-		
-		 net.ipv4.tcp_rmem = 4520 88168 3345648
-		 net.ipv4.tcp_wmem = 4448 89848 3455464
-		 net.ipv4.udp_mem = 46424 57912 87614
-		 net.ipv4.tcp_timestamps = 0
-		 net.ipv4.tcp_window_scaling = 0
-		 net.ipv4.tcp_moderate_rcvbuf = 0
-		 net.ipv4.conf.all.promote_secondaries = 0
-
-04. Optional mympd & ssh & serial console
-
-	$ sudo nano /etc/default/audio.conf
-		mympd=on
-		ssh=off
-		serial=off
+	$ sudo nano /etc/systemd/system/roonbridge.service
+	  ...
+	$ sudo sed 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridge.service > /etc/systemd/system/roonbridgetoram.service
+	$ sudo systemctl daemon-reload
+	$ sudo systemctl disable roonbridge roonbridgetoram
+	$ ls -al /etc/init.d/roonbridge
 	$ sudo nano /etc/rc.local
-		[ "$mympd"  = on ] && mympd&...
-		[ "$ssh"    = on ] && systemctl start ssh
-		[ "$serial" = on ] || systemctl stop serial-getty@ttySAC3
+		roon_bridge () {
+		 if [ "$roontoram" = on ]; then
+		  cp -r /opt/RoonBridge /dev/shm/
+		  systemctl start roonbridgetoram
+		 else
+		  systemctl start roonbridge
+		 fi
+		}
+	# nano /etc/default/audio.conf		# for Artik
+		roontoram=on
 
-05. myMPD to ram
-
-	$ sudo nano /etc/rc.local
-		cp /usr/bin/mympd /dev/shm/
-		/dev/shm/mympd ...
-
-06. Traffic Control
-
-	$ sudo tc qdisc add dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1) root pfifo_fast
-	$ sudo tc qdisc add dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1) ingress
-	$ tc -s -d qdisc show dev $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo | head -1)
-	
-	$ sudo nano /etc/default/audio.conf
-		tfc=on
-	$ sudo nano /etc/rc.local
-		if [ "$tfc" = on ]; then
-		 echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
-		  tc qdisc add dev $dev root pfifo_fast || true
-		  tc qdisc add dev $dev ingress || true
-		 #tc -s -d qdisc show dev $dev
-		 done
-		fi
-
-07. Tidal quiality
-
-	$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
-	$ grep tidalquality /etc/upmpdcli.conf
-		tidalquality = lossless
-
-08. ALSA library update to 1.2.2
-
-09. Configuration files
-
-	$ sudo nano /usr/share/alsa/alsa.conf.min
-
-		defaults.pcm{ minperiodtime 2772  ;}
-		pcm.0{ type hw card 0 device 0 subdevice 0  ;}
-
-	$ sudo nano /etc/mpd.conf.sav /etc/upmpdcli.conf /etc/mympd.conf .config/mpv/mpv.conf /etc/resolv.conf /etc/network/interfaces
-
-10. Add /dev/shm/ to library path
-
-	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
-		/dev/shm/
-	$#ls -al /usr/lib/x86_64-linux-gnu/lib{asound*,audiofile*,FLAC.*}
-	$ sudo mv /usr/lib/x86_64-linux-gnu/lib{asound.so.2.0.0.*,audiofile.so.1.0.0.*,FLAC.so.8*} /etc/
-	$ sudo rm -i /usr/lib/x86_64-linux-gnu/lib{asound.so*,audiofile.so*,FLAC.so.*}
-	$ sudo cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
-	$ sudo cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
-	$ sudo cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
-	
-	$ ls -al /dev/shm/
-	$ sudo ldconfig
-	
-	$ sudo nano /etc/rc.local
-
-		if [ "$alsa" = plug ]; then
-		 cp /etc/libasound.so.2.0.0.plug /dev/shm/libasound.so.2
-		 cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
-		elif [ "$alsa" = min ]; then
-		 cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
-		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
-		 rm -rf /dev/snd/*c /dev/snd/by* || true
-		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		else
-		 cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
-		 cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
-		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		fi
-
-		ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-		cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /dev/shm/
-		cp /etc/mpd.conf.sav /dev/shm/mpd.conf
-		cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
-		cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
-
-11. Artik710
+cf) Artik710
 
 	-. Disable connman
 	-. Blacklist modules
