@@ -10,5 +10,6 @@ if [ "$1" = play ]; then
  echo
  host="127.0.0.1"
  url=$(curl -s http://hificlass.inlive.co.kr/listen.pls | grep -m1 -i file | cut -d= -f2)
+ [ -z "$url" ] && echo "${0##*/} stream is not available!" && exit
  mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
 fi
