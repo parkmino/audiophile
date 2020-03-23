@@ -369,19 +369,22 @@ Tuning
 		$ sudo nano /etc/hdparm.conf
 			read_ahead_sect = 1904
 			lookahead = on
-			apm = 255    
-			  
+			apm = 255
 		$ sudo cp /sbin/hdparm /usr/bin/
 		$ sudo apt-get remove hdparm
 		$ sudo nano /etc/rc.local
 			hdparm -A1 -a1904 -B255 /dev/sda # -M0
 			echo none > /sys/block/sda/queue/scheduler
-		  
 	-. ZRAM
 		$ #sudo apt-get install zram-config
 		$ #ls /sys/block && cat /proc/swaps
 		$ #sudo service zram-config stop  # stop zram
 		$ #sudo service zram-config start # start zram
+	-. nodm
+		$ sudo nano /etc/default/nodm
+			NODM_XSESSION='exec /etc/X11/Xsession'
+			NODM_OPTIONS='--no-syslog --no-stderr'
+			NODM_X_OPTIONS='-nolisten tcp -logfile /dev/null -logverbose 0 -verbose 0'
 
 4. References.
 
