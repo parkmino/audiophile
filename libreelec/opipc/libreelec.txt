@@ -38,10 +38,10 @@ LibreELEC 9.80 Nightly for Orange Pi PC
   1.2 ALSA
 
 	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
-	$ printf 'pcm.default.type hw pcm.default.card 2 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2773 ctl.default ctl.9' > ../copy/alsa.conf.min
+	$ printf 'pcm.default.type hw pcm.default.card 2 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default ctl.9,' > ../copy/alsa.conf.min
 	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
 	$ sed -i '$d' ../copy/alsa.conf.mix
-	$ printf 'pcm.default.type hw pcm.default.card 2 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2773 ctl.default ctl.9' >> ../copy/alsa.conf.mix
+	$ printf 'pcm.default.type hw pcm.default.card 2 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default ctl.9,' >> ../copy/alsa.conf.mix
 	$ cp ../copy/alsa.conf.min ../copy/alsa.hdmi.conf.min
 	$ cp ../copy/alsa.conf.mix ../copy/alsa.hdmi.conf.mix
 	$ sed -i 's/pcm.default.card ./pcm.default.card 0/g' ../copy/alsa.hdmi.conf.*
@@ -171,8 +171,8 @@ AllowIsolate=yes' > ../tuning_audio.target
 cf)
 
 https://notepad-plus-plus.org/
-
 https://github.com/soju6jan
+https://cvh.libreelec.tv/test/h3/
 
 Screenshots
 Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
