@@ -18,8 +18,15 @@
 	# nano /etc/default/audio.conf		# for Artik
 		roontoram=on
 
+02. Roonbridge libraries
+
+	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
+	$ find /opt/RoonBridge/ -name *.so -exec sudo chmod -x {} \; -exec sudo strip --strip-debug {} \;
+	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
+
 cf) Artik710
 
 	-. Disable connman
 	-. Blacklist modules
 	-. CPU affinity for IRQ
+	-. roonbridge toram & libraries
