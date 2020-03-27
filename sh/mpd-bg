@@ -32,13 +32,13 @@ echo "$(pstree -npt $pgr_mpd)" | while read line ; do
  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  mpd)		 taskset -cp $h_task $proc_nr ;;
-  io)		 taskset -cp $h_task $proc_nr ;;
-  rtio)		 taskset -cp $h_task $proc_nr
-		 chrt -opv 0	     $proc_nr ;;
-  player)	 taskset -cp $s_task $proc_nr ;;
-  decoder)	 taskset -cp $h_task $proc_nr ;;
+  mpd)		 taskset -cp $s_task $proc_nr ;;
+  io)		 taskset -cp $s_task $proc_nr ;;
+  rtio)		 taskset -cp $s_task $proc_nr
+		 chrt -opv 0         $proc_nr ;;
+  player)	 taskset -cp $m_task $proc_nr ;;
+  decoder)	 taskset -cp $s_task $proc_nr ;;
   output)	 taskset -cp $m_task $proc_nr
-		 chrt -opv 0	     $proc_nr ;;
+		 chrt -opv 0         $proc_nr ;;
  esac
 done
