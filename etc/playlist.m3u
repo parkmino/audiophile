@@ -97,18 +97,6 @@ rtsp://61.85.197.50/magicfm_live
 http://1.222.207.80:1935/live/cjbtv/playlist.m3u8
 #EXTINF:-1,CJB청주FM
 http://1.222.207.80:1935/live/cjbradio/playlist.m3u8
-#EXTINF:-1,OBS경인
-http://live.obs.co.kr:1935/live/obs/myStream.sdp/playlist.m3u8
-#EXTINF:-1,OBS경인W
-http://121.160.102.99:1935/live/myStream.sdp/playlist.m3u8
-#EXTINF:-1,KCTV광주CH05
-http://119.77.96.184:1935/chn05/chn05/chunklist_w644291506.m3u8
-#EXTINF:-1,KCTV광주CH21
-http://119.77.96.184:1935/chn21/chn21/chunklist_w252131137.m3u8
-#EXTINF:-1,KCTV제주방송
-https://5b99fdb0a9492.streamlock.net/LIVE/ch7/playlist.m3u8
-#EXTINF:-1,KTV국민방송
-http://218.38.152.31:1935/klive/klive.stream/playlist.m3u8
 #EXTINF:-1,국방TV
 http://mediaworks.dema.mil.kr:1935/live_edge/cudo.sdp/playlist.m3u8
 #EXTINF:-1,국방FM
@@ -127,18 +115,14 @@ http://139.150.248.29:1935/smartlive/558/91258ac21591769e21f41b96f26d883e/playli
 http://etomatomobile.hscdn.com/artemobile/livestream/playlist.m3u8
 #EXTINF:-1,아리랑TV
 http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
-#EXTINF:-1,eduTV
-http://external.cdn.zroad.tv/EduTV/live/playlist.m3u8
 #EXTINF:-1,이데일리TV
 http://edaily.flive.skcdn.com:1935/high/livestream/playlist.m3u8
-#EXTINF:-1,TV조선
-http://live.chosun.gscdn.com/live/tvchosun1.stream/playlist.m3u8
 #EXTINF:-1,지방자치TV
 http://121.78.81.179:1935/smartlive/436/101d1ccdeb2cd1794db38206dcec198d/playlist.m3u8
-#EXTINF:-1,팍스경제TV
-rtmp://124.139.232.61:1935/live/livestream
 #EXTINF:-1,채널i
 http://121.78.242.199:1935/live/stream.sdp/playlist.m3u8
+#EXTINF:-1,팍스경제TV
+rtmp://124.139.232.61:1935/live/livestream
 #EXTINF:-1,피싱TV
 http://media.fishingtv.kr:1935/mobileLIVE/_definst_/mp4:livestream.sdp/playlist.m3u8
 #EXTINF:-1,한국농업방송
@@ -147,19 +131,35 @@ https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 http://necgokr2-724.acs.wecandeo.com/ms/2528/724/index_1.m3u8
 #EXTINF:-1,한국직업방송
 http://live.worktv.or.kr:1935/live/wowtvlive1.sdp/playlist.m3u8
+#EXTINF:-1,eduTV
+http://external.cdn.zroad.tv/EduTV/live/playlist.m3u8
+#EXTINF:-1,KCTV광주CH05
+http://119.77.96.184:1935/chn05/chn05/chunklist_w644291506.m3u8
+#EXTINF:-1,KCTV광주CH21
+http://119.77.96.184:1935/chn21/chn21/chunklist_w252131137.m3u8
+#EXTINF:-1,KCTV제주방송
+https://5b99fdb0a9492.streamlock.net/LIVE/ch7/playlist.m3u8
+#EXTINF:-1,KTV국민방송
+http://218.38.152.31:1935/klive/klive.stream/playlist.m3u8
+#EXTINF:-1,OBS경인
+http://live.obs.co.kr:1935/live/obs/myStream.sdp/playlist.m3u8
+#EXTINF:-1,OBS경인W
+http://121.160.102.99:1935/live/myStream.sdp/playlist.m3u8
 #EXTINF:-1,tbsTV
 http://58.234.158.60:1935/catvlive/myStream/playlist.m3u8
 #EXTINF:-1,tbsFM
 http://58.234.158.60:1935/fmlive/myStream/playlist.m3u8
-#EXTINF:-1,YTNkorean
-http://ytnmmd.mmdlive.lldns.net/ytnmmd/9484b70302db4786886ae40308bf45a1/manifest.m3u8
-#EXTINF:-1,YTNdmb
-http://slive.ytn.co.kr:1935/dmb/ydlive_20140419_1/playlist.m3u8
-#EXTINF:-1,YTNlife
+#EXTINF:-1,TV조선
+http://live.chosun.gscdn.com/live/tvchosun1.stream/playlist.m3u8
+#EXTINF:-1,YTN 라이프
 http://slive.ytnweather.co.kr:1935/weather/weather_20140419_1/playlist.m3u8
-#EXTINF:-1,YTNscience
+#EXTINF:-1,YTN 사이언스
 http://slive.sciencetv.kr:1935/science/yslive_20140419_1/playlist.m3u8
-#EXTINF:-1,YTNRadio
+#EXTINF:-1,YTN 코리안
+http://ytnmmd.mmdlive.lldns.net/ytnmmd/9484b70302db4786886ae40308bf45a1/manifest.m3u8
+#EXTINF:-1,YTN DMB
+http://slive.ytn.co.kr:1935/dmb/ydlive_20140419_1/playlist.m3u8
+#EXTINF:-1,YTN 라디오
 http://slive.ytn.co.kr:1935/live/fmlive_0624_1.sdp/playlist.m3u8
 #EXTINF:-1,연변위성방송
 http://live.ybtvyun.com/video/s10006-cys-sd/index.m3u8
