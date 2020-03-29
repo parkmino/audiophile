@@ -1,4 +1,41 @@
-01. RoonBridge to ram
+01. MPD configuration
+
+	$ sudo nano /etc/mpd.conf.sav
+
+		 mixer_type "none" # outside audio_output
+		 audio_output {
+		 auto_resample "no"
+		 auto_channels "no"
+		 auto_format "no"
+		 device "pcm.0"
+		 mixer_device "ctl.hw"
+
+	$#sudo sed -i '/audio_output {/,/replay_gain_handler/s/mixer_type ".*"/mixer_type "software"/' /etc/mpd.conf.sav # for software volume
+
+02. MPD in rc.local
+
+	$ sudo nano /etc/rc.local
+
+		taskset -pc $s_task $pgr_mpd
+		...
+		  mpd)		 taskset -cp $s_task $proc_nr ;;
+		  io)		 taskset -cp $s_task $proc_nr ;;
+		  rtio)		 taskset -cp $s_task $proc_nr
+				 chrt -opv 0         $proc_nr ;;
+		  player)	 taskset -cp $m_task $proc_nr ;;
+		  decoder)	 taskset -cp $s_task $proc_nr ;;
+		  output)	 taskset -cp $m_task $proc_nr
+				 chrt -opv 0         $proc_nr ;;
+
+03. ALSA configuration
+
+	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
+
+		pcm.0{type hw card 0}
+
+		ctl{default ctl.hw}pcm.default{type hw card 0} # kodi
+
+04. RoonBridge to ram
 
 	$ sudo nano /etc/systemd/system/roonbridge.service
 	  ...
@@ -18,15 +55,21 @@
 	# nano /etc/default/audio.conf		# for Artik
 		roontoram=on
 
-02. Roonbridge libraries
+05. Roonbridge binaries
+
+	$ ls -al /opt/RoonBridge/Bridge/processreaper
+	$ sudo strip --strip-debug /opt/RoonBridge/Bridge/processreaper
+	$ ls -al /opt/RoonBridge/Bridge/processreaper
 
 	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
 	$ find /opt/RoonBridge/ -name *.so -exec sudo chmod -x {} \; -exec sudo strip --strip-debug {} \;
 	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
 
+06. Roonbridge withnout --debug
+
 cf) Artik710
 
 	-. Disable connman
 	-. Blacklist modules
-	-. CPU affinity for IRQ
-	-. roonbridge toram & libraries
+	-. CPU affinities for IRQ
+	-. roonbridge toram & tweak binaries
