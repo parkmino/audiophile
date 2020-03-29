@@ -36,7 +36,8 @@
 
 	$ sudo nano /etc/systemd/system/roonbridge.service
 	  ...
-	$ sudo sed 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridge.service > /etc/systemd/system/roonbridgetoram.service
+	$ sudo cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
+	$ sudo sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge roonbridgetoram
 	$ ls -al /etc/init.d/roonbridge
