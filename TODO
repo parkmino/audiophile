@@ -4,9 +4,6 @@
 
 		 mixer_type "none" # outside audio_output
 		 audio_output {
-		 auto_resample "no"
-		 auto_channels "no"
-		 auto_format "no"
 		 device "pcm.0"
 		 mixer_device "ctl.hw"
 
@@ -31,9 +28,9 @@
 
 	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
 
-		pcm.0{type hw card 0}
+		pcm.0{type hw card 0 device 0 subdevice 0}
 
-		ctl{default ctl.hw}pcm.default{type hw card 0} # kodi
+		ctl{default ctl.hw}pcm.!default{type hw card 0 device 0 subdevice 0} # kodi
 
 04. RoonBridge to ram
 
