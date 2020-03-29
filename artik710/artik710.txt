@@ -208,15 +208,25 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
-	# nano -L /opt/RoonBridge/Bridge/RoonBridge
+	# nano /opt/RoonBridge/Bridge/RoonBridge
 		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
-		 exec /bin/bash -c "exec -a $SCRIPT /dev/shm/nohup \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
+		 exec /bin/bash -c "exec -a $SCRIPT /dev/shm/nohup \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
-		 exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
-		 fi    
-		   
+		 exec "/dev/shm/nohup $MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		 fi
+	# cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
+	# sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
 	# systemctl daemon-reload
-	# systemctl disable roonbridge
+	# disable roonbridge roonbridgetoram
+
+	# ls -al /opt/RoonBridge/Bridge/processreaper
+	# strip --strip-debug /opt/RoonBridge/Bridge/processreaper
+	# ls -al /opt/RoonBridge/Bridge/processreaper
+
+	# find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
+	# find /opt/RoonBridge/ -name *.so -exec chmod -x {} \; -exec strip --strip-debug {} \;
+	# find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
+
 	# rm roonbridge-installer*
 
 11. Librespot / AirUPnP / ttyd

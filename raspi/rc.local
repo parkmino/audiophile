@@ -23,10 +23,10 @@ musicpd_bg () {
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		 taskset -cp $h_task $proc_nr ;;
-   io)		 taskset -cp $h_task $proc_nr ;;
-   player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $h_task $proc_nr ;;
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $m_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
    output)	 taskset -cp $m_task $proc_nr
 		#renice -1 -p	     $proc_nr
 		 chrt -op 0	     $proc_nr ;;
@@ -59,13 +59,11 @@ eol () {
 
 roon_bridge () {
  if [ "$roontoram" = on ]; then
-  [ -d /opt/RoonBridge ] && [ ! -d /opt/roon ] && mv /opt/RoonBridge /opt/roon
-  cp -r /opt/roon /dev/shm/
-  ln -sf /dev/shm/roon /opt/RoonBridge
+  cp -r /opt/RoonBridge /dev/shm/
+  systemctl start roonbridgetoram
  else
-  [ -d /opt/roon ] && [ -L /opt/RoonBridge ] && rm /opt/RoonBridge && mv /opt/roon /opt/RoonBridge
+  systemctl start roonbridge
  fi
- systemctl start roonbridge
 }
 
 spotifyd () {
