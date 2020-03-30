@@ -10,7 +10,7 @@ dot () {
  done
 }
 
-dot &
+#dot &
 
 alsa_conf=/usr/share/alsa/alsa.conf
 mpd_conf=/etc/mpd.conf.sav
@@ -21,6 +21,6 @@ sudo sed -i '/defaults.pcm { min/d; s/.*pcm.0.*/pcm.!0{type hw card 0 device 0 s
 sudo sed -i 's/ctl.9/ctl.hw/' $mpd_conf $rc_local
 sudo sed -i '/mpd)\|io)\|decoder)/s/._task/s_task/; /player)/s/._task/m_task/' $rc_local
 
-kill $!
+#kill $!
 
 printf "\n* Finished and reboot to take effect. \n* 완료되어 시스템을 다시 시작하면 적용됩니다. (^_^)\n"
