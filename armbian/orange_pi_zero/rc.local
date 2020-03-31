@@ -12,10 +12,10 @@ musicpd_bg () {
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		 taskset -cp $h_task $proc_nr ;;
-   io)		 taskset -cp $h_task $proc_nr ;;
-   player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $h_task $proc_nr ;;
+   mpd)		 taskset -cp $s_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   player)	 taskset -cp $m_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
    output)	 taskset -cp $m_task $proc_nr
 		#renice -1 -p	     $proc_nr
 		 chrt -op 0	     $proc_nr ;;
