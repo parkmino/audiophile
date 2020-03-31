@@ -19,7 +19,7 @@ rc_local=/etc/rc.local
 sudo sed -i '/defaults.pcm { min/d; s/.*pcm.0.*/pcm.!0{type hw card 0 device 0 subdevice 0}defaults.pcm{minperiodtime 2774}/' $alsa_conf.{min,mix,plug}
 [ $(grep mixer_type $mpd_conf | wc -l) -eq 1 ] && sudo sed -i '/buffer_before_play/amixer_type "none"' $mpd_conf
 sudo sed -i 's/ctl.9/ctl.hw/' $mpd_conf $rc_local
-sudo sed -i '/mpd)/s/._task/h_task/; /io\|decoder\|player)/s/._task/s_task/' $rc_local
+sudo sed -i '/mpd)/s/._task/h_task/; /io)\|decoder)\|player)/s/._task/s_task/' $rc_local
 
 #kill $!
 #echo
