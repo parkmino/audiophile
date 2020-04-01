@@ -9,11 +9,8 @@ card=$(grep -o 'card..' $alsa_conf | head -1 | cut -c6) # card=0
 
 if grep -q ' \?ctl.default' $alsa_conf; then
  sudo sed -i '$ s/ \?ctl.*/\nctl.default{type hw card '"$card"'}/' $alsa_conf
-elif grep -q '!ctl{}' $alsa_conf; then
-#sudo sed -i 's/!ctl{}/ctl.default{type hw card '"$card"'}/' $alsa_conf
- sudo sed -i '$ actl.default{type hw card '"$card"'}' $alsa_conf
 else
- sudo sed -i '1ictl.default{type hw card '"$card"'}' $alsa_conf
+ sudo sed -i '$ actl.default{type hw card '"$card"'}' $alsa_conf
 fi
 
 amixer_int_init() {

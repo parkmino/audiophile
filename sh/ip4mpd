@@ -10,6 +10,8 @@ for i in nmap fping nc; do # nmblookup
  [ -z "$(which $i)" ] && echo "$i is not installed and exit." && exit
 done
 
+sudo true
+
 #sudo nmap -p $port --open ${ip_root}.1-254 && printf \\n
 
 echo "$(fping -a -q -r0 -g ${ip_root}.1 ${ip_root}.254 | sort -V)" | while read ip; do
@@ -28,7 +30,6 @@ echo "$(fping -a -q -r0 -g ${ip_root}.1 ${ip_root}.254 | sort -V)" | while read 
  else
   ping=$(echo ping | nc -w1 $ip $port | head -1 | sed 's/^OK //')
  #mac=$(arp -a $ip | cut -d' ' -f4)
-  sudo true
   string=$(sudo nmap -sn $ip | grep -m1 ^MAC)
   mac=$(echo $string | cut -d' ' -f3)
   name=$(echo $string | cut -d'(' -f2 | cut -d')' -f1)
