@@ -30,7 +30,7 @@
 
 		pcm.hw{type hw card 0 device 0 subdevice 0}
 
-		pcm.default{type hw card 0 device 0 subdevice 0}ctl.{default ctl.hw} # kodi
+		ctl.{default ctl.hw}pcm.default{type hw card 0 device 0 subdevice 0} # kodi
 
 04. RoonBridge to ram
 
