@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/raspi/patch_20.04.2.sh)
-#bash <(curl -sL https://bit.ly/2UXFaUn)
+#bash <(curl -sL https://bit.ly/2wYGUF2)
 
 dot () {
  while true; do
