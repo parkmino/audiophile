@@ -4,7 +4,7 @@
 
 		 mixer_type "none" # outside audio_output
 		 audio_output {
-		 device "pcm.0"
+		 device "pcm.hw"
 		 mixer_device "ctl.hw"
 
 	$#sudo sed -i '/audio_output {/,/replay_gain_handler/s/mixer_type ".*"/mixer_type "software"/' /etc/mpd.conf.sav # for software volume
@@ -28,9 +28,9 @@
 
 	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
 
-		pcm.!0{type hw card 0 device 0 subdevice 0}defaults.pcm{minperiodtime 2774}
+		pcm.hw{type hw card 0 device 0 subdevice 0}
 
-		pcm.!default{type hw card 0 device 0 subdevice 0}ctl.{!default ctl.hw}defaults.pcm{minperiodtime 2774} # kodi
+		pcm.default{type hw card 0 device 0 subdevice 0}ctl.{default ctl.hw} # kodi
 
 04. RoonBridge to ram
 
