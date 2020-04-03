@@ -1,1 +1,1 @@
-pcm.!0{type hw card 0 device 0 subdevice 0}defaults.pcm{minperiodtime 2774}
+pcm.hw{type hw card 0 device 0 subdevice 0}
