@@ -7,7 +7,7 @@ usage () {
  echo "Manipulate ALSA output"
 }
 
-alsa_orig="/usr/share/alsa/alsa.conf.sav"
+alsa_orig="/usr/share/alsa/alsa.conf.min"
 alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
@@ -29,9 +29,9 @@ case $1 in
   fi
 
   if grep -q ' \?ctl.default' $alsa_conf; then
-   sudo sed -i '$ s/ \?ctl.*/\nctl.default.type hw ctl.default.card '"$card"'' $alsa_conf
+   sudo sed -i '$ s/ \?ctl.*/\nctl.default{type hw card '"$card"'}/' $alsa_conf
   else
-   sudo sed -i '1ictl.default.type hw ctl.default.card '"$card"'' $alsa_conf
+   sudo sed -i '$s/$/ctl.default{type hw card '"$card"'}/' $alsa_conf
   fi
   
   amixer -q set IEC958 $IEC958
@@ -45,12 +45,11 @@ case $1 in
    echo "* $proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
   done ;;
  def)
-   echo "pcm.$card"
   if ! grep -q 'pcm.default' $alsa_conf; then
-  #sudo sed -i 's/pcm.default.*/pcm.default pcm.'"$card"'/' $alsa_conf
-  #else
-  #sudo sed -i '1s/^/pcm.default pcm.'"$card"' /' $alsa_conf
-   sudo sed -i '$apcm{default pcm.'"$card"'}' $alsa_conf
+#  sudo sed -i 's/pcm.default.*/pcm.default pcm.'"$card"'/' $alsa_conf
+# else
+#  sudo sed -i '1s/^/pcm.default pcm.'"$card"' /' $alsa_conf
+   sudo sed -i '1s/^/pcm{default pcm.hw}/' $alsa_conf
   fi ;;
  nodef)
    sudo cp $alsa_orig $alsa_conf ;;

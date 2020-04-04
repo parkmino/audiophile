@@ -2,15 +2,17 @@
 
 snd1="Speaker"
 snd2="Bass Speaker"
-alsa_orig="/usr/share/alsa/alsa.conf.sav"
+alsa_orig="/usr/share/alsa/alsa.conf.min"
 alsa_conf="/dev/shm/alsa.conf"
 #alsa_conf="/usr/share/alsa/alsa.conf"
 card=$(grep -o 'card..' $alsa_conf | head -1 | cut -c6) # card=0
 
 if grep -q ' \?ctl.default' $alsa_conf; then
  sudo sed -i '$ s/ \?ctl.*/\nctl.default{type hw card '"$card"'}/' $alsa_conf
+ replace=1
 else
- sudo sed -i '$ actl.default{type hw card '"$card"'}' $alsa_conf
+ sudo sed -i '$s/$/ctl.default{type hw card '"$card"'}/' $alsa_conf
+ replace=0
 fi
 
 amixer_int_init() {
@@ -92,5 +94,5 @@ case $1 in
  *) chrt -i 0 nice -n 19 ionice -c 3 taskset -c 0 alsamixer -V all ;;
 esac
 
-#sudo cp $alsa_orig $alsa_conf
-sudo sed -i '/^ctl.default/d' $alsa_conf
+[ "$replace" = 1 ] && sudo cp $alsa_orig $alsa_conf
+[ "$replace" = 0 ] && sudo sed -i 's/ctl.default.*//' $alsa_conf
