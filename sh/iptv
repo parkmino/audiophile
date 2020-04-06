@@ -44,7 +44,7 @@ elif [ "$1" = ls ]; then
 elif [ "$1" = ck ]; then
  rm -f $folder/tvheadend.avl
  echo "$(cat $folder/tvheadend.ls)" | while read line; do
-  printf "$line\t"
+  [ "${#line}" -le 15 ] && printf "$line\t\t" || printf "$line\t"
   file=$folder/channels_$line.m3u
   curl $curl_chk http://$line/playlist && printf "playlist "
   if ffprobe $ffprobe_opt $(grep -m1 "^https\?://" $file); then
