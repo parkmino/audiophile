@@ -58,9 +58,11 @@ else
  if [ -e $folder/tvheadend.avl ]; then
   for i in $(seq 1 $#); do
    echo "$(cat $folder/tvheadend.avl)" | while read line; do
-    grep -i -A1 "$(eval echo "\$$i")" $folder/channels_$line.m3u | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
+   #grep -i -A1 "$(eval echo "\$$i")" $folder/channels_$line.m3u | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
+    grep -i -A1 "$(eval echo "\$$i")" $folder/channels_$line.m3u | grep -v -e -- | cut -d, -f2 | cut -d? -f1 | sed 's/^http/  http/'
    done
-  grep -i -A1 "$(eval echo "\$$i")" -h /home/parkmino/Videos/uptv.m3u | grep -v -e -- -e EXTINF
+ #grep -i -A1 "$(eval echo "\$$i")" -h /home/parkmino/Videos/uptv.m3u | grep -v -e -- -e EXTINF
+  grep -i -A1 "$(eval echo "\$$i")" -h /home/parkmino/Videos/uptv.m3u | grep -v -e -- | cut -d, -f2 | sed 's/^http/  http/'
   done
  else
   echo "$folder/tvheadend.avl does not exist"
