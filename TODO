@@ -28,13 +28,10 @@
 
 	$ sudo nano -L /usr/share/alsa/alsa.conf.min
 
-		pcm.hw{type hw card 0 device 0 subdevice 0}
-		 # single space
+		pcm.hw{ type hw card 0 device 0 subdevice 0 }
 		### Kodi
-		ctl.{default ctl.hw}pcm.default{type hw card 0 device 0 subdevice 0}
-		 # single space
-		ctl.{default ctl.hw}pcm{default pcm.hw}pcm.hw{type hw card 0 device 0 subdevice 0}
-		 # single space
+		ctl.{ default ctl.hw }pcm.default{ type hw card 0 device 0 subdevice 0 }
+		ctl.{ default ctl.hw }pcm{ default pcm.hw }pcm.hw{ type hw card 0 device 0 subdevice 0 }
 
 	$ sudo nano -L /usr/share/alsa/alsa.conf.{mix,plug}
 
