@@ -11,7 +11,7 @@ if [ $torrent = kim ]; then
  for i in 5 8 11 14 17 22 25 28 31 34; do
   j=$(($j+1))
   printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
-  printf "    $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
+  printf "     $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
  done
 elif [ $torrent = haja ]; then
  url="https://torrenthaja4.com"
@@ -20,7 +20,7 @@ elif [ $torrent = haja ]; then
  for i in $(seq 1 10); do # upto 15
  #curl -s "$url" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
   printf "%2d.%s\n" $i "$(curl -s "$url" | grep '<strong>' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
-  printf "    $(curl -s "$url" | grep -m$i -o "/torrent_.*.html" | tail -1 | echo "$url$(cat -)")\n"
+  printf "     $(curl -s "$url" | grep -m$i -o "/torrent_.*.html" | tail -1 | echo "$url$(cat -)")\n"
  done
 elif [ $torrent = boja ]; then
  url="https://torrentboza.net"
@@ -30,7 +30,7 @@ elif [ $torrent = boja ]; then
  for i in $(seq 1 10); do
  #curl -s "$url" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
   printf "%2d.%s\n" $i "$(curl -s "$url" | grep -A 60 best-post-addon | grep -o '\[.*' | head -$i | tail -1 | cut -d'<' -f1 | sed 's/$[ \t]*//; s/&lt;/</; s/&gt;/>/')"
-  printf "    $(curl -s "$url" | grep -A 60 best-post-addon | grep -m$i "href" | tail -1 | cut -d\" -f2 | sed 's/amp;//')\n"
+  printf "     $(curl -s "$url" | grep -A 60 best-post-addon | grep -m$i "href" | tail -1 | cut -d\" -f2 | sed 's/amp;//')\n"
  done
 elif [ $torrent = wal ]; then
  url="https://torrentwal.com"
@@ -41,7 +41,7 @@ elif [ $torrent = wal ]; then
   [ -z "$name" ] && echo "Not found and exit!" && exit
   printf "%2d.%s\n" $i "$name"
  #printf "%2d.%s\n" $i "$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')"
-  printf "    $url$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
+  printf "     $url$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
  done
 elif [ $torrent = qq ]; then
  url="https://torrentqq24.com"
@@ -53,8 +53,8 @@ elif [ $torrent = qq ]; then
   [ -z "$name" ] && echo "Not found and exit!" && exit
   printf "%2d.%s\n" $i "$name"
  #printf "%2d.%s\n" $i "$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)"
- #printf "    $(curl -s "$url" | sed 's/<\/span><a href=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)\n"
-  printf "    $(curl -s "$url" | grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" | head -$i | tail -1 | cut -d\" -f2)\n"
+ #printf "     $(curl -s "$url" | sed 's/<\/span><a href=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)\n"
+  printf "     $(curl -s "$url" | grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" | head -$i | tail -1 | cut -d\" -f2)\n"
  done
 else
  echo "$1 is not supported"
