@@ -2,19 +2,19 @@
 
 	$ sudo nano /etc/mpd.conf.sav
 
-		 mixer_type "none" # outside audio_output
+		 mixer_type "none"
 		 audio_output {
 		 device "pcm.hw"
 		 mixer_device "ctl.hw"
+		 buffer_before_play "10.5596937298023%"
+		 }
+		 mixer_type "none"
 
-	$#sudo sed -i '/audio_output {/,/replay_gain_handler/s/mixer_type ".*"/mixer_type "software"/' /etc/mpd.conf.sav # for software volume
-
-02. MPD in rc.local
+02. MPD CPU affinities
 
 	$ sudo nano /etc/rc.local
 
 		taskset -pc $s_task $pgr_mpd
-		...
 		  mpd)		 taskset -cp $h_task $proc_nr ;;
 		  io)		 taskset -cp $s_task $proc_nr ;;
 		  rtio)		 taskset -cp $s_task $proc_nr
@@ -39,8 +39,11 @@
 
 	$ sudo nano /etc/sysctl.conf
 
-		kernel.sched_wakeup_granularity_ns = 388288	< 388289
-		kernel.sched_latency_ns = 1394065		< 1394064
+		 kernel.sched_wakeup_granularity_ns = 388288
+		 kernel.sched_latency_ns = 1394065
+		 net.ipv4.tcp_rmem = 4544 88184 3345656
+		 net.ipv4.tcp_wmem = 4472 89864 3455480
+		#net.ipv4.udp_mem = 46552 57912 87618
 
 04. RoonBridge to ram
 
