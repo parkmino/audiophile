@@ -264,7 +264,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
 	41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
 	53	          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
-	# printf '\nInitializing Sylphid\nSylphid 초기화\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
+	# printf '\nInitializing Sylphid\nSylphid 초기화\n\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
 	# tail src/i18n/ko-KR.txt
 		...
 		Initializing Sylphid
