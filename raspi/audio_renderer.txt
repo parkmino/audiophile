@@ -309,6 +309,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		 sticker = false
 		 mixramp = false
 		 syscmds = true
+		 mounts = false		# >= 6.3.0
 	$#sudo chown -R pi /var/lib/mympd # dietpi
 	$#sudo adduser pi mympd # dietpi
 	$#sudo chomod -R 775 /var/lib/mympd

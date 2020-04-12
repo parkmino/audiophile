@@ -314,6 +314,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		 sticker = false
 		 mixramp = false
 		 syscmds = true
+		 mounts = false		# >= 6.3.0
 	# sed -i '/\[syscmds\]/q' /etc/mympd.conf
 	# nano /etc/mympd.conf
 		HR =
