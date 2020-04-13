@@ -26,29 +26,20 @@
 
 03. ALSA configuration
 
-	$ sudo nano -L /usr/share/alsa/alsa.conf.min
+	$ sudo nano /usr/share/alsa/alsa.conf.min
 
-		pcm.hw{	type hw card 0 device 0 subdevice 0
-		
-		}
+		pcm.hw	{type hw card 0 device 0 subdevice 0}
 
 		### Kodi
 		
-		ctl.{	default ctl.hw
+		ctl	{default ctl.hw}
+		pcm.default	{type hw card 0 device 0 subdevice 0}
 		
-		}pcm.default{	type hw card 0 device 0 subdevice 0
-		
-		}
-		
-		ctl.{	default ctl.hw
-		
-		}pcm{	default pcm.hw
-		
-		}pcm.hw{	type hw card 0 device 0 subdevice 0
-		
-		}
+		ctl	{default ctl.hw}
+		pcm	{default pcm.hw}
+		pcm.hw	{type hw card 0 device 0 subdevice 0}
 
-	$ sudo nano -L /usr/share/alsa/alsa.conf.{mix,plug}
+	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
 
 04. Sysctl
 
@@ -92,6 +83,26 @@
 	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
 
 06. Roonbridge withnout --debug
+
+07. CPU affinities for IRQ
+
+	$ sudo nano /etc/rc.local
+
+		### Taskset
+
+		for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
+		 echo "80" > /proc/irq/$i/smp_affinity || true
+		done
+		for i in $(awk '/enp3s0|1f.2/{print +$1}' /proc/interrupts); do
+		 echo "20" > /proc/irq/$i/smp_affinity || true
+		done
+		for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
+		 echo "40" > /proc/irq/$i/smp_affinity || true
+		done
+		echo "20" > /proc/irq/default_smp_affinity || true
+		for pid in 1 $(pgrep -x rc.local); do
+		 taskset -cp $s_task $pid || true
+		done
 
 cf) Artik710
 
