@@ -33,9 +33,6 @@
 		### Kodi
 		
 		ctl	{default ctl.hw}
-		pcm.default	{type hw card 0 device 0 subdevice 0}
-		
-		ctl	{default ctl.hw}
 		pcm	{default pcm.hw}
 		pcm.hw	{type hw card 0 device 0 subdevice 0}
 
