@@ -28,13 +28,13 @@
 
 	$ sudo nano /usr/share/alsa/alsa.conf.min
 
-		pcm.hw	{type hw card 0 device 0 subdevice 0}
+		pcm.hw   {type hw card 0 device 0 subdevice 0}
 
 		### Kodi
 		
-		ctl	{default ctl.hw}
-		pcm	{default pcm.hw}
-		pcm.hw	{type hw card 0 device 0 subdevice 0}
+		ctl   {default ctl.hw}
+		pcm   {default pcm.hw}
+		pcm.hw   {type hw card 0 device 0 subdevice 0}
 
 	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
 
@@ -42,8 +42,9 @@
 
 	$ sudo nano /etc/sysctl.conf
 
-		 kernel.sched_wakeup_granularity_ns = 388288
+		 kernel.sched_wakeup_granularity_ns = 388287
 		 kernel.sched_latency_ns = 1394065
+		 kernel.sched_migration_cost_ns = 4899006
 		 net.ipv4.tcp_rmem = 4544 88184 3345656
 		 net.ipv4.tcp_wmem = 4472 89864 3455480
 		#net.ipv4.udp_mem = 46552 57912 87618
