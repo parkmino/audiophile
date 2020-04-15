@@ -63,9 +63,10 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 	#options snd-usb-audio index=-2
 $ sudo mkdir /usr/share/alsa
 $ sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
-$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
-$ sudo rm /usr/lib/libasound*
-$ sudo cp copy/libasound.so.2.0.0.{min,mix,plug} /usr/lib/arm-linux-gnueabihf/
+$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+$ sudo rm -i /usr/lib/libasound* /usr/lib/arm-linux-gnueabihf/libasound.so*
+$ sudo cp copy/libasound.so.2.0.0.{min,mix,plug} /etc/
 $ sudo cp copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
 
 $ sudo nano /etc/rc.local
+$ sudo reboot
