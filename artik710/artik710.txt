@@ -188,7 +188,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# wget https://launchpad.net/~jean-francois-dockes/+archive/ubuntu/upnpp1/+files/upmpdcli-tidal_1.4.7-1~ppa1~xenial1_all.deb
 
 	# apt-get install libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp1 python3 python3-requests
-	# dpkg -i copy/lib*upnp*.deb copy/upmpdcli_*.deb
+	# dpkg -i copy/lib*upnp*.deb copy/upmpdcli*.deb
 	# nano /etc/upmpdcli.conf
 		friendlyname = Bann Audio Sylphid Network Player
 		checkcontentformat = 0
@@ -257,21 +257,23 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# tar xvzf mympd.tar.gz && rm mympd.tar.gz
 	# cd myMPD*
 
-	# sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
-	# sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
-	# grep -n -e Sylphi -e bann htdocs/index.html
+	##sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
+	##sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
+	##grep -n -e Sylphi -e bann htdocs/index.html
 	32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> Sylphid
 	34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
 	41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
 	53	          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
-	# printf '\nInitializing Sylphid\nSylphid 초기화\n\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
-	# tail src/i18n/ko-KR.txt
+	##printf '\nInitializing Sylphid\nSylphid 초기화\n\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
+	##tail src/i18n/ko-KR.txt
 		...
 		Initializing Sylphid
 		Sylphid 초기화
 		
 		Web interface
 		웹 인터페이스
+
+	# sed -i 's/스트림 추가/스트리밍 서비스 추가/; s/스트림/스트리밍/' src/i18n/ko-KR.txt   # <= 6.3.0
 
 	# apt-get install build-essential fakeroot
 	# apt-get install -t xenial-backports debhelper
@@ -317,6 +319,9 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		 mounts = false		# >= 6.3.0
 	# sed -i '/\[syscmds\]/q' /etc/mympd.conf
 	# nano /etc/mympd.conf
+		HR =
+		DSD - DSD over PCM 켜기 = sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf.sav
+		DSD - DSD over PCM 끄기 = sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf.sav
 		HR =
 		KBS 클래식 FM = kr2mpd 1fm
 		KBS 쿨 FM     = kr2mpd 2fm
