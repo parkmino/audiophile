@@ -463,7 +463,7 @@ KODI () {
 }
 
 LIBFFMPEG () {
- printf "• Libffmeg\t"
+ printf "• Libffmpeg\t"
 #latest=$(curl $curl_opt https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases | grep -m1 linux-x64 | sed 's/.*\///; s/-.*//')
  latest=$(curl $curl_opt https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases | grep -m1 linux-x64 | cut -d'/' -f6)
  current=$(ls /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip | head -1 | cut -d'/' -f6 | cut -d'-' -f1)
