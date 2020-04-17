@@ -368,7 +368,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# mkdir /usr/share/alsa
 	# cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 	# mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
-	##sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}   # Not for Artik710 Module but for Board
+	# sed -i 's/card 0/card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
 17. Tweak decoder libraries
 
