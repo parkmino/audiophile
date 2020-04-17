@@ -323,6 +323,9 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		DSD - DSD over PCM 켜기 = sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf.sav
 		DSD - DSD over PCM 끄기 = sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf.sav
 		HR =
+		PCM 디코더 켜기 = sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' /etc/mpd.conf.sav
+		PCM 디코더 끄기 = sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  /etc/mpd.conf.sav
+		HR =
 		KBS 클래식 FM = kr2mpd 1fm
 		KBS 쿨 FM     = kr2mpd 2fm
 		MBC FM        = kr2mpd mbcm
