@@ -82,9 +82,36 @@
 
 06. Roonbridge withnout --debug
 
-07. CPU affinities for IRQ
+07. ALSA initialization and Tasksets for Artik
 
-	$ sudo nano /etc/rc.local
+	# nano /etc/rc.local
+	
+		### ALSA initialization
+
+		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
+		cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
+		printf 'ctl.default{type hw card 0}' > /dev/shm/alsa.conf
+		ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+		amixer sset "..." off
+		cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+
+		if [ "$alsa" = plug ]; then
+		 cp /etc/libasound.so.2.0.0.plug /dev/shm/libasound.so.2
+		 cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
+		elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
+		 cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+		 rm -rf /dev/snd/*c /dev/snd/by* || true
+		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+		#else
+		#cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
+		#cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+		fi
+
+		#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
 		### Taskset
 
@@ -108,3 +135,4 @@ cf) Artik710
 	-. Blacklist modules
 	-. CPU affinities for IRQ
 	-. roonbridge toram & tweak binaries
+	-. Turn off SPDIF-Transceiver (card 0)
