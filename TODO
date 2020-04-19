@@ -133,6 +133,12 @@ cf) Artik710
 
 	-. Disable connman
 	-. Blacklist modules
+		kernel/sound/soc/nexell/nexell-snd-pcm.ko
+		kernel/sound/soc/nexell/nexell-snd-i2s.ko
+		kernel/sound/soc/nexell/nexell-snd-spdiftx.ko
+		kernel/sound/soc/nexell/nexell-snd-alc5658.ko
+		kernel/sound/soc/nexell/nexell-snd-null.ko
+		kernel/sound/soc/nexell/nexell-snd-spdif-transceiver.ko
 	-. CPU affinities for IRQ
 	-. roonbridge toram & tweak binaries
 	-. Turn off SPDIF-Transceiver (card 0)
