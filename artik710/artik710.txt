@@ -438,14 +438,11 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 cf)
 
 ### U-boot
-#printenv bootargs
-#setenv bootargs '... initcall_blacklist=nexell-spdif-transceiver_init_module'
-	nexell-alc5658.c
-	nexell-i2s.c
-	nexell-pcm.c
-	nexell-spdif-transceiver.c
-	nexell-spdiftx.c
+#printenv
+#printenv bootdelay mmcboot opts
+#setenv opts ${opts} initcall_blacklist=nexell-spdif-transceiver_init_module
 #saveenv
+# cat /proc/cmdline
 
 https://oinkzwurgl.org/hacking/bash_cgi/
 http://www.team2053.org/docs/bashcgi/postdata.html
