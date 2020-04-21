@@ -2,6 +2,7 @@
 
 	$ sudo nano /etc/mpd.conf.sav
 
+		#state_file "/var/lib/mpd/state"
 		 mixer_type "none"
 		 audio_output {
 		 device "pcm.hw"
