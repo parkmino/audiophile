@@ -29,9 +29,9 @@ case $1 in
   fi
 
   if grep -q ' \?ctl.default' $alsa_conf; then
-   sudo sed -i '$ s/ \?ctl.*/\nctl.default{type hw card '"$card"'}/' $alsa_conf
+   sudo sed -i '$ s/ \?ctl.*/\nctl.default   {type hw card '"$card"'}/' $alsa_conf
   else
-   sudo sed -i '$s/$/ctl.default{type hw card '"$card"'}/' $alsa_conf
+   sudo sed -i '$s/$/ctl.default   {type hw card '"$card"'}/' $alsa_conf
   fi
   
   amixer -q set IEC958 $IEC958
@@ -49,7 +49,7 @@ case $1 in
 #  sudo sed -i 's/pcm.default.*/pcm.default pcm.'"$card"'/' $alsa_conf
 # else
 #  sudo sed -i '1s/^/pcm.default pcm.'"$card"' /' $alsa_conf
-   sudo sed -i '1s/^/pcm{default pcm.hw}/' $alsa_conf
+   sudo sed -i '1s/^/pcm   {default pcm.hw}/' $alsa_conf
   fi ;;
  nodef)
    sudo cp $alsa_orig $alsa_conf ;;
