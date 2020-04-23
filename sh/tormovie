@@ -44,7 +44,7 @@ elif [ $torrent = wal ]; then
   printf "     $url$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
  done
 elif [ $torrent = qq ]; then
- url="https://torrentqq26.com"
+ url="https://torrentqq27.com"
  printf "\n%s\n\n" $url
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
  url="$url/torrent/popular.html?period=d&board=mov"
