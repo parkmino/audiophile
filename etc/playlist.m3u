@@ -161,3 +161,11 @@ http://ytnmmd.mmdlive.lldns.net/ytnmmd/9484b70302db4786886ae40308bf45a1/manifest
 http://slive.ytn.co.kr:1935/dmb/ydlive_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 라디오
 http://slive.ytn.co.kr:1935/live/fmlive_0624_1.sdp/playlist.m3u8
+#EXTINF:-1,연변라지오TV넷 연변위성
+http://live.ybtvyun.com/video/s10016-bd6e048a741f/index.m3u8
+#EXTINF:-1,연변라지오TV넷 조선어종합채널
+http://live.ybtvyun.com/video/s10016-3f1f847a4c2d/index.m3u8
+#EXTINF:-1,연변라지오TV넷 한어종합채널
+http://live.ybtvyun.com/video/s10016-783d533b0361/index.m3u8
+#EXTINF:-1,연변라지오TV넷 보이는 라지오
+http://live.ybtvyun.com/video/s10016-1be8f17b0ab7/index.m3u8
