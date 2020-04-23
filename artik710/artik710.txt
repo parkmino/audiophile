@@ -274,6 +274,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		웹 인터페이스
 
 	# sed -i 's/스트림 추가/스트리밍 서비스 추가/; s/스트림/스트리밍/' src/i18n/ko-KR.txt   # <= 6.3.0
+	# grep 스트리밍 src/i18n/ko-KR.txt   # <= 6.3.0
 
 	# apt-get install build-essential fakeroot
 	# apt-get install -t xenial-backports debhelper
