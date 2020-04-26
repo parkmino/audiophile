@@ -9,7 +9,7 @@ echo "\
 (y) 연합뉴스TV
 (v) YTN LIVE
 (f) YTN 라이프
-(s) YTN 사이언스" # (r) RTV 시민방송
+(c) YTN 사이언스" # (r) RTV 시민방송
 
 read -p " " i
 
@@ -22,7 +22,7 @@ case $i in
  y) ch=yonhap      ; url="https://www.youtube.com/channel/UCTHCOPwqNfZ0uiKOvFyhGwg" ;;
  v) ch=ytn         ; url="https://www.youtube.com/user/ytnnews24"                   ;;
  f) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
- s) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
+ c) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
  r) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
  *) exit ;;
 esac
