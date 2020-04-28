@@ -15,78 +15,75 @@ if [ "$1" = ck ]; then
  exit
 fi
 
-ch_1=747; prog_1="JTBC"
-ch_2=750; prog_2="MBN"
-ch_3=749; prog_3="채널A"
-ch_4=746; prog_4="TV조선"
-ch_5=596; prog_5="OBS"
-ch_6=648; prog_6="OBS W"
-ch_7=682; prog_7="tvN"
-ch_8=696; prog_8="올리브"
-ch_9=689; prog_9="O tvN"
-ch_10=671; prog_10="XtvN"
-ch_11=778; prog_11="온스타일"
-ch_12=606; prog_12="JTBC2"
-ch_13=662; prog_13="K스타"
-ch_14=389; prog_14="KBSN PLUS"
-ch_15=603; prog_15="라이프타임"
-ch_16=690; prog_16="다이아TV"
-ch_17=767; prog_17="JTBC4"
-ch_18=725; prog_18="중화TV"
-ch_19=658; prog_19="아시아N"
-ch_20=667; prog_20="스포티비"
-ch_21=383; prog_21="SPOTV2"
-ch_22=381; prog_22="SPOTV3"
-ch_23=382; prog_23="SPOTV4"
-ch_24=384; prog_24="SPOTV5"
-ch_25=397; prog_26="스프링캠프"
-ch_26=398; prog_27="ABL2"
-ch_27=399; prog_28="ABL3"
-ch_28=602; prog_29="JTBC골프"
-ch_29=614; prog_30="SBS골프"
-ch_30=650; prog_31="스포티비+"
-ch_31=795; prog_32="JTBC3 FOX스포츠"
-ch_32=668; prog_33="빌리어즈TV"
-ch_33=698; prog_34="YTN"
-ch_34=734; prog_35="연합뉴스TV"
-ch_35=729; prog_36="CNN International"
-ch_36=771; prog_37="토마토TV"
-ch_37=174; prog_38="CNBC"
-ch_38=687; prog_39="엠넷"
-ch_39=794; prog_40="가요TV"
-ch_40=688; prog_41="GMTV"
-ch_41=391; prog_42="PLAYY프리미엄"
-ch_42=392; prog_43="PLAYY웰메이드"
-ch_43=683; prog_44="바둑TV"
-ch_44=665; prog_45="FTV"
-ch_45=625; prog_46="피싱TV"
-ch_46=726; prog_47="폴라리스TV"
-ch_47=707; prog_48="브레인TV"
-ch_48=703; prog_49="애니맥스"
-ch_49=699; prog_50="애니+"
-ch_50=761; prog_51="어린이TV"
-ch_51=728; prog_52="브라보키즈"
-ch_52=676; prog_53="GS샵"
-ch_53=675; prog_54="현대홈쇼핑"
-ch_54=672; prog_55="CJ오쇼핑"
-ch_55=674; prog_56="롯데홈쇼핑"
-ch_56=673; prog_57="NS홈쇼핑"
-ch_57=649; prog_58="홈앤쇼핑"
-ch_58=740; prog_59="GS마이샵"
-ch_59=760; prog_60="현대홈쇼핑+샵"
-ch_60=813; prog_61="W 쇼핑"
-ch_61=681; prog_62="OGN"
-ch_62=727; prog_63="스포티비 게임즈"
-ch_63=505; prog_64="EBS1"
-ch_64=607; prog_65="EBS Kids"
-ch_65=768; prog_66="EBSEnglish"
-ch_66=173; prog_67="EBS+2"
-ch_67=172; prog_68="EBS+1"
-ch_68=793; prog_69="JEI EnglishTV"
-ch_69=175; prog_70="플레이런TV"
-ch_70=629; prog_71="플레이보이"
-ch_71=628; prog_72="미드나잇"
-ch_72=743; prog_73="허니TV"
+ch_1=682; prog_1="tvN"
+ch_2=696; prog_2="올리브"
+ch_3=689; prog_3="O tvN"
+ch_4=671; prog_4="XtvN"
+ch_5=778; prog_5="온스타일"
+ch_6=606; prog_6="JTBC2"
+ch_7=662; prog_7="K스타"
+ch_8=389; prog_8="KBSN PLUS"
+ch_9=603; prog_9="라이프타임"
+ch_10=690; prog_10="채널 다이아"
+ch_11=767; prog_11="JTBC4"
+ch_12=725; prog_12="중화TV"
+ch_13=658; prog_13="아시아N"
+ch_14=727; prog_14="STATV"
+ch_15=747; prog_15="JTBC"
+ch_16=750; prog_16="MBN"
+ch_17=749; prog_17="채널A"
+ch_18=746; prog_18="TV조선"
+ch_19=596; prog_19="OBS"
+ch_20=648; prog_20="OBS W"
+ch_21=667; prog_21="스포티비"
+ch_22=383; prog_22="SPOTV2"
+ch_23=381; prog_23="SPOTV3"
+ch_24=382; prog_24="SPOTV4"
+ch_25=384; prog_25="SPOTV5"
+ch_26=397; prog_26="프로야구 청백전1"
+ch_27=398; prog_27="프로야구 청백전2"
+ch_28=399; prog_28="프로야구 청백전3"
+ch_29=602; prog_29="JTBC골프"
+ch_30=614; prog_30="SBS골프"
+ch_31=650; prog_31="스포티비+"
+ch_32=795; prog_32="JTBC골프앤스포츠"
+ch_33=668; prog_33="빌리어즈TV"
+ch_34=698; prog_34="YTN"
+ch_35=734; prog_35="연합뉴스TV"
+ch_36=729; prog_36="CNN International"
+ch_37=771; prog_37="토마토TV"
+ch_38=174; prog_38="CNBC"
+ch_39=687; prog_39="엠넷"
+ch_40=794; prog_40="가요TV"
+ch_41=688; prog_41="GMTV"
+ch_42=391; prog_42="PLAYY프리미엄"
+ch_43=392; prog_43="PLAYY웰메이드"
+ch_44=683; prog_44="바둑TV"
+ch_45=665; prog_45="FTV"
+ch_46=625; prog_46="피싱TV"
+ch_47=726; prog_47="폴라리스TV"
+ch_48=707; prog_48="브레인TV"
+ch_49=703; prog_49="애니맥스"
+ch_50=699; prog_50="애니플러스"
+ch_51=761; prog_51="어린이TV"
+ch_52=728; prog_52="브라보키즈"
+ch_53=676; prog_53="GS샵"
+ch_54=675; prog_54="현대홈쇼핑"
+ch_55=672; prog_55="CJ오쇼핑"
+ch_56=674; prog_56="롯데홈쇼핑"
+ch_57=673; prog_57="NS홈쇼핑"
+ch_58=649; prog_58="홈앤쇼핑"
+ch_59=740; prog_59="GS마이샵"
+ch_60=760; prog_60="현대홈쇼핑+샵"
+ch_61=813; prog_61="W 쇼핑"
+ch_62=681; prog_62="OGN"
+ch_63=505; prog_63="EBS1"
+ch_64=607; prog_64="EBS Kids"
+ch_65=173; prog_65="EBS+2"
+ch_66=172; prog_66="EBS+1"
+ch_67=768; prog_73="EBSEnglish"
+ch_68=793; prog_74="JEI EnglishTV"
+ch_69=175; prog_75="플레이런TV"
 
 time=$(date +%Y%m%d%H%M%S)
 m3u_dir="/home/parkmino/Videos"
@@ -101,20 +98,20 @@ if [ "$1" = all ]2>/dev/null; then
 fi
 
 echo "\
- (1) JTBC	 (2) MBN	 (3) 채널A	 (4) TV조선	 (5) OBS
- (6) OBS W	 (7) tvN	 (8) 올리브	 (9) O tvN	(10) XtvN
-(11) 온스타일	(12) JTBC2	(13) K스타	(14) KBSN PLUS	(15) 라이프타임
-(16) 다이아TV	(17) JTBC4	(18) 중화TV	(19) 아시아N	(20) 스포티비
-(21) SPOTV2	(22) SPOTV3	(23) SPOTV4	(24) SPOTV5	(25) 스프링캠프
-(26) ABL2	(27) ABL3	(28) JTBC골프	(29) SBS골프	(30) 스포티비+
-(31) JTBC3 FOX	(32) 빌리어즈	(33) YTN	(34) 연합뉴스	(35) CNN Int'l
-(36) 토마토TV	(37) CNBC	(38) 엠넷	(39) 가요TV	(40) GMTV
-(41) PLAYY프리	(42) PLAYY웰	(43) 바둑TV	(44) FTV	(45) 피싱TV
-(46) 폴라리스	(47) 브레인TV	(48) 애니맥스	(49) 애니+	(50) 어린이TV
-(51) 키즈	(52) GS샵	(53) 현대쇼핑	(54) CJ오쇼핑	(55) 롯데쇼핑
-(56) NS홈쇼핑	(57) 홈앤쇼핑	(58) GS마이샵	(59) 현대쇼핑+	(60) W 쇼핑
-(61) OGN	(62) 게임즈	(63) EBS1	(64) EBS Kids	(65) EBSEnglish
-(66) EBS+2	(67) EBS+1	(68) JEI 영어	(69) 플레이런TV"
+(1) tvN		(2) 올리브	(3) O tvN	(4) XtvN	(5) 온스타일
+(6) JTBC2	(7) K스타	(8) KBSN PLUS	(9) 라이프타임	(10) 채널 다이아
+(11) JTBC4	(12) 중화TV	(13) 아시아N	(14) STATV	(15) JTBC
+(16) MBN	(17) 채널A	(18) TV조선	(19) OBS	(20) OBS W
+(21) 스포티비	(22) SPOTV2	(23) SPOTV3	(24) SPOTV4	(25) SPOTV5
+(26) 프로야구1	(27) 프로야구2	(28) 프로야구3	(29) JTBC골프	(30) SBS골프
+(31) 스포티비+	(32) JTBC골프	(33) 빌리어즈	(34) YTN	(35) 연합뉴스TV
+(36) CNN	(37) 토마토TV	(38) CNBC	(39) 엠넷	(40) 가요TV
+(41) GMTV	(42) PLAYY프리	(43) PLAYY웰	(44) 바둑TV	(45) FTV
+(46) 피싱TV	(47) 폴라리스	(48) 브레인TV	(49) 애니맥스	(50) 애니플러스
+(51) 어린이TV	(52) 키즈	(53) GS샵	(54) 현대쇼핑	(55) CJ오쇼핑
+(56) 롯데쇼핑	(57) NS홈쇼핑	(58) 홈앤쇼핑	(59) GS마이샵	(60) 현대홈쇼핑+
+(61) W 쇼핑	(62) OGN	(63) EBS1	(64) EBS Kids	(65) EBS+2
+(66) EBS+1	(67) EBSEnglish	(68) JEI 영어	(69) 플레이런TV"
 
 read -p " " i
 
