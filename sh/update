@@ -596,7 +596,7 @@ STRAWBERRY () {
 
 TELEGRAM () {
  printf "• Telegram\t"
- ver=$(dpkg -l telegram-cli | tail -1 | cut -d' ' -f6 | cut -d'e' -f1)
+ ver=$(dpkg -l telegram-cli | tail -1 | cut -d' ' -f6 | grep -o [0-9.]* | head -1)
  count=0
  dialog=0
  echo "$(telegram-cli -WC -e "dialog_list" | grep unread)" | while read line ; do
