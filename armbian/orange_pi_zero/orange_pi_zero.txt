@@ -86,8 +86,11 @@
 
 06. Remove service
 
-	# systemctl disable cron getty@tty1 ntp polkit wpa_supplicant armbian-zram-config # haveged serial-getty@ttyS0 
+	# pstree
+	# systemctl list-unit-files -t service | awk '$2~/enabled/'
+	# systemctl disable cron getty@tty1 ntp polkit wpa_supplicant armbian-zram-config # haveged serial-getty@ttyS0
 	# systemctl mask cron rsyslog systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # dbus dbus.socket
+	# systemctl disable armbian-hardware-monitor armbian-hardware-optimize armbian-ramlog dbus-org.freedesktop.timesync1 fake-hwclock.service resolvconf sysstat
 
 07. Install Pakages
 

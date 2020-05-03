@@ -289,7 +289,7 @@ Tuning
 		address 192.168.0.x
 		netmask 255.255.255.0
 		gateway 192.168.0.1    
-	$ sudo systemctl disable systemd-resolved
+	$ sudo systemctl disable systemd-resolved resolvconf
 	$ sudo rm /etc/resolv.conf
 	$ sudo nano -L /etc/resolv.conf
 		nameserver 1.1.1.1    
@@ -312,6 +312,7 @@ Tuning
 		$ sudo apt-get install sysv-rc-conf && sudo sysv-rc-conf or
 		$ ps aux && cd /usr/sbin && sudo chmod -x -v acpid anacron atd ...
 		Systemd
+		$ sudo systemctl list-unit-files --type=service | grep enabled
 		$ sudo systemctl disable ...
 		$ sudo systemctl disable systemd-resolved
 		$ sudo rm   /etc/resolv.conf

@@ -5,7 +5,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 0. QEMU
 
-	$ sudo apt install qemu-user-static
+	$ sudo apt install binfmt-support qemu-user-static
 	$ mkdir /home/parkmino/Downloads/artik710/rootfs
 	$ sudo tar xf /home/parkmino/Downloads/artik710/img/rootfs.tar.gz -C /home/parkmino/Downloads/artik710/rootfs
 	$ sudo cp /usr/bin/qemu-aarch64-static /home/parkmino/Downloads/artik710/rootfs/usr/bin
@@ -20,12 +20,14 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	$ sudo cp /etc/resolv.conf /home/parkmino/Downloads/artik710/rootfs/etc/.
 
+	$ sudo systemctl start binfmt-support.service
 	$ sudo chroot /home/parkmino/Downloads/artik710/rootfs
 
 	### Build mpd, libasound, libaudiofile, libflac. mympd, librespot
 
 	# exit
 
+	$ sudo systemctl stop binfmt-support.service
 	$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/dev
 	$ sudo umount -A /home/parkmino/Downloads/artik710/rootfs/proc
 	$ sudo rm /home/parkmino/Downloads/artik710/rootfs/etc/resolv.conf
@@ -135,10 +137,10 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 6. Disable services
 
-	# systemctl list-unit-files | grep enabled
+	# systemctl list-unit-files -t service | awk '$2~/enabled/'
 	# apt-get remove zigbeed
 	# apt-get autoremove
-	# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
+	# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved resolvconf # serial-getty@ttySAC3 avahi-daemon
 	# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
 	# ls -al /etc/resov.conf
 	##rm   /etc/resolv.conf

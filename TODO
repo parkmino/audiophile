@@ -130,6 +130,13 @@
 		 taskset -cp $s_task $pid || true
 		done
 
+08. Disable services
+
+	$ pstree
+	$ systemctl list-unit-files -t service | awk '$2~/enabled/'
+	$ sudo systemctl disable dmesg resolvconf
+	# systemctl disable armbian-hardware-monitor armbian-hardware-optimize armbian-ramlog dbus-org.freedesktop.timesync1 fake-hwclock.service resolvconf sysstat # armbian
+
 cf) Artik710
 
 	-. Disable connman
