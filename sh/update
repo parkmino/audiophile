@@ -10,7 +10,7 @@ upd () {
 #sudo rm -rf /var/lib/apt/lists/partial
 #sudo apt-get update -o Acquire::CompressionTypes::Order::=gz && sudo apt-get dist-upgrade && sudo apt-get clean
  sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get clean
-
+ [ -n "$(pgrep packagekitd)" ] && sudo pkill packagekitd
 }
 
 upd_fix () {
@@ -590,7 +590,7 @@ STRAWBERRY () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "구판 ($latest)\n  $url\n  https://builds.strawberrymusicplayer.org/ubuntu/bionic/\n"
+  printf "구판 ($latest)\n  $url\n  https://builds.strawberrymusicplayer.org/ubuntu/focal/\n"
  fi
 }
 
@@ -703,7 +703,7 @@ YOUTUBE_DL () {
 #HIFIBERRY
 #IPTIME
  LIBFFMPEG
- STRAWBERRY
+#STRAWBERRY
  TTYD
  YOUTUBE_DL
 
