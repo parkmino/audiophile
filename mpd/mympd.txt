@@ -48,5 +48,5 @@ $#sed -i 's/^Section: .*/Section: sound/' myMPD-$ver/debian/control
 $#cat myMPD-$ver/debian/control
 $ cd myMPD-$ver
 $ debuild -S -kF55443ED433D8977 # -sd
-$ cd ..
-$ dput ppa:parkmino/mympd mympd_$ver-1ppa1_source.changes
+$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1_source.changes
+
