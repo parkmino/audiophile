@@ -10,7 +10,7 @@ case $1 in
   echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
    echo "# $dev #"
    sudo tc qdisc add dev $dev root $2
-   sudo tc qdisc add dev $dev ingress
+  #sudo tc qdisc add dev $dev ingress
    tc -s -d qdisc show dev $dev
   done ;;
  del)
