@@ -117,7 +117,7 @@ cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
 if [ "$tfc" = on ]; then
  echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
   tc qdisc add dev $dev root pfifo_fast
-  tc qdisc add dev $dev ingress
+ #tc qdisc add dev $dev ingress
  #tc -s -d qdisc show dev $dev
  done
 fi

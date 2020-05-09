@@ -137,6 +137,11 @@
 	$ sudo systemctl disable dmesg resolvconf
 	# systemctl disable armbian-hardware-monitor armbian-hardware-optimize armbian-ramlog dbus-org.freedesktop.timesync1 fake-hwclock.service resolvconf sysstat # armbian
 
+09. Disable qdisc ingress
+
+	$ sudo nano /etc/rc.local
+		#tc qdisc add dev $dev ingress
+
 cf) Artik710
 
 	-. Disable connman

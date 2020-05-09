@@ -58,6 +58,10 @@
  sysctl -w net.ipv4.tcp_moderate_rcvbuf=0
 #sysctl -w net.ipv4.udp_mem='46424 57912 87618'
  sysctl -w net.ipv4.conf.all.promote_secondaries=0
+ sysctl -w net.ipv4.conf.default.promote_secondaries=0
+ sysctl -w net.ipv4.conf.enp3s0.promote_secondaries=0
+ sysctl -w net.ipv4.conf.lo.promote_secondaries=0
+ sysctl -w net.ipv4.conf.wlp2s0.promote_secondaries=0
 #sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
@@ -74,7 +78,7 @@
 
 echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
  sudo tc qdisc add dev $dev root pfifo_fast
- sudo tc qdisc add dev $dev ingress
+#sudo tc qdisc add dev $dev ingress
 #tc -s -d qdisc show dev $dev
 done
 
