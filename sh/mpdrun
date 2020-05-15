@@ -54,4 +54,4 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 
 mpd_bg &
 sleep 1
-nphup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+/dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
