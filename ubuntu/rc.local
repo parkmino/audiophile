@@ -61,7 +61,7 @@
  sysctl -w net.ipv4.conf.default.promote_secondaries=0
  sysctl -w net.ipv4.conf.enp3s0.promote_secondaries=0
  sysctl -w net.ipv4.conf.lo.promote_secondaries=0
- sysctl -w net.ipv4.conf.wlp2s0.promote_secondaries=0
+#sysctl -w net.ipv4.conf.wlp2s0.promote_secondaries=0
 #sysctl -w net.core.netdev_max_backlog=5000
  sysctl -w net.ipv6.conf.all.disable_ipv6=1
 

@@ -35,7 +35,7 @@ musicpd_bg () {
  ### Text to Speech
  [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
  [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
-/dev/shm/nohup /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
 }
 
 eol () {
@@ -69,14 +69,14 @@ roon_bridge () {
 spotifyd () {
 #cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
 #sleep 1
-#/dev/shm/nohup /dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
  cp /home/pi/librespot /dev/shm/
 /dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.hw --mixer alsa --mixer-card ctl.hw &
 }
 
 airconnect () {
  cp /home/pi/airupnp-arm /dev/shm/
- /dev/shm/nohup /dev/shm/airupnp-arm -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
+/dev/shm/airupnp-arm -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
@@ -207,7 +207,7 @@ done
 if [ "$upnp" = on ]; then
  musicpd_bg &
  eol &
-/dev/shm/nohup /dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+/dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 else
  pkill rc.local
 fi

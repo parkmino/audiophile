@@ -142,6 +142,8 @@
 	$ sudo nano /etc/rc.local
 		#tc qdisc add dev $dev ingress
 
+10. Disable nohup
+
 cf) Artik710
 
 	-. Disable connman

@@ -27,7 +27,7 @@ musicpd_bg () {
   esac
  done
 
-/run/shm/nohup /run/shm/upmpdcli -c /run/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+/run/shm/upmpdcli -c /run/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
 
 }
 
@@ -99,7 +99,7 @@ done
 ### AirConnect
 if [ "$airplay" = on ]; then
  cp /usr/bin/airupnp-arm5 /run/shm/
- /run/shm/nohup /run/shm/airupnp-arm5 -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
+/run/shm/airupnp-arm5 -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
 fi
 
 sleep 1
@@ -189,7 +189,7 @@ fi
 if [ "$upnp" = on ]; then
  musicpd_bg &
  eol &
-/run/shm/nohup /run/shm/mpd /run/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+/run/shm/mpd /run/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 else
  pkill rc.local
 fi
