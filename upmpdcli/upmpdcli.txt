@@ -8,12 +8,12 @@ $ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/up
 $ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
 $ sudo dpkg -i libupnpp*.deb upmpdcli_*.deb
 
-[1.4.9]
+[1.4.10]
 
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libn/libnpupnp1/libnpupnp1_4.0.2-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libn/libnpupnp1/libnpupnp1_4.0.4-1~ppa1~buster_armhf.deb
 $ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp6/libupnpp6_0.19.1-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.9-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.9-1~ppa1~buster_all.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.10-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.10-1~ppa1~buster_all.deb
 
 $ sudo apt-get install libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
 $ sudo dpkg -i lib*upnp*.deb upmpdcli_*.deb
