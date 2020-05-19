@@ -1,1 +1,2 @@
-pcm.hw {type hw card 0 device 0 subdevice 0}
+pcm.hw{type hw card 0 device 0 subdevice 0}
+
