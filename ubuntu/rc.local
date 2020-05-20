@@ -49,8 +49,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4600 88256 3345665'
- sysctl -w net.ipv4.tcp_wmem='4528 89904 3455594'
+ sysctl -w net.ipv4.tcp_rmem='4600 88248 3345670'
+ sysctl -w net.ipv4.tcp_wmem='4528 89896 3455598'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
