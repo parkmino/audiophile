@@ -40,13 +40,23 @@ $ export ver=$(curl -s https://github.com/jcorporation/myMPD/releases/latest | c
 $ tar -xvzf mympd.tar.gz
 $ mv mympd.tar.gz mympd_$ver.orig.tar.gz
 $ mv myMPD-$ver/contrib/packaging/debian myMPD-$ver
-$ sed -i '1s/-1)/-1ppa1)/; 1s/unstable/bionic/' myMPD-$ver/debian/changelog
-$ cat myMPD-$ver/debian/changelog
-	mympd ($ver-1ppa1) bionic; urgency=medium
-$#sed -i 's/^Section: .*/Section: sound/' myMPD-$ver/debian/control
-	Section: sound
-$#cat myMPD-$ver/debian/control
 $ cd myMPD-$ver
+
+$ sed -i '1s/-1)/-1ppa1~focal)/; 1s/unstable/focal/' debian/changelog
+$ cat debian/changelog
+	mympd ($ver-1ppa1~focal) focal; urgency=medium
 $ debuild -S -kF55443ED433D8977 # -sd
-$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1_source.changes
+$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~focal_source.changes
+
+$ sed -i '1s/focal/bionic/g' debian/changelog
+$ cat debian/changelog
+	mympd ($ver-1ppa1~bionic) bionic; urgency=medium
+$ debuild -S -kF55443ED433D8977 # -sd
+$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~bionic_source.changes
+
+$ sed -i '1s/bionic/xenial/g' debian/changelog
+$ cat debian/changelog
+	mympd ($ver-1ppa1~xenial) xenial; urgency=medium
+$ debuild -S -kF55443ED433D8977 # -sd
+$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~xenial_source.changes
 
