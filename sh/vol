@@ -91,5 +91,6 @@ case $1 in
  *) chrt -i 0 nice -n 19 ionice -c 3 taskset -c 0 alsamixer -V all ;;
 esac
 
-sudo cp $alsa_orig $alsa_conf
-#sudo sed -i 's/ctl.default.*//' $alsa_conf
+#sudo cp $alsa_orig $alsa_conf
+ sudo sed -i '/ctl.default/d' $alsa_conf
+
