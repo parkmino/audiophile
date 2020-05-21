@@ -86,7 +86,10 @@ echo 4 > /proc/irq/default_smp_affinity || true
  if [ "$tweak" = on ]; then
   systemctl stop systemd-journald systemd-logind || true
   pkill hciattach || true
-  sysctl -w net.ipv4.conf.all.promote_secondaries=0
+ #sysctl -w net.ipv4.conf.all.promote_secondaries=0
+  for i in $(ls /proc/sys/net/ipv4/conf/*/promote_secondaries); do
+   echo 0 > $i
+  done
  fi
 
  llctl f0 l0 d0
