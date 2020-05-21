@@ -19,7 +19,7 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
   1.2 ALSA
 
 	$ cp ~/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
-	$ printf 'ctl {default ctl.hw}\npcm {default pcm.hw}\npcm.hw {type hw card 0 device 0 subdevice 0}\n' > ../copy/alsa.conf.min
+	$ printf 'pcm{default pcm.hw}\npcm.default {type hw card 0 device 0 subdevice 0}\nctl{default ctl.hw}\n' > ../copy/alsa.conf.min
 	$ cp ~/git/audiophile/alsa/alsa.conf.mix ../copy/
 	$ sed -i '/minperiodtime/,$d' ../copy/alsa.conf.mix
 	$ cat ../copy/alsa.conf.min >> ../copy/alsa.conf.mix
