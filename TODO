@@ -46,8 +46,8 @@
 		 kernel.sched_wakeup_granularity_ns = 388287
 		 kernel.sched_latency_ns = 1394065
 		 kernel.sched_migration_cost_ns = 4899005
-		 net.ipv4.tcp_rmem = 4600 88248 3345670
-		 net.ipv4.tcp_wmem = 4528 89896 3455598
+		 net.ipv4.tcp_rmem = 4604 88254 3345671
+		 net.ipv4.tcp_wmem = 4528 89899 3455599
 		#net.ipv4.udp_mem = 46552 57912 87618
 
 04. RoonBridge to ram
