@@ -149,8 +149,6 @@ http://121.160.102.99:1935/live/myStream.sdp/playlist.m3u8
 http://58.234.158.60:1935/catvlive/myStream/playlist.m3u8
 #EXTINF:-1,tbsFM
 http://58.234.158.60:1935/fmlive/myStream/playlist.m3u8
-#EXTINF:-1,TV조선
-http://live.chosun.gscdn.com/live/tvchosun1.stream/playlist.m3u8
 #EXTINF:-1,YTN 라이프
 http://slive.ytnweather.co.kr:1935/weather/weather_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 사이언스
