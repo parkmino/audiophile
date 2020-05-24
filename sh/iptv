@@ -6,7 +6,7 @@ usage () {
 
 [ "$#" -lt 1 ] && usage && exit
 
-url="https://www.extinf.com/category/korean/"
+url="https://www.extinf.com/en/category/korean/"
 curl_opt="-s -m9 --connect-timeout 9"
 curl_chk="-s -o /dev/null --connect-timeout 2 -m 3"
 ffprobe_opt="-timeout 5 -listen_timeout 5 -v quiet"
@@ -14,15 +14,15 @@ folder="/home/parkmino/Videos/iptv"
 h=1
 
 url_probe () {
- [ "$i" = "https://www.extinf.com/korean-45/"  ] || \
- [ "$i" = "https://www.extinf.com/korean-2-3/" ] || \
- [ "$i" = "https://www.extinf.com/korea-3-5/"  ] || \
- [ "$i" = "https://www.extinf.com/korea-30/"   ] && continue
+ [ "$i" = "https://www.extinf.com/en/korean-45/"  ] || \
+ [ "$i" = "https://www.extinf.com/en/korean-2-3/" ] || \
+ [ "$i" = "https://www.extinf.com/en/korea-3-5/"  ] || \
+ [ "$i" = "https://www.extinf.com/en/korea-30/"   ] && continue
  iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
  pls="$(echo "$iptv_url" | cut -d\/ -f-3)/playlist"
  curl $curl_chk $pls || continue
  printf "\33[2K\r$i (Page $h of $page)"
- ffprobe $ffprobe_opt "$iptv_url" && printf "\33[2K\r$i\n$pls\n"
+ ffprobe $ffprobe_opt "$iptv_url" && printf "\33[2K\r$i\n $pls\n"
 }
 
 if [ "$1" = ip ]; then
@@ -30,11 +30,11 @@ if [ "$1" = ip ]; then
  ! curl $curl_opt "${url}" >/dev/null && printf " is not available!\n" && exit
  page=$(curl $curl_opt "${url}" | grep -o "Page 1 of [0-9]*" | cut -d' ' -f4)
  echo
- for i in $(curl $curl_opt "${url}" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
+ for i in $(curl $curl_opt "${url}" | grep -o "https://www.extinf.com/en/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
   url_probe
  done
  for h in $(seq 2 $page); do
-  for i in $(curl $curl_opt "${url}page/$h/" | grep -o "https://www.extinf.com/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
+  for i in $(curl $curl_opt "${url}page/$h/" | grep -o "https://www.extinf.com/en/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
    url_probe
   done
  done
