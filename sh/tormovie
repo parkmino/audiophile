@@ -1,28 +1,8 @@
 #!/bin/sh
 
-[ -n "$1" ] && torrent="$1" || torrent=qq # kim haja boja wal qq
+[ -n "$1" ] && torrent="$1" || torrent=qq # boja wal qq
 
-if [ $torrent = kim ]; then
- url="https://torrentkim.org/torrent_movie/torrent1.htm"
- str=$(curl -s -m12 $url | grep 인기자료 -A2 | tail -1)
- j=0
- printf "\n%s\n\n" $url
- [ -z "$str" ] && echo "Not connected and exit!" && exit
- for i in 5 8 11 14 17 22 25 28 31 34; do
-  j=$(($j+1))
-  printf "%02d.%s\n" $j "$(echo $str | cut -d'>' -f$i | cut -d'<' -f1 | sed 's/^[ \t]*//')"
-  printf "     $(echo $url | cut -d'/' -f1-4)/$(echo $str | cut -d'<' -f$i | cut -d'>' -f1 | grep -o [0-9]*.html)\n"
- done
-elif [ $torrent = haja ]; then
- url="https://torrenthaja4.com"
- printf "\n%s\n\n" $url
- ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
- for i in $(seq 1 10); do # upto 15
- #curl -s "$url" | grep '<strong>' | head -15 | cut -d'>' -f2 | cut -d'<' -f1 | nl
-  printf "%2d.%s\n" $i "$(curl -s "$url" | grep '<strong>' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)"
-  printf "     $(curl -s "$url" | grep -m$i -o "/torrent_.*.html" | tail -1 | echo "$url$(cat -)")\n"
- done
-elif [ $torrent = boja ]; then
+if [ $torrent = boja ]; then
  url="https://torrentboza.net"
  printf "\n%s\n\n" "$url"
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
@@ -44,12 +24,12 @@ elif [ $torrent = wal ]; then
   printf "     $url$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
  done
 elif [ $torrent = qq ]; then
-#url="https://토렌트큐큐.com"
- url="https://torrentqq30.com"
+ url="https://토렌트큐큐.com"
+#url="https://torrentqq30.com"
  printf "\n%s\n\n" $url
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
-#url="$(curl -s "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
- url="$url/torrent/popular.html?period=d&board=mov"
+ url="$(curl -s "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
+#url="$url/torrent/popular.html?period=d&board=mov"
  for i in $(seq 1 10); do
   name=$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)
   [ -z "$name" ] && echo "Not found and exit!" && exit
