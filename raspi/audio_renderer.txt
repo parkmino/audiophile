@@ -7,7 +7,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/raspi/*raspbian-buster-lite.img | tail -1) of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/raspi/*raspios-buster-lite-armhf.img | tail -1) of=/dev/sdc
 	$#sudo dd status=progress bs=4M if=~/Downloads/raspi/DietPi_RPi-ARMv6-Stretch.img of=/dev/sdc
 	$ sync
 
@@ -31,7 +31,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ mkdir ~/copy
 	# apt-get install openssh-client libusb-0.1-4
 
-	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config pi@192.168.0.32:/home/pi/copy/
+	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config audioconf pi@192.168.0.32:/home/pi/copy/
 	$ scp /home/parkmino/Downloads/raspi/copy/* pi@192.168.0.32:/home/pi/copy/
 
 2. Configuration file
@@ -475,9 +475,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 25. audio-config
 
-	$ sudo mv copy/audio-config /usr/bin/
+	$ sudo mv copy/audio-config copy/audioconf /usr/bin/
 	$ sudo mv copy/audio.conf /etc/default/
 	$ audio-config
+	$ audioconf
 
 26. CIFS & NFS & USB mounting
 
