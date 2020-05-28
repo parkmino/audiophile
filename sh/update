@@ -567,9 +567,9 @@ NEWSTAPA () {
  fi
 }
 
-RASPBIAN () {
- printf "• Raspbian\t"
- release="$(curl $curl_opt https://www.raspberrypi.org/downloads/raspbian/ | grep -o Raspbian.*Lite | head -1 | cut -d' ' -f2)"
+RASPIOS () {
+ printf "• Raspi OS\t"
+ release="$(curl $curl_opt https://www.raspberrypi.org/downloads/raspbian/ | grep 'Version' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)"
  date=$(curl $curl_opt https://www.raspberrypi.org/downloads/raspbian/ | grep 'Release date' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)
  if [ -z "$release" ] || [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
@@ -677,7 +677,7 @@ YOUTUBE_DL () {
 ### OS
 #ARMBIAN
 #DIETPI
- RASPBIAN
+ RASPIOS
 #UBUNTU
 
 ### ALSA & MPD & Upmpdcli
