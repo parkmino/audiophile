@@ -44,4 +44,3 @@ for i in /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer;
 done
 
 numlockx off
-
