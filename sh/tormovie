@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -n "$1" ] && torrent="$1" || torrent=view # wal qq view
+[ -n "$1" ] && torrent="$1" || torrent=qq # wal qq view
 
 if [ $torrent = wal ]; then
  url="https://torrentwal.com"
@@ -20,16 +20,16 @@ elif [ $torrent = qq ]; then
 #! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && echo "Not connected and exit!" && exit
  ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
  url="$(curl -s "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
- echo "$url"
-#url="$url/torrent/popular.html?period=d&board=mov"
-#for i in $(seq 1 10); do
-# name=$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)
-# [ -z "$name" ] && echo "Not found and exit!" && exit
-# printf "%2d.%s\n" $i "$name"
-##printf "%2d.%s\n" $i "$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)"
-##printf "     $(curl -s "$url" | sed 's/<\/span><a href=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)\n"
-# printf "     $(curl -s "$url" | grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" | head -$i | tail -1 | cut -d\" -f2)\n"
-#done
+#echo "$url"; exit
+ url="$url/torrent/popular.html?period=d&board=mov"
+ for i in $(seq 1 10); do
+  name=$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)
+  [ -z "$name" ] && echo "Not found and exit!" && exit
+  printf "%2d.%s\n" $i "$name"
+ #printf "%2d.%s\n" $i "$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)"
+ #printf "     $(curl -s "$url" | sed 's/<\/span><a href=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)\n"
+  printf "     $(curl -s "$url" | grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" | head -$i | tail -1 | cut -d\" -f2)\n"
+ done
 elif [ $torrent = view ]; then
  url="https://torrentview11.net"
  printf "\n%s\n\n" $url
