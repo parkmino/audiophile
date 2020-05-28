@@ -33,10 +33,12 @@ $ sudo apt-get install upmpdcli
 $ wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
 $ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
 $ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
+$ sudo sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
 $ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
-$ grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf
+$ grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf -e radiolist
 
 	checkcontentformat = 0
+	#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 	tidalquality = lossless
 
 $ sudo systemctl disable upmpdcli.service
@@ -99,7 +101,56 @@ artUrl = https://i.imgur.com/ebtVtuV.png
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
 artUrl = https://pbs.twimg.com/profile_images/883196509982011392/l7yA_yVP_400x400.jpg
 
-$ sudo nano /usr/share/upmpdcli/radio_scripts/radiolist.conf
+[radio Radio Paradise Main (flac)]
+url = http://stream.radioparadise.com/flac
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+metaScript = radio-paradise-meta.py 0
+preferScript = 1
 
-$ sudo nano /etc/environment
+[radio Radio Paradise Main (aac128)]
+# There are many different urls and data formats for radio paradise. See
+# the details here:
+# http://www.radioparadise.com/rp_2.php#name=Listen&file=links
+url = http://stream.radioparadise.com/aac-128
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+# An example of a simple script to just retrieve the cover art.
+#artScript = radio-paradise-get-art.sh
+metaScript = radio-paradise-meta.py 0
+preferScript = 1
+
+[radio Paradise Mellow (mp3 192)]
+url = http://stream.radioparadise.com/mellow-192
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+metaScript = radio-paradise-meta.py 1
+preferScript = 1
+
+[radio Paradise Rock (mp3 192)]
+url = http://stream.radioparadise.com/rock-192
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+metaScript = radio-paradise-meta.py 2
+preferScript = 1
+
+[radio Paradise Eclectic (mp3 192)]
+url = http://stream.radioparadise.com/eclectic-192
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+metaScript = radio-paradise-meta.py 3
+preferScript = 1
+
+[radio Naim Radio]
+url =  http://37.130.228.60:8090/listen.pls
+artUrl = https://www.naimaudio.com/sites/all/themes/naim/images/naim_records_logo.png
+
+[radio Linn Radio (Variety)]
+url =  http://opml.radiotime.com/Tune.ashx?id=s122119
+artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.png
+
+[radio Linn Classical (Classical)]
+url =  http://opml.radiotime.com/Tune.ashx?id=s122116
+artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.png
+
+[radio Linn Jazz (Jazz)]
+url =  http://opml.radiotime.com/Tune.ashx?id=s122120
+artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.png
+
+$#sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
