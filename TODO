@@ -81,7 +81,7 @@
 	$ find /opt/RoonBridge/ -name *.so -exec sudo chmod -x {} \; -exec sudo strip --strip-debug {} \;
 	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
 
-06. Roonbridge withnout --debug
+06. Roonbridge without --debug argument
 
 07. ALSA initialization and Tasksets for Artik
 
