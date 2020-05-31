@@ -60,5 +60,5 @@ $ cat debian/changelog
 $ debuild -S -kF55443ED433D8977 # -sd
 $ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~xenial_source.changes
 
-$ pkill gpg-agent; pkill gnome-keyring-daemon
+$ pkill gpg-agent; pkill gnome-keyring-d
 
