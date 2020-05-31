@@ -1,47 +1,64 @@
 #!/bin/sh
 
-[ -n "$1" ] && torrent="$1" || torrent=qq # wal qq view
+usage () {
+ echo "Usage: $(basename "$0") [(torrent)qq|(torrent)view]"
+ echo "Scrape torrent movies"
+}
 
-if [ $torrent = wal ]; then
- url="https://torrentwal.com"
+chk_url () {
  printf "\n%s\n\n" $url
- ! wget --spider -q --no-check-certificate "$url" 2>&1 && echo "Not connected and exit!" && exit
+ if ! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && ! wget --spider -q "$url" 2>&1; then
+  echo "The URL is not connected and exit!"
+  exit
+ fi
+}
+
+chk_movie () {
+ if [ -z "$movie" ]; then
+  echo "The movie is not found and exit!"
+  exit
+ else
+ printf "%2d.%s\n" $i "$movie"
+ fi
+}
+
+torwal () {
+ url="https://torrentwal.com"
+ chk_url
  for i in $(seq 1 10); do
-  name=$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')
-  [ -z "$name" ] && echo "Not found and exit!" && exit
-  printf "%2d.%s\n" $i "$name"
- #printf "%2d.%s\n" $i "$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')"
+  movie=$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')
+  chk_movie
   printf "     $url$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
  done
-elif [ $torrent = qq ]; then
+}
+
+torqq () {
  url="https://토렌트큐큐.com"
-#url="https://torrentqq31.com"
- printf "\n%s\n\n" $url
-#! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && echo "Not connected and exit!" && exit
- ! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
- url="$(curl -s "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
-#echo "$url"; exit
+#url="https://torrentqq32.com"
+ chk_url
+ [ -z "${url##*큐큐*}" ] && url="$(curl -s "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
  url="$url/torrent/popular.html?period=d&board=mov"
  for i in $(seq 1 10); do
-  name=$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)
-  [ -z "$name" ] && echo "Not found and exit!" && exit
-  printf "%2d.%s\n" $i "$name"
- #printf "%2d.%s\n" $i "$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)"
- #printf "     $(curl -s "$url" | sed 's/<\/span><a href=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)\n"
+  movie=$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)
+  chk_movie
   printf "     $(curl -s "$url" | grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" | head -$i | tail -1 | cut -d\" -f2)\n"
  done
-elif [ $torrent = view ]; then
- url="https://torrentview11.net"
- printf "\n%s\n\n" $url
- ! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && echo "Not connected and exit!" && exit
-#! wget --spider -q "$url" 2>&1 && echo "Not connected and exit!" && exit
+}
+
+torview () {
+ url="https://torrentview12.net"
+ chk_url
  url="$url/bbs/board.php?bo_table=mov"
  for i in $(seq 1 10); do
-  name=$(curl -s "$url" | grep -A 60 '인기 포스트' | grep '</a>' | head -$i | tail -1 | sed 's/ <\/a>//')
-  [ -z "$name" ] && echo "Not found and exit!" && exit
-  printf "%2d.%s\n" $i "$name"
+  movie=$(curl -s "$url" | grep -A 60 '인기 포스트' | grep '</a>' | head -$i | tail -1 | sed 's/ <\/a>//')
+  chk_movie
   printf "     $(curl -s "$url" | grep -A 60 '인기 포스트' | grep '<a href=' | head -$i | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g')\n"
  done
+}
+
+if [ "$1" = torrentview  ] || [ "$1" = torview  ] || [ "$1" = view  ]; then
+ torview
 else
- echo "$1 is not supported"
+ torqq
 fi
+
