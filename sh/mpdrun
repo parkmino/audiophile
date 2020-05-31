@@ -39,11 +39,12 @@ m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
  #proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
   case $proc in
    mpd)		 taskset -cp $h_task $proc_nr ;;
-   io)		 taskset -cp $h_task $proc_nr ;;
+   io)		 taskset -cp $s_task $proc_nr ;;
+   rtio)	 taskset -cp $s_task $proc_nr
+		 chrt -opv 0         $proc_nr ;;
    player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $h_task $proc_nr ;;
+   decoder)	 taskset -cp $s_task $proc_nr ;;
    output)	 taskset -cp $m_task $proc_nr
-		#sudo renice -1 -p   $proc_nr
 		 chrt -opv 0	     $proc_nr ;;
   esac
  done
