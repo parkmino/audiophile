@@ -1,0 +1,48 @@
+WSL Windows Subsystem for Linux
+
+    https://docs.microsoft.com/ko-kr/windows/wsl/install-win10
+    https://www.microsoft.com/ko-kr/p/ubuntu/9nblggh4msv6
+    https://github.com/microsoft/terminal/releases (Windows Terminal)
+    https://ubuntu.com/blog/ubuntu-on-wsl-2-is-generally-available
+
+1.  Enable WSL
+
+    > dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+    Restart
+
+2.  Enable WSL 2
+
+    Update to Windows 10 2004 (build 19041 or higher)
+    > dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+    Restart
+    > wsl.exe --set-default-version 2 (Set WSL 2 as the default)
+
+3.  Install Ubuntu from the Microsoft Store
+
+4.  Check distro list and versions.
+
+    > wsl -l -v
+
+5.  Run ubuntu on WSL
+
+    > wsl (Ubuntu)
+
+    $ sudo apt-get update
+    $ sudo apt-get upgrade
+    $ sudo apt-get dist-upgrade
+    $ sudo apt-get autoremove
+    $ sudo dpkg-reconfigure locales
+
+6.  Shutdown WSL
+
+    > wsl --shutdown
+
+7.  Convert Ubuntu on WSL 2 to WSL 1
+
+    > wsl --set-version Ubuntu 1
+
+8.  Disable WSL 2
+
+    > dism.exe /online /disable-feature /featurename:VirtualMachinePlatform /norestart
+    Restart
+
