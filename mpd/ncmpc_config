@@ -1,0 +1,38 @@
+#host = 192.168.0.3  # Raspberry Pi
+#host = 192.168.0.14 # Android
+enable-mouse = yes
+#display-time = yes
+enable-colors = yes
+search-mode = 3
+visible-bitrate = yes
+### Color Set I
+color background = blue
+color title = cyan
+color title-bold = yellow,bold
+color line = cyan
+color line-flags = cyan
+color list = white
+color list-bold = white,bold
+color browser-directory = white
+color browser-playlist = white
+color progressbar = cyan
+color status-state = yellow,bold
+color status-song = cyan
+color status-time = cyan
+color alert = yellow,bold
+### Color Set II
+#color background = black
+#color title = green
+#color title-bold = yellow,bold
+#color line = gray
+#color line-flags = gray
+#color list = white
+#color list-bold = white,bold
+#color browser-directory = white
+#color browser-playlist = white
+#color progressbar = gray
+#color status-state = yellow,bold
+#color status-song = green
+#color status-time = green
+#color alert = yellow,bold
+#
