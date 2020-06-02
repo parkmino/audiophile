@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") [(torrent)qq|(torrent)view]"
+ echo "Usage: $(basename "$0") [qq|view]"
  echo "Scrape torrent movies"
 }
 
@@ -56,9 +56,12 @@ torview () {
  done
 }
 
-if [ "$1" = torrentview  ] || [ "$1" = torview  ] || [ "$1" = view  ]; then
+if [ "$1" = qq ]; then
+ torqq
+elif [ "$1" = view ]; then
  torview
 else
- torqq
+#torqq
+ torview
 fi
 
