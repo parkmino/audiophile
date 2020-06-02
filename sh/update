@@ -569,8 +569,9 @@ NEWSTAPA () {
 
 RASPIOS () {
  printf "• Raspi OS\t"
- release="$(curl $curl_opt https://www.raspberrypi.org/downloads/raspbian/ | grep 'Version' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)"
- date=$(curl $curl_opt https://www.raspberrypi.org/downloads/raspbian/ | grep 'Release date' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)
+ url="https://www.raspberrypi.org/downloads/raspberry-pi-os/"
+ release="$(curl $curl_opt "$url" | grep 'Version' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)"
+ date="$(curl $curl_opt "$url" | grep 'Release date' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)"
  if [ -z "$release" ] || [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
