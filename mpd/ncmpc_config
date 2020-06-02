@@ -1,5 +1,4 @@
-#host = 192.168.0.3  # Raspberry Pi
-#host = 192.168.0.14 # Android
+#host = 192.168.0.7
 enable-mouse = yes
 #display-time = yes
 enable-colors = yes
@@ -35,4 +34,3 @@ color alert = yellow,bold
 #color status-song = green
 #color status-time = green
 #color alert = yellow,bold
-#
