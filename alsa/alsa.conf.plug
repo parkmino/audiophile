@@ -15,4 +15,3 @@ ctl.hw{@args[CARD]
 @args.CARD{type string default{@func getenv vars[ALSA_CTL_CARD ALSA_CARD]default{@func refer name defaults.ctl.card}}}
 type hw card $CARD
 hint.description "Direct control device"}
-
