@@ -61,7 +61,7 @@ if [ "$1" = qq ]; then
 elif [ "$1" = view ]; then
  torview
 else
-#torqq
- torview
+ torqq
+#torview
 fi
 
