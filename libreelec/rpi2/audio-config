@@ -124,7 +124,7 @@ until [ "$i" == "q" ] ; do
  (1) Audio Device	      (1) 오디오 장치
  (2) USB Signal & Power >>    (2) USB 신호와 전원 >>
 
- (3) [ $([ "$status_lirc"  = off ] && echo X || echo O) ] LIRC
+ (3) [ $(if [ "$status_lirc"  = off ]; then echo X; elif [ "$status_lirc"  = on ]; then echo O; else echo NA; fi) ] LIRC
  (4) [ $([ "$status_nfs"   = off ] && echo X || echo O) ] NFS
  (5) [ $([ "$status_pulse" = off ] && echo X || echo O) ] Pulseaudio
  (6) [ $([ "$status_vpn"   = off ] && echo X || echo O) ] VPN
@@ -172,8 +172,8 @@ until [ "$i" == "q" ] ; do
       sed -i '/tweak=/s/=.*/=off/' $audio_conf
      fi ;;
   q) exit		;;
-  r) reboot		;;
-  p) poweroff		;;
+  r) reboot   && exit	;;
+  p) poweroff && exit	;;
   *) clear		;;
  esac
 done
