@@ -4,13 +4,13 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
-	$ ver=9.2.1
+	$ ver=9.2.3
 	$ wget http://releases.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
 	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
 	$ gzip -d LibreELEC-RPi2.arm-$ver.img.gz
 	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-$ver
 	$ mv LibreELEC-RPi2.arm-$ver.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/ && rm LibreELEC-RPi2.arm-$ver.img.gz
-	$ cd Downloads/libreelec/LibreELEC-RPi2.arm-$ver
+	$ cd ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -19,11 +19,8 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
   1.2 ALSA
 
 	$ cp ~/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
-	$ printf 'pcm{default pcm.hw}\npcm.default {type hw card 0 device 0 subdevice 0}\nctl{default ctl.hw}\n' > ../copy/alsa.conf.min
+	$ printf 'pcm{default pcm.hw}\npcm.hw {type hw card 0 device 0 subdevice 0}\nctl{default ctl.hw}\n' > ../copy/alsa.conf.min
 	$ cp ~/git/audiophile/alsa/alsa.conf.mix ../copy/
-	$ sed -i '/minperiodtime/,$d' ../copy/alsa.conf.mix
-	$ cat ../copy/alsa.conf.min >> ../copy/alsa.conf.mix
-	$ tail ../copy/alsa.conf.mix
 
 	$ rm usr/lib/libasound.so*
 	$ cp ../copy/libasound.so.2.0.0.min usr/lib/libasound.so
