@@ -2,8 +2,8 @@
 
 prog_1="JTBC 뉴스룸"
 prog_2="이규연의 스포트라이트"
-prog_3="팬텀싱어3" # "비긴어게인 시즌3" "슈퍼밴드"
-prog_4="그것이 알고싶다"
+prog_3="팬텀싱어3"		# "비긴어게인 시즌3" "슈퍼밴드"
+prog_4="비긴 어게인"		# "그것이 알고싶다"
 prog_5="멜론"
 prog_a="더 팬"
 prog_b="썰전"
@@ -36,5 +36,8 @@ else
  find="$prog $(date +%y%m%d -d "$time") 토렌트"
 fi
 
-echo +googler --colorize -t h$hour -n 9 --np "$find"
-googler --colorize -t h$hour -n 9 --np "$find" | more
+#echo +googler --colorize -t h$hour -n 9 --np "$find"
+#googler --colorize -t h$hour -n 9 --np "$find" | more
+
+set -x
+googler --colorize -t h$hour -n 9 --np "$find"
