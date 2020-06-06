@@ -6,7 +6,7 @@ item=5
  prog_1="보이스 코리아 2020"
  prog_2="맛있는 녀석들"
  prog_3="팬텀싱어3"
- prog_4="비긴 어게인"
+ prog_4="비긴어게인 코리아"
  prog_5="멜론"
 
 for i in $(seq 1 $item); do
