@@ -8,14 +8,14 @@ usage () {
 chk_url () {
  printf "\n%s\n\n" $url
  if ! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && ! wget --spider -q "$url" 2>&1; then
-  echo "The URL is not connected and exit!"
+  echo "$url is not connected and exit!"
   exit
  fi
 }
 
 chk_movie () {
  if [ -z "$movie" ]; then
-  echo "The movie is not found and exit!"
+  echo "Movies are not found and exit!"
   exit
  else
  printf "%2d.%s\n" $i "$movie"
