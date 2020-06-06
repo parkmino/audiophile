@@ -1,33 +1,31 @@
 #!/bin/sh
 
-prog_1="JTBC 뉴스룸"
-prog_2="이규연의 스포트라이트"
-prog_3="팬텀싱어3"		# "비긴어게인 시즌3" "슈퍼밴드"
-prog_4="비긴 어게인"		# "그것이 알고싶다"
-prog_5="멜론"
-prog_a="더 팬"
-prog_b="썰전"
+items=4
 
-for i in $(seq 1 5); do
+#prog_1="JTBC 뉴스룸"
+ prog_1="보이스 코리아 2020"
+ prog_2="팬텀싱어3"
+ prog_3="비긴 어게인"
+ prog_4="멜론"
+
+for i in $(seq 1 $items); do
  printf "(%d) %s %s %s %s %s\n" $i $(eval echo \$prog_$i)
 done
 
 read -p " " i
 
 case $i in
- 1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30" ;;
- 2) [ $(date +%u) -eq 4 ] && [ $(date +%k) -ge 23 ] && time="today 22:50" || time="last thursday 22:50" ;;
- 3) time="last friday 22:50"	;;
- 4) time="last saturday 23:59"	;;
- 5) time="yesterday"		;;
- a) time="last saturday 23:59"	;;
- b) time="last sunday 22:30"	;;
- *) exit ;;
+#1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30" ;;
+ 1) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:10" || time="last friday 21:10" ;;
+ 2) time="last friday 23:00"	;;
+ 3) time="last saturday 23:59"	;;
+ 4) time="yesterday"		;;
+ *) exit			;;
 esac
 
 prog=$(eval echo \$prog_$i)
 
-if [ "$i" -eq 5 ]; then
+if [ "$time" = yesterday ]; then
  hour=24
  find="$prog 토렌트"
 else
@@ -36,8 +34,6 @@ else
  find="$prog $(date +%y%m%d -d "$time") 토렌트"
 fi
 
-#echo +googler --colorize -t h$hour -n 9 --np "$find"
-#googler --colorize -t h$hour -n 9 --np "$find" | more
-
-set -x
-googler --colorize -t h$hour -n 9 --np "$find"
+cmd="googler --colorize -t h$hour -n 9 --np "$find""
+echo ; echo " $cmd"
+$cmd | more
