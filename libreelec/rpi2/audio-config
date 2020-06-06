@@ -129,6 +129,7 @@ until [ "$i" == "q" ] ; do
  (5) [ $([ "$status_pulse" = off ] && echo X || echo O) ] Pulseaudio
  (6) [ $([ "$status_vpn"   = off ] && echo X || echo O) ] VPN
  (7) [ $([ "$status_wpa"   = off ] && echo X || echo O) ] Wi-Fi
+
  (8) [ $([ "$status_tweak" = off ] && echo X || echo O) ] More Tweaks / 추가 트윅
 
  (q) Quit                     (q) 나가기
