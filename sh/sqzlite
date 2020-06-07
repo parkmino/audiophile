@@ -38,4 +38,4 @@ pgr_sqz=$(pidof squeezelite)
 ) &
 
 [ ! -e /dev/shm/squeezelite ] && sudo cp /usr/bin/squeezelite /dev/shm/squeezelite
-/dev/shm/squeezelite -n Squeezelite -o pcm.hw>/dev/null</dev/null 2>/dev/null
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -n Squeezelite>/dev/null</dev/null 2>/dev/null
