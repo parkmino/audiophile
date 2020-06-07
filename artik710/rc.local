@@ -47,12 +47,8 @@ eol () {
  done
  sleep 1
  taskset -acp $h_task $(pgrep -x upmpdcli) || true
- ### AirConnect
- if [ "$airplay" = on ]; then
-  airconnect
-  [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-aarch64) || true
- fi
- [ "$serial" = on ] || systemctl stop serial-getty@ttySAC3
+ [ "$airplay" = on ] && airconnect
+ [ "$serial"  = on ] || systemctl stop serial-getty@ttySAC3
  pkill rc.local
 }
 
@@ -76,6 +72,7 @@ spotifyd () {
 airconnect () {
  cp /root/airupnp-aarch64 /dev/shm/
 /dev/shm/airupnp-aarch64 -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
+ [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-aarch64) || true
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf

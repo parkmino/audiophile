@@ -44,11 +44,7 @@ eol () {
  done
  sleep 1
  taskset -acp $h_task $(pgrep -x upmpdcli) || true
- ### AirConnect
- if [ "$airplay" = on ]; then
-  airconnect
-  [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-arm) || true
- fi
+ [ "$airplay" = on ] && airconnect
  /home/pi/llctl f0 l0 d0 || true
  echo none > /sys/class/leds/led0/trigger
  echo 0    > /sys/class/leds/led0/brightness
@@ -77,6 +73,7 @@ spotifyd () {
 airconnect () {
  cp /home/pi/airupnp-arm /dev/shm/
 /dev/shm/airupnp-arm -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
+ [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-arm) || true
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
