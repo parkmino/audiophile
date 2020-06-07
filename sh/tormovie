@@ -15,7 +15,7 @@ chk_url () {
 
 chk_movie () {
  if [ -z "$movie" ]; then
-  echo "Movies are not found and exit"
+  echo "Movies are not available and exit"
   exit
  elif [ "$movie" = en-US ]; then
   echo "Movies are not valid and exit"
