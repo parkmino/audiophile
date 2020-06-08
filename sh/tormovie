@@ -49,14 +49,17 @@ torqq () {
 }
 
 torview () {
- url="https://torrentview12.net"
+ url="https://torrentview13.net"
  chk_url
  url="$url/bbs/board.php?bo_table=mov"
+ tmpfile=$(mktemp)
+ curl -s "$url" | grep -A 60 '인기 포스트' > "$tmpfile"
  for i in $(seq 1 10); do
-  movie=$(curl -s "$url" | grep -A 60 '인기 포스트' | grep '</a>' | head -$i | tail -1 | sed 's/ <\/a>//')
+  movie=$(grep '</a>' "$tmpfile" | head -$i | tail -1 | sed 's/ <\/a>//')
   chk_movie
-  printf "     $(curl -s "$url" | grep -A 60 '인기 포스트' | grep '<a href=' | head -$i | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g')\n"
+  printf "     $(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g')\n"
  done
+ rm "$tmpfile"
 }
 
 if [ "$1" = qq ]; then
