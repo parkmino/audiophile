@@ -62,6 +62,24 @@ roon_bridge () {
  fi
 }
 
+sqzlite () {
+ cp /usr/bin/squeezelite /dev/shm/
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -D -C 1 -n Squeezelite -z>/dev/null</dev/null 2>/dev/null || true
+ pgr_sqz=$(pidof squeezelite)
+ [ -z "$pgr_sqz" ] && continue
+ [ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
+ count=2
+ echo "$(pstree -npt $pgr_sqz)" | while read line ; do
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $count in
+   3) taskset -cp $m_task $proc_nr
+      chrt    -op 0 $proc_nr       ;;
+   *) taskset -cp $s_task $proc_nr ;;
+  esac
+  count=$(($count+1))
+ done
+}
+
 spotifyd () {
 #cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
 #sleep 1
@@ -179,6 +197,9 @@ fi
 ### Roon Bridge
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
+### Squeezelite
+[ "$sqzlite" = on ] && sqzlite
+
 ### Spotify
 [ "$spotify" = on ] && (spotifyd &) # && sleep 3
 
@@ -188,7 +209,7 @@ for pid in 1 $(pgrep -x rc.local); do
  taskset -acp $s_task $pid || true
 done
 
-for i in RoonBridge librespot spotifyd networkaudiod squeezelite; do
+for i in RoonBridge librespot spotifyd networkaudiod; do
  if [ $m_task -ge 1 ] && [ $(pidof $i) -ge 1 ] 2>/dev/null; then
   taskset -acp 1-$m_task $(pidof $i) || true
  fi

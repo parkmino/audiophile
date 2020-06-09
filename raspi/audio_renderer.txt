@@ -278,8 +278,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
 16. Squeezelite
-	$ sudo apt-get install squeezelite
-	$ sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
+	$ sudo cp copy/squeezelite /usr/bin/
+	$#sudo apt-get install squeezelite
+	$#sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.hw"/' /etc/default/squeezelite
 
 17. myMPD
 

@@ -196,24 +196,25 @@ fi
 }
 
 features () {
-i=$(whiptail --title "AirPlay, Roon, Spotify, Tidal" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 4 \
+i=$(whiptail --title "AirPlay, Roon Bridge, Spotify, Squeezebox" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 4 \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
 "roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
 "spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) \
-"tidal"     "Enable Tidal         타이달 사용" $(grep -q 'tidal=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+"sqzlite"   "Enable Squeezebox    스퀴즈박스 사용" $(grep -q 'sqzlite=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
- [[ $i =~ roon ]] && sudo sed -i '/roon=/s/=.*/=on/' $audio_conf || sudo sed -i '/roon=/s/=.*/=off/' $audio_conf
+ [[ $i =~ roon    ]] && sudo sed -i '/roon=/s/=.*/=on/'    $audio_conf || sudo sed -i '/roon=/s/=.*/=off/'    $audio_conf
  [[ $i =~ spotify ]] && sudo sed -i '/spotify=/s/=.*/=on/' $audio_conf || sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf
- if [[ $i =~ tidal ]]; then
-  ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
-  sudo sed -i '/tidal=/s/=.*/=on/' $audio_conf
- else
-  [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
-  sudo sed -i '/tidal=/s/=.*/=off/' $audio_conf
- fi
+ [[ $i =~ sqzlite ]] && sudo sed -i '/sqzlite=/s/=.*/=on/' $audio_conf || sudo sed -i '/sqzlite=/s/=.*/=off/' $audio_conf
+#if [[ $i =~ tidal ]]; then
+# ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
+# sudo sed -i '/tidal=/s/=.*/=on/' $audio_conf
+#else
+# [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
+# sudo sed -i '/tidal=/s/=.*/=off/' $audio_conf
+#fi
 fi
 }
 
@@ -280,7 +281,7 @@ while true; do
  "1"  "Audio device                   오디오 장치                        >" \
  "2"  "MPD options                    MPD 옵션                           >" \
  "3"  "Change renderer name           렌더러 이름 바꾸기                 >" \
- "4"  "Airplay, Roon, Spotify, Tidal  에어플레이, 룬, 스포티파이, 타이달 >" \
+ "4"  "Airplay, Roon Bridge, Spotify, Squeezebox                         >" \
  "5"  "IP TTS, DBus                   IP TTS와 DBus                      >" \
  "6"  "Ethernet IP                    유선 IP 설정                       >" \
  "7"  "USB signal & power             USB 신호와 전원                    >" \

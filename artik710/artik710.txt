@@ -244,8 +244,9 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 13. Squeezelite
 
-	# apt-get install squeezelite
-	# sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.0"/' /etc/default/squeezelite
+	# cp copy/squeezelite /usr/bin/
+	##apt-get install squeezelite
+	##sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.hw"/' /etc/default/squeezelite
 
 14. uhubctl
 

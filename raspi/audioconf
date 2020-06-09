@@ -39,7 +39,7 @@ until [ "$i" = "q" ] ; do
  status_pcm=$(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo on || echo off)
  status_vol=$(grep -q 'mixer_type.*software' $mpd_conf && echo on || echo off)
 
- for i in airplay roon spotify tidal; do
+ for i in airplay roon spotify sqzlite; do
   eval status_$i="$(grep ^$i= $audio_conf | cut -d= -f2)"
  done
 
@@ -57,7 +57,7 @@ until [ "$i" = "q" ] ; do
  (5) [ $([ "$status_airplay"  = off ] && echo X || echo O) ] Airplay
  (6) [ $([ "$status_roon"     = off ] && echo X || echo O) ] Roon Bridge
  (7) [ $([ "$status_spotify"  = off ] && echo X || echo O) ] Spotify
- (8) [ $([ "$status_tidal"    = off ] && echo X || echo O) ] Tidal
+ (8) [ $([ "$status_sqzlite"  = off ] && echo X || echo O) ] Squeezebox
 
  (9) [ $current_name ] Renderer Name / 렌더러 이름 >>
 
@@ -103,10 +103,10 @@ until [ "$i" = "q" ] ; do
      else
       sudo sed -i '/spotify=/s/=.*/=off/'           $audio_conf
      fi ;;
-  8) if [ $status_tidal = off ]; then
-      sudo sed -i '/tidal=/s/=.*/=on/'              $audio_conf
+  8) if [ $status_sqzlite = off ]; then
+      sudo sed -i '/sqzlite=/s/=.*/=on/'              $audio_conf
      else
-      sudo sed -i '/tidal=/s/=.*/=off/'             $audio_conf
+      sudo sed -i '/sqzlite=/s/=.*/=off/'             $audio_conf
      fi ;;
   9) renderer_name ;;
   q) exit          ;;
