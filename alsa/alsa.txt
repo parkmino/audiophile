@@ -1,7 +1,7 @@
 ### Build ALSA Library
 
 $ cd ~
-$ ver=1.2.2 # ver=1.1.5
+$ ver=1.2.3 # 1.2.2
 $ wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-$ver.tar.bz2
 $ tar xvjf alsa-lib-$ver.tar.bz2
 $ cd alsa-lib-$ver
@@ -24,29 +24,31 @@ $ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp -
 $ sudo make install
 $ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.plug_$ver
 
-## Save for ubuntu
+$ ls -al /usr/lib/libasound.so.2.0.0.*
+$ sudo chmod -x /usr/lib/libasound.so.2.0.0.*
+$ file /usr/lib/libasound.so.2.0.0.*
+$ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0.*
+$ ls -al /usr/lib/libasound.so.2.0.0.*
+
+$ scp pi@192.168.0.x:/usr/lib/libasound.so.2.0.0.* ./
+
+$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
+$ sudo cp /usr/lib/libasound.so.2.0.0.min_$ver  /etc/libasound.so.2.0.0.min
+$ sudo cp /usr/lib/libasound.so.2.0.0.mix_$ver  /etc/libasound.so.2.0.0.mix
+$ sudo cp /usr/lib/libasound.so.2.0.0.plug_$ver /etc/libasound.so.2.0.0.plug
+$ sudo rm -i /usr/lib/libasound*
+$ unset ver
+
+## Ubuntu
 $ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
 $ sudo make install
 $ ls -al /usr/lib/libasound.so.2.0.0
 $ sudo chmod -x /usr/lib/libasound.so.2.0.0
 $ file /usr/lib/libasound.so.2.0.0
 $ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0
-$ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0.sav
-
-$ ls -al /usr/lib/libasound.so.2.0.0.*
-$ sudo chmod -x /usr/lib/libasound.so.2.0.0.*
-$ file /usr/lib/libasound.so.2.0.0.*
-$ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0.*
-$ ls -al /usr/lib/libasound.so.2.0.0.*
+$ sudo mv /usr/lib/libasound.so.2.0.0 /etc/libasound.so.2.0.0_$ver
+$ sudo rm -i /usr/lib/libasound*
 $ unset ver
-
-$ scp pi@192.168.0.x:/usr/lib/libasound.so.2.0.0.* ./
-
-$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
-$ sudo cp /usr/lib/libasound.so.2.0.0.min_$ver  /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.min
-$ sudo cp /usr/lib/libasound.so.2.0.0.mix_$ver  /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.mix
-$ sudo cp /usr/lib/libasound.so.2.0.0.plug_$ver /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.plug
-$ sudo rm /usr/lib/libasound*
 
 ### Tweak ALSA Library
 
