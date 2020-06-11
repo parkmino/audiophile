@@ -2,7 +2,11 @@
 
 pgr_sqz=$(pidof squeezelite)
 
-[ -n "$pgr_sqz" ] && echo "Squeezelite is already running !" && exit
+if [ -n "$pgr_sqz" ]; then
+ read -p "Quit Squeezelite? [Y/n]" i
+ [ "$i" != n ] && pkill squeezelite && echo "Quit Squeezelite!"
+ exit
+fi
 
 (
  sec=0
@@ -38,4 +42,4 @@ pgr_sqz=$(pidof squeezelite)
 ) &
 
 [ ! -e /dev/shm/squeezelite ] && sudo cp /usr/bin/squeezelite /dev/shm/squeezelite
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -n Squeezelite>/dev/null</dev/null 2>/dev/null
+/dev/shm/squeezelite -C 1 -o pcm.hw -O ctl.hw>/dev/null</dev/null 2>/dev/null
