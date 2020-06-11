@@ -183,6 +183,8 @@
 	$ sudo nano /usr/bin/audio-config
 	$ sudo nano /usr/bin/audioconf
 
+12. ALSA Library 1.2.3 Update
+
 cf) Artik710
 
 	-. Disable connman
