@@ -101,3 +101,16 @@ commands, stats, status, decoders, urlhandlers, close
 $ telnet localhost 6600
 $ nc localhost 6600
 $ echo stats | nc -w1 localhost 6600
+
+### Compiling for Windows
+https://www.musicpd.org/doc/html/user.html#compiling-for-windows
+$ sudo apt-get install gcc-mingw-w64 mingw-w64
+$ sudo apt-get install nasm yasm quilt
+$ cd MPD-master
+$ nano win32/build.py
+  #libmodplug,
+  #wildmidi,
+  #gme,
+$ mkdir -p output/win64
+$ cd output/win64
+$ ../../win32/build.py --64
