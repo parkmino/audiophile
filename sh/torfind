@@ -1,16 +1,20 @@
 #!/bin/sh
 
-item=5
-
 #prog_1="JTBC 뉴스룸"
  prog_1="보이스 코리아 2020"
  prog_2="맛있는 녀석들"
  prog_3="팬텀싱어3"
  prog_4="비긴어게인 코리아"
- prog_5="멜론"
+ prog_5="악인전"
+ prog_6="멜론"
 
-for i in $(seq 1 $item); do
- printf "(%d) %s %s %s %s %s\n" $i $(eval echo \$prog_$i)
+nr=1
+
+while true; do
+ prog=$(eval echo \$prog_$nr)
+ [ -z "$prog" ] && break
+ printf "(%d) %s %s %s %s %s\n" $nr "$prog"
+ nr=$(($nr+1))
 done
 
 read -p " " i
@@ -21,7 +25,8 @@ case $i in
  2) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:20" || time="last friday 21:20" ;;
  3) time="last friday 23:00"	;;
  4) time="last saturday 23:59"	;;
- 5) time="yesterday"		;;
+ 5) time="last saturday 23:59"	;;
+ 6) time="yesterday"		;;
  *) exit			;;
 esac
 
