@@ -161,9 +161,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# apt-get install mpc ncmpc
 	# mkdir /etc/ncmpc
-	# nano /etc/ncmpc/config
-		host = 127.0.0.1
-		color ...
+	# mv copy/ncmpc_config /etc/ncmpc/config
 	# mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
 	# mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
 	
@@ -191,14 +189,19 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# apt-get install libmpdclient2 libexpat1 libcurl3 libmicrohttpd10 libjsoncpp1 python3 python3-requests
 	# dpkg -i copy/lib*upnp*.deb copy/upmpdcli*.deb
-	# nano /etc/upmpdcli.conf
-		friendlyname = Bann Audio Sylphid Network Player
+	# mv copy/icon.png /usr/share/upmpdcli/
+	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
+	# sed -i '/friendlyname =/s/^#//; /friendlyname =/s/= .*/= Bann Audio Sylphid Network Player/' /etc/upmpdcli.conf
+	# sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
+	# sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
+	# grep -e checkcontentformat -e friendlyname -e tidalquality /etc/upmpdcli.conf -e radiolist
 		checkcontentformat = 0
+		friendlyname = Bann Audio Sylphid Network Player
+		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 		tidalquality = lossless
+	# nano /etc/upmpdcli.conf
 		[radio ...]
 		...
-	##wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
-	# mv copy/icon.png /usr/share/upmpdcli/
 	# systemctl restart upmpdcli
 	# systemctl disable upmpdcli
 
@@ -231,9 +234,9 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# rm roonbridge-installer*
 
-11. Librespot / AirUPnP / ttyd
+11. AirUPnP / Librespot / ttyd
 
-	# mv copy/librespot copy/airupnp* ./
+	# mv copy/airupnp* copy/librespot ./
 	# mv copy/ttyd /usr/bin/
 
 12. HQPlayer NAA
@@ -244,7 +247,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 13. Squeezelite
 
-	# cp copy/squeezelite /usr/bin/
+	# mv copy/squeezelite ./
 	##apt-get install squeezelite
 	##sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.hw"/' /etc/default/squeezelite
 
@@ -299,13 +302,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	##getent group  mympd > /dev/null || groupadd -r mympd
 	##getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
 
-	# systemctl stop    mympd
-	# systemctl disable mympd
-	# nano /usr/lib/systemd/system/mympd.service
-		#Requires=network.target local-fs.target mpd.service
-		#After=mpd.service
-	# systemctl daemon-reload
-
+	# dpkg -i copy/mympd*.deb
 	# nano /etc/mympd.conf
 		 host = 127.0.0.1
 		 port = 6600
@@ -321,8 +318,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		 mixramp = false
 		 syscmds = true
 		 mounts = false		# >= 6.3.0
-	# sed -i '/\[syscmds\]/q' /etc/mympd.conf
-	# nano /etc/mympd.conf
+		[syscmds\]
 		HR =
 		DSD - DSD over PCM 켜기 = sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf.sav
 		DSD - DSD over PCM 끄기 = sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf.sav
@@ -360,7 +356,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# ls -al /usr/lib/aarch64-linux-gnu/libasound*
 	# mv /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
 	# mv copy/libasound.so.2.0.0.*  /etc/
-	# rm /usr/lib/arm-linux-gnueabihf/libasound.so*
+	# rm -i /usr/lib/arm-linux-gnueabihf/libasound.so*
 
 	# cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
 
@@ -396,11 +392,15 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		uhubctl -a 0 -p 1,3 (?)
 
 19. Edit /etc/sysctl.conf
+
 	# nano /etc/sysctl.conf
 
 20. audio-config
-	# sudo mv copy/{audio-config,audioconf} /usr/bin/
+
+	# mv copy/{audio-config,audioconf} /usr/bin/
 	# mv copy/audio.conf /etc/default/
+	# audio-config
+	# audioconf
 
 21. MicroSD mount
 
