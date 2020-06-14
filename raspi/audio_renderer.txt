@@ -14,10 +14,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo raspi-config
 		5 Interfacing Options > P2 SSH
 
-	$ ssh-keygen -f "/home/parkmino/.ssh/known_hosts" -R "192.168.0.32"
-	$ ssh pi@raspbian_ip
+	$ export ip="192.168.0.32"
+	$ ssh-keygen -f "/home/parkmino/.ssh/known_hosts" -R $ip
+	$ ssh pi@$ip
 	  password: raspberry
-	$#ssh root@dietpi_ip
+	$#ssh root@$ip
 	  password: dietpi
 
 1. Update & upgrade
@@ -28,8 +29,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get autoremove
 
 	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-pycryptodome uhubctl
-	$ mkdir ~/copy
 	# apt-get install openssh-client libusb-0.1-4
+	$ mkdir ~/copy
 
 	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config audioconf pi@192.168.0.32:/home/pi/copy/
 	$ scp /home/parkmino/Downloads/raspi/copy/* pi@192.168.0.32:/home/pi/copy/
@@ -49,12 +50,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 3. Kernel option
 
 	$ sudo nano /boot/cmdline.txt
-		#root=/dev/mmcblk0p2
-		#console=serial0,115200 console=tty1
+		##root=/dev/mmcblk0p2
+		#console=serial0,115200
+		#console=tty1
 		elevator=noop
-		consoleblank=0
-		smsc95xx.turbo_mode=0
-		selinux=0
+		consoleblank=0 smsc95xx.turbo_mode=0 selinux=0
 
 4. Localisation
 
@@ -86,6 +86,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		blacklist vc_sm_cma
 		blacklist x_tables
 		#blacklist bcm2835_gpiomem
+		#blacklist cfg80211
 		#blacklist fixed
 		#blacklist ip_tables
 		###Disable RPi3 Wi-Fi
@@ -104,7 +105,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sync
 	$ sudo reboot
-	$ ssh pi@192.168.0.32
+	$ ssh pi@$ip
 	$ lsmod | sort
 	$ pstree
 
@@ -119,9 +120,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	
 	$ sudo apt-get install mpc ncmpc
 	$ sudo mkdir /etc/ncmpc
-	$ sudo nano /etc/ncmpc/config
-		host = 127.0.0.1
-		color ...
+	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
 	$ sudo mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
 	$ sudo mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
 
@@ -141,13 +140,16 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 9. Upmpdcli
 
-	$ sudo apt-get install libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
+	$#sudo apt-get install libmpdclient2 libexpat1 libcurl4 python3 python3-requests
+	$ sudo apt-get install libjsoncpp1 libmicrohttpd12
 	$ sudo dpkg -i copy/lib*upnp*.deb copy/upmpdcli_*.deb
 	$ sudo mv copy/icon.png /usr/share/upmpdcli/
 	$ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
+	$ sudo sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
 	$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
-	$ grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf
+	$ grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf -e radiolist
 		checkcontentformat = 0
+		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 		tidalquality = lossless
 	$ sudo systemctl disable upmpdcli.service
 	$ sudo nano /etc/upmpdcli.conf
@@ -175,21 +177,26 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$#chmod +x roonbridge-installer-linuxarmv8.sh
 	$#sudo ./roonbridge-installer-linuxarmv8.sh
 
+	$ cat cat /opt/RoonBridge/VERSION
+		100000171
+		1.0 (build 171) stable
+		stable
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
-		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
+		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
-		 exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
 		 fi
 	$ sudo cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	$ sudo sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl disable roonbridge roonbridgetoram
-	$ ls -al /etc/init.d/roonbridge
+	$#ls -al /etc/init.d/roonbridge
 
-	$ ls -al /opt/RoonBridge/Bridge/processreaper
+	$ file /opt/RoonBridge/Bridge/processreaper
+	$ ls -al /opt/RoonBridge/Bridge/processreaper	
 	$ sudo strip --strip-debug /opt/RoonBridge/Bridge/processreaper
 	$ ls -al /opt/RoonBridge/Bridge/processreaper
 
@@ -278,7 +285,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
 16. Squeezelite
-	$ sudo cp copy/squeezelite /usr/bin/
+	$ mv copy/squeezelite ./
 	$#sudo apt-get install squeezelite
 	$#sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.hw"/' /etc/default/squeezelite
 
@@ -298,7 +305,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	
 	$ sudo dpkg -i copy/mympd*.deb
 
-	$ sudo nano -L /etc/mympd.conf
+	$ sudo nano /etc/mympd.conf
 		 host = 127.0.0.1
 		 port = 6600
 		 musicdirectory = /var/lib/mpd/music
@@ -312,21 +319,13 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		 mixramp = false
 		 syscmds = true
 		 mounts = false		# >= 6.3.0
-	$#sudo chown -R pi /var/lib/mympd # dietpi
-	$#sudo adduser pi mympd # dietpi
-	$#sudo chomod -R 775 /var/lib/mympd
-	
-	$ sudo sed -i '/\[syscmds\]/q' /etc/mympd.conf
-	$ sudo nano /etc/mympd.conf
-
 		[syscmds]
-		HR =
-		KBS 클래식 FM = /home/parkmino/kr2mpd 1fm
-		KBS 쿨 FM     = /home/parkmino/kr2mpd 2fm
-		MBC FM        = /home/parkmino/kr2mpd mbcm
-		MBC FM4U      = /home/parkmino/kr2mpd mbc4u
-		SBS 파워 FM   = /home/parkmino/kr2mpd sbsp
-		SBS 러브 FM   = /home/parkmino/kr2mpd sbsl
+		KBS 클래식 FM = kr2mpd 1fm
+		KBS 쿨 FM     = kr2mpd 2fm
+		MBC FM        = kr2mpd mbcm
+		MBC FM4U      = kr2mpd mbc4u
+		SBS 파워 FM   = kr2mpd sbsp
+		SBS 러브 FM   = kr2mpd sbsl
 		HR =
 		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
 		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /home/pi; sudo su pi"&>/dev/null</dev/null 2>/dev/null
@@ -334,6 +333,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		다시 시작 - Reboot    = sudo reboot
 		전원 끄기 - Power off = sudo poweroff
 
+	$#sudo chown -R pi /var/lib/mympd
+	$#sudo adduser pi mympd
+	$#sudo chomod -R 775 /var/lib/mympd
 	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
 	$ sudo cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
 	$ sudo nano /etc/systemd/system/mympd.service
@@ -433,7 +435,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
 	$ sudo mv copy/libasound.so.2.0.0.*  /etc/
-	$ sudo rm /usr/lib/arm-linux-gnueabihf/libasound.so*
+	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/libasound.so*
 
 	$ sudo cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
 
