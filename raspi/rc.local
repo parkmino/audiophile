@@ -140,7 +140,7 @@ done
 
 if [ "$tfc" = on ]; then
  echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
-  tc qdisc add dev $dev root pfifo_fast
+  tc qdisc add dev $dev root pfifo_fast || true
  #tc qdisc add dev $dev ingress
  #tc -s -d qdisc show dev $dev
  done
@@ -198,7 +198,7 @@ fi
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Squeezelite
-[ "$sqzlite" = on ] && sqzlite
+[ "$sqzlite" = on ] && (sqzlite || true)
 
 ### Spotify
 [ "$spotify" = on ] && (spotifyd &) # && sleep 3
