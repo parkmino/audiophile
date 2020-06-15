@@ -104,9 +104,9 @@ until [ "$i" = "q" ] ; do
       sudo sed -i '/spotify=/s/=.*/=off/'           $audio_conf
      fi ;;
   8) if [ $status_sqzlite = off ]; then
-      sudo sed -i '/sqzlite=/s/=.*/=on/'              $audio_conf
+      sudo sed -i '/sqzlite=/s/=.*/=on/'            $audio_conf
      else
-      sudo sed -i '/sqzlite=/s/=.*/=off/'             $audio_conf
+      sudo sed -i '/sqzlite=/s/=.*/=off/'           $audio_conf
      fi ;;
   9) renderer_name ;;
   q) exit          ;;

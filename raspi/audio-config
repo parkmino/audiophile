@@ -198,7 +198,7 @@ fi
 features () {
 i=$(whiptail --title "AirPlay, Roon Bridge, Spotify, Squeezebox" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 4 \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
-"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
+"roon"      "Enable Roon Bridge   룬 브리지  사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
 "spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) \
 "sqzlite"   "Enable Squeezebox    스퀴즈박스 사용" $(grep -q 'sqzlite=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
