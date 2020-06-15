@@ -291,7 +291,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 17. myMPD
 
-	$ sudo apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev liblua50-dev
+	$ sudo apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev # liblua5.3-dev
 	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
 	$ unzip mympd.zip -d ~/ && rm mympd.zip
 	$ cd myMPD*
@@ -299,7 +299,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ./build.sh install
 	$ ./build.sh pkgdebian
 
-	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz liblua50 # libmediainfo0v5
+	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz # liblua5.3 libmediainfo0v5
 	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 	
