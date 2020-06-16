@@ -1,5 +1,12 @@
 #!/bin/sh
 
+usage () {
+ echo "Usage: $(basename "$0") [ch|ck|m3u]"
+ echo "Scrape and list U+TV channels"
+}
+
+[ -z "$1" ] && usage && exit
+
 time=$(date +%Y%m%d%H%M%S)
 m3u_dir="/home/parkmino/Videos"
 
@@ -72,15 +79,9 @@ ch_66=505; prog_66="EBS1"
 ch_67=607; prog_67="EBS Kids"
 ch_68=173; prog_68="EBS+2"
 ch_69=172; prog_69="EBS+1"
-ch_70=600; prog_70="EBS러닝 초등3"
-ch_71=714; prog_71="EBS러닝 초등4"
-ch_72=715; prog_72="EBS러닝 초등5"
-ch_73=719; prog_73="EBS러닝 초등6"
-ch_74=722; prog_74="EBS러닝 중학1"
-ch_75=730; prog_75="EBS러닝 중학2"
-ch_76=768; prog_76="EBSEnglish"
-ch_77=793; prog_77="JEI EnglishTV"
-ch_78=175; prog_78="플레이런TV"
+ch_70=768; prog_70="EBSEnglish"
+ch_71=793; prog_71="JEI EnglishTV"
+ch_72=175; prog_72="플레이런TV"
 
 uptv_ck () {
  ch="http://123.140.104.150/api/epg/v1/channel/virtual?access_key=C4A0697007C3548D389B&cp_id=S_LGU_HYUK0920&system_id=HDTV&SA_ID=500053434041&STB_MAC=v000.5343.4041&NSC_TYPE=LTE&BASE_GB=Y&BASE_CD=W172.017&YOUTH_YN=N&ORDER_GB=N&POOQ_YN=N&HDTV_VIEW_GB=R&SID=001010005638&CLIENT_IP=172.17.100.15&OS_INFO=android_4.4.2&NW_INFO=WIFI&APP_TYPE=ROSA&DEV_MODEL=SM-N935F&CARRIER_TYPE=E&UI_VER=04.38.04&NOW_PAGE=25&PRE_PAGE=&MENU_NM=&CONTS_GB=&TERM_BINVER=3.8.118.0106"
@@ -122,14 +123,13 @@ echo "\
 (51) 브레인TV	(52) 애니맥스	(53) 애니플러스 (54) 어린이TV	(55) 브라보키즈
 (56) GS샵	(57) 현대홈쇼핑 (58) CJ오쇼핑	(59) 롯데홈쇼핑 (60) NS홈쇼핑
 (61) 홈앤쇼핑	(62) GS마이샵	(63) 현대홈쇼핑 (64) W 쇼핑	(65) OGN
-(66) EBS1	(67) EBS Kids	(68) EBS+2	(69) EBS+1	(70) EBS 초등3
-(71) EBS 초등4	(72) EBS 초등5	(73) EBS 초등6	(74) EBS 중학1	(75) EBS 중학2
-(76) EBSEnglish	(77) JEI English (78) 플레이런TV"
+(66) EBS1	(67) EBS Kids	(68) EBS+2	(69) EBS+1	(70) EBSEnglish
+(71) JEI English (72) 플레이런TV"
 
 read -p " " i
 
 case $i in
- [1-9]|[1-6][0-9]|7[0-8])
+ [1-9]|[1-6][0-9]|7[0-5])
    #url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
     url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time"
     echo "$url"
