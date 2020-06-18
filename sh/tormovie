@@ -29,31 +29,34 @@ torwal () {
  url="https://torrentwal.com"
  chk_url
  for i in $(seq 1 10); do
-  movie=$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')
+  movie=$(curl -sL -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')
   chk_movie
-  printf "     $url$(curl -s -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
+  printf "     $url$(curl -sL -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
  done
 }
 
 torqq () {
  url="https://토렌트큐큐.com"
-#url="https://torrentqq33.com"
+#url="https://torrentqq34.com"
  chk_url
- [ -z "${url##*큐큐*}" ] && url="$(curl -s "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
+ [ -z "${url##*큐큐*}" ] && url="$(curl -sL "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
  url="$url/torrent/popular.html?period=d&board=mov"
+ tmpfile=$(mktemp)
+ curl -sL "$url" | sed 's/title=/\n/g' > "$tmpfile"
  for i in $(seq 1 10); do
-  movie=$(curl -s "$url" | sed 's/title=/\n/g' | head -$((i+1)) | tail -1 | cut -d\" -f2)
+  movie=$(head -$((i+1)) "$tmpfile" | tail -1 | cut -d\" -f2)
   chk_movie
-  printf "     $(curl -s "$url" | grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" | head -$i | tail -1 | cut -d\" -f2)\n"
+  printf "     $(grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" "$tmpfile" | head -$i | tail -1 | cut -d\" -f2)\n"
  done
+ rm "$tmpfile"
 }
 
 torview () {
- url="https://torrentview13.net"
+ url="https://torrentview14.net"
  chk_url
  url="$url/bbs/board.php?bo_table=mov"
  tmpfile=$(mktemp)
- curl -s "$url" | grep -A 60 '인기 포스트' > "$tmpfile"
+ curl -sL "$url" | grep -A 60 '인기 포스트' > "$tmpfile"
  for i in $(seq 1 10); do
   movie=$(grep '</a>' "$tmpfile" | head -$i | tail -1 | sed 's/ <\/a>//')
   chk_movie
@@ -70,4 +73,3 @@ else
  torqq
 #torview
 fi
-
