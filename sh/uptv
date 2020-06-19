@@ -123,7 +123,7 @@ echo "\
 (16) MBN	(17) 채널A	(18) TV조선	(19) OBS	(20) OBS W
 (21) 프로야구1	(22) 프로야구2	(23) 프로야구3	(24) 프로야구4	(25) 프로야구5
 (26) 스포티비	(27) SPOTV2	(28) SBS스포츠	(29) 청백전1	(30) 청백전2
-(31) 청백전3	(32) JTBC골프	(33) SBS골프	(34) 골프앤헬스 (35) 골프앤스포츠
+(31) 청백전3	(32) JTBC골프	(33) SBS골프	(34) 골프앤헬스 (35) 골프스포츠
 (36) 빌리어즈TV	(37) YTN	(38) 연합뉴스TV	(39) CNN	(40) 토마토TV
 (41) CNBC	(42) 엠넷	(43) 가요TV	(44) GMTV	(45) PLAYY프리
 (46) PLAYY웰	(47) 바둑TV	(48) FTV	(49) 피싱TV	(50) 폴라리스TV
@@ -131,16 +131,16 @@ echo "\
 (56) GS샵	(57) 현대홈쇼핑 (58) CJ오쇼핑	(59) 롯데홈쇼핑 (60) NS홈쇼핑
 (61) 홈앤쇼핑	(62) GS마이샵	(63) 현대홈쇼핑 (64) W 쇼핑	(65) OGN
 (66) EBS1	(67) EBS Kids	(68) EBS+2	(69) EBS+1	(70) EBSEnglish
-(71) JEI English (72) 플레이런TV"
+(71) JEI 영어	(72) 플레이런TV"
 
 read -p " " i
 
-case $i in
- [1-9]|[1-6][0-9]|7[0-5])
-   #url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
-    url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time"
-    echo "$url"
-    prog=$(eval echo \$prog_$i)
-    printf "#EXTM3U\n#EXTINF:-1,$prog\n$url\n" > $m3u_dir/$prog.m3u ;;
- *) exit ;;
-esac
+ ch=$(eval echo \$ch_$i)
+ [ -z "$ch" ] && exit
+#url="http://1.214.67.74:80/${ch}HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
+ url="http://1.214.67.74:80/${ch}HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time"
+ prog=$(eval echo \$prog_$i)
+ [ -z "$prog" ] && prog=$i
+ echo " $prog"
+ echo " $url"
+ printf "#EXTM3U\n#EXTINF:-1,$prog\n$url\n" > $m3u_dir/$prog.m3u
