@@ -82,6 +82,9 @@ ch_69=172; prog_69="EBS+1"
 ch_70=768; prog_70="EBSEnglish"
 ch_71=793; prog_71="JEI EnglishTV"
 ch_72=175; prog_72="플레이런TV"
+ch_73=629; prog_73=""
+ch_74=628; prog_74=""
+ch_75=743; prog_75=""
 
 uptv_ck () {
  ch="http://123.140.104.150/api/epg/v1/channel/virtual?access_key=C4A0697007C3548D389B&cp_id=S_LGU_HYUK0920&system_id=HDTV&SA_ID=500053434041&STB_MAC=v000.5343.4041&NSC_TYPE=LTE&BASE_GB=Y&BASE_CD=W172.017&YOUTH_YN=N&ORDER_GB=N&POOQ_YN=N&HDTV_VIEW_GB=R&SID=001010005638&CLIENT_IP=172.17.100.15&OS_INFO=android_4.4.2&NW_INFO=WIFI&APP_TYPE=ROSA&DEV_MODEL=SM-N935F&CARRIER_TYPE=E&UI_VER=04.38.04&NOW_PAGE=25&PRE_PAGE=&MENU_NM=&CONTS_GB=&TERM_BINVER=3.8.118.0106"
@@ -98,11 +101,15 @@ uptv_ck () {
 }
 
 uptv_m3u () {
+ nr=1
  printf "#EXTM3U\n" > $m3u_dir/uptv.m3u
- for i in $(seq 1 78); do
- #url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
-  url="http://1.214.67.74:80/$(eval echo \$ch_$i)HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time"
-  printf "#EXTINF:-1,$(eval echo \$prog_$i)\n$url\n" >> $m3u_dir/uptv.m3u
+ while true; do
+  ch=$(eval echo \$ch_$nr)
+  [ -z "$ch" ] && break
+ #url="http://1.214.67.74:80/${ch}HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time;LTE;720p;WIFI&APPNAME=hdtv&ALBUM_ID=747&ma=D0:17:C2:CE:D7:A1"
+  url="http://1.214.67.74:80/${ch}HN.m3u8?VOD_RequestID=v2M2-0101-1010-7272-5050-0000$time"
+  printf "#EXTINF:-1,$(eval echo \$prog_$nr)\n$url\n" >> $m3u_dir/uptv.m3u
+  nr=$(($nr+1))
  done
 }
 
