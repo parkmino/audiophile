@@ -1,7 +1,7 @@
 ### Build ALSA Library
 
 $ cd ~
-$ ver=1.2.3 # 1.2.2
+$ ver=1.2.3.1
 $ wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-$ver.tar.bz2
 $ tar xvjf alsa-lib-$ver.tar.bz2
 $ cd alsa-lib-$ver
