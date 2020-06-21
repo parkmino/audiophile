@@ -134,10 +134,6 @@ done
 #done
 #[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
-for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
- renice -2 $i
-done
-
 if [ "$tfc" = on ]; then
  echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
   tc qdisc add dev $dev root pfifo_fast || true
@@ -145,6 +141,10 @@ if [ "$tfc" = on ]; then
  #tc -s -d qdisc show dev $dev
  done
 fi
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
+done
 
 for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
  chrt -op 0 $i
@@ -175,20 +175,13 @@ if [ "$m_task" -ge 1 ];then
  done
 fi
 
-### For Criterion from Reference Club
-#amixer -D control set 'XMOS Clock Selector',0 Capture 0 0 off off
-#amixer -D control set 'XMOS Clock Selector',1 Capture 0 off
-
 ### Unmute IQaudIO I2S
 #echo "22"  > /sys/class/gpio/export
 #echo "out" > /sys/class/gpio/gpio22/direction
 #echo "1"   > /sys/class/gpio/gpio22/value
 
-### Digital Volume
-#amixer -D control set 'Digital',0 67% || true # 40@67% 60@81%
-
 ### Turn off USBs
-[ "$usb" = "on" ] || uhubctl -a 0 -p "$usb"
+[ "$usb" = on ] || uhubctl -a 0 -p "$usb"
 
 ### Turn off HDMI
 /opt/vc/bin/tvservice -o
