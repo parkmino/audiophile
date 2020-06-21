@@ -12,7 +12,7 @@
 # By default this script does nothing.
 
 musicpd_bg () {
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+ until [ ! -z $(pgrep -x mpd) ] && $(pstree -npt $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
  done
  sleep 1
@@ -39,7 +39,7 @@ musicpd_bg () {
 }
 
 eol () {
- until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+ until [ ! -z $(pgrep -x upmpdcli) ]; do
   sleep 1
  done
  sleep 1

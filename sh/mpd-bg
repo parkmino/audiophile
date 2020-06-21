@@ -3,7 +3,7 @@
 mpd_ver=$(/dev/shm/mpd --version | head -1 | cut -d. -f2 | cut -d~ -f1)
 
 sec=0
-until [ "$(pgrep -x mpd)" -gt 0 ] 2>/dev/null; do
+until [ ! -z $(pgrep -x mpd) ]; do
  sleep 1
  sec=$(($sec+1))
  [ "$sec" -ge 10 ] && printf "\nMPD is not available!\n" && exit
@@ -13,7 +13,7 @@ sleep 1
 [ "$mpd_ver" -ge 21 ] && mpc add Etc/blank.mp3 && mpc play $(mpc playlist | wc -l)
 
 sec=0
-until [ "$(pgrep -x mpd)" -gt 0 ] 2>/dev/null && $(pstree -npt "$(pgrep -x mpd)" 2>/dev/null | grep -q output); do
+until [ ! -z $(pgrep -x mpd) ] && $(pstree -npt "$(pgrep -x mpd)" 2>/dev/null | grep -q output); do
  [ "$mpd_ver" -ge 21 ] && mpc play $(mpc playlist | wc -l)
  sec=$(($sec+1))
  [ "$sec" -ge 5 ] && printf "\nNo MPD audio output and exit!\n" && exit

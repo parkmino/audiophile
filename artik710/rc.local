@@ -13,7 +13,7 @@
 
 musicpd_bg () {
  sec=0
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+ until [ ! -z $(pgrep -x mpd) ] && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
   sleep 1
   sec=$(($sec+1))
   [ "$sec" -ge 10 ] && break
@@ -40,7 +40,7 @@ musicpd_bg () {
 
 eol () {
  sec=0
- until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
+ until [ ! -z $(pgrep -x upmpdcli) ]; do
   sleep 1
   sec=$(($sec+1))
   [ "$sec" -ge 10 ] && break

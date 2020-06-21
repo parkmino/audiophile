@@ -2,7 +2,7 @@
 
 pgr_mpv=$(pgrep -nx mpv)
 
-[ "$pgr_mpv" = "" ] && echo "Error: mpv is not running" && exit
+[ -z "$pgr_mpv" ] && echo "Error: mpv is not running" && exit
 
 times=0
 until pstree -pt $pgr_mpv | grep -q mpv/ao; do
