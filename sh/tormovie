@@ -16,10 +16,12 @@ chk_url () {
 chk_movie () {
  if [ -z "$movie" ]; then
   echo "Movies are not available and exit"
+  echo "$url"
   [ -e "$tmpfile" ] && rm "$tmpfile"
   exit
  elif [ "$movie" = en-US ]; then
   echo "Movies are not valid and exit"
+  echo "$url"
   [ -e "$tmpfile" ] && rm "$tmpfile"
   exit
  else
@@ -41,7 +43,7 @@ torqq () {
  url="https://토렌트큐큐.com"
 #url="https://torrentqq35.com"
  chk_url
- [ -z "${url##*큐큐*}" ] && url="$(curl -sL "$url" | grep -o href=.* | cut -d\" -f2)torrent/popular.html?period=d&board=mov"
+ [ -z "${url##*큐큐*}" ] && url="$(curl -sL "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=d&board=mov"
  tmpfile=$(mktemp)
  curl -sL "$url" | sed 's/title=/\n/g' > "$tmpfile"
