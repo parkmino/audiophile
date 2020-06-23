@@ -113,10 +113,8 @@ uptv_m3u () {
  done
 }
 
-[ "$1" = ck  ] && uptv_ck  && exit
-[ "$1" = m3u ] && uptv_m3u && exit
-
-echo "\
+uptv_ch () {
+ echo "\
 (1) tvN		(2) 올리브	(3) O tvN	(4) XtvN	(5) 온스타일
 (6) JTBC2	(7) K스타	(8) KBSN PLUS	(9) 라이프타임	(10) 채널 다이아
 (11) JTBC4	(12) 중화TV	(13) 아시아N	(14) STATV	(15) JTBC
@@ -133,7 +131,7 @@ echo "\
 (66) EBS1	(67) EBS Kids	(68) EBS+2	(69) EBS+1	(70) EBSEnglish
 (71) JEI 영어	(72) 플레이런TV"
 
-read -p " " i
+ read -p " " i
 
  ch=$(eval echo \$ch_$i)
  [ -z "$ch" ] && exit
@@ -144,3 +142,11 @@ read -p " " i
  echo " $prog"
  echo " $url"
  printf "#EXTM3U\n#EXTINF:-1,$prog\n$url\n" > $m3u_dir/$prog.m3u
+}
+
+case "$1" in
+ ch)	uptv_ch  ;;
+ ck)	uptv_ck  ;;
+ m3u)	uptv_m3u ;;
+ *)	usage    ;;
+esac
