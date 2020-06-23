@@ -4,67 +4,66 @@ usage () {
  echo "Usage: $(basename "$0") [ip|ls|ck|queries]"
 }
 
-[ "$#" -lt 1 ] && usage && exit
+[ -z "$1" ] && usage && exit
 
 url="https://www.extinf.com/us/category/korean/"
-curl_opt="-s -m9 --connect-timeout 9"
-curl_chk="-s -o /dev/null --connect-timeout 2 -m 3"
+curl_opt="-sL -m9 --connect-timeout 9"
+curl_chk="-sL -m3 --connect-timeout 2 -o /dev/null"
 ffprobe_opt="-timeout 5 -listen_timeout 5 -v quiet"
 folder="/home/parkmino/Videos/iptv"
+uptv="/home/parkmino/Videos/uptv.m3u"
 h=1
+nr=1
 
 url_probe () {
- [ "$i" = "https://www.extinf.com/us/korean-45/"  ] || \
- [ "$i" = "https://www.extinf.com/us/korean-2-3/" ] || \
- [ "$i" = "https://www.extinf.com/us/korea-3-5/"  ] || \
- [ "$i" = "https://www.extinf.com/us/korea-30/"   ] && continue
+ [ -z "${i##*/korean-45/*}"  ] || \
+ [ -z "${i##*/korean-2-3/*}" ] || \
+ [ -z "${i##*/korea-3-5/*}"  ] || \
+ [ -z "${i##*/korea-30/*}"   ] && continue
  iptv_url=$(curl $curl_opt "$i" | grep -o "https\?://[0-9.:]*/[a-z0-9/]*" | head -1)
  pls="$(echo "$iptv_url" | cut -d\/ -f-3)/playlist"
  curl $curl_chk $pls || continue
- printf "\33[2K\r$i (Page $h of $page)"
- ffprobe $ffprobe_opt "$iptv_url" && printf "\33[2K\r$i\n $pls\n"
+ printf "\33[2K\r%02d. $i (Page $h of $page)" $nr
+ ffprobe $ffprobe_opt "$iptv_url" && printf "\33[2K\r$i\n    $pls\n" && nr=$(($nr+1))
 }
 
-if [ "$1" = ip ]; then
- printf "$url"
- ! curl $curl_opt "${url}" >/dev/null && printf " is not available!\n" && exit
- page=$(curl $curl_opt "${url}" | grep -o "Page 1 of [0-9]*" | cut -d' ' -f4)
- echo
- for i in $(curl $curl_opt "${url}" | grep -o "https://www.extinf.com/us/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
-  url_probe
- done
- for h in $(seq 2 $page); do
-  for i in $(curl $curl_opt "${url}page/$h/" | grep -o "https://www.extinf.com/us/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
-   url_probe
-  done
- done
- printf "\33[2K\r"
-elif [ "$1" = ls ]; then
- ls -1 $folder/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.ls
-elif [ "$1" = ck ]; then
- rm -f $folder/tvheadend.avl
- echo "$(cat $folder/tvheadend.ls)" | while read line; do
-  [ "${#line}" -le 15 ] && printf "$line\t\t" || printf "$line\t"
-  file=$folder/channels_$line.m3u
-  curl $curl_chk http://$line/playlist && printf "playlist "
-  if ffprobe $ffprobe_opt $(grep -m1 "^https\?://" $file); then
-   printf "stream\n"
-   echo "$line" >> $folder/tvheadend.avl
-  else
-   printf "\n"
-  fi
- done
-else
- if [ -e $folder/tvheadend.avl ]; then
-  for i in $(seq 1 $#); do
-   echo "$(cat $folder/tvheadend.avl)" | while read line; do
-   #grep -i -A1 "$(eval echo "\$$i")" $folder/channels_$line.m3u | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
-    grep -i -A1 "$(eval echo "\$$i")" $folder/channels_$line.m3u | grep -v -e -- | cut -d, -f2 | cut -d? -f1 | sed 's/^http/  http/'
+case "$1" in
+ ip)
+  printf "$url"
+  ! curl $curl_opt "${url}" >/dev/null && printf " is not available!\n" && exit
+  page=$(curl $curl_opt "${url}" | grep -o "Page 1 of [0-9]*" | cut -d' ' -f4)
+  echo
+  for h in $(seq 1 $page); do
+   for i in $(curl $curl_opt "${url}page/$h/" | grep -o "$(echo "$url" | cut -d\/ -f-4)/[a-z0-9-]*korea[a-z0-9-]*/" | uniq); do
+    url_probe
    done
- #grep -i -A1 "$(eval echo "\$$i")" -h /home/parkmino/Videos/uptv.m3u | grep -v -e -- -e EXTINF
-  grep -i -A1 "$(eval echo "\$$i")" -h /home/parkmino/Videos/uptv.m3u | grep -v -e -- | cut -d, -f2 | sed 's/^http/  http/'
   done
- else
-  echo "$folder/tvheadend.avl does not exist"
- fi
-fi
+  printf "\33[2K\r" ;;
+ ls) ls -1 $folder/channels_* | cut -d_ -f2 | cut -d. -f-4 > $folder/tvheadend.ls ;;
+ ck)
+  rm -f $folder/tvheadend.avl
+  echo "$(cat $folder/tvheadend.ls)" | while read line; do
+   [ "${#line}" -le 15 ] && printf "$line\t\t" || printf "$line\t"
+   file=$folder/channels_$line.m3u
+   curl $curl_chk http://$line/playlist && printf "playlist "
+   if ffprobe $ffprobe_opt $(grep -m1 "^https\?://" $file); then
+    printf "stream\n"
+    echo "$line" >> $folder/tvheadend.avl
+   else
+    printf "\n"
+   fi
+  done ;;
+ *)
+  if [ -e $folder/tvheadend.avl ]; then
+   for i in $(seq 1 $#); do
+    echo "$(cat $folder/tvheadend.avl)" | while read line; do
+    #grep -i -A1 "$(eval echo \$$i)" $folder/channels_$line.m3u | grep -v -e -- -e EXTINF | cut -d- -f2 | cut -d? -f1
+     grep -i -A1 "$(eval echo \$$i)" $folder/channels_$line.m3u | grep -v -e -- | cut -d, -f2 | cut -d? -f1 | sed 's/^http/  http/'
+    done
+  #grep -i -A1 "$(eval echo \$$i)" -h "$uptv" | grep -v -e -- -e EXTINF
+   grep -i -A1 "$(eval echo \$$i)" -h "$uptv" | grep -v -e -- | cut -d, -f2 | sed 's/^http/  http/'
+   done
+  else
+   echo "$folder/tvheadend.avl does not exist"
+  fi ;;
+esac
