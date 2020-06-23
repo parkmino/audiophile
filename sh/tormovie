@@ -15,13 +15,13 @@ chk_url () {
 
 chk_movie () {
  if [ -z "$movie" ]; then
-  echo "Movies are not available and exit"
   echo "$url"
+  echo "Movies are not available and exit"
   [ -e "$tmpfile" ] && rm "$tmpfile"
   exit
  elif [ "$movie" = en-US ]; then
-  echo "Movies are not valid and exit"
   echo "$url"
+  echo "Movies are not valid and exit"
   [ -e "$tmpfile" ] && rm "$tmpfile"
   exit
  else
@@ -69,11 +69,8 @@ torview () {
  rm "$tmpfile"
 }
 
-if [ "$1" = qq ]; then
- torqq
-elif [ "$1" = view ]; then
- torview
-else
-#torqq
- torview
-fi
+case "$1" in
+ qq)	torqq	;;
+ view)	torview	;;
+ *)	torview	;;	# torqq
+esac
