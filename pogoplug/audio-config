@@ -5,7 +5,7 @@
 audio_conf=/etc/default/audio.conf
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 10 70 4 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 10 67 4 \
 "dop" "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "pcm" "Enable PCM Decoder          PCM 디코더 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
 "vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) \
@@ -21,12 +21,14 @@ fi
 }
 
 features () {
-i=$(whiptail --title "AirPlay / 에어플레이" --checklist "UPnP, Roon Bridge, AirPlay" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 7 55 1 \
-"airplay"   "Enable AirPlay   에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
+i=$(whiptail --title "AirPlay, Squeezebox" --checklist "AirPlay, Squeezebox" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 8 57 2 \
+"airplay"   "Enable AirPlay     에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
+"sqzlite"   "Enable Squeezbox   스퀴즈박스 사용" $(grep -q 'sqzlite=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ airplay ]] && sudo sed -i '/airplay=/s/=.*/=on/' $audio_conf || sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf
+ [[ $i =~ sqzlite ]] && sudo sed -i '/sqzlite=/s/=.*/=on/' $audio_conf || sudo sed -i '/sqzlite=/s/=.*/=off/' $audio_conf
 fi
 }
 
@@ -168,12 +170,12 @@ esac
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Pogoplug" 12 60 5 \
-"1" "MPD options            MPD 옵션               >" \
-"2" "Change renderer name   렌더러 이름 바꾸기     >" \
-"3" "AirPlay                에어플레이             >" \
-"4" "myMPD, NFS, SSH        myMPD, NFS, SSH 설정   >" \
-"5" "Ethernet IP            유선 IP 설정           >" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Pogoplug" 12 63 5 \
+"1" "MPD options            MPD 옵션                 >" \
+"2" "Change renderer name   렌더러 이름 바꾸기       >" \
+"3" "AirPlay, Squeezebox    에어플레이, 스퀴즈박스   >" \
+"4" "myMPD, NFS, SSH        myMPD, NFS, SSH 설정     >" \
+"5" "Ethernet IP            유선 IP 설정             >" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break

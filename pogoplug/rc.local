@@ -109,6 +109,21 @@ pkill rc.local || true
 
 }
 
+sqzlite () {
+ cp /usr/bin/squeezelite /run/shm/
+/run/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -z>/dev/null</dev/null 2>/dev/null || true
+ pgr_sqz=$(pidof squeezelite)
+ [ -z "$pgr_sqz" ] && continue
+ count=2
+ echo "$(pstree -npt $pgr_sqz)" | while read line ; do
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $count in
+   3) chrt -op 0 $proc_nr ;;
+  esac
+  count=$(($count+1))
+ done
+}
+
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 mount -o remount,exec /run/shm
@@ -127,20 +142,11 @@ else
 #rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-#ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0
-#ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so.2
-#ln -sf /run/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabi/libasound.so
  ln -sf /run/shm/alsa.conf /usr/share/alsa/alsa.conf
- cp /usr/bin/nohup /usr/local/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /usr/bin/mympd /usr/etc/mympd.conf /run/shm/
+ cp /usr/local/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /usr/bin/mympd /usr/etc/mympd.conf /run/shm/
  cp /etc/mpd.conf.sav /run/shm/mpd.conf
  cp /etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1
-#ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0
-#ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so.1
-#ln -sf /run/shm/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabi/libaudiofile.so
  cp /etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8
-#ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0
-#ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so.8
-#ln -sf /run/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabi/libFLAC.so
 
 for i in $(ls /sys/block/*/queue/scheduler); do
  if   echo $(cat $i) | grep -q none; then
@@ -185,6 +191,9 @@ if [ "$nfs" = off ]; then
   pkill $i || true
  done
 fi
+
+### Squeezelite
+[ "$sqzlite" = on ] && (sqzlite || true)
 
 if [ "$upnp" = on ]; then
  musicpd_bg &
