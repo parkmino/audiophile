@@ -2,7 +2,12 @@
 
 	$ wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.2.3.1.tar.bz2
 
-02. ALSA initialization and Tasksets for Artik
+02. Squeezelite
+
+	$ sudo nano /etc/rc.local
+		/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 39:4::0 -b 4002:3071 -z>/dev/null</dev/null 2>/dev/null
+
+03. ALSA initialization and Tasksets for Artik
 
 	# nano /etc/rc.local
 	
