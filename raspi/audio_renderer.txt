@@ -438,7 +438,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mv copy/libasound.so.2.0.0.*  /etc/
 	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/libasound.so*
 
-	# ln -sf /etc/libasound.so.2.0.0.orig /usr/lib/arm-linux-gnueabihf/libasound.so
+	##ln -sf /etc/libasound.so.2.0.0.orig /usr/lib/arm-linux-gnueabihf/libasound.so
 	$ sudo cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
 
 	$ sudo mv /usr/share/alsa /usr/share/alsa.orig
@@ -461,8 +461,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 sudo cp -v copy/libFLAC.so.8.3.0
 	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/lib{audiofile.so*,FLAC.so*}
 	$ rm copy/{libaudiofile.so.1.0.0,libFLAC.so.8.3.0}
-	$ sudo ln -sf /etc/libFLAC.so.8.3.0.sav      /usr/lib/arm-linux-gnueabi/libFLAC.so
-	$ sudo ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/arm-linux-gnueabi/libaudiofile.so
+	$#sudo ln -sf /etc/libFLAC.so.8.3.0.sav      /usr/lib/arm-linux-gnueabi/libFLAC.so
+	$#sudo ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/arm-linux-gnueabi/libaudiofile.so
 
 	$ ls -al /dev/shm/
 	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
