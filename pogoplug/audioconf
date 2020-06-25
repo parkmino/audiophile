@@ -2,7 +2,7 @@
 
 audio_conf=/etc/default/audio.conf
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
-[ -e /usr/local/etc/upmpdcli.conf.sav ] && upmpdcli_conf=/usr/local/etc/upmpdcli.conf.sav || upmpdcli_conf=/usr/local/etc/upmpdcli.conf
+[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
 
 renderer_name () {
 

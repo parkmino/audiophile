@@ -43,13 +43,13 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	# cd /media/parkmino/rootfs
 
 	# ls -al
-	# rm -rf *
+	##rm -rf *
 	# sync
 	# ls -al
 
 	# tar -xjf '/home/parkmino/Downloads/pogoplug/Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2'
 	# sync
-	# nano /media/parkmino/rootfs/etc/fstab
+	# cat /media/parkmino/rootfs/etc/fstab
 		/dev/root / ext2  noatime,errors=remount-ro 0 1
 		tmpfs     /tmp tmpfs defaults,noatime       0 0
 
@@ -69,11 +69,12 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 2. Update
 
-	$ ssh root@192.168.0.x (password: root)
+	$ ip=192.168.0.37
+	$ ssh root@$ip (password: root)
 	# rm /etc/ssh/ssh_host*
 	# ssh-keygen -A
 	# exit
-	$ ssh root@192.168.0.x (password: root)
+	$ ssh root@$ip (password: root)
 
 	# apt-get update
 	# apt-get install debian-archive-keyring
@@ -90,11 +91,11 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	# apt-get clean
 	# dpkg-reconfigure tzdata
 	# apt-get install locales
-	# dpkg-reconfigure locales
+	# dpkg-reconfigure locales	# en_US.UTF-8 ko_KR.UTF-8
 	# locale
 	# locale -a
 	# locale -a -v
-	# rm -rfv /usr/lib/locale/*
+	##rm -rfv /usr/lib/locale/*
 	# locale-gen
 	# nano /etc/default/locale
 		LANG=en_US.UTF-8
@@ -106,30 +107,33 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	# apt-get install python-crypto whiptail
 
 	# mkdir ~/copy
-	$ scp /home/parkmino/Downloads/pogoplug/copy/* root@192.168.0.x:/root/copy/
+
+	$ ip=192.168.0.37
+	$ scp /home/parkmino/Downloads/pogoplug/copy/* root@$ip:/root/copy/
 
 	# cat /etc/hostname
 	# nano /etc/hosts
-		127.0.0.1	debian
+		127.0.1.1	debian
 
 3. Remove moduels & Services
 
 	# lsmod
-	# nano /etc/modprobe.d/blacklist
-
+	# nano /etc/modprobe.d/marvellcrypto-blacklist.conf
+		blacklist marvell_cesa
 	# nano /etc/inittab
-		#... ttyS0
+		#T0:2345:respawn:/sbin/getty -L ttyS0 115200 linux
 	# apt-get install sysv-rc-conf
 	# sysv-rc-conf
-		Remove alsa-utils(S) avahi-daemon(2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5)
+		Diable #alsa-utils(S) avahi-daemon(2-3-4-5) busybox-klogd(2-3-4-5) busybox-syslogd(2-3-4-5) mpd(2-3-4-5)
 
 4. MPD
 
-	### Build MPD 0.20.23
-
+	# apt-get install libcue1 libaudiofile1 libavformat56 libflac8 libid3tag0 libmpdclient2 libupnp6 libcurl3-gnutls
 	# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
-	# mv copy/mpd /usr/local/bin/
+	# mv copy/mpd /usr/bin/
 	# mv copy/mpd.conf /etc/mpd.conf.sav
+	##mpd /etc/mpd.conf.sav
+	  Ctrl+C
 
 	# apt-get install mpc ncmpc
 	# mkdir /etc/ncmpc
@@ -139,14 +143,14 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 5. Internet Radio & TTS (Text to Speech)
 
-	# curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+	# curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	# chmod 755 /usr/local/bin/youtube-dl
 	# mv copy/{kr2mpd,sbs_dec.py,ut2mpd,tts2mpd} /usr/bin/
 	# sed -i 's/Cryptodome/Crypto/g' /usr/bin/sbs_dec.py
 	# mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
 	# mkdir /var/lib/mpd/music/webradio
 	# mv copy/*.pls /var/lib/mpd/music/webradio
-	# mpc update
+	##mpc update
 
 6. Upmpdcli Build
 
@@ -213,9 +217,10 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	
 	$ scp root@192.168.0.37:/root/build/{libupnp/*.deb,libupnpp6/*.deb,upmpdcli/*.deb} ~/Downloads
 
-	# apt-get install libmpdclient2 libexpat1 libcurl4 python3 python3-requests
-	# apt-get install libjsoncpp1 libmicrohttpd12
-	# dpkg -i copy/lib*upnp*.deb copy/upmpdcli_*.deb
+	# apt-get install libmpdclient2 libexpat1 python3 python3-requests # libcurl4
+	# apt-get install libjsoncpp0 libmicrohttpd10
+	# apt-get install libstdc++6
+	# dpkg -i copy/libupnpp*.deb copy/upmpdcli_*.deb
 
 	# apt-get install autoconf automake build-essential libtool pkg-config
 	# apt-get install libupnp6-dev libexpat1-dev libmpdclient-dev libcurl4-gnutls-dev libmicrohttpd-dev libjsoncpp-dev python3-requests
@@ -247,13 +252,18 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	# adduser upmpdcli
 
 	# mv copy/icon.png /usr/share/upmpdcli/
-	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /usr/local/etc/upmpdcli.conf
+	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
 	# sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
-	# sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /usr/local/etc/upmpdcli.conf
-	# grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf -e radiolist
+	# sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
+	# grep -e checkcontentformat -e tidalquality -e radiolist /etc/upmpdcli.conf
 		checkcontentformat = 0
 		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 		tidalquality = lossless
+	##systemctl disable upmpdcli.service
+	# sysv-rc-conf
+		Disable upmpdcli (2-3-4-5)
+	# nano /etc/upmpdcli.conf
+	  	...
 
 7. AirConnect & squeezelite & ttyd
 
@@ -277,20 +287,38 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 9. myMPD
 
 	# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev
-	##curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
-	# wget https://github.com/jcorporation/myMPD/archive/v6.4.2.zip
-	# unzip v6.4.2.zip -d ~/ && rm v6.4.2.zip
+	# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
+	# unzip mympd.zip -d ~/ && rm mympd.zip
+	##wget https://github.com/jcorporation/myMPD/archive/v6.4.2.zip
+	##unzip v6.4.2.zip -d ~/ && rm v6.4.2.zip
 	# cd myMPD*
 
 	##nano contrib/packaging/debian/control
 		debhelper (>= 9)
 	##./build.sh pkgdebian
 
+	# nano CMakeLists.txt
+		cmake_minimum_required(VERSION 2.6)
+	# nano cli_tools/CMakeLists.txt
+		cmake_minimum_required(VERSION 2.6)
+
+	# ./build.sh release
+	# ls -al release/mympd release/cli_tools/mympd-config
+	
+	$ scp root@192.168.0.37:/root/myMPD-6.4.2/release/{mympd,cli_tools/mympd-config} ~/Downloads	
+
+	# mv copy/mympd copy/mympd-config /usr/bin/
+	# mv copy/mympd.conf /etc/
+	# mkdir -p /usr/var/lib/mympd
+	# getent group  mympd > /dev/null || groupadd -r mympd
+	# getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /usr/var/lib/mympd mympd
+	##mympd-config
+
 	# ./build.sh install
-	# ls -al /usr/local/bin/mympd
-	# file /usr/local/bin/mympd
-	# strip --strip-debug /usr/local/bin/mympd
-	# ls -al /usr/local/bin/mympd
+	# ls -al /usr/local/bin/mympd /usr/local/bin/mympd-config
+	# file   /usr/local/bin/mympd /usr/local/bin/mympd-config
+	##strip --strip-debug /usr/local/bin/mympd /usr/local/bin/mympd-config
+	# ls -al /usr/local/bin/mympd /usr/local/bin/mympd-config
 	# mkdir -p /var/lib/mympd /usr/var/lib/mympd
 	# chown -R mympd:mympd /var/lib/mympd /usr/var/lib/mympd
 
@@ -299,6 +327,8 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 		 port = 6600
 		 music_directory = /var/lib/mpd/music
 		 playlistdirectory = /var/lib/mpd/playlists
+		#ssl
+		#sslport
 		 publish = true
 		#webdav = false
 		 loglevel = 1
@@ -321,15 +351,15 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 		다시 시작 - Reboot    = sudo reboot
 		전원 끄기 - Power off = sudo poweroff\n' >> /usr/etc/mympd.conf
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-	# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
-	# nano /etc/systemd/system/mympd.service
+	##cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
+	##nano /etc/systemd/system/mympd.service
 		#Requires=network.target local-fs.target mpd.service
 		#After=mpd.service
 		#Protect...
 		#Restrict...
-	# systemctl disable mympd
-	# systemctl daemon-reload
-	# systemctl status mympd
+	##systemctl disable mympd
+	##systemctl daemon-reload
+	##systemctl status mympd
 	
 	# mympd
 		설정 > 외관 > 알림 > 페이지에 알림	
@@ -380,40 +410,49 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 11. Tweak ALSA
 
-	# ls -al /usr/lib/arm-linux-gnueabi/libasound*
-	# mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+	##ls -al /usr/lib/arm-linux-gnueabi/libasound*
+	##mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
 	# mv copy/libasound.so.2.0.0.*  /etc/
-	# rm /usr/lib/arm-linux-gnueabi/libasound.so*
+	# sed -i 's/card 0/card 1/g' /usr/share/alsa/alsa.conf.{min,mix,plug}
+	# grep -o 'card [0-9]' /usr/share/alsa/alsa.conf.{min,mix,plug}
+	##rm /usr/lib/arm-linux-gnueabi/libasound.so*
 
-	# ln -sf /etc/libasound.so.2.0.0.orig /usr/lib/arm-linux-gnueabi/libasound.so
-	# cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+	##ln -sf /etc/libasound.so.2.0.0.orig /usr/lib/arm-linux-gnueabi/libasound.so
+	# cp /etc/libasound.so.2.0.0.min /run/shm/libasound.so.2
 
-	# mv /usr/share/alsa /usr/share/alsa.orig
-	# systemctl mask alsa-store.service
-	# systemctl mask alsa-restore.service
-	# nano /lib/modprobe.d/aliases.conf
+	##mv /usr/share/alsa /usr/share/alsa.orig
+	##systemctl mask alsa-store.service
+	##systemctl mask alsa-restore.service
+	##nano /lib/modprobe.d/aliases.conf
 		#options snd-usb-audio index=-2
 	# mkdir /usr/share/alsa
-	# cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+	##cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 	# mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
+	# cp /usr/share/alsa/alsa.conf.min /run/shm/alsa.conf
+	# ln -sf /run/shm/alsa.conf /usr/share/alsa/alsa.conf
 
 12. Tweak decoder libraries
 
-	# ls -al /usr/lib/arm-linux-gnueabi/lib{audiofile,FLAC.so}*
+	##ls -al /usr/lib/arm-linux-gnueabi/lib{audiofile,FLAC.so}*
 	# mv /usr/lib/arm-linux-gnueabi/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
 	# mv /usr/lib/arm-linux-gnueabi/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
-	# echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
-	# echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
+	# echo "/etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
+	# echo "/etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
 	# rm -i /usr/lib/arm-linux-gnueabi/lib{audiofile.so*,FLAC.so*}
 	# rm copy/{libaudiofile.so.1.0.0,libFLAC.so.8.3.0}
-	# ln -sf /etc/libFLAC.so.8.3.0.sav      /usr/lib/arm-linux-gnueabi/libFLAC.so
-	# ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/arm-linux-gnueabi/libaudiofile.so
+	##ln -sf /etc/libFLAC.so.8.3.0.sav      /usr/lib/arm-linux-gnueabi/libFLAC.so
+	##ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/arm-linux-gnueabi/libaudiofile.so
 
-	# ls -al /dev/shm/
-	# nano /etc/ld.so.conf.d/dev_shm.conf
-		/dev/shm/
+	# ls -al /run/shm/
+	# nano /etc/ld.so.conf.d/run_shm.conf
+		/run/shm/
 	# ldconfig
 	# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
+
+	# mount -o remount,exec /run/shm
+	# mpd /etc/mpd.conf.sav
+	# mpc update
+	  mpd - Ctrl+C
 
 13. Fstab
 
@@ -436,7 +475,7 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 16. Network configuration
 
-	# nano /etc/network/interfaces
+	##nano /etc/network/interfaces
 
 17. USB Auto Mount
 
@@ -447,7 +486,7 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 18. audio-config
 
-	# mv copy/audio-config copy/audioconf /usr/bin/
+	# mv copy/{audio-config,audioconf} /usr/bin/
 	# mv copy/audio.conf /etc/default/
 	# audio-config
 	# audioconf
@@ -460,6 +499,7 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 	# wget http://ftp.us.debian.org/debian/pool/non-free/f/firmware-nonfree/firmware-misc-nonfree_20190717-2~bpo10+1_all.deb
 	# dpkg -i firmware-misc*.deb
+	# mv firmware-misc*.deb copy/
 	##reboot
 	##lsmod
 	##ifconfig -a

@@ -11,27 +11,7 @@
 #
 # By default this script does nothing.
 
-musicpd_bg () {
-
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
-  sleep 1
- done
-
- sleep 1
-
- echo "$(pstree -np $pgr_mpd)" | while read line ; do
-  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
-  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-  case $proc in
-   output) chrt -op 0 $proc_nr ;;
-  esac
- done
-
-/run/shm/upmpdcli -c /run/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
-
-}
-
-eol () {
+led_on () {
 
 # turn on LED
 
@@ -91,7 +71,27 @@ fi
 if [ -d /sys/class/leds/nsa325:green:usb ]; then
    echo usb-host > /sys/class/leds/nsa325\:green\:usb/trigger
 fi
+}
 
+musicpd_bg () {
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+  sleep 1
+ done
+
+ sleep 1
+
+ echo "$(pstree -np $pgr_mpd)" | while read line ; do
+  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+  case $proc in
+   output) chrt -op 0 $proc_nr ;;
+  esac
+ done
+
+/run/shm/upmpdcli -c /run/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+}
+
+eol () {
 until [ $(pgrep -x upmpdcli) -gt 0 ] 2>/dev/null; do
  sleep 1
 done
@@ -102,20 +102,21 @@ if [ "$airplay" = on ]; then
 /run/shm/airupnp-arm5 -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
 fi
 
+led_on
+
 sleep 1
 pkill startpar || true
 sleep 1
 pkill rc.local || true
-
 }
 
 sqzlite () {
- cp /usr/bin/squeezelite /run/shm/
-/run/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -z>/dev/null</dev/null 2>/dev/null || true
- pgr_sqz=$(pidof squeezelite)
+ cp /usr/bin/squeezelite-static /run/shm/
+/run/shm/squeezelite-static -o pcm.hw -O ctl.hw -C 1 -z>/dev/null</dev/null 2>/dev/null || true
+ pgr_sqz=$(pidof squeezelite-static)
  [ -z "$pgr_sqz" ] && continue
  count=2
- echo "$(pstree -npt $pgr_sqz)" | while read line ; do
+ echo "$(pstree -np $pgr_sqz)" | while read line ; do
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $count in
    3) chrt -op 0 $proc_nr ;;
@@ -143,7 +144,7 @@ else
 fi
 
  ln -sf /run/shm/alsa.conf /usr/share/alsa/alsa.conf
- cp /usr/local/bin/mpd /usr/local/bin/upmpdcli /usr/local/etc/upmpdcli.conf /usr/bin/mympd /usr/etc/mympd.conf /run/shm/
+ cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /run/shm/
  cp /etc/mpd.conf.sav /run/shm/mpd.conf
  cp /etc/libaudiofile.so.1.0.0.sav /run/shm/libaudiofile.so.1
  cp /etc/libFLAC.so.8.3.0.sav /run/shm/libFLAC.so.8
@@ -183,7 +184,7 @@ swapoff -a
 
 [ "$dbus" = off ] && service dbus stop || true
 [ "$mympd" = on ] && /run/shm/mympd /run/shm/mympd.conf&</dev/null 2>/dev/null
-[ "$ssh" = off ] && pkill sshd || true
+[ "$ssh" = off  ] && pkill sshd || true
 
 ### NFS
 if [ "$nfs" = off ]; then
