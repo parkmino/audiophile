@@ -147,7 +147,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
 	$ sudo sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
 	$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
-	$ grep -e checkcontentformat -e tidalquality /etc/upmpdcli.conf -e radiolist
+	$ grep -e checkcontentformat -e tidalquality -e radiolist /etc/upmpdcli.conf
 		checkcontentformat = 0
 		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 		tidalquality = lossless
