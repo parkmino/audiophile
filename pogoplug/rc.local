@@ -201,6 +201,7 @@ if [ "$upnp" = on ]; then
  eol &
 /run/shm/mpd /run/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
 else
+ led_on
  pkill rc.local
 fi
 
