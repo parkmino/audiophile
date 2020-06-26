@@ -104,7 +104,7 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 	# apt-get install bc ca-certificates cifs-utils curl file ntpdate psmisc sudo
 	# apt-get install exfat-fuse exfat-utils
-	# apt-get install python-crypto whiptail
+	# apt-get install python-crypto whiptail lrzsz
 
 	# mkdir ~/copy
 
@@ -279,8 +279,8 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 		username = USER
 		password = PASS
 		backend = alsa
-		device = pcm.0
-		mixer = ctl.9
+		device = pcm.hw
+		mixer = ctl.hw
 		device_name = Spotifyd
 		bitrate = 320
 
@@ -312,17 +312,9 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	# mkdir -p /usr/var/lib/mympd
 	# getent group  mympd > /dev/null || groupadd -r mympd
 	# getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /usr/var/lib/mympd mympd
-	##mympd-config
+	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-	# ./build.sh install
-	# ls -al /usr/local/bin/mympd /usr/local/bin/mympd-config
-	# file   /usr/local/bin/mympd /usr/local/bin/mympd-config
-	##strip --strip-debug /usr/local/bin/mympd /usr/local/bin/mympd-config
-	# ls -al /usr/local/bin/mympd /usr/local/bin/mympd-config
-	# mkdir -p /var/lib/mympd /usr/var/lib/mympd
-	# chown -R mympd:mympd /var/lib/mympd /usr/var/lib/mympd
-
-	# nano -L /usr/etc/mympd.conf
+	# nano -L /etc/mympd.conf
 		 host = 127.0.0.1
 		 port = 6600
 		 music_directory = /var/lib/mpd/music
@@ -349,20 +341,12 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "sudo su"&>/dev/null</dev/null 2>/dev/null
 		HR =
 		다시 시작 - Reboot    = sudo reboot
-		전원 끄기 - Power off = sudo poweroff\n' >> /usr/etc/mympd.conf
-	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-	##cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
-	##nano /etc/systemd/system/mympd.service
-		#Requires=network.target local-fs.target mpd.service
-		#After=mpd.service
-		#Protect...
-		#Restrict...
-	##systemctl disable mympd
-	##systemctl daemon-reload
-	##systemctl status mympd
-	
+		전원 끄기 - Power off = sudo poweroff	
+
 	# mympd
-		설정 > 외관 > 알림 > 페이지에 알림	
+		업데이트 > 데이터베이스 업데이트
+		설정 > 외관 > 알림 > 페이지에 알림
+		Ctrl+C
 
 10. Build libaudiofile libFLAC
 
@@ -413,8 +397,6 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	##ls -al /usr/lib/arm-linux-gnueabi/libasound*
 	##mv /usr/lib/arm-linux-gnueabi/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
 	# mv copy/libasound.so.2.0.0.*  /etc/
-	# sed -i 's/card 0/card 1/g' /usr/share/alsa/alsa.conf.{min,mix,plug}
-	# grep -o 'card [0-9]' /usr/share/alsa/alsa.conf.{min,mix,plug}
 	##rm /usr/lib/arm-linux-gnueabi/libasound.so*
 
 	##ln -sf /etc/libasound.so.2.0.0.orig /usr/lib/arm-linux-gnueabi/libasound.so
@@ -449,10 +431,13 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 	# ldconfig
 	# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 
+	# cat /proc/asound/cards
+	# sed -i 's/card 0/card 1/g' /usr/share/alsa/alsa.conf.{min,mix,plug}
+	# grep -o 'card [0-9]' /usr/share/alsa/alsa.conf.{min,mix,plug}
+
 	# mount -o remount,exec /run/shm
 	# mpd /etc/mpd.conf.sav
-	# mpc update
-	  mpd - Ctrl+C
+	  Ctrl+C
 
 13. Fstab
 
@@ -523,7 +508,7 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 22. Image Build
 
 	# ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
-	# sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
+	# sed -i '/ssh=/s/=on/=off/' /etc/default/audio.conf
 	# cat /etc/default/audio.conf
 	# echo "* Mino's UPnP Audio Renderer for Pogoplug $(date +"%y.%m")" > ~/release
 	# cat ~/release

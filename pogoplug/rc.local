@@ -74,12 +74,12 @@ fi
 }
 
 musicpd_bg () {
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) 2>/dev/null | grep -q output); do
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
   sleep 1
  done
 
  sleep 1
-
+ pgr_mpd=$(pgrep -x mpd)
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
@@ -112,7 +112,7 @@ pkill rc.local || true
 
 sqzlite () {
  cp /usr/bin/squeezelite-static /run/shm/
-/run/shm/squeezelite-static -o pcm.hw -O ctl.hw -C 1 -z>/dev/null</dev/null 2>/dev/null || true
+/run/shm/squeezelite-static -o pcm.hw -O ctl.hw -C 1 -a 39:4::0 -b 4002:3071 -z>/dev/null</dev/null 2>/dev/null || true
  pgr_sqz=$(pidof squeezelite-static)
  [ -z "$pgr_sqz" ] && continue
  count=2
