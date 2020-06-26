@@ -13,7 +13,7 @@
 
 musicpd_bg () {
  sec=0
- until [ ! -z $(pgrep -x mpd) ] && $(pstree -np $(pgrep -x mpd) | grep -q output); do
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
   sleep 1
   sec=$(($sec+1))
   [ "$sec" -ge 10 ] && break
