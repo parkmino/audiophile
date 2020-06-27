@@ -264,7 +264,7 @@ BUNKER1 () {
 DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=UUxvU6bRtYhNLvZleAIGa-FQ"
- days=$(curl $curl_opt "$url" | grep -m1 업데이트: | sed 's/.*업데이트: //' | cut -d'<' -f1)
+ days=$(curl $curl_opt "$url" | grep 업데이트: | head -1 | sed 's/.*업데이트: //' | cut -d'<' -f1)
  if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
   date=$(echo $days | tr -d '.' | tr ' ' '-')
   diff=$(($(date +%s)-$(date -ud "$date" +%s)))
@@ -278,14 +278,18 @@ DAS () {
   [ -z "${days##*오늘*}" ] && last=2
   [ "$days" = "어제" ]     && last=1
   if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
+   tmpfile=$(mktemp)
+   curl $curl_opt "$url" | grep -o 'data-title="\(김어준\|\[총선\).*' > "$tmpfile"
+   [ -s "$tmpfile" ] || return
    for i in $(seq 1 $last); do
     printf '\33[2K\r  '
-    curl $curl_opt "$url" | grep -m$i -o 'data-title="\(김어준\|\[총선\).*' | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+    head -$i "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    #printf '   https://youtu.be/'
     printf '\33[2K\r  '
-    curl $curl_opt "$url" | grep -m$i -o 'data-title="\(김어준\|\[총선\).*' | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
+    head -$i "$tmpfile" | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
    done
    printf '\33[2K\r'
+   rm "$tmpfile"
   fi
  fi
 }
@@ -551,18 +555,22 @@ NEWSTAPA () {
   printf "$(date -d "$date" +%F)\t\t\t"
   days_diff
   if [ "$days" -le 1 2>/dev/null ]; then
+   tmpfile=$(mktemp)
+   curl $curl_opt "$url" > "$tmpfile"
+   [ -s "$tmpfile" ] || return
    for i in $(seq 1 $(((2-$days)*1))); do
     printf '\33[2K\r  '
-     curl $curl_opt "$url" | grep '<title>' | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | cut -d'/' -f1
+     grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | cut -d'/' -f1
     #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
     #curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
     printf '\33[2K\r  '
-     curl $curl_opt "$url" | grep 'enclosure url=' | head -$i | tail -1 | cut -d'"' -f2
+     grep 'enclosure url=' "$tmpfile" | head -$i | tail -1 | cut -d'"' -f2
     #curl $curl_opt "$url" | grep -m$(($i+2)) '<link>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
     #echo http://youtu.be/$(curl $curl_opt http://newstapa.org/feed | grep -m$i '<iframe src=' | tail -1 | cut -d"/" -f5 | cut -d'?' -f1)
     #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f24  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    done
    printf '\33[2K\r'
+   rm "$tmpfile"
   fi
  fi
 }
