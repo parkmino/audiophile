@@ -1,26 +1,20 @@
-[1.4.5]
+[1.4.12]
 
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp5/libupnpp5_0.17.2-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.5-1~ppa1~buster_armhf.deb
-$#wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-qobuz_1.4.5-1~ppa1~buster_all.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.5-1~ppa1~buster_all.deb
-
-$ sudo apt-get install libupnp6 libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
-$ sudo dpkg -i libupnpp*.deb upmpdcli_*.deb
-
-[1.4.10]
-
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libn/libnpupnp1/libnpupnp1_4.0.5-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp6/libupnpp6_0.19.1-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.10-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.10-1~ppa1~buster_all.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libn/libnpupnp1/libnpupnp1_4.0.7-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp6/libupnpp6_0.19.2-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.12-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.12-1~ppa1~buster_all.deb
 
 $ sudo apt-get install libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
 $ sudo dpkg -i lib*upnp*.deb upmpdcli_*.deb
 
-$ sudo apt-get update
-$ sudo apt-get install dirmngr
-$ gpg --keyserver pool.sks-keyservers.net --recv-key F8E3347256922A8AE767605B7808CE96D38B9201
+$ wget https://www.lesbonscomptes.com/pages/jf-at-dockes.org.pgp
+$ gpg --import jf-at-dockes.org.pgp
+
+$#sudo apt-get update
+$#sudo apt-get install dirmngr
+$#gpg --keyserver pool.sks-keyservers.net --recv-key F8E3347256922A8AE767605B7808CE96D38B9201
+
 $ gpg --export '7808CE96D38B9201' | sudo apt-key add -
 $ sudo nano /etc/apt/sources.list.d/upmpdcli.list
 
@@ -30,8 +24,6 @@ deb-src http://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/ buster main
 $ sudo apt-get update
 $ sudo apt-get install upmpdcli
 
-$ wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
-$ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
 $ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
 $ sudo sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
 $ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
@@ -151,6 +143,9 @@ artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.pn
 [radio Linn Jazz (Jazz)]
 url =  http://opml.radiotime.com/Tune.ashx?id=s122120
 artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.png
+
+$ wget -O icon.png https://github.com/openwrt/packages/raw/master/sound/upmpdcli/files/upmpdcli.png
+$ sudo mv ./icon.png /usr/share/upmpdcli/icon.png
 
 $#sudo nano /etc/environment
 	UPMPD_CONFIG="/etc/upmpdcli.conf"
