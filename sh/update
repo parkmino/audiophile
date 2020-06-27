@@ -280,7 +280,10 @@ DAS () {
   if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
    tmpfile=$(mktemp)
    curl $curl_opt "$url" | grep -o 'data-title="\(김어준\|\[총선\).*' > "$tmpfile"
-   [ -s "$tmpfile" ] || return
+   if [ ! -s "$tmpfile" ]; then
+    rm "$tmpfile"
+    return
+   fi
    for i in $(seq 1 $last); do
     printf '\33[2K\r  '
     head -$i "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
@@ -557,7 +560,10 @@ NEWSTAPA () {
   if [ "$days" -le 1 2>/dev/null ]; then
    tmpfile=$(mktemp)
    curl $curl_opt "$url" > "$tmpfile"
-   [ -s "$tmpfile" ] || return
+   if [ ! -s "$tmpfile" ]; then
+    rm "$tmpfile"
+    return
+   fi
    for i in $(seq 1 $(((2-$days)*1))); do
     printf '\33[2K\r  '
      grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | cut -d'/' -f1
