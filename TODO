@@ -7,7 +7,12 @@
 	$ sudo nano /etc/rc.local
 		/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 39:4::0 -b 4002:3071 -z>/dev/null</dev/null 2>/dev/null
 
-03. ALSA initialization and Tasksets for Artik
+03. MPD buffer
+
+	$ sudo nano /etc/mpd.conf.sav
+		buffer_before_play "10.5596937298025%"
+
+04. ALSA initialization and Tasksets for Artik
 
 	# nano /etc/rc.local
 	
