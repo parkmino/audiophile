@@ -9,24 +9,24 @@ hrs=$(($ut%86400/3600))
 min=$(($ut%3600/60))
 sec=$(($ut%60))
 
-black=$(tput setaf 0)
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-yellow=$(tput setaf 3)
-lime_yellow=$(tput setaf 190)
-powder_blue=$(tput setaf 153)
-blue=$(tput setaf 4)
-magenta=$(tput setaf 5)
-cyan=$(tput setaf 6)
-white=$(tput setaf 7)
-bright=$(tput bold)
-normal=$(tput sgr0)
-blink=$(tput blink)
-reverse=$(tput smso)
-underline=$(tput smul)
+#black=$(tput setaf 0)
+#red=$(tput setaf 1)
+#green=$(tput setaf 2)
+#yellow=$(tput setaf 3)
+#lime_yellow=$(tput setaf 190)
+#powder_blue=$(tput setaf 153)
+#blue=$(tput setaf 4)
+#magenta=$(tput setaf 5)
+#cyan=$(tput setaf 6)
+#white=$(tput setaf 7)
+#bright=$(tput bold)
+#normal=$(tput sgr0)
+#blink=$(tput blink)
+#reverse=$(tput smso)
+#underline=$(tput smul)
 
 printf "$(date +'%Y년%-m월%-d일(%a) %p%-I:%M:%S')"
-printf " | ⏱️  %d+%02d:%02d:%02d | CPU \e[1;34m%0.1f%%\e[m | MEM \e[1;34m%0.1f%%\e[m |" $day $hrs $min $sec $cpu $mem
+printf " | ⏱️  %d+%02d:%02d:%02d | CPU $(tput setaf 4)%0.1f%%$(tput sgr0) | MEM $(tput setaf 4)%0.1f%%$(tput sgr0) |" $day $hrs $min $sec $cpu $mem
 
 if [ "$status" = "Charging" ]; then
  printf " 🔌 "
@@ -40,8 +40,8 @@ fi
 
 if [ $charge -lt 20 ] && [ $status != Charging ]; then
 #printf " 😓\n"
- printf "${red}$charge%%${normal}\n"
+ printf "$(tput setaf 1)$charge%%$(tput sgr0)\n"
 else
 #printf " 🙂️"
- printf "${green}$charge%%${normal}\n"
+ printf "$(tput setaf 2)$charge%%$(tput sgr0)\n"
 fi
