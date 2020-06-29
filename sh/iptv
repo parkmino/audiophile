@@ -24,12 +24,12 @@ url_probe () {
  pls="$(echo "$iptv_url" | cut -d\/ -f-3)/playlist"
  curl $curl_chk $pls || continue
  printf "\33[2K\r%02d. $i (Page $h of $page)" $nr
- ffprobe $ffprobe_opt "$iptv_url" && printf "\33[2K\r$i\n    $pls\n" && nr=$(($nr+1))
+ ffprobe $ffprobe_opt "$iptv_url" && printf "\33[2K\r$i\n    \e[34m$pls\e[0m\n" && nr=$(($nr+1))
 }
 
 case "$1" in
  ip)
-  printf "$url"
+  printf "\e[2m$url\e[0m"
   ! curl $curl_opt "${url}" >/dev/null && printf " is not available!\n" && exit
   page=$(curl $curl_opt "${url}" | grep -o "Page 1 of [0-9]*" | cut -d' ' -f4)
   echo
