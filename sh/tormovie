@@ -35,7 +35,7 @@ torwal () {
  for i in $(seq 1 10); do
   movie=$(curl -sL -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//')
   chk_movie
-  printf "     $url$(curl -sL -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\n"
+  printf "     \e[34m$url$(curl -sL -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\e[0m\n"
  done
 }
 
@@ -50,7 +50,7 @@ torqq () {
  for i in $(seq 1 10); do
   movie=$(head -$((i+1)) "$tmpfile" | tail -1 | cut -d\" -f2)
   chk_movie
-  printf "     $(grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" "$tmpfile" | head -$i | tail -1 | cut -d\" -f2)\n"
+  printf "     \e[34m$(grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" "$tmpfile" | head -$i | tail -1 | cut -d\" -f2)\e[0m\n"
  done
  rm "$tmpfile"
 }
@@ -64,7 +64,7 @@ torview () {
  for i in $(seq 1 10); do
   movie=$(grep '</a>' "$tmpfile" | head -$i | tail -1 | sed 's/ <\/a>//')
   chk_movie
-  printf "     $(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g')\n"
+  printf "     \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g')\e[0m\n"
  done
  rm "$tmpfile"
 }
