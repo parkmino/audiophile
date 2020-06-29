@@ -10,7 +10,7 @@ min=$(($ut%3600/60))
 sec=$(($ut%60))
 
 printf "$(date +'%Y년%-m월%-d일(%a) %p%-I:%M:%S')"
-printf " | ⏱️  %d+%02d:%02d:%02d | CPU \e[34m%0.1f%%\e[0m | MEM \e[34m%0.1f%%\e[0m |" $day $hrs $min $sec $cpu $mem
+printf " | ⏱️  %d+%02d:%02d:%02d | CPU \e[32m%0.1f%%\e[0m | MEM \e[32m%0.1f%%\e[0m |" $day $hrs $min $sec $cpu $mem
 
 if [ "$status" = "Charging" ]; then
  printf " 🔌 "
