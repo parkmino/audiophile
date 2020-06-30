@@ -13,7 +13,7 @@ renderer_name () {
  --------------------------------------------
 
 
- [ $current_name ] Renderer Name / 렌더러 이름
+ [ \e[32m"$current_name"\e[0m ] Renderer Name / 렌더러 이름
 
 
  (m) Main / 주메뉴
@@ -49,15 +49,15 @@ until [ "$i" = "q" ] ; do
   Audio Configuration / 오디오 설정
  -----------------------------------
 
- (1) [ $([ "$status_dop"      = off ] && echo X || echo O) ] MPD DoP (DSD over PCM)
- (2) [ $([ "$status_pcm"      = off ] && echo X || echo O) ] MPD PCM Decoder
- (3) [ $([ "$status_vol"      = off ] && echo X || echo O) ] MPD Software Volume
- (4) [ $([ "$status_tag"      = off ] && echo X || echo O) ] MPD Tag Metadata
+ (1) [ $([ "$status_dop"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD DoP (DSD over PCM)
+ (2) [ $([ "$status_pcm"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD PCM Decoder
+ (3) [ $([ "$status_vol"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD Software Volume
+ (4) [ $([ "$status_tag"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD Tag Metadata
 
- (5) [ $([ "$status_airplay"  = off ] && echo X || echo O) ] Airplay
- (6) [ $([ "$status_sqzlite"  = off ] && echo X || echo O) ] Squeezebox
+ (5) [ $([ "$status_airplay"  = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] Airplay
+ (6) [ $([ "$status_sqzlite"  = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] Squeezebox
 
- (7) [ $current_name ] Renderer Name / 렌더러 이름 >>
+ (7) [ \e[32m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
 
  (q) Quit   / 나가기
  (r) Reboot / 재시작하여 적용
