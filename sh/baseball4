@@ -17,14 +17,17 @@ out=0
 count="" # " [Ball count]"
 
 until [ $strike -eq 4 ] || [ $out -eq 3 ] ; do
- read -p " *" in
+
+ pitch=$((pitch + 1)) # ((pitch+=1))
+
+ read -p " *$pitch " in
  if [ ${#in} -eq 4 ] && [ $in -ge 0 2>/dev/null ] && [ $in -le 9999 ]; then
   f_in=$(expr substr $in 1 1) # ${in:0:1}
   s_in=$(expr substr $in 2 1) # ${in:1:1}
   t_in=$(expr substr $in 3 1) # ${in:2:1}
   l_in=$(expr substr $in 4 1) # ${in:3:1}
  else
-  echo "• It should be in 0000~9999 to hit $f_nr$s_nr$t_nr$l_nr and exit (-_-;)"
+  echo "• It should be in 0000~9999 to hit $f_nr$s_nr$t_nr$l_nr and exit 😥️"
   exit
  fi
 
@@ -50,19 +53,17 @@ until [ $strike -eq 4 ] || [ $out -eq 3 ] ; do
 
  [ $(($ball + $strike)) -eq 0 ] && out=$((out + 1)) # ((out+=1))
 
- pitch=$((pitch + 1)) # ((pitch+=1))
-
- count="$count\n$(printf "%3s" \#$pitch) $f_in$s_in$t_in$l_in S:$strike B:$ball O:$out"
+ count="$count\n$(printf "\e[32m%3s" \#$pitch) $f_in$s_in$t_in$l_in S:$strike B:$ball O:$out\e[0m"
  echo "$count" | grep .
 done
 
-[ $out -ge 3 ] && echo "• Three out and you lost $f_nr$s_nr$t_nr$l_nr! ☹" && exit
+[ $out -ge 3 ] && echo "• Three out and you lost $f_nr$s_nr$t_nr$l_nr! 😥️" && exit
 
 printf "• You beat me at $pitch pitches! "
 if [ $pitch -le 5 ]; then
- printf "Wonderful ☻\n"
+ printf "Wonderful 😀️\n"
 elif [ $pitch -le 9 ]; then
- printf "Very good ☺\n"
+ printf "Very good 🙂️\n"
 else
  printf "😐\n"
 fi
