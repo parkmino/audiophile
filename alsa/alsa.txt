@@ -54,7 +54,7 @@ $ unset ver
 
 $ dpkg-query -l 'libasound*'
 $ sudo apt-get remove '^libasound2-plugin.*'
-$ ls /usr/lib/*/alsa-lib/
+$ ls /usr/lib/*/alsa-lib/ 2>/dev/null
 $ sudo rm -rf /usr/lib/*/alsa-lib/
 
 $ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
@@ -65,7 +65,7 @@ $ ls -al /dev/shm/
 $ sudo nano /etc/ld.so.conf.d/dev_shm.conf
 	/dev/shm/
 $ sudo ldconfig
-$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*}
+$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*} 2>/dev/null
 
 $ [ -d /usr/share/alsa.orig ] && sudo rm -rf /usr/share/alsa.orig
 $ sudo mv /usr/share/alsa /usr/share/alsa.orig
@@ -76,6 +76,9 @@ $ sudo nano /lib/modprobe.d/aliases.conf
 $ sudo mkdir /usr/share/alsa
 $ sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 $ sudo mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
+
+$ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/
+$ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
 $ sudo nano /etc/rc.local
 $ sudo reboot
