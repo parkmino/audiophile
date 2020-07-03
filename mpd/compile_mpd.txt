@@ -92,9 +92,9 @@ patch -p1 < ./mpd-0.21git-...patch
 ./autogen.sh
 ./configure ... --enable-rtopt --enable-glib
 
-$ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec pcm_s16le	blank.wav
-$ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec flac	blank.flac
-$ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec mp3	blank.mp3
+$ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec pcm_s16le blank.wav
+$ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec flac blank.flac
+$ ffmpeg -ar 44100 -t 1 -f s16le -acodec pcm_s16le -ac 2 -i /dev/zero -acodec mp3 blank.mp3
 
 https://www.musicpd.org/doc/html/protocol.html
 commands, stats, status, decoders, urlhandlers, close
@@ -108,9 +108,12 @@ $ sudo apt-get install gcc-mingw-w64 mingw-w64
 $ sudo apt-get install nasm yasm quilt
 $ cd MPD-master
 $ nano win32/build.py
+  #liblame,
   #libmodplug,
   #wildmidi,
   #gme,
+  #libnfs,
 $ mkdir -p output/win64
 $ cd output/win64
+$#export LDFLAGS="-fstack-protector" ; export LIBS="-lssp"
 $ ../../win32/build.py --64
