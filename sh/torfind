@@ -1,12 +1,12 @@
 #!/bin/sh
 
-#prog_1="JTBC 뉴스룸"
+#prog_0="JTBC 뉴스룸"
  prog_1="보이스 코리아 2020\t(금 19:00-21:00)"
  prog_2="맛있는 녀석들\t(금 20:00-21:20)"
- prog_3="팬텀싱어3\t\t(금 21:00-23:00)"
- prog_4="비긴어게인 코리아\t(토 23:00-01:00)"
- prog_5="악인전\t\t(토 22:55-00:15)"
- prog_6="멜론"
+ prog_3="악인전\t\t(토 22:55-00:15)"
+ prog_4="비긴어게인 코리아\t(일 23:00-01:00)"
+ prog_5="멜론"
+#prog_6="팬텀싱어3\t\t(금 21:00-23:00)"
 
 nr=1
 
@@ -20,13 +20,13 @@ done
 read -p " " i
 
 case $i in
-#1) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30" ;;
+#0) [ $(date +%k) -ge 22 ] && time="today 21:30" || time="yesterday 21:30" ;;
  1) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:00" || time="last friday 21:00" ;;
  2) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:20" || time="last friday 21:20" ;;
- 3) time="last friday 23:00"	;;
- 4) time="last saturday 23:59"	;;
- 5) time="last saturday 23:59"	;;
- 6) time="yesterday"		;;
+ 3) time="last saturday 23:59"	;;
+ 4) time="last sunday 23:59"	;;
+ 5) time="yesterday"		;;
+ 6) time="last friday 23:00"	;;
  *) exit			;;
 esac
 
