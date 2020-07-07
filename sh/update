@@ -609,6 +609,21 @@ STRAWBERRY () {
  fi
 }
 
+TASTYGUYS () {
+ printf "• 맛있는 녀석들\t\t\t\t\t"
+ url="https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"
+ latest=$(curl $curl_opt "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
+ if [ -z "$latest" ]; then
+  printf "정보 없음\n"
+ else
+  label=$(curl $curl_opt "$url" | grep -o '"label":.*' | cut -d\" -f4)
+  [ -z "$label" ] && printf "정보 없음\n  https://youtu.be/$latest\n" && return
+  days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
+  prog=$(echo "$label" | sed 's/ \[맛있는.*//')
+  printf "$days\n  $prog\n  https://youtu.be/$latest\n"
+ fi
+}
+
 TELEGRAM () {
  printf "• Telegram\t"
  ver=$(dpkg -l telegram-cli | tail -1 | cut -d' ' -f6 | grep -o [0-9.]* | head -1)
@@ -729,6 +744,7 @@ YOUTUBE_DL () {
 #BUNKER1	# 벙커1
 #ALILEO_LIVE	# 알릴레오 라이브 (알라뷰)
 #ALILEO		# 알릴레오
+ TASTYGUYS	# 맛있는 녀석들
 
 ### Telegram
  TELEGRAM
