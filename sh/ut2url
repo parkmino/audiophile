@@ -9,7 +9,8 @@ echo "\
 (y) 연합뉴스TV
 (v) YTN LIVE
 (f) YTN 라이프
-(c) YTN 사이언스" # (r) RTV 시민방송
+(c) YTN 사이언스
+(g) 맛있는 녀석들" # (r) RTV 시민방송
 
 read -p " " i
 
@@ -24,13 +25,19 @@ case $i in
  f) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
  c) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
  r) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
+ g) ch=tastyguys   ; url="https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg" ;;
  *) exit ;;
 esac
 
-uturl=$(curl -s "$url" | grep -m1 -o data-context-item-id.* | cut -d\" -f2)
- [ -n "$uturl" ] && printf "  $ch - https://youtu.be/$uturl\n( $url )\n"
-#[ -n "$uturl" ] && printf "  $ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n( $url )\n"
+if [ "$i" = g ]; then
+ uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
+else
+ uturl=$(curl -s "$url" | grep -o data-context-item-id.* | head -1 | cut -d\" -f2)
+fi
 
-m3u_dir="/home/parkmino/Videos"
+[ -z "$uturl" ] && echo "YouTube url is not found !" && exit
 
-printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > $m3u_dir/$ch.m3u
+ printf "  $ch - https://youtu.be/$uturl\n( $url )\n"
+#printf "  $ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n( $url )\n"
+
+printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > /home/parkmino/Videos/$ch.m3u
