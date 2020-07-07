@@ -9,7 +9,7 @@ hrs=$(($ut%86400/3600))
 min=$(($ut%3600/60))
 sec=$(($ut%60))
 
-printf "$(date +'%Y년%-m월%-d일(%a) %p%-I:%M:%S') | ⏱️  %d+%02d:%02d:%02d" $day $hrs $min $sec
+printf "$(date +'%Y년%-m월%-d일(%a) %p%-I:%M:%S') | ⏱️  \e[32m%d+%02d:%02d:%02d\e[0m" $day $hrs $min $sec
 
 for i in CPU MEM; do
  j=$(eval echo \$$i)
