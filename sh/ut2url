@@ -31,13 +31,20 @@ esac
 
 if [ "$i" = g ]; then
  uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
+  if [ -n "$uturl" ]; then
+   label=$(curl -s "$url" | grep -o '"label":.*' | cut -d\" -f4)
+   [ -z "$label" ] && printf "  정보 없음\n  https://youtu.be/$uturl\n" && exit
+   days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
+   prog=$(echo "$label" | sed 's/ \[맛있는.*//')
+   printf "\e[32m$prog ($days)\e[0m\n"
+  fi
 else
  uturl=$(curl -s "$url" | grep -o data-context-item-id.* | head -1 | cut -d\" -f2)
 fi
 
 [ -z "$uturl" ] && echo "YouTube url is not found !" && exit
 
- printf "  $ch - https://youtu.be/$uturl\n( $url )\n"
-#printf "  $ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n( $url )\n"
+ printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
+#printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
 
 printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > /home/parkmino/Videos/$ch.m3u
