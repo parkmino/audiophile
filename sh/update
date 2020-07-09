@@ -744,7 +744,7 @@ YOUTUBE_DL () {
 #BUNKER1	# 벙커1
 #ALILEO_LIVE	# 알릴레오 라이브 (알라뷰)
 #ALILEO		# 알릴레오
- TASTYGUYS	# 맛있는 녀석들
+#TASTYGUYS	# 맛있는 녀석들
 
 ### Telegram
  TELEGRAM
