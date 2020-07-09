@@ -180,10 +180,11 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 70 4 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 67 5 \
 "dop" "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "pcm"      "Enable PCM Decoder          PCM 디코더 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
 "vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) \
+"sta" "Enable State File           상태 파일 사용" $(grep -q '^state_file' $mpd_conf && echo ON || echo OFF) \
 "tag" "Enable Tag Metadata         태그 메타데이터 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
@@ -191,6 +192,7 @@ if [ "$exitstatus" = 0 ]; then
  [[ $i =~ dop ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
  [[ $i =~ pcm ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
  [[ $i =~ vol ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+ [[ $i =~ sta ]] && sudo sed -i '/state_file/s/^#*//' $mpd_conf || sudo sed -i '/state_file/s/^/#/' $mpd_conf
  [[ $i =~ tag ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
 fi
 }
@@ -198,7 +200,7 @@ fi
 features () {
 i=$(whiptail --title "AirPlay, Roon Bridge, Spotify, Squeezebox" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 4 \
 "airplay"   "Enable AirPlay       에어플레이 사용" $(grep -q 'airplay=on' $audio_conf && echo ON || echo OFF) \
-"roon"      "Enable Roon Bridge   룬 브리지  사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
+"roon"      "Enable Roon Bridge   룬 브리지 사용" $(grep -q 'roon=on' $audio_conf && echo ON || echo OFF) \
 "spotify"   "Enable Spotify       스포티파이 사용" $(grep -q 'spotify=on' $audio_conf && echo ON || echo OFF) \
 "sqzlite"   "Enable Squeezebox    스퀴즈박스 사용" $(grep -q 'sqzlite=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
 
@@ -277,15 +279,15 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "audio-config" 15 77 8 \
- "1"  "Audio device                   오디오 장치                        >" \
- "2"  "MPD options                    MPD 옵션                           >" \
- "3"  "Change renderer name           렌더러 이름 바꾸기                 >" \
- "4"  "Airplay, Roon Bridge, Spotify, Squeezebox                         >" \
- "5"  "IP TTS, DBus                   IP TTS와 DBus                      >" \
- "6"  "Ethernet IP                    유선 IP 설정                       >" \
- "7"  "USB signal & power             USB 신호와 전원                    >" \
- "8"  "Raspberry OS update            OS 업데이트" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "audio-config" 15 65 8 \
+ "1"  "Audio device               오디오 장치            >" \
+ "2"  "MPD options                MPD 옵션               >" \
+ "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
+ "4"  "Airplay, Roon Bridge, Spotify, Squeezebox         >" \
+ "5"  "IP TTS, DBus               IP TTS와 DBus          >" \
+ "6"  "Ethernet IP                유선 IP 설정           >" \
+ "7"  "USB signal & power         USB 신호와 전원        >" \
+ "8"  "Raspberry OS update        OS 업데이트" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break

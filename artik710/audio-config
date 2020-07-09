@@ -81,18 +81,20 @@ esac
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Audio Sylphid Network Player" 10 70 4 \
-"dop"      "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 67 5 \
+"dop" "Enable DoP (DSD over PCM)   DoP 사용" $(grep -q '^dop' $mpd_conf && echo ON || echo OFF) \
 "pcm"      "Enable PCM Decoder          PCM 디코더 사용" $(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo ON || echo OFF) \
-"vol"      "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) \
-"tag"      "Enable Tag Metadata         태그 메타데이터 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
+"vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(grep -q 'mixer_type.*software' $mpd_conf && echo ON || echo OFF) \
+"sta" "Enable State File           상태 파일 사용" $(grep -q '^state_file' $mpd_conf && echo ON || echo OFF) \
+"tag" "Enable Tag Metadata         태그 메타데이터 사용" $(grep -q '^metadata.*none' $mpd_conf && echo OFF || echo ON) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ dop    ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
- [[ $i =~ pcm    ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
- [[ $i =~ vol    ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
- [[ $i =~ tag    ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
+ [[ $i =~ dop ]] && sudo sed -i '/dop/s/^#*//g' $mpd_conf || sudo sed -i '/dop/s/^/#/g' $mpd_conf
+ [[ $i =~ pcm ]] && sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf || sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/' $mpd_conf
+ [[ $i =~ vol ]] && sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf || sudo sed -i '/mixer_type/s/".*"/"none"/' $mpd_conf
+ [[ $i =~ sta ]] && sudo sed -i '/state_file/s/^#*//' $mpd_conf || sudo sed -i '/state_file/s/^/#/' $mpd_conf
+ [[ $i =~ tag ]] && sudo sed -i '/metadata.*none/s/^/#/' $mpd_conf || sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf
 fi
 }
 
@@ -121,10 +123,10 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Bann Audio Sylphid Network Player" 10 77 3 \
-"1" "MPD options                    MPD 옵션                           >" \
-"2" "Change renderer name           렌더러 이름 바꾸기                 >" \
-"3" "AirPlay, Roon Bridge, Spotify, Squeezebox                         >" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Bann Audio Sylphid Network Player" 10 63 3 \
+"1" "MPD options                MPD 옵션               >" \
+"2" "Change renderer name       렌더러 이름 바꾸기     >" \
+"3" "AirPlay, Roon Bridge, Spotify, Squeezebox         >" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
