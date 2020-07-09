@@ -80,7 +80,7 @@ AIRCONNECT () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  Update AirConnect? [Y/n]" answer
+  read -p "  \e[32mUpdate AirConnect? [Y/n]\e[30m" answer
   if [ "$answer" != n ]; then
    printf '  '
    wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64 -P /home/parkmino/Downloads/
@@ -285,13 +285,13 @@ DAS () {
     return
    fi
    for i in $(seq 1 $last); do
-    printf '\33[2K\r  '
+    printf '\33[2K\r  \e[32m'
     head -$i "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    #printf '   https://youtu.be/'
-    printf '\33[2K\r  '
+    printf '\33[2K\r  \e[34m'
     head -$i "$tmpfile" | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
    done
-   printf '\33[2K\r'
+   printf '\e[0m\33[2K\r'
    rm "$tmpfile"
   fi
  fi
@@ -405,7 +405,7 @@ GOOGLER () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  Update googler? [Y/n]" answer
+  read -p "  \e[32mUpdate googler? [Y/n]\e[0m" answer
   [ "$answer" != n ] && printf '  ' && sudo googler -u
  fi
 }
@@ -470,7 +470,7 @@ LIBFFMPEG () {
  msg
  url="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases/download/$latest/$latest-linux-x64.zip"
  if [ -n "$current" ] && [ "$current" != "$latest" ] && curl -IL -s $url | grep -qs '302 Found'; then
-  read -p "  Update libffmpeg.so? [Y/n]" answer
+  read -p "  \e[32mUpdate libffmpeg.so? [Y/n]\e[0m" answer
   if [ "$answer" != n ]; then
    printf '  '
    sudo rm -f /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip
@@ -515,11 +515,11 @@ MPD_CANTATA_MYMPD () {
    days_diff
    if [ "$days" -le 1 2>/dev/null ]; then
     for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
-     printf '\33[2K\r  '
+     printf '\33[2K\r  \e[32m'
     #curl $curl_opt https://github.com/$i/commits/master | grep -m$j -A1 commit-title | tail -1 | sed 's/.*title=.//; s/.>.*//' | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
      curl $curl_opt https://github.com/$i/commits/master | grep -m$j -A1 commit-title | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
     done
-    printf '\33[2K\r'
+    printf '\e[0m\33[2K\r'
    fi
   fi
  done
@@ -565,17 +565,17 @@ NEWSTAPA () {
     return
    fi
    for i in $(seq 1 $(((2-$days)*1))); do
-    printf '\33[2K\r  '
+    printf '\33[2K\r  \e[32m'
      grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | cut -d'/' -f1
     #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f20  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
     #curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m$i \'share_title\' | tail -1 | sed 's/.*share_title'\'':'\''//; s/'\'',//; s/\\'\''/'\''/g'
-    printf '\33[2K\r  '
+    printf '\33[2K\r  \e[34m'
      grep 'enclosure url=' "$tmpfile" | head -$i | tail -1 | cut -d'"' -f2
     #curl $curl_opt "$url" | grep -m$(($i+2)) '<link>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
     #echo http://youtu.be/$(curl $curl_opt http://newstapa.org/feed | grep -m$i '<iframe src=' | tail -1 | cut -d"/" -f5 | cut -d'?' -f1)
     #curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m$i preview-title | tail -1 | cut -d\" -f24  | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    done
-   printf '\33[2K\r'
+   printf '\e[0m\33[2K\r'
    rm "$tmpfile"
   fi
  fi
@@ -658,7 +658,7 @@ TTYD () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  Update ttyd? [Y/n]" answer
+  read -p "  \e[32mUpdate ttyd? [Y/n]\e[0m" answer
   if [ "$answer" != n ]; then
    printf '  '
   #curl -s "$url" | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.x86_64/' | wget "$(cat -)" -P /home/parkmino/Downloads/
@@ -699,7 +699,7 @@ YOUTUBE_DL () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  Update youtube-dl? [Y/n]" answer
+  read -p "  \e[32mUpdate youtube-dl? [Y/n]\e[0m" answer
   [ "$answer" != n ] && printf '  ' && sudo youtube-dl --update
  fi
 }
