@@ -42,7 +42,6 @@ case "$1:$2:$3" in
  sqzlite:on:*)  sudo sed -i '/sqzlite=/s/=.*/=on/'  $audio_conf				;;
  sqzlite:off:*) sudo sed -i '/sqzlite=/s/=.*/=off/' $audio_conf				;;
  sqzlite:*)     grep ^sqzlite= $audio_conf | cut -d= -f2					;;
- spotify:*)     grep ^spotify= $audio_conf | cut -d= -f2					;;
  mympd:on:*)    sudo sed -i '/mympd=/s/=.*/=on/'  $audio_conf				;;
  mympd:off:*)   sudo sed -i '/mympd=/s/=.*/=off/' $audio_conf				;;
  mympd:*)       grep ^mympd= $audio_conf | cut -d= -f2					;;
