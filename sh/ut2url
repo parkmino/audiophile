@@ -32,7 +32,7 @@ esac
 if [ "$i" = g ]; then
  uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
   if [ -n "$uturl" ]; then
-   label=$(curl -s "$url" | grep -o '"label":.*' | sed 's/\\"//g' | cut -d\" -f4)
+   label=$(curl -s "$url" | grep -o '"label":.*' | cut -c -300 | sed 's/\\"//g' | cut -d\" -f4)
    [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[34mhttps://youtu.be/$uturl\e[0m\n" && exit
    days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
    prog=$(echo "$label" | sed 's/ \[맛있는.*//')
