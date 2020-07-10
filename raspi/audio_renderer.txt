@@ -482,7 +482,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 25. audio-config
 
-	$ sudo mv copy/audio-config copy/audioconf /usr/bin/
+	$ sudo mv copy/{audio-config,audioconf,consf} /usr/bin/
 	$ sudo mv copy/audio.conf /etc/default/
 	$ audio-config
 	$ audioconf

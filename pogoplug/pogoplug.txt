@@ -471,7 +471,7 @@ Debian-4.4.0-kirkwood-tld-1-rootfs-bodhi.tar.bz2
 
 18. audio-config
 
-	# mv copy/{audio-config,audioconf} /usr/bin/
+	# mv copy/{audio-config,audioconf,consf} /usr/bin/
 	# mv copy/audio.conf /etc/default/
 	# audio-config
 	# audioconf

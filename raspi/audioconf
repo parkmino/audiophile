@@ -1,9 +1,5 @@
 #!/bin/sh
 
-audio_conf=/etc/default/audio.conf
-[ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
-[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
-
 renderer_name () {
 
  clear
@@ -25,23 +21,21 @@ renderer_name () {
  case $i in
   m) clear ; return ;;
   q) exit ;;
-  *) sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$i"'/' $upmpdcli_conf ;;
+  *) consf upmpd set "$i" ;;
  esac
  return
 }
 
 until [ "$i" = "q" ] ; do
 
- current_name=$(grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3-)
+ current_name=$(consf upmpd)
 
- status_dop=$(grep -q '^dop' $mpd_conf && echo on || echo off)
- status_pcm=$(grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo on || echo off)
- status_vol=$(grep -q 'mixer_type.*software' $mpd_conf && echo on || echo off)
- status_sta=$(grep -q '^state_file' $mpd_conf && echo on || echo off)
- status_tag=$(grep -q '^metadata.*none' $mpd_conf && echo off || echo on)
+ for i in dop pcm vol sta tag; do
+  eval status_$i="$(consf mpd $i)"
+ done
 
  for i in airplay roon spotify sqzlite; do
-  eval status_$i="$(grep ^$i= $audio_conf | cut -d= -f2)"
+  eval status_$i="$(consf $i)"
  done
 
  clear
@@ -50,71 +44,35 @@ until [ "$i" = "q" ] ; do
   Audio Configuration / 오디오 설정
  -----------------------------------
 
- (1) [ $([ "$status_dop"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD DoP (DSD over PCM)
- (2) [ $([ "$status_pcm"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD PCM Decoder
- (3) [ $([ "$status_vol"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD Software Volume
- (4) [ $([ "$status_sta"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD State File
- (5) [ $([ "$status_tag"      = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] MPD Tag Metadata
+ (\e[33m1\e[0m) [ $([ "$status_dop"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD DoP (DSD over PCM)
+ (\e[33m2\e[0m) [ $([ "$status_pcm"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD PCM Decoder
+ (\e[33m3\e[0m) [ $([ "$status_vol"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD Software Volume
+ (\e[33m4\e[0m) [ $([ "$status_sta"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD State File
+ (\e[33m5\e[0m) [ $([ "$status_tag"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD Tag Metadata
 
- (6) [ $([ "$status_airplay"  = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] Airplay
- (7) [ $([ "$status_roon"     = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] Roon Bridge
- (8) [ $([ "$status_spotify"  = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] Spotify
- (9) [ $([ "$status_sqzlite"  = off ] && echo "\e[32mX\e[0m" || "\e[32mO\e[0m") ] Squeezebox
+ (\e[33m6\e[0m) [ $([ "$status_airplay" = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Airplay
+ (\e[33m7\e[0m) [ $([ "$status_roon"    = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Roon Bridge
+ (\e[33m8\e[0m) [ $([ "$status_spotify" = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Spotify
+ (\e[33m9\e[0m) [ $([ "$status_sqzlite" = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Squeezebox
 
- (n) [ \e[32m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
+ (\e[33mn\e[0m) [ \e[32m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
 
- (q) Quit   / 나가기
- (r) Reboot / 재시작하여 적용
+ (\e[33mq\e[0m) Quit   / 나가기
+ (\e[33mr\e[0m) Reboot / 재시작하여 적용
 
-  *  Select / 선택 (1-9|n|q|r) : "
+  *  Select / 선택 (\e[33m1-9\e[0m|\e[33mn\e[0m|\e[33mq\e[0m|\e[33mr\e[0m) : "
  read i
  echo
  case $i in
-  1) if [ $status_dop = off ]; then
-      sudo sed -i '/dop/s/^#*//g'                   $mpd_conf
-     else
-      sudo sed -i '/dop/s/^/#/g'                    $mpd_conf
-     fi ;;
-  2) if [ $status_pcm = off ]; then
-      sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf
-     else
-      sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  $mpd_conf
-     fi ;;
-  3) if [ $status_vol = off ]; then
-      sudo sed -i '/mixer_type/s/".*"/"software"/'  $mpd_conf
-     else
-      sudo sed -i '/mixer_type/s/".*"/"none"/'      $mpd_conf
-     fi ;;
-  4) if [ $status_sta = off ]; then
-      sudo sed -i '/state_file/s/^#*//'             $mpd_conf
-     else
-      sudo sed -i '/state_file/s/^/#/'              $mpd_conf
-     fi ;;
-  5) if [ $status_tag = off ]; then
-      sudo sed -i '/metadata.*none/s/^/#/'          $mpd_conf
-     else
-      sudo sed -i '/metadata.*none/s/^#*//'         $mpd_conf
-     fi ;;
-  6) if [ $status_airplay = off ]; then
-      sudo sed -i '/airplay=/s/=.*/=on/'            $audio_conf
-     else
-      sudo sed -i '/airplay=/s/=.*/=off/'           $audio_conf
-     fi ;;
-  7) if [ $status_roon = off ]; then
-      sudo sed -i '/roon=/s/=.*/=on/'               $audio_conf
-     else
-      sudo sed -i '/roon=/s/=.*/=off/'              $audio_conf
-     fi ;;
-  8) if [ $status_spotify = off ]; then
-      sudo sed -i '/spotify=/s/=.*/=on/'            $audio_conf
-     else
-      sudo sed -i '/spotify=/s/=.*/=off/'           $audio_conf
-     fi ;;
-  9) if [ $status_sqzlite = off ]; then
-      sudo sed -i '/sqzlite=/s/=.*/=on/'            $audio_conf
-     else
-      sudo sed -i '/sqzlite=/s/=.*/=off/'           $audio_conf
-     fi ;;
+  1) [ $status_dop     = off ] && consf mpd dop on || consf mpd dop off ;;
+  2) [ $status_pcm     = off ] && consf mpd pcm on || consf mpd pcm off ;;
+  3) [ $status_vol     = off ] && consf mpd vol on || consf mpd vol off ;;
+  4) [ $status_sta     = off ] && consf mpd sta on || consf mpd sta off ;;
+  5) [ $status_tag     = off ] && consf mpd tag on || consf mpd tag off ;;
+  6) [ $status_airplay = off ] && consf airplay on || consf airplay off ;;
+  7) [ $status_roon    = off ] && consf roon    on || consf roon    off ;;
+  8) [ $status_spotify = off ] && consf spotify on || consf spotify off ;;
+  9) [ $status_sqzlite = off ] && consf sqzlite on || consf sqzlite off ;;
   n) renderer_name ;;
   q) exit          ;;
   r) sudo reboot   ;;

@@ -395,7 +395,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 20. audio-config
 
-	# mv copy/{audio-config,audioconf} /usr/bin/
+	# mv copy/{audio-config,audioconf,consf} /usr/bin/
 	# mv copy/audio.conf /etc/default/
 	# audio-config
 	# audioconf
