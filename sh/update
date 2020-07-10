@@ -582,7 +582,7 @@ NEWSTAPA () {
 }
 
 RASPIOS () {
- printf "• Raspi OS\t"
+ printf "• RasPiOS\t"
  url="https://www.raspberrypi.org/downloads/raspberry-pi-os/"
  release="$(curl $curl_opt "$url" | grep 'Version' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)"
  date="$(curl $curl_opt "$url" | grep 'Release date' | tail -1 | cut -d'>' -f5 | cut -d'<' -f1)"
