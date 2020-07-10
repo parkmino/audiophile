@@ -12,7 +12,12 @@
 	$ sudo nano /etc/mpd.conf.sav
 		buffer_before_play "10.5596937298025%"
 
-04. ALSA initialization and Tasksets for Artik
+04. consf
+
+	$ sudo nano /usr/bin/consf
+		#!/bin/sh
+
+05. ALSA initialization and Tasksets for Artik
 
 	# nano /etc/rc.local
 	
