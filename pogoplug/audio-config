@@ -6,11 +6,11 @@ audio_conf=/etc/default/audio.conf
 
 mpd_options () {
 i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 67 5 \
-"dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop | tr [a-z] [A-Z]) \
-"pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm | tr [a-z] [A-Z]) \
-"vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol | tr [a-z] [A-Z]) \
-"sta" "Enable State File           상태 파일 사용"       $(consf mpd sta | tr [a-z] [A-Z]) \
-"tag" "Enable Tag Metadata         태그 메타데이터 사용" $(consf mpd tag | tr [a-z] [A-Z]) 3>&1 1>&2 2>&3)
+"dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop) \
+"pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm) \
+"vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol) \
+"sta" "Enable State File           상태 파일 사용"       $(consf mpd sta) \
+"tag" "Enable Tag Metadata         태그 메타데이터 사용" $(consf mpd tag) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -24,8 +24,8 @@ fi
 
 features () {
 i=$(whiptail --title "AirPlay, Squeezebox" --checklist "AirPlay, Squeezebox" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Pogoplug" 8 57 2 \
-"airplay"   "Enable AirPlay     에어플레이 사용" $(consf airplay | tr [a-z] [A-Z]) \
-"sqzlite"   "Enable Squeezbox   스퀴즈박스 사용" $(consf sqzlite | tr [a-z] [A-Z]) 3>&1 1>&2 2>&3)
+"airplay"   "Enable AirPlay     에어플레이 사용" $(consf airplay) \
+"sqzlite"   "Enable Squeezbox   스퀴즈박스 사용" $(consf sqzlite) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then

@@ -82,11 +82,11 @@ esac
 
 mpd_options () {
 i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 67 5 \
-"dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop | tr [a-z] [A-Z]) \
-"pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm | tr [a-z] [A-Z]) \
-"vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol | tr [a-z] [A-Z]) \
-"sta" "Enable State File           상태 파일 사용"       $(consf mpd sta | tr [a-z] [A-Z]) \
-"tag" "Enable Tag Metadata         태그 메타데이터 사용" $(consf mpd tag | tr [a-z] [A-Z]) 3>&1 1>&2 2>&3)
+"dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop) \
+"pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm) \
+"vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol) \
+"sta" "Enable State File           상태 파일 사용"       $(consf mpd sta) \
+"tag" "Enable Tag Metadata         태그 메타데이터 사용" $(consf mpd tag) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -108,10 +108,10 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 
 features () {
 i=$(whiptail --title "AirPlay, Roon Bridge, Spotify, Squeezebox" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 4 \
-"airplay" "Enable AirPlay       에어플레이 사용" $(consf airplay | tr [a-z] [A-Z]) \
-"roon"    "Enable Roon Bridge   룬 브리지  사용" $(consf roon    | tr [a-z] [A-Z]) \
-"spotify" "Enable Spotify       스포티파이 사용" $(consf spotify | tr [a-z] [A-Z]) \
-"sqzlite" "Enable Squeezebox    스퀴즈박스 사용" $(consf sqzlite | tr [a-z] [A-Z]) 3>&1 1>&2 2>&3)
+"airplay" "Enable AirPlay       에어플레이 사용" $(consf airplay) \
+"roon"    "Enable Roon Bridge   룬 브리지  사용" $(consf roon) \
+"spotify" "Enable Spotify       스포티파이 사용" $(consf spotify) \
+"sqzlite" "Enable Squeezebox    스퀴즈박스 사용" $(consf sqzlite) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
