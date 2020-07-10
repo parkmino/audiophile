@@ -42,5 +42,15 @@ case "$1:$2:$3" in
  sqzlite:on:*)  sudo sed -i '/sqzlite=/s/=.*/=on/'  $audio_conf				;;
  sqzlite:off:*) sudo sed -i '/sqzlite=/s/=.*/=off/' $audio_conf				;;
  sqzlite:*)     grep ^sqzlite= $audio_conf | cut -d= -f2					;;
+ spotify:*)     grep ^spotify= $audio_conf | cut -d= -f2					;;
+ upnp:on:*)     sudo sed -i '/upnp=/s/=.*/=on/'  $audio_conf				;;
+ upnp:off:*)    sudo sed -i '/upnp=/s/=.*/=off/' $audio_conf				;;
+ upnp:*)        grep ^upnp= $audio_conf | cut -d= -f2					;;
+ mympd:on:*)    sudo sed -i '/mympd=/s/=.*/=on/'  $audio_conf				;;
+ mympd:off:*)   sudo sed -i '/mympd=/s/=.*/=off/' $audio_conf				;;
+ mympd:*)       grep ^mympd= $audio_conf | cut -d= -f2					;;
+ ssh:on:*)      sudo sed -i '/ssh=/s/=.*/=on/'  $audio_conf				;;
+ ssh:off:*)     sudo sed -i '/ssh=/s/=.*/=off/' $audio_conf				;;
+ ssh:*)         grep ^ssh= $audio_conf | cut -d= -f2					;;
  *)             usage 									;;
 esac
