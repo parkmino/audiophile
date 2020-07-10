@@ -1,16 +1,16 @@
 #!/bin/sh
 
 echo "\
-(j) JTBC 뉴스
-(k) KBS 뉴스
-(m) MBC 뉴스
-(s) SBS 뉴스
-(t) tbs TV
-(y) 연합뉴스TV
-(v) YTN LIVE
-(f) YTN 라이프
-(c) YTN 사이언스
-(g) 맛있는 녀석들" # (r) RTV 시민방송
+(\e[32mj\e[0m) JTBC 뉴스
+(\e[32mk\e[0m) KBS 뉴스
+(\e[32mm\e[0m) MBC 뉴스
+(\e[32ms\e[0m) SBS 뉴스
+(\e[32mt\e[0m) tbs TV
+(\e[32my\e[0m) 연합뉴스TV
+(\e[32mv\e[0m) YTN LIVE
+(\e[32mf\e[0m) YTN 라이프
+(\e[32mc\e[0m) YTN 사이언스
+(\e[32mg\e[0m) 맛있는 녀석들" # (\e[32mr\e[0m) RTV 시민방송
 
 read -p " " i
 
@@ -32,8 +32,8 @@ esac
 if [ "$i" = g ]; then
  uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
   if [ -n "$uturl" ]; then
-   label=$(curl -s "$url" | grep -o '"label":.*' | cut -d\" -f4)
-   [ -z "$label" ] && printf "  정보 없음\n  https://youtu.be/$uturl\n" && exit
+   label=$(curl -s "$url" | grep -o '"label":.*' | sed 's/\\"//g' | cut -d\" -f4)
+   [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[34mhttps://youtu.be/$uturl\e[0m\n" && exit
    days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
    prog=$(echo "$label" | sed 's/ \[맛있는.*//')
    printf "\e[32m$prog ($days)\e[0m\n"
@@ -42,7 +42,7 @@ else
  uturl=$(curl -s "$url" | grep -o data-context-item-id.* | head -1 | cut -d\" -f2)
 fi
 
-[ -z "$uturl" ] && echo "YouTube url is not found !" && exit
+[ -z "$uturl" ] && printf "YouTube url is not found !\n$url\n" && exit
 
  printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
 #printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
