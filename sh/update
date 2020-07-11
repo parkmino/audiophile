@@ -532,6 +532,7 @@ MYMPD_DEV () {
  printf "$(date -d "$date" +%F)\t\t\t"
  days_diff
  if [ "$days" -le 1 2>/dev/null ]; then
+  echo "  \e[34m$url\e[0m"
   for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
    printf '\33[2K\r  \e[32m'
    curl $curl_opt "$url" | grep -m$j -A1 commit-title | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
@@ -699,6 +700,7 @@ UPMPDCLI_DEV () {
   printf "$(date -d "$date" +%F)\t\t\t"
   days_diff
   if [ "$days" -le 1 2>/dev/null ]; then
+   echo "  \e[34mhttps://framagit.org/users/medoc92/activity\e[0m"
    for i in $(seq 1 $(((2-$days)*1))); do
     printf '\33[2K\r  \e[32m'
     grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
