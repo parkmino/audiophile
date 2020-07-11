@@ -525,6 +525,21 @@ MPD_CANTATA_MYMPD () {
  done
 }
 
+MYMPD_DEV () {
+ printf "• myMPD Dev\t"
+ url="https://github.com/jcorporation/myMPD/commits/devel"
+ date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
+ printf "$(date -d "$date" +%F)\t\t\t"
+ days_diff
+ if [ "$days" -le 1 2>/dev/null ]; then
+  for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
+   printf '\33[2K\r  \e[32m'
+   curl $curl_opt "$url" | grep -m$j -A1 commit-title | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
+  done
+  printf '\e[0m\33[2K\r'
+ fi
+}
+
 MALP () {
  printf "• M.A.L.P.\t"
  url="https://gitlab.com/gateship-one/malp/commits/master"
@@ -672,6 +687,30 @@ UPMPDCLI () {
  msg
 }
 
+UPMPDCLI_DEV () {
+ printf "• Upmpdcli Dev\t"
+ url="https://framagit.org/medoc92.atom"
+ tmpfile=$(mktemp)
+ curl $curl_opt "$url" --output "$tmpfile"
+ date=$(grep "<updated>" "$tmpfile" | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
+ if [ -z "$date" ]; then
+  printf "\t\t\t\t정보 없음\n"
+ else
+  printf "$(date -d "$date" +%F)\t\t\t"
+  days_diff
+  if [ "$days" -le 1 2>/dev/null ]; then
+   for i in $(seq 1 $(((2-$days)*1))); do
+    printf '\33[2K\r  \e[32m'
+    grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
+    printf '\33[2K\r  \e[34m'
+    grep 'data-sourcepos=' "$tmpfile" | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
+   done
+   printf '\e[0m\33[2K\r'
+  fi
+ fi
+ rm "$tmpfile"
+}
+
 YOUTUBE_DL () {
  printf "• Youtube-dl\t"
  latest=$(curl $curl_opt https://github.com/ytdl-org/youtube-dl/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
@@ -698,8 +737,10 @@ YOUTUBE_DL () {
 ### ALSA & MPD & Upmpdcli
  ALSA
  MPD_CANTATA_MYMPD
+ MYMPD_DEV
 #MALP
  UPMPDCLI
+ UPMPDCLI_DEV
 #ASSETUPNP
 
 ### Kodi & LibreELEC
