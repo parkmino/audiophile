@@ -693,7 +693,7 @@ UPMPDCLI_DEV () {
  url="https://framagit.org/medoc92.atom"
  tmpfile=$(mktemp)
  curl $curl_opt "$url" --output "$tmpfile"
- date=$(grep "<updated>" "$tmpfile" | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
+ date=$(grep "<updated>" "$tmpfile" | head -2 | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
  if [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
