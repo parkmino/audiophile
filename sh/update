@@ -470,7 +470,7 @@ LIBFFMPEG () {
  msg
  url="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases/download/$latest/$latest-linux-x64.zip"
  if [ -n "$current" ] && [ "$current" != "$latest" ] && curl -IL -s $url | grep -qs '302 Found'; then
-  read -p "  \e[32mUpdate libffmpeg.so? [Y/n]\e[0m" answer
+  read -p "  Update libffmpeg.so? [Y/n]" answer
   if [ "$answer" != n ]; then
    printf '  '
    sudo rm -f /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip
