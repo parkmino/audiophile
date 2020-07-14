@@ -18,7 +18,7 @@ while true; do
  min=$(($dif%3600/60))
  sec=$(($dif%60))
  if [ $hrs -le 99 ]; then
-  printf "\33[2K\r⏱️  \e[32m%02d:%02d:%02d\e[0m \e[34m[ $(date +'%p%-I:%M:%S') - $origin ]\e[0m" $hrs $min $sec
+  printf "\33[2K\r⏱️  %02d:%02d:%02d \e[34m[ $(date +'%p%-I:%M:%S') - $origin ]\e[0m" $hrs $min $sec
  else
   printf "\nPassed the bounds of 100 hours and exit!\n"
   exit

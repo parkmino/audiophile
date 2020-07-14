@@ -49,7 +49,7 @@ msg () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\e[0m\n"
+  printf "구판 ($latest)\n"
  fi
 }
 
@@ -59,7 +59,7 @@ msg_url () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\n  $url\e[0m\n"
+  printf "구판 ($latest)\n  \e[32m$url\e[0m\n"
  fi
 }
 
@@ -79,7 +79,7 @@ AIRCONNECT () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\e[0m\n"
+  printf "구판 ($latest)\n"
   read -p "  \e[32mUpdate AirConnect? [Y/n]\e[30m" answer
   if [ "$answer" != n ]; then
    printf '  '
@@ -103,7 +103,7 @@ ADOBE_FLASH () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\e[0m\n"
+  printf "구판 ($latest)\n"
   echo "  Adboe Flash Player $latest download link"
   echo "  https://get.adobe.com/flashplayer/otherversions/"
  #echo "  $ sudo tar --overwrite -C /usr/lib/PepperFlash/ -zxvf ~/Downloads/flash_player_ppapi_*.tar.gz"
@@ -390,7 +390,7 @@ EXTINF () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\n  $url\n  \e[34msed -i 's/current=\"$current\"/current=\"$latest\"/' $0\e[0m\n"
+  printf "구판 ($latest)\n  \e[32m$url\e[0m\n  \e[34msed -i 's/current=\"$current\"/current=\"$latest\"/' $0\e[0m\n"
  fi
 }
 
@@ -404,7 +404,7 @@ GOOGLER () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\e[0m\n"
+  printf "구판 ($latest)\n"
   read -p "  \e[32mUpdate googler? [Y/n]\e[0m" answer
   [ "$answer" != n ] && printf '  ' && sudo googler -u
  fi
@@ -621,7 +621,7 @@ STRAWBERRY () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\n  $url\n  \e[34mhttps://builds.strawberrymusicplayer.org/ubuntu/focal/\e[0m\n"
+  printf "구판 ($latest)\n  \e[32m$url\e[0m\n  \e[34mhttps://builds.strawberrymusicplayer.org/ubuntu/focal/\e[0m\n"
  fi
 }
 
@@ -658,7 +658,7 @@ TTYD () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\e[0m\n"
+  printf "구판 ($latest)\n"
   read -p "  \e[32mUpdate ttyd? [Y/n]\e[0m" answer
   if [ "$answer" != n ]; then
    printf '  '
@@ -724,7 +724,7 @@ YOUTUBE_DL () {
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
  else
-  printf "\e[32m구판 ($latest)\e[0m\n"
+  printf "구판 ($latest)\n"
   read -p "  \e[32mUpdate youtube-dl? [Y/n]\e[0m" answer
   [ "$answer" != n ] && printf '  ' && sudo youtube-dl --update
  fi
