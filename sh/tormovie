@@ -56,7 +56,7 @@ torqq () {
 }
 
 torview () {
- url="https://torrentview15.net"
+ url="https://torrentview16.net"
  chk_url
  url="$url/bbs/board.php?bo_table=mov"
  tmpfile=$(mktemp)
