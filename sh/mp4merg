@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#ffmpeg -i video.mp4 -i audio.m4a -map 0:v -map 1:a -shortest -c copy output.mp4
+#ffmpeg -i video.mp4 -itsoffset 0.5 -i audio.m4a -map 0:v -map 1:a -shortest -c copy output.mp4
+#ffmpeg -i video.mp4 -vf scale=1920x1080:flags=lanczos output.mp4
+
+usage () {
+ echo "Usage: $(basename "$0") [1080] video_file audio_file"
+}
+
+if [ $# -eq 3 ] && [ "$1" = 1080 ]; then
+ for i in "$2" "$3"; do
+  [ ! -e "$i" ] && echo "$i does not exist!" && exit
+ done
+ ffmpeg -i "$2" -i "$3" -map 0:v -map 1:a -shortest -vf scale=1920x1080:flags=lanczos $(echo "$2" | cut -d. -f-$(echo "$1" | tr -cd . | wc -c))_1920x1080.mp4
+elif [ $# -eq 2 ]; then
+ for i in "$1" "$2"; do
+  [ ! -e "$i" ] && echo "$i does not exist!" && exit
+ done
+ ffmpeg -i "$1" -i "$2" -map 0:v -map 1:a -shortest -c copy $(echo "$2" | cut -d. -f-$(echo "$1" | tr -cd . | wc -c))_av.mp4
+else
+ usage && exit
+fi
