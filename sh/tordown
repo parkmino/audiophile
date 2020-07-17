@@ -4,10 +4,9 @@ usage () {
  echo "Usage: $(basename "$0") torrent"
 }
 
-if [ -r "$*" ]; then
- aria2c --dir=/home/parkmino/Downloads --seed-time=0 --enable-dht6=false --disable-ipv6=true "$*"
-else
+if [ $# -lt 1 ]; then
  usage
  exit
+else
+ aria2c --dir=/home/parkmino/Downloads --seed-time=0 --enable-dht6=false --disable-ipv6=true "$*"
 fi
-
