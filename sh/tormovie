@@ -69,8 +69,4 @@ torview () {
  rm "$tmpfile"
 }
 
-case "$1" in
- qq)	torqq	;;
- view)	torview	;;
- *)	torview	;;	# torqq
-esac
+[ "$1" = view ] && torview || torqq
