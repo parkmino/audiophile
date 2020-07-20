@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") video_file audio_file [1080] [audio_delay]"
+ echo "Usage: $(basename "$0") video_file audio_file [audio_delay] [1080]"
  echo "   or: $(basename "$0") cap|capture"
  echo "Merge video and audio files into a MP4 with FFmpeg"
 }
@@ -14,15 +14,19 @@ usage () {
 #ffmpeg -i video.mp4 -itsoffset 2 -i audio.m4a -map 0:v -map 1:a -shortest -c copy output.mp4
 #ffmpeg -i video.mp4 -vf scale=1920x1080:flags=lanczos output.mp4
 
-opt_offset=0
+opt_off=''
+opt_sc='-c copy'
 
-if [ $# -ge 3 ] || [ "$3" -ne 1080 ] 2>/dev/null; then
- offset=$(echo "$3" | grep -o "^[0-9]*.[0-9]*$")
- [ -n $offset ] && opt_offset="$offset"
-elif [ $# -ge 4 ] || [ "$4" -ne 1080 ] 2>/dev/null; then
- offset=$(echo "$4" | grep -o "^[0-9]*.[0-9]*$")
- [ -n $offset ] && opt_offset="$offset"
-fi
+for i in "$3" "$4"; do
+ if [ -n $i ]; then
+  if [ $i = 1080 ] 2>/dev/null; then
+   opt_sc='-vf scale=1920x1080:flags=lanczos'
+  else
+   off=$(echo $i | grep -o "^[0-9]*.[0-9]*$")
+   [ -n $off ] && opt_off="-itsoffset $off"
+  fi
+ fi
+done
 
 if [ $# -ge 2 ]; then
  for i in "$1" "$2"; do
@@ -30,13 +34,10 @@ if [ $# -ge 2 ]; then
  done
  afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_loudnorm.m4a
  ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a loudnorm=I=-13:TP=-2:LRA=20 "$afile"
- if [ "$3" -eq 1080 ] 2>/dev/null || [ "$4" -eq 1080 ] 2>/dev/null; then
-  ffmpeg -i "$1" -itsoffset $opt_offset -i "$afile" -map 0:v -map 1:a -shortest -vf scale=1920x1080:flags=lanczos $(echo "$1" | cut -d. -f-$(echo "$1" | tr -cd . | wc -c))_av.mp4
- else
-  ffmpeg -i "$1" -itsoffset $opt_offset -i "$afile" -map 0:v -map 1:a -shortest -c copy $(echo "$1" | cut -d. -f-$(echo "$1" | tr -cd . | wc -c))_av.mp4
- fi
+#set -x
+ ffmpeg -i "$1" $opt_off -i "$afile" -map 0:v -map 1:a -shortest $opt_sc $(echo "$1" | cut -d. -f-$(echo "$1" | tr -cd . | wc -c))_av.mp4
 elif [ "$1" = cap ] 2>/dev/null || [ "$1" = capture ] 2>/dev/null; then
- ffmpeg -vaapi_device /dev/dri/renderD128 -f x11grab -video_size 1600x900 -i :0 -vf 'format=nv12,hwupload' -c:v h264_vaapi -qp 16 screen_capture.mp4
+ ffmpeg -vaapi_device /dev/dri/renderD128 -f x11grab -video_size 1600x900 -i :0 -vf 'format=nv12,hwupload' -c:v h264_vaapi -qp 16 video.mp4
 else
  usage && exit
 fi
