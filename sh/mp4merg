@@ -9,6 +9,7 @@ usage () {
 #ffmpeg -vaapi_device /dev/dri/renderD128 -f x11grab -video_size 1600x900 -i :0 -vf 'hwupload,scale_vaapi=format=nv12' -c:v h264_vaapi -qp 16 video.mp4
 #ffmpeg -vaapi_device /dev/dri/renderD128 -f x11grab -video_size 1600x900 -i :0 -vf 'format=nv12,hwupload' -c:v h264_vaapi -qp 16 video.mp4
 #sudo ffmpeg -device /dev/dri/card0 -f kmsgrab -i - -vf 'hwmap=derive_device=vaapi,scale_vaapi=w=1600:h=900:format=nv12' -c:v h264_vaapi -qp 16 video.mp4
+#ffmpeg -i voice.m4a -b:a 256k -ar 48000 -filter:a "volume=10" audio.m4a
 #ffmpeg -i voice.m4a -b:a 256k -ar 48000 -filter:a loudnorm=I=-13:TP=-2:LRA=20 audio.m4a # single pass
 #ffmpeg -i video.mp4 -i audio.m4a -map 0:v -map 1:a -shortest -c copy output.mp4
 #ffmpeg -i video.mp4 -itsoffset 2 -i audio.m4a -map 0:v -map 1:a -shortest -c copy output.mp4
@@ -18,12 +19,12 @@ opt_off=''
 opt_sc='-c copy'
 
 for i in "$3" "$4"; do
- if [ -n $i ]; then
+ if [ ! -z $i ]; then
   if [ $i = 1080 ] 2>/dev/null; then
    opt_sc='-vf scale=1920x1080:flags=lanczos'
   else
    off=$(echo $i | grep -o "^[0-9]*.[0-9]*$")
-   [ -n $off ] && opt_off="-itsoffset $off"
+   [ ! -z $off ] && opt_off="-itsoffset $off"
   fi
  fi
 done
@@ -32,9 +33,11 @@ if [ $# -ge 2 ]; then
  for i in "$1" "$2"; do
   [ ! -e "$i" ] && echo "$i does not exist!" && exit
  done
- afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_loudnorm.m4a
- ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a loudnorm=I=-13:TP=-2:LRA=20 "$afile"
-#set -x
+ afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_x10.m4a
+ ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a "volume=10" "$afile"
+#afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_loudnorm.m4a
+#ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a loudnorm=I=-13:TP=-2:LRA=20 "$afile"
+ set -x
  ffmpeg -i "$1" $opt_off -i "$afile" -map 0:v -map 1:a -shortest $opt_sc $(echo "$1" | cut -d. -f-$(echo "$1" | tr -cd . | wc -c))_av.mp4
 elif [ "$1" = cap ] 2>/dev/null || [ "$1" = capture ] 2>/dev/null; then
  ffmpeg -vaapi_device /dev/dri/renderD128 -f x11grab -video_size 1600x900 -i :0 -vf 'format=nv12,hwupload' -c:v h264_vaapi -qp 16 video.mp4
