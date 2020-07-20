@@ -33,10 +33,10 @@ if [ $# -ge 2 ]; then
  for i in "$1" "$2"; do
   [ ! -e "$i" ] && echo "$i does not exist!" && exit
  done
- afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_x10.m4a
- ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a "volume=10" "$afile"
-#afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_loudnorm.m4a
-#ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a loudnorm=I=-13:TP=-2:LRA=20 "$afile"
+#afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_x10.m4a
+#ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a "volume=10" "$afile"
+ afile=$(echo "$2" | cut -d. -f-$(echo "$2" | tr -cd . | wc -c))_loudnorm.m4a
+ ffmpeg -i "$2" -b:a 256k -ar 48000 -filter:a loudnorm=I=-13:TP=-2:LRA=20 "$afile"
  set -x
  ffmpeg -i "$1" $opt_off -i "$afile" -map 0:v -map 1:a -shortest $opt_sc $(echo "$1" | cut -d. -f-$(echo "$1" | tr -cd . | wc -c))_av.mp4
 elif [ "$1" = cap ] 2>/dev/null || [ "$1" = capture ] 2>/dev/null; then
