@@ -496,28 +496,23 @@ LIBREELEC () {
 }
 
 MPD_CANTATA_MYMPD () {
- count=0
  for i in MusicPlayerDaemon/MPD CDrummond/cantata jcorporation/myMPD; do # gateship-one/malp
-  count=$(($count+1))
-  if [ $count -eq 1 ]; then
-   printf "• $(echo $i | cut -d'/' -f2)\t\t"
-  elif [ $count -eq 2 ]; then
-   printf "• Cantata\t"
-  else
-   printf "• myMPD\t\t"
-  fi
-  release="$(curl $curl_opt https://github.com/$i/releases | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1)"
-  date=$(curl $curl_opt https://github.com/$i/commits/master | grep -m1 datetime | cut -d'"' -f2)
+  id=$(echo "$i" | cut -d\/ -f2)
+  [ "$id" = cantata ] && printf "• Cantata\t" || printf "• $id\t\t"
+  url="https://github.com/$i/commits/master"
+  release=$(curl $curl_opt https://github.com/$i/releases | grep -m1 'releases/tag' | cut -d'/' -f6 | cut -d'"' -f1)
+  date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
   if [ -z "$release" ] || [ -z "$date" ]; then
    printf "\t\t\t\t정보 없음\n"
   else
    printf "$release ($(date -d "$date" +%F))\t\t"
    days_diff
    if [ "$days" -le 1 2>/dev/null ]; then
+    echo "  \e[34m$url\e[0m"
     for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
      printf '\33[2K\r  \e[32m'
-    #curl $curl_opt https://github.com/$i/commits/master | grep -m$j -A1 commit-title | tail -1 | sed 's/.*title=.//; s/.>.*//' | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
-     curl $curl_opt https://github.com/$i/commits/master | grep -m$j -A1 commit-title | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
+    #curl $curl_opt "$url" | grep -m$j -A1 commit-title | tail -1 | sed 's/.*title=.//; s/.>.*//' | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+     curl $curl_opt "$url" | grep -m$j -A1 commit-title | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
     done
     printf '\e[0m\33[2K\r'
    fi
@@ -704,7 +699,7 @@ UPMPDCLI_DEV () {
    for i in $(seq 1 $(((2-$days)*1))); do
     printf '\33[2K\r  \e[32m'
     grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
-    printf '\33[2K\r  \e[34m'
+    printf '\33[2K\r  \e[36m'
     grep -o 'dir="auto">.*' "$tmpfile" | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
    done
    printf '\e[0m\33[2K\r'
