@@ -23,24 +23,24 @@ printf "
   Sound Card / 사운드카드 설정
  ------------------------------
 
- (0)  USB Audio Class 2.0\t\t(11) HiFiBerry Amp/Amp+
- (1)  Allo Boss DAC\t\t\t(12) HiFiBerry DAC
- (2)  Allo DigiOne\t\t\t(13) HiFiBerry DAC+ADC
- (3)  Allo Katana DAC\t\t\t(14) HifiBerry DAC+ADC Pro
- (4)  Allo Piano DAC\t\t\t(15) HiFiBerry DAC+/DAC+ Pro
- (5)  Allo Piano DAC+\t\t\t(16) HiFiBerry Digi/Digi+
- (6)  Allo Piano DAC+ (+Kali board)\t(17) HiFiBerry Digi+ Pro
- (7)  ApplePi DAC\t\t\t(18) IQaudIO DAC
- (8)  Audiophonics I-SABRE Q2M DAC\t(19) IQaudIO DAC+
- (9)  Dion Audio LOCO DAC-AMP\t\t(20) IQaudIO DigiAMP+
- (10) Dion Audio LOCO-V2 DAC-AMP\t(21) IQaudIO Digi+
-\t\t\t\t\t(22) JustBoom DAC
-\t\t\t\t\t(23) JustBoom Digi
-\t\t\t\t\t(24) RPi DAC
- (m) Main / 주메뉴
- (q) Quit / 나가기
+ (\e[32m0\e[0m)  USB Audio Class 2.0\t\t(\e[32m11\e[0m) HiFiBerry Amp/Amp+
+ (\e[32m1\e[0m)  Allo Boss DAC\t\t\t(\e[32m12\e[0m) HiFiBerry DAC
+ (\e[32m2\e[0m)  Allo DigiOne\t\t\t(\e[32m13\e[0m) HiFiBerry DAC+ADC
+ (\e[32m3\e[0m)  Allo Katana DAC\t\t\t(\e[32m14\e[0m) HifiBerry DAC+ADC Pro
+ (\e[32m4\e[0m)  Allo Piano DAC\t\t\t(\e[32m15\e[0m) HiFiBerry DAC+/DAC+ Pro
+ (\e[32m5\e[0m)  Allo Piano DAC+\t\t\t(\e[32m16\e[0m) HiFiBerry Digi/Digi+
+ (\e[32m6\e[0m)  Allo Piano DAC+ (+Kali board)\t(\e[32m17\e[0m) HiFiBerry Digi+ Pro
+ (\e[32m7\e[0m)  ApplePi DAC\t\t\t(\e[32m18\e[0m) IQaudIO DAC
+ (\e[32m8\e[0m)  Audiophonics I-SABRE Q2M DAC\t(\e[32m19\e[0m) IQaudIO DAC+
+ (\e[32m9\e[0m)  Dion Audio LOCO DAC-AMP\t\t(\e[32m20\e[0m) IQaudIO DigiAMP+
+ (\e[32m10\e[0m) Dion Audio LOCO-V2 DAC-AMP\t(\e[32m21\e[0m) IQaudIO Digi+
+\t\t\t\t\t(\e[32m22\e[0m) JustBoom DAC
+\t\t\t\t\t(\e[32m23\e[0m) JustBoom Digi
+\t\t\t\t\t(\e[32m24\e[0m) RPi DAC
+ (\e[32mm\e[0m) Main / 주메뉴
+ (\e[32mq\e[0m) Quit / 나가기
 
- * Select / 선택 (0-24|m|q) : "
+ * Select / 선택 (\e[32m0-24\e[0m|\e[32mm\e[0m|\e[32mq\e[0m) : "
 read i
 echo
 case $i in
@@ -77,7 +77,7 @@ return
 
 usb_signal_power () {
 clear
-echo -n "
+echo -ne "
  --------------------------------------
   USB Signal & Power / USB 신호와 전원
  --------------------------------------
@@ -88,16 +88,16 @@ echo -n "
   -  RasPi 1B+/2B/3B Back Port        -  라즈베리 파이 1B+/2B/3B 뒷면
   -  USB3 is recommended for DAC      -  DAC은 USB3을 추천합니다
 
- (1) Enable  All USB Signal & Power  (1) 모든 USB 신호와 전원 켜기 (기본값)
- (2) Disable All USB Signal & Power  (2) 모든 USB 신호와 전원 끄기 (I2S DAC)
- (3) Disable USB 4,5 Signal          (3) USB 4,5 신호만 끄기
- (4) Disable USB 4,5 Signal & Power  (4) USB 4,5 신호와 전원 끄기
+ (\e[32m1\e[0m) Enable  All USB Signal & Power  (\e[32m1\e[0m) 모든 USB 신호와 전원 켜기 (기본값)
+ (\e[32m2\e[0m) Disable All USB Signal & Power  (\e[32m2\e[0m) 모든 USB 신호와 전원 끄기 (I2S DAC)
+ (\e[32m3\e[0m) Disable USB 4,5 Signal          (\e[32m3\e[0m) USB 4,5 신호만 끄기
+ (\e[32m4\e[0m) Disable USB 4,5 Signal & Power  (\e[32m4\e[0m) USB 4,5 신호와 전원 끄기
     (for Powered USB DAC)               (자체 전원 USB DAC)
 
- (m) Main                            (m) 주메뉴
- (q) Quit                            (q) 나가기
+ (\e[32mm\e[0m) Main                            (\e[32mm\e[0m) 주메뉴
+ (\e[32mq\e[0m) Quit                            (\e[32mq\e[0m) 나가기
 
- * Select / 선택 (1-4|m|q) : "
+ * Select / 선택 (\e[32m1-4\e[0m|\e[32mm\e[0m|\e[32mq\e[0m) : "
 read i
 echo
 case $i in
@@ -116,27 +116,27 @@ until [ "$i" == "q" ] ; do
   eval status_$i="$(grep ^$i= $audio_conf | cut -d= -f2)"
  done
  clear
- echo -n "
+ echo -ne "
  ---------------------------------
   Audio Main Menu / 오디오 주메뉴
  ---------------------------------
 
- (1) Audio Device	      (1) 오디오 장치
- (2) USB Signal & Power >>    (2) USB 신호와 전원 >>
+ (\e[32m1\e[0m) Audio Device	      (\e[32m1\e[0m) 오디오 장치
+ (\e[32m2\e[0m) USB Signal & Power >>    (\e[32m2\e[0m) USB 신호와 전원 >>
 
- (3) [ $(if [ "$status_lirc"  = off ]; then echo X; elif [ "$status_lirc"  = on ]; then echo O; else echo NA; fi) ] LIRC
- (4) [ $([ "$status_nfs"   = off ] && echo X || echo O) ] NFS
- (5) [ $([ "$status_pulse" = off ] && echo X || echo O) ] Pulseaudio
- (6) [ $([ "$status_vpn"   = off ] && echo X || echo O) ] VPN
- (7) [ $([ "$status_wpa"   = off ] && echo X || echo O) ] Wi-Fi
+ (\e[32m3\e[0m) [ $(if [ "$status_lirc"  = off ]; then echo "\e[33mX\e[0m"; elif [ "$status_lirc"  = on ]; then echo "\e[33mO\e[0m"; else echo "\e[33mNA\e[0m"; fi) ] LIRC
+ (\e[32m4\e[0m) [ $([ "$status_nfs"   = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] NFS
+ (\e[32m5\e[0m) [ $([ "$status_pulse" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Pulseaudio
+ (\e[32m6\e[0m) [ $([ "$status_vpn"   = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] VPN
+ (\e[32m7\e[0m) [ $([ "$status_wpa"   = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Wi-Fi
 
- (8) [ $([ "$status_tweak" = off ] && echo X || echo O) ] More Tweaks / 추가 트윅
+ (\e[32m8\e[0m) [ $([ "$status_tweak" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] More Tweaks / 추가 트윅
 
- (q) Quit                     (q) 나가기
- (r) Reboot to apply          (r) 재시작하여 적용
- (p) Power off                (p) 전원 끄기
+ (\e[32mq\e[0m) Quit                     (\e[32mq\e[0m) 나가기
+ (\e[32mr\e[0m) Reboot to apply          (\e[32mr\e[0m) 재시작하여 적용
+ (\e[32mp\e[0m) Power off                (\e[32mp\e[0m) 전원 끄기
 
- * Select / 선택 (0-9|q|r|p) : "
+ * Select / 선택 (\e[32m0-9\e[0m|\e[32mq\e[0m|\e[32mr\e[0m|\e[32mp\e[0m) : "
  read i
  echo
  case $i in

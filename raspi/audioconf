@@ -9,7 +9,7 @@ renderer_name () {
  --------------------------------------------
 
 
- [ \e[32m"$current_name"\e[0m ] Renderer Name / 렌더러 이름
+ [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름
 
 
  (m) Main / 주메뉴
@@ -44,23 +44,23 @@ until [ "$i" = "q" ] ; do
   Audio Configuration / 오디오 설정
  -----------------------------------
 
- (\e[33m1\e[0m) [ $([ "$status_dop"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD DoP (DSD over PCM)
- (\e[33m2\e[0m) [ $([ "$status_pcm"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD PCM Decoder
- (\e[33m3\e[0m) [ $([ "$status_vol"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD Software Volume
- (\e[33m4\e[0m) [ $([ "$status_sta"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD State File
- (\e[33m5\e[0m) [ $([ "$status_tag"     = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] MPD Tag Metadata
+ (\e[32m1\e[0m) [ $([ "$status_dop"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD DoP (DSD over PCM)
+ (\e[32m2\e[0m) [ $([ "$status_pcm"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD PCM Decoder
+ (\e[32m3\e[0m) [ $([ "$status_vol"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Software Volume
+ (\e[32m4\e[0m) [ $([ "$status_sta"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD State File
+ (\e[32m5\e[0m) [ $([ "$status_tag"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Tag Metadata
 
- (\e[33m6\e[0m) [ $([ "$status_airplay" = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Airplay
- (\e[33m7\e[0m) [ $([ "$status_roon"    = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Roon Bridge
- (\e[33m8\e[0m) [ $([ "$status_spotify" = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Spotify
- (\e[33m9\e[0m) [ $([ "$status_sqzlite" = off ] && echo "\e[32mX\e[0m" || echo "\e[32mO\e[0m") ] Squeezebox
+ (\e[32m6\e[0m) [ $([ "$status_airplay" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Airplay
+ (\e[32m7\e[0m) [ $([ "$status_roon"    = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Roon Bridge
+ (\e[32m8\e[0m) [ $([ "$status_spotify" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Spotify
+ (\e[32m9\e[0m) [ $([ "$status_sqzlite" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Squeezebox
 
- (\e[33mn\e[0m) [ \e[32m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
+ (\e[32mn\e[0m) [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
 
- (\e[33mq\e[0m) Quit   / 나가기
- (\e[33mr\e[0m) Reboot / 재시작하여 적용
+ (\e[32mq\e[0m) Quit   / 나가기
+ (\e[32mr\e[0m) Reboot / 재시작하여 적용
 
-  *  Select / 선택 (\e[33m1-9\e[0m|\e[33mn\e[0m|\e[33mq\e[0m|\e[33mr\e[0m) : "
+  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32mq\e[0m|\e[32mr\e[0m) : "
  read i
  echo
  case $i in
