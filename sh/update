@@ -521,9 +521,13 @@ MPD_CANTATA_MYMPD () {
 
 MYMPD_DEV () {
  printf "• myMPD Dev\t"
- url="https://github.com/jcorporation/myMPD/commits/devel"
+ branch=devel
+ for i in $(curl -s https://github.com/jcorporation/myMPD/branches | grep -o 'branch-filter-item branch=.*' | cut -d\" -f2); do
+  [ ! "$i" = master ] && [ ! "$i" = gh-pages ] && [ ! "$i" = devel ] && branch="$i"
+ done
+ url="https://github.com/jcorporation/myMPD/commits/$branch"
  date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
- printf "$(date -d "$date" +%F)\t\t\t"
+ printf "$branch ($(date -d "$date" +%F))\t\t"
  days_diff
  if [ "$days" -le 1 2>/dev/null ]; then
   echo "  \e[34m$url\e[0m"
