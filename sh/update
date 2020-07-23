@@ -510,7 +510,7 @@ MPD_CANTATA_MYMPD () {
     echo "  \e[34m$url\e[0m"
     for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
      printf '\33[2K\r  \e[32m'
-     curl $curl_opt "$url" | grep -m$j -A1 'class="mb-1"' | tail -1 | cut -d\> -f2 | cut -d\< -f1 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&lt;/</g; s/&gt;/>/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
+     curl $curl_opt "$url" | grep -m$j -A1 'class="mb-1"' | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&lt;/</g; s/&gt;/>/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
     done
     printf '\e[0m\33[2K\r'
    fi
@@ -532,7 +532,7 @@ MYMPD_DEV () {
   echo "  \e[34m$url\e[0m"
   for j in $(seq 1 $(echo "3-1.5*$days" | bc)); do
    printf '\33[2K\r  \e[32m'
-   curl $curl_opt "$url" | grep -m$j -A1 'class="mb-1"' | tail -1 | cut -d\> -f2 | cut -d\< -f1 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&lt;/</g; s/&gt;/>/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
+   curl $curl_opt "$url" | grep -m$j -A1 'class="mb-1"' | tail -1 | cut -d\" -f2 | sed 's/&amp;/\&/g; s/&apos;/'\''/g; s/&quot;/"/g; s/&lt;/</g; s/&gt;/>/g; s/&#[0-9]*;//g; s/&[a-z]*;//g'
   done
   printf '\e[0m\33[2K\r'
  fi
