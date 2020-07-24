@@ -29,22 +29,19 @@ case $i in
  *) exit ;;
 esac
 
+uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
+
+[ -z "$uturl" ] && printf "YouTube live streaming is not available!\n\e[34m$url\e[0m\n" && exit
+
 if [ "$i" = g ]; then
- uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
-  if [ -n "$uturl" ]; then
-   label=$(curl -s "$url" | grep -o '"label":.*' | cut -c -300 | sed 's/\\"//g' | cut -d\" -f4)
-   [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n" && exit
-   days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
-   prog=$(echo "$label" | sed 's/ \[맛있는.*//')
-   printf "\e[32m$prog ($days)\e[0m\n"
-  fi
-else
- uturl=$(curl -s "$url" | grep -o data-context-item-id.* | head -1 | cut -d\" -f2)
+ label=$(curl -s "$url" | grep -o '"label":.*' | cut -c -300 | sed 's/\\"//g' | cut -d\" -f4)
+ [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n" && exit
+ days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
+ prog=$(echo "$label" | sed 's/ \[맛있는.*//')
+ printf "\e[32m$prog ($days)\e[0m\n"
 fi
 
-[ -z "$uturl" ] && printf "YouTube url is not found !\n$url\n" && exit
-
- printf "\e[36m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
-#printf "\e[36m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
+ printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
+#printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
 
 printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > /home/parkmino/Videos/$ch.m3u
