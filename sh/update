@@ -577,6 +577,7 @@ NEWSTAPA () {
     rm "$tmpfile"
     return
    fi
+   printf '\33[2K\r  \e[34mhttps://www.youtube.com/c/newstapa/videos\e[0m\n'
    for i in $(seq 1 $(((2-$days)*1))); do
     printf '\33[2K\r  \e[32m'
      grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | cut -d'/' -f1
