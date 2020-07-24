@@ -279,17 +279,18 @@ DAS () {
   [ "$days" = "어제" ]     && last=1
   if [ -z "${days##*오늘*}" ] || [ "$days" = "어제" ]; then
    tmpfile=$(mktemp)
-   curl $curl_opt "$url" | grep -o 'data-title="\(김어준\|\[총선\).*' > "$tmpfile"
+   curl $curl_opt "$url" > "$tmpfile"
    if [ ! -s "$tmpfile" ]; then
     rm "$tmpfile"
     return
    fi
+   printf "\e[34m  $url\e[0m\n"
    for i in $(seq 1 $last); do
     printf '\33[2K\r  \e[32m'
-    head -$i "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+    grep -oE '김어준의 다스뵈이다.{0,100}' "$tmpfile" | sed 's/ 게시자.*//; s/.*다스뵈이다 \|.*다스뵈이다] //' | head -$i | tail -1 | sed 's/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    #printf '   https://youtu.be/'
     printf '\33[2K\r  \e[34m'
-    head -$i "$tmpfile" | tail -1 | grep -o 'watch?v='.* | cut -d\= -f2 | cut -d\& -f1 | echo "https://youtu.be/$(cat -)"
+    grep -o 'watch?v=..........' "$tmpfile" | cut -d= -f2 | head -$i | tail -1 | echo "https://youtu.be/$(cat -)"
    done
    printf '\e[0m\33[2K\r'
    rm "$tmpfile"
