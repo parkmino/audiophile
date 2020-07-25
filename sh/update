@@ -80,7 +80,8 @@ AIRCONNECT () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  \e[32mUpdate AirConnect? [Y/n]\e[30m" answer
+  echo -n "  Update AirConnect? \e[32m[Y/n]\e[30m"
+  read answer
   if [ "$answer" != n ]; then
    printf '  '
    wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64 -P /home/parkmino/Downloads/
@@ -406,7 +407,8 @@ GOOGLER () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  \e[32mUpdate googler? [Y/n]\e[0m" answer
+  echo -n "  Update googler? \e[32m[Y/n]\e[0m"
+  read answer
   [ "$answer" != n ] && printf '  ' && sudo googler -u
  fi
 }
@@ -471,7 +473,8 @@ LIBFFMPEG () {
  msg
  url="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases/download/$latest/$latest-linux-x64.zip"
  if [ -n "$current" ] && [ "$current" != "$latest" ] && curl -IL -s $url | grep -qs '302 Found'; then
-  read -p "  Update libffmpeg.so? [Y/n]" answer
+  echo -n "  Update libffmpeg.so? \e[32m[Y/n]\e[0m"
+  read answer
   if [ "$answer" != n ]; then
    printf '  '
    sudo rm -f /usr/lib/x86_64-linux-gnu/opera/*-linux-x64.zip
@@ -658,7 +661,8 @@ TTYD () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  \e[32mUpdate ttyd? [Y/n]\e[0m" answer
+  echo -n "  Update ttyd? \e[32m[Y/n]\e[0m"
+  read answer
   if [ "$answer" != n ]; then
    printf '  '
   #curl -s "$url" | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.x86_64/' | wget "$(cat -)" -P /home/parkmino/Downloads/
@@ -724,7 +728,8 @@ YOUTUBE_DL () {
   printf "신판\n"
  else
   printf "구판 ($latest)\n"
-  read -p "  \e[32mUpdate youtube-dl? [Y/n]\e[0m" answer
+  echo -n "  Update youtube-dl? \e[32m[Y/n]\e[0m"
+  read answer
   [ "$answer" != n ] && printf '  ' && sudo youtube-dl --update
  fi
 }
