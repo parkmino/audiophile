@@ -384,7 +384,7 @@ EXTINF () {
  printf "• EXTINF\t"
  url="https://www.extinf.com/us/category/korean/"
  latest=$(curl $curl_opt "$url" | grep -om1 "article id=\"post-[0-9]*" | cut -d\- -f2)
- current="72685"
+ current="72835"
  printf "$current"
  printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
  if [ -z "$latest" ]; then
