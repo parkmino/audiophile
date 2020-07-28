@@ -708,7 +708,7 @@ UPMPDCLI_DEV () {
     printf '\33[2K\r  \e[32m'
     grep '<title>' "$tmpfile" | head -$(($i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
     printf '\33[2K\r  \e[36m'
-    grep -o 'dir="auto">.*' "$tmpfile" | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
+    grep -o 'dir="auto">.*' "$tmpfile" | sed "s/<code>/'/g; s/<.code>/'/g" | head -$i | tail -1 | cut -d'>' -f2 | cut -d'<' -f1
    done
    printf '\e[0m\33[2K\r'
   fi
