@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-chs = ["JTBC 뉴스", "KBS 뉴스", "tbs TV", "연합뉴스", "YTN 라이브", "YTN 라이프", "YTN 사이언스"]
+chs = ["JTBC 뉴스", "KBS 뉴스", "tbs TV", "연합뉴스", "YTN 라이브", "YTN 라이프", "YTN 사이언스", "맛있는 녀석들"]
 
-ch = chs[4]
+ch = chs[7]
 
 import urllib, urllib2, re
 import xbmc
@@ -11,14 +11,15 @@ import xbmc
 def url_func(url):
     WebSock = urllib.urlopen(url)
     WebHTML = WebSock.read()
+    WebHTML = WebHTML.decode('utf-8')
     WebSock.close()
     return WebHTML
 
 def ut_func(ch):
     Base_URL = 'http://www.youtube.com/' + ch
     WebHTML = url_func(Base_URL)
-    Temp_Web_URL = re.compile('data-context-item-id=["][0-9a-zA-Z-_]*').findall(WebHTML)
-    url = Temp_Web_URL[0].split('"', 1)[1]
+    Temp_Web_URL = re.compile('"videoId":"[0-9a-zA-Z-_]*"').findall(WebHTML)
+    url = Temp_Web_URL[0].split('"', 4)[3]
     url = 'plugin://plugin.video.youtube/play/?video_id=' + url
     return url
 
@@ -37,8 +38,10 @@ def ch_func(ch):
         url = ut_func('channel/UCDww6ExpwQS0TzmREIOo40Q')
     elif ch == chs[6]:
         url = ut_func('user/ytnscience')
+    elif ch == chs[7]:
+        url = ut_func('channel/UCsOW9TPy2TKkqCchUHL04Fg')
     else:
-        print 'Argument(s) is missing or invalid!'
+        print("Argument is missing or invalid!")
         quit()
     return url
 
