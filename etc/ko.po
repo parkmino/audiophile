@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: sawfish 0.37.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-05 16:53+0900\n"
-"PO-Revision-Date: 2020-07-30 10:07+0900\n"
+"PO-Revision-Date: 2020-07-30 12:11+0900\n"
 "Last-Translator: Michelle Kim <mkim@brisbane.redhat.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1240,7 +1240,7 @@ msgstr "그룹 삭제"
 
 #. ../lisp/sawfish/wm/commands/groups.jl
 msgid "Delete all windows in the group that the current window is a member of."
-msgstr "현재 창은 멤버인 그룹에서 모든 창을 삭제"
+msgstr "현재 창은 멤버인 그룹에서 모든 창을 삭제."
 
 #. ../lisp/sawfish/wm/commands/jump-or-exec.jl
 msgid "Jump or exec"
@@ -1347,7 +1347,7 @@ msgstr "커서를 왼쪽으로 1 픽셀 이동"
 
 #. ../lisp/sawfish/wm/commands/move-cursor.jl
 msgid "Move cursor up fine"
-msgstr "커서 위쪽으로 약간 이동"
+msgstr "커서 위로 약간 이동"
 
 #. ../lisp/sawfish/wm/commands/move-cursor.jl
 msgid "Move the cursor 1 pixel upwards."
@@ -1568,39 +1568,36 @@ msgid "Yank window right"
 msgstr "창 오른쪽으로 당기기"
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
-#, fuzzy
 msgid ""
 "Moves WINDOW to the right until it overlaps with one less window\n"
 "than before."
 msgstr ""
 "다른 창에 부딪힐 때까지 오른쪽으로 창 이동.\n"
-"'창 위쪽으로 채워넣기' 참조."
+"'창 위로 이동' 참조."
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid "Yank window up"
-msgstr "창 위쪽으로 당기기"
+msgstr "창 위로 당기기"
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
-#, fuzzy
 msgid ""
 "Moves WINDOW upwards until it overlaps with one less window than\n"
 "before."
 msgstr ""
 "다른 창에 부딪힐 때까지 아래로 창 이동.\n"
-"'창 위쪽으로 채워넣기' 참조."
+"'창 위로 이동' 참조."
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid "Yank window down"
 msgstr "창 아래로 당기기"
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
-#, fuzzy
 msgid ""
 "Moves WINDOW downwards until it overlaps with one less window than\n"
 "before."
 msgstr ""
 "다른 창에 부딪힐 때까지 아래로 창 이동.\n"
-"'창 위쪽으로 채워넣기' 참조."
+"'창 위로 이동' 참조."
 
 #. ../lisp/sawfish/wm/commands/size-window.jl
 msgid "Size window add row"
@@ -1684,7 +1681,7 @@ msgstr "`slide-window-increment' 픽셀만큼 창 그룹을 오른쪽으로 이�
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Slide group up"
-msgstr "그룹 위쪽으로 움직이기"
+msgstr "그룹 위로 움직이기"
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Move the window group `slide-window-increment' pixels upwards."
@@ -1882,7 +1879,6 @@ msgid "Grow window up"
 msgstr "창 위로 키우기"
 
 #. ../lisp/sawfish/wm/commands/grow-pack.jl
-#, fuzzy
 msgid ""
 "Grows window upwards until it touches another window.\n"
 "If the top edge was beyond the screen edge, it is brought back in.\n"
@@ -1891,7 +1887,7 @@ msgid ""
 "by\n"
 "window or pixels instead."
 msgstr ""
-"다른 창에 부딪힐 때까지 위쪽으로 창 확장.\n"
+"다른 창에 부딪힐 때까지 위로 창 확장.\n"
 "만일 위쪽 테두리가 화면 가장자리를 벗어나면, 안으로 복귀. \n"
 "범용 접두 인자를 사용하여 대신 위로 최대화. \n"
 "수치 접두 인자를 사용하여 대신 창이나 픽셀로 지정된 증가량만큼 \n"
@@ -1902,13 +1898,12 @@ msgid "Grow window down"
 msgstr "창 아래로 키우기"
 
 #. ../lisp/sawfish/wm/commands/grow-pack.jl
-#, fuzzy
 msgid ""
 "Grows window downwards until it touches another window.\n"
 "See `grow-window-up' for full doc."
 msgstr ""
 "다른 창에 부딪힐 때까지 아래로 창 확장.\n"
-"`창 위로 키움' 참조."
+"`창 위로 키우기' 참조."
 
 #. ../lisp/sawfish/wm/commands/grow-pack.jl
 msgid "Pack window left"
@@ -1928,17 +1923,16 @@ msgid "Pack window right"
 msgstr "창 오른쪽으로 밀기"
 
 #. ../lisp/sawfish/wm/commands/grow-pack.jl
-#, fuzzy
 msgid ""
 "Moves window to the right until it touches another window.\n"
 "See `pack-window-up' for full doc."
 msgstr ""
 "다른 창에 부딪힐 때까지 오른쪽으로 창 이동.\n"
-"'창 위쪽으로 채워넣기' 참조."
+"'창 위로 키우기' 참조."
 
 #. ../lisp/sawfish/wm/commands/grow-pack.jl
 msgid "Pack window up"
-msgstr "창 위쪽으로 밀기"
+msgstr "창 위로 밀기"
 
 #. ../lisp/sawfish/wm/commands/grow-pack.jl
 #, fuzzy
@@ -1958,13 +1952,12 @@ msgid "Pack window down"
 msgstr "창 아래로 밀기"
 
 #. ../lisp/sawfish/wm/commands/grow-pack.jl
-#, fuzzy
 msgid ""
 "Moves window downwards until it touches another window.\n"
 "See `pack-window-up' for full doc."
 msgstr ""
 "다른 창에 부딪힐 때까지 아래로 창 이동.\n"
-"'창 위쪽으로 채워넣기' 참조."
+"'창 위로 이동' 참조."
 
 #. ../lisp/sawfish/wm/commands/move-resize.jl
 msgid "opaque"
@@ -2343,7 +2336,7 @@ msgstr "Iconified"
 
 #. ../lisp/sawfish/wm/ext/match-window.jl
 msgid "Shaded"
-msgstr "가림"
+msgstr "숨김"
 
 #. ../lisp/sawfish/wm/ext/match-window.jl
 msgid "Never iconify"
@@ -2429,7 +2422,7 @@ msgstr "초점"
 #. ../lisp/sawfish/wm/custom.jl
 #. ../lisp/sawfish/wm/ext/match-window.jl
 msgid "Appearance"
-msgstr "외양"
+msgstr "외관"
 
 #. ../lisp/sawfish/wm/ext/match-window.jl
 msgid "Other"
@@ -2864,11 +2857,11 @@ msgstr "순환 가능(_C)"
 
 #. ../lisp/sawfish/wm/state/ignored.jl
 msgid "In _window list"
-msgstr "창 목록에(_w)"
+msgstr "창 목록(_w)"
 
 #. ../lisp/sawfish/wm/state/ignored.jl
 msgid "In _task list"
-msgstr "작업 목록에(_t)"
+msgstr "작업 목록(_t)"
 
 #. ../lisp/sawfish/wm/state/maximize.jl
 msgid ""
@@ -3087,7 +3080,7 @@ msgstr "창의 은둔 상태(타이틀바만 있는)를 토글"
 
 #. ../lisp/sawfish/wm/state/shading.jl
 msgid "S_haded"
-msgstr "가림(_h)"
+msgstr "숨김(_h)"
 
 #. ../lisp/sawfish/wm/state/transient.jl
 msgid "Focus on application windows when they first appear."
@@ -3360,7 +3353,7 @@ msgstr "없음"
 #. ../lisp/sawfish/wm/keymaps.jl
 #. ../lisp/sawfish/wm/custom.jl
 msgid "Bindings"
-msgstr "바인딩"
+msgstr "연계"
 
 #. ../lisp/sawfish/wm/custom.jl
 msgid "Mini/Maximizing"
@@ -4386,7 +4379,7 @@ msgstr "토글(_T)"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "In _group"
-msgstr "그룹에서(_g)"
+msgstr "그룹(_g)"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "_Send window to"
@@ -4429,7 +4422,7 @@ msgstr "창 오른쪽으로 키우기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Grow up"
-msgstr "창 위쪽으로 키우기"
+msgstr "창 위로 키우기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Grow down"
@@ -4445,7 +4438,7 @@ msgstr "창 오른쪽으로 밀기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Pack up"
-msgstr "창 위쪽으로 밀기"
+msgstr "창 위로 밀기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Pack down"
@@ -4481,7 +4474,7 @@ msgstr "창 오른쪽으로 당기기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Yank up"
-msgstr "창 위쪽으로 당기기"
+msgstr "창 위로 당기기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Yank down"
@@ -4561,7 +4554,7 @@ msgstr "Sawfish 뉴스(_N)"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Sawfish _Wiki"
-msgstr "Sawfish 위키( _W)"
+msgstr "Sawfish 위키(_W)"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Sawfish _Manual"
@@ -4573,7 +4566,7 @@ msgstr "Sawfish 정보(_A)"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "_Kill Window"
-msgstr "윈도 닫기(_K)"
+msgstr "창 닫기(_K)"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "_Reboot System"
