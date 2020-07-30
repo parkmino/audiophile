@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: sawfish 0.37.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-05 16:53+0900\n"
-"PO-Revision-Date: 2020-07-30 12:16+0900\n"
+"PO-Revision-Date: 2020-07-30 13:05+0900\n"
 "Last-Translator: Michelle Kim <mkim@brisbane.redhat.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1511,7 +1511,7 @@ msgstr ""
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid "Shrink window left"
-msgstr "창을 왼쪽으로 줄이기"
+msgstr "창 왼쪽으로 줄이기"
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid ""
@@ -1521,7 +1521,7 @@ msgstr ""
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid "Shrink window right"
-msgstr "창을 오른쪽으로 줄이기"
+msgstr "창 오른쪽으로 줄이기"
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid ""
@@ -1531,7 +1531,7 @@ msgstr ""
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid "Shrink window up"
-msgstr "창을 위로 줄이기"
+msgstr "창 위로 줄이기"
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid ""
@@ -1541,7 +1541,7 @@ msgstr ""
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid "Shrink window down"
-msgstr "창을 아래로 줄이기"
+msgstr "창 아래로 줄이기"
 
 #. ../lisp/sawfish/wm/commands/shrink-yank.jl
 msgid ""
@@ -1632,7 +1632,7 @@ msgstr "현재 창의 크기를 한 열 줄입니다."
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Slide window left"
-msgstr "창을 왼쪽으로 움직이기"
+msgstr "창 왼쪽으로 움직이기"
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Move the window `slide-window-increment' pixels to the left."
@@ -1640,7 +1640,7 @@ msgstr "`slide-window-increment' 만큼 창으로 왼쪽으로 이동."
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Slide window right"
-msgstr "창을 오른쪽으로 움직이기"
+msgstr "창 오른쪽으로 움직이기"
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Move the window `slide-window-increment' pixels to the right."
@@ -1648,7 +1648,7 @@ msgstr "`slide-window-increment' 픽셀만큼 오른쪽으로 이동"
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Slide window up"
-msgstr "창을 위로 움직이기"
+msgstr "창 위로 움직이기"
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Move the window `slide-window-increment' pixels upwards."
@@ -1656,7 +1656,7 @@ msgstr "`slide-window-increment' 픽셀만큼 창을 위로 이동"
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Slide window down"
-msgstr "창을 아래로 움직이기"
+msgstr "창 아래로 움직이기"
 
 #. ../lisp/sawfish/wm/commands/slide-window.jl
 msgid "Move the window `slide-window-increment' pixels downwards."
@@ -4009,7 +4009,7 @@ msgstr "뷰포트를 한 화면 아래로 이동"
 
 #. ../lisp/sawfish/wm/viewport.jl
 msgid "Move window right"
-msgstr "창을 오른쪽으로 이동"
+msgstr "창 오른쪽으로 이동"
 
 #. ../lisp/sawfish/wm/viewport.jl
 #, fuzzy
@@ -4020,7 +4020,7 @@ msgstr "창을 오른쪽 뷰포트로 이동 후, 지정한 뷰포트로 전환"
 
 #. ../lisp/sawfish/wm/viewport.jl
 msgid "Move window left"
-msgstr "창을 왼쪽으로 이동"
+msgstr "창 왼쪽으로 이동"
 
 #. ../lisp/sawfish/wm/viewport.jl
 #, fuzzy
@@ -4031,7 +4031,7 @@ msgstr "창을 왼쪽 뷰포트로 이동 후 지정한 뷰포트로 전환"
 
 #. ../lisp/sawfish/wm/viewport.jl
 msgid "Move window up"
-msgstr "창을 위로 이동"
+msgstr "창 위로 이동"
 
 #. ../lisp/sawfish/wm/viewport.jl
 #, fuzzy
@@ -4449,19 +4449,19 @@ msgstr "줄이고 당기기(_Y)"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Shrink left"
-msgstr "창을 왼쪽으로 줄이기"
+msgstr "창 왼쪽으로 줄이기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Shrink right"
-msgstr "창을 오른쪽으로 줄이기"
+msgstr "창 오른쪽으로 줄이기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Shrink up"
-msgstr "창을 위로 줄이기"
+msgstr "창 위로 줄이기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Shrink down"
-msgstr "창을 아래로 줄이기"
+msgstr "창 아래로 줄이기"
 
 #. ../lisp/sawfish/wm/menus.jl
 msgid "Yank left"
