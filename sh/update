@@ -382,9 +382,9 @@ CELLULOID () {
 
 EXTINF () {
  printf "• EXTINF\t"
- url="https://www.extinf.com/enus/category/korean/"
+ url="https://www.extinf.com/iptv/category/korean/"
  latest=$(curl $curl_opt "$url" | grep -o "article id=\"post-[0-9]*" | head -1 | cut -d\- -f2)
- current="72835"
+ current="72685"
  printf "$current"
  printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
  if [ -z "$latest" ]; then

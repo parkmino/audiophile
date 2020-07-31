@@ -6,7 +6,7 @@ usage () {
 
 [ -z "$1" ] && usage && exit
 
-url="https://www.extinf.com/enus/category/korean/"
+url="https://www.extinf.com/iptv/category/korean/"
 curl_opt="-sL -m9 --connect-timeout 9"
 curl_chk="-sL -m3 --connect-timeout 2 -o /dev/null"
 ffprobe_opt="-timeout 5 -listen_timeout 5 -v quiet"
