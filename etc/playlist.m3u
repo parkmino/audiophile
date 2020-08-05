@@ -131,8 +131,6 @@ https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 http://necgokr2-724.acs.wecandeo.com/ms/2528/724/index_1.m3u8
 #EXTINF:-1,한국직업방송
 http://live.worktv.or.kr:1935/live/wowtvlive1.sdp/playlist.m3u8
-#EXTINF:-1,eduTV
-http://external.cdn.zroad.tv/EduTV/live/playlist.m3u8
 #EXTINF:-1,KCTV광주CH05
 http://119.77.96.184:1935/chn05/chn05/chunklist_w644291506.m3u8
 #EXTINF:-1,KCTV광주CH21
@@ -150,11 +148,11 @@ http://58.234.158.60:1935/catvlive/myStream/playlist.m3u8
 #EXTINF:-1,tbsFM
 http://58.234.158.60:1935/fmlive/myStream/playlist.m3u8
 #EXTINF:-1,YTN 라이프
-http://slive.ytnweather.co.kr:1935/weather/weather_20140419_1/playlist.m3u8
+http://slive.ytn.co.kr:1935/weather/weather_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 사이언스
 http://slive.sciencetv.kr:1935/science/yslive_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 코리안
-http://ytnmmd.mmdlive.lldns.net/ytnmmd/9484b70302db4786886ae40308bf45a1/manifest.m3u8
+http://liveplayytn.rumpus.co.kr/live/YTNKOREAN_1080p.m3u8
 #EXTINF:-1,YTN DMB
 http://slive.ytn.co.kr:1935/dmb/ydlive_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 라디오
