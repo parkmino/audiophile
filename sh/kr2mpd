@@ -84,4 +84,4 @@ esac
 
 [ -z "$url" ] && echo "$1 stream is not available!" && exit
 mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
-#gst123 -qx -a alsa=pcm.0 $url
+#gst123 -qx -a alsa=pcm.hw $url
