@@ -4,9 +4,9 @@
 #prog_0="보이스 코리아 2020\t\e[36m(금 19:00-21:00)\e[0m"
 #prog_0="팬텀싱어3\t\t\e[36m(금 21:00-23:00)\e[0m"
 #prog_0="악인전\t\t\e[36m(토 22:55-00:15)\e[0m"
+#prog_0="비긴어게인 코리아\t\e[36m(일 23:00-01:00)\e[0m"
  prog_1="맛있는 녀석들\t\e[36m(금 20:00-21:20)\e[0m"
- prog_2="비긴어게인 코리아\t\e[36m(일 23:00-01:00)\e[0m"
- prog_3="멜론"
+ prog_2="멜론"
 
 nr=1
 
@@ -24,9 +24,9 @@ case $i in
 #0) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:00" || time="last friday 21:00" ;;
 #0) time="last friday 23:00"	;;
 #0) time="last saturday 23:59"	;;
+#0) time="last sunday 23:59"	;;
  1) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:20" || time="last friday 21:20" ;;
- 2) time="last sunday 23:59"	;;
- 3) time="yesterday"		;;
+ 2) time="yesterday"		;;
  *) exit			;;
 esac
 
