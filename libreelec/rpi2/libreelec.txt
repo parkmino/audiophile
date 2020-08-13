@@ -4,7 +4,7 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.1 Unsquashfs
 
-	$ ver=9.2.3
+	$ ver=9.2.4
 	$ wget http://releases.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
 	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
 	$ gzip -d LibreELEC-RPi2.arm-$ver.img.gz
