@@ -10,7 +10,8 @@ echo "\
 (\e[32mv\e[0m) YTN LIVE
 (\e[32mf\e[0m) YTN 라이프
 (\e[32mc\e[0m) YTN 사이언스
-(\e[32mg\e[0m) 맛있는 녀석들" # (\e[32mr\e[0m) RTV 시민방송
+(\e[32mg\e[0m) 맛있는 녀석들
+(\e[32m0\e[0m) 여은파"
 
 read -p " " i
 
@@ -25,26 +26,32 @@ case $i in
  f) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
  c) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
  r) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
- g) ch=tastyguys   ; url="https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg" ;;
+ g) ch=tastyguys   ; url="https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"
+    live=$(curl -s "$url" | grep -o '지금 최초 공개 중.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
+    if [ ! -z "$live" ]; then
+     printf "\e[32m#지금 최초 공개 중\e[0m\n"
+     printf "$ch - https://youtu.be/$live\n"
+    fi
+    label=$(curl -s "$url" | grep -o '"label":.*' | head -1 | sed 's/\\"//g' | cut -d\" -f4)
+    [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n" && exit
+    days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
+    prog=$(echo "$label" | sed 's/ \[맛있는.*//')
+    printf "\e[32m$prog ($days)\e[0m\n" ;;
+ 0) ch=여은파
+    url="https://www.youtube.com/playlist?list=PL9lPr2KXothXWfekXHx9J1LVNhl14yKpI"
+    label=$(curl -s "$url" | grep -o 'label":".\{1000\}' | grep 여은파 | tail -1 | cut -d\" -f3-)
+    [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n" && exit
+     days=$(echo "$label" | sed 's/.*STUDIO //; s/ 조회수.*//' | rev | cut -d' ' -f2- | rev)
+     prog=$(echo "$label" | sed 's/ 게시자.*//')
+    uturl=$(echo "$label" | sed 's/.*watch?v=//' | cut -b -11)
+    printf "\e[32m$prog ($days)\e[0m\n"
+    printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
+    exit ;;
  *) exit ;;
 esac
 
 uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
-
 [ -z "$uturl" ] && printf "YouTube live streaming is not available!\n\e[34m$url\e[0m\n" && exit
-
-if [ "$i" = g ]; then
- live=$(curl -s "$url" | grep -o '지금 최초 공개 중.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
- if [ ! -z "$live" ]; then
-  printf "\e[32m#지금 최초 공개 중\e[0m\n"
-  printf "$ch - https://youtu.be/$live\n"
- fi
- label=$(curl -s "$url" | grep -o '"label":.*' | head -1 | sed 's/\\"//g' | cut -d\" -f4)
- [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n" && exit
- days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
- prog=$(echo "$label" | sed 's/ \[맛있는.*//')
- printf "\e[32m$prog ($days)\e[0m\n"
-fi
 
  printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
 #printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
