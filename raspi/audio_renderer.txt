@@ -211,9 +211,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	https://github.com/librespot-org/librespot
 
 	$ sudo ntpdate pool.ntp.org
-	$ wget https://github.com/librespot-org/librespot/archive/v0.1.1.tar.gz
-	$ tar xvzf v0.1.1.tar.gz && rm v0.1.1.tar.gz
-	$ cd librespot-0.1.1
+	$ wget https://github.com/librespot-org/librespot/archive/v0.1.3.tar.gz
+	$ tar xvzf v0.1.3.tar.gz && rm v0.1.3.tar.gz
+	$ cd librespot-0.1.3
 	$ cargo build --release --no-default-features --features alsa-backend
 
 	$ target/release/librespot -n Librespot --backend ?
