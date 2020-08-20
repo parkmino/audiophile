@@ -11,7 +11,8 @@ echo "\
 (\e[32mf\e[0m) YTN 라이프
 (\e[32mc\e[0m) YTN 사이언스
 (\e[32mg\e[0m) 맛있는 녀석들
-(\e[32m0\e[0m) 여은파"
+(\e[32m0\e[0m) 김기열
+(\e[32m1\e[0m) 여은파"
 
 read -p " " i
 
@@ -37,7 +38,17 @@ case $i in
     days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
     prog=$(echo "$label" | sed 's/ \[맛있는.*//')
     printf "\e[32m$prog ($days)\e[0m\n" ;;
- 0) ch=여은파
+ 0) ch=김기열
+    url="https://www.youtube.com/c/김기열/videos "
+    label=$(curl -s "$url" | grep -o '"title":{"runs":\[{"text":".\{500\}' | head -1)
+    [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n" && exit
+     days=$(echo "$label" | grep -o 'simpleText.*' | cut -d\" -f3)
+     prog=$(echo "$label" | cut -d\" -f8)
+    uturl=$(echo "$label" | grep -o 'watch?v=.*' | cut -d\= -f2 | cut -c -11)
+    printf "\e[32m$prog ($days)\e[0m\n"
+    printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
+    exit ;;
+ 1) ch=여은파
     url="https://www.youtube.com/playlist?list=PL9lPr2KXothXWfekXHx9J1LVNhl14yKpI"
     label=$(curl -s "$url" | grep -o 'label":".\{1000\}' | grep 여은파 | tail -1 | cut -d\" -f3-)
     [ -z "$label" ] && printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n" && exit
