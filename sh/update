@@ -383,7 +383,7 @@ CELLULOID () {
 
 EXTINF () {
  printf "• EXTINF\t"
- url=$(curl -is https://www.extinf.com/category/korean | grep -o "https\?://[a-z0-9./]*korean/")
+ url=$(curl -is https://www.extinf.com/category/korean | grep -o "http.*korean/")
  latest=$(curl $curl_opt "$url" | grep -o "article id=\"post-[0-9]*" | head -1 | cut -d\- -f2)
  current="72685"
  printf "$current"
