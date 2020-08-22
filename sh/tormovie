@@ -6,24 +6,24 @@ usage () {
 }
 
 chk_url () {
- printf "\n%s\n\n" $url
+ printf "[ %s ]\n" $url
  if ! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && ! wget --spider -q "$url" 2>&1; then
-  echo "$url is not connected and exit!"
-  exit
+  echo "$url is not connected!"
+  return
  fi
 }
 
 chk_movie () {
  if [ -z "$movie" ]; then
   echo "$url"
-  echo "Movies are not available and exit"
+  echo "Movies are not available"
   [ -e "$tmpfile" ] && rm "$tmpfile"
-  exit
+  return
  elif [ "$movie" = en-US ]; then
   echo "$url"
-  echo "Movies are not valid and exit"
+  echo "Movies are not valid"
   [ -e "$tmpfile" ] && rm "$tmpfile"
-  exit
+  return
  else
   printf "%2d.%s\n" $i "$movie"
  fi
@@ -42,7 +42,7 @@ torwal () {
 torqq () {
  url="https://토렌트큐큐.com"
 #url="https://torrentqq35.com"
- chk_url
+ chk_url || return
  [ -z "${url##*큐큐*}" ] && url="$(curl -sL "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=d&board=mov"
  tmpfile=$(mktemp)
@@ -57,7 +57,7 @@ torqq () {
 
 torview () {
  url="https://torrentview18.net"
- chk_url
+ chk_url || return
  url="$url/bbs/board.php?bo_table=mov"
  tmpfile=$(mktemp)
  curl -sL "$url" | grep -A 60 '인기 포스트' > "$tmpfile"
@@ -69,4 +69,7 @@ torview () {
  rm "$tmpfile"
 }
 
-[ "$1" = view ] && torview || torqq
+torqq
+echo "Press any key to continue..."
+read continue
+torview
