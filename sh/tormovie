@@ -6,7 +6,7 @@ usage () {
 }
 
 chk_url () {
- printf "[ %s ]\n" $url
+ printf "\n[ %s ]\n\n" $url
  if ! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && ! wget --spider -q "$url" 2>&1; then
   echo "$url is not connected!"
   return
@@ -70,6 +70,6 @@ torview () {
 }
 
 torqq
-echo "Press any key to continue..."
+printf "Press any key to continue..."
 read continue
 torview
