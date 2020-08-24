@@ -608,7 +608,8 @@ RASPIOS () {
  if [ -z "$release" ] || [ -z "$date" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
-  printf "$release ($date)\t\t"
+  printf "$release ($date)"
+  [ ${#release} -ge 11 ] && printf "\t" || printf "\t\t"
   days_diff
  fi
 }
