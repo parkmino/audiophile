@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 usage () {
  echo "Usage: $(basename "$0") [qq|view]"
@@ -69,6 +69,8 @@ torview () {
  rm "$tmpfile"
 }
 
-torqq
-read -n 1 -s -r -p "Press any key to continue..."
-torview
+case $1 in
+ qq)      torqq   ;;
+ view|vw) torview ;;
+ *)       torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
+esac
