@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage () {
  echo "Usage: $(basename "$0") [qq|view]"
@@ -70,6 +70,5 @@ torview () {
 }
 
 torqq
-printf "Press any key to continue..."
-read continue
+read -n 1 -s -r -p "Press any key to continue..."
 torview
