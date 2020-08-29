@@ -147,10 +147,10 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd
 done
 
 ### Remove services
-for i in serial-getty@ttySAC3
-do
- service $i stop || true
-done
+#for i in serial-getty@ttySAC3
+#do
+# service $i stop || true
+#done
 for i in hciattach
 do
  pkill $i || true
