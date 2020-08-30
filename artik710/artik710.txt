@@ -49,7 +49,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		password : root
 
 	# uname -a; cat /etc/os-release
-		Ubuntu 16.04.5 LTS (Linux artix 4.4.159)
+		Ubuntu 16.04.7 LTS (Linux artik 4.4.159-0710GC0F-44U-DJW0)
 	# apt-get update
 	# apt-get install bc file nano psmisc software-properties-common unzip
 	# nano /etc/apt/sources.list
@@ -85,6 +85,25 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# locale -a -v
 
 4. Network
+
+	# nano /etc/network/interfaces
+
+		auto eth0
+		iface eth0 inet dhcp
+		auto lo
+		iface lo inet loopback
+
+	# rm /etc/resolv.conf
+	# nano /etc/resolv.conf
+
+		nameserver 8.8.8.8
+	
+	# systemctl disable connman
+
+	# nano -L /etc/avahi/avahi-daemon.conf
+		host-name=bann
+		domain-name=local
+	# systemctl restart avahi-daemon
 
 	##connmanctl services
 	##connmanctl config $eth --ipv4 manual 192.168.0.x 255.255.255.0 192.168.0.1
@@ -122,10 +141,6 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		domain your.domain.name
 	##resolvconf -u
 	##hostnamectl
-	##nano -L /etc/avahi/avahi-daemon.conf
-		host-name=bann
-		domain-name=local
-	##systemctl restart avahi-daemon
 
 	# ls /etc/update-motd.d/*
 
@@ -133,29 +148,43 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# lsmod
 	# nano /etc/modprobe.d/artik710.conf
-		blacklist ...
+		 blacklist aes_neon_blk
+		#blacklist 8021q
+		#blacklist iptable_nat
+		#blasklist tun
+		 blacklist crc32_arm64
+		 blacklist aes_ce_blk
+		 blacklist ghash_ce
+		 blacklist sha2_ce
+		 blacklist sha1_ce
+		 blacklist mali
+		#blacilist dhd
+
+	# nano /etc/rc.local
+		rmmod 8021q iptable_nat nf_nat_ipv4 nf_nat tun dhd
 
 6. Disable services
 
 	# systemctl list-unit-files -t service | awk '$2~/enabled/'
 	# apt-get remove zigbeed
 	# apt-get autoremove
-	# systemctl stop    ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved resolvconf # serial-getty@ttySAC3 avahi-daemon
-	# systemctl disable ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved # serial-getty@ttySAC3 avahi-daemon
-	# ls -al /etc/resov.conf
-	##rm   /etc/resolv.conf
-	##nano /etc/resolv.conf
-		nameserver 1.1.1.1   
+	# systemctl stop ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved resolvconf rpcbind # serial-getty@ttySAC3 avahi-daemon
+	# systemctl disable avahi-daemon audiosetting ble-onboarding-launcher bluetooth dnsmasq mosquitto pulseaudio wpa_supplicant getty@tty1 systemd-resolved rpcbind # serial-getty@ttySAC3 avahi-daemon
 	# systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush
 	# systemctl mask systemd-logind wpa_supplicant
-	# pkill hciattach; pkill tzdaemon
+	# pkill hciattach; pkill tzdaemon; system
 
 7. MPD
 
 	# apt-get install libcue1 libaudiofile1 libavformat-ffmpeg56 libflac8 libid3tag0 libmpdclient2 libupnp6
 	# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /run/mpd
-	# cp copy/mpd /usr/bin/
-	# cp copy/mpd.conf /etc/mpd.conf.sav
+	##systemctl stop mpd
+	##systemctl disable mpd.service
+	##systemctl mask    mpd.socket
+	##mv /usr/bin/mpd  /usr/bin/mpd.org
+	##mv /etc/mpd.conf /etc/mpd.conf.orig
+	# mv copy/mpd /usr/bin/
+	# mv copy/mpd.conf /etc/mpd.conf.sav
 	# mpd /etc/mpd.conf.sav
 		Ctrl+C
 
@@ -222,7 +251,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	# sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
 	# systemctl daemon-reload
-	# disable roonbridge roonbridgetoram
+	# systemctl disable roonbridge roonbridgetoram
 
 	# ls -al /opt/RoonBridge/Bridge/processreaper
 	# strip --strip-debug /opt/RoonBridge/Bridge/processreaper
@@ -236,7 +265,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 11. AirUPnP / Librespot / ttyd
 
-	# mv copy/airupnp* copy/librespot ./
+	# mv copy/airupnp* copy/librespot /root/
 	# mv copy/ttyd /usr/bin/
 
 12. HQPlayer NAA
@@ -247,13 +276,14 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 13. Squeezelite
 
-	# mv copy/squeezelite ./
+	# mv copy/squeezelite /root/
 	##apt-get install squeezelite
 	##sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.hw"/' /etc/default/squeezelite
 
 14. uhubctl
 
-	# dpkg -i copy/uhubctl_2.1.0-1_arm64.deb
+	# dpkg -i copy/uhubctl_2.2.0-1_arm64.deb
+	# uhubctl
 
 15. myMPD
 
@@ -288,12 +318,12 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# ./build.sh pkgdebian
 	# ls -al package/mympd*.deb
 
-	# apt-get install libc6 libid3tag0 libflac8 lrzsz # liblua5.3 libmediainfo0v5 openssl
+	# apt-get install libc6 libid3tag0 libflac8 lrzsz openssl liblua5.3-0 # libmediainfo0v5
 	# dpkg -i copy/mympd*.deb
 	# ls -al /usr/bin/mympd
 	# file /usr/bin/mympd
-	# strip --strip-debug /usr/bin/mympd
-	# ls -al /usr/bin/mympd
+	##strip --strip-debug /usr/bin/mympd
+	##ls -al /usr/bin/mympd
 
 	##cp mympd /usr/bin/
 	##cp mympd.conf /etc/
@@ -307,7 +337,8 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		 port = 6600
 		 musicdirectory = /var/lib/mpd/music
 		 playlistdirectory = /var/lib/mpd/playlists
-		 ssl = false
+		#ssl = false
+		#sslport = 443
 		 publish = true
 		#webdav = false
 		 loglevel = 1
@@ -317,13 +348,6 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		 syscmds = true
 		 mounts = false
 		[syscmds]
-		HR =
-		DSD - DSD over PCM 켜기 = sudo sed -i '/dop/s/^#*//g' /etc/mpd.conf.sav
-		DSD - DSD over PCM 끄기 = sudo sed -i '/dop/s/^/#/g'  /etc/mpd.conf.sav
-		HR =
-		PCM 디코더 켜기 = sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' /etc/mpd.conf.sav
-		PCM 디코더 끄기 = sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  /etc/mpd.conf.sav
-		HR =
 		KBS 클래식 FM = kr2mpd 1fm
 		KBS 쿨 FM     = kr2mpd 2fm
 		MBC FM        = kr2mpd mbcm
@@ -331,11 +355,23 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		SBS 파워 FM   = kr2mpd sbsp
 		SBS 러브 FM   = kr2mpd sbsl
 		HR =
-		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
-		HR =
 		다시 시작 - Reboot    = sudo reboot
 		전원 끄기 - Power off = sudo poweroff
+		HR =
+		MPD DoP(DSD over PCM) 켜기 = consf mpd dsd on
+		MPD DoP(DSD over PCM) 끄기 = consf mpd dsd off
+		HR =
+		룬 브리지 켜기 = consf roon on
+		룬 브리지 끄기 = consf roon off
+		HR =
+		스퀴즈박스 켜기 = consf sqzlite on
+		스퀴즈박스 끄기 = consf sqzlite off
+		HR=
+		UPnP/DLNA 켜기 = consf upnp on
+		UPnP/DLNA 끄기 = consf upnp off
+		HR =
+		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
+		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 	# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
 	# nano /etc/systemd/system/mympd.service
@@ -354,7 +390,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# ls -al /usr/lib/aarch64-linux-gnu/libasound*
 	# mv /usr/lib/aarch64-linux-gnu/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
 	# mv copy/libasound.so.2.0.0.*  /etc/
-	# rm -i /usr/lib/arm-linux-gnueabihf/libasound.so*
+	# rm -i /usr/lib/aarch64-linux-gnu/libasound.so*
 
 	# cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
 
@@ -366,7 +402,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# mkdir /usr/share/alsa
 	# cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 	# mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
-	# sed -i 's/card 0/card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
+	##sed -i 's/card 0/card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
 17. Tweak decoder libraries
 
@@ -375,14 +411,14 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# mv /usr/lib/aarch64-linux-gnu/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
 	# echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
 	# echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 cp -v copy/libFLAC.so.8.3.0
-	# rm -i /usr/lib/arm-linux-gnueabihf/lib{audiofile.so*,FLAC.so*}
+	# rm -i /usr/lib/aarch64-linux-gnu/lib{audiofile.so*,FLAC.so*}
 	# rm copy/{libaudiofile.so.1.0.0,libFLAC.so.8.3.0}
 
 	# ls -al /dev/shm/
 	# nano /etc/ld.so.conf.d/dev_shm.conf
 		/dev/shm/
 	# ldconfig
-	# ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so*,audiofile.so*,FLAC.so*}
+	# ls -al /usr/lib/aarch64-linux-gnu/lib{asound.so*,audiofile.so*,FLAC.so*}
 
 18. Edit /etc/rc.local
 
@@ -392,6 +428,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 19. Edit /etc/sysctl.conf
 
 	# nano /etc/sysctl.conf
+	# sysctl -p /etc/sysctl.conf
 
 20. audio-config
 
@@ -400,16 +437,14 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# audio-config
 	# audioconf
 
-21. MicroSD mount
+21. USB mount # MicroSD
 
 	# apt-get install exfat-fuse exfat-utils # microSDXC
-	# mkdir /mnt/microSD /mnt/usb
-	# ln -sf /mnt/microSD /var/lib/mpd/music
+	# mkdir /mnt/usb # /mnt/microSD
+	# ln -sf /mnt/usb /var/lib/mpd/music # /mnt/microSD
 	# nano /etc/fstab
-		/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
-		/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
-		##/dev/sda1         /mnt/usb  vfat    ro 0 0
-		##/dev/sda1         /mnt/usb  ntfs-3g ro 0 0
+		#/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
+		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 		#//192.168.0.x/Music /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
 		#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
 
@@ -417,6 +452,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# systemctl disable sshd
 	# sed -i '/^serial/s/on/off/' /etc/default/audio.conf
+	# rm /usr/bin/airupnp* /usr/bin/librespot*
 
 23. Back up
 
