@@ -18,12 +18,12 @@ chk_movie () {
   echo "$url"
   echo "Movies are not available"
   [ -e "$tmpfile" ] && rm "$tmpfile"
-  return
+  exit
  elif [ "$movie" = en-US ]; then
   echo "$url"
   echo "Movies are not valid"
   [ -e "$tmpfile" ] && rm "$tmpfile"
-  return
+  exit
  else
   printf "%2d.%s\n" $i "$movie"
  fi
