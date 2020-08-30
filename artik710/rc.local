@@ -189,6 +189,9 @@ swapoff -a
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
  echo "80" > /proc/irq/$i/smp_affinity
 done
+for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
+ echo "0f" > /proc/irq/$i/smp_affinity
+done
 echo "0f" > /proc/irq/default_smp_affinity
 for pid in 1 $(pgrep -x rc.local); do
  taskset -cp $s_task $pid || true
