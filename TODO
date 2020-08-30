@@ -51,8 +51,8 @@
 		### Taskset
 
 		$ echo "obase=16; $(echo "ibase=2; 10000000" | bc)" | bc => 80
-		$ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc => 40
 		$ echo "obase=16; $(echo "ibase=2; 00100000" | bc)" | bc => 20
+		$ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc => 40
 		$ echo "obase=16; $(echo "ibase=2; 00010000" | bc)" | bc => 10
 		$ echo "obase=16; $(echo "ibase=2; 11110000" | bc)" | bc => F0
 		$ echo "obase=16; $(echo "ibase=2; 00001111" | bc)" | bc =>  F
