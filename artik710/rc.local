@@ -186,13 +186,19 @@ swapoff -a
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### Taskset
+for i in $(awk '/s0|hdmi/{print +$1}' /proc/interrupts); do
+ [ "$i" -le 42 ] && echo "10" > /proc/irq/$i/smp_affinity
+done
+for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
+ echo "40" > /proc/irq/$i/smp_affinity
+done
+for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
+ echo "20" > /proc/irq/$i/smp_affinity
+done
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
  echo "80" > /proc/irq/$i/smp_affinity
 done
-for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
- echo "0f" > /proc/irq/$i/smp_affinity
-done
-echo "0f" > /proc/irq/default_smp_affinity
+echo "20" > /proc/irq/default_smp_affinity
 for pid in 1 $(pgrep -x rc.local); do
  taskset -cp $s_task $pid || true
 done
