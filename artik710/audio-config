@@ -110,7 +110,7 @@ features () {
 i=$(whiptail --title "Roon Bridge, Squeezebox, UPnP/DLNA" --checklist "Roon Bridge, Squeezebox, UPnP/DLNA" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 59 3 \
 "roon"    "Enable Roon Bridge   룬 브리지  사용" $(consf roon) \
 "sqzlite" "Enable Squeezebox    스퀴즈박스 사용" $(consf sqzlite) \
-"upnp"    "Enable UPnP/DLNA     UPnP/DLNA  사용" $(consf sqzlite) 3>&1 1>&2 2>&3)
+"upnp"    "Enable UPnP/DLNA     UPnP/DLNA  사용" $(consf upnp) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -121,10 +121,10 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Bann Audio Sylphid Network Player" 10 63 3 \
-"1" "MPD options                MPD 옵션               >" \
-"2" "Change renderer name       렌더러 이름 바꾸기     >" \
-"3" "Roon Bridge, Squeezebox, UPnP/DLNA                >" 3>&1 1>&2 2>&3)
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Bann Audio Sylphid Network Player" 10 61 3 \
+"1" "MPD options              MPD 옵션               >" \
+"2" "Change renderer name     렌더러 이름 바꾸기     >" \
+"3" "Roon Bridge, Squeezebox, UPnP/DLNA              >" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
