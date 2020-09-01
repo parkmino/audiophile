@@ -3,9 +3,10 @@
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
 audio_conf=/etc/default/audio.conf
+bkti="Bann Sylphid Network Player"
 
 ethernet_ip () {
-i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Bann Sylphid Network Player" 9 45 2 \
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 9 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
@@ -17,7 +18,7 @@ case $i in
 
 Input Static IP address to use.       사용할 수동 IP를 입력합니다.
 Current IP is listed below.           아래는 현재 주소입니다.
-Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -z "$user_ip" ]; then
@@ -45,7 +46,7 @@ esac
 }
 
 wifi_client () {
-i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Wi-Fi Client / 무선 연결" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "Bann Sylphid Network Player" 9 50 2 \
+i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Wi-Fi Client / 무선 연결" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 9 50 2 \
 "1" "Enable  Wi-Fi       무선 연결        >" \
 "2" "Disable Wi-Fi       무선 연결 안 함" 3>&1 1>&2 2>&3)
 #"0" "Scan    Wi-Fi       무선 검색" \
@@ -54,11 +55,11 @@ i=$(whiptail --title "Wi-Fi Client / 무선 연결" --menu "Wi-Fi Client / 무�
 
 case $i in
  0) wpa_cli -iwlan0 scan && echo "$(wpa_cli scan_results)" > ~/scan_wifi.txt
-    whiptail --title "Scan Wi-Fi / 무선 검색" --scrolltext --textbox ~/scan_wifi.txt --ok-button "OK/확인" --backtitle "Bann Sylphid Network Player" 18 75 ;;
+    whiptail --title "Scan Wi-Fi / 무선 검색" --scrolltext --textbox ~/scan_wifi.txt --ok-button "OK/확인" --backtitle "$bkti" 18 75 ;;
  1) wifi=$(whiptail --title "Wi-Fi Client / 무선 연결" --inputbox "\
 
 Input AP and password to use.   공유기와 비밀번호를 입력합니다.
-Use space in between.           사이에 빈 칸을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 11 67 "AP password" 3>&1 1>&2 2>&3)
+Use space in between.           사이에 빈 칸을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 11 67 "AP password" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      ap=$(echo "$wifi" | cut -d " " -f1)
@@ -81,7 +82,7 @@ esac
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 11 67 5 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 11 67 5 \
 "dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop) \
 "pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm) \
 "vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol) \
@@ -102,12 +103,12 @@ renderer_name () {
  current_name="$(consf upmpd)"
  i="$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
 
-Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 9 67 "$current_name" 3>&1 1>&2 2>&3)"
+Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 9 67 "$current_name" 3>&1 1>&2 2>&3)"
  [ "$i" != "$current_name" ] && [ "$i" != "" ] && consf upmpd set "$i"
 }
 
 features () {
-i=$(whiptail --title "Roon Bridge, Squeezebox, UPnP/DLNA" --checklist "Roon Bridge, Squeezebox, UPnP/DLNA" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 9 59 3 \
+i=$(whiptail --title "Roon Bridge, Squeezebox, UPnP/DLNA" --checklist "Roon Bridge, Squeezebox, UPnP/DLNA" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 9 59 3 \
 "roon"    "Enable Roon Bridge   룬 브리지  사용" $(consf roon) \
 "sqzlite" "Enable Squeezebox    스퀴즈박스 사용" $(consf sqzlite) \
 "upnp"    "Enable UPnP/DLNA     UPnP/DLNA  사용" $(consf upnp) 3>&1 1>&2 2>&3)
@@ -121,7 +122,7 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "Bann Sylphid Network Player" 10 61 3 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti" 10 61 3 \
 "1" "MPD options              MPD 옵션               >" \
 "2" "Change renderer name     렌더러 이름 바꾸기     >" \
 "3" "Roon Bridge, Squeezebox, UPnP/DLNA              >" 3>&1 1>&2 2>&3)
@@ -138,7 +139,7 @@ while true; do
  esac
 done
 
-if (whiptail --title "Reboot / 다시 시작" --backtitle "Bann Sylphid Network Player" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+if (whiptail --title "Reboot / 다시 시작" --backtitle "$bkti" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
   reboot is necessary.    다시 시작해야 합니다.
 
   Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
