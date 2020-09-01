@@ -81,7 +81,7 @@ esac
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 67 5 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 11 67 5 \
 "dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop) \
 "pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm) \
 "vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol) \
@@ -102,12 +102,12 @@ renderer_name () {
  current_name="$(consf upmpd)"
  i="$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
 
-Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 67 "$current_name" 3>&1 1>&2 2>&3)"
+Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 9 67 "$current_name" 3>&1 1>&2 2>&3)"
  [ "$i" != "$current_name" ] && [ "$i" != "" ] && consf upmpd set "$i"
 }
 
 features () {
-i=$(whiptail --title "Roon Bridge, Squeezebox, UPnP/DLNA" --checklist "Roon Bridge, Squeezebox, UPnP/DLNA" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 59 3 \
+i=$(whiptail --title "Roon Bridge, Squeezebox, UPnP/DLNA" --checklist "Roon Bridge, Squeezebox, UPnP/DLNA" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "Bann Sylphid Network Player" 9 59 3 \
 "roon"    "Enable Roon Bridge   룬 브리지  사용" $(consf roon) \
 "sqzlite" "Enable Squeezebox    스퀴즈박스 사용" $(consf sqzlite) \
 "upnp"    "Enable UPnP/DLNA     UPnP/DLNA  사용" $(consf upnp) 3>&1 1>&2 2>&3)
