@@ -4,6 +4,7 @@
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
 spotifyd_conf=/home/pi/spotifyd.conf
 audio_conf=/etc/default/audio.conf
+bkti="Raspberry Renderer / 라즈베리 렌더러"
 
 sound_card_initial () {
  sudo sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio\|dtoverlay=justboom\|dtoverlay=rpi-dac/d' /boot/config.txt
@@ -23,7 +24,7 @@ iqaudio () {
 }
 
 sound_card () {
-i=$(whiptail --title "Audio device / 오디오 장치" --menu "Audio device / 오디오 장치" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 19 55 12 \
+i=$(whiptail --title "Audio device / 오디오 장치" --menu "Audio device / 오디오 장치" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 19 55 12 \
 "1"  "USB Audio Class 2.0" \
 "2"  "Allo Boss DAC" \
 "3"  "Allo DigiOne" \
@@ -90,7 +91,7 @@ i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
    [LAN]      [USB3]      [USB5]
   =============================== 
     RasPi 1B+/2B/3B Back Port           라즈베리 파이 1B+/2B/3B 뒷면
-    USB3 is recommended for DAC         DAC은 USB3을 추천합니다" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 17 75 4 \
+    USB3 is recommended for DAC         DAC은 USB3을 추천합니다" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 17 75 4 \
 "1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
 "2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \
 "3" "Disable USB 4/5 signal              USB 4/5 신호만 끄기" \
@@ -105,7 +106,7 @@ esac
 }
 
 ethernet_ip () {
-i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 9 45 2 \
+i=$(whiptail --title "Ethernet IP / 유선 IP 설정" --menu "Ethernet IP / 유선 IP 설정" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 9 45 2 \
 "1" "Dynamic IP (DHCP)       자동 IP" \
 "2" "Static  IP              수동 IP   >" 3>&1 1>&2 2>&3)
 
@@ -120,7 +121,7 @@ case $i in
 
 Input Static IP address to use.       사용할 수동 IP를 입력합니다.
 Current IP is listed below.           아래는 현재 주소입니다.
-Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
+Otherwise, 192.168.0.9 will be used.  아니면 192.168.0.9로 설정합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 11 75 $(hostname -I) 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -z "$user_ip" ]; then
@@ -155,14 +156,14 @@ My assumption may be wrong, please edit with the following command.
 -----------------------
 
 $(cat /etc/network/interfaces)" > ~/static_ip.txt
-     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "audio-config" 18 75
+     whiptail --title "Static IP / 수동 IP" --scrolltext --textbox ~/static_ip.txt --ok-button "OK/확인" --backtitle "$bkti" 18 75
     fi
     ;;
 esac
 }
 
 dbus_tts () {
-i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "IP TTS, DBus / IP TTS와 DBus" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 63 3 \
+i=$(whiptail --title "IP TTS, DBus / IP TTS와 DBus" --checklist "IP TTS, DBus / IP TTS와 DBus" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 9 63 3 \
 "tts"  "Enable booting IP TTS   부팅 시 IP TTS 사용" $(grep -q 'tts=on' $audio_conf && echo ON || echo OFF) \
 "eng"  "Enable English IP TTS   영어 IP TTS 사용" $(grep -q 'tts_eng=on' $audio_conf && echo ON || echo OFF) \
 "dbus" "Enable DBus             DBus 사용" $(grep -q 'dbus=on' $audio_conf && echo ON || echo OFF) 3>&1 1>&2 2>&3)
@@ -179,12 +180,12 @@ renderer_name () {
  current_name="$(consf upmpd)"
  i="$(whiptail --title "Change renderer name / 렌더러 이름 바꾸기" --inputbox "\
 
-Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 9 67 "$current_name" 3>&1 1>&2 2>&3)"
+Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 9 67 "$current_name" 3>&1 1>&2 2>&3)"
  [ "$i" != "$current_name" ] && [ "$i" != "" ] && consf upmpd set "$i"
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 11 67 5 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 11 67 5 \
 "dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop) \
 "pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm) \
 "vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol) \
@@ -202,7 +203,7 @@ fi
 }
 
 features () {
-i=$(whiptail --title "AirPlay, Roon Bridge, Spotify, Squeezebox" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 59 4 \
+i=$(whiptail --title "AirPlay, Roon Bridge, Spotify, Squeezebox" --checklist "AirPlay, Roon, Spotify, Tidal" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 10 59 4 \
 "airplay" "Enable AirPlay       에어플레이 사용" $(consf airplay) \
 "roon"    "Enable Roon Bridge   룬 브리지  사용" $(consf roon) \
 "spotify" "Enable Spotify       스포티파이 사용" $(consf spotify) \
@@ -230,7 +231,7 @@ while true; do
 i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
 
     To disable Tidal, just remove username or password.
-   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" 13 63 3 \
+   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 13 63 3 \
 "1"  "Tidal ┬ username        사용자        >" \
 "2"  "      │ password        비밀번호      >" \
 "3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
@@ -242,7 +243,7 @@ case $i in
  1) tidal_user=$(grep "tidaluser =" $upmpdcli_conf | cut -d' ' -f3-)
     input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
 
-Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
+Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_user" ]; then
@@ -256,7 +257,7 @@ Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확
  2) tidal_pwd=$(grep "tidalpass =" $upmpdcli_conf | cut -d' ' -f3-)
     input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
 
-Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "audio-config" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
+Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ "$exitstatus" = 0 ]; then
      if [ -n "$input_pwd" ]; then
@@ -267,7 +268,7 @@ Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/
       [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
      fi
     fi ;;
- 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Tidal quality / Tidal 품질" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "audio-config" --default-item 3 10 50 3 \
+ 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Tidal quality / Tidal 품질" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" --default-item 3 10 50 3 \
 "1" "low" \
 "2" "high" \
 "3" "loseless" 3>&1 1>&2 2>&3)
@@ -283,7 +284,7 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "audio-config" 15 65 8 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti" 15 65 8 \
  "1"  "Audio device               오디오 장치            >" \
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
@@ -312,7 +313,7 @@ while true; do
  esac
 done
 
-if (whiptail --title "Reboot / 다시 시작" --backtitle "audio-config" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+if (whiptail --title "Reboot / 다시 시작" --backtitle "$bkti" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
   reboot is necessary.    다시 시작해야 합니다.
 
   Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
