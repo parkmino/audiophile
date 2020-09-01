@@ -36,7 +36,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/artik710/artik710_sdfuse-0710GC0F-44U-DJW0-20181030.003001.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/artik710/img/artik710_sdfuse-0710GC0F-44U-DJW0-20181030.003001.img of=/dev/sdc
 	$ sync
 
 	### SW402-4 ON  for the ARTIK 530/710 board
@@ -161,7 +161,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		#blacilist dhd
 
 	# nano /etc/rc.local
-		rmmod 8021q iptable_nat nf_nat_ipv4 nf_nat tun dhd
+		rmmod 8021q aes_ce_cipher cfg80211 iptable_nat nf_nat_ipv4 nf_nat tun dhd
 
 6. Disable services
 
@@ -220,12 +220,12 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# dpkg -i copy/lib*upnp*.deb copy/upmpdcli*.deb
 	# mv copy/icon.png /usr/share/upmpdcli/
 	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
-	# sed -i '/friendlyname =/s/^#//; /friendlyname =/s/= .*/= Bann Audio Sylphid Network Player/' /etc/upmpdcli.conf
+	# sed -i '/friendlyname =/s/^#//; /friendlyname =/s/= .*/= Bann Sylphid Network Player/' /etc/upmpdcli.conf
 	# sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
 	# sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
 	# grep -e checkcontentformat -e friendlyname -e tidalquality /etc/upmpdcli.conf -e radiolist
 		checkcontentformat = 0
-		friendlyname = Bann Audio Sylphid Network Player
+		friendlyname = Bann Sylphid Network Player
 		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 		tidalquality = lossless
 	# nano /etc/upmpdcli.conf
@@ -271,6 +271,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 12. HQPlayer NAA
 
 	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
+	##wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/stretch/networkaudiod_3.6.0-42_arm64.deb
 	# dpkg -i networkaudiod*.deb
 	# sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
@@ -371,7 +372,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		UPnP/DLNA 끄기 = consf upnp off
 		HR =
 		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /root; sudo su"&>/dev/null</dev/null 2>/dev/null
+		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "sudo su"&>/dev/null</dev/null 2>/dev/null
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 	# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
 	# nano /etc/systemd/system/mympd.service
@@ -384,6 +385,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# systemctl status mympd
 	# mympd
 		설정 > 외관 > 알림 > 페이지에 알림
+	##mympd reset_state
 
 16. Tweak ALSA
 
@@ -467,7 +469,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# systemctl disable sshd
 	# systemctl daemon-reload
 	# youtube-dl --update
-	# echo "* Bann Audio Sylphid Network Player $(date +"%y.%m")" > ~/release
+	# echo "* Bann Sylphid Network Player $(date +"%y.%m")" > ~/release
 	# mpc clear
 	# rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	# cat /lib/systemd/system/sshd.service
