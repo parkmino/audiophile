@@ -25,7 +25,7 @@ DEV="/dev/mmcblk1"
 # Where does partition 3 start now?
 start_sector=`fdisk -l $DEV | grep ${DEV}p3 | awk '{print $2}'`
 # What's the max number of sectors?
-end_sector=`fdisk -l DEV="/dev/mmcblk1" | awk 'NR==1 {print $7}'`
+end_sector=`fdisk -l $DEV | awk 'NR==1 {print $7}'`
 # one less ... 
 end_sector=$((end_sector - 1))
 # Make sure it's not mounted...
@@ -62,7 +62,7 @@ echo "Resize complete"
 
 # Look for pv. If it's not installed, ask if they want to install it.
 pv=`which pv 2>&1`
-if [[ $pv == which* ]]; then
+if [[ $pv == "" ]]; then
     echo "pv is not installed. This limits feedback."
     read -p 'Install pv now? [Y|n]: ' yn
     if [ ! -z $yn ]; then
