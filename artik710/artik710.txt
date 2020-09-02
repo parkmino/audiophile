@@ -443,10 +443,10 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# apt-get install exfat-fuse exfat-utils # microSDXC
 	# mkdir /mnt/usb # /mnt/microSD
-	# ln -sf /mnt/usb /var/lib/mpd/music # /mnt/microSD
+	##ln -sf /mnt/usb /var/lib/mpd/music # /mnt/microSD
 	# nano /etc/fstab
 		#/dev/mmcblk1p1 /mnt/microSD auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
-		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
+		#/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 		#//192.168.0.x/Music /mnt/cifs cifs    guest,ro,iocharset=utf8 0 0
 		#//192.168.0.x/Music /mnt/cifs cifs    username=user,password=pass,ro,iocharset=utf8 0 0
 
