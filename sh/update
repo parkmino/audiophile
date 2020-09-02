@@ -383,7 +383,7 @@ CELLULOID () {
 
 EXTINF () {
  printf "• EXTINF\t"
- url=$(curl -is https://www.extinf.com/category/korean | grep -o -m1 "http.*korean/")
+ url=$(curl -i $curl_opt https://www.extinf.com/category/korean | grep -o -m1 "http.*korean/")
  latest=$(curl $curl_opt "$url" | grep -o "article id=\"post-[0-9]*" | head -1 | cut -d\- -f2)
  current="73107"
  printf "$current"
@@ -566,7 +566,7 @@ MALP () {
 NEWSTAPA () {
  printf "• 뉴스타파\t"
  url="http://download.newstapa.org/api/podcast.xml"
- date=$(curl $curl_opt "$url" | grep -m1 '<pubDate>' | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ' | tr -d '`')
+ date=$(curl $curl_opt "$url" | grep -m1 '<pubDate>' | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ' | tr -d '`' | sed 's/Seq/Sep/')
 #date=$(curl $curl_opt "$url" | grep -m$((0+2)) '<pubDate>' | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | tr , ' ')
 #date=$(curl $curl_opt 'https://itunes.apple.com/us/podcast/뉴스타파-newstapa/id609417347?mt=2&ign-mpt=uo%3D4' | grep -m1 -A14 preview-title | tail -1 | cut -d\" -f4)
 #date=$(curl $curl_opt 'http://www.podbbang.com/ch/5695' | grep -m1 pubdate | cut -d\' -f4)
