@@ -89,7 +89,7 @@ fi
 
 # These are all added to the tarfile with --no-recursion
 ADD_DIRS="bin dev/pts lib lost+found media mnt proc run/systemd run/systemd/shutdown run/systemd/netif run/systemd/netif/links run/systemd/netif/leases run/systemd/machines run/systemd/sessions run/systemd/ask-password run/systemd/users run/systemd/seats run/mariadb run/log run/wpa_supplicant run/lock run/lock/subsys run/lock/lockdev run/user run/faillock run/setrans run/lirc run/console run/netreport run/blkid run/sepermit sbin srv sys var/log var/lock var/run var/cache/yum var/cache/apt var/yp var/games var/empty var/empty/sshd var/tmp var/spool var/spool/mail var/spool/mail/rpc var/spool/lpd var/spool/anacron var/spool/cron"
-
+#ADD_DIRS="$ADD_DIRS run/dnsmasq run/mount run/sendsigs.omit.d run/shm run/sudo var/cache/debconf "
 # See if the user wants to add more
 user_add_dir=''
 read -p 'Enter additonal (non-recursive) Directory: ' newdir
@@ -107,7 +107,7 @@ fi
 
 # These are added recursively. 
 ADD_FILES="etc dev/stdin dev/stderr dev/tty dev/random dev/fd dev/zero dev/full dev/ptmx dev/shm/ dev/urandom dev/null dev/stdout home opt root tmp/.font-unix/ tmp/.Test-unix/ tmp/.XIM-unix/ tmp/.X11-unix/ tmp/.ICE-unix/ usr var/local/ var/nis/ var/log/lastlog var/log/mariadb/ var/log/wtmp var/log/btmp var/log/tallylog var/log/README var/log/journal/ var/lib/ var/mail var/preserve/ var/opt/ var/gopher/ var/kerberos/ var/db/ var/adm/ var/cache/ var/cache/ldconfig/ var/cache/ldconfig/aux-cache var/cache/man/ var/cache/fontconfig/ var/spool/anacron/cron.weekly var/spool/anacron/cron.daily var/spool/anacron/cron.monthly"
-
+#ADD_FILES="$ADD_FILES boot dists lib pool var/backups"
 # See if the user wants to add more
 user_add_file=''
 read -p 'Enter additonal (recursive) Directory or File: ' newfile
