@@ -464,8 +464,8 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# apt-get update
 	# apt-get upgrade
 	# apt-get dist-upgrade
-	# cp copy/backup.sh /usr/bin/
-	# apt-get install pv
+	# cp copy/backup.sh /dev/shm/
+	##apt-get install pv
 	# systemctl disable sshd
 	# systemctl daemon-reload
 	# youtube-dl --update
@@ -475,8 +475,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# cat /lib/systemd/system/sshd.service
 	# rm /etc/systemd/system/*/sshd.service
 	# rm -f /root/.bash_history ~/.bash_history ; history -c
-	# backup.sh
-	##tar cf renderer.tar --no-recursion renderer
+	# /dev/shm/backup.sh
 
 cf)
 
@@ -491,13 +490,12 @@ https://oinkzwurgl.org/hacking/bash_cgi/
 http://www.team2053.org/docs/bashcgi/postdata.html
 https://marc.waeckerlin.org/computer/blog/parsing_of_query_string_in_bash_cgi_scripts
 
-76543210
-16318421
-2426
-8
-mhso
-8420
-000F
+$ echo "obase=16; $(echo "ibase=2; 10000000" | bc)" | bc # 80 Main
+$ echo "obase=16; $(echo "ibase=2; 00100000" | bc)" | bc # 20 Second
+$ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc # 40 High
+$ echo "obase=16; $(echo "ibase=2; 00010000" | bc)" | bc # 10 Other
+$ echo "obase=16; $(echo "ibase=2; 11110000" | bc)" | bc # F0
+$ echo "obase=16; $(echo "ibase=2; 00001111" | bc)" | bc #  F
 $ printf '%x\n' 128 64 32 $((8+4+2+1))
 $ echo "obase=16; 128; 64; 32; $((8+4+2+1))" | bc
 
