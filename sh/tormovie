@@ -40,8 +40,8 @@ torwal () {
 }
 
 torqq () {
- url="https://토렌트큐큐.com"
-#url="https://torrentqq35.com"
+#url="https://토렌트큐큐.com"
+ url="https://torrentqq48.com"
  chk_url || return
  [ -z "${url##*큐큐*}" ] && url="$(curl -sL "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=d&board=mov"
@@ -56,7 +56,7 @@ torqq () {
 }
 
 torview () {
- url="https://torrentview18.net"
+ url="https://torrentview19.net"
  chk_url || return
  url="$url/bbs/board.php?bo_table=mov"
  tmpfile=$(mktemp)
