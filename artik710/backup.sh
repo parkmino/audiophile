@@ -158,12 +158,21 @@ for f in $ADD_FILES ; do
 done 
 echo  "Done with files                                          "
 
+dots () {
+while true; do 
+printf "."
+sleep 1
+done
+}
+
 # Now compress the whole mess. Also takes forever.
 #if [ -f $pv ]; then 
 #    gzip /mnt/SD3/rootfs.tar | pv -N "Compressing the rootfs"
 #else
-    echo "Sorry, no progress indication, be patient ..."
+    echo "No progress indication of gzip, be patient "
+    dots &
     gzip /mnt/SD3/rootfs.tar
+    kill $!
 #fi
 echo "Done!"
 echo ""
