@@ -61,20 +61,20 @@ echo "Resize complete"
 
 
 # Look for pv. If it's not installed, ask if they want to install it.
-pv=`which pv 2>&1`
-if [[ $pv == "" ]]; then
-    echo "pv is not installed. This limits feedback."
-    read -p 'Install pv now? [Y|n]: ' yn
-    if [ ! -z $yn ]; then
-        apt-get install -y pv
-        pv=`which pv`
-    elif [ $yn == 'y' -o $yn == 'Y' ]; then
-        apt-get install -y pv
-        pv=`which pv`
-    else
-        echo "User feedback will be minimal."
-    fi
-fi
+#pv=`which pv 2>&1`
+#if [[ $pv == "" ]]; then
+#    echo "pv is not installed. This limits feedback."
+#    read -p 'Install pv now? [Y|n]: ' yn
+#    if [ ! -z $yn ]; then
+#        apt-get install -y pv
+#        pv=`which pv`
+#    elif [ $yn == 'y' -o $yn == 'Y' ]; then
+#        apt-get install -y pv
+#        pv=`which pv`
+#    else
+#        echo "User feedback will be minimal."
+#    fi
+#fi
 
 # Move the old rootfs.tar.gz in case we need it again
 # If it doesn't exist, this is some other media, so abort.
@@ -129,44 +129,41 @@ echo "Backing up root file system. This will take some time."
 touch $TARFILE
 # Add all the non-recursive stuff ... 
 for f in $ADD_DIRS ; do
-    if [ $pv ]; then 
-        if [ -d $f -o -f $f ]; then
-            echo -ne  "`tar rf $TARFILE --no-recursion $f | pv -N \"Adding $f \"   ` \r"
-        fi
-    else
+#    if [ $pv ]; then 
+#        if [ -d $f -o -f $f ]; then
+#            echo -ne  "`tar rf $TARFILE --no-recursion $f | pv -N \"Adding $f \"   ` \r"
+#        fi
+#    else
         echo "Adding $f to tarfile ..."
         if [ -d $f -o -f $f ]; then
             tar rf $TARFILE --no-recursion $f
         fi
-    fi
+#    fi
 done 
 echo  "Done with directories                                     "
 
 # Now for all the recursive stuff. This takes forever
 for f in $ADD_FILES ; do
-    if [ $pv ]; then
-        if [ -d $f -o -f $f ]; then
-           #echo -ne "`tar cf - $f | pv -N \"Adding $f \" -s  $(du -sb $f | awk '{print $1}') >> $TARFILE`                    \r"
-            printf "Adding %s \n" "$f"
-            tar rf $TARFILE --checkpoint=.1000 $f
-            printf "\n"
-        fi             
-    else
+#    if [ $pv ]; then
+#        if [ -d $f -o -f $f ]; then
+#            echo -ne "`tar cf - $f | pv -N \"Adding $f \" -s  $(du -sb $f | awk '{print $1}') >> $TARFILE`                    \r"
+#        fi             
+#    else
         if [ -d $f -o -f $f ]; then
             printf "Adding %s \n" "$f"
             tar rf $TARFILE --checkpoint=.1000 $f
             printf "\n"
         fi
-    fi
+#    fi
 done 
 echo  "Done with files                                          "
 
 # Now compress the whole mess. Also takes forever.
-if [ -f $pv ]; then 
-    gzip /mnt/SD3/rootfs.tar | pv -N "Compressing the rootfs"
-else
+#if [ -f $pv ]; then 
+#    gzip /mnt/SD3/rootfs.tar | pv -N "Compressing the rootfs"
+#else
     echo "Sorry, no progress indication, be patient ..."
     gzip /mnt/SD3/rootfs.tar
-fi
+#fi
 echo "Done!"
 echo ""
