@@ -1,86 +1,11 @@
-01. ALSA library 1.2.3.1
+1. Artik710
 
-	$ wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.2.3.1.tar.bz2
+1.1 Repalce qemu with sylphid compiled binaries for libasound, libaudiofile1, libflac8
 
-02. Squeezelite
+1.2 Update backup.sh and place it /usr/bin/
 
-	$ sudo nano /etc/rc.local
-		/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 39:4::0 -b 4002:3071 -z>/dev/null</dev/null 2>/dev/null
+1.3 Comment out /mnt/usb in /etc/fstab
 
-03. MPD buffer
+1.4 Customize mympd korean translation in 
 
-	$ sudo nano /etc/mpd.conf.sav
-		buffer_before_play "10.5596937298025%"
-
-04. consf
-
-	$ sudo nano /usr/bin/consf
-		#!/bin/sh
-
-05. ALSA initialization and Tasksets for Artik
-
-	# nano /etc/rc.local
-	
-		### ALSA initialization
-
-		[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
-
-		cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
-		printf 'ctl.default{type hw card 0}' > /dev/shm/alsa.conf
-		ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-		amixer sset "..." off
-		cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
-		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-
-		if [ "$alsa" = plug ]; then
-		 cp /etc/libasound.so.2.0.0.plug /dev/shm/libasound.so.2
-		 cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
-		elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
-		 cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
-		 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
-		 rm -rf /dev/snd/*c /dev/snd/by* || true
-		 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		#else
-		#cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
-		#cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
-		#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
-		fi
-
-		#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-
-		### Taskset
-
-		$ echo "obase=16; $(echo "ibase=2; 10000000" | bc)" | bc => 80
-		$ echo "obase=16; $(echo "ibase=2; 00100000" | bc)" | bc => 20
-		$ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc => 40
-		$ echo "obase=16; $(echo "ibase=2; 00010000" | bc)" | bc => 10
-		$ echo "obase=16; $(echo "ibase=2; 11110000" | bc)" | bc => F0
-		$ echo "obase=16; $(echo "ibase=2; 00001111" | bc)" | bc =>  F
-
-		for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
-		 echo "80" > /proc/irq/$i/smp_affinity || true
-		done
-		for i in $(awk '/enp3s0|1f.2/{print +$1}' /proc/interrupts); do
-		 echo "20" > /proc/irq/$i/smp_affinity || true
-		done
-		for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
-		 echo "40" > /proc/irq/$i/smp_affinity || true
-		done
-		echo "20" > /proc/irq/default_smp_affinity || true
-		for pid in 1 $(pgrep -x rc.local); do
-		 taskset -cp $s_task $pid || true
-		done
-
-cf) Artik710
-
-	-. Disable connman
-	-. Blacklist modules
-		kernel/sound/soc/nexell/nexell-snd-pcm.ko
-		kernel/sound/soc/nexell/nexell-snd-i2s.ko
-		kernel/sound/soc/nexell/nexell-snd-spdiftx.ko
-		kernel/sound/soc/nexell/nexell-snd-alc5658.ko
-		kernel/sound/soc/nexell/nexell-snd-null.ko
-		kernel/sound/soc/nexell/nexell-snd-spdif-transceiver.ko
-	-. CPU affinities for IRQ
-	-. roonbridge toram & tweak binaries
-	-. Turn off SPDIF-Transceiver (card 0)
+1.5 Supress booting error messages
