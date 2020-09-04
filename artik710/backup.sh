@@ -66,9 +66,11 @@ echo "Resize complete"
 #    echo "pv is not installed. This limits feedback."
 #    read -p 'Install pv now? [Y|n]: ' yn
 #    if [ ! -z $yn ]; then
+##       dnf install -y pv
 #        apt-get install -y pv
 #        pv=`which pv`
 #    elif [ $yn == 'y' -o $yn == 'Y' ]; then
+##       dnf install -y pv
 #        apt-get install -y pv
 #        pv=`which pv`
 #    else
@@ -88,7 +90,7 @@ else
 fi
 
 # These are all added to the tarfile with --no-recursion
-ADD_DIRS="dev/pts lost+found media mnt proc run/systemd run/systemd/shutdown run/systemd/netif run/systemd/netif/links run/systemd/netif/leases run/systemd/machines run/systemd/sessions run/systemd/ask-password run/systemd/users run/systemd/seats run/mariadb run/log run/wpa_supplicant run/lock run/lock/subsys run/lock/lockdev run/user run/faillock run/setrans run/lirc run/console run/netreport run/blkid run/sepermit srv sys var/log var/lock var/run var/cache/yum var/yp var/games var/empty var/empty/sshd var/tmp var/spool var/spool/mail var/spool/mail/rpc var/spool/lpd var/spool/anacron var/spool/cron"
+ADD_DIRS="dev/pts lost+found media mnt proc run/systemd run/systemd/shutdown run/systemd/netif run/systemd/netif/links run/systemd/netif/leases run/systemd/machines run/systemd/sessions run/systemd/ask-password run/systemd/users run/systemd/seats run/mariadb run/log run/wpa_supplicant run/lock run/lock/subsys run/lock/lockdev run/user run/faillock run/setrans run/lirc run/console run/netreport run/blkid run/sepermit srv sys var/log var/lock var/run var/cache/yum var/cache/dnf var/yp var/games var/empty var/empty/sshd var/tmp var/spool var/spool/mail var/spool/mail/rpc var/spool/lpd var/spool/anacron var/spool/cron"
 ADD_DIRS="$ADD_DIRS run/dnsmasq run/mount run/sendsigs.omit.d run/shm run/sudo"
 # See if the user wants to add more
 user_add_dir=''
@@ -146,7 +148,10 @@ echo  "Done with directories                                     "
 for f in $ADD_FILES ; do
 #    if [ $pv ]; then
 #        if [ -d $f -o -f $f ]; then
-#            echo -ne "`tar cf - $f | pv -N \"Adding $f \" -s  $(du -sb $f | awk '{print $1}') >> $TARFILE`                    \r"
+##           echo -ne "`tar cf - $f | pv -N \"Adding $f \" -s  $(du -sb $f | awk '{print $1}') >> $TARFILE`                    \r"
+#            printf "Adding %s \n" "$f"
+#            tar rf $TARFILE --checkpoint=.1000 $f
+#            printf "\n"
 #        fi             
 #    else
         if [ -d $f -o -f $f ]; then
