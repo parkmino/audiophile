@@ -464,7 +464,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# apt-get update
 	# apt-get upgrade
 	# apt-get dist-upgrade
-	# cp copy/backup.sh /dev/shm/
+	# mv copy/backup.sh /usr/bin/
 	##apt-get install pv
 	# systemctl disable sshd
 	# systemctl daemon-reload
@@ -475,7 +475,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# cat /lib/systemd/system/sshd.service
 	# rm /etc/systemd/system/*/sshd.service
 	# rm -f /root/.bash_history ~/.bash_history ; history -c
-	# /dev/shm/backup.sh
+	# backup.sh
 
 cf)
 
