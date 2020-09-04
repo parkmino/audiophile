@@ -47,8 +47,8 @@ eol () {
  done
  sleep 1
  taskset -acp $h_task $(pgrep -x upmpdcli) || true
- [ "$airplay" = on ] && airconnect
- [ "$serial"  = on ] || systemctl stop serial-getty@ttySAC3
+ [ "$airplay" = on  ] && airconnect
+ [ "$serial"  = off ] && systemctl stop serial-getty@ttySAC3
  pkill rc.local
 }
 
