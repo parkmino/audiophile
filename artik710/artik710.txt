@@ -387,6 +387,14 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		설정 > 외관 > 알림 > 페이지에 알림
 	##mympd reset_state
 
+	$ ver=6.6.1
+	$ cd /home/parkmino/Downloads/artik710/copy/mympd
+	$ sudo dpkg-deb -R mympd_$ver-1ppa1~xenial_arm64.deb sylphid/
+	$ sudo cp mympd.conf sylphid/etc/mympd.conf
+	$ sudo nano ...
+	$ sudo dpkg-deb -b extracted-files/ mympd_$ver-1ppa1~sylphid_arm64.deb
+	$ cp mympd_$ver-1ppa1~sylphid_arm64.deb ../
+
 16. Tweak ALSA
 
 	# ls -al /usr/lib/aarch64-linux-gnu/libasound*

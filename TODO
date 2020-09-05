@@ -6,7 +6,7 @@
 
 1.3 Comment out /mnt/usb in /etc/fstab.
 
-1.4 Customize mympd korean translation, publish it at launchpad.net.
+1.4 Customize mympd korean translation, publish it at launchpad.net, package customized mympd.conf.
 
 1.5 Supress booting error messages.
     => Check cloned copy!
