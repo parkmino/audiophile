@@ -454,7 +454,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 	# systemctl disable sshd
 	##sed -i '/^serial=/s/on/off/' /etc/default/audio.conf
-	# rm /usr/bin/airupnp* /usr/bin/librespot*
+	# rm /root/airupnp* /root/librespot*
 
 23. Back up
 
