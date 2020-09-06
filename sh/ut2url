@@ -69,7 +69,7 @@ case $i in
  *) exit ;;
 esac
 
-uturl=$(curl -s "$url" | grep '실시간 스트리밍 중' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
+uturl=$(curl -s "$url" | grep -o '실시간 스트리밍 중.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
 [ -z "$uturl" ] && printf "YouTube live streaming is not available!\n\e[34m$url\e[0m\n" && exit
 
  printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
