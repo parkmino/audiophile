@@ -295,23 +295,20 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# cd myMPD*
 
 	##sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
-	##sed -i '/data-phrase="Settings"/a\          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
+	##sed -i '/data-phrase="Browse directories"/a\          <a data-phrase="Browse web commands" class="dropdown-item text-light featBrowse alwaysEnabled" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
 	##grep -n -e Sylphi -e bann htdocs/index.html
 	32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> Sylphid
 	34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
 	41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
-	53	          <a data-phrase="Web interface" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
-	##printf '\nInitializing Sylphid\nSylphid 초기화\n\nWeb interface\n웹 인터페이스\n' >> src/i18n/ko-KR.txt
+	62	          <a data-phrase="Browse web commands" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
+	##printf '\nInitializing Sylphid\nSylphid 초기화\n\nBrowse web commands\n웹 명령어 열기\n' >> src/i18n/ko-KR.txt
 	##tail src/i18n/ko-KR.txt
 		...
 		Initializing Sylphid
 		Sylphid 초기화
 		
-		Web interface
-		웹 인터페이스
-
-	# sed -i 's/스트림 추가/스트리밍 서비스 추가/; s/스트림/스트리밍/' src/i18n/ko-KR.txt   # <= 6.3.0
-	# grep 스트리밍 src/i18n/ko-KR.txt   # <= 6.3.0
+		Browse web commands
+		웹 명령어 열기
 
 	# apt-get install build-essential fakeroot
 	# apt-get install -t xenial-backports debhelper
