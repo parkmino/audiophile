@@ -54,15 +54,16 @@ case $i in
     exit ;;
  1) ch=여은파
     url="https://www.youtube.com/playlist?list=PL9lPr2KXothXWfekXHx9J1LVNhl14yKpI"
-    str=$(curl -s "$url" | grep -o 'label":".\{1000\}' | grep 여은파 | tail -2 | cut -d\" -f3-)
+    str=$(curl -s "$url" | grep -o 'label":".\{1000\}' | grep 여은파 | head -2 | cut -d\" -f3-)
     [ -z "$str" ] && printf "\e[32m정보 없음\e[0m\n\e[36m$url\e[0m\n" && exit
     printf "\e[34m$url\e[0m\n"
     for i in 1 2; do
-     label=$(echo "$str" | tail -$i | head -1)
+     label=$(echo "$str" | head -$i | tail -1)
       days=$(echo "$label" | sed 's/.*STUDIO //; s/ 조회수.*//' | rev | cut -d' ' -f2- | rev)
       prog=$(echo "$label" | sed 's/ 게시자.*//')
      uturl=$(echo "$label" | sed 's/.*watch?v=//' | cut -b -11)
-     printf "\e[32m$prog ($days)\e[0m\n"
+     echo "\e[32m$prog ($days)\e[0m"
+     #printf "\e[32m$prog ($days)\e[0m\n"
      printf "$ch - https://youtu.be/$uturl\n"
     done
     exit ;;
