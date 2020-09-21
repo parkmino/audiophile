@@ -28,6 +28,11 @@ renderer_name () {
 
 until [ "$i" = "q" ] ; do
 
+ nr=0
+ [ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
+ [ -e /proc/asound/card$nr/pcm0p/info ] && card=$(grep "^id: " /proc/asound/card$nr/pcm0p/info | cut -d' ' -f2-)
+ [ -z "$id" ] && card0="N/A" || card0="$id ($card)"
+
  current_name=$(consf upmpd)
 
  for i in dop pcm vol sta tag; do
@@ -43,6 +48,8 @@ until [ "$i" = "q" ] ; do
  -----------------------------------
   Audio Configuration / 오디오 설정
  -----------------------------------
+
+ \e[35m$card0\e[0m
 
  (\e[32m1\e[0m) [ $([ "$status_dop"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD DoP (DSD over PCM)
  (\e[32m2\e[0m) [ $([ "$status_pcm"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD PCM Decoder

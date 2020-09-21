@@ -122,7 +122,11 @@ fi
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti" 10 61 3 \
+ nr=0
+ [ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
+ [ -e /proc/asound/card$nr/pcm0p/info ] && card=$(grep "^id: " /proc/asound/card$nr/pcm0p/info | cut -d' ' -f2-)
+ [ -z "$id" ] && card0="N/A" || card0="$id ($card)"
+ i=$(whiptail --title "audio-config / 오디오 설정 ($card)" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti" 10 61 3 \
 "1" "MPD options              MPD 옵션               >" \
 "2" "Change renderer name     렌더러 이름 바꾸기     >" \
 "3" "Roon Bridge, Squeezebox, UPnP/DLNA              >" 3>&1 1>&2 2>&3)
