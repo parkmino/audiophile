@@ -2,7 +2,7 @@
 #complete -W 'hdmi usb int def nodef' ./audio \~/audio
 
 usage () {
- echo "Usage: $(basename "$0") [hdmi|usb|int] # HDMI/USB/Internal"
+ echo "Usage: $(basename "$0") [ls|hdmi|usb|int] # HDMI/USB/Internal"
  echo "   or: $(basename "$0") [def|nodef]    # PCM Default On/Off"
  echo "Manipulate ALSA output"
 }
@@ -12,6 +12,22 @@ alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
 case $1 in
+ ls)
+  #nr=0
+  #
+  #[ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
+  #[ -e /proc/asound/card$nr/pcm0p/info ] && card=$(grep "^id: " /proc/asound/card$nr/pcm0p/info | cut -d' ' -f2-)
+  #[ -z "$id" ] && card0="N/A" || card0="$id ($card)"
+  #
+  echo "+ ALSA Sound Card(s)"
+  for nr in $(seq 0 9); do
+   [ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
+   for i in $(seq 0 9); do
+    card=""
+    [ -e /proc/asound/card$nr/pcm${i}p/info ] && card=$(grep "^id: " /proc/asound/card$nr/pcm${i}p/info | cut -d' ' -f2-)
+    ! [ -z "$id" ] && ! [ -z "$card" ] && echo "$nr.$i: $id ($card)"
+   done
+  done ;;
  hdmi|usb|int)
   if [ "$1" = hdmi ]; then
    card=0; dev=3; IEC958=on;  irq=snd
