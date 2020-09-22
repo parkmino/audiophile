@@ -1,6 +1,6 @@
 1. Artik710
 
-1.1 Repalce qemu with sylphid compiled binaries for mpd, libasound, libaudiofile1, libflac8.
+1.1 Repalce qemu with sylphid compiled binaries for libasound, libaudiofile1, libflac8.
 
 1.2 Update backup.sh and place it /usr/bin/.
 
@@ -26,3 +26,6 @@
 		-- {"order":2,"arguments":[]}
 		result = mympd.os_capture("sudo poweroff")
 		return result
+
+1.8 Updrade Upmpdcli to 1.4.14
+
