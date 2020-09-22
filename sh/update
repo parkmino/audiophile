@@ -266,7 +266,7 @@ BUNKER1 () {
 DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLvbpOOxdLN39xfkJl-Oh0Ct1iQZkyI0nW"
- days=$(curl $curl_opt "$url" | grep 업데이트: | head -1 | sed 's/.*업데이트: //' | cut -d\" -f1)
+ days=$(curl $curl_opt "$url" | grep 업데이트: | head -1 | sed 's/.*업데이트: //' | cut -d\" -f5,9 | tr -d \")
  if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
   date=$(echo $days | tr -d '.' | tr ' ' '-')
   diff=$(($(date +%s)-$(date -ud "$date" +%s)))
@@ -385,7 +385,7 @@ EXTINF () {
  printf "• EXTINF\t"
  url=$(curl -i $curl_opt https://www.extinf.com/category/korean | grep -o -m1 "http.*korean/")
  latest=$(curl $curl_opt "$url" | grep -o "article id=\"post-[0-9]*" | head -1 | cut -d\- -f2)
- current="73107"
+ current="73274"
  printf "$current"
  printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
  if [ -z "$latest" ]; then
