@@ -96,7 +96,7 @@ swapoff -a
 #ln -sf /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
- cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
+ cp /usr/bin/mpd /dev/shm/
  cp /etc/mpd.conf.sav /dev/shm/mpd.conf
  cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 #ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
@@ -138,7 +138,7 @@ if [ "$m_task" -ge 1 ];then
  done
  for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
   proc="/proc/irq/$i/smp_affinity"
-  echo $(echo "2^$m_task" | bc) > $proc || true
+  echo $(echo "2^$h_task" | bc) > $proc || true
   echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
  done
  echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
@@ -154,6 +154,7 @@ rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || tru
 modprobe -r psmouse
 
 uhubctl -a 0 -l 2-1 -p 1-6
-uhubctl -a 0 -l 1-1 -p 3-6
+#uhubctl -a 0 -l 1-1 -p 3-6
+uhubctl -a 0 -l 1-1 -p 1-6
 
 exit 0

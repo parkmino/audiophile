@@ -24,7 +24,7 @@ for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
 done
 
 proc="/proc/irq/default_smp_affinity"
-sudo sh -c "echo $(echo "2^$h_task" | bc) > $proc"
+sudo sh -c "echo $(echo "2^$s_task" | bc) > $proc"
 echo "$proc = $(cat $proc) ($(echo $proc | cut -d'/' -f4))"
 
 /home/parkmino/pri set
