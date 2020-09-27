@@ -186,9 +186,9 @@ swapoff -a
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### Taskset
-for i in $(awk '/s0|hdmi/{print +$1}' /proc/interrupts); do
- [ "$i" -le 42 ] && echo "10" > /proc/irq/$i/smp_affinity
-done
+#for i in $(awk '/s0|hdmi/{print +$1}' /proc/interrupts); do
+# [ "$i" -le 42 ] && echo "1F" > /proc/irq/$i/smp_affinity
+#done
 for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
  echo "40" > /proc/irq/$i/smp_affinity
 done
