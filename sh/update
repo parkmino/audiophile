@@ -236,7 +236,7 @@ BUBBLEUPNP () {
  url="https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp"
 #latest=$(curl $curl_opt "$url&hl=en" | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
  latest=$(curl $curl_opt "$url&hl=en" | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
- current=3.4.10.1
+ current=3.4.12.1
  printf "$current"
  [ ${#current} -ge 8 ] && printf "\t\t\t" || printf "\t\t\t\t"
  msg_url
@@ -266,7 +266,7 @@ BUNKER1 () {
 DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLvbpOOxdLN39xfkJl-Oh0Ct1iQZkyI0nW"
- days=$(curl $curl_opt "$url" | grep 업데이트: | head -1 | sed 's/.*업데이트: //' | cut -d\" -f5,9 | tr -d \")
+ days=$(curl $curl_opt "$url" | grep 업데이트: | head -1 | sed 's/.*업데이트: //' | cut -d\" -f1)
  if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
   date=$(echo $days | tr -d '.' | tr ' ' '-')
   diff=$(($(date +%s)-$(date -ud "$date" +%s)))
@@ -289,7 +289,7 @@ DAS () {
    printf "\e[34m  $url\e[0m\n"
    for i in $(seq 1 $last); do
     printf '\33[2K\r  \e[32m'
-    grep -oE -e '김어준의 다스뵈이다.{0,100}' -e '총선.{0,100}' -e '대선.{0,100}' "$tmpfile" | head -$i | tail -1 | sed 's/ 게시자.*//; s/.*다스뵈이다 \|.*다스뵈이다] //; s/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+    grep -oE -e '김어준의 다스뵈이다.{0,250}' -e '총선.{0,250}' -e '대선.{0,250}' "$tmpfile" | head -$i | tail -1 | sed 's/ 게시자.*//; s/.*다스뵈이다 \|.*다스뵈이다] //; s/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    #printf '   https://youtu.be/'
     printf '\33[2K\r  \e[34m'
     grep -o 'watch?v=...........' "$tmpfile" | cut -d= -f2 | head -$i | tail -1 | echo "https://youtu.be/$(cat -)"
