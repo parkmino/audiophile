@@ -294,21 +294,24 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# tar xvzf mympd.tar.gz && rm mympd.tar.gz
 	# cd myMPD*
 
-	##sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing Sylphid/' htdocs/index.html
-	##sed -i '/data-phrase="Browse directories"/a\          <a data-phrase="Browse web commands" class="dropdown-item text-light featBrowse alwaysEnabled" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
-	##grep -n -e Sylphi -e bann htdocs/index.html
-	32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> Sylphid
-	34	    <div id="splashScreenAlert" data-phrase="Initializing Sylphid"></div>
-	41	          <span class="material-icons header-logo">play_circle_outline</span>Sylphid
+	# sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing myMPD - Sylphid/' htdocs/index.html
+	# sed -i '/data-phrase="Browse directories"/a\          <a data-phrase="Browse web commands" class="dropdown-item text-light featBrowse alwaysEnabled" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
+	# grep -n -e Sylphi -e bann htdocs/index.html
+	32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> ㅡmyMPD - Sylphid
+	34	    <div id="splashScreenAlert" data-phrase="Initializing myMPD - Sylphid"></div>
+	41	          <span class="material-icons header-logo">play_circle_outline</span>myMPD - Sylphid
 	62	          <a data-phrase="Browse web commands" class="dropdown-item text-light" href="http://bann.local:8080" target="_blank"></a>
-	##printf '\nInitializing Sylphid\nSylphid 초기화\n\nBrowse web commands\n웹 명령어 열기\n' >> src/i18n/ko-KR.txt
-	##tail src/i18n/ko-KR.txt
+	# sed -i 's/syscmdsMaxListLen = 4/syscmdsMaxListLen = 20/' htdocs/js/settings.js
+	# grep 'syscmdsMaxListLen =' htdocs/js/settings.js
+		let syscmdsMaxListLen = 100;
+	# printf '\nInitializing myMPD - Sylphid\nmyMPD - Sylphid 초기화\n\nStreaming settings\n스트리밍 설정\n' >> src/i18n/ko-KR.txt
+	# tail src/i18n/ko-KR.txt
 		...
-		Initializing Sylphid
-		Sylphid 초기화
+		Initializing myMPD - Sylphid
+		myMPD - Sylphid 초기화
 		
-		Browse web commands
-		웹 명령어 열기
+		Streaming settings
+		스트리밍 설정
 
 	# apt-get install build-essential fakeroot
 	# apt-get install -t xenial-backports debhelper
@@ -356,20 +359,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		다시 시작 - Reboot    = sudo reboot
 		전원 끄기 - Power off = sudo poweroff
 		HR =
-		MPD DoP(DSD over PCM) 켜기 = consf mpd dsd on
-		MPD DoP(DSD over PCM) 끄기 = consf mpd dsd off
-		HR =
-		룬 브리지 켜기 = consf roon on
-		룬 브리지 끄기 = consf roon off
-		HR =
-		스퀴즈박스 켜기 = consf sqzlite on
-		스퀴즈박스 끄기 = consf sqzlite off
-		HR=
-		UPnP/DLNA 켜기 = consf upnp on
-		UPnP/DLNA 끄기 = consf upnp off
-		HR =
-		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "sudo su"&>/dev/null</dev/null 2>/dev/null
+		IP 주소 읽기 = tts2mpd
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 	# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
 	# nano /etc/systemd/system/mympd.service
