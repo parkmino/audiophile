@@ -125,11 +125,24 @@ while true; do
  nr=0
  [ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
  [ -e /proc/asound/card$nr/pcm0p/info ] && card=$(grep "^id: " /proc/asound/card$nr/pcm0p/info | cut -d' ' -f2-)
- [ -z "$id" ] && card0="N/A" || card0="$id ($card)"
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti - $card0" 10 61 3 \
+ if [ -z "$id" ]; then
+  card0="N/A"
+ elif [ -z "$card" ]; then
+  card0="$id"
+ else
+  card0="$id ($card)"
+ fi
+ ip=$(hostname -I)
+ if [ -z "$ip" ]; then
+  ip="N/A"
+ else
+  ip=$(echo "$ip" | tr -d ' ')
+ fi
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "audio-config / 오디오 설정" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti (IP:$ip) - $card0" 11 61 4 \
 "1" "MPD options              MPD 옵션               >" \
 "2" "Change renderer name     렌더러 이름 바꾸기     >" \
-"3" "Roon Bridge, Squeezebox, UPnP/DLNA              >" 3>&1 1>&2 2>&3)
+"3" "Roon Bridge, Squeezebox, UPnP/DLNA              >" \
+"4" "Bash                     쉘 명령어" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
@@ -140,6 +153,7 @@ while true; do
   1) mpd_options ;;
   2) renderer_name ;;
   3) features ;;
+  4) bash ;;
  esac
 done
 
