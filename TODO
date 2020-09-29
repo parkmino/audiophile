@@ -16,8 +16,6 @@
 1.7 myMPD
 
 	# nano /etc/mympd.conf
-		scripting = false
-		lualibs = base, string, utf8, table, math, mympd, io
 		[syscmds]
 		KBS 클래식 FM = kr2mpd 1fm
 		KBS 쿨 FM     = kr2mpd 2fm
@@ -30,6 +28,9 @@
 		전원 끄기 - Power off = sudo poweroff
 		HR =
 		IP 주소 읽기 = tts2mpd
+	##nano /etc/mympd.conf
+		scripting = false
+		lualibs = base, string, utf8, table, math, mympd, io
 	##nano /var/lib/mympd/scripts/'다시 시작 - Reboot.lua'
 		-- {"order":1,"arguments":[]}
 		result = mympd.os_capture("sudo reboot")
