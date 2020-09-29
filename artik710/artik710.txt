@@ -477,8 +477,9 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# backup.sh
 
 	$ sudo fdisk -l
-	$ sudo dd bs=4M status=progress if=/dev/sdc of=sylphid_$(date +"%y.%m").img
+	$ sudo dd bs=4M status=progress if=/dev/sdc of=sylphid_$(date +"%y%m%d").img
 	$ sync
+	$ zip -dd sylphid_$(date +"%y%m%d").zip sylphid_$(date +"%y%m%d").img
 
 cf)
 
