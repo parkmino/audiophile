@@ -7,7 +7,12 @@
 
 if [ $# -eq 0 ]; then
 #queue="tl=ko&q=지금 시각은 $(date +"%p %-I:%M") 입니다"
- queue="tl=ko&q=안녕하세요,실피드입니다. 저의 IP는 $(hostname -I) 입니다"
+ host=$(hostname -I)
+ if [ -z "$host" ]; then
+  queue="tl=ko&q=안녕하세요,실피드입니다. 현재 IP를 확인할 수 없습니다."
+ else
+  queue="tl=ko&q=안녕하세요,실피드입니다. 저의 IP는 $host 입니다."
+ fi
 elif [ $# -ge 2 ] && [ ${#1} -eq 2 ] && [ $(expr "$1" : "[a-z]*") -eq 2 ]; then
  tl=$1
  shift
