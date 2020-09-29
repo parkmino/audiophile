@@ -133,14 +133,16 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	##systemctl enable wlan_dhcp
 	##systemctl start  wlan_dhcp
 
-	##hostname -f
-	##nano /etc/hostname
-	##nano /etc/hosts
-	##hostname $(cat /etc/hostname)
-	##/etc/resolvconf/resolv.conf.d/head
-		domain your.domain.name
-	##resolvconf -u
-	##hostnamectl
+	# hostname -f
+	# nano /etc/hostname
+		Sylphid
+	# nano /etc/hosts
+		127.0.1.1	Sylphid
+	##/etc/init.d/hostname.sh start
+	# reboot
+
+	##hostnamectl set-hostname Sylphid
+	##systemctl restart systemd-logind.service
 
 	# ls /etc/update-motd.d/*
 
@@ -347,7 +349,8 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		#sticker = false
 		#mixramp = false
 		 syscmds = true
-		 mounts = false
+		#mounts = false
+		 scripting = false
 		[syscmds]
 		KBS 클래식 FM = kr2mpd 1fm
 		KBS 쿨 FM     = kr2mpd 2fm
@@ -470,7 +473,12 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# cat /lib/systemd/system/sshd.service
 	# rm /etc/systemd/system/*/sshd.service
 	# rm -f /root/.bash_history ~/.bash_history ; history -c
+	# sync
 	# backup.sh
+
+	$ sudo fdisk -l
+	$ sudo dd bs=4M status=progress if=/dev/sdc of=sylphid_$(date +"%y.%m").img
+	$ sync
 
 cf)
 
