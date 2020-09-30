@@ -4,7 +4,7 @@
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
 spotifyd_conf=/home/pi/spotifyd.conf
 audio_conf=/etc/default/audio.conf
-bkti="Raspberry Renderer / 라즈베리 렌더러"
+bkti="RPi Renderer"
 
 sound_card_initial () {
  sudo sed -i '/dtoverlay=allo\|dtoverlay=applepi\|dtoverlay=dionaudio\|dtoverlay=hifiberry\|dtoverlay=iqaudio\|dtoverlay=justboom\|dtoverlay=rpi-dac/d' /boot/config.txt
@@ -284,7 +284,23 @@ done
 }
 
 while true; do
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti" 15 65 8 \
+ nr=0
+ [ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
+ [ -e /proc/asound/card$nr/pcm0p/info ] && card=$(grep "^id: " /proc/asound/card$nr/pcm0p/info | cut -d' ' -f2-)
+ if [ -z "$id" ]; then
+  card0="N/A"
+ elif [ -z "$card" ]; then
+  card0="$id"
+ else
+  card0="$id ($card)"
+ fi
+ ip=$(hostname -I)
+ if [ -z "$ip" ]; then
+  ip="N/A"
+ else
+  ip=$(echo "$ip" | tr -d ' ')
+ fi
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti (IP:$ip) - $card0" 15 65 8 \
  "1"  "Audio device               오디오 장치            >" \
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
