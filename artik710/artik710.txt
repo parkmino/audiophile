@@ -359,10 +359,9 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		SBS 파워 FM   = kr2mpd sbsp
 		SBS 러브 FM   = kr2mpd sbsl
 		HR =
-		다시 시작 - Reboot    = sudo reboot
-		전원 끄기 - Power off = sudo poweroff
+		시스템 종료   = sudo poweroff
 		HR =
-		IP 주소 읽기 = tts2mpd
+		IP 주소 읽기  = tts2mpd
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 	# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
 	# nano /etc/systemd/system/mympd.service
@@ -495,6 +494,7 @@ http://www.team2053.org/docs/bashcgi/postdata.html
 https://marc.waeckerlin.org/computer/blog/parsing_of_query_string_in_bash_cgi_scripts
 
 $ echo "obase=16; $(echo "ibase=2; 10000000" | bc)" | bc # 80 Main
+$ echo "obase=16; $(echo "ibase=2; 01111111" | bc)" | bc # 7F IRQ Others
 $ echo "obase=16; $(echo "ibase=2; 00100000" | bc)" | bc # 20 Second
 $ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc # 40 High
 $ echo "obase=16; $(echo "ibase=2; 00010000" | bc)" | bc # 10 Other

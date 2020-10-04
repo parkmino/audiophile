@@ -12,15 +12,15 @@ renderer_name () {
  [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름
 
 
- (\e[32mm\e[0m) Main   / 주메뉴
- (\e[32mr\e[0m) Reboot / 재시작하여 적용
+ (\e[32mm\e[0m) Main     / 주메뉴
+ (\e[32ms\e[0m) Shutdown / 시스템 종료
 
-  * Input / 입력 (\e[32mname\e[0m|\e[32mm\e[0m|\e[32mr\e[0m) : "
+  * Input / 입력 (\e[32mname\e[0m|\e[32mm\e[0m|\e[32ms\e[0m) : "
  read i
  echo
  case $i in
   m) clear ; return ;;
-  r) sudo reboot    ;;
+  s) sudo poweroff  ;;
   *) consf upmpd set "$i" ;;
  esac
  return
@@ -76,10 +76,10 @@ until [ "$i" = "q" ] ; do
 
  (\e[32mn\e[0m) [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
 
- (\e[32ms\e[0m) Bash   / 쉘 명령어
- (\e[32mr\e[0m) Reboot / 재시작하여 적용
+ (\e[32mb\e[0m) Bash     / 쉘 명령어
+ (\e[32ms\e[0m) Shutdown / 시스템 종료
 
-  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32ms\e[0m|\e[32mr\e[0m) : "
+  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32mb\e[0m|\e[32ms\e[0m) : "
  read i
  echo
  case $i in
@@ -92,9 +92,9 @@ until [ "$i" = "q" ] ; do
   7) [ $status_sqzlite = off ] && consf sqzlite on || consf sqzlite off ;;
   8) [ $status_upnp    = off ] && consf upnp    on || consf upnp    off ;;
   n) renderer_name ;;
-  s) bash	  ;;
+  b) bash	  ;;
   q) exit          ;;
-  r) sudo reboot   ;;
+  s) sudo poweroff ;;
   *) clear         ;;
  esac
 done

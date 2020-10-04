@@ -157,9 +157,9 @@ while true; do
  esac
 done
 
-if (whiptail --title "Reboot / 다시 시작" --backtitle "$bkti" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
-  reboot is necessary.    다시 시작해야 합니다.
+if (whiptail --title "Restart / 다시 시작" --backtitle "$bkti" --yes-button "Yes/예" --no-button "No/아니오" --yesno "  To take effect,         바뀐 설정을 적용하려면,
+  resart is necessary.    다시 시작해야 합니다.
 
-  Reboot this system?     시스템을 다시 시작할까요?" 10 57); then
- sudo reboot
+  Shutdown this system?   시스템을 종료할까요?" 10 57); then
+ sudo poweroff
 fi
