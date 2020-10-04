@@ -59,7 +59,7 @@ case $i in
     printf "\e[34m$url\e[0m\n"
     for i in 1 2; do
      label=$(echo "$str"   | head -$i | tail -1)
-      days=$(echo "$label" | cut -d\" -f1 | sed 's/.*STUDIO //')
+      days=$(echo "$label" | cut -d\" -f1 | sed 's/.*STUDIO //; s/전 /전,/')
       prog=$(echo "$label" | sed 's/ 게시자.*//')
      uturl=$(echo "$label" | sed 's/.*watch?v=//' | cut -b -11)
      echo "\e[32m$prog ($days)\e[0m"
