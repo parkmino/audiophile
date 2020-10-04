@@ -42,9 +42,9 @@
 
 1.8 nano /etc/rc.local
 
-	#for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
-	# echo "40" > /proc/irq/$i/smp_affinity # 1F
-	#done
+	for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
+	 echo "7F" > /proc/irq/$i/smp_affinity # 1F
+	done
 
 1.9 Replace audio-config & audioconf
 
@@ -59,7 +59,7 @@
 		ttyd=on
 	# nano /etc/rc.local
 	  [ "$ssh"   = on ] && systemctl start ssh
-	  [ "$ttyd"  = on ] && ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
+	  [ "$ttyd"  = on ] && ttyd -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
 
 1.11 avahi-daemon
 

@@ -12,15 +12,15 @@ renderer_name () {
  [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름
 
 
- (\e[32mm\e[0m) Main / 주메뉴
- (\e[32mq\e[0m) Quit / 나가기
+ (\e[32mm\e[0m) Main   / 주메뉴
+ (\e[32mr\e[0m) Reboot / 재시작하여 적용
 
-  * Input / 입력 (\e[32mname\e[0m|\e[32mm\e[0m|\e[32mq\e[0m) : "
+  * Input / 입력 (\e[32mname\e[0m|\e[32mm\e[0m|\e[32mr\e[0m) : "
  read i
  echo
  case $i in
   m) clear ; return ;;
-  q) exit ;;
+  r) sudo reboot    ;;
   *) consf upmpd set "$i" ;;
  esac
  return
@@ -77,10 +77,9 @@ until [ "$i" = "q" ] ; do
  (\e[32mn\e[0m) [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
 
  (\e[32ms\e[0m) Bash   / 쉘 명령어
- (\e[32mq\e[0m) Quit   / 나가기
  (\e[32mr\e[0m) Reboot / 재시작하여 적용
 
-  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32ms\e[0m|\e[32mq\e[0m|\e[32mr\e[0m) : "
+  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32ms\e[0m|\e[32mr\e[0m) : "
  read i
  echo
  case $i in
