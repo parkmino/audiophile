@@ -136,11 +136,11 @@ if [ "$m_task" -ge 1 ];then
   echo $(echo "2^$s_task" | bc) > $proc || true
   echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
  done
- #for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
- # proc="/proc/irq/$i/smp_affinity"
- # echo $(echo "2^$h_task" | bc) > $proc || true
- # echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
- #done
+ for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
+  proc="/proc/irq/$i/smp_affinity"
+  echo $(echo "2^$m_task-1" | bc) > $proc || true
+  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+ done
  echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
 fi
 

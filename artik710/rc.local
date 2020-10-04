@@ -164,7 +164,7 @@ done
 [ "$mympd" = on ] && /dev/shm/mympd /dev/shm/mympd.conf&</dev/null 2>/dev/null
 [ "$avahi" = on ] && systemctl start avahi-daemon
 [ "$ssh"   = on ] && systemctl start ssh
-[ "$ttyd"  = on ] && ttyd -o -O -p 8080 audio-config&>/dev/null</dev/null 2>/dev/null&
+[ "$ttyd"  = on ] && ttyd -O -p 8080 audio-config>/dev/null</dev/null 2>/dev/null&
 
 m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 [ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
@@ -187,9 +187,9 @@ swapoff -a
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### Taskset
-#for i in $(awk '/s0|hdmi/{print +$1}' /proc/interrupts); do
-# [ "$i" -le 42 ] && echo "1F" > /proc/irq/$i/smp_affinity
-#done
+for i in $(awk '/s0|hdmi/{print +$1}' /proc/interrupts); do
+ [ "$i" -le 42 ] && echo "7F" > /proc/irq/$i/smp_affinity
+done
 for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
  echo "40" > /proc/irq/$i/smp_affinity
 done
