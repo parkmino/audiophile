@@ -1,0 +1,29 @@
+1. Artik
+
+1.1 Sound (sharp-balanced-soft)
+
+    # nano /etd/default/audio.conf
+    	sound=balanced
+    # nano /usr/bin/consf
+    # nano /usr/bin/audioconf
+    # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep ' ${i}:' /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
+    # nano /etc/rc.local
+
+	### Taskset
+
+	if   [ "$sound" = sharp ]; then
+	 for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
+	  echo "40" > /proc/irq/$i/smp_affinity
+	 done
+	elif [ "$sound" = soft ]; then
+	 for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
+	  echo "FF" > /proc/irq/$i/smp_affinity
+	 done
+	else
+	 for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
+	  echo "FF" > /proc/irq/$i/smp_affinity
+	 done
+	 for i in $(awk '/pinctrl/{print +$1}' /proc/interrupts); do
+	  echo "7F" > /proc/irq/$i/smp_affinity
+	 done
+	fi
