@@ -466,7 +466,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# systemctl disable sshd
 	# systemctl daemon-reload
 	# youtube-dl --update
-	# echo "* Bann Sylphid Network Player $(date +"%y.%m")" > ~/release
+	# echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > ~/release
 	# mpc clear
 	# rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	# cat /lib/systemd/system/sshd.service
