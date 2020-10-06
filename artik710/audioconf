@@ -78,8 +78,10 @@ until [ "$i" = "q" ] ; do
 
  (\e[32mb\e[0m) Bash     / 쉘 명령어
  (\e[32ms\e[0m) Shutdown / 시스템 종료
+ 
+     변경된 설정을 적용하시려면 전원을 껐다 다시 켜 주세요.
 
-  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32mb\e[0m|\e[32ms\e[0m) : "
+  *  Select / 선택 (\e[32m1-8\e[0m|\e[32mn\e[0m|\e[32mb\e[0m|\e[32ms\e[0m) : "
  read i
  echo
  case $i in
