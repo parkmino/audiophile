@@ -188,23 +188,22 @@ swapoff -a
 
 ### Taskset
 	
-### OPT1 (200930)
-#for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
-# echo "40" > /proc/irq/$i/smp_affinity
-#done
-
-### OPT2 (201005)
-for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
- echo "FF" > /proc/irq/$i/smp_affinity
-done
-for i in $(awk '/pinctrl/{print +$1}' /proc/interrupts); do
- echo "7F" > /proc/irq/$i/smp_affinity
-done
-
-### OPT3 (201006)
-#for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-# echo "FF" > /proc/irq/$i/smp_affinity
-#done
+if   [ "$sound" = sharp ]; then
+ for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
+  echo "40" > /proc/irq/$i/smp_affinity
+ done
+elif [ "$sound" = warm ]; then
+ for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
+  echo "FF" > /proc/irq/$i/smp_affinity
+ done
+else
+ for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
+  echo "FF" > /proc/irq/$i/smp_affinity
+ done
+ for i in $(awk '/pinctrl/{print +$1}' /proc/interrupts); do
+  echo "7F" > /proc/irq/$i/smp_affinity
+ done
+fi
 
 for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
  echo "20" > /proc/irq/$i/smp_affinity

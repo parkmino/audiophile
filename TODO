@@ -1,6 +1,6 @@
 1. Artik
 
-1.1 Sound (sharp-balanced-soft)
+1.1 Sound (sharp-balanced-warm)
 
     # nano /etd/default/audio.conf
     	sound=balanced
@@ -15,7 +15,7 @@
 	 for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
 	  echo "40" > /proc/irq/$i/smp_affinity
 	 done
-	elif [ "$sound" = soft ]; then
+	elif [ "$sound" = warm ]; then
 	 for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
 	  echo "FF" > /proc/irq/$i/smp_affinity
 	 done
