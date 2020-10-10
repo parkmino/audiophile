@@ -56,6 +56,7 @@ until [ "$i" = "q" ] ; do
   eval status_$i="$(consf $i)"
  done
 
+ clear
  echo -ne "
  -----------------------------------
   Audio Configuration / 오디오 설정
