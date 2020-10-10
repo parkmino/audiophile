@@ -272,8 +272,8 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 12. HQPlayer NAA
 
-	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
-	##wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/stretch/networkaudiod_3.6.0-42_arm64.deb
+	##wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
+	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/stretch/networkaudiod_3.6.0-42_arm64.deb
 	# dpkg -i networkaudiod*.deb
 	# sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
@@ -435,6 +435,8 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# mv copy/audio.conf /etc/default/
 	# audio-config
 	# audioconf
+	
+	# for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep ' ${i}:' /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
 
 21. USB mount # MicroSD
 
