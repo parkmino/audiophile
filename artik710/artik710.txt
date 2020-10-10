@@ -436,7 +436,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# audio-config
 	# audioconf
 	
-	# for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep ' ${i}:' /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
+	# for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep "^ *${i}:" /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
 
 21. USB mount # MicroSD
 

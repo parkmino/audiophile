@@ -6,7 +6,7 @@
     	sound=balanced
     # nano /usr/bin/consf
     # nano /usr/bin/audioconf
-    # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep ' ${i}:' /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
+    # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep "^ *${i}:" /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
     # nano /etc/rc.local
 
 	### Taskset
