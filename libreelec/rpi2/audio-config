@@ -136,7 +136,7 @@ until [ "$i" == "q" ] ; do
  (\e[32mr\e[0m) Reboot to apply          (\e[32mr\e[0m) 재시작하여 적용
  (\e[32mp\e[0m) Power off                (\e[32mp\e[0m) 전원 끄기
 
- * Select / 선택 (\e[32m0-9\e[0m|\e[32mq\e[0m|\e[32mr\e[0m|\e[32mp\e[0m) : "
+ * Select / 선택 (\e[32m0-8\e[0m|\e[32mq\e[0m|\e[32mr\e[0m|\e[32mp\e[0m) : "
  read i
  echo
  case $i in
