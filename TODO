@@ -27,3 +27,9 @@
 	  echo "7F" > /proc/irq/$i/smp_affinity
 	 done
 	fi
+	
+	for i in RoonBridge librespot networkaudiod; do
+	 if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
+	  taskset -acp 0-$m_task $(pidof $i) || true # $s_task
+	 fi
+	done
