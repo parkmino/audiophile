@@ -152,7 +152,7 @@ https://5b99fdb0a9492.streamlock.net/LIVE/ch7/playlist.m3u8
 #EXTINF:-1,KTV국민방송
 http://218.38.152.31:1935/klive/klive.stream/playlist.m3u8
 #EXTINF:-1,OBS경인
-http://live.obs.co.kr:1935/live/obs/myStream.sdp/playlist.m3u8
+http://59.25.202.82:1935/live/obsstream1/myStream.sdp/playlist.m3u8
 #EXTINF:-1,OBS경인W
 http://121.160.102.99:1935/live/myStream.sdp/playlist.m3u8
 #EXTINF:-1,tbsTV
