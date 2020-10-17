@@ -168,9 +168,9 @@ done
 
 procnr=$(nproc --all)
 if   [ "$procnr" -eq 4 ]; then
- m_task=$((procnr-1)); s_task=$((m_task-2)); h_task=$((m_task-1)); o_task=0-$(($m_task-3))
+ m_task=2; s_task=0; h_task=3; o_task=1,3
 elif [ "$procnr" -eq 8 ]; then
- m_task=$((procnr-2)); s_task=$((m_task-2)); h_task=$((m_task-4)); o_task=0-$(($m_task-6))
+ m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
 else
  m_task=0; s_task=0; h_task=0; o_task=0
 fi
@@ -203,10 +203,9 @@ elif [ "$sound" = warm ]; then
  done
 fi
 
-# for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-#  echo "FF" > /proc/irq/$i/smp_affinity
-# done
-
+for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
+ echo "54" > /proc/irq/$i/smp_affinity
+done
 for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
  echo "10" > /proc/irq/$i/smp_affinity
 done

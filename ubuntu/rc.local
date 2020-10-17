@@ -112,12 +112,15 @@ for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|m
  renice  -3 $pid || true
 done
 
-m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
-[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
+if   [ "$(nproc --all)" -eq 4 ]; then
+ m_task=2; s_task=0; h_task=3; o_task=1,3
+else
+ m_task=0; s_task=0; h_task=0; o_task=0
+fi
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
-  taskset -acp 0 $pid 2>/dev/null || true
+  taskset -acp $o_task $pid 2>/dev/null || true
  done
 
  until $(grep -q snd /proc/interrupts); do
