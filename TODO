@@ -9,27 +9,52 @@
     # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep "^ *${i}:" /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
     # nano /etc/rc.local
 
+	procnr=$(nproc --all)
+	if   [ "$procnr" -eq 4 ]; then
+	 m_task=$((procnr-1)); s_task=$((m_task-2)); h_task=$((m_task-1)); o_task=0-$(($m_task-3))
+	elif [ "$procnr" -eq 8 ]; then
+	 m_task=$((procnr-2)); s_task=$((m_task-2)); h_task=$((m_task-4)); o_task=0-$(($m_task-6))
+	else
+	 m_task=0; s_task=0; h_task=0; o_task=0
+	fi
+
 	### Taskset
 
 	if   [ "$sound" = sharp ]; then
-	 for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
-	  echo "40" > /proc/irq/$i/smp_affinity
+	 for i in $(awk '/spi|watchdog|tmuctrl|vip0|hdmi/{print +$1}' /proc/interrupts); do
+	  echo "3F" > /proc/irq/$i/smp_affinity
 	 done
 	elif [ "$sound" = warm ]; then
-	 for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-	  echo "FF" > /proc/irq/$i/smp_affinity
-	 done
-	else
-	 for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-	  echo "FF" > /proc/irq/$i/smp_affinity
-	 done
-	 for i in $(awk '/pinctrl/{print +$1}' /proc/interrupts); do
-	  echo "7F" > /proc/irq/$i/smp_affinity
+	 for i in $(awk '/hdmi|Mali/{print +$1}' /proc/interrupts); do
+	  echo "3F" > /proc/irq/$i/smp_affinity
 	 done
 	fi
+	
+	#else
+	# for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
+	#  echo "FF" > /proc/irq/$i/smp_affinity
+	# done
+	#fi
+	
+	for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
+	 echo "10" > /proc/irq/$i/smp_affinity
+	done
+	for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
+	 echo "40" > /proc/irq/$i/smp_affinity
+	done
+	echo "10" > /proc/irq/default_smp_affinity
+	for pid in 1 $(pgrep -x rc.local); do
+	 taskset -cp $s_task $pid || true
+	done
 	
 	for i in RoonBridge librespot networkaudiod; do
 	 if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
 	  taskset -acp 0-$m_task $(pidof $i) || true # $s_task
 	 fi
 	done
+
+2. Build number
+
+	# nano /usr/bin/audioconf
+	# rm /root/release
+	# echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release

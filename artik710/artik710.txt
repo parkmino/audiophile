@@ -495,11 +495,10 @@ https://oinkzwurgl.org/hacking/bash_cgi/
 http://www.team2053.org/docs/bashcgi/postdata.html
 https://marc.waeckerlin.org/computer/blog/parsing_of_query_string_in_bash_cgi_scripts
 
-$ echo "obase=16; $(echo "ibase=2; 10000000" | bc)" | bc # 80 Main
-$ echo "obase=16; $(echo "ibase=2; 01111111" | bc)" | bc # 7F IRQ Others
-$ echo "obase=16; $(echo "ibase=2; 00100000" | bc)" | bc # 20 Second
-$ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc # 40 High
-$ echo "obase=16; $(echo "ibase=2; 00010000" | bc)" | bc # 10 Other
+$ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc # 40 Main
+$ echo "obase=16; $(echo "ibase=2; 00111111" | bc)" | bc # 3F IRQ Others
+$ echo "obase=16; $(echo "ibase=2; 00010000" | bc)" | bc # 10 Second
+$ echo "obase=16; $(echo "ibase=2; 00000100" | bc)" | bc # 04 High
 $ echo "obase=16; $(echo "ibase=2; 11110000" | bc)" | bc # F0
 $ echo "obase=16; $(echo "ibase=2; 00001111" | bc)" | bc #  F
 $ printf '%x\n' 128 64 32 $((8+4+2+1))
