@@ -166,8 +166,14 @@ done
 [ "$ssh"   = on ] && systemctl start ssh
 [ "$ttyd"  = on ] && ttyd -O -p 8080 audioconf>/dev/null</dev/null 2>/dev/null&
 
-m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
-[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2)) && o_task=0-$(($m_task-3))
+procnr=$(nproc --all)
+if   [ "$procnr" -eq 4 ]; then
+ m_task=$((procnr-1)); s_task=$((m_task-2)); h_task=$((m_task-1)); o_task=0-$(($m_task-3))
+elif [ "$procnr" -eq 8 ]; then
+ m_task=$((procnr-2)); s_task=$((m_task-2)); h_task=$((m_task-4)); o_task=0-$(($m_task-6))
+else
+ m_task=0; s_task=0; h_task=0; o_task=0
+fi
 
 if [ "$m_task" -ge 1 ];then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|networkaudiod/ {print $1}'); do
@@ -187,38 +193,35 @@ swapoff -a
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
 ### Taskset
-
 if   [ "$sound" = sharp ]; then
- for i in $(awk '/dmac|mci|otg|/{print +$1}' /proc/interrupts); do
-  echo "40" > /proc/irq/$i/smp_affinity
+ for i in $(awk '/spi|watchdog|tmuctrl|vip0|hdmi/{print +$1}' /proc/interrupts); do
+  echo "3F" > /proc/irq/$i/smp_affinity
  done
 elif [ "$sound" = warm ]; then
- for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-  echo "FF" > /proc/irq/$i/smp_affinity
- done
-else
- for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-  echo "FF" > /proc/irq/$i/smp_affinity
- done
- for i in $(awk '/pinctrl/{print +$1}' /proc/interrupts); do
-  echo "7F" > /proc/irq/$i/smp_affinity
+ for i in $(awk '/hdmi|Mali/{print +$1}' /proc/interrupts); do
+  echo "3F" > /proc/irq/$i/smp_affinity
  done
 fi
 
+# for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
+#  echo "FF" > /proc/irq/$i/smp_affinity
+# done
+
 for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
- echo "20" > /proc/irq/$i/smp_affinity
+ echo "10" > /proc/irq/$i/smp_affinity
 done
 for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
- echo "80" > /proc/irq/$i/smp_affinity
+ echo "40" > /proc/irq/$i/smp_affinity
 done
-echo "20" > /proc/irq/default_smp_affinity
+echo "10" > /proc/irq/default_smp_affinity
 for pid in 1 $(pgrep -x rc.local); do
  taskset -cp $s_task $pid || true
 done
 
 for i in RoonBridge librespot networkaudiod; do
  if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
-  taskset -acp $s_task-$m_task $(pidof $i) || true
+ #taskset -acp $s_task-$m_task $(pidof $i) || true
+  taskset -acp 0-$m_task $(pidof $i) || true
  fi
 done
 
