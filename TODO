@@ -7,19 +7,21 @@
     # nano /usr/bin/consf
     # nano /usr/bin/audioconf
     # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep "^ *${i}:" /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
+
     # nano /etc/rc.local
 
 	procnr=$(nproc --all)
-	if   [ "$procnr" -eq 4 ]; then
+	if   [ "$procnr" -eq 2 ]; then
+	 m_task=0; s_task=1; h_task=1; o_task=1
+	elif [ "$procnr" -eq 4 ]; then
 	 m_task=2; s_task=0; h_task=3; o_task=1,3
-	elif [ "$procnr" -eq 8 ]; then
+	elif [ "$procnr" -ge 8 ]; then
 	 m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
 	else
 	 m_task=0; s_task=0; h_task=0; o_task=0
 	fi
-
+	
 	### Taskset
-
 	if   [ "$sound" = sharp ]; then
 	 for i in $(awk '/spi|watchdog|tmuctrl|vip0|hdmi/{print +$1}' /proc/interrupts); do
 	  echo "3F" > /proc/irq/$i/smp_affinity
@@ -50,8 +52,10 @@
 	 fi
 	done
 
-2. Build number
+1.2 Build number
 
+	# nano /usr/bin/consf
 	# nano /usr/bin/audioconf
 	# rm /root/release
 	# echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release
+

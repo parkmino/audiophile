@@ -27,12 +27,11 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd
  renice  -3 $i || true
 done
 
-m_task=3 # grep -m1 siblings /proc/cpuinfo | grep -o [0-9*] # getconf _NPROCESSORS_ONLN # echo $(($(cat /sys/devices/system/cpu/present | sed 's/0-//')+1)) # grep -c ^processor /proc/cpuinfo
-[ "$m_task" -ge 3 ] && s_task=$((m_task-2)) || s_task=0
+m_task=2; s_task=0; h_task=3; o_task=1,3 # grep -m1 siblings /proc/cpuinfo | grep -o [0-9*] # getconf _NPROCESSORS_ONLN # echo $(($(cat /sys/devices/system/cpu/present | sed 's/0-//')+1)) # grep -c ^processor /proc/cpuinfo
 
 if [ "$m_task" -ge 1 ]; then
  for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd$|kodi|kodi.bin/ {print $1}'); do
-  taskset -acp 0 $pid 2>/dev/null || true
+  taskset -acp $o_task $pid 2>/dev/null || true
  done
 fi
 
@@ -75,10 +74,10 @@ echo 4 > /proc/irq/default_smp_affinity || true
 
  until [ $ppid -eq 1 ]; do
   ppid=$(ps -o ppid= -p $ppid)
-  taskset -cp 1-$(($m_task-1)) $ppid
+  taskset -cp 0,1,3 $ppid
  done
 
- [ $m_task -ge 2 ] && taskset -acp 1-$(($m_task-1)) $pgr_kodi
+ taskset -acp 0,1,3 $pgr_kodi
  for i in $(pstree -p $pgr_kodi | grep ActiveAE | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1); do
   taskset -cp $m_task $i
  done
