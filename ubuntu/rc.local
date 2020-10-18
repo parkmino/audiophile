@@ -112,8 +112,13 @@ for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|m
  renice  -3 $pid || true
 done
 
-if   [ "$(nproc --all)" -eq 4 ]; then
+procnr=$(nproc --all)
+if   [ "$procnr" -eq 2 ]; then
+ m_task=0; s_task=1; h_task=1; o_task=1
+elif [ "$procnr" -eq 4 ]; then
  m_task=2; s_task=0; h_task=3; o_task=1,3
+elif [ "$procnr" -ge 8 ]; then
+ m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
 else
  m_task=0; s_task=0; h_task=0; o_task=0
 fi
