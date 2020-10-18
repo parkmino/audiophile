@@ -5,6 +5,7 @@ usage () {
  echo "   or: $(basename "$0") upmpd [set]"
  echo "   or: $(basename "$0") airplay|roon|spotify|sqzlite|mympd|ssh|upnp [on|off]"
  echo "   or: $(basename "$0") sound [sharp|balanced|warm]"
+ echo "   or: $(basename "$0") build"
  echo "Consult and configure MPD and other features"
 }
 
@@ -56,5 +57,6 @@ case "$1:$2:$3" in
  sound:balanced:*)	sudo sed -i '/sound=/s/=.*/=balanced/' $audio_conf		;;
  sound:warm:*)		sudo sed -i '/sound=/s/=.*/=warm/'     $audio_conf		;;
  sound:*)		grep ^sound= $audio_conf | cut -d= -f2				;;
+ build:*)		grep -o [0-9].* /etc/release					;;
  *)             	usage 								;;
 esac
