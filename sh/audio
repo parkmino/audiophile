@@ -3,7 +3,7 @@
 
 usage () {
  echo "Usage: $(basename "$0") [ls|hdmi|usb|int] # HDMI/USB/Internal"
- echo "   or: $(basename "$0") [def|nodef]    # PCM Default On/Off"
+ echo "   or: $(basename "$0") [def|nodef]       # PCM Default On/Off"
  echo "Manipulate ALSA output"
 }
 
