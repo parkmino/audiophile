@@ -296,7 +296,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# tar xvzf mympd.tar.gz && rm mympd.tar.gz
 	# cd myMPD*
 
-	# sed -i '/play_circle_outline/s/myMPD/Sylphid/; s/Initializing myMPD/Initializing myMPD - Sylphid/' htdocs/index.html
+	# sed -i '/play_circle_outline/s/myMPD/myMPD - Sylphid/; s/Initializing myMPD/Initializing myMPD - Sylphid/' htdocs/index.html
 	# sed -i '/data-phrase="Browse directories"/a\          <a data-phrase="Browse web commands" class="dropdown-item text-light featBrowse alwaysEnabled" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
 	# grep -n -e Sylphi -e bann htdocs/index.html
 	32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> ㅡmyMPD - Sylphid
@@ -306,8 +306,17 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# sed -i 's/syscmdsMaxListLen = 4/syscmdsMaxListLen = 20/' htdocs/js/settings.js
 	# grep 'syscmdsMaxListLen =' htdocs/js/settings.js
 		let syscmdsMaxListLen = 100;
-	# printf '\nInitializing myMPD - Sylphid\nmyMPD - Sylphid 초기화\n\nStreaming settings\n스트리밍 설정\n' >> src/i18n/ko-KR.txt
+	##printf '\nInitializing myMPD - Sylphid\nmyMPD - Sylphid 초기화\n\nStreaming settings\n스트리밍 설정\n' >> src/i18n/ko-KR.txt
 	# tail src/i18n/ko-KR.txt
+		...
+		Initializing myMPD - Sylphid
+		myMPD - Sylphid 초기화
+		
+		Streaming settings
+		스트리밍 설정
+	# nano src/i18n/ko-KR.txt
+		Settings
+		MPD 설정
 		...
 		Initializing myMPD - Sylphid
 		myMPD - Sylphid 초기화
