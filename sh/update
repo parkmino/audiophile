@@ -726,7 +726,7 @@ YOUTUBE_DL () {
  current=$(youtube-dl --version)
 #printf "$current ($(date -d $(echo $current | cut -d'.' -f1-3 | tr . -) +%F))\t\t"
  printf "$current \t\t\t"
- if [ -z "$latest" ]; then
+ if [ -z "$latest" ] || [ ${#latest} -gt 15 ] ; then
   printf "정보 없음\n"
  elif [ "$latest" = "$current" ]; then
   printf "신판\n"
