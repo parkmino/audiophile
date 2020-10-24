@@ -59,3 +59,5 @@
 	# rm /root/release
 	# echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release
 
+1.3 ALSA 1.2.4
+
