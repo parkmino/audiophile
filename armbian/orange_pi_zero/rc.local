@@ -127,12 +127,12 @@ sleep 1
 for i in $(awk '/usb3/{print +$1}' /proc/interrupts); do
  echo $(echo "2^$m_task" | bc) > /proc/irq/$i/smp_affinity || true
 done
-for i in $(awk '/dmam|eth|rtc/{print +$1}' /proc/interrupts); do
+for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
  echo $(echo "2^$s_task" | bc) > /proc/irq/$i/smp_affinity || true
 done
-for i in $(awk '/mmc|musb|usb[1,2,4]|tty/{print +$1}' /proc/interrupts); do
- echo $(echo "2^$h_task" | bc) > /proc/irq/$i/smp_affinity || true
-done
+#for i in $(awk '/mmc|musb|usb[1,2,4]|tty/{print +$1}' /proc/interrupts); do
+# echo $(echo "2^$h_task" | bc) > /proc/irq/$i/smp_affinity || true
+#done
 echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity || true
 
 ### Taskset

@@ -115,15 +115,15 @@ for i in /usr/bin/nohup /usr/bin/rygel /etc/rygel.conf /usr/sbin/minidlnad /etc/
 done
 
 (
- for i in $(awk '/spi|lcd|sunxi_mmc|tty|i2c/{print +$1}' /proc/interrupts); do
-  echo 1 > /proc/irq/$i/smp_affinity || true
- done
+for i in $(awk '/mv64/{print +$1}' /proc/interrupts); do
+ echo 2 > /proc/irq/$i/smp_affinity || true
+done
 
-#for i in $(awk '/sata/{print +$1}' /proc/interrupts); do
-# echo 2 > /proc/irq/$i/smp_affinity  || true
-#done
+for i in $(awk '/sata|eth0/{print +$1}' /proc/interrupts); do
+ echo 1 > /proc/irq/$i/smp_affinity  || true
+done
 
- echo 1 > /proc/irq/default_smp_affinity
+#echo 1 > /proc/irq/default_smp_affinity
 
 #until [ $(pgrep -x rygel) -gt 0 ] 2>/dev/null; do
 #until pstree -npt $(pgrep -x rygel) | grep -q gmain; do
