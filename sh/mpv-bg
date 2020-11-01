@@ -19,21 +19,21 @@ else
  m_task=0; s_task=0; h_task=0; o_task=0
 fi
 
-taskset -pc $s_task $pgr_mpv
+#taskset -pc $s_task,$o_task $pgr_mpv
 
 echo "$(pstree -npt $pgr_mpv)" | while read line; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  mpv/demux)
-   taskset -pc $s_task $proc_nr ;;
-  mpv/vo|mpv/lua*)
-   taskset -pc $h_task $proc_nr ;;
-  mpv/worker)
-   taskset -pc $m_task $proc_nr ;;
+# mpv/demux)
+#  taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+# mpv/vo|mpv/lua*)
+#  taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+# mpv/worker)
+#  taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
   mpv/ao)
-   taskset -pc $m_task $proc_nr ;;
-  *)
-   taskset -pc $s_task $proc_nr ;;
+   taskset -pc $m_task			$proc_nr ;;
+# *)
+#  taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
  esac
 done
