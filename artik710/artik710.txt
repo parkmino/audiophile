@@ -506,6 +506,7 @@ https://marc.waeckerlin.org/computer/blog/parsing_of_query_string_in_bash_cgi_sc
 
 $ echo "obase=16; $(echo "ibase=2; 01000000" | bc)" | bc # 40 Main
 $ echo "obase=16; $(echo "ibase=2; 00111111" | bc)" | bc # 3F IRQ Others
+$ echo "obase=16; $(echo "ibase=2; 10111111" | bc)" | bc # BF IRQ Others
 $ echo "obase=16; $(echo "ibase=2; 00010000" | bc)" | bc # 10 Second
 $ echo "obase=16; $(echo "ibase=2; 00000100" | bc)" | bc # 04 High
 $ echo "obase=16; $(echo "ibase=2; 00000001" | bc)" | bc # 01
