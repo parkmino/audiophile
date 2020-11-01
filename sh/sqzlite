@@ -22,27 +22,28 @@ fi
 
  [ -z "$pgr_sqz" ] 2>/dev/null || [ ! "$pgr_sqz" -ge 1 ] 2>/dev/null && echo "Wrong pid of Squeezelite !" && exit
 
- procnr=$(nproc --all)
- if   [ "$procnr" -eq 2 ]; then
-  m_task=0; s_task=1; h_task=1; o_task=1
- elif [ "$procnr" -eq 4 ]; then
-  m_task=2; s_task=0; h_task=3; o_task=1,3
- elif [ "$procnr" -ge 8 ]; then
-  m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
- else
-  m_task=0; s_task=0; h_task=0; o_task=0
- fi
-
- sudo taskset -pc $s_task $pgr_sqz
- 
+# procnr=$(nproc --all)
+# if   [ "$procnr" -eq 2 ]; then
+#  m_task=0; s_task=1; h_task=1; o_task=1
+# elif [ "$procnr" -eq 4 ]; then
+#  m_task=2; s_task=0; h_task=3; o_task=1
+# elif [ "$procnr" -ge 8 ]; then
+#  m_task=6; s_task=4; h_task=2; o_task=0,1,3,5,7
+# else
+#  m_task=0; s_task=0; h_task=0; o_task=0
+# fi
+#
+# #sudo taskset -pc $s_task $pgr_sqz
+# 
  count=2
 
  echo "$(pstree -npt $pgr_sqz)" | while read line ; do
  #proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $count in
-   3) taskset -cp $m_task $proc_nr ;;
-   *) taskset -cp $s_task $proc_nr ;;
+   3) # taskset -cp $m_task 			$proc_nr ;;
+        chrt    -op 0				$proc_nr ;;
+ # *) taskset -cp $s_task,$h_task,$o_task $proc_nr ;;
   esac
   count=$(($count+1))
  done
@@ -50,4 +51,4 @@ fi
 ) &
 
 [ ! -e /dev/shm/squeezelite ] && sudo cp /usr/bin/squeezelite /dev/shm/squeezelite
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 39:4::0 -b 4002:3071>/dev/null</dev/null 2>/dev/null
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 42:5::1 -b 4010:3080>/dev/null</dev/null 2>/dev/null
