@@ -14,9 +14,9 @@
 	if   [ "$procnr" -eq 2 ]; then
 	 m_task=0; s_task=1; h_task=1; o_task=1
 	elif [ "$procnr" -eq 4 ]; then
-	 m_task=2; s_task=0; h_task=3; o_task=1,3
+	 m_task=2; s_task=0; h_task=3; o_task=1
 	elif [ "$procnr" -ge 8 ]; then
-	 m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
+	 m_task=6; s_task=4; h_task=2; o_task=0,1,3,5,7
 	else
 	 m_task=0; s_task=0; h_task=0; o_task=0
 	fi
@@ -59,9 +59,27 @@
 	# rm /root/release
 	# echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release
 
-1.3 ALSA 1.2.4
+1.3 ALSA 1.2.4 => Stay with 1.2.3.1
 
-1.4 MPD buffer_before_play
+1.4 MPD
 
-	# buffer_before_play "10.5596937298030%"
-
+	# nano /etc/rc.local
+		#taskset -pc $s_task,$h_task,$o_task $pgr_mpd
+		   mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+		   io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+		   rtio)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr
+				 chrt -opv 0         			$proc_nr ;;
+		# player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+		# decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+		  output)	 taskset -cp $m_task			$proc_nr
+				 chrt -opv 0				$proc_nr ;;
+		...
+		#for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
+		# taskset -acp $s_task,$h_task,$o_task $pid 2>/dev/null || true
+		#done
+		...
+		#for pid in 1 $(pgrep -x rc.local); do
+		# taskset -cp $s_task $pid || true
+		#done
+	# nano /etc/mpd.conf.sav
+		buffer_before_play "10.5596937298036%"
