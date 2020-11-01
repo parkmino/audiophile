@@ -94,11 +94,11 @@ else
  m_task=0; s_task=0; h_task=0; o_task=0
 fi
 
-if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod|squeezelite/ {print $1}'); do
-  taskset -acp $o_task $pid 2>/dev/null || true
- done
-fi
+#if [ "$m_task" -ge 1 ];then
+# for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod|squeezelite/ {print $1}'); do
+#  taskset -acp $o_task $pid 2>/dev/null || true
+# done
+#fi
 
 systemctl stop dbus.service dbus.socket haveged systemd-udevd # polkit
 
@@ -108,7 +108,7 @@ systemctl stop dbus.service dbus.socket haveged systemd-udevd # polkit
 swapoff -a
 
 ### Init
-taskset -cp $s_task 1
+#taskset -cp $s_task 1
 
 for i in /usr/bin/nohup /usr/bin/rygel /etc/rygel.conf /usr/sbin/minidlnad /etc/minidlna.conf; do
  [ -e $i ] && cp $i /dev/shm/

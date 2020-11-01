@@ -124,9 +124,9 @@ else
 fi
 
 if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
-  taskset -acp $o_task $pid 2>/dev/null || true
- done
+ #for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
+ # taskset -acp $s_task,$h_task,$o_task $pid 2>/dev/null || true
+ #done
 
  until $(grep -q snd /proc/interrupts); do
   sleep 1
