@@ -60,7 +60,7 @@ $ sudo rm -rf /usr/lib/*/alsa-lib/
 $ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
 $ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
 $ sudo mv copy/libasound.so.2.0.0.{min,mix,plug} /etc/
-$ sudo rm -i /usr/lib/libasound* /usr/lib/arm-linux-gnueabihf/libasound.so.*
+$ sudo rm -i /usr/lib/libasound* /usr/lib/arm-linux-gnueabihf/libasound*
 $ ls -al /dev/shm/
 $ sudo nano /etc/ld.so.conf.d/dev_shm.conf
 	/dev/shm/
@@ -77,7 +77,7 @@ $ sudo mkdir /usr/share/alsa
 $ sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 $ sudo mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
 
-$ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/
+$ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 $ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
 $ sudo nano /etc/rc.local
