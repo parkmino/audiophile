@@ -5,13 +5,13 @@ ptzzz1 () {
  sleep 1
 }
 
-pgr_mpv=$(pgrep -nx gnome-mpv)
+pgr_mpv=$(pgrep -nx celluloid)
 
-[ "$pgr_mpv" = "" ] && echo "Error: gnome-mpv is not running" && exit
+[ "$pgr_mpv" = "" ] && echo "Error: Celluloid is not running" && exit
 
 times=0
-until pstree -p $pgr_mpv | grep -q mpv/ao; do
- ptzzz1
+until pstree -npt $pgr_mpv | grep -q mpv/ao; do
+#ptzzz1
  times=$(($times+1))
  [ "$times" -ge 10 ] && printf "\nNo audio output pid found!\n" && exit
 done
@@ -28,22 +28,22 @@ else
  m_task=0; s_task=0; h_task=0; o_task=0
 fi
 
-echo
-taskset -pc $s_task $pgr_mpv
+#echo
+#taskset -pc $s_task,$h_task,$o_task $pgr_mpv
 
-echo "$(pstree -np $pgr_mpv)" | while read line; do
+echo "$(pstree -npt $pgr_mpv)" | while read line; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-  dconf*|gmain|gdbus|gnome*)
-   taskset -pc $h_task $proc_nr ;;
-  mpv/demux|mpv/worker)
-   taskset -pc $s_task $proc_nr ;;
-  mpv/vo)
-   taskset -pc $h_task $proc_nr ;;
+  dconf*|gmain|gdbus|celluloid*)
+   taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+#  mpv/demux|mpv/worker)
+#   taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+#  mpv/vo)
+#   taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
   mpv/ao)
-   taskset -pc $m_task $proc_nr ;;
-  *)
-   taskset -pc $h_task $proc_nr ;;
+   taskset -pc $m_task			$proc_nr ;;
+#  *)
+#   taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
  esac
 done
