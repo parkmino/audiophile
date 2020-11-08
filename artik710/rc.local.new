@@ -63,7 +63,7 @@ roon_bridge () {
 
 sqzlite () {
  cp /root/squeezelite /dev/shm/
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 39:4::0 -b 4002:3071 -n Sylphid -z>/dev/null</dev/null 2>/dev/null || true
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 42.58437:5.45545::1 -b 4010.57657:3080.86794 -n Sylphid -z>/dev/null</dev/null 2>/dev/null || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
 #[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
@@ -71,8 +71,8 @@ sqzlite () {
  echo "$(pstree -npt $pgr_sqz)" | while read line ; do
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $count in
-   3) # taskset -cp $m_task			$proc_nr
-        chrt    -op 0				$proc_nr ;;
+   3) taskset -cp $m_task			$proc_nr
+      chrt    -op 0				$proc_nr ;;
  # *) taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
   esac
   count=$(($count+1))
