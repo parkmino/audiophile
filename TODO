@@ -82,4 +82,4 @@
 		# taskset -cp $s_task $pid || true
 		#done
 	# nano /etc/mpd.conf.sav
-		buffer_before_play "10.55969372980366575485%"
+		buffer_before_play "10.559693729803665754847%"
