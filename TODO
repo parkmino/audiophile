@@ -82,4 +82,8 @@
 		# taskset -cp $s_task $pid || true
 		#done
 	# nano /etc/mpd.conf.sav
+		audio_buffer_size "3683"
 		buffer_before_play "10.559693729803665754847%"
+	# nano /etc/mpd.conf.sav
+		audio_buffer_size "3684"
+		buffer_before_play "9.9999039%"
