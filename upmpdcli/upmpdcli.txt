@@ -1,9 +1,9 @@
-[1.4.12]
+[1.4.14]
 
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libn/libnpupnp1/libnpupnp1_4.0.7-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp6/libupnpp6_0.19.2-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.12-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.12-1~ppa1~buster_all.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libn/libnpupnp1/libnpupnp1_4.0.13-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp6/libupnpp6_0.19.4-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.4.14-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-tidal_1.4.14-1~ppa1~buster_all.deb
 
 $ sudo apt-get install libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
 $ sudo dpkg -i lib*upnp*.deb upmpdcli_*.deb
@@ -92,6 +92,57 @@ artUrl = https://i.imgur.com/ebtVtuV.png
 [radio 국악방송]
 url = http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
 artUrl = https://pbs.twimg.com/profile_images/883196509982011392/l7yA_yVP_400x400.jpg
+
+[radio Radio Paradise Main (flac)]
+# Using the specific RP API for the Flac blocks channel
+# channel 0:main, 1:mellow, 2:rock, 3:eclectic
+metaScript = radio-paradise-get-flac.py channel 0
+preferScript = 1
+
+[radio Radio Paradise Main (aac128)]
+# There are many different urls and data formats for radio paradise. See
+# the details here:
+# http://www.radioparadise.com/rp_2.php#name=Listen&file=links
+url = http://stream.radioparadise.com/aac-128
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+# An example of a simple script to just retrieve the cover art.
+#artScript = radio-paradise-get-art.sh
+metaScript = radio-paradise-meta.py 0
+preferScript = 1
+
+[radio Paradise Mellow (mp3 192)]
+url = http://stream.radioparadise.com/mellow-192
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+metaScript = radio-paradise-meta.py 1
+preferScript = 1
+
+[radio Paradise Rock (mp3 192)]
+url = http://stream.radioparadise.com/rock-192
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+metaScript = radio-paradise-meta.py 2
+preferScript = 1
+
+[radio Paradise Eclectic (mp3 192)]
+url = http://stream.radioparadise.com/eclectic-192
+artUrl = https://www.radioparadise.com/graphics/fb_logo.png
+metaScript = radio-paradise-meta.py 3
+preferScript = 1
+
+[radio Naim Radio]
+url =  http://37.130.228.60:8090/listen.pls
+artUrl = https://www.naimaudio.com/sites/all/themes/naim/images/naim_records_logo.png
+
+[radio Linn Radio (Variety)]
+url =  http://opml.radiotime.com/Tune.ashx?id=s122119
+artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.png
+
+[radio Linn Classical (Classical)]
+url =  http://opml.radiotime.com/Tune.ashx?id=s122116
+artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.png
+
+[radio Linn Jazz (Jazz)]
+url =  http://opml.radiotime.com/Tune.ashx?id=s122120
+artUrl = http://small.linncdn.com/website/responsive/images/logo-black-chunky.png
 
 [radio Radio Paradise Main (flac)]
 url = http://stream.radioparadise.com/flac
