@@ -87,3 +87,6 @@
 	# nano /etc/mpd.conf.sav
 		audio_buffer_size "3684"
 		buffer_before_play "9.9999039%"
+
+1.5 Update Upmpdcli 1.4.14
+
