@@ -11,4 +11,4 @@ else
  m_task=0; s_task=0; h_task=0; o_task=0
 fi
 
-taskset -ac $h_task /usr/bin/upmpdcli -D -c /etc/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+taskset -ac $h_task /usr/bin/upmpdcli -D -c /etc/upmpdcli.conf 1</dev/null 2</dev/null 0</dev/null
