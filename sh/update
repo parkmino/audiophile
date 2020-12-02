@@ -387,7 +387,7 @@ EXTINF () {
  printf "• EXTINF\t"
  url=$(curl -i $curl_opt https://www.extinf.com/category/korean | grep -o -m1 "http.*korean/")
  latest=$(curl $curl_opt "$url" | grep -o "article id=\"post-[0-9]*" | head -1 | cut -d\- -f2)
- current="73573"
+ current="73664"
  printf "$current"
  printf " %.0s" $(seq 1 $((33-$(echo "$current" | wc -c))))
  if [ -z "$latest" ]; then
@@ -691,7 +691,7 @@ UBUNTU () {
 UPMPDCLI () {
  printf "• Upmpdcli\t"
 #latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/downloads/ | sed -n 's/.*upmpdcli-//p' | sort | cut -d'.' -f1-3 | tail -1)
- latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/releases.html | grep -o -m1 'upmpdcli [0-9.]*' | cut -d' ' -f2)
+ latest=$(curl $curl_opt https://www.lesbonscomptes.com/upmpdcli/pages/releases.html | grep -o -m1 'upmpdcli [0-9.]*' | cut -d' ' -f2)
  current=$(upmpdcli -v | cut -d' ' -f2)
  printf "$current\t\t\t\t"
  msg
