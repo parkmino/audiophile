@@ -6,8 +6,8 @@
 ! wget -q --spider -T1 http://google.com && echo "Google is not reachable!" && exit
 
 if [ $# -eq 0 ]; then
-#queue="tl=ko&q=지금 시각은 $(date +"%p %-I:%M") 입니다"
- queue="tl=ko&q=저의 IP는 $(hostname -I) 입니다"
+ queue="tl=ko&q=지금 시각은 $(date +"%p %-I:%M") 입니다"
+#queue="tl=ko&q=저의 IP는 $(hostname -I) 입니다"
 elif [ $# -ge 2 ] && [ ${#1} -eq 2 ] && [ $(expr "$1" : "[a-z]*") -eq 2 ]; then
  tl=$1
  shift
