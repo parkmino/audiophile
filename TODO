@@ -88,5 +88,17 @@
 		audio_buffer_size "3684"
 		buffer_before_play "9.9999039%"
 
-1.5 Update Upmpdcli 1.4.14
+1.5 Shell redirection
+
+	>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
+
+1.6 Update Upmpdcli 1.5.3
+
+1.7 Update myMPD 6.8.2
+
+2 hdparm
+
+	# /etc/hdparm.conf
+		read_ahead_sect = 1928
+	# hdparm -a1936 /dev/sda
 
