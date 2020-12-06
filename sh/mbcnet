@@ -1,0 +1,9 @@
+#!/bin/sh
+
+ch="http://mediaapi.imbc.com/Player/NetMedia?callback=?"
+m3u_dir="/home/parkmino/Videos"
+
+url=$(curl -s $ch | cut -d\" -f8)
+
+echo "$url"
+printf "#EXTM3U\n#EXTINF:-1,MBCNET\n$url\n" > $m3u_dir/mbcnet.m3u
