@@ -70,7 +70,7 @@ torview () {
 }
 
 case $1 in
- qq)      torqq   ;;
+ qq|*)    torqq   ;;
  view|vw) torview ;;
- *)       torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
+# *)       torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
 esac
