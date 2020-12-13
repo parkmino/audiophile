@@ -145,9 +145,9 @@ done
 #pkill rc.local
 ) &
 
-hdparm -A1 -a1904 -B255 /dev/sda
+hdparm -A1 -a1928 -B255 /dev/sda
 
-#/dev/shm/rygel -c /dev/shm/rygel.conf>/dev/null</dev/null 2>/dev/null
-/dev/shm/minidlnad -f /dev/shm/minidlna.conf>/dev/null</dev/null 2>/dev/null
+#/dev/shm/rygel -c /dev/shm/rygel.conf 1</dev/null 2</dev/null 0</dev/null
+/dev/shm/minidlnad -f /dev/shm/minidlna.conf 1</dev/null 2</dev/null 0</dev/null
 
 exit 0

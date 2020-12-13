@@ -59,9 +59,9 @@
 	# rm /root/release
 	# echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release
 
-1.3 ALSA 1.2.4 => Stay with 1.2.3.1
+2. ALSA 1.2.4 => Stay with 1.2.3.1
 
-1.4 MPD
+3. MPD
 
 	# nano /etc/rc.local
 		#taskset -pc $s_task,$h_task,$o_task $pgr_mpd
@@ -81,24 +81,24 @@
 		#for pid in 1 $(pgrep -x rc.local); do
 		# taskset -cp $s_task $pid || true
 		#done
-	# nano /etc/mpd.conf.sav
+	##nano /etc/mpd.conf.sav
 		audio_buffer_size "3683"
 		buffer_before_play "10.559693729803665754847%"
 	# nano /etc/mpd.conf.sav
 		audio_buffer_size "3684"
 		buffer_before_play "9.9999039%"
 
-1.5 Shell redirection
+4. Shell redirection
 
 	>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
 
-1.6 Update Upmpdcli 1.5.3
+5. Update Upmpdcli 1.5.5
 
-1.7 Update myMPD 6.8.2
+6. Update myMPD 6.8.2
 
-2 hdparm
+7. hdparm
 
 	# /etc/hdparm.conf
 		read_ahead_sect = 1928
-	# hdparm -a1936 /dev/sda
+	# hdparm -a1928 /dev/sda
 

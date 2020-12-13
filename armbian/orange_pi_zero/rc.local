@@ -146,6 +146,6 @@ echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity || true
 #taskset -cp $s_task 1
 
 musicpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+/dev/shm/mpd /dev/shm/mpd.conf 1</dev/null 2</dev/null 0</dev/null
 
 exit 0
