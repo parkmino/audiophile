@@ -533,7 +533,7 @@ MYMPD_DEV () {
  [ $branch = master ] && continue || printf "• myMPD $branch\t"
  url="https://github.com/jcorporation/myMPD/commits/$branch"
  date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
- printf "$branch ($(date -d "$date" +%F))\t\t"
+ printf "$(date -d "$date" +%F)\t\t\t"
  days_diff
  if [ "$days" -le 1 2>/dev/null ]; then
   echo "  \e[34m$url\e[0m"
