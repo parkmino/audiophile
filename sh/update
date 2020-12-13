@@ -671,10 +671,10 @@ TTYD () {
   read answer
   if [ "$answer" != n ]; then
    printf '  '
-  #curl -s "$url" | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.x86_64/' | wget "$(cat -)" -P /home/parkmino/Downloads/
+  #curl -s "$url" | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd.x86_64/' | wget "$(cat -)" -P /home/parkmino/Downloads/
    curl -s $(curl -s "$url" | cut -d\" -f2) | grep -m1 x86_64 | cut -d\" -f2 | wget "https://github.com/$(cat -)" -P /home/parkmino/Downloads/
-   chmod 755 /home/parkmino/Downloads/ttyd_linux.x86_64
-   sudo mv /home/parkmino/Downloads/ttyd_linux.x86_64 /usr/bin/ttyd
+   chmod 755 /home/parkmino/Downloads/ttyd.x86_64
+   sudo mv /home/parkmino/Downloads/ttyd.x86_64 /usr/bin/ttyd
    printf "  $(ttyd --version)\n"
   fi
  fi
