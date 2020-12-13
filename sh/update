@@ -526,11 +526,11 @@ MPD_CANTATA_MYMPD () {
 }
 
 MYMPD_DEV () {
- printf "• myMPD Dev\t"
- branch=devel
- for i in $(curl -s https://github.com/jcorporation/myMPD/branches | grep -o 'branch-filter-item branch=.*' | cut -d\" -f2); do
-  [ ! "$i" = master ] && [ ! "$i" = gh-pages ] && [ ! "$i" = devel ] && branch="$i"
+ branch=master
+ for i in $(curl -s https://github.com/jcorporation/myMPD/branches | grep -o 'branch-filter-item branch=.*' | cut -d\" -f2 | sort); do
+  [ ! "$i" = master ] && [ ! "$i" = gh-pages ] && branch="$i"
  done
+ [ $branch = master ] && continue || printf "• myMPD $branch\t"
  url="https://github.com/jcorporation/myMPD/commits/$branch"
  date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
  printf "$branch ($(date -d "$date" +%F))\t\t"
