@@ -530,10 +530,10 @@ MYMPD_DEV () {
  for i in $(curl -s https://github.com/jcorporation/myMPD/branches | grep -o 'branch-filter-item branch=.*' | cut -d\" -f2 | sort); do
   [ ! "$i" = master ] && [ ! "$i" = gh-pages ] && branch="$i"
  done
- [ $branch = master ] && continue || printf "• myMPD $branch\t"
+ [ $branch = master ] && continue || printf "• myMPD Dev\t"
  url="https://github.com/jcorporation/myMPD/commits/$branch"
  date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
- printf "$(date -d "$date" +%F)\t\t\t"
+ printf "$branch ($(date -d "$date" +%F))\t\t"
  days_diff
  if [ "$days" -le 1 2>/dev/null ]; then
   echo "  \e[34m$url\e[0m"
