@@ -43,6 +43,7 @@ else
  find="$prog $(date +%y%m%d -d "$time") 토렌트"
 fi
 
-cmd="googler --colorize -t h$hour -n 9 --np "$find""
+#cmd="googler --colorize -t h$hour -n 9 --np "$find""
+cmd="googler --colorize -n 9 --np "$find" 1080p"
 echo ; echo " $cmd"
 $cmd | more
