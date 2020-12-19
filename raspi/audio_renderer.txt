@@ -320,6 +320,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#mixramp = false
 		 syscmds = true
 		 mounts = false
+		 footerstop = both
 		[syscmds]
 		KBS 클래식 FM = kr2mpd 1fm
 		KBS 쿨 FM     = kr2mpd 2fm
