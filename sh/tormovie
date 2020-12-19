@@ -13,6 +13,8 @@ chk_url () {
  fi
 }
 
+curl_opt="-s --connect-timeout 7 --max-time 7"
+
 chk_movie () {
  if [ -z "$movie" ]; then
   echo "$url"
@@ -33,9 +35,9 @@ torwal () {
  url="https://torrentwal.com"
  chk_url
  for i in $(seq 1 10); do
-  movie=$(curl -sL -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//' | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
+  movie=$(curl $curl_opt -L -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. <a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d'>' -f2 | cut -d'<' -f1 | sed 's/^[ \t]*//' | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
   chk_movie
-  printf "     \e[34m$url$(curl -sL -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\e[0m\n"
+  printf "     \e[34m$url$(curl $curl_opt -L -k "$url" | grep -o '영화</a> 인기자료.*' | sed 's/>[0-9]*\. *<a href='\''\.\./\n/g' | head -$((i+1)) | tail -1 | cut -d\' -f1)\e[0m\n"
  done
 }
 
@@ -43,10 +45,10 @@ torqq () {
  url="https://토렌트큐큐.com"
 #url="https://torrentqq49.com"
  chk_url || return
- [ -z "${url##*큐큐*}" ] && url="$(curl -sL "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
+ [ -z "${url##*큐큐*}" ] && url="$(curl $curl_opt -L "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=d&board=mov"
  tmpfile=$(mktemp)
- curl -sL "$url" | sed 's/title=/\n/g' > "$tmpfile"
+ curl $curl_opt -L "$url" | sed 's/title=/\n/g' > "$tmpfile"
  for i in $(seq 1 10); do
   movie=$(head -$((i+1)) "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
   chk_movie
@@ -60,7 +62,7 @@ torview () {
  chk_url || return
  url="$url/bbs/board.php?bo_table=mov"
  tmpfile=$(mktemp)
- curl -sL "$url" | grep -A 60 '인기 포스트' > "$tmpfile"
+ curl $curl_opt -L "$url" | grep -A 60 '인기 포스트' > "$tmpfile"
  for i in $(seq 1 10); do
   movie=$(grep '</a>' "$tmpfile" | head -$i | tail -1 | sed 's/ <\/a>//' | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
   chk_movie
