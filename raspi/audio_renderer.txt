@@ -589,9 +589,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get dist-upgrade
 	$ sudo systemctl daemon-reload
 	$ sudo youtube-dl --update
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" > ~/release
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" | sudo tee /etc/release
 	
-	$ cat ~/release
+	$ cat /etc/release
 	$ mpc clear
 	
 	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
