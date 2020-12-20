@@ -300,7 +300,7 @@ while true; do
  else
   ip=$(echo "$ip" | tr -d ' ')
  fi
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti (IP:$ip) - $card0" 16 65 9 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti $(consf build) (IP:$ip) - $card0" 16 65 9 \
  "1"  "Audio device               오디오 장치            >" \
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
