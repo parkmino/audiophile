@@ -33,7 +33,7 @@
 	fi
 
 	for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-	 echo "54" > /proc/irq/$i/smp_affinity
+	 echo "FF" > /proc/irq/$i/smp_affinity
 	done	
 	for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
 	 echo "10" > /proc/irq/$i/smp_affinity
@@ -48,7 +48,7 @@
 	
 	for i in RoonBridge librespot networkaudiod; do
 	 if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
-	  taskset -acp 0-$m_task $(pidof $i) || true # $s_task
+	  taskset -acp 0-$procnr $(pidof $i) || true # $s_task
 	 fi
 	done
 
@@ -92,9 +92,15 @@
 
 	>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
 
-5. Update Upmpdcli 1.5.5
+5. Update Upmpdcli 1.5.5 => Stay with 1.4.14
 
-6. Update myMPD 6.8.2
+6. Update myMPD 6.9.0
+
+	# dpkg -i copy/mympd_6.9.0-1_arm64.deb
+	# mv copy/*.png /var/lib/mympd/pics/
+	# mv copy/*.lua /var/lib/mympd/scripts/
+	# nano /etc/mympd.conf
+	# mympd
 
 7. hdparm
 
