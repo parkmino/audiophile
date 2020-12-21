@@ -221,7 +221,6 @@ echo "10" > /proc/irq/default_smp_affinity
 
 for i in RoonBridge librespot networkaudiod; do
  if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
- #taskset -acp $s_task-$m_task $(pidof $i) || true
   taskset -acp 0-$procnr $(pidof $i) || true
  fi
 done
