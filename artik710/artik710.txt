@@ -296,9 +296,9 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# tar xvzf mympd.tar.gz && rm mympd.tar.gz
 	# cd myMPD*
 
-	# sed -i '/play_circle_outline/s/myMPD/myMPD - Sylphid/; s/Initializing myMPD/Initializing myMPD - Sylphid/' htdocs/index.html
-	# sed -i '/data-phrase="Browse directories"/a\          <a data-phrase="Browse web commands" class="dropdown-item text-light featBrowse alwaysEnabled" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
-	# grep -n -e Sylphi -e bann htdocs/index.html
+	##sed -i '/play_circle_outline/s/myMPD/myMPD - Sylphid/; s/Initializing myMPD/Initializing myMPD - Sylphid/' htdocs/index.html
+	##sed -i '/data-phrase="Browse directories"/a\          <a data-phrase="Browse web commands" class="dropdown-item text-light featBrowse alwaysEnabled" href="http://bann.local:8080" target="_blank"></a>' htdocs/index.html
+	##grep -n -e Sylphid -e bann htdocs/index.html
 	32	      <span class="material-icons splashScreenIcon">play_circle_outline</span> ㅡmyMPD - Sylphid
 	34	    <div id="splashScreenAlert" data-phrase="Initializing myMPD - Sylphid"></div>
 	41	          <span class="material-icons header-logo">play_circle_outline</span>myMPD - Sylphid
@@ -307,7 +307,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# grep 'syscmdsMaxListLen =' htdocs/js/settings.js
 		let syscmdsMaxListLen = 100;
 	##printf '\nInitializing myMPD - Sylphid\nmyMPD - Sylphid 초기화\n\nStreaming settings\n스트리밍 설정\n' >> src/i18n/ko-KR.txt
-	# tail src/i18n/ko-KR.txt
+	##tail src/i18n/ko-KR.txt
 		...
 		Initializing myMPD - Sylphid
 		myMPD - Sylphid 초기화
@@ -371,6 +371,34 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 		시스템 종료   = sudo poweroff
 		HR =
 		IP 주소 읽기  = tts2mpd
+
+	# mv copy/*.png /var/lib/mympd/pics/
+	# mv copy/*.lua /var/lib/mympd/scripts/
+	
+	# nano /etc/mympd.conf
+		 host = 127.0.0.1
+		 port = 6600
+		 musicdirectory = /var/lib/mpd/music
+		 playlistdirectory = /var/lib/mpd/playlists
+		#ssl = false
+		#sslport = 443
+		 publish = true
+		#webdav = false
+		 loglevel = 1
+		#user = mympd
+		#sticker = false
+		#mixramp = false
+		#syscmds = true
+		#mounts = false
+		 scripting = true
+		 lualibs = base, string, utf8, table, math, mympd, io
+		 footerstop = both
+		[syscmds]
+
+	# mympd
+		IP 주소 읽기, record_voice_over, #28a745, iptts
+		전원 끄기, power_off, #28a745, poweroff
+
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 	# cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
 	# nano /etc/systemd/system/mympd.service
