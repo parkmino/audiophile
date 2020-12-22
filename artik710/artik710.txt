@@ -290,7 +290,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 
 15. myMPD
 
-	# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev # liblua5.3-dev
+	# apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev liblua5.3-dev
 	# cd /root
 	# curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
 	# tar xvzf mympd.tar.gz && rm mympd.tar.gz
