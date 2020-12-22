@@ -6,14 +6,21 @@
 	# apt-get upgrade
 	# apt-get dist-upgrade
 
-1.1 CPU Affinities
+1.1 Menu
 
-    # nano /etd/default/audio.conf
+    # nano /etc/default/audio.conf
     	sound=balanced
-    # nano /usr/bin/consf
-    # nano /usr/bin/audioconf
+    # cp copy/consf /usr/bin/consf
+    # cp copy/audioconf /usr/bin/audioconf
+
+    # rm /root/release
+    # echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release
+
+1.2 CPU Affinities
+
     # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep "^ *${i}:" /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
 
+    # cp /etc/rc.local /etc/rc.local.old
     # nano /etc/rc.local
 
 	procnr=$(nproc --all)
@@ -58,14 +65,7 @@
 	 fi
 	done
 
-1.2 Build number
-
-	# nano /usr/bin/consf
-	# nano /usr/bin/audioconf
-	# rm /root/release
-	# echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release
-
-1.3 Upmpdcli
+1.3 Upmpdcli 1.4.14
 
 	# sudo dpkg -i copy/upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb
 
@@ -76,7 +76,15 @@
 	# mv copy/*.png /var/lib/mympd/pics/
 	# mv copy/*.lua /var/lib/mympd/scripts/
 	# nano /etc/mympd.conf
+		#syscmds = true
+		 scripting = true
+		 lualibs = base, string, utf8, table, math, mympd, io
+		 footerstop = both
+	# reboot
 	# mympd
+		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
+		IP 주소 읽기, record_voice_over, #28a745, iptts
+		전원 끄기, power_off, #28a745, poweroff
 
 2. ALSA 1.2.3.1
 
