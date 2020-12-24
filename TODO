@@ -2,9 +2,11 @@
 
 1.0 Update
 
-	# apt-get update
-	# apt-get upgrade
-	# apt-get dist-upgrade
+    # apt-get update
+    # apt-get upgrade
+    # apt-get dist-upgrade
+
+    # scp consf audioconf upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb root@192.168.0.x:/root/copy/
 
 1.1 Menu
 
@@ -21,6 +23,7 @@
     # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep "^ *${i}:" /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
 
     # cp /etc/rc.local /etc/rc.local.old
+    # truncate -s 0 /etc/rc.local
     # nano /etc/rc.local
 
 	procnr=$(nproc --all)
