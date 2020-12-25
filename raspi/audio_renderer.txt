@@ -322,8 +322,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#mixramp = false
 		#syscmds = true
 		 scripting = true
-		 lualibs = base, string, utf8, table, math, mympd, io
-		 footerstop = both		
+		 lualibs = base, string, utf8, table, math, mympd, io		
 		 mounts = false
 		 footerstop = both
 		[syscmds]
