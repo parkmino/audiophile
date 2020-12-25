@@ -5,8 +5,9 @@
     # apt-get update
     # apt-get upgrade
     # apt-get dist-upgrade
+    # youtube-dl --update
 
-    # scp consf audioconf upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb root@192.168.0.x:/root/copy/
+    # scp consf audioconf upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb *.png *.lua root@192.168.0.x:/root/copy/
 
 1.1 Menu
 
