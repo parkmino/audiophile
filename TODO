@@ -121,11 +121,13 @@
 
 4. Shell redirection
 
-	>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
+	$ sudo nano /etc/rc.local
+	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
+		>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
 
 5. hdparm
 
-	# /etc/hdparm.conf
+	$ sudo nano /etc/hdparm.conf
 		read_ahead_sect = 1928
-	# hdparm -a1928 /dev/sda
+	$ sudo hdparm -a1928 /dev/sda
 

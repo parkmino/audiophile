@@ -184,10 +184,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
-		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
-		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@">/dev/null</dev/null 2>/dev/null
-		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
-		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@">/dev/null</dev/null 2>/dev/null
+		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"1</dev/null 2</dev/null 0</dev/null
+		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"1</dev/null 2</dev/null 0</dev/null
+		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"1</dev/null 2</dev/null 0</dev/null
+		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"1</dev/null 2</dev/null 0</dev/null
 		 fi
 	$ sudo cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	$ sudo sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
@@ -333,8 +333,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		SBS 파워 FM   = kr2mpd sbsp
 		SBS 러브 FM   = kr2mpd sbsl
 		HR =
-		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config&>/dev/null</dev/null 2>/dev/null
-		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /home/pi; sudo su pi"&>/dev/null</dev/null 2>/dev/null
+		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config 1</dev/null 2</dev/null 0</dev/null&
+		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /home/pi; sudo su pi"1</dev/null 2</dev/null 0</dev/null&
 		HR =
 		다시 시작 - Reboot    = sudo reboot
 		전원 끄기 - Power off = sudo poweroff
@@ -354,11 +354,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ systemctl status mympd
 	
 	$ sudo mympd
-		 설정 > 외관 > 알림 > 페이지에 알림
-		 KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
-		#IP 주소 읽기, record_voice_over, #28a745, iptts
-		 다시 시작, refresh, #28a745, reboot
-		 전원 끄기, power_off, #28a745, poweroff
+		설정 > 외관 > 알림 > 페이지에 알림
+		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
+		IP 주소 읽기, record_voice_over, #28a745, iptts
+		웹 설정, settings, #28a745, settings
+		다시 시작, refresh, #28a745, reboot
+		전원 끄기, power_off, #28a745, poweroff
 
 18. ttyd
 
