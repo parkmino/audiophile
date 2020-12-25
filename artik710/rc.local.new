@@ -28,7 +28,7 @@ musicpd_bg () {
    mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
    io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
    rtio)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr
-		 chrt -opv 0         			$proc_nr ;;
+		 chrt -opv 0				$proc_nr ;;
  # player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
  # decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
    output)	 taskset -cp $m_task			$proc_nr
