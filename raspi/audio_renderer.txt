@@ -354,10 +354,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ systemctl status mympd
 	
 	$ sudo mympd
-		설정 > 외관 > 알림 > 페이지에 알림
-		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
-		IP 주소 읽기, record_voice_over, #28a745, iptts
-		전원 끄기, power_off, #28a745, poweroff
+		 설정 > 외관 > 알림 > 페이지에 알림
+		 KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
+		#IP 주소 읽기, record_voice_over, #28a745, iptts
+		 다시 시작, refresh, #28a745, reboot
+		 전원 끄기, power_off, #28a745, poweroff
 
 18. ttyd
 
