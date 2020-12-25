@@ -52,6 +52,6 @@ case "$1:$2:$3" in
  upnp:on:*)     sudo sed -i '/upnp=/s/=.*/=on/'  $audio_conf				;;
  upnp:off:*)    sudo sed -i '/upnp=/s/=.*/=off/' $audio_conf				;;
  upnp:*)        grep ^upnp= $audio_conf | cut -d= -f2					;;
- build:*)		grep -o [0-9].* /etc/release					;;
+ build:*)       grep -o [0-9].* /etc/release						;;
  *)             usage 									;;
 esac
