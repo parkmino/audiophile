@@ -299,12 +299,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ./build.sh install
 	$ ./build.sh pkgdebian
 
-	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz # liblua5.3 libmediainfo0v5
+	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz liblua5.3 # libmediainfo0v5
 
 	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 	
 	$ sudo dpkg -i copy/mympd*.deb
+	$ sudo mv copy/*.png /var/lib/mympd/pics/
+	$ sudo mv mv copy/*.lua /var/lib/mympd/scripts/
 
 	$ sudo nano /etc/mympd.conf
 		 host = 127.0.0.1
@@ -318,7 +320,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#user = mympd
 		#sticker = false
 		#mixramp = false
-		 syscmds = true
+		#syscmds = true
+		 scripting = true
+		 lualibs = base, string, utf8, table, math, mympd, io
+		 footerstop = both		
 		 mounts = false
 		 footerstop = both
 		[syscmds]
@@ -351,6 +356,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	
 	$ sudo mympd
 		설정 > 외관 > 알림 > 페이지에 알림
+		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
+		IP 주소 읽기, record_voice_over, #28a745, iptts
+		전원 끄기, power_off, #28a745, poweroff
 
 18. ttyd
 
