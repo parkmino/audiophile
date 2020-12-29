@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/airplayon.sh)
-#bash <(curl -sL https://bit.ly/2J39eMc)
+#bash <(curl -s  https://github.com/parkmino/audiophile/raw/master/artik710/roonup.sh)
+#bash <(curl -sL https://bit.ly/34RPSl0)
 
 dot () {
  while true; do
