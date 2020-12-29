@@ -12,7 +12,7 @@ dot () {
 
 #dot &
 
-sudo wget http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv8.sh -O /root/copy/roonbridge-installer-linuxarmv8.sh
+sudo wget http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv8.sh -P /root/copy/
 sudo chmod 755 /root/copy/roonbridge-installer-linuxarmv8.sh
 sudo /root/copy/roonbridge-installer-linuxarmv8.sh
 sudo systemctl disable roonbridge
