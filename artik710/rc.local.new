@@ -225,6 +225,12 @@ for i in RoonBridge librespot networkaudiod; do
  fi
 done
 
+for i in agetty mympd ttyd; do
+ if [ $m_task -ge 1 ] && [ ! -z $(pidof $i) ]; then
+  taskset -acp $o_task $(pidof $i) || true
+ fi
+done
+
 ### uhubctl
 uhubctl -l 2 -a 0 -p 1,3 || true
 

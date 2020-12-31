@@ -166,7 +166,7 @@ pkill rngd    || true
 swapoff -a
 
 ### myMPD & SSH
-[ "$mympd" = on ] && /dev/shm/mympd /dev/shm/mympd.conf 1</dev/null 2</dev/null 0</dev/null&
+[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf 1</dev/null 2</dev/null 0</dev/null&
 [ "$ssh"   = on ] && systemctl start ssh
 
 #m_task=$(($(nproc --all)-1)); h_task=0; s_task=0

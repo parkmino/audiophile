@@ -131,3 +131,13 @@
 		read_ahead_sect = 1928
 	$ sudo hdparm -a1928 /dev/sda
 
+6. More CPU Affinities
+
+	$ sudo nano /etc/rc.local
+
+		for i in agetty mympd ttyd; do
+		 if [ ! -z $(pidof $i) ]; then
+		  taskset -acp $o_task $(pidof $i) || true
+		 fi
+		done
+
