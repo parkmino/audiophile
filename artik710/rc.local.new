@@ -228,7 +228,7 @@ done
 for i in agetty mympd ttyd; do
  if [ "$procnr" -ge 2 ] && pidof -q $i; then
   for j in $(pidof $i); do
-   taskset -acp $o_task $j || true
+   taskset -acp $s_task,$h_task,$o_task $j || true
   done
  fi
 done
