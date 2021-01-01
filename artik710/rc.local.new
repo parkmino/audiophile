@@ -220,14 +220,16 @@ echo "10" > /proc/irq/default_smp_affinity
 #done
 
 for i in RoonBridge librespot networkaudiod; do
- if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
+ if [ "$procnr" -ge 2 ] && pidof -q $i; then
   taskset -acp 0-$procnr $(pidof $i) || true
  fi
 done
 
 for i in agetty mympd ttyd; do
- if [ $m_task -ge 1 ] && [ ! -z $(pidof $i) ]; then
-  taskset -acp $o_task $(pidof $i) || true
+ if [ "$procnr" -ge 2 ] && pidof -q $i; then
+  for j in $(pidof $i); do
+   taskset -acp $o_task $j || true
+  done
  fi
 done
 

@@ -73,8 +73,8 @@
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall || true
 
 echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
- sudo tc qdisc add dev $dev root pfifo_fast
-#sudo tc qdisc add dev $dev ingress
+ tc qdisc add dev $dev root pfifo_fast
+#tc qdisc add dev $dev ingress
 #tc -s -d qdisc show dev $dev
 done
 
@@ -146,7 +146,7 @@ if [ "$m_task" -ge 1 ];then
  done
  for i in $(awk '/i915/{print +$1}' /proc/interrupts); do
   proc="/proc/irq/$i/smp_affinity"
-  sudo sh -c "echo a > $proc" || true
+  sh -c "echo a > $proc" || true
   echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
  done
 # for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
@@ -163,6 +163,14 @@ for i in $(ls /dev/snd/); do
  [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"
 done
 rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+
+for i in dbus-daemon nimf polkitd systemd-journal systemd-logind systemd-udevd udisksd; do
+ if [ "$procnr" -ge 2 ] && pidof -q $i; then
+  for j in $(pidof $i); do
+   sudo taskset -acp $o_task $j || true
+  done
+ fi
+done
 
 modprobe -r psmouse
 

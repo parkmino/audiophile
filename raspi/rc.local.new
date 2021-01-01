@@ -217,7 +217,7 @@ fi
 #done
 
 for i in RoonBridge librespot networkaudiod; do
- if [ $m_task -ge 1 ] && [ ! -z $(pidof $i) ]; then
+ if [ "$procnr" -ge 2 ] && pidof -q $i; then
   taskset -acp 0-$procnr $(pidof $i) || true
  fi
 done
