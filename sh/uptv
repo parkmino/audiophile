@@ -136,7 +136,7 @@ uptv_ch () {
 (61) 홈앤쇼핑	(62) GS마이샵	(63) 현대샵	(64) W 쇼핑	(65) OGN
 (66) EBS1	(67) EBS Kids	(68) EBS+2	(69) EBS+1	(70) EBS 초등3
 (71) EBS 초등4	(72) EBS 초등5	(73) EBS 초등6	(74) EBS 중학1	(75) EBS 중학2
-(76) EBSEnglish	(77) 플레이런TV"
+(76) EBSEnglish	(77) JEI 영어TV	(78) 플레이런TV"
 
  read -p " " i
 
