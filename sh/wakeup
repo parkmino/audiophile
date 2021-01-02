@@ -58,12 +58,12 @@ for i in /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer;
  [ -f "$i" ] && sudo rm "$i"
 done
 
-for i in dbus-daemon nimf polkitd systemd-journal systemd-logind systemd-udevd udisksd; do
- if [ "$procnr" -ge 2 ] && pidof -q $i; then
-  for j in $(pidof $i); do
-   sudo taskset -acp $s_task,$h_task,$o_task $j || true
-  done
- fi
-done
+#for i in dbus-daemon nimf polkitd systemd-journal systemd-logind systemd-udevd udisksd; do
+# if [ "$procnr" -ge 2 ] && pidof -q $i; then
+#  for j in $(pidof $i); do
+#   sudo taskset -acp $s_task,$h_task,$o_task $j || true
+#  done
+# fi
+#done
 
 numlockx off
