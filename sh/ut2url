@@ -27,7 +27,9 @@ case $i in
  f) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
  c) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
  r) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
- g) ch=tastyguys   ; url="https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"
+ g) ch=tastyguys
+    url="https://www.youtube.com/channel/UCHcsy2HkeLAus-43nKDm09Q"
+   #url="https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"
     live=$(curl -s "$url" | grep -o '지금 최초 공개 중.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
     if [ ! -z "$live" ]; then
      printf "\e[32m#지금 최초 공개 중\e[0m\n"
@@ -76,4 +78,4 @@ uturl=$(curl -s "$url" | grep -o '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_
  printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
 #printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
 
-printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > /home/parkmino/Videos/$ch.m3u
+#printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > /home/parkmino/Videos/$ch.m3u
