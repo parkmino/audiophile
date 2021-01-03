@@ -78,4 +78,4 @@ uturl=$(curl -s "$url" | grep -o '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_
  printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
 #printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
 
-#printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > /home/parkmino/Videos/$ch.m3u
+ printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > /home/parkmino/Videos/$ch.m3u
