@@ -55,7 +55,8 @@ case $i in
       printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
       printf "#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" >> $m3u_dir/$ch.m3u
      fi
-    done ;;
+    done
+    exit ;;
  0) ch=김기열
     url="https://www.youtube.com/c/김기열/videos "
     str=$(curl -s "$url" | grep -o '"title":{"runs":\[{"text":".\{500\}' | head -2)
@@ -81,17 +82,18 @@ case $i in
       prog=$(echo "$label" | sed 's/ 게시자.*//')
      uturl=$(echo "$label" | sed 's/.*watch?v=//' | cut -b -11)
      echo "\e[32m$prog ($days)\e[0m"
-     #printf "\e[32m$prog ($days)\e[0m\n"
+    #printf "\e[32m$prog ($days)\e[0m\n"
      printf "$ch - https://youtu.be/$uturl\n"
     done
     exit ;;
  *) exit ;;
 esac
 
-if [ ! $i = g ]; then
- uturl=$(curl -s "$url" | grep -o '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
- [ -z "$uturl" ] && printf "YouTube live streaming is not available!\n\e[34m$url\e[0m\n" && exit
+uturl=$(curl -s "$url" | grep -o '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
+if [ -z "$uturl" ]; then
+ printf "YouTube live streaming is not available!\n\e[34m$url\e[0m\n"
+else
  printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
- #printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
+#printf "\e[34m$url\e[0m\n$ch - plugin://plugin.video.youtube/play/?video_id=$uturl\n"
  printf "#EXTM3U\n#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" > $m3u_dir/$ch.m3u
 fi
