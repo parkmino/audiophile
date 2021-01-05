@@ -58,12 +58,12 @@ case $i in
     done
     exit ;;
  0) ch=김기열
-    url="https://www.youtube.com/c/김기열/videos "
+    url="https://www.youtube.com/c/%EA%B9%80%EA%B8%B0%EC%97%B4/videos"
     str=$(curl -s "$url" | grep -o '"title":{"runs":\[{"text":".\{500\}' | head -2)
     [ -z "$str" ] && printf "\e[32m정보 없음\e[0m\n\e[36m$url\e[0m\n" && exit
-    printf "\e[34m$url\e[0m\n"
-    for i in 1 2; do
-     label=$(echo "$str" | head -$i | tail -1)
+    printf "\e[34m$(percent $url)\e[0m\n"
+    for i in $(seq 1 2); do
+     label=$(echo "$str"   | head -$i | tail -1)
       days=$(echo "$label" | grep -o 'simpleText.*' | cut -d\" -f3)
       prog=$(echo "$label" | cut -d\" -f8)
      uturl=$(echo "$label" | grep -o 'watch?v=.*' | cut -d\= -f2 | cut -c -11)
@@ -76,7 +76,7 @@ case $i in
     str=$(curl -s "$url" | grep -o 'label":".\{1000\}' | grep 여은파 | head -2 | cut -d\" -f3-)
     [ -z "$str" ] && printf "\e[32m정보 없음\e[0m\n\e[36m$url\e[0m\n" && exit
     printf "\e[34m$url\e[0m\n"
-    for i in 1 2; do
+    for i in $(seq 1 2); do
      label=$(echo "$str"   | head -$i | tail -1)
       days=$(echo "$label" | cut -d\" -f1 | sed 's/.*STUDIO //; s/전 /전,/')
       prog=$(echo "$label" | sed 's/ 게시자.*//')
