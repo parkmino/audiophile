@@ -134,7 +134,6 @@
 6. More CPU Affinities
 
 	$ sudo nano /etc/rc.local
-
 		for i in agetty mympd ttyd; do
 		 if [ "$procnr" -ge 2 ] && pidof -q $i; then
 		  for j in $(pidof $i); do
@@ -142,4 +141,61 @@
 		  done
 		 fi
 		done
+
+	$ sudo nano /etc/rc.local
+		[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf 1</dev/null 2</dev/null 0</dev/null&
+
+7. myMPD customized navbar
+
+	$ sudo nano /var/lib/mympd/state/navbar_icons
+		[
+		  {
+		    "ligature": "home",
+		    "title": "Home",
+		    "options": ["Home"],
+		    "badge":""
+		  },
+		  {
+		    "ligature": "play_arrow",
+		    "title": "Playback",
+		    "options": ["Playback"],
+		    "badge": ""
+		  },
+		  { 
+		    "ligature": "queue_music",
+		    "title":"Queue",
+		    "options": ["Queue"],
+		    "badge":"<span id=\"badgeQueueItems\" class=\"badge badge-secondary\"></span>"
+		  },
+		  {
+		    "ligature": "library_music",
+		    "title":"Browse",
+		    "options": ["Browse"],
+		    "badge":""
+		  },
+		  #{
+		  #  "ligature": "layers",
+		  #  "title":"Database",
+		  #  "options": ["Browse", "Database"],
+		  #  "badge":""
+		  #},
+		  {
+		    "ligature": "folder",
+		    "title":"Folders",
+		    "options": ["Browse", "Filesystem"],
+		    "badge":""
+		  },
+		  {
+		    "ligature": "list",
+		    "title":"Playlists",
+		    "options": ["Browse", "Playlists"],
+		    "badge":""
+		  },
+		  {
+		    "ligature": "search",
+		    "title": "Search",
+		    "options": ["Search"],
+		    "badge": ""
+		  }
+		]
 
