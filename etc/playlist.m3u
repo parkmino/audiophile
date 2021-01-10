@@ -126,7 +126,7 @@ http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/pla
 #EXTINF:-1,이데일리TV
 http://edaily.flive.skcdn.com:1935/high/livestream/playlist.m3u8
 #EXTINF:-1,지방자치TV
-http://121.78.81.179:1935/smartlive/436/101d1ccdeb2cd1794db38206dcec198d/playlist.m3u8
+http://139.150.248.29/smartlive/436/101d1ccdeb2cd1794db38206dcec198d/playlist.m3u8
 #EXTINF:-1,채널i
 http://121.78.242.199:1935/live/stream.sdp/playlist.m3u8
 #EXTINF:-1,피싱TV
@@ -148,7 +148,7 @@ https://hlive.ktv.go.kr/live/klive_h.stream/playlist.m3u8
 #EXTINF:-1,OBS경인
 http://59.25.202.82:1935/live/obsstream1/myStream.sdp/playlist.m3u8
 #EXTINF:-1,OBS경인W
-http://121.160.102.99:1935/live/myStream.sdp/playlist.m3u8
+https://5ee9633b25727.streamlock.net/live/_definst_/obsw.stream/playlist.m3u8
 #EXTINF:-1,tbsTV
 http://58.234.158.60:1935/catvlive/myStream/playlist.m3u8
 #EXTINF:-1,tbsFM
@@ -164,10 +164,10 @@ http://slive.ytn.co.kr:1935/dmb/ydlive_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 라디오
 http://slive.ytn.co.kr:1935/live/fmlive_0624_1.sdp/playlist.m3u8
 #EXTINF:-1,연변라지오TV넷 연변위성
-http://live.ybtvyun.com/video/s10016-bd6e048a741f/index.m3u8
+http://live.ybtvyun.com/video/s10016-c5713f73d666/index.m3u8
 #EXTINF:-1,연변라지오TV넷 조선어종합채널
-http://live.ybtvyun.com/video/s10016-3f1f847a4c2d/index.m3u8
+http://live.ybtvyun.com/video/s10016-af95004b6d1a/index.m3u8
 #EXTINF:-1,연변라지오TV넷 한어종합채널
-http://live.ybtvyun.com/video/s10016-783d533b0361/index.m3u8
+http://live.ybtvyun.com/video/s10016-20b6acaa07f8/index.m3u8
 #EXTINF:-1,연변라지오TV넷 보이는 라지오
 http://live.ybtvyun.com/video/s10016-1be8f17b0ab7/index.m3u8
