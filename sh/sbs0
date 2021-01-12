@@ -9,7 +9,7 @@ usage () {
 
 sbs () {
  api=$(curl -s "http://apis.sbs.co.kr/play-api/1.0/onair/channel/S$1?v_type=2&platform=pcweb&protocol=hls" | grep -o 'mediaurl.*' | cut -d\" -f3)
- url=$(curl -s "$api" | tail -1)
+ url=$(echo "$api" | cut -d\/ -f-5)/$(curl -s "$api" | tail -1)
 }
 
 case $1 in
