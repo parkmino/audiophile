@@ -1,4 +1,5 @@
 #!/bin/sh
+mpc>/dev/null || exit
 mpc -f "[[[%artist% - ]%title%]|[%file%]] (%time%)" playlist | nl -w3 -s'. '
 echo
 mpc -f "  %position%. [[[%artist% - ]%title%]|[%file%]]" status
