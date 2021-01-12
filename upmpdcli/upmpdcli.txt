@@ -1,9 +1,9 @@
 [1.5.6]
 
 $ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libn/libnpupnp1/libnpupnp1_4.0.14-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp6/libupnpp6_0.20.1-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.5.6-1~ppa1~buster_armhf.deb
-$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-hra_1.5.6-1~ppa1~buster_all.deb https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-qobuz_1.5.6-1~ppa1~buster_all.deb https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-spotify_1.5.6-1~ppa1~buster_all.deb https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-uprcl_1.5.6-1~ppa1~buster_all.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/libu/libupnpp6/libupnpp6_0.20.2-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli_1.5.8-1~ppa1~buster_armhf.deb
+$ wget https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-hra_1.5.8-1~ppa1~buster_all.deb https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-qobuz_1.5.8-1~ppa1~buster_all.deb https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-spotify_1.5.8-1~ppa1~buster_all.deb https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upmpdcli/upmpdcli-uprcl_1.5.8-1~ppa1~buster_all.deb
 
 $ sudo apt-get install libmpdclient2 libexpat1 libcurl4 libmicrohttpd12 libjsoncpp1 python3 python3-requests
 $ sudo dpkg -i lib*upnp*.deb upmpdcli_*.deb
