@@ -12,8 +12,8 @@ dot () {
 
 #dot &
 
-sudo wget https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/librespot -P /root/copy/
-sudo chmod 755 /root/copy/librespot
+sudo wget https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/librespot -P /root/
+sudo chmod 755 /root/librespot
 consf spotify on
 
 #kill $!
