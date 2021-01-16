@@ -90,7 +90,7 @@ spotifyd () {
 
 airconnect () {
  cp /home/pi/airupnp-arm /dev/shm/
-/dev/shm/airupnp-arm -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
+/dev/shm/airupnp-arm -l 1000:2000 -r -Z -z>/dev/null</dev/null 2>/dev/null
  [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-arm) || true
 }
 

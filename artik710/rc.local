@@ -89,7 +89,7 @@ spotifyd () {
 
 airconnect () {
  cp /root/airupnp-aarch64 /dev/shm/
-/dev/shm/airupnp-aarch64 -l 1000:2000 -Z -z>/dev/null</dev/null 2>/dev/null
+/dev/shm/airupnp-aarch64 -l 1000:2000 -r -Z -z>/dev/null</dev/null 2>/dev/null
  [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-aarch64) || true
 }
 
