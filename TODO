@@ -112,23 +112,22 @@
 		#for pid in 1 $(pgrep -x rc.local); do
 		# taskset -cp $s_task $pid || true
 		#done
-	##nano /etc/mpd.conf.sav
-		audio_buffer_size "3683"
-		buffer_before_play "10.559693729803665754847%"
 	# nano /etc/mpd.conf.sav
 		audio_buffer_size "3684"
-		buffer_before_play "9.9999039%"
+		buffer_before_play "9.999903975%"
 
 4. Shell redirection
 
 	$ sudo nano /etc/rc.local
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 		>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
+	$ sudo sed -i 's/1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
+	$#sudo sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
 
 5. hdparm
 
 	$ sudo nano /etc/hdparm.conf
-		read_ahead_sect = 1928
+		read_ahead_sect = 1928	# 1936
 	$ sudo hdparm -a1928 /dev/sda
 
 6. More CPU Affinities
