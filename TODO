@@ -1,138 +1,29 @@
-1. Artik
-
-1.0 Update
-
-    # apt-get update
-    # apt-get upgrade
-    # apt-get dist-upgrade
-    # youtube-dl --update
-
-    # scp consf audioconf upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb *.png *.lua root@192.168.0.x:/root/copy/
-
-1.1 Menu
-
-    # nano /etc/default/audio.conf
-    	sound=balanced
-    # cp copy/consf /usr/bin/consf
-    # cp copy/audioconf /usr/bin/audioconf
-
-    # rm /root/release
-    # echo "* Bann Sylphid Network Player $(date +"%y%m%d")" > /etc/release
-
-1.2 CPU Affinities
-
-    # for i in $(grep -o ' [0-9]*:' /proc/interrupts | tr -d ' ' | tr -d ':'); do grep "^ *${i}:" /proc/interrupts; cat /proc/irq/$i/smp_affinity; done
-
-    # cp /etc/rc.local /etc/rc.local.old
-    # truncate -s 0 /etc/rc.local
-    # nano /etc/rc.local
-
-	procnr=$(nproc --all)
-	if   [ "$procnr" -eq 2 ]; then
-	 m_task=0; s_task=1; h_task=1; o_task=1
-	elif [ "$procnr" -eq 4 ]; then
-	 m_task=2; s_task=0; h_task=3; o_task=1
-	elif [ "$procnr" -ge 8 ]; then
-	 m_task=6; s_task=4; h_task=2; o_task=0,1,3,5,7
-	else
-	 m_task=0; s_task=0; h_task=0; o_task=0
-	fi
-	
-	### Taskset
-	if   [ "$sound" = sharp ]; then
-	 for i in $(awk '/spi|watchdog|tmuctrl|vip0|hdmi/{print +$1}' /proc/interrupts); do
-	  echo "3F" > /proc/irq/$i/smp_affinity
-	 done
-	elif [ "$sound" = warm ]; then
-	 for i in $(awk '/hdmi|Mali/{print +$1}' /proc/interrupts); do
-	  echo "3F" > /proc/irq/$i/smp_affinity
-	 done
-	fi
-
-	for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
-	 echo "FF" > /proc/irq/$i/smp_affinity
-	done	
-	for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
-	 echo "10" > /proc/irq/$i/smp_affinity
-	done
-	for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
-	 echo "40" > /proc/irq/$i/smp_affinity
-	done
-	echo "10" > /proc/irq/default_smp_affinity
-	for pid in 1 $(pgrep -x rc.local); do
-	 taskset -cp $s_task $pid || true
-	done
-	
-	for i in RoonBridge librespot networkaudiod; do
-	 if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
-	  taskset -acp 0-$procnr $(pidof $i) || true # $s_task
-	 fi
-	done
-
-1.3 Upmpdcli 1.4.14
-
-	# sudo dpkg -i copy/upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb
-
-1.4 Update myMPD 6.9.0
-
-	# apt-get install liblua5.3-0
-	# dpkg -i copy/mympd_6.9.0-1_arm64.deb
-	# mv copy/*.png /var/lib/mympd/pics/
-	# mv copy/*.lua /var/lib/mympd/scripts/
-	# nano /etc/mympd.conf
-		#syscmds = true
-		 scripting = true
-		 lualibs = base, string, utf8, table, math, mympd, io
-		 footerstop = both
-	# reboot
-	# mympd
-		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
-		IP 주소 읽기, record_voice_over, #28a745, iptts
-		전원 끄기, power_off, #28a745, poweroff
-
-2. ALSA 1.2.3.1
-
-3. CPU Affinities for MPD
-
-	# nano /etc/rc.local
-		#taskset -pc $s_task,$h_task,$o_task $pgr_mpd
-		   mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-		   io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-		   rtio)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr
-				 chrt -opv 0         			$proc_nr ;;
-		# player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-		# decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-		  output)	 taskset -cp $m_task			$proc_nr
-				 chrt -opv 0				$proc_nr ;;
-		...
-		#for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
-		# taskset -acp $s_task,$h_task,$o_task $pid 2>/dev/null || true
-		#done
-		...
-		#for pid in 1 $(pgrep -x rc.local); do
-		# taskset -cp $s_task $pid || true
-		#done
-	# nano /etc/mpd.conf.sav
+01. MPD audio buffer
+	$ sudo nano /etc/mpd.conf.sav
 		audio_buffer_size "3684"
 		buffer_before_play "9.999903975%"
 
-4. Shell redirection
+02. Shell redirection
+
+	>/dev/null</dev/null 2>/dev/null =>   1</dev/null 2</dev/null 0</dev/null
 
 	$ sudo nano /etc/rc.local
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
-		>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
-		>/dev/null</dev/null 2>/dev/null => 1</dev/zero 2</dev/zero 0</dev/zero
-		>/dev/null</dev/null 2>/dev/null => &>/dev/null</dev/zero
-	$ sudo sed -i 's/1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
-	$#sudo sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
 
-5. hdparm
+	$ sudo sed -i 's/1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/g' /etc/rc.local /opt/RoonBridge/Bridge/RoonBridge
+
+03. ALSA conf
+
+	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
+		pcm.hw{type hw card 0 device 0 subdevice 0}
+
+04. hdparm
 
 	$ sudo nano /etc/hdparm.conf
-		read_ahead_sect = 1928	# 1968
-	$ sudo hdparm -a1928 /dev/sda
+		read_ahead_sect = 1968
+	$ sudo hdparm -a1968 /dev/sda
 
-6. More CPU Affinities
+05. More CPU Affinities
 
 	$ sudo nano /etc/rc.local
 		#for i in agetty mympd ttyd; do
@@ -146,7 +37,7 @@
 	$ sudo nano /etc/rc.local
 		[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf 1</dev/null 2</dev/null 0</dev/null&
 
-7. myMPD customized navbar
+06. myMPD customized navbar
 
 	$ sudo nano /var/lib/mympd/state/navbar_icons
 		[
@@ -200,11 +91,3 @@
 		  }
 		]
 
-8. sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
-
-	pcm.hw={type hw card 0 device 0 subdevice 0}
-
-9. alsa library --with-configdir=/dev/shm
-
-10. &>/dev/null  < /dev/null		# pcm.hw{type hw card 0 device 0 subdevice 0}
-     1</dev/null 2</dev/null 0</dev/null	# pcm.hw{type hw card 0 device 0 subdevice 0}
