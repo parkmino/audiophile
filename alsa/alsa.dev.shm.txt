@@ -1,0 +1,84 @@
+### Build ALSA Library
+
+$ cd ~
+$ ver=1.2.3.1
+$ wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-$ver.tar.bz2
+$ tar xvjf alsa-lib-$ver.tar.bz2
+$ cd alsa-lib-$ver
+$#export CFLAGS="-march=native -O2" ; export CXXFLAGS="-march=native -O2" ; export CPPFLAGS="-march=native -O2"
+$ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
+$ ./configure --help
+
+## Minimal
+$ ./configure --disable-aload --disable-mixer --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-configdir=/dev/shm #--disable-thread-safety
+$ sudo make install
+$ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.min_$ver.dev.shm
+
+## Mixer
+$ ./configure --disable-aload --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw --with-configdir=/dev/shm #--disable-thread-safety
+$ sudo make install
+$ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.mix_$ver.dev.shm
+
+## Plug
+$ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw,plughw --with-ctl-plugins=hw --with-configdir=/dev/shm #--disable-thread-safety
+$ sudo make install
+$ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.plug_$ver.dev.shm
+
+$ ls -al /usr/lib/libasound.so.2.0.0.*
+$ sudo chmod -x /usr/lib/libasound.so.2.0.0.*
+$ file /usr/lib/libasound.so.2.0.0.*
+$ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0.*
+$ ls -al /usr/lib/libasound.so.2.0.0.*
+
+$ scp pi@192.168.0.x:/usr/lib/libasound.so.2.0.0.* ./
+
+$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
+$ sudo cp /usr/lib/libasound.so.2.0.0.min_$ver.dev.shm  /etc/libasound.so.2.0.0.min
+$ sudo cp /usr/lib/libasound.so.2.0.0.mix_$ver.dev.shm  /etc/libasound.so.2.0.0.mix
+$ sudo cp /usr/lib/libasound.so.2.0.0.plug_$ver.dev.shm /etc/libasound.so.2.0.0.plug
+$ sudo rm -i /usr/lib/libasound*
+$ unset ver
+
+## Ubuntu
+$ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw --with-configdir=/dev/shm #--disable-thread-safety
+$ sudo make install
+$ ls -al /usr/lib/libasound.so.2.0.0
+$ sudo chmod -x /usr/lib/libasound.so.2.0.0
+$ file /usr/lib/libasound.so.2.0.0
+$ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0
+$ sudo mv /usr/lib/libasound.so.2.0.0 /etc/libasound.so.2.0.0_$ver.dev.shm
+$ sudo rm -i /usr/lib/libasound*
+$ unset ver
+
+### Tweak ALSA Library
+
+$ dpkg-query -l 'libasound*'
+$ sudo apt-get remove '^libasound2-plugin.*'
+$ ls /usr/lib/*/alsa-lib/ 2>/dev/null
+$ sudo rm -rf /usr/lib/*/alsa-lib/
+
+$ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
+$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+$ sudo mv copy/libasound.so.2.0.0.{min,mix,plug} /etc/
+$ sudo rm -i /usr/lib/libasound* /usr/lib/arm-linux-gnueabihf/libasound*
+$ ls -al /dev/shm/
+$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
+	/dev/shm/
+$ sudo ldconfig
+$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so.*,audiofile.so.*,FLAC.so.*} 2>/dev/null
+
+$ [ -d /usr/share/alsa.orig ] && sudo rm -rf /usr/share/alsa.orig
+$ sudo mv /usr/share/alsa /usr/share/alsa.orig
+$ sudo systemctl mask alsa-store.service
+$ sudo systemctl mask alsa-restore.service
+$ sudo nano /lib/modprobe.d/aliases.conf
+	#options snd-usb-audio index=-2
+$#sudo mkdir /usr/share/alsa
+$#sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+$ sudo mv copy/alsa.conf.{min,mix,plug} /dev/shm/
+
+$ sudo cp /dev/shm/alsa.conf.min /dev/shm/alsa.conf
+$#sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+
+$ sudo nano /etc/rc.local
+$ sudo reboot

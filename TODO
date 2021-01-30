@@ -121,13 +121,15 @@
 	$ sudo nano /etc/rc.local
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 		>/dev/null</dev/null 2>/dev/null => 1</dev/null 2</dev/null 0</dev/null
+		>/dev/null</dev/null 2>/dev/null => 1</dev/zero 2</dev/zero 0</dev/zero
+		>/dev/null</dev/null 2>/dev/null => &>/dev/null</dev/zero
 	$ sudo sed -i 's/1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
 	$#sudo sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
 
 5. hdparm
 
 	$ sudo nano /etc/hdparm.conf
-		read_ahead_sect = 1928	# 1936
+		read_ahead_sect = 1928	# 1968
 	$ sudo hdparm -a1928 /dev/sda
 
 6. More CPU Affinities
@@ -198,3 +200,11 @@
 		  }
 		]
 
+8. sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
+
+	pcm.hw={type hw card 0 device 0 subdevice 0}
+
+9. alsa library --with-configdir=/dev/shm
+
+10. &>/dev/null  < /dev/null		# pcm.hw{type hw card 0 device 0 subdevice 0}
+     1</dev/null 2</dev/null 0</dev/null	# pcm.hw{type hw card 0 device 0 subdevice 0}
