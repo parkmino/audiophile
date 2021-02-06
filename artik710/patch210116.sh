@@ -6,7 +6,7 @@
 ### Update Upmpdcli 1.4.14
 
 [ ! -d /root/copy ] && mkdir /root/copy
-wget -O -P /root/copy/ https://github.com/parkmino/audiophile/raw/master/artik710/libnpupnp1_4.0.14-1~ppa1~xenial1_arm64.deb https://github.com/parkmino/audiophile/raw/master/artik710/libupnpp6_0.20.1-1~ppa1~xenial1_arm64.deb https://github.com/parkmino/audiophile/raw/master/artik710/upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb
+wget -P /root/copy/ https://github.com/parkmino/audiophile/raw/master/artik710/libnpupnp1_4.0.14-1~ppa1~xenial1_arm64.deb https://github.com/parkmino/audiophile/raw/master/artik710/libupnpp6_0.20.1-1~ppa1~xenial1_arm64.deb https://github.com/parkmino/audiophile/raw/master/artik710/upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb
 dpkg -i /root/copy/libnpupnp1_4.0.14-1~ppa1~xenial1_arm64.deb /root/copy/libupnpp6_0.20.1-1~ppa1~xenial1_arm64.deb
 dpkg -i --force-confold /root/copy/upmpdcli_1.4.14-1~ppa6~xenial1_arm64.deb
 systemctl disable upmpdcli
