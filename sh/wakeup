@@ -52,7 +52,7 @@ for i in $(ls /proc/sys/net/ipv4/conf/*/promote_secondaries | cut -d\/ -f4-); do
  sudo sysctl -w $i=0
 done
 
-ls -al /dev/shm/libasound.so* /usr/share/alsa/alsa.conf
+ls -al /dev/shm/libasound.so* /dev/shm/alsa.conf
 
 for i in /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer; do # /dev/snd/control*
  [ -f "$i" ] && sudo rm "$i"
