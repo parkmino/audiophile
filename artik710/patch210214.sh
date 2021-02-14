@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210207.sh)
-#bash <(curl -sL https://bit.ly/3oZE4EC)
+#bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210214.sh)
+#bash <(curl -sL https://bit.ly/...)
 
 ### 1. Tune ALSA Library
 
@@ -18,18 +18,22 @@ sed -i 's/pcm.hw {/pcm.hw{/' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
 ### 3. Tune Shell Redirection
 
-sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/  \&>   \/dev\/null  <  \/dev\/null/g' /etc/rc.local
-sed -i 's/>\/dev\/null<\/dev\/null 2>\/dev\/null/  \&>   \/dev\/null  <  \/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
+sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/     \&>   \/dev\/null  <  \/dev\/null/g' /etc/rc.local
+sed -i 's/>\/dev\/null<\/dev\/null 2>\/dev\/null/     \&>   \/dev\/null  <  \/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
 
 ### 4. Tune MPD buffer_before_play
 
 sed -i 's/0.*%/03975%/' /etc/mpd.conf.sav
 
-### 5. Update Release
+### 5. Tune Kernel Parameters
+
+sed -i 's/229978/229880/g; s/388287/388289/g; s/1394065/1394066/g; s/4899005/4899007/g; s/4604 88254 3345671/4606 88254 3345673/g; s/4528 89899 3455599/4533 89902 3455603/g' /etc/sysctl.conf
+
+### 6. Update Release
 
 sed -i 's/[0-9]*$/210207/' /etc/release
 
-### 5. Clear History & Sync
+### 7. Clear History & Sync
 
 rm -f /root/.bash_history ~/.bash_history ; history -c
 sync
