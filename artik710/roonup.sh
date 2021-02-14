@@ -17,4 +17,4 @@ find /opt/RoonBridge/ -name *.so -exec chmod -x {} \; -exec strip --strip-debug 
 mv /opt/RoonBridge/Bridge/RoonBridge       /opt/RoonBridge/Bridge/RoonBridge.orig
 mv /opt/RoonBridge/Bridge/RoonBridge.tweak /opt/RoonBridge/Bridge/RoonBridge
 
-printf "* Finished and reboot to take effect. \n* 완료되어 시스템을 다시 시작하면 적용됩니다. (^_^)\n"
+printf "\n* Finished and reboot to take effect. \n* 완료되어 시스템을 다시 시작하면 적용됩니다. (^_^)\n"
