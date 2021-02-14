@@ -16,14 +16,14 @@
 
 03. Shell redirection
 
-	 1</dev/null 2</dev/null 0</dev/null[=>]  &>   /dev/null  <  /dev/null
-	>/dev/null</dev/null 2>/dev/null[=>]  &>   /dev/null  <  /dev/null
+	 1</dev/null 2</dev/null 0</dev/null[=>]     &>   /dev/null  <  /dev/null
+	>/dev/null</dev/null 2>/dev/null[=>]     &>   /dev/null  <  /dev/null
 
 	$ sudo nano /etc/rc.local
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 
-	$ sudo sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/  \&>   \/dev\/null  <  \/dev\/null/g' /etc/rc.local
-	$ sudo sed -i 's/>\/dev\/null<\/dev\/null 2>\/dev\/null/  \&>   \/dev\/null  <  \/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
+	$ sudo sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/     \&>   \/dev\/null  <  \/dev\/null/g' /etc/rc.local
+	$ sudo sed -i 's/>\/dev\/null<\/dev\/null 2>\/dev\/null/     \&>   \/dev\/null  <  \/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
 
 04. MPD audio buffer
 	$ sudo nano /etc/mpd.conf.sav
@@ -38,7 +38,19 @@
 		read_ahead_sect = 1968
 	$ sudo hdparm -a1968 /dev/sda
 
-06. More CPU Affinities
+06. Tune Kernel Parameters
+
+	$ sudo nano /etc/sysctl.conf
+		kernel.sched_min_granularity_ns = 229980
+		kernel.sched_wakeup_granularity_ns = 388289
+		kernel.sched_latency_ns = 1394066
+		kernel.sched_migration_cost_ns = 4899007
+		net.ipv4.tcp_rmem = 4606 88254 3345673
+		net.ipv4.tcp_wmem = 4533 89902 3455603
+	
+	$ sudo sed -i 's/229978/229880/g; s/388287/388289/g; s/1394065/1394066/g; s/4899005/4899007/g; s/4604 88254 3345671/4606 88254 3345673/g; s/4528 89899 3455599/4533 89902 3455603/g' /etc/sysctl.conf
+
+07. More CPU Affinities
 
 	$ sudo nano /etc/rc.local
 		#for i in agetty mympd ttyd; do
@@ -52,7 +64,12 @@
 	$ sudo nano /etc/rc.local
 		[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf  &>   /dev/null  <  /dev/null&
 
-07. myMPD customized navbar
+08. Tune squeezelite
+
+	$ sudo nano /etc/rc.local
+		/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 49:10::1 -b 4018:3082
+
+09. myMPD customized navbar
 
 	$ sudo nano /var/lib/mympd/state/navbar_icons
 		[
