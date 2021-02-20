@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 #https://github.com/Orochimarufan/vlyc2/blob/master/plugins/python/plugins/sbs.py
 
