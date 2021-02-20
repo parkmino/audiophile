@@ -43,12 +43,12 @@
 	$ sudo nano /etc/sysctl.conf
 		kernel.sched_min_granularity_ns = 229980
 		kernel.sched_wakeup_granularity_ns = 388289
-		kernel.sched_latency_ns = 1394066
+		kernel.sched_latency_ns = 1394067
 		kernel.sched_migration_cost_ns = 4899007
 		net.ipv4.tcp_rmem = 4606 88254 3345673
-		net.ipv4.tcp_wmem = 4533 89902 3455603
+		net.ipv4.tcp_wmem = 4534 89903 3455605
 	
-	$ sudo sed -i 's/229978/229880/g; s/388287/388289/g; s/1394065/1394066/g; s/4899005/4899007/g; s/4604 88254 3345671/4606 88254 3345673/g; s/4528 89899 3455599/4533 89902 3455603/g' /etc/sysctl.conf
+	$ sudo sed -i 's/229978/229880/g; s/388287/388289/g; s/1394065/1394067/g; s/4899005/4899007/g; s/4604 88254 3345671/4606 88254 3345673/g; s/4528 89899 3455599/4534 89903 3455605/g' /etc/sysctl.conf
 
 07. More CPU Affinities
 
