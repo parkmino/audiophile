@@ -115,14 +115,14 @@ http://mediaworks.dema.mil.kr:1935/live_edge/audio.sdp/playlist.m3u8
 http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8
 #EXTINF:-1,국악방송 라디오
 http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
+#EXTINF:-1,국회방송
+https://m.webcast.go.kr/live/_definst_/smil:natv_720p.smil/playlist.m3u8
 #EXTINF:-1,머니투데이방송
 http://moneytoday1.ktcdn.co.kr:1935/mtnlive/720/playlist.m3u8
 #EXTINF:-1,복지TV
 http://121.78.81.179:1935/smartlive/312/46324be24454bd98f785039457ac695d/playlist.m3u8
 #EXTINF:-1,소상공인방송
 http://139.150.248.29:1935/smartlive/558/91258ac21591769e21f41b96f26d883e/playlist.m3u8
-#EXTINF:-1,아르떼TV
-http://etomatomobile.hscdn.com/artemobile/livestream/playlist.m3u8
 #EXTINF:-1,아리랑TV
 http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
 #EXTINF:-1,이데일리TV
@@ -131,6 +131,10 @@ http://edaily.flive.skcdn.com:1935/high/livestream/playlist.m3u8
 http://121.78.81.179/smartlive/436/101d1ccdeb2cd1794db38206dcec198d/playlist.m3u8
 #EXTINF:-1,채널i
 http://121.78.242.199:1935/live/stream.sdp/playlist.m3u8
+#EXTINF:-1,토마토TV
+https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8
+#EXTINF:-1,부동산토마토
+http://rtomatofms2.hscdn.com/rtomato/livestream/playlist.m3u8
 #EXTINF:-1,피싱TV
 http://media.fishingtv.kr:1935/mobileLIVE/_definst_/mp4:livestream.sdp/playlist.m3u8
 #EXTINF:-1,한국농업방송
@@ -155,7 +159,7 @@ https://5ee9633b25727.streamlock.net/live/_definst_/obsw.stream/playlist.m3u8
 http://58.234.158.60:1935/catvlive/myStream/playlist.m3u8
 #EXTINF:-1,tbsFM
 http://58.234.158.60:1935/fmlive/myStream/playlist.m3u8
-#EXTINF:-1,YTN 라이프
+#EXTINF:-1,YTN2
 http://slive.ytn.co.kr:1935/weather/weather_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 사이언스
 http://slive.sciencetv.kr:1935/science/yslive_20140419_1/playlist.m3u8
