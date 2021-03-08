@@ -8,8 +8,9 @@ echo "\
 (\e[32mt\e[0m) tbs TV
 (\e[32my\e[0m) 연합뉴스TV
 (\e[32mv\e[0m) YTN LIVE
-(\e[32mf\e[0m) YTN 라이프
+(\e[32m2\e[0m) YTN2
 (\e[32mc\e[0m) YTN 사이언스
+(\e[32ma\e[0m) ArteTV
 (\e[32mg\e[0m) 맛있는 녀석들
 (\e[32m0\e[0m) 김기열
 (\e[32m1\e[0m) 여은파"
@@ -26,9 +27,10 @@ case $i in
  t) ch=tbs         ; url="https://www.youtube.com/user/seoultbstv/featured"         ;;
  y) ch=yonhap      ; url="https://www.youtube.com/channel/UCTHCOPwqNfZ0uiKOvFyhGwg" ;;
  v) ch=ytn         ; url="https://www.youtube.com/user/ytnnews24"                   ;;
- f) ch=ytn_life    ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
+ 2) ch=ytn2        ; url="https://www.youtube.com/channel/UCDww6ExpwQS0TzmREIOo40Q" ;;
  c) ch=ytn_science ; url="https://www.youtube.com/user/ytnscience"                  ;;
  r) ch=rtv         ; url="https://www.youtube.com/channel/UCvogIa1elSl9iwF4MbRXmAQ" ;;
+ a) ch=artetv      ; url="https://www.youtube.com/channel/UCPglj7zGwmOlH8_31Tpgh8Q" ;;
  g) ch=tastyguys
     printf "#EXTM3U\n" > $m3u_dir/$ch.m3u
     for url in "https://www.youtube.com/channel/UCHcsy2HkeLAus-43nKDm09Q" "https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"; do

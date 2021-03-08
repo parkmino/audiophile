@@ -13,7 +13,9 @@ until pstree -pt $pgr_mpv | grep -q mpv/ao; do
 done
 sleep 1
 
-if   [ "$(nproc --all)" -eq 4 ]; then
+procnr=$(nproc --all)
+
+if   [ "$procnr" -eq 4 ]; then
  m_task=2; s_task=0; h_task=3; o_task=1,3
 else
  m_task=0; s_task=0; h_task=0; o_task=0
@@ -25,12 +27,14 @@ echo "$(pstree -npt $pgr_mpv)" | while read line; do
     proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1)
  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
  case $proc in
-# mpv/demux)
-#  taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
-# mpv/vo|mpv/lua*)
-#  taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
-# mpv/worker)
-#  taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+  mpv/lua*|mpv/vo)
+   taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+  mpv:disk*)
+   taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+  mpv/worker)
+   taskset -pc $s_task,$h_task,$o_task	$proc_nr ;;
+  mpv/demux)
+   taskset -pc 0-"$procnr"		$proc_nr ;;
   mpv/ao)
    taskset -pc $m_task			$proc_nr ;;
 # *)

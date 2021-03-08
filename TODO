@@ -10,6 +10,12 @@
 
 	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
 		pcm.hw{type hw card 0 device 0 subdevice 0}
+		pcm.hw {  type hw  card 0    device 0 subdevice 0}
+		pcm.hw {  @args[CARD DEV SUBDEV]
+		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
+		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
+		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
+		type hw  card $CARD    device $DEV subdevice $SUBDEV
 
 	$ sudo rm /usr/share/alsa/alsa.conf
 	$ sudo sed -i 's/pcm.hw {/pcm.hw{/' /usr/share/alsa/alsa.conf.{min,mix,plug}
@@ -29,26 +35,27 @@
 	$ sudo nano /etc/mpd.conf.sav
 		audio_buffer_size "3684"
 		buffer_before_play "9.999903975%"
+		buffer_before_play "9.999903974999%"
 
-	$ sudo sed -i 's/0.*%/03975%/' /etc/mpd.conf.sav
+	$ sudo sed -i 's/0.*%/03974999%/' /etc/mpd.conf.sav
 
 05. hdparm
 
 	$ sudo nano /etc/hdparm.conf
-		read_ahead_sect = 1968
-	$ sudo hdparm -a1968 /dev/sda
+		read_ahead_sect = 2040
+	$ sudo hdparm -a2040 /dev/sda
 
 06. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 229980
-		kernel.sched_wakeup_granularity_ns = 388289
-		kernel.sched_latency_ns = 1394067
-		kernel.sched_migration_cost_ns = 4899007
-		net.ipv4.tcp_rmem = 4606 88254 3345673
-		net.ipv4.tcp_wmem = 4534 89903 3455605
+		kernel.sched_min_granularity_ns = 229988
+		kernel.sched_wakeup_granularity_ns = 388298
+		kernel.sched_latency_ns = 1394080
+		kernel.sched_migration_cost_ns = 4899018
+		net.ipv4.tcp_rmem = 4610 88275 3345697
+		net.ipv4.tcp_wmem = 4542 89926 3455666
 	
-	$ sudo sed -i 's/229978/229880/g; s/388287/388289/g; s/1394065/1394067/g; s/4899005/4899007/g; s/4604 88254 3345671/4606 88254 3345673/g; s/4528 89899 3455599/4534 89903 3455605/g' /etc/sysctl.conf
+	$ sudo sed -i 's/229978/229883/g; s/388287/388293/g; s/1394065/1394069/g; s/4899005/4899019/g; s/4604 88254 3345671/4610 88275 3345697/g; s/4528 89899 3455599/4542 89923 3455666/g' /etc/sysctl.conf
 
 07. More CPU Affinities
 
