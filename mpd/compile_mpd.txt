@@ -117,3 +117,5 @@ $ mkdir -p output/win64
 $ cd output/win64
 $#export LDFLAGS="-fstack-protector" ; export LIBS="-lssp"
 $ ../../win32/build.py --64
+$ cp mpd.exe mpd.orig.exe
+$ strip --strip-debug mpd.exe
