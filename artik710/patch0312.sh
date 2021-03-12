@@ -14,7 +14,8 @@ sed -i 's/libasound.so.2.0.0.min/libasound.so.2.0.0.min.dev.shm/; s/libasound.so
 ### 2. Tune ALSA Configuration
 
 rm /usr/share/alsa/alsa.conf
-sed -i 's/pcm.hw {/pcm.hw{/' /usr/share/alsa/alsa.conf.{min,mix,plug}
+sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0    device 0 sub/' /usr/share/alsa/alsa.conf.min
+sed -i 's/pcm.hw.*args/pcm.hw {  @arg/; s/^type hw.*sub/type hw  card $CARD    device $DEV sub/' /usr/share/alsa/alsa.conf.{mix,plug}
 
 ### 3. Tune Shell Redirection
 
@@ -23,11 +24,11 @@ sed -i 's/>\/dev\/null<\/dev\/null 2>\/dev\/null/     \&>   \/dev\/null  <  \/de
 
 ### 4. Tune MPD buffer_before_play
 
-sed -i 's/0.*%/03975%/' /etc/mpd.conf.sav
+sed -i 's/0.*%/03974999%/' /etc/mpd.conf.sav
 
 ### 5. Tune Kernel Parameters
 
-sed -i 's/229978/229880/g; s/388287/388289/g; s/1394065/1394066/g; s/4899005/4899007/g; s/4604 88254 3345671/4606 88254 3345673/g; s/4528 89899 3455599/4533 89902 3455603/g' /etc/sysctl.conf
+sed -i 's/229978/229888/g; s/388287/388298/g; s/1394065/1394080/g; s/4899005/4899018/g; s/4604 88254 3345671/4610 88275 3345697/g; s/4528 89899 3455599/4542 89926 3455666/g' /etc/sysctl.conf
 
 ### 6. Update Release
 
