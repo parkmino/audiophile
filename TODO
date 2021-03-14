@@ -35,7 +35,7 @@
 04. MPD audio buffer
 	$ sudo nano /etc/mpd.conf.sav
 		audio_buffer_size "3684"
-		buffer_before_play "9.999903974999%"
+		buffer_before_play "9.9999039749999%"
 
 	$ sudo sed -i 's/0.*%/03974999%/' /etc/mpd.conf.sav
 
@@ -48,14 +48,14 @@
 06. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 229988
-		kernel.sched_wakeup_granularity_ns = 388298
-		kernel.sched_latency_ns = 1394080
-		kernel.sched_migration_cost_ns = 4899018
-		net.ipv4.tcp_rmem = 4610 88275 3345697
-		net.ipv4.tcp_wmem = 4542 89926 3455666
+		kernel.sched_min_granularity_ns = 229991
+		kernel.sched_wakeup_granularity_ns = 388308
+		kernel.sched_latency_ns = 1394083
+		kernel.sched_migration_cost_ns = 4899022
+		net.ipv4.tcp_rmem = 4610 88276 3345697
+		net.ipv4.tcp_wmem = 4543 89927 3455670
 	
-	$ sudo sed -i 's/229978/229888/g; s/388287/388298/g; s/1394065/1394080/g; s/4899005/4899018/g; s/4604 88254 3345671/4610 88275 3345697/g; s/4528 89899 3455599/4542 89926 3455666/g' /etc/sysctl.conf
+	$ sudo sed -i 's/229978/229991/g; s/388287/388308/g; s/1394065/1394083/g; s/4899005/4899022/g; s/4604 88254 3345671/4610 88276 3345697/g; s/4528 89899 3455599/4543 89927 3455670/g' /etc/sysctl.conf
 
 07. More CPU Affinities
 
