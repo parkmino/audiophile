@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210214.sh)
+#bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210316.sh)
 #bash <(curl -sL https://bit.ly/...)
 
 ### 1. Tune ALSA Library
@@ -24,7 +24,7 @@ sed -i 's/>\/dev\/null<\/dev\/null 2>\/dev\/null/     \&>   \/dev\/null  <  \/de
 
 ### 4. Tune MPD buffer_before_play
 
-sed -i 's/0.*%/03974999%/' /etc/mpd.conf.sav
+sed -i 's/0.*%/039749999%/' /etc/mpd.conf.sav
 
 ### 5. Tune Kernel Parameters
 
@@ -32,7 +32,7 @@ sed -i 's/229978/229888/g; s/388287/388298/g; s/1394065/1394080/g; s/4899005/489
 
 ### 6. Update Release
 
-sed -i 's/[0-9]*$/210207/' /etc/release
+sed -i 's/[0-9]*$/210316/' /etc/release
 
 ### 7. Clear History & Sync
 
