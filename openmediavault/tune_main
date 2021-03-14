@@ -1,0 +1,16 @@
+#!/bin/sh
+
+swapoff -a
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+ renice -2 $i
+done
+
+for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+ chrt -op 0 $i
+ renice  -3 $i
+done
+
+for i in $(awk '/snd/{print +$1}' /proc/interrupts); do
+ echo "4" > /proc/irq/$i/smp_affinity
+done

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") [install|on|off]"
+ echo "Install and turn on/off AirPlay"
+}
+
+audio_conf=/etc/default/audio.conf
+
+if [ "$1" = install ]; then
+ wget https://github.com/philippe44/AirConnect/raw/master/bin/airupnp-x86-64-static -O /usr/local/bin/airupnp-x86-64
+ chmod 755 /usr/local/bin/airupnp-x86-64
+ systemctl start  airplay
+ systemclt enable airplay
+ consf airplay on
+elif [ "$1" = on ]; then
+ systemctl start  airplay
+ systemctl enable airplay
+ const airplay on
+elif [ "$1" = off ]; then
+ systemctl stop    airplay
+ systemctl disable airplay
+ consf airplay off
+else
+ usage
+ echo "* AirPlay is [ $(grep ^airplay= $audio_conf | cut -d= -f2) ]"
+ exit
+fi
+
+printf "\n* Finished and reboot to take effect. \n* 완료되어 시스템을 다시 시작하면 적용됩니다. (^_^)\n"

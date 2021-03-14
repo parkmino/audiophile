@@ -1,0 +1,13 @@
+[Unit]
+Description=Airplay Daemon
+
+[Service]
+#StandardInput=null
+StandardOutput=null
+#StandardError=null
+
+ExecStartPre=cp /usr/local/bin/librespot /dev/shm/
+ExecStart=/dev/shm/librespot -b 320 --backend alsa --device pcm.hw --mixer alsa --mixer-name Master
+
+[Install]
+WantedBy=multi-user.target

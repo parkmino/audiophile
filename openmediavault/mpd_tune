@@ -1,0 +1,50 @@
+#!/bin/sh
+
+mpd_ver=$(/dev/shm/mpd --version | head -1 | cut -d. -f2 | cut -d~ -f1)
+
+sec=0
+until [ ! -z $(pgrep -x mpd) ]; do
+ sleep 1
+ sec=$(($sec+1))
+ [ "$sec" -ge 10 ] && printf "\nMPD is not available!\n" && exit
+done
+
+sleep 1
+[ "$mpd_ver" -ge 21 ] && mpc add Etc/blank.mp3 && mpc play $(mpc playlist | wc -l)
+
+sec=0
+until [ ! -z $(pgrep -x mpd) ] && $(pstree -npt $(pgrep -x mpd) | grep -q output); do
+ [ "$mpd_ver" -ge 21 ] && mpc play $(mpc playlist | wc -l)
+ sec=$(($sec+1))
+ [ "$sec" -ge 5 ] && printf "\nNo MPD audio output and exit!\n" && exit
+done
+
+B[ "$mpd_ver" -ge 21 ] && mpc del $(mpc playlist | wc -l)
+
+procnr=$(nproc --all)
+if   [ "$procnr" -eq 4 ]; then
+ m_task=2; s_task=0; h_task=3; o_task=1,3
+elif [ "$procnr" -eq 8 ]; then
+ m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
+else
+ m_task=0; s_task=0; h_task=0; o_task=0
+fi
+
+pgr_mpd=$(pgrep -nx mpd)
+
+#taskset -pc $s_task,$h_task,$o_task $pgr_mpd
+
+echo "$(pstree -npt $pgr_mpd)" | while read line ; do
+ proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ case $proc in
+   mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   rtio)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr
+		 chrt -opv 0				$proc_nr ;;
+# player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+# decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+  output)	 taskset -cp $m_task			$proc_nr
+		 chrt -opv 0				$proc_nr ;;
+ esac
+done

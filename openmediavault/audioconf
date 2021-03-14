@@ -1,0 +1,161 @@
+#!/bin/bash
+
+roonbridge_install () {
+curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxx64.sh
+chmod +x roonbridge-installer-linuxx64.sh
+./roonbridge-installer-linuxx64.sh
+}
+
+roonserver_install () {
+curl -O http://download.roonlabs.com/builds/roonserver-installer-linuxx64.sh
+chmod +x roonserver-installer-linuxx64.sh
+sudo ./roonserver-installer-linuxx64.sh
+}
+
+renderer_name () {
+
+ clear
+ echo -ne "
+ --------------------------------------------
+  Change Renderer Name / 렌더러 이름 바꾸기
+ --------------------------------------------
+ [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름
+ (\e[32mm\e[0m) Main     / 주메뉴
+  * Input / 입력 (\e[32mname\e[0m|\e[32mm\e[0m|\e[32ms\e[0m) : "
+ read i
+ echo
+ case $i in
+  m) clear ; return ;;
+  *) consf upmpd set "$i" && systemctl restart upmpdcli ;;
+ esac
+ return
+}
+
+until [ "$i" = "q" ] ; do
+
+ nr=0
+ [ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
+ [ -e /proc/asound/card$nr/pcm0p/info ] && card=$(grep "^id: " /proc/asound/card$nr/pcm0p/info | cut -d' ' -f2-)
+ if [ -z "$id" ]; then
+  card0="N/A"
+ elif [ -z "$card" ]; then
+  card0="$id"
+ else
+  card0="$id ($card)"
+ fi
+
+ ip=$(hostname -I)
+ if [ -z "$ip" ]; then
+  ip="N/A"
+ else
+  ip=$(echo "$ip" | tr -d ' ')
+ fi
+
+ current_name=$(consf upmpd)
+
+ for i in dop pcm vol sta tag; do
+  eval status_$i="$(consf mpd $i)"
+ done
+
+ for i in upnp lms sqzlite roonbridge roonserver; do
+  eval status_$i="$(consf $i)"
+ done
+
+#clear
+ echo -ne "
+ ---------------------
+  Bann Network Server
+ ---------------------
+ \e[35mBuild:$(consf build) (IP:$ip) - $card0\e[0m
+
+ (\e[32m1\e[0m) [ $([ "$status_upnp"       = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] UPnP/DLNA Renderer
+ (\e[32m2\e[0m) [ $([ "$status_dop"        = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD DoP (DSD over PCM)
+ (\e[32m3\e[0m) [ $([ "$status_pcm"        = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD PCM Decoder
+ (\e[32m4\e[0m) [ $([ "$status_vol"        = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Software Volume
+ (\e[32m5\e[0m) [ $([ "$status_sta"        = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD State File
+ (\e[32m6\e[0m) [ $([ "$status_tag"        = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Tag Metadata
+ (\e[32m7\e[0m) [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
+
+ (\e[32m8\e[0m) [ $([ "$status_lms"        = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Logitech Media Server
+ (\e[32m9\e[0m) [ $([ "$status_sqzlite"    = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Squeezelite
+
+ (\e[32mb\e[0m) [ $(if [ "$status_roonbridge" = "" ]; then echo " "; elif [ "$status_roonbridge" = off ]; then echo "\e[33mX\e[0m"; else echo "\e[33mO\e[0m"; fi) ] Roon Bridge
+ (\e[32ms\e[0m) [ $(if [ "$status_roonserver" = "" ]; then echo " "; elif [ "$status_roonserver" = off ]; then echo "\e[33mX\e[0m"; else echo "\e[33mO\e[0m"; fi) ] Roon Server
+
+ (\e[32mq\e[0m) Quit / 나가기
+
+  *  Select / 선택 (\e[32m0-9\e[0m|\e[32mn\e[0m|\e[32mq\e[0m) : "
+ read i
+ echo
+ case $i in
+  1) if [ $status_upnp = off ]; then
+      systemctl start   mpd mympd upmpdcli
+      systemctl enable  mpd mympd upmpdcli
+      tune_mpd; tune_mympd; tune_upmpdcli
+      consf upnp on
+     else
+      systemctl stop    mpd mympd upmpdcli
+      systemctl disable mpd mympd upmpdcli
+      consf upnp off
+     fi ;;
+  2) [ $status_dop = off ] && consf mpd dop on || consf mpd dop off
+     systemctl restart mpd ;;
+  3) [ $status_pcm = off ] && consf mpd pcm on || consf mpd pcm off
+     systemctl restart mpd ;;
+  4) [ $status_vol = off ] && consf mpd vol on || consf mpd vol off
+     systemctl restart mpd ;;
+  5) [ $status_sta = off ] && consf mpd sta on || consf mpd sta off
+     systemctl restart mpd ;;
+  6) [ $status_tag = off ] && consf mpd tag on || consf mpd tag off
+     systemctl restart mpd ;;
+  7) renderer_name ;;
+  8) if [ "$status_lms" = off ]; then
+      systemctl start  logitechmediaserver
+      systemctl enable logitechmediaserver
+      consf lms on
+     else
+      systemctl stop    logitechmediaserver
+      systemctl disable logitechmediaserver
+      consf lms off
+     fi ;;
+  9) if [ $status_sqzlite = off ]; then
+      systemctl start  sqzlite
+      systemctl enable sqzlite
+      consf sqzlite on
+     else
+      systemctl stop    sqzlite
+      systemctl disable sqzlite
+      consf sqzlite off
+     fi ;;
+  b) if [ "$status_roonbridge" = "" ]; then
+      echo -n "Roon Bridge를 설치할까요? \e[32m[Y/n]\e[0m"
+      read answer
+      [ "$answer" != n ] && roonbridge_install || continue
+      consf roonbridge on
+     elif [ "$status_roonbridge" = off ]; then
+      systemctl start   roonbridge
+      systemctl enable  roonbridge
+      consf roonbridge on
+     else
+      systemctl stop    roonbridge
+      systemctl disable roonbridge
+      consf roonbridge off
+     fi ;;
+  s) if [ "$status_roonserver" = "" ]; then
+      echo -n "Roon Server를 설치할까요? \e[32m[Y/n]\e[0m"
+      read answer
+      [ "$answer" != n ] && roonserver_install || continue
+      consf roonserver on
+     elif [ "$status_roonserver" = off ]; then
+      systemctl start   roonserver
+      systemctl enable  roonserver
+      consf roonserver on
+     else
+      systemctl stop    roonserver
+      systemctl disable roonserver
+      consf roonserver off
+     fi ;;
+  q) exit          ;;
+  *) clear         ;;
+ esac
+done

@@ -1,0 +1,14 @@
+[Unit]
+Description=mpd daemon and tuning
+
+[Service]
+#StandardInput=null
+StandardOutput=null
+#StandardError=null
+
+ExecStartPre=cp /usr/local/bin/mpd /etc/mpd.conf /dev/shm/
+ExecStart=/dev/shm/mpd --no-daemon /dev/shm/mpd.conf
+ExecStartPost=/usr/local/bin/mpd_tune
+
+[Install]
+WantedBy=multi-user.target

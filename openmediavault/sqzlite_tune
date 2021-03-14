@@ -1,0 +1,17 @@
+#!/bin/sh
+
+sleep 1
+
+pgr_sqz=$(pidof squeezelite)
+[ -z "$pgr_sqz" ] && continue
+#[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
+count=2
+echo "$(pstree -npt $pgr_sqz)" | while read line ; do
+ proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+ case $count in
+  3) taskset -cp $m_task			$proc_nr
+     chrt    -op 0			$proc_nr ;;
+# *) taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+ esac
+ count=$(($count+1))
+done

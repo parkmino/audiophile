@@ -1,0 +1,28 @@
+[Unit]
+Description=MiniDLNA lightweight DLNA/UPnP-AV server
+Documentation=man:minidlnad(1) man:minidlna.conf(5)
+After=network.target
+
+[Service]
+#Type=oneshot
+#Type=forking
+#User=minidlna
+#Group=minidlna
+
+#StandardInput=null
+StandardOutput=null
+#StandardError=null
+
+Environment=CONFIGFILE=/etc/minidlna.conf
+Environment=DAEMON_OPTS=-r
+EnvironmentFile=-/etc/default/minidlna
+
+RuntimeDirectory=minidlna
+LogsDirectory=minidlna
+PIDFile=/run/minidlna/minidlna.pid
+ExecStartPre=cp /usr/sbin/minidlnad $CONFIGFILE /dev/shm/
+ExecStart=/dev/shm/minidlnad -f /dev/shm/minidlna.conf -P /run/minidlna/minidlna.pid -S $DAEMON_OPTS
+
+
+[Install]
+WantedBy=multi-user.target

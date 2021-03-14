@@ -1,0 +1,22 @@
+[Unit]
+Description=UPnP Renderer front-end to MPD
+After=network.target mpd.service
+
+[Service]
+#StandardInput=null
+StandardOutput=null
+#StandardError=null
+
+Type=simple
+# Note: if start fails check with "systemctl status upmpdcli"
+ExecStartPre=cp /usr/bin/upmpdcli /etc/upmpdcli.conf /dev/shm/
+ExecStart=/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf
+#ExecStart=taskset -ac 0,1,3 /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf
+# For some reason, the first start of libupnp fails. Probably this should
+# be started later in the start sequence, but I don't know how. Retry a bit
+# later. 
+Restart=always
+RestartSec=1min
+
+[Install]
+WantedBy=multi-user.target

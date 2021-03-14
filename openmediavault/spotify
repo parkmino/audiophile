@@ -1,0 +1,32 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") [install|on|off]"
+ echo "Install and turn on/off Spotify Connect"
+}
+
+audio_conf=/etc/default/audio.conf
+
+if [ "$1" = install ]; then
+ wget https://github.com/parkmino/audiophile/raw/master/openmediavault/librespot -O /usr/local/bin/librespot
+ chmod 755 /usr/local/bin/librespot
+ systemctl start  librespot
+ systemclt enable librespot
+#tune_librespot
+ consf librespot on
+elif [ "$1" = on ]; then
+ systemctl start  librespot
+ systemctl enable librespot
+#tune_librespot
+ const librespot on
+elif [ "$1" = off ]; then
+ systemctl stop    librespot
+ systemctl disable librespot
+ consf librespot off
+else
+ usage
+ echo "* Spotify Connect is [ $(grep ^airplay= $audio_conf | cut -d= -f2) ]"
+ exit
+fi
+
+printf "\n* Finished and reboot to take effect. \n* 완료되어 시스템을 다시 시작하면 적용됩니다. (^_^)\n"

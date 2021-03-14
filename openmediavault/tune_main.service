@@ -1,0 +1,8 @@
+[Unit]
+Description=Tune main processes
+
+[Service]
+ExecStart=/usr/local/bin/tune_main
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,179 @@
+openmediavault
+
+https://www.openmediavault.org/
+
+0. Flashing
+
+	https://sourceforge.net/projects/openmediavault/files/
+	
+	$ sudo fdisk -l
+	$ sudo umount /dev/sdb?
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/openmediavault/openmediavault_5.5.11-amd64.iso of=/dev/sdb
+	$ sync
+
+1. Update & upgrade
+
+	Smartphone USB Tethering
+
+	# ip a
+	# omv-firstaid
+		1. Configure network interface
+	# date 030612002021
+	# omv-update
+	# apt-get -t buster-backports upgrade
+	# apt-get -t buster-backports install libsystemd-dev
+	# omv-firstaid
+		1. Configure network interface
+		enp2s0
+	# ip a
+
+	# nano /etc/apt/sources.list
+		deb https://deb.debian.org/debian buster main contrib non-free
+		deb-src https://deb.debian.org/debian buster main contrib non-free
+
+		deb https://deb.debian.org/debian buster-updates main contrib non-free
+		deb-src https://deb.debian.org/debian buster-updates main contrib non-free	
+	# nano /etc/apt/sources.list.d/openmediavault-kernel-backports.list
+		#deb https://deb.debian.org/debian buster-backports main contrib non-free
+	# apt-get update && apt-get upgrade && apt-get dist-upgrade
+	# apt-get install unzip patch mc curl
+	# echo "* Bann Network Server $(date +"%y%m%d")" > /etc/release
+
+2. Web interface
+
+	192.168.0.x
+	admin
+	openmediavault
+
+	홈 > 시스템 > 날짜 및 시간 > NTP 서버 사용
+	홈 > 서비스 > SMB/CIFS > 활성화
+
+3. OMV-Extras.org Plugin
+
+	# ssh root@192.168.0.x
+		root
+	##apt-get install gpgv=2.2.12-1+deb10u1
+	# wget -O - https://github.com/OpenMediaVault-Plugin-Developers/packages/raw/master/install | bash
+
+	홈 > 시스템 > OMV-Extras > 설정 > 일반 설정 (Extras repo > on, Backports > off)
+		
+	Install and enable MiniDLNA
+
+x. hdparm & sysctl
+
+	# nano /etc/hdparm.conf
+		read_ahead_sect = 2040
+		lookahead = on
+		#apm = 255
+	# reboot
+	# mount
+	# hdparm -A -a -B -M /dev/sda1
+
+	# nano /etc/sysctl.conf
+
+x. Build MiniDLNA 3.0 with cover image patch
+
+	$ scp minidlna-1.3.0.zip root@192.168.0.x:/root
+	# unzip minidlna-1.3.0.zip
+	# cd minidlna-1.3.0
+	# for i in debian/patches/*.patch; do patch -p1 < $i; done
+	# apt-get install autoconf automake build-essential
+	# apt-get install autopoint debhelper libavcodec-dev libavformat-dev libavutil-dev libexif-dev libflac-dev libid3tag0-dev libjpeg-dev libogg-dev libsqlite3-dev libvorbis-dev
+	# ./configure
+	# make -j4
+	# file minidlnad
+	# strip --strip-debug minidlnad
+	
+	# systemctl stop minidlna
+	# cp /usr/sbin/minidlnad /usr/sbin/minidlnad.orig
+	# cp minidlnad /usr/sbin/
+	# cp minidlnad /usr/sbin/minidlnad.1.3.0
+	# nano /lib/systemd/system/minidlna.service
+	# systemctl daemon-reload
+
+	홈 > 서비스 > DLNA > 추가옵션
+		resize_covers=no
+
+	# rm -rf /var/cache/minidlna/art_cache
+	# systemctl start minidlna
+	##sed -i '$aresize_covers=no' /etc/minidlna.conf
+
+x. MPD
+
+	# apt-get install libsystemd-dev -t buster-backports
+	# ./configure --enable-database --disable-daemon --disable-debug --disable-documentation --enable-dsd --disable-fifo --disable-httpd-output --disable-inotify --disable-ipv6 --enable-largefile --disable-soundcloud --disable-libwrap --disable-mikmod --disable-openal --disable-oss --disable-osx --disable-pipe-output --disable-recorder-output --disable-sidplay --disable-shout --disable-solaris-output --enable-tcp --disable-test --disable-un --disable-vorbis --disable-wave-encoder --disable-werror --disable-icu --disable-iconv --enable-systemd-daemon --enable-libmpdclient --enable-expat  --enable-id3 --disable-sqlite --disable-lsr --disable-soxr --enable-curl --disable-smbclient --disable-nfs --disable-cdio-paranoia --disable-mms --disable-webdav --enable-cue --disable-neighbor-plugins --disable-iso9660 --disable-zlib --disable-bzip2 --enable-upnp --disable-zzip --disable-adplug --enable-audiofile --disable-aac --enable-ffmpeg --enable-flac --disable-fluidsynth --disable-gme --disable-mad --disable-mpg123 --disable-modplug --disable-opus --disable-sndfile --disable-mpc --disable-wavpack --disable-wildmidi --disable-shine-encoder --disable-vorbis-encoder --disable-lame-encoder --disable-twolame-encoder --enable-alsa --disable-roar --disable-sndio --disable-haiku --disable-jack --disable-ao --disable-pulse --with-zeroconf=no
+	# make -j4
+	# make install
+	# file /usr/local/bin/mpd
+	# strip --strip-debug /usr/local/bin/mpd
+	# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
+	# nano /etc/mpd.conf
+	# nano /lib/systemd/system/mpd.service
+	# systemctl start mpd
+	# systemctl enable mpd
+
+	# apt-get install mpc ncmpc
+	# apt-get install alsa-utils
+	# aplay -l
+	# aplay -L
+	# alsamixer
+
+x. rc-local
+
+	# cp tune_main /usr/share/bin/
+	# cp tune_main.service /lib/systemd/system/
+	# systemctl start  tune_main
+	# systemctl status tune_main
+	# systemctl enable tune_main
+
+x. Install Packages
+
+	Upmpdcli
+
+	# nano /lib/systemd/system/upmpdcli.service
+	# sed  -i 's/^#*friendlyname.*/friendlyname = Bann Network Server/' /etc/upmpdcli.conf
+	# grep ^friendlyname /etc/upmpdcli.conf
+	# systemctl daemon-reload
+	# systemctl stop upmpdcli
+	# systemctl start upmpdcli
+	
+	myMPD
+
+	# cp mympd_..._amd64.deb /root
+	# apt-get install lrzsz liblua5.3-0
+	# dpkg -i mympd_..._amd64.deb
+	# nano /etc/mympd.conf
+		webport = 8000
+	# nano /lib/systemd/system/mympd.service
+	# systemctl daemon-reload
+	# systemctl stop upmpdcli
+	# systemctl start upmpdcli
+
+	Logitech Media Server
+	
+	# wget http://downloads.slimdevices.com/nightly/8.2/lms/8b4077746120b828e56f6e268dc6dd2d6e600efe/logitechmediaserver_8.2.0~1614990095_amd64.deb
+	# apt-get install libio-socket-ssl-perl
+	# dpkg -i logitech*.deb
+	##apt --fix-broken install
+	http://openmediavault:9000
+	# audioconf
+		(8) [ X ] Logitech Media Server
+
+	UPnP Media Server - Gerbera, MinimServer(Trial license), Asset UPnP(30 day trial)
+
+x. Configuration
+
+	# nano /etc/default/audio.conf
+	# cp auioconf consf airplay squeeselite /usr/local/bin/
+	
+	upnp        on/off
+	lms         on/off
+	sqzlite     on/off/output device
+	
+	airplay     install/on/off
+	librespot   install/on/off
+	roonbridge  install/on/off
+	roonserver  install/on/off
+	
+	mpd_tune
+	squeezelite_tune
