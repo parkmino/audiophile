@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210316.sh)
-#bash <(curl -sL https://bit.ly/...)
+#bash <(curl -sL https://bit.ly/3vI0SgW)
 
 ### 1. Tune ALSA Library
 
