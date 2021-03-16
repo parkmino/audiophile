@@ -1,11 +1,11 @@
 #!/bin/sh
 
 #bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210316.sh)
-#bash <(curl -sL https://bit.ly/...)
+#bash <(curl -sL https://bit.ly/3rYfS7Z)
 
 ### 1. Tune ALSA Library
 
-sed -i 's/libasound.so.2.0.0.min.dev.shm/libasound.so.2.0.0.min/; s/libasound.so.2.0.0.mix.dev.shm/libasound.so.2.0.0.mix/; s/libasound.so.2.0.0.plug.dev.shm/libasound.so.2.0.0.plug/; /^ln.*alsa.conf/s/^#*//' /etc/rc.local
+sed -i 's/libasound.so.2.0.0.min.dev.shm/libasound.so.2.0.0.min/; s/libasound.so.2.0.0.mix.dev.shm/libasound.so.2.0.0.mix/; s/libasound.so.2.0.0.plug.dev.shm/libasound.so.2.0.0.plug/; /ln.*alsa.conf/s/^#*//' /etc/rc.local
 
 ### 2. Tune ALSA Configuration
 
