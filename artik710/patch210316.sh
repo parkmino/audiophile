@@ -15,7 +15,7 @@ sed -i 's/libasound.so.2.0.0.min/libasound.so.2.0.0.min.dev.shm/; s/libasound.so
 
 rm /usr/share/alsa/alsa.conf
 sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0    device 0 sub/' /usr/share/alsa/alsa.conf.min
-sed -i 's/pcm.hw.*args/pcm.hw {  @arg/; s/^type hw.*sub/type hw  card $CARD    device $DEV sub/' /usr/share/alsa/alsa.conf.{mix,plug}
+sed -i 's/pcm.hw.*args/pcm.hw {  @args/; s/^type hw.*sub/type hw  card $CARD    device $DEV sub/' /usr/share/alsa/alsa.conf.{mix,plug}
 
 ### 3. Tune Shell Redirection
 
