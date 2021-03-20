@@ -177,3 +177,10 @@ x. Configuration
 	
 	mpd_tune
 	squeezelite_tune
+
+x. Image
+
+	$ sudo fdisk -l
+	$ sudo dd bs=4M status=progress if=/dev/sdb of=Bann_Network_Server_$(date +"%y%m%d").img
+	$ sync
+	$ zip -dd -ds 100m Bann_Network_Server_$(date +"%y%m%d").zip Bann_Network_Server_$(date +"%y%m%d").img
