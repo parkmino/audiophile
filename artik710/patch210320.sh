@@ -32,7 +32,7 @@ sed -i 's/0.*%/039749999%/' /etc/mpd.conf.sav
 
 ### 6. Update Release
 
-#sed -i 's/[0-9]*$/210316/' /etc/release
+sed -i 's/[0-9]*$/210320/' /etc/release
 
 ### 7. Clear History & Sync
 
