@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210316.sh)
+#bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/patch210316_revert.sh)
 #bash <(curl -sL https://bit.ly/3rYfS7Z)
 
 ### 1. Tune ALSA Library
