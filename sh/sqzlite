@@ -41,7 +41,7 @@ fi
  #proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $count in
-   3) taskset -cp $m_task 			$proc_nr
+   3) #taskset -cp $m_task 			$proc_nr
       chrt    -op 0				$proc_nr ;;
  # *) taskset -cp $s_task,$h_task,$o_task $proc_nr ;;
   esac
@@ -51,6 +51,5 @@ fi
 ) &
 
 [ ! -e /dev/shm/squeezelite ] && sudo cp /usr/bin/squeezelite /dev/shm/squeezelite
-#/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 42.58437:5.45545::1 -b 4010.57657:3080.86794 1</dev/null 2</dev/null 0</dev/null
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 49:10::1 -b 4018:3082  &>   /dev/null  <  /dev/null
-#/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 49:10::1 -b 4018:3082&
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 41:10::1 -b 2660:3838&>/dev/null 0</dev/null
+#/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 41:10::1 -b 2660:3838&
