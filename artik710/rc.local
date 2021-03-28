@@ -20,22 +20,22 @@ musicpd_bg () {
  done
  sleep 1
  pgr_mpd=$(pgrep -x mpd)
- taskset -pc $s_task $pgr_mpd
- #renice -1 -p       $pgr_mpd
+ #taskset -pc $s_task $pgr_mpd
  echo "$(pstree -np $pgr_mpd)" | while read line ; do
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		 taskset -cp $h_task $proc_nr ;;
-   io)		 taskset -cp $s_task $proc_nr ;;
-   player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $s_task $proc_nr ;;
-   output)	 taskset -cp $m_task $proc_nr
-		#renice -1 -p	     $proc_nr
-		 chrt -op 0	     $proc_nr ;;
+   mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   rtio)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr
+		 chrt -opv 0				$proc_nr ;;
+ # player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+ # decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   output)	 taskset -cp $m_task			$proc_nr
+		 chrt -op 0				$proc_nr ;;
   esac
  done
-/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf>/dev/null</dev/null 2>/dev/null
+/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null 0</dev/null
 }
 
 eol () {
@@ -46,7 +46,7 @@ eol () {
   [ "$sec" -ge 10 ] && break
  done
  sleep 1
- taskset -acp $h_task $(pgrep -x upmpdcli) || true
+ taskset -acp $s_task,$h_task,$o_task $(pgrep -x upmpdcli) || true
  [ "$airplay" = on  ] && airconnect
  [ "$serial"  = off ] && systemctl stop serial-getty@ttySAC3
  pkill rc.local
@@ -63,17 +63,17 @@ roon_bridge () {
 
 sqzlite () {
  cp /root/squeezelite /dev/shm/
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 39:4::0 -b 4002:3071 -n Sylphid -z>/dev/null</dev/null 2>/dev/null || true
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 41:10::1 -b 2660:3838 -n Sylphid -z&>/dev/null 0</dev/null || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
- [ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
+#[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
  count=2
  echo "$(pstree -npt $pgr_sqz)" | while read line ; do
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $count in
-   3) taskset -cp $m_task $proc_nr
-      chrt    -op 0 $proc_nr       ;;
-   *) taskset -cp $s_task $proc_nr ;;
+   3) taskset -cp $m_task			$proc_nr
+      chrt    -op 0				$proc_nr ;;
+ # *) taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
   esac
   count=$(($count+1))
  done
@@ -82,34 +82,34 @@ sqzlite () {
 spotifyd () {
 #cp /root/spotifyd /root/spotifyd.conf /dev/shm/
 #sleep 1
-#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf>/dev/null</dev/null 2>/dev/null
+#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf&>/dev/null 0</dev/null
  cp /root/librespot /dev/shm/
 /dev/shm/librespot -n Sylphid -b 320 --backend alsa --device pcm.hw --mixer alsa --mixer-card ctl.hw &
 }
 
 airconnect () {
  cp /root/airupnp-aarch64 /dev/shm/
-/dev/shm/airupnp-aarch64 -l 1000:2000 -r -Z -z>/dev/null</dev/null 2>/dev/null
- [ "$h_task" -ge 1 ] && taskset -acp $h_task $(pidof airupnp-aarch64) || true
+/dev/shm/airupnp-aarch64 -l 1000:2000 -r -Z -z&>/dev/null 0</dev/null
+ [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-aarch64) || true
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = plug ]; then
- cp /etc/libasound.so.2.0.0.plug /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0.plug.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
 elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
- cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0.min.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 else
- cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0.mix.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
 #rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
@@ -161,25 +161,27 @@ done
 [ "$dbus" = off ] && systemctl stop dbus  || true
 
 ### myMPD & Avahi & SSH
-[ "$mympd" = on ] && /dev/shm/mympd /dev/shm/mympd.conf&</dev/null 2>/dev/null
+[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
 [ "$avahi" = on ] && systemctl start avahi-daemon
 [ "$ssh"   = on ] && systemctl start ssh
-[ "$ttyd"  = on ] && ttyd -O -p 8080 audioconf>/dev/null</dev/null 2>/dev/null&
+[ "$ttyd"  = on ] && ttyd -O -p 8080 audioconf&>/dev/null 0</dev/null&
 
 procnr=$(nproc --all)
-if   [ "$procnr" -eq 4 ]; then
- m_task=2; s_task=0; h_task=3; o_task=1,3
-elif [ "$procnr" -eq 8 ]; then
- m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
+if   [ "$procnr" -eq 2 ]; then
+ m_task=0; s_task=1; h_task=1; o_task=1
+elif [ "$procnr" -eq 4 ]; then
+ m_task=2; s_task=0; h_task=3; o_task=1
+elif [ "$procnr" -ge 8 ]; then
+ m_task=6; s_task=4; h_task=2; o_task=0,1,3,5,7
 else
  m_task=0; s_task=0; h_task=0; o_task=0
 fi
 
-if [ "$m_task" -ge 1 ];then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|networkaudiod/ {print $1}'); do
-  taskset -acp $o_task $pid 2>/dev/null || true
- done
-fi
+#if [ "$m_task" -ge 1 ];then
+# for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|networkaudiod/ {print $1}'); do
+#  taskset -acp $o_task $pid 2>/dev/null || true
+# done
+#fi
 
 swapoff -a
 
@@ -195,16 +197,16 @@ swapoff -a
 ### Taskset
 if   [ "$sound" = sharp ]; then
  for i in $(awk '/spi|watchdog|tmuctrl|vip0|hdmi/{print +$1}' /proc/interrupts); do
-  echo "3F" > /proc/irq/$i/smp_affinity
+  echo "BF" > /proc/irq/$i/smp_affinity
  done
 elif [ "$sound" = warm ]; then
  for i in $(awk '/hdmi|Mali/{print +$1}' /proc/interrupts); do
-  echo "3F" > /proc/irq/$i/smp_affinity
+  echo "BF" > /proc/irq/$i/smp_affinity
  done
 fi
 
 for i in $(awk '/Event Timer IRQ/{print +$1}' /proc/interrupts); do
- echo "54" > /proc/irq/$i/smp_affinity
+ echo "FF" > /proc/irq/$i/smp_affinity
 done
 for i in $(awk '/eth/{print +$1}' /proc/interrupts); do
  echo "10" > /proc/irq/$i/smp_affinity
@@ -213,16 +215,23 @@ for i in $(awk '/hci/{print +$1}' /proc/interrupts); do
  echo "40" > /proc/irq/$i/smp_affinity
 done
 echo "10" > /proc/irq/default_smp_affinity
-for pid in 1 $(pgrep -x rc.local); do
- taskset -cp $s_task $pid || true
-done
+#for pid in 1 $(pgrep -x rc.local); do
+# taskset -cp $s_task $pid || true
+#done
 
 for i in RoonBridge librespot networkaudiod; do
- if [ $m_task -gt $s_task ] && [ ! -z $(pidof $i) ]; then
- #taskset -acp $s_task-$m_task $(pidof $i) || true
-  taskset -acp 0-$m_task $(pidof $i) || true
+ if [ "$procnr" -ge 2 ] && pidof -q $i; then
+  taskset -acp 0-$procnr $(pidof $i) || true
  fi
 done
+
+#for i in agetty mympd ttyd; do
+# if [ "$procnr" -ge 2 ] && pidof -q $i; then
+#  for j in $(pidof $i); do
+#   taskset -acp $s_task,$h_task,$o_task $j || true
+#  done
+# fi
+#done
 
 ### uhubctl
 uhubctl -l 2 -a 0 -p 1,3 || true
@@ -230,7 +239,7 @@ uhubctl -l 2 -a 0 -p 1,3 || true
 if [ "$upnp" = on ]; then
  musicpd_bg &
  eol &
-/dev/shm/mpd /dev/shm/mpd.conf>/dev/null</dev/null 2>/dev/null
+/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null 0</dev/null
 else
  pkill rc.local
 fi
