@@ -722,8 +722,8 @@ UPMPDCLI_DEV () {
 
 YOUTUBE_DL () {
  printf "• Youtube-dl\t"
-#latest=$(curl $curl_opt https://github.com/ytdl-org/youtube-dl/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
- latest=$(curl $curl_opt https://youtube-dl.org | grep -m1 latest | cut -d'(' -f2 | cut -d')' -f1 | tr -d v)
+ latest=$(curl $curl_opt https://github.com/ytdl-org/youtube-dl/releases/latest | cut -d'/' -f8 | cut -d'"' -f1)
+#latest=$(curl $curl_opt https://youtube-dl.org | grep -m1 latest | cut -d'(' -f2 | cut -d')' -f1 | tr -d v)
  current=$(youtube-dl --version)
 #printf "$current ($(date -d $(echo $current | cut -d'.' -f1-3 | tr . -) +%F))\t\t"
  printf "$current \t\t\t"
@@ -765,7 +765,7 @@ YOUTUBE_DL () {
 #APCAST
  BUBBLEUPNP
 #CELLULOID
- EXTINF
+#EXTINF
 #GOOGLER
 #HIFIBERRY
 #IPTIME
