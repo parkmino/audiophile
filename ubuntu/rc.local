@@ -19,11 +19,11 @@
  sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
- sysctl -w kernel.sched_min_granularity_ns=229980
- sysctl -w kernel.sched_wakeup_granularity_ns=388289
- sysctl -w kernel.sched_latency_ns=1394067
+ sysctl -w kernel.sched_min_granularity_ns=229997
+ sysctl -w kernel.sched_wakeup_granularity_ns=388318
+ sysctl -w kernel.sched_latency_ns=1394087
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899007
+ sysctl -w kernel.sched_migration_cost_ns=4899028
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window_ns=345997
@@ -49,8 +49,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4606 88254 3345673'
- sysctl -w net.ipv4.tcp_wmem='4534 89903 3455605'
+ sysctl -w net.ipv4.tcp_rmem='4613 88279 3345699'
+ sysctl -w net.ipv4.tcp_wmem='4546 89930 3455679'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -158,7 +158,7 @@ if [ "$m_task" -ge 1 ];then
  echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
 fi
 
-hdparm -A1 -a1968 -B255 /dev/sda # -M0
+hdparm -A1 -a2040 -B255 /dev/sda # -M0
 
 for i in $(ls /dev/snd/); do
  [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"

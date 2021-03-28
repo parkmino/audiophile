@@ -222,7 +222,7 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# dpkg -i copy/lib*upnp*.deb copy/upmpdcli*.deb
 	# mv copy/icon.png /usr/share/upmpdcli/
 	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
-	# sed -i '/friendlyname =/s/^#//; /friendlyname =/s/= .*/= Bann Sylphid Network Player/' /etc/upmpdcli.conf
+	# sed -i '/^#*friendlyname =/s/^#*//; /^friendlyname =/s/= .*/= Bann Sylphid Network Player/' /etc/upmpdcli.conf
 	# sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
 	# sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
 	# grep -e checkcontentformat -e friendlyname -e tidalquality /etc/upmpdcli.conf -e radiolist
@@ -245,10 +245,10 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	# nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	# nano /opt/RoonBridge/Bridge/RoonBridge
-		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"1</dev/null 2</dev/null 0</dev/null
-		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"1</dev/null 2</dev/null 0</dev/null
-		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"1</dev/null 2</dev/null 0</dev/null
-		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"1</dev/null 2</dev/null 0</dev/null
+		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"&>/dev/null 0</dev/null
+		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"&>/dev/null 0</dev/null
+		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"&>/dev/null 0</dev/null
+		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"&>/dev/null 0</dev/null
 		 fi
 	# cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	# sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service

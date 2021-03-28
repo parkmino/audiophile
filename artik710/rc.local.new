@@ -35,7 +35,7 @@ musicpd_bg () {
 		 chrt -op 0				$proc_nr ;;
   esac
  done
-/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf 1</dev/null 2</dev/null 0</dev/null
+/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null 0</dev/null
 }
 
 eol () {
@@ -63,7 +63,7 @@ roon_bridge () {
 
 sqzlite () {
  cp /root/squeezelite /dev/shm/
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 42.58437:5.45545::1 -b 4010.57657:3080.86794 -n Sylphid -z 1</dev/null 2</dev/null 0</dev/null || true
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 41:10::1 -b 2660:3838 -n Sylphid -z&>/dev/null 0</dev/null || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
 #[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
@@ -82,34 +82,34 @@ sqzlite () {
 spotifyd () {
 #cp /root/spotifyd /root/spotifyd.conf /dev/shm/
 #sleep 1
-#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf 1</dev/null 2</dev/null 0</dev/null
+#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf&>/dev/null 0</dev/null
  cp /root/librespot /dev/shm/
 /dev/shm/librespot -n Sylphid -b 320 --backend alsa --device pcm.hw --mixer alsa --mixer-card ctl.hw &
 }
 
 airconnect () {
  cp /root/airupnp-aarch64 /dev/shm/
-/dev/shm/airupnp-aarch64 -l 1000:2000 -r -Z -z 1</dev/null 2</dev/null 0</dev/null
+/dev/shm/airupnp-aarch64 -l 1000:2000 -r -Z -z&>/dev/null 0</dev/null
  [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-aarch64) || true
 }
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = plug ]; then
- cp /etc/libasound.so.2.0.0.plug /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0.plug.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
 elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
- cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0.min.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
  rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 else
- cp /etc/libasound.so.2.0.0.mix /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0.mix.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
 #rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 fi
 
-ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
@@ -161,10 +161,10 @@ done
 [ "$dbus" = off ] && systemctl stop dbus  || true
 
 ### myMPD & Avahi & SSH
-[ "$mympd" = on ] && /dev/shm/mympd /dev/shm/mympd.conf 1</dev/null 2</dev/null 0</dev/null&
+[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
 [ "$avahi" = on ] && systemctl start avahi-daemon
 [ "$ssh"   = on ] && systemctl start ssh
-[ "$ttyd"  = on ] && ttyd -O -p 8080 audioconf& 1</dev/null 2</dev/null 0</dev/null&
+[ "$ttyd"  = on ] && ttyd -O -p 8080 audioconf&>/dev/null 0</dev/null&
 
 procnr=$(nproc --all)
 if   [ "$procnr" -eq 2 ]; then
@@ -239,7 +239,7 @@ uhubctl -l 2 -a 0 -p 1,3 || true
 if [ "$upnp" = on ]; then
  musicpd_bg &
  eol &
-/dev/shm/mpd /dev/shm/mpd.conf 1</dev/null 2</dev/null 0</dev/null
+/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null 0</dev/null
 else
  pkill rc.local
 fi
