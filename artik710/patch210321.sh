@@ -9,7 +9,7 @@ wget -P /etc/ https://github.com/parkmino/audiophile/raw/master/artik710/libasou
 mv /etc/libasound.so.2.0.0.min_1.2.3.1.dev.shm  /etc/libasound.so.2.0.0.min.dev.shm
 mv /etc/libasound.so.2.0.0.mix_1.2.3.1.dev.shm  /etc/libasound.so.2.0.0.mix.dev.shm
 mv /etc/libasound.so.2.0.0.plug_1.2.3.1.dev.shm /etc/libasound.so.2.0.0.plug.dev.shm
-sed -i 's/libasound.so.2.0.0.min/libasound.so.2.0.0.min.dev.shm/; s/libasound.so.2.0.0.mix/libasound.so.2.0.0.mix.dev.shm/; s/libasound.so.2.0.0.plug/libasound.so.2.0.0.plug.dev.shm/; /^ln.*alsa.conf/s/^/#/' /etc/rc.local
+sed -i 's/libasound.so.2.0.0.min /libasound.so.2.0.0.min.dev.shm /; s/libasound.so.2.0.0.mix /libasound.so.2.0.0.mix.dev.shm /; s/libasound.so.2.0.0.plug /libasound.so.2.0.0.plug.dev.shm /; /^ln.*alsa.conf/s/^/#/' /etc/rc.local
 
 ### 2. Tune ALSA Configuration
 
