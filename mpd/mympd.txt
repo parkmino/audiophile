@@ -54,11 +54,11 @@ $ cat debian/changelog
 $ debuild -S -kF55443ED433D8977 -sd
 $ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~bionic_source.changes
 
-$ sed -i '1s/bionic/xenial/g' debian/changelog
-$ cat debian/changelog
+$#sed -i '1s/bionic/xenial/g' debian/changelog
+$#cat debian/changelog
 	mympd ($ver-1ppa1~xenial) xenial; urgency=medium
-$ debuild -S -kF55443ED433D8977 -sd
-$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~xenial_source.changes
+$#debuild -S -kF55443ED433D8977 -sd
+$#dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~xenial_source.changes
 
 $ pkill gpg-agent; pkill gnome-keyring-d
 
