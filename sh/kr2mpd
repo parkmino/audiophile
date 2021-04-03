@@ -9,6 +9,7 @@ usage () {
  echo "   or: $(basename "$0") mbcm(MBC Channel M),mbc4u(MBC FM4U),mbcfm(MBC FM)"
  echo "   or: $(basename "$0") sbsp(SBS파워FM),sbsl(SBS러브FM)"
  echo "   or: $(basename "$0") cbs(CBS음악FM),tbs(tbsFM),tbse(tbseFM),gugak(국악방송)"
+ echo "   or: $(basename "$0") http://...(Stream URL)"
  echo "   or: $(basename "$0") stop(정지)"
  echo "Play Korean Radio with MPD"
 }
@@ -80,9 +81,12 @@ case $1 in
  tbse)  pls "http://tbs.hscdn.com/tbsradio/efm/playlist.m3u8" ;;
  gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
  stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
- *)     usage ; exit ;;
+ *)     if [ -n "$1" ] && [ -z "${1##http*}" ]; then
+         url="$1"
+        else
+         usage ; exit
+        fi ;;
 esac
 
 [ -z "$url" ] && echo "$1 stream is not available!" && exit
 mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
-#gst123 -qx -a alsa=pcm.hw $url
