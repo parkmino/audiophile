@@ -7,7 +7,7 @@ StandardOutput=null
 #StandardError=null
 
 ExecStartPre=cp /usr/local/bin/squeezelite /dev/shm/
-ExecStart=/dev/shm/squeezelite -o pcm.hw -O default -V Master -C 1 -a 42.58437:5.45545::1 -b 4010.57657:3080.86794 -z
+ExecStart=/dev/shm/squeezelite -o pcm.hw -O default -V Master -C 1 -a 41:10::1 -b 2660:3838 -z
 ExecStartPost=/usr/local/bin/sqzlite_tune
 
 [Install]
