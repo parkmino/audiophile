@@ -10,16 +10,16 @@
 
 	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
 		pcm.hw{type hw card 0 device 0 subdevice 0}
-		pcm.hw {  type hw  card 0   device 0  subdevice 0}
+		pcm.hw {  type hw  card 0   device 0 subdevice 0}
 		pcm.hw {  @args[CARD DEV SUBDEV]
 		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
 		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
 		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
-		type hw  card $CARD   device $DEV  subdevice $SUBDEV
+		type hw  card $CARD   device $DEV subdevice $SUBDEV
 
 	$ sudo rm /usr/share/alsa/alsa.conf
-	$ sudo sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0   device 0  sub/' /usr/share/alsa/alsa.conf.min
-	$ sudo sed -i 's/pcm.hw.*args/pcm.hw {  @args/; s/^type hw.*sub/type hw  card $CARD   device $DEV  sub/' /usr/share/alsa/alsa.conf.{mix,plug}
+	$ sudo sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0   device 0 sub/' /usr/share/alsa/alsa.conf.min
+	$ sudo sed -i 's/pcm.hw.*args/pcm.hw {  @args/; s/^type hw.*sub/type hw  card $CARD   device $DEV sub/' /usr/share/alsa/alsa.conf.{mix,plug}
 
 03. Shell redirection
 
@@ -48,14 +48,14 @@
 06. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 229995 > 7
-		kernel.sched_wakeup_granularity_ns = 388313 > 8
-		kernel.sched_latency_ns = 1394085 > 7
-		kernel.sched_migration_cost_ns = 4899027 > 8
-		net.ipv4.tcp_rmem = 4612 88279 3345697 > 4613 3345699
-		net.ipv4.tcp_wmem = 4545 89928 3455674 > 4546 89930 3455679
+		kernel.sched_min_granularity_ns = 229995 > 7 > 8
+		kernel.sched_wakeup_granularity_ns = 388313 > 8 > 9
+		kernel.sched_latency_ns = 1394085 > 7 > 8
+		kernel.sched_migration_cost_ns = 4899027 > 8 > 9
+		net.ipv4.tcp_rmem = 4612 88279 3345697 > 4613 3345699 > 4613 88281 3345700
+		net.ipv4.tcp_wmem = 4545 89928 3455674 > 4546 89930 3455679 > 4546 89931 3455680
 
-	$ sudo sed -i 's/229978/229997/g; s/388287/388318/g; s/1394065/1394087/g; s/4899005/4899028/g; s/4604 88254 3345671/4613 88279 3345699/g; s/4528 89899 3455599/4546 89930 3455679/g' /etc/sysctl.conf
+	$ sudo sed -i 's/229978/229998/g; s/388287/388319/g; s/1394065/1394088/g; s/4899005/4899029/g; s/4604 88254 3345671/4613 88281 3345700/g; s/4528 89899 3455599/4546 89931 3455680/g' /etc/sysctl.conf
 
 07. More CPU Affinities
 
