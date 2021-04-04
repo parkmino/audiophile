@@ -40,12 +40,12 @@ case "$1:$2:$3" in
  sqzlite:on:*)  	sed  -i '/sqzlite=/s/=.*/=on/'  $audio_conf ;;
  sqzlite:off:*) 	sed  -i '/sqzlite=/s/=.*/=off/' $audio_conf ;;
  sqzlite:*)     	grep ^sqzlite= $audio_conf | cut -d= -f2 ;;
- roonbridge:on:*)	sed  -i '/roon=/s/=.*/=on/'  $audio_conf ;;
- roonbridge:off:*)	sed  -i '/roon=/s/=.*/=off/' $audio_conf ;;
- roonbridge:*)		grep ^roon= $audio_conf | cut -d= -f2 ;;
- roonserver:on:*)	sed  -i '/roon=/s/=.*/=on/'  $audio_conf ;;
- roonserver:off:*)	sed  -i '/roon=/s/=.*/=off/' $audio_conf ;;
- roonserver:*)		grep ^roon= $audio_conf | cut -d= -f2 ;;
+ roonbridge:on:*)	sed  -i '/roonbridge=/s/=.*/=on/'  $audio_conf ;;
+ roonbridge:off:*)	sed  -i '/roonbridge=/s/=.*/=off/' $audio_conf ;;
+ roonbridge:*)		grep ^roonbridge= $audio_conf | cut -d= -f2 ;;
+ roonserver:on:*)	sed  -i '/roonserver=/s/=.*/=on/'  $audio_conf ;;
+ roonserver:off:*)	sed  -i '/roonserver=/s/=.*/=off/' $audio_conf ;;
+ roonserver:*)		grep ^roonserver= $audio_conf | cut -d= -f2 ;;
  airplay:on:*)		sed -i '/airplay=/s/=.*/=on/'  $audio_conf ;;
  airplay:off:*)		sed -i '/airplay=/s/=.*/=off/' $audio_conf ;;
  airplay:*)		grep ^airplay= $audio_conf | cut -d= -f2 ;;
