@@ -19,8 +19,6 @@ pls () {
 }
 
 kbsr () {
-#url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
-#pls $(curl -s "http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1" | cut -d\" -f16)
 #if   [ "$1" = 21 ]; then
 # pls $(curl -s http://serpent0.duckdns.org:8088/kbs1radio.pls | head -2 | tail -1 | cut -d\= -f2-)
 #elif [ "$1" = 22 ]; then
@@ -33,7 +31,6 @@ kbsr () {
 }
 
 mbcr () {
-#pls $(curl -s "http://miniplay.imbc.com/WebLiveURL.ashx?channel=$1&agent=android&protocol=M3U8" | sed -n '3p' | cut -d\" -f2)
 #url=$(curl -s http://serpent0.duckdns.org:8088/mbc$1.pls | head -2 | tail -1 | cut -d\= -f2-)
  pls $(curl -s "http://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
  [ ${#url} -lt 80 ] && url=
@@ -47,20 +44,13 @@ sbsr () {
 }
 
 case $1 in
- 1fm)   #kbsr 1
-        kbsr 24  ;;
- 2fm)   #kbsr 2
-	kbsr 25  ;;
- 1r)    #kbsr 3
-	kbsr 21  ;;
- 2r)    #kbsr 4
- 	kbsr 22  ;;
- 3r)    #kbsr 5
-	kbsr 23  ;;
- scr)   #kbsr 7
-	kbsr I26 ;;
- rki)   #kbsr 8
-	kbsr I92 ;;
+ 1fm)   kbsr 24  ;;
+ 2fm)   kbsr 25  ;;
+ 1r)    kbsr 21  ;;
+ 2r)    kbsr 22  ;;
+ 3r)    kbsr 23  ;;
+ scr)   kbsr I26 ;;
+ rki)   kbsr I92 ;;
  mbcm)  mbcr chm ;;
  mbc4u) mbcr mfm ;;
  mbcfm) mbcr sfm ;;

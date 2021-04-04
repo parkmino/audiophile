@@ -14,23 +14,20 @@ pls () {
 }
 
 kbsr () {
-#url=$(curl -s "http://kong.kbs.co.kr/live_player/channelMini.php?id=kbsid&channel=$1" | tail -1)
-#pls $(curl -s "http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$1" | cut -d\" -f16)
-if   [ "$1" = 24 ]; then
- url=$(curl -s http://serpent0.duckdns.org:8088/kbsfm.pls     | head -2 | tail -1 | cut -d\= -f2-)
-elif [ "$1" = 25 ]; then
- url=$(curl -s http://serpent0.duckdns.org:8088/kbs2fm.pls    | head -2 | tail -1 | cut -d\= -f2-)
-elif [ "$1" = 21 ]; then
- url=$(curl -s http://serpent0.duckdns.org:8088/kbs1radio.pls | head -2 | tail -1 | cut -d\= -f2-)
-elif [ "$1" = 22 ]; then
- url=$(curl -s http://serpent0.duckdns.org:8088/kbs2radio.pls | head -2 | tail -1 | cut -d\= -f2-)
-else
+#if   [ "$1" = 24 ]; then
+# url=$(curl -s http://serpent0.duckdns.org:8088/kbsfm.pls     | head -2 | tail -1 | cut -d\= -f2-)
+#elif [ "$1" = 25 ]; then
+# url=$(curl -s http://serpent0.duckdns.org:8088/kbs2fm.pls    | head -2 | tail -1 | cut -d\= -f2-)
+#elif [ "$1" = 21 ]; then
+# url=$(curl -s http://serpent0.duckdns.org:8088/kbs1radio.pls | head -2 | tail -1 | cut -d\= -f2-)
+#elif [ "$1" = 22 ]; then
+# url=$(curl -s http://serpent0.duckdns.org:8088/kbs2radio.pls | head -2 | tail -1 | cut -d\= -f2-)
+#else
  url=$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
-fi
+#fi
 }
 
 mbcr () {
-#pls $(curl -s "http://miniplay.imbc.com/WebLiveURL.ashx?channel=$1&agent=android&protocol=M3U8" | sed -n '3p' | cut -d\" -f2)
  pls $(curl -s "http://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
 #[ ${#url} -lt 80 ] && url=
 #url=$(curl -s http://serpent0.duckdns.org:8088/mbc$1.pls | head -2 | tail -1 | cut -d\= -f2-)
@@ -44,24 +41,15 @@ sbsr () {
 }
 
 case $1 in
- 1fm)   #kbsr 1
-        kbsr 24  ;;
- 2fm)   #kbsr 2
-	kbsr 25  ;;
- 1r)    #kbsr 3
-	kbsr 21  ;;
- 2r)    #kbsr 4
-	kbsr 22  ;;
- 3r)    #kbsr 5
-	kbsr 23  ;;
- scr)   #kbsr 7
-	kbsr I26 ;;
- rki)   #kbsr 8
-	kbsr I92 ;;
+ 1fm)   kbsr 24  ;;
+ 2fm)   kbsr 25  ;;
+ 1r)    kbsr 21  ;;
+ 2r)    kbsr 22  ;;
+ 3r)    kbsr 23  ;;
+ scr)   kbsr I26 ;;
+ rki)   kbsr I92 ;;
  mbcm)  mbcr chm ;;
-#       mbcr sfm ;;
  mbc4u) mbcr mfm ;;
-#       mbcr fm  ;;
  mbcfm) mbcr sfm ;;
  sbsp)  #sbsr 07
 	sbsr powerpc powerfm ;;
