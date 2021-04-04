@@ -7,9 +7,11 @@ chmod +x roonbridge-installer-linuxx64.sh
 }
 
 roonserver_install () {
+apt-get update
+apt-get -y install ffmpeg cifs-utils
 curl -O http://download.roonlabs.com/builds/roonserver-installer-linuxx64.sh
 chmod +x roonserver-installer-linuxx64.sh
-sudo ./roonserver-installer-linuxx64.sh
+./roonserver-installer-linuxx64.sh
 }
 
 renderer_name () {
@@ -128,7 +130,7 @@ until [ "$i" = "q" ] ; do
       consf sqzlite off
      fi ;;
   b) if [ "$status_roonbridge" = "" ]; then
-      echo -n "Roon Bridge를 설치할까요? \e[32m[Y/n]\e[0m"
+      echo -ne "Roon Bridge를 설치할까요? \e[32m[Y/n]\e[0m"
       read answer
       [ "$answer" != n ] && roonbridge_install || continue
       consf roonbridge on
@@ -142,7 +144,7 @@ until [ "$i" = "q" ] ; do
       consf roonbridge off
      fi ;;
   s) if [ "$status_roonserver" = "" ]; then
-      echo -n "Roon Server를 설치할까요? \e[32m[Y/n]\e[0m"
+      echo -ne "Roon Server를 설치할까요? \e[32m[Y/n]\e[0m"
       read answer
       [ "$answer" != n ] && roonserver_install || continue
       consf roonserver on
