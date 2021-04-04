@@ -45,6 +45,7 @@ https://www.openmediavault.org/
 	admin
 	openmediavault
 
+	시스템 > 전원 관리 > 설정 > 전원버튼 - 종료 > 저장 > 재시작
 	홈 > 시스템 > 날짜 및 시간 > NTP 서버 사용
 	홈 > 서비스 > SMB/CIFS > 활성화
 
@@ -160,6 +161,11 @@ x. Install Packages
 		(8) [ X ] Logitech Media Server
 
 	UPnP Media Server - Gerbera, MinimServer(Trial license), Asset UPnP(30 day trial)
+
+	RoonServer
+	
+	# audioconf
+		(9) [ X ] Roon Server
 
 x. Configuration
 
