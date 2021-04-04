@@ -1,10 +1,10 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") 1fm,2fm,1r,2r,3r,scr,rki(KBS라디오)"
- echo "   or: $(basename "$0") mbcm(MBC Channel M),mbc4u(MBC FM4U),mbcfm(MBC FM)"
- echo "   or: $(basename "$0") sbsp(SBS파워FM),sbsl(SBS러브FM)"
- echo "   or: $(basename "$0") cbs(CBS음악FM),tbs(tbsFM),tbse(tbseFM),gugak(국악방송)"
+ echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r, 3r, scr, rki(KBS라디오)"
+ echo "   or: $(basename "$0") mbcfm(MBC 표준FM), mbc4u(MBC FM4U), mbcm(MBC 올댓뮤직)"
+ echo "   or: $(basename "$0") sbsp(SBS파워FM), sbsl(SBS러브FM)"
+ echo "   or: $(basename "$0") cbs(CBS음악FM), tbs(tbsFM), tbse(tbseFM), gugak(국악방송)"
  echo "   or: $(basename "$0") stop(정지)"
  echo "Show the Korean Radio URLs"
 }
@@ -32,6 +32,7 @@ fi
 mbcr () {
 #pls $(curl -s "http://miniplay.imbc.com/WebLiveURL.ashx?channel=$1&agent=android&protocol=M3U8" | sed -n '3p' | cut -d\" -f2)
  pls $(curl -s "http://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
+#[ ${#url} -lt 80 ] && url=
 #url=$(curl -s http://serpent0.duckdns.org:8088/mbc$1.pls | head -2 | tail -1 | cut -d\= -f2-)
 }
 
@@ -44,37 +45,28 @@ sbsr () {
 
 case $1 in
  1fm)   #kbsr 1
-        kbsr 24
-	;;
+        kbsr 24  ;;
  2fm)   #kbsr 2
-	kbsr 25
-	;;
+	kbsr 25  ;;
  1r)    #kbsr 3
-	kbsr 21
-	;;
+	kbsr 21  ;;
  2r)    #kbsr 4
-	kbsr 22
-	;;
+	kbsr 22  ;;
  3r)    #kbsr 5
-	kbsr 23
-	;;
+	kbsr 23  ;;
  scr)   #kbsr 7
-	kbsr I26
-	;;
+	kbsr I26 ;;
  rki)   #kbsr 8
-	kbsr I92
-	;;
+	kbsr I92 ;;
  mbcm)  mbcr chm ;;
 #       mbcr sfm ;;
  mbc4u) mbcr mfm ;;
 #       mbcr fm  ;;
  mbcfm) mbcr sfm ;;
  sbsp)  #sbsr 07
-	sbsr powerpc powerfm
-	;;
+	sbsr powerpc powerfm ;;
  sbsl)  #sbsr 08
-	sbsr lovepc  lovefm
-	;;
+	sbsr lovepc  lovefm  ;;
  cbs)   pls "http://aac.cbs.co.kr/cbs939/cbs939.stream/playlist.m3u8" ;;
  tbs)   pls "http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8" ;;
  tbse)  pls "http://tbs.hscdn.com/tbsradio/efm/playlist.m3u8" ;;
