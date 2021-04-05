@@ -1,0 +1,24 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0")"
+ echo "Calculate the number of squares you can put in the square"
+}
+
+read -p "* Enter 1st side of the outer square (deafult=197) : "  owd
+! [ "$owd" -gt 0 ] 2>/dev/null && owd=$((200-3))
+read -p "* Enter 2nd side of the outer square (deafult=197) : " oht
+! [ "$oht" -gt 0 ] 2>/dev/null && oht=$((200-3))
+read -p "* Enter 1st side of the inner square : "   iwd
+! [ "$iwd" -gt 0 ] 2>/dev/null && echo "Invalid innner width (integer > 0)"  && exit
+read -p "* Enter 2nd side of the inner square : "  iht
+! [ "$iht" -gt 0 ] 2>/dev/null && echo "Invalid innner height (integer > 0)" && exit
+
+wd1=$(($owd/$iwd)); ht1=$(($oht/$iht))
+wd2=$(($owd/$iht)); ht2=$(($oht/$iwd))
+
+if [ $(($wd1*$ht1)) -ge $(($wd2*$ht1)) ]; then
+ echo "  $wd1 (+$(($owd-$iwd*$wd1))) * $ht1 (+$(($oht-$iht*$ht1))) = $(($wd1*$ht1))"
+else
+ echo "  $wd2 (+$(($owd-$iht*$wd2))) * $ht2 (+$(($oht-$iwd*$ht2))) = $(($wd2*$ht2))"
+fi
