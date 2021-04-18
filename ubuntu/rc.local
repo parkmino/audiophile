@@ -19,8 +19,8 @@
  sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
- sysctl -w kernel.sched_min_granularity_ns=230002
- sysctl -w kernel.sched_wakeup_granularity_ns=388321
+ sysctl -w kernel.sched_min_granularity_ns=230001
+ sysctl -w kernel.sched_wakeup_granularity_ns=388320
  sysctl -w kernel.sched_latency_ns=1394090
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
  sysctl -w kernel.sched_migration_cost_ns=4899032
@@ -50,7 +50,7 @@
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
  sysctl -w net.ipv4.tcp_rmem='4614 88282 3345702'
- sysctl -w net.ipv4.tcp_wmem='4548 89932 3455682'
+ sysctl -w net.ipv4.tcp_wmem='4547 89932 3455682'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
