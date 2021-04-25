@@ -40,8 +40,8 @@ musicpd_bg () {
 
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
-cp /etc/libasound.so.2.0.0.min_1.2.3.1 /dev/shm/libasound.so.2
-#cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2.0.0
+#cp /etc/libasound.so.2.0.0.min_1.2.3.1 /dev/shm/libasound.so.2
+cp /etc/libasound.so.2.0.0.min_1.2.3.1.dev.shm /dev/shm/libasound.so.2
 cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 rm -rf /dev/snd/*c /dev/snd/by* || true
 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
@@ -49,7 +49,7 @@ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 #ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0
 #ln -sf /dev/shm/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2
 #ln -sf libasound.so.2.0.0 /dev/shm/libasound.so.2
- ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
  cp /usr/bin/nohup /usr/bin/mpd /dev/shm/
  cp /etc/mpd.conf.sav /dev/shm/mpd.conf
  cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
@@ -146,6 +146,8 @@ echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity || true
 #taskset -cp $s_task 1
 
 musicpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf 1</dev/null 2</dev/null 0</dev/null
+#/dev/shm/mpd /dev/shm/mpd.conf</dev/null&>/dev/null
+/dev/shm/mpd /dev/shm/mpd.conf &>/dev/null</dev/null
+#/dev/shm/mpd /dev/shm/mpd.conf 1</dev/null 2</dev/null 0</dev/null
 
 exit 0

@@ -1,4 +1,15 @@
-#!/bin/bash
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
 
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
@@ -18,11 +29,11 @@
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
- sysctl -w kernel.sched_min_granularity_ns=229978
- sysctl -w kernel.sched_wakeup_granularity_ns=388287
- sysctl -w kernel.sched_latency_ns=1394065
+ sysctl -w kernel.sched_min_granularity_ns=230002
+ sysctl -w kernel.sched_wakeup_granularity_ns=388321
+ sysctl -w kernel.sched_latency_ns=1394090
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899005
+ sysctl -w kernel.sched_migration_cost_ns=4899032
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window=345997
@@ -33,8 +44,9 @@
 #sysctl -w net.core.rmem_max=12582912
 #sysctl -w net.core.wmem_max=12582912
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4604 88254 3345671'
- sysctl -w net.ipv4.tcp_wmem='4528 89899 3455599'
+sysctl -w net.ipv4.tcp_rmem='4613 88283 3345702'
+sysctl -w net.ipv4.tcp_wmem='4547 89932 3455682'
+#sysctl -w net.ipv4.udp_mem='46464 57912 87618'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -64,7 +76,7 @@ for i in $(ls /sys/block/*/queue/scheduler); do
 done
 
 if [ "$tfc" = on ]; then
- echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy0)" | while read dev ; do
   tc qdisc add dev $dev root pfifo_fast
  #tc qdisc add dev $dev ingress
  #tc -s -d qdisc show dev $dev
@@ -120,10 +132,10 @@ done
 #done
 
 for i in $(awk '/sata|eth0/{print +$1}' /proc/interrupts); do
- echo 1 > /proc/irq/$i/smp_affinity  || true
+ echo 1 > /proc/irq/$i/smp_affinity || true
 done
 
-#echo 1 > /proc/irq/default_smp_affinity
+#echo 2 > /proc/irq/default_smp_affinity
 
 #until [ $(pgrep -x rygel) -gt 0 ] 2>/dev/null; do
 #until pstree -npt $(pgrep -x rygel) | grep -q gmain; do
@@ -145,9 +157,11 @@ done
 #pkill rc.local
 ) &
 
-hdparm -A1 -a1928 -B255 /dev/sda
+hdparm -A1 -a2032 -B255 -M0 /dev/sda
 
 #/dev/shm/rygel -c /dev/shm/rygel.conf 1</dev/null 2</dev/null 0</dev/null
-/dev/shm/minidlnad -f /dev/shm/minidlna.conf 1</dev/null 2</dev/null 0</dev/null
+#/dev/shm/minidlnad -f /dev/shm/minidlna.conf</dev/null&>/dev/null
+/dev/shm/minidlnad -f /dev/shm/minidlna.conf &>/dev/null</dev/null
+#/dev/shm/minidlnad -f /dev/shm/minidlna.conf 1</dev/null 2</dev/null 0</dev/null
 
 exit 0
