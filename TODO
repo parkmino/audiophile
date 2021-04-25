@@ -8,33 +8,19 @@
 
 02. ALSA conf
 
+	$ sudo rm /usr/share/alsa/alsa.conf
+	$ sudo sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0  device 0 sub/' /usr/share/alsa/alsa.conf.min
+	$ sudo sed -i 's/pcm.hw.*args/pcm.hw {  @args/; s/^type hw.*sub/type hw  card $CARD  device $DEV sub/' /usr/share/alsa/alsa.conf.{mix,plug}
+
 	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
-		pcm.hw{type hw card 0 device 0 subdevice 0}
-		pcm.hw {  type hw  card 0   device 0 subdevice 0}
+		pcm.hw {  type hw  card 0  device 0 subdevice 0}
 		pcm.hw {  @args[CARD DEV SUBDEV]
 		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
 		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
 		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
-		type hw  card $CARD   device $DEV subdevice $SUBDEV
-
-	$ sudo rm /usr/share/alsa/alsa.conf
-	$ sudo sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0   device 0 sub/' /usr/share/alsa/alsa.conf.min
-	$ sudo sed -i 's/pcm.hw.*args/pcm.hw {  @args/; s/^type hw.*sub/type hw  card $CARD   device $DEV sub/' /usr/share/alsa/alsa.conf.{mix,plug}
+		type hw  card $CARD  device $DEV subdevice $SUBDEV
 
 03. Shell redirection
-
-	 1</dev/null 2</dev/null 0</dev/null[=>]&>/dev/null 0</dev/null
-	>/dev/null</dev/null 2>/dev/null[=>]&>/dev/null 0</dev/null
-
-	$ sudo nano /etc/rc.local
-	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
-
-	$ sudo sed -i 's/ 1<\/dev\/null 2<\/dev\/null 0<\/dev\/null/\&>\/dev\/null 0<\/dev\/null/g' /etc/rc.local
-	$ sudo sed -i 's/>\/dev\/null<\/dev\/null 2>\/dev\/null/\&>\/dev\/null 0<\/dev\/null/g' /opt/RoonBridge/Bridge/RoonBridge
-
-	&>/dev/null 0</dev/null[=>]&>/dev/null</dev/null
-
-	# sed -i 's/\&>\/dev\/null 0<\/dev\/null/\&>\/dev\/null<\/dev\/null/g' /etc/rc.local /opt/RoonBridge/Bridge/RoonBridge
 
 	&>/dev/null 0</dev/null[=>] &>/dev/null</dev/null
 
@@ -56,14 +42,14 @@
 06. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 229995 > 7 > 8 > 230002 > 230001
-		kernel.sched_wakeup_granularity_ns = 388313 > 8 > 9 > 388321> 388320
-		kernel.sched_latency_ns = 1394085 > 7 > 8 > 1394090
-		kernel.sched_migration_cost_ns = 4899027 > 8 > 9 > 4899032
-		net.ipv4.tcp_rmem = 4612 88279 3345697 > 4613 3345699 > 4614 88282 3345702
-		net.ipv4.tcp_wmem = 4545 89928 3455674 > 4546 89930 3455679 > 4546 89931 3455680 > 4548 89932 3455682 > 4547 89932 3455682
+		kernel.sched_min_granularity_ns = 230002
+		kernel.sched_wakeup_granularity_ns = 388321
+		kernel.sched_latency_ns = 1394090
+		kernel.sched_migration_cost_ns = 4899032
+		net.ipv4.tcp_rmem = 4613 88283 3345702
+		net.ipv4.tcp_wmem = 4547 89932 3455682
 
-	$ sudo sed -i 's/229978/229998/g; s/388287/388319/g; s/1394065/1394088/g; s/4899005/4899029/g; s/4604 88254 3345671/4613 88281 3345700/g; s/4528 89899 3455599/4546 89931 3455680/g' /etc/sysctl.conf
+	$ sudo sed -i 's/229978/230002/g; s/388287/388321/g; s/1394065/1394090/g; s/4899005/4899032/g; s/4604 88254 3345671/4613 88283 3345702/g; s/4528 89899 3455599/4547 89932 3455682/g' /etc/sysctl.conf
 
 07. More CPU Affinities
 
