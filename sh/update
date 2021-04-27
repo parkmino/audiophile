@@ -475,7 +475,7 @@ LIBFFMPEG () {
  printf "$current\t\t\t\t"
  msg
  url="https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases/download/$latest/$latest-linux-x64.zip"
- if [ -n "$current" ] && [ "$current" != "$latest" ] && curl -IL -s $url | grep -qs '302 Found'; then
+ if [ -n "$current" ] && [ "$current" != "$latest" ] && curl -IL -s $url | grep -qsv '302 Found'; then
   echo -n "  Update libffmpeg.so? \e[32m[Y/n]\e[0m"
   read answer
   if [ "$answer" != n ]; then
