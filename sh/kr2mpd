@@ -26,13 +26,13 @@ kbsr () {
 #elif [ "$1" = 24 ]; then
 # pls $(curl -s http://serpent0.duckdns.org:8088/kbs1fm.pls | head -2 | tail -1 | cut -d\= -f2-)
 #else
-  url=$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
+  url=$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
 #fi
 }
 
 mbcr () {
-#url=$(curl -s http://serpent0.duckdns.org:8088/mbc$1.pls | head -2 | tail -1 | cut -d\= -f2-)
- pls $(curl -s "http://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
+ url=$(curl -s http://serpent0.duckdns.org:8088/mbc$1.pls | head -2 | tail -1 | cut -d\= -f2-)
+#pls $(curl -s "https://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
  [ ${#url} -lt 80 ] && url=
 }
 
@@ -51,8 +51,9 @@ case $1 in
  3r)    kbsr 23  ;;
  scr)   kbsr I26 ;;
  rki)   kbsr I92 ;;
- mbcm)  mbcr chm ;;
- mbc4u) mbcr mfm ;;
+# mbcm)  mbcr chm ;;
+ mbc4u) #mbcr mfm ;;
+        mbcr fm  ;;
  mbcfm) mbcr sfm ;;
  sbsp)  #sbsr 07
 	sbsr powerpc powerfm ;;
