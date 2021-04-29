@@ -161,7 +161,7 @@ done
 [ "$dbus" = off ] && systemctl stop dbus  || true
 
 ### myMPD & Avahi & SSH
-[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
+[ "$mympd" = on ] && /dev/shm/mympd /dev/shm/mympd.conf&
 [ "$avahi" = on ] && systemctl start avahi-daemon
 [ "$ssh"   = on ] && systemctl start ssh
 [ "$ttyd"  = on ] && ttyd -O -p 8080 audioconf&>/dev/null 0</dev/null&
