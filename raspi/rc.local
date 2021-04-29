@@ -161,6 +161,7 @@ done
 #done
 pkill alsactl || true
 pkill rngd    || true
+systemctl stop systemd-timesyncd || true
 [ "$dbus" = off ] && systemctl stop dbus  || true
 [ "$wifi" = off ] && pkill wpa_supplicant || true
 swapoff -a
