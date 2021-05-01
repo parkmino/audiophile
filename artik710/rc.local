@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-musicpd_bg () {
+mpd_bg () {
  sec=0
  until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
   sleep 1
@@ -38,7 +38,7 @@ musicpd_bg () {
 /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null 0</dev/null
 }
 
-eol () {
+upmpd_bg () {
  sec=0
  until [ ! -z $(pgrep -x upmpdcli) ]; do
   sleep 1
@@ -48,8 +48,6 @@ eol () {
  sleep 1
  taskset -acp $s_task,$h_task,$o_task $(pgrep -x upmpdcli) || true
  [ "$airplay" = on  ] && airconnect
- [ "$serial"  = off ] && systemctl stop serial-getty@ttySAC3
- pkill rc.local
 }
 
 roon_bridge () {
@@ -160,11 +158,11 @@ do
 done
 [ "$dbus" = off ] && systemctl stop dbus  || true
 
-### myMPD & Avahi & SSH
-[ "$mympd" = on ] && /dev/shm/mympd /dev/shm/mympd.conf&
-[ "$avahi" = on ] && systemctl start avahi-daemon
-[ "$ssh"   = on ] && systemctl start ssh
-[ "$ttyd"  = on ] && ttyd -O -p 8080 audioconf&>/dev/null 0</dev/null&
+### ttyd & Avahi & SSH & serial
+[ "$ttyd"   = on  ] && ttyd -O -p 8080 audioconf&>/dev/null 0</dev/null&
+[ "$avahi"  = on  ] && systemctl start avahi-daemon
+[ "$ssh"    = on  ] && systemctl start ssh
+[ "$serial" = off ] && systemctl stop serial-getty@ttySAC3
 
 procnr=$(nproc --all)
 if   [ "$procnr" -eq 2 ]; then
@@ -237,11 +235,13 @@ done
 uhubctl -l 2 -a 0 -p 1,3 || true
 
 if [ "$upnp" = on ]; then
- musicpd_bg &
- eol &
+ mpd_bg &
+ upmpd_bg &
 /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null 0</dev/null
-else
- pkill rc.local
 fi
+
+[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
+
+pkill rc.local
 
 exit 0
