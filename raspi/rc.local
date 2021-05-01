@@ -19,7 +19,6 @@ eol () {
  echo 0    > /sys/class/leds/led0/brightness
  sleep 1
  [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
- pkill rc.local
 }
 
 mpd_bg () {
@@ -60,6 +59,7 @@ upmpd_bg () {
  taskset -acp $s_task,$h_task,$o_task $(pgrep -x upmpdcli) || true
  [ "$airplay" = on ] && airconnect
  eol
+ pkill rc.local
 }
 
 roon_bridge () {
