@@ -73,7 +73,7 @@ roon_bridge () {
 
 sqzlite () {
  cp /home/pi/squeezelite /dev/shm/
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 41:10::1 -b 2660:3838 -z &>/dev/null</dev/null || true
+/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -z &>/dev/null</dev/null || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
 #[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
