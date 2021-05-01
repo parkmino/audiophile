@@ -47,7 +47,9 @@ upmpd_bg () {
  done
  sleep 1
  taskset -acp $s_task,$h_task,$o_task $(pgrep -x upmpdcli) || true
- [ "$airplay" = on  ] && airconnect
+ [ "$mympd" =   on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
+ [ "$airplay" = on ] && airconnect
+ pkill rc.local
 }
 
 roon_bridge () {
@@ -238,10 +240,9 @@ if [ "$upnp" = on ]; then
  mpd_bg &
  upmpd_bg &
 /dev/shm/mpd /dev/shm/mpd.conf&>/dev/null 0</dev/null
+else
+ [ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
+ pkill rc.local
 fi
-
-[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
-
-pkill rc.local
 
 exit 0
