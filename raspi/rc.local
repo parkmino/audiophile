@@ -81,7 +81,7 @@ sqzlite () {
  echo "$(pstree -npt $pgr_sqz)" | while read line ; do
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $count in
-   3) taskset -cp $m_task			$proc_nr
+   3) #taskset -cp $m_task			$proc_nr >/dev/null
       chrt    -op 0				$proc_nr ;;
  # *) taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
   esac

@@ -33,17 +33,17 @@ fi
   m_task=0; s_task=0; h_task=0; o_task=0
  fi
 
-# #sudo taskset -pc $s_task $pgr_sqz
-# 
+ #sudo taskset -pc $s_task,$h_task,$o_task $pgr_sqz >/dev/null
+ 
  count=2
 
  echo "$(pstree -npt $pgr_sqz)" | while read line ; do
  #proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $count in
-   3) #taskset -cp $m_task 			$proc_nr
-      chrt    -op 0				$proc_nr ;;
- # *) taskset -cp $s_task,$h_task,$o_task $proc_nr ;;
+   3) #taskset -cp $m_task $proc_nr >/dev/null
+      chrt    -op 0 $proc_nr ;;
+ # *) taskset -cp $s_task,$h_task,$o_task $proc_nr >/dev/null ;;
   esac
   count=$(($count+1))
  done
