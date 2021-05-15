@@ -63,6 +63,7 @@ roon_bridge () {
 
 sqzlite () {
  cp /root/squeezelite /dev/shm/
+ cp /dev/shm/alsa.conf /usr/share/alsa/
 /dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 41:10::1 -b 2660:3838 -n Sylphid -z&>/dev/null 0</dev/null || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
