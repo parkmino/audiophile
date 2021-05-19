@@ -58,7 +58,7 @@ torqq () {
 }
 
 torview () {
- url="https://torrentview23.net"
+ url="https://torrentview34.com"
  chk_url || return
  url="$url/bbs/board.php?bo_table=mov"
  tmpfile=$(mktemp)
@@ -72,7 +72,7 @@ torview () {
 }
 
 case $1 in
- qq|*)    torqq   ;;
  view|vw) torview ;;
+ qq|*)    torqq   ;;
 # *)       torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
 esac
