@@ -36,8 +36,8 @@
 05. hdparm
 
 	$ sudo nano /etc/hdparm.conf
-		read_ahead_sect = 2040
-	$ sudo hdparm -a2040 /dev/sda
+		read_ahead_sect = 2048
+	$ sudo hdparm -a2048 /dev/sda
 
 06. Tune Kernel Parameters
 

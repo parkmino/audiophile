@@ -158,7 +158,7 @@ if [ "$m_task" -ge 1 ];then
  echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
 fi
 
-hdparm -A1 -a2040 -B255 /dev/sda # -M0
+hdparm -A1 -a2048 -B255 /dev/sda # -M0
 
 for i in $(ls /dev/snd/); do
  [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"
