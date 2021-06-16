@@ -10,17 +10,17 @@ $ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 $ ./configure --help
 
 ## Minimal
-$ ./configure --disable-aload --disable-mixer --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw #--disable-thread-safety
+$ ./configure --disable-aload --disable-mixer --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-configdir=/dev/shm# --disable-thread-safety
 $ sudo make install
 $ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.min_$ver
 
 ## Mixer
-$ ./configure --disable-aload --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
+$ ./configure --disable-aload --disable-rawmidi --disable-hwdep --disable-seq --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw --with-configdir=/dev/shm# --disable-thread-safety
 $ sudo make install
 $ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.mix_$ver
 
 ## Plug
-$ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw,plughw --with-ctl-plugins=hw #--disable-thread-safety
+$ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw,plughw --with-ctl-plugins=hw --with-configdir=/dev/shm# --disable-thread-safety
 $ sudo make install
 $ sudo mv /usr/lib/libasound.so.2.0.0 /usr/lib/libasound.so.2.0.0.plug_$ver
 
@@ -40,7 +40,7 @@ $ sudo rm -i /usr/lib/libasound*
 $ unset ver
 
 ## Ubuntu
-$ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw #--disable-thread-safety
+$ ./configure --disable-aload --disable-ucm --disable-topology --disable-alisp --disable-old-symbols --disable-python --with-pcm-plugins=hw --with-ctl-plugins=hw --with-configdir=/dev/shm# --disable-thread-safety
 $ sudo make install
 $ ls -al /usr/lib/libasound.so.2.0.0
 $ sudo chmod -x /usr/lib/libasound.so.2.0.0
