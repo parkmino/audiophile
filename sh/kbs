@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") 1tv|2tv|w(orld)|24|d(rama)|j(oy)|W|l(ife)|k(ids)"
+ echo "Usage: $(basename "$0") 1tv|2tv|w(orld)|24|d(rama)|j(oy)|l(ife)|k(ids)"
  echo "   or: $(basename "$0") 1fm|2fm|1r|2r|3r|scr|rki"
 }
 
@@ -11,14 +11,13 @@ m3u_dir="/home/parkmino/Videos"
 fd=16
 
 case $1 in
- 1tv) ch=11  ; fd=16 ;;
- 2tv) ch=12  ; fd=16 ;;
-#  w) url=http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8 ;;
-#     ch=14  ; fd=40 ;;
+ 1tv) ch=11  ;;
+ 2tv) ch=12  ;;
+# w)  url=http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8 ;;
  24)  ch=81  ;;
  d)   ch=N91 ;;
- j)   ch=N92 ; fd=16 ;;
- W)   ch=N94 ; fd=16 ;;
+ j)   ch=N92 ;;
+ W)   ch=N94 ;;
  l)   ch=N93 ;;
  k)   ch=N96 ;;
  1fm) ch=24  ;;
