@@ -11,14 +11,14 @@ m3u_dir="/home/parkmino/Videos"
 fd=16
 
 case $1 in
- 1tv) ch=11  ; fd=40 ;;
- 2tv) ch=12  ; fd=40 ;;
- w)   url=http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8 ;;
-     #ch=14  ; fd=40 ;;
+ 1tv) ch=11  ; fd=16 ;;
+ 2tv) ch=12  ; fd=16 ;;
+#  w) url=http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8 ;;
+#     ch=14  ; fd=40 ;;
  24)  ch=81  ;;
  d)   ch=N91 ;;
- j)   ch=N92 ; fd=40 ;;
- W)   ch=N94 ; fd=40 ;;
+ j)   ch=N92 ; fd=16 ;;
+ W)   ch=N94 ; fd=16 ;;
  l)   ch=N93 ;;
  k)   ch=N96 ;;
  1fm) ch=24  ;;
@@ -32,8 +32,8 @@ case $1 in
 esac
 
 #api="$(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$ch | cut -d\" -f$fd)"
-#url="$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep service_url | tail -1 | cut -d\" -f$fd | cut -d\\ -f1)"
-[ -z "$url" ] && url="$(curl -s "http://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep -o http://.*Key-Pair-Id=[0-9A-Z]* | cut -d\\ -f1)"
+#url="$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep service_url | tail -1 | cut -d\" -f$fd | cut -d\\ -f1)"
+[ -z "$url" ] && url="$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep -o https://.*Key-Pair-Id=[0-9A-Z]* | cut -d\\ -f1)"
 #url="$(echo "$api" | grep -o '.*/' | sed 's/_[1-4].stream/_5.stream/')$(curl -s "$api" | tail -1)"
 
 echo "$url"
