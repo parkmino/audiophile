@@ -151,10 +151,10 @@ done
 rmmod 8021q aes_ce_cipher cfg80211 iptable_nat nf_nat_ipv4 nf_nat tun dhd || true
 
 ### Remove services
-for i in systemd-timesyncd
-do
- systemctl stop $i || true
-done
+#for i in systemd-timesyncd
+#do
+# systemctl stop $i || true
+#done
 for i in hciattach
 do
  pkill $i || true
