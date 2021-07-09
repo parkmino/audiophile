@@ -5,7 +5,7 @@
 
 mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.tweak
 [ ! -d /root/copy ] && mkdir /root/copy
-wget -P /root/copy/ http://download.roonlabs.com/builds/RoonBridge_linuxarmv8.tar.bz2
+wget -P /root/copy/ -O RoonBridge_linuxarmv8.tar.bz2 http://download.roonlabs.com/builds/RoonBridge_linuxarmv8.tar.bz2
 systemctl stop roonbridgetoram
 tar -xjfv /root/copy/RoonBridge_linuxarmv8.tar.bz2 -C /opt/RoonBridge/
 strip --strip-debug /opt/RoonBridge/Bridge/processreaper
