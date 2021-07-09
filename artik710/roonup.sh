@@ -4,7 +4,6 @@
 # bash <(curl -sL https://bit.ly/34RPSl0)
 
 mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.tweak
-
 [ ! -d /root/copy ] && mkdir /root/copy
 wget -O http://download.roonlabs.com/builds/RoonBridge_linuxarmv8.tar.bz2 -P /root/copy/
 systemctl stop roonbridgetoram
