@@ -13,8 +13,9 @@ dot () {
 #dot &
 
 sudo wget https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/airupnp-aarch64-static -O /root/airupnp-aarch64
+sync
 sudo chmod 755 /root/airupnp-aarch64
-consf airplay on
+sudo consf airplay on
 
 #kill $!
 #echo
