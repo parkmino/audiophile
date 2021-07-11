@@ -16,6 +16,7 @@ sudo wget https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/
 sync
 sudo chmod 755 /root/airupnp-aarch64
 sudo consf airplay on
+sync
 
 #kill $!
 #echo
