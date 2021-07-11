@@ -19,4 +19,6 @@ mv /opt/RoonBridge/Bridge/RoonBridge.tweak /opt/RoonBridge/Bridge/RoonBridge
 
 sync
 
+cat /opt/RoonBridge/VERSION
+
 printf "\n* Finished and reboot to take effect. \n* 완료되어 시스템을 다시 시작하면 적용됩니다. (^_^)\n"
