@@ -32,7 +32,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	# apt-get install openssh-client libusb-0.1-4
 	$ mkdir ~/copy
 
-	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config audioconf pi@192.168.0.32:/home/pi/copy/
+	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config audioconf roonup pi@192.168.0.32:/home/pi/copy/
 	$ scp /home/parkmino/Downloads/raspi/copy/* pi@192.168.0.32:/home/pi/copy/
 
 2. Configuration file
@@ -205,6 +205,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
 
 	$ rm roonbridge-installer*
+	$ cp copy/roonup /usr/bin/
 
 11. Librespot
 
