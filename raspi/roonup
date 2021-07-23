@@ -2,17 +2,17 @@
 
 arch=armv7hf
 
-mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.tweak
+sudo mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.tweak
 
-[ ! -d /root/copy ] && mkdir /root/copy
-wget -O /root/copy/RoonBridge_linux$arch.tar.bz2 http://download.roonlabs.com/builds/RoonBridge_linux$arch.tar.bz2
-systemctl stop roonbridge roonbridgetoram
-tar -xvf /root/copy/RoonBridge_linux$arch.tar.bz2 -C /opt/
-strip --strip-debug /opt/RoonBridge/Bridge/processreaper
-find /opt/RoonBridge/ -name *.so -exec chmod -x {} \; -exec strip --strip-debug {} 2>/dev/null \;
+#[ ! -d /home/pi ] && mkdir /home/pi
+wget -O /home/pi/RoonBridge_linux$arch.tar.bz2 http://download.roonlabs.com/builds/RoonBridge_linux$arch.tar.bz2
+sudo systemctl stop roonbridge roonbridgetoram
+sudo tar -xvf /root/copy/RoonBridge_linux$arch.tar.bz2 -C /opt/
+sudo strip --strip-debug /opt/RoonBridge/Bridge/processreaper
+find /opt/RoonBridge/ -name *.so -exec sudo chmod -x {} \; -exec sudo strip --strip-debug {} 2>/dev/null \;
 
-mv /opt/RoonBridge/Bridge/RoonBridge       /opt/RoonBridge/Bridge/RoonBridge.orig
-mv /opt/RoonBridge/Bridge/RoonBridge.tweak /opt/RoonBridge/Bridge/RoonBridge
+sudo mv /opt/RoonBridge/Bridge/RoonBridge       /opt/RoonBridge/Bridge/RoonBridge.orig
+sudo mv /opt/RoonBridge/Bridge/RoonBridge.tweak /opt/RoonBridge/Bridge/RoonBridge
 
 sync
 cat /opt/RoonBridge/VERSION
