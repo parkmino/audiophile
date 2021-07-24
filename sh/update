@@ -236,7 +236,7 @@ BUBBLEUPNP () {
  url="https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp"
 #latest=$(curl $curl_opt "$url&hl=en" | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
  latest=$(curl $curl_opt "$url&hl=en" | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
- current=3.5.2.2
+ current=3.5.4
  printf "$current"
  [ ${#current} -ge 8 ] && printf "\t\t\t" || printf "\t\t\t\t"
  msg_url
@@ -771,7 +771,7 @@ YOUTUBE_DL () {
 #GOOGLER
 #HIFIBERRY
 #IPTIME
- LIBFFMPEG
+#LIBFFMPEG
 #STRAWBERRY
  TTYD
  YOUTUBE_DL

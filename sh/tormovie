@@ -13,7 +13,7 @@ chk_url () {
  fi
 }
 
-curl_opt="-s --connect-timeout 7 --max-time 7"
+curl_opt="-s --connect-timeout 9 --max-time 9"
 
 chk_movie () {
  if [ -z "$movie" ]; then

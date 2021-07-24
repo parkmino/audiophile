@@ -25,7 +25,7 @@ mpd_bg () {
 
  pgr_mpd=$(pgrep -x mpd)
 
- taskset -pc $s_task $pgr_mpd
+#taskset -pc $s_task $pgr_mpd
 
 # n=0
 # echo "$(chrt -ap $(pgrep -x mpd))" | cut -d' ' -f2 | uniq | cut -d\' -f1 | while read line; do
@@ -46,14 +46,14 @@ mpd_bg () {
  #proc_nr=$(echo "$line" | sed 's/.*(//; s/)//')
  #proc_nr=$(echo "$line" | awk -F '[(,)]' '{ print $(NF-1) }')
   case $proc in
-   mpd)		 taskset -cp $h_task $proc_nr ;;
-   io)		 taskset -cp $s_task $proc_nr ;;
-   rtio)	 taskset -cp $s_task $proc_nr
-		 chrt -opv 0         $proc_nr ;;
-   player)	 taskset -cp $s_task $proc_nr ;;
-   decoder)	 taskset -cp $s_task $proc_nr ;;
-   output)	 taskset -cp $m_task $proc_nr
-		 chrt -opv 0	     $proc_nr ;;
+   mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   rtio)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr
+		 chrt -opv 0         			$proc_nr ;;
+# player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+# decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+  output)	 taskset -cp $m_task			$proc_nr
+		 chrt -opv 0				$proc_nr ;;
   esac
  done
 
