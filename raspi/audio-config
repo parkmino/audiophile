@@ -300,30 +300,31 @@ while true; do
  else
   ip=$(echo "$ip" | tr -d ' ')
  fi
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti $(consf build) (IP:$ip) - $card0" 15 65 8 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti $(consf build) (IP:$ip) - $card0" 16 65 9 \
  "1"  "Audio device               오디오 장치            >" \
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
  "4"  "Airplay, Roon Bridge, Spotify, Squeezebox         >" \
- "5"  "IP TTS, DBus               IP TTS와 DBus          >" \
- "6"  "Ethernet IP                유선 IP 설정           >" \
- "7"  "USB signal & power         USB 신호와 전원        >" \
- "8"  "BASH                       쉘 명령어" 3>&1 1>&2 2>&3)
+ "5"  "Roon Bridge update         룬 브리지 업데이트     >" \
+ "6"  "IP TTS, DBus               IP TTS와 DBus          >" \
+ "7"  "Ethernet IP                유선 IP 설정           >" \
+ "8"  "USB signal & power         USB 신호와 전원        >" \
+ "9"  "BASH                       쉘 명령어" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
 
  case $i in
-  1)  sound_card ;;
-  2)  mpd_options ;;
-  3)  renderer_name ;;
-  4)  features ;;
-  t)  upmpd_tidal ;;
-  5)  dbus_tts ;;
-  6)  ethernet_ip ;;
-  7)  usb_signal_power ;;
-  8)  bash ;;
-  9)  sudo ntpdate pool.ntp.org
+  1)  sound_card	;;
+  2)  mpd_options	;;
+  3)  renderer_name	;;
+  4)  features		;;
+  5)  roonup		;;
+  6)  dbus_tts		;;
+  7)  ethernet_ip	;;
+  8)  usb_signal_power	;;
+  9)  bash		;;
+  0)  sudo ntpdate pool.ntp.org
       sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
