@@ -16,12 +16,13 @@ case $1 in
   else
    usage
   fi ;;
- blank)	  xset dpms force off			     ;;
- dark)	  xrandr --output $monitor --brightness 0.7  ;;
- bright)  xrandr --output $monitor --brightness 1    ;;
- 0.96)	  xrandr --output $monitor --brightness 0.96 ;;
- mute)	  vol mute   ;;
- unmute)  vol unmute ;;
- toggle)  vol toggle ;;
- *)	  usage
+ blank)		feh -FY /home/parkmino/Pictures/black.png >/dev/null 2>&1 &
+		xset dpms force off			 ;;
+ dark)		xrandr --output $monitor --brightness 0.7  ;;
+ bright)	xrandr --output $monitor --brightness 1    ;;
+ 0.96)		xrandr --output $monitor --brightness 0.96 ;;
+ mute)		vol mute   ;;
+ unmute)	vol unmute ;;
+ toggle)	vol toggle ;;
+ *)		usage
 esac
