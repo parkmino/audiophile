@@ -305,10 +305,10 @@ while true; do
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
  "4"  "Airplay, Roon Bridge, Spotify, Squeezebox         >" \
- "5"  "Roon Bridge update         룬 브리지 업데이트     >" \
- "6"  "IP TTS, DBus               IP TTS와 DBus          >" \
- "7"  "Ethernet IP                유선 IP 설정           >" \
- "8"  "USB signal & power         USB 신호와 전원        >" \
+ "5"  "IP TTS, DBus               IP TTS와 DBus          >" \
+ "6"  "Ethernet IP                유선 IP 설정           >" \
+ "7"  "USB signal & power         USB 신호와 전원        >" \
+ "8"  "Roon Bridge Update         룬 브리지 업데이트      " \
  "9"  "BASH                       쉘 명령어" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
@@ -319,10 +319,10 @@ while true; do
   2)  mpd_options	;;
   3)  renderer_name	;;
   4)  features		;;
-  5)  roonup		;;
-  6)  dbus_tts		;;
-  7)  ethernet_ip	;;
-  8)  usb_signal_power	;;
+  5)  dbus_tts		;;
+  6)  ethernet_ip	;;
+  7)  usb_signal_power	;;
+  8)  roonup		;;
   9)  bash		;;
   0)  sudo ntpdate pool.ntp.org
       sudo apt-get update

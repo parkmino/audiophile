@@ -61,15 +61,13 @@ until [ "$i" = "q" ] ; do
  -----------------------------
   Bann Sylphid Network Player
  -----------------------------
-
- \e[35mBuild:$(consf build) (IP:$ip) - $card0\e[0m
+  \e[35mBuild:$(consf build) (IP:$ip) - $card0\e[0m
 
  (\e[32m1\e[0m) [ $([ "$status_dop"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD DoP (DSD over PCM)
  (\e[32m2\e[0m) [ $([ "$status_pcm"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD PCM Decoder
  (\e[32m3\e[0m) [ $([ "$status_vol"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Software Volume
  (\e[32m4\e[0m) [ $([ "$status_sta"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD State File
  (\e[32m5\e[0m) [ $([ "$status_tag"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Tag Metadata
-
  (\e[32m6\e[0m) [ $([ "$status_roon"    = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Roon Bridge
  (\e[32m7\e[0m) [ $([ "$status_sqzlite" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Squeezebox
  (\e[32m8\e[0m) [ $([ "$status_upnp"    = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] UPnP/DLNA
@@ -77,12 +75,13 @@ until [ "$i" = "q" ] ; do
  (\e[32m9\e[0m) [ \e[33m"$status_sound"\e[0m ] Sound (sharp-balanced-warm)
  (\e[32mn\e[0m) [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
 
- (\e[32mb\e[0m) Bash     / 쉘 명령어
- (\e[32ms\e[0m) Shutdown / 시스템 종료
+ (\e[32mu\e[0m) Update Roon Bridge / 룬 브리지 업데이트
+ (\e[32mb\e[0m) Bash               / 쉘 명령어
+ (\e[32ms\e[0m) Shutdown           / 시스템 종료
  
      변경된 설정을 적용하시려면 전원을 껐다 다시 켜 주세요.
 
-  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32mb\e[0m|\e[32ms\e[0m) : "
+  *  Select / 선택 (\e[32m1-9\e[0m|\e[32mn\e[0m|\e[32mu\e[0m|\e[32mb\e[0m|\e[32ms\e[0m) : "
  read i
  echo
  case $i in
@@ -98,6 +97,7 @@ until [ "$i" = "q" ] ; do
      [ $status_sound = balanced ] && consf sound warm
      [ $status_sound = warm     ] && consf sound sharp ;;
   n) renderer_name ;;
+  u) bash <(curl -sL https://bit.ly/34RPSl0) ;;
   b) bash	  ;;
   q) exit          ;;
   s) sudo poweroff ;;
