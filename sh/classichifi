@@ -13,6 +13,7 @@ now=$(curl -s $url | grep -m1 "<div id=\"moreMusic\">" | cut -d\> -f2- | cut -d\
 
 if [ "$1" = play ]; then
  url=$(curl -s http://hificlass.inlive.co.kr/listen.pls | grep -m1 -i file | cut -d= -f2)
+ [ -z "$url" ] && url=$(curl -s http://saycast.sayclub.com/station/home/index/hifi | grep -i playmusic | cut -d\> -f3 | cut -d\< -f1)
  [ -z "$url" ] || ! ffprobe -timeout 5 -listen_timeout 5 -v quiet "$url" && echo "${0##*/} stream ("$url") is not available!" && exit
  mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
 fi
