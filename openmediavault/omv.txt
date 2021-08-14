@@ -167,6 +167,24 @@ x. Install Packages
 	# audioconf
 		(9) [ X ] Roon Server
 
+	Gerbera
+	
+	# wget https://gerbera.jfrog.io/native/debian/pool/main/g/gerbera/gerbera_1.9.0-buster1_amd64.deb
+	# https://gerbera.jfrog.io/native/debian/pool/main/g/gerbera/gerbera_1.9.0-bullseye1_amd64.deb
+	# wget https://www.deb-multimedia.org/pool/main/g/gerbera-dmo/gerbera_1.9.0-dmo1_amd64.deb
+	# dpkg -i gerbera*.deb
+
+	https://docs.gerbera.io/en/stable/daemon.html
+	# useradd --system gerbera
+	# id -u gerbera
+	# mkdir /etc/gerbera
+	# chown -Rv gerbera:gerbera /etc/gerbera
+	# nano /etc/gerbera/config.xml
+		<tmpdir>/dev/shm</tmpdir>
+	# systemctl daemon-reload
+	# systemctl start gerbera
+	  openmediavault:49152
+
 x. Configuration
 
 	# nano /etc/default/audio.conf
