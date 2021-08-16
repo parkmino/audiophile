@@ -94,6 +94,15 @@ airconnect () {
  [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-aarch64) || true
 }
 
+naa () {
+ if [ "$naatoram" = on ]; then
+  cp /usr/sbin/networkaudiod /dev/shm/
+  systemctl start networkaudiodtoram
+ else
+  systemctl start networkaudiod
+ fi
+}
+
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = plug ]; then
@@ -195,6 +204,12 @@ swapoff -a
 ### Spotifyd
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
+### Spotifyd
+[ "$spotify" = on ] && (spotifyd &) && sleep 3
+
+### Networkaudiod
+[ "$naa" = on ] && (naa &) && sleep 3
+
 ### Taskset
 if   [ "$sound" = sharp ]; then
  for i in $(awk '/spi|watchdog|tmuctrl|vip0|hdmi/{print +$1}' /proc/interrupts); do
@@ -220,11 +235,11 @@ echo "10" > /proc/irq/default_smp_affinity
 # taskset -cp $s_task $pid || true
 #done
 
-for i in RoonBridge librespot networkaudiod; do
- if [ "$procnr" -ge 2 ] && pidof -q $i; then
-  taskset -acp 0-$procnr $(pidof $i) || true
- fi
-done
+#for i in RoonBridge librespot networkaudiod; do
+# if [ "$procnr" -ge 2 ] && pidof -q $i; then
+#  taskset -acp 0-$procnr $(pidof $i) || true
+# fi
+#done
 
 #for i in agetty mympd ttyd; do
 # if [ "$procnr" -ge 2 ] && pidof -q $i; then

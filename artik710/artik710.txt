@@ -275,7 +275,17 @@ http://developer.artik.io/documentation/developer-guide/update-image/updating-ar
 	##wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
 	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/stretch/networkaudiod_3.6.0-42_arm64.deb
 	# dpkg -i networkaudiod*.deb
-	# sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
+	# systemctl disable networkaudiod
+	# cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
+	# nano /lib/systemd/system/networkaudiodtoram.service
+		ExecStart=/dev/shm/networkaudiod
+	# systemctl daemon-reload
+	# systemctl start networkaudiod
+	# systemctl stop  networkaudiod
+	# cp /usr/sbin/networkaudiod /dev/shm/
+	# systemctl start networkaudiodtoram
+	# systemctl stop  networkaudiodtoram
+	# consf naa
 
 13. Squeezelite
 
