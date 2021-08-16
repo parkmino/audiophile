@@ -1,7 +1,7 @@
 #!/bin/sh
 #complete -W '1fm 2fm 1r 2r 3r scr rki mbcm mbc4u mbcfm sbsp sbsl cbs tbs tbse gugak stop' kr2mpd ./kr2mpd \~/kr2mpd
 
- host="127.0.0.1"
+host="127.0.0.1"
 
 usage () {
  echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r, 3r, scr, rki(KBS라디오)"
@@ -65,8 +65,8 @@ case $1 in
         #duckdns sbslove
         ;;
  cbs)   pls "http://aac.cbs.co.kr/cbs939/cbs939.stream/playlist.m3u8" ;;
- tbs)   pls "http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8"  ;;
- tbse)  pls "http://tbs.hscdn.com/tbsradio/efm/playlist.m3u8" ;;
+ tbs)   pls "http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8"          ;;
+ tbse)  pls "http://tbs.hscdn.com/tbsradio/efm/playlist.m3u8"         ;;
  gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
  stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
  *)     if [ -n "$1" ] && [ -z "${1##http*}" ]; then
