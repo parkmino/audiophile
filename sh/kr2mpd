@@ -2,7 +2,6 @@
 #complete -W '1fm 2fm 1r 2r 3r scr rki mbcm mbc4u mbcfm sbsp sbsl cbs tbs tbse gugak stop' kr2mpd ./kr2mpd \~/kr2mpd
 
  host="127.0.0.1"
-#host="192.168.0.3"
 
 usage () {
  echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r, 3r, scr, rki(KBS라디오)"
@@ -19,48 +18,54 @@ pls () {
 }
 
 kbsr () {
-#if   [ "$1" = 21 ]; then
-# pls $(curl -s http://serpent0.duckdns.org:8088/kbs1radio.pls | head -2 | tail -1 | cut -d\= -f2-)
-#elif [ "$1" = 22 ]; then
-# pls $(curl -s http://serpent0.duckdns.org:8088/kbs2radio.pls | head -2 | tail -1 | cut -d\= -f2-)
-#elif [ "$1" = 24 ]; then
-# pls $(curl -s http://serpent0.duckdns.org:8088/kbs1fm.pls | head -2 | tail -1 | cut -d\= -f2-)
-#else
-  url=$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
-#fi
+ url=$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$1" | grep service_url | tail -1 | cut -d\" -f16 | cut -d\\ -f1)
 }
 
 mbcr () {
- url=$(curl -s http://serpent0.duckdns.org:8088/mbc$1.pls | head -2 | tail -1 | cut -d\= -f2-)
-#pls $(curl -s "https://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
+ pls $(curl -s "https://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
  [ ${#url} -lt 80 ] && url=
 }
 
 sbsr () {
-#api=$(curl -s "http://apis.sbs.co.kr/play-api/1.0/onair/channel/S$1?v_type=2&platform=pcweb&protocol=hls" | grep -o 'mediaurl.*' | cut -d\" -f3)
-#url=$(curl -s "$api" | tail -1)
  api=$(curl -s "http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channelPath=$1&streamName=$2.stream&playerType=mobile")
  url=$(curl -s $(sbs_dec.py "$api") | tail -1)
 }
 
+duckdns () {
+ url=$(curl -s http://serpent0.duckdns.org:8088/$1.pls | head -2 | tail -1 | cut -d\= -f2-)
+}
+
 case $1 in
- 1fm)   kbsr 24  ;;
- 2fm)   kbsr 25  ;;
- 1r)    kbsr 21  ;;
- 2r)    kbsr 22  ;;
+ 1fm)   kbsr 24
+        #duckdns kbsfm
+        ;;
+ 2fm)   kbsr 25
+        #duckdns kbs2fm
+        ;;
+ 1r)    kbsr 21
+        #duckdns kbs1radio
+        ;;
+ 2r)    kbsr 22
+        #duckdns kbs2radio
+        ;;
  3r)    kbsr 23  ;;
  scr)   kbsr I26 ;;
  rki)   kbsr I92 ;;
-# mbcm)  mbcr chm ;;
- mbc4u) #mbcr mfm ;;
-        mbcr fm  ;;
- mbcfm) mbcr sfm ;;
- sbsp)  #sbsr 07
-	sbsr powerpc powerfm ;;
- sbsl)  #sbsr 08
-	sbsr lovepc  lovefm  ;;
+ mbcm)  mbcr chm ;;
+ mbc4u) #mbcr mfm
+        duckdns mbcfm
+        ;;
+ mbcfm) #mbcr sfm
+        duckdns mbcsfm
+        ;;
+ sbsp)  sbsr powerpc powerfm
+        #duckdns sbsfm
+        ;;
+ sbsl)  sbsr lovepc  lovefm
+        #duckdns sbslove
+        ;;
  cbs)   pls "http://aac.cbs.co.kr/cbs939/cbs939.stream/playlist.m3u8" ;;
- tbs)   pls "http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8" ;;
+ tbs)   pls "http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8"  ;;
  tbse)  pls "http://tbs.hscdn.com/tbsradio/efm/playlist.m3u8" ;;
  gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
  stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
