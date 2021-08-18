@@ -103,6 +103,15 @@ airconnect () {
  [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-arm) || true
 }
 
+naa () {
+ if [ "$naatoram" = on ]; then
+  cp /usr/sbin/networkaudiod /dev/shm/
+  systemctl start networkaudiodtoram
+ else
+  systemctl start networkaudiod
+ fi
+}
+
 [ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = plug ]; then
@@ -215,6 +224,9 @@ fi
 
 ### Spotify
 [ "$spotify" = on ] && (spotifyd &) # && sleep 3
+
+### Networkaudiod
+[ "$naa" = on ] && (naa &) && sleep 3
 
 ### Gerbera
 [ "$gerbera" = on ] && systemctl start gerbera

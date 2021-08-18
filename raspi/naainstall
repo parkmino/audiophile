@@ -1,0 +1,9 @@
+#!/bin/sh
+
+wget https://www.signalyst.eu/bins/naa/linux/buster/networkaudiod_4.1.1-46_armhf.deb -P /home/pi/
+sudo dpkg -i /home/pi/networkaudiod*.deb
+sudo systemctl disable networkaudiod
+sudo cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
+sudo sed 's/\/usr\/sbin\/networkaudiod/\/dev\/shm\/networkaudiod/' /lib/systemd/system/networkaudiodtoram.service
+sudo systemctl daemon-reload
+consf naa on

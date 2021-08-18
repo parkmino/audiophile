@@ -3,7 +3,7 @@
 usage () {
  echo "Usage: $(basename "$0") mpd [dop|pcm|vol|sta|tag] [on|off]"
  echo "   or: $(basename "$0") upmpd [set]"
- echo "   or: $(basename "$0") [airplay|roon|spotify|sqzlite|mympd|ssh|upnp|gerbera] [on|off]"
+ echo "   or: $(basename "$0") [airplay|naa|roon|spotify|sqzlite|mympd|ssh|upnp|gerbera] [on|off]"
  echo "   or: $(basename "$0") build"
  echo "Consult and configure MPD and other features"
 }
@@ -34,6 +34,9 @@ case "$1:$2:$3" in
  airplay:on:*)  sudo sed -i '/airplay=/s/=.*/=on/'  $audio_conf				;;
  airplay:off:*) sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf				;;
  airplay:*)     grep ^airplay= $audio_conf | cut -d= -f2					;;
+ naa:on:*)      sudo sed -i '/naa=/s/=.*/=on/'  $audio_conf				;;
+ naa:off:*)     sudo sed -i '/naa=/s/=.*/=off/' $audio_conf				;;
+ naa:*)         grep ^naa= $audio_conf | cut -d= -f2					;;
  roon:on:*)     sudo sed -i '/roon=/s/=.*/=on/'  $audio_conf				;;
  roon:off:*)    sudo sed -i '/roon=/s/=.*/=off/' $audio_conf				;;
  roon:*)        grep ^roon= $audio_conf | cut -d= -f2					;;
