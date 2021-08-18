@@ -204,9 +204,6 @@ swapoff -a
 ### Spotifyd
 [ "$spotify" = on ] && (spotifyd &) && sleep 3
 
-### Spotifyd
-[ "$spotify" = on ] && (spotifyd &) && sleep 3
-
 ### Networkaudiod
 [ "$naa" = on ] && (naa &) && sleep 3
 
