@@ -1,178 +1,109 @@
-$ wget https://launchpad.net/ubuntu/+archive/primary/+files/squashfs-tools_4.3-12_amd64.deb
-$ sudo dpkg -i squashfs-tools_4.3-12_amd64.deb
-
-$ sudo mksquashfs squashfs-root SYSTEM -all-root -noappend -comp zstd -Xcompression-level 22 -b 262144 # 1048576
-
-$ sed -i 's/pcm.default.card ./pcm.default.card 2/g' ../copy/alsa.conf.*
-$ cp ../copy/alsa.conf.min ../copy/alsa.hdmi.conf.min
-$ cp ../copy/alsa.conf.mix ../copy/alsa.hdmi.conf.mix
-$ sed -i 's/pcm.default.card ./pcm.default.card 0/g' ../copy/alsa.hdmi.conf.*
-$ sed -i '/watchdog/s/^/#/' ../sysctl.conf
-$ cp ../autostart-opipc.sh etc/autostart.sh
-$ cp ../audio-opipc.conf   etc/audio.conf
-
-http://libreelec.1337-server.net/addons/9.0/H3/arm/inputstream.adaptive/inputstream.adaptive-2.2.27.0.zip
-
-=======================================
-LibreELEC 9.80 Nightly for Orange Pi PC
-=======================================
+=================================
+LibreELEC 10.0.0 for Orange Pi PC
+=================================
 
 1. Squashfs
 
   1.1 Unsquashfs
 
-	$ wget https://launchpad.net/ubuntu/+archive/primary/+files/squashfs-tools_4.3-12_amd64.deb
-	$ sudo dpkg -i squashfs-tools_4.3-12_amd64.deb
-
-	$ wget https://test.libreelec.tv/LibreELEC-H3.arm-9.80-nightly-20190626-97ea5a2-orangepi_pc.img.gz
-	$ mkdir ~/Downloads/libreelec/LibreELEC-H3.arm-9.80-orangepi_pc
-	$ gzip -d LibreELEC-H3.arm-9.80-orangepi_pc.img.gz
-	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-H3.arm-9.80-orangepi_pc
-	$ mv LibreELEC-H3.arm-9.80-orangepi_pc.img ~/Downloads/libreelec/LibreELEC-H3.arm-9.80-orangepi_pc && rm LibreELEC-H3.arm-9.80-orangepi_pc.img.gz
-	$ cd Downloads/libreelec/LibreELEC-H3.arm-9.80-orangepi_pc
-	$ mv SYSTEM SYSTEM.orig
+	$ ver=10.0.0
+	$ wget https://releases.libreelec.tv/LibreELEC-H3.arm-$ver-orangepi-pc.img.gz
+	$ mkdir ~/Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc
+	$ gzip -d LibreELEC-H3.arm-$ver-orangepi-pc.img.gz
+	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc
+	$ mv LibreELEC-H3.arm-$ver-orangepi-pc.img ~/Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc && rm LibreELEC-H3.arm-$ver-orangepi-pc.img.gz
+	$ cd Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc
+	$ [ ! -e SYSTEM.orig ] && mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
 	$ cd squashfs-root
 
   1.2 ALSA
 
-	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
-	$ printf 'pcm.default.type hw pcm.default.card 2 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default ctl.9,' > ../copy/alsa.conf.min
+	$ cp /home/parkmino/git/audiophile/raspi/libasound.so.2.0.0.min_1.2.3.1 ../copy/libasound.so.2.0.0.min
+	$ printf 'pcm { default pcm.hw}\npcm.hw {  type hw  card 2  device 0 subdevice 0}\nctl{default ctl.hw}\n' > ../copy/alsa.conf.min
 	$ cp /home/parkmino/git/audiophile/alsa/alsa.conf.mix ../copy/
-	$ sed -i '$d' ../copy/alsa.conf.mix
-	$ printf 'pcm.default.type hw pcm.default.card 2 pcm.default.device 0 pcm.default.subdevice 0 pcm.default.nonblock 1 defaults.pcm.minperiodtime 2759 ctl.default ctl.9,' >> ../copy/alsa.conf.mix
-	$ cp ../copy/alsa.conf.min ../copy/alsa.hdmi.conf.min
-	$ cp ../copy/alsa.conf.mix ../copy/alsa.hdmi.conf.mix
-	$ sed -i 's/pcm.default.card ./pcm.default.card 0/g' ../copy/alsa.hdmi.conf.*
+	$ nano ../copy/alsa.conf.mix
 
-	$ mv usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0.orig
-	$ cp ../copy/libasound.so.2.0.0.min usr/lib/
-	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
-	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so.2
-	$ ln -sf /dev/shm/libasound.so.2.0.0 usr/lib/libasound.so
-	$ mv usr/share/alsa usr/share/alsa.orig
-	$ mkdir usr/share/alsa
-	$ cp ../copy/alsa.* usr/share/alsa/
-	$ ln -sf /dev/shm/alsa.conf usr/share/alsa/alsa.conf
-	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
-	$ nano usr/lib/modprobe.d/alsa-base.conf
+	$ rm usr/lib/libasound.so*
+	$ cp ../copy/libasound.so.2.0.0.min_1.2.3.1.dev.shm usr/lib/libasound.so
+	$ cp ../copy/libasound.so.2.0.0.min_1.2.3.1.dev.shm usr/lib/libasound.so.2
+	$ rm -rf usr/share/alsa && mkdir usr/share/alsa
+	$ cp ../copy/alsa.{hdmi,int,usb}.conf.min usr/share/alsa/
+	
+	$#sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
+	$#cat usr/lib/modprobe.d/alsa-base.conf
 
   1.3 Kodi.bin
 
-	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/aexec /dev/shm/nohup /usr/lib/kodi/kodi.bin $SAVED_ARGS>/dev/null</dev/null 2>/dev/null' usr/lib/kodi/kodi.sh
+	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/aexec /usr/lib/kodi/kodi.bin $SAVED_ARGS &>/dev/null</dev/null' usr/lib/kodi/kodi.sh
 	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/s/^/#/' usr/lib/kodi/kodi.sh
-	$ nano usr/lib/kodi/kodi.sh
+	$ grep /usr/lib/kodi/kodi.bin usr/lib/kodi/kodi.sh
 
   1.4 Patch
 
-	$ nano ../tuning_audio
-
-	#!/bin/sh
-
-	# Audio patch
-
-	if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /storage/.config/modprobe.d/ ] && [ -d /storage/.config/sysctl.d/ ]; then
-	 echo -en "\033[?25l"
-	 if [ -f /sys/devices/virtual/graphics/fbcon/cursor_blink ] ; then
-	  echo 0 > /sys/devices/virtual/graphics/fbcon/cursor_blink
-	 fi
-	 echo "Audio tunings will be applied and reboot..."
-	#sed -i '/boot=/s/quiet $/quiet consoleblank=0 elevator=noop selinux=0/' /flash/cmdline.txt
-	#sed -i '/^disable_pvt=/s/^/^#/' /boot/config.txt
-	 printf 'blacklist bcm2835_gpiomem\nblacklist fixed' > /storage/.config/modprobe.d/libreelec-blacklist.conf
-	 cp /etc/sysctl.conf /storage/.config/sysctl.d/
-	 cp /etc/audio.conf /etc/autostart.sh /storage/.config/
-	#mkdir -p /storage/.kodi/userdata/playlists/music/kr2kodi/
-	#cp /etc/*.py /etc/*.m3u /storage/.kodi/userdata/playlists/music/kr2kodi/
-	#cp /etc/*.pls /storage/.kodi/userdata/playlists/music/
-	#cp -r /etc/plugin.* /storage/.kodi/addons/
-	 cp /etc/*.zip /storage/backup/
-	 touch /storage/.config/audio_patched
-	#read -p "* Reboot to apply the audio tunings? [Y/n]" answer
-	#[ "$answer" != n ] && reboot
-	 sync
-	 sleep 1
-	 reboot -f
-	fi
-
-	$ chmod +x ../tuning_audio
-
-	$ echo '[Unit]
-Description=Tuning Audio
-DefaultDependencies=no
-
-[Service]
-Type=idle
-ExecStart=/usr/lib/libreelec/tuning_audio
-StandardInput=tty-force
-StandardOutput=inherit
-StandardError=inherit' > ../tuning_audio.service
-
-	$ echo '[Unit]
-Description=Tuning Audio
-Requires=tuning_audio.service
-After=tuning_audio.service
-AllowIsolate=yes' > ../tuning_audio.target
-
-	$ cp bin/ps usr/bin/{chrt,nohup,taskset,inst_addon} ../copy/
+	$ cp bin/ps usr/bin/{chrt,nohup,taskset} uhubctl ../copy/
 	$ cp lib/arm-linux-gnueabihf/libprocps.so.7.1.0 ../copy/libprocps.so.7
-	$ cp /home/parkmino/git/audiophile/libreelec/opipc/{audio.conf,autostart.sh,sysctl.conf} ../
-	$ wget http://libreelec.1337-server.net/addons/9.0/H3/arm/inputstream.adaptive/inputstream.adaptive-2.2.27.0.zip -P ../copy/
+	$ cp ~/git/audiophile/libreelec/opipc/{kodi.conf,autostart.sh,sysctl.conf} ../copy/
 
-	$  rm usr/bin/ps usr/bin/nohup
-	$  cp ../copy/{ps,chrt,nohup,taskset,kodi-config} usr/bin/
-	$  cp ../copy/*.pls ../copy/inputstream* etc/
-	$ #cp -r ../../plugin.audio.kr2kodi etc/
-	$ #cp -r ../../kodi/plugin.video.{ktv2kodi,kut2kodi} etc/
-	$  cp ../../../kodi/plugin.{audio.kr2kodi,audio.kpodcast,video.klive}.zip etc/
-	$ #cp ../../kodi/plugin.video.{ktv2kodi,kut2kodi}.zip etc/
-	$  cp ../copy/libprocps.so.7 usr/lib/
-	$  cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
-	$  cp ../tuning_audio usr/lib/libreelec/
-	$  cp ../tuning_audio.{service,target} usr/lib/systemd/system/
-	$  ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
-	$  #[ ! -f usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig ] && mv usr/share/kodi/addons/skin.estuary/xml/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml.orig && cp ../copy/Font.xml usr/share/kodi/addons/skin.estuary/xml/Font.xml
-
-  1.6 Korean Transaltion
-
-	$ https://www.transifex.com/libreelec/
-	$ #mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
-	$ #cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
+	$ rm usr/bin/ps usr/bin/nohup
+	$ cp ../copy/{ps,chrt,nohup,taskset,uhubctl,kodi-config} usr/bin/
+	$ cp ../copy/*.pls ../copy/*.m3u etc/
+	$ cp ../../kodi/plugin.audio.kr2kodi.zip etc/
+	$ cp ../copy/libprocps.so.7 usr/lib/
+	$ cp ../{kodi.conf,autostart.sh,sysctl.conf} etc/
+	$ cp ../tuning_audio usr/lib/libreelec/
+	$ cp ../tuning_audio.{service,target} usr/lib/systemd/system/
+	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
+	$ sed -i '/qdisc/s/= .*/= pfifo_fast/' usr/lib/sysctl.d/qdisc.conf
+	$ cat usr/lib/sysctl.d/qdisc.conf
+		net.core.default_qdisc = pfifo_fast # fq_codel
 
   1.7 Mksquashfs
 
 	$ cd ..
 	$ [ -f SYSTEM ] && rm -f SYSTEM
 	$ sudo mksquashfs squashfs-root SYSTEM -all-root -noappend
+	$#sudo mksquashfs squashfs-root SYSTEM -all-root -noappend -comp zstd -Xcompression-level 22 -b 262144 # 1048576
+
+
+  1.8 Make image
+	
+	$ cp LibreELEC-H3.arm-10.0.0-orangepi-pc.img LibreELEC-OrangePiPC.arm-$ver-audio.img
+	$ fdisk -l LibreELEC-OrangePiPC.arm-$ver-audio.img
+	$ sudo mkdir /mnt/le
+	$ sudo mount -o loop,offset=$(echo $((512*8192))) LibreELEC-OrangePiPC.arm-$ver-audio.img /mnt/le
+	$ sudo rm /mnt/le/SYSTEM*
+	$ sudo cp SYSTEM /mnt/le
+	$ sync
+	
+	## SYSTEM to RAM
+	$#sudo sed -i '1s/$/toram /' /mnt/le/cmdline.txt
+	$#cat /mnt/le/cmdline.txt
+	$ sudo sed -i '/APPEND/s/$/ toram/' /mnt/le/extlinux/extlinux.conf
+	$ cat /mnt/le/extlinux/extlinux.conf
+	
+	$ sudo umount /mnt/le
+	$ sudo rm -rf /mnt/le
 
 2. Flashing
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-H3.arm-9.80-nightly-20190624-c840643-orangepi_pc/LibreELEC-H3.arm-9.80-nightly-20190624-c840643-orangepi_pc.img of=/dev/sdc
+	$ sudo dd status=progress if=/home/parkmino/Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc/LibreELEC-OrangePiPC.arm-$ver-audio.img of=/dev/sdc
 	$ sync
-	$ mv /media/parkmino/LIBREELEC/SYSTEM /media/parkmino/LIBREELEC/SYSTEM.orig
-	$ cp /home/parkmino/Downloads/libreelec/LibreELEC-H3.arm-9.80-nightly-20190624-c840643-orangepi_pc/SYSTEM /media/parkmino/LIBREELEC/SYSTEM
-	$ sync
-	$ sudo umount /dev/sdc?
 
-3. SSH login
+3. Release
 
-	$ ssh root@192.168.0.x (password: libreelec)
+	$ mv ~/Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc/LibreELEC-OrangePiPC.arm-$ver-audio.img ~/Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc/LibreELEC-OrangePiPC.arm-$ver-audio-$(date +"%y.%m").img
+	$ zip -j ~/Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc/LibreELEC-OrangePiPC.arm-$ver-audio-$(date +"%y.%m").zip ~/Downloads/libreelec/LibreELEC-H3.arm-$ver-orangepi-pc/LibreELEC-OrangePiPC.arm-$ver-audio-$(date +"%y.%m").img
 
 4. More tweaks
 
-	$ nano /flash/cmdline.txt
-	$ nano /storage/.config/audio.conf
-	$ nano /storage/.config/autostart.sh
-	$ cp -r ../video/* /storage/.kodi/userdata/playlists/video/
+	$ ssh root@192.168.0.x (password: libreelec)
+	$ kodi-config			# Disable USB signal & power
+	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind connman-vpnd
 
 cf)
-
-https://notepad-plus-plus.org/
 https://github.com/soju6jan
-https://cvh.libreelec.tv/test/h3/
-
-Screenshots
-Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
+Screenshots : Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
