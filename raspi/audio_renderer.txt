@@ -362,6 +362,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		다시 시작, refresh, #28a745, reboot
 		전원 끄기, power_off, #28a745, poweroff
 
+	$ sudo echo "base, string, utf8, table, math, mympd, io" > /var/lib/mympd/config/lualibs
+	$ sudo echo "false" > /var/lib/mympd/config/ssl
+
 18. ttyd
 
 	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
