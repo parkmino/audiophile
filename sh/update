@@ -236,7 +236,7 @@ BUBBLEUPNP () {
  url="https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp"
 #latest=$(curl $curl_opt "$url&hl=en" | grep -m1 Updated | sed 's/<\/span>.*//; s/.*>//')
  latest=$(curl $curl_opt "$url&hl=en" | grep -m1 'Current Version' | sed 's/.*Current Version//; s/<\/span>.*//; s/.*>//')
- current=3.5.4
+ current=3.5.6
  printf "$current"
  [ ${#current} -ge 8 ] && printf "\t\t\t" || printf "\t\t\t\t"
  msg_url
@@ -604,7 +604,7 @@ NEWSTAPA () {
 
 RASPIOS () {
  printf "• RasPiOS\t"
- url="https://www.raspberrypi.org/software/operating-systems/"
+ url="https://www.raspberrypi.com/software/operating-systems/"
  mdy="$(curl $curl_opt "$url" | grep -o 'Raspberry Pi OS Lite.*' | cut -c -200 | grep -o "Release date:.*" | cut -d'>' -f2 | cut -d'<' -f1)"
  if [ -z "$mdy" ]; then
   printf "\t\t\t\t정보 없음\n"
@@ -778,7 +778,7 @@ YOUTUBE_DL () {
 
 ### Podcasts
 #GHLIGHTCLUB	# 관훈라이트클럽
- NEWSTAPA	# 뉴스타파
+#NEWSTAPA	# 뉴스타파
  DAS		# 다스뵈이다
 #BUNKER1	# 벙커1
 #ALILEO_LIVE	# 알릴레오 라이브 (알라뷰)
