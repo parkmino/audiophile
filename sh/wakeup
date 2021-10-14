@@ -66,4 +66,6 @@ done
 # fi
 #done
 
+ps -ef | grep [d]efunct | awk '{print $3}' | xargs -r sudo kill -9
+
 numlockx off
