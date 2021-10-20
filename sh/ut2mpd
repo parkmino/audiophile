@@ -9,9 +9,9 @@ usage () {
 
 [ -z "$1" ] && usage && exit
 
-if youtube-dl -qs "$1" ; then
+if yt-dlp -qs "$1" ; then
  next=$(($(mpc -h $host playlist | wc -l)+1))
- mpc -h $host add $(youtube-dl -f bestaudio/best -g "$1") && mpc -h $host play $next
+ mpc -h $host add $(yt-dlp -f bestaudio/best -g "$1") && mpc -h $host play $next
 else
  echo "* The requested YouTube URL is not correct or supported!"
 fi
