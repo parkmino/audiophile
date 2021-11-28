@@ -1,5 +1,30 @@
 -. 바뀐 점
 
+21.12 (21년 12월 1일)
+
+01. Raspberry Pi OS 21-10-30 업데이트 (데비안 11 Bullseye, 커널 5.10.63)
+02. ALSA 라이브러리 1.2.3.1 업데이트
+03. ALSA 설정 파일 튜닝
+04. MPD 버퍼 튜닝
+05. MPD 상태 파일 메뉴 옵션 추가
+06. CPU Affinity 튜닝
+07. 셀 redirection 튜닝
+08. 커널 파라미터 튜닝
+09. consf 설정 스크립트 추가
+10. Squeezelite 튜닝
+11. Upmpdcli 1.5.13 업데이트 (OpenHome과 UPnP 분리)
+12. myMPD 8.1.6 업데이트 (홈 화면 추가)
+13. librespot 0.3.1 업데이트
+14. HifiBerry DAC+ HD 오디오 카드 추가
+15. 웹 설정/인터페이스를 웹 설정으로 통합
+16. 클래식 HiFi 세이캐스트와 radioboss.fm 지원
+17. 라즈베리 파이 OS 업데이트 사용 안 함 (튜닝과 충돌할 가능성 있음).
+18. 시스템 시각 맞추기 (curl 오류 방지)
+19. 룬 브리지 업데이트 지원 (roonup)
+20. HQPlayer NAA 설치 지원 (naainstall)
+21. UPnP 미디어 서버 지원 (gerbera 1.1.0)
+22. youtube-dl 대신 yt-dlp 사용
+
 20.06 (20-06-18)
 
 01. ALSA 라이브러리 1.2.3 업데이트.
