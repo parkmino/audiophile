@@ -587,6 +587,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 32. Make Image
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
+	$ ps -ef | grep [d]efunct | awk '{print $3}'
 	$ sudo systemctl disable sshd
 	##dietpi-services disable dropbear
 
