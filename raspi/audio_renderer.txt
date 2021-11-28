@@ -2,17 +2,19 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 0. Flashing
 
-	https://www.raspberrypi.org/downloads/raspbian/
-	http://downloads.raspberrypi.org/raspbian_lite/images/
+	https://www.raspberrypi.com/software/operating-systems/
+	https://downloads.raspberrypi.org/raspios_armhf/images/
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/raspi/*raspios-buster-lite-armhf.img | tail -1) of=/dev/sdc
-	$#sudo dd status=progress bs=4M if=~/Downloads/raspi/DietPi_RPi-ARMv6-Stretch.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/raspi/*raspios*.img | tail -1) of=/dev/sdc
+	$#sudo dd status=progress bs=4M if=~/Downloads/raspi/DietPi*.img of=/dev/sdc
 	$ sync
 
+	  raspberrypi login : pi
+	  password : raspberry
 	$ sudo raspi-config
-		5 Interfacing Options > P2 SSH
+		3 Interface Options > P2 SSH
 
 	$ export ip="192.168.0.32"
 	$ ssh-keygen -f "/home/parkmino/.ssh/known_hosts" -R $ip
@@ -28,7 +30,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get dist-upgrade
 	$ sudo apt-get autoremove
 
-	$ sudo apt-get install bc exfat-fuse exfat-utils ntpdate python-pycryptodome uhubctl
+	$ sudo apt-get install bc exfat-fuse exfat-utils file ntpdate python3-pycryptodome uhubctl
 	# apt-get install openssh-client libusb-0.1-4
 	$ mkdir ~/copy
 
@@ -77,6 +79,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo nano /etc/modprobe.d/raspi-blacklist.conf
 		#blacklist 8021q
 		blacklist bcm2835_codec
+		blacklist bcm2835_isp
 		blacklist bcm2835_v4l2
 		blacklist brcmfmac
 		blacklist ip_tables
@@ -98,8 +101,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 6. Disable services
 
 	$ systemctl list-unit-files -t service | awk '$2~/enabled/'
-	$ sudo systemctl disable getty@tty1 cron rsyslog triggerhappy avahi-daemon hciuart  systemd-timesyncd # rng-tools systemd-resolved resolvconf dbus.service dbus.socket
-	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind
+	$ sudo systemctl disable getty@tty1 cron rsyslog triggerhappy avahi-daemon hciuart # rng-tools systemd-resolved resolvconf dbus.service dbus.socket systemd-timesyncd
+	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # systemd-journald-audit.service
 
 	# dietpi-services disable cron
 
@@ -111,7 +114,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 7. MPD
 
-	$ sudo apt-get install libcue2 libaudiofile1 libavformat58 libflac8 libid3tag0 libmpdclient2 libupnp13 libcurl3-gnutls
+	$ sudo apt-get install libcue2 libaudiofile1 libavformat58 libflac8 libid3tag0 libmpdclient2 libupnp13 # libcurl3-gnutls
 	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
 	$ sudo mv copy/mpd /usr/bin/
 	$ sudo mv copy/mpd.conf /etc/mpd.conf.sav
@@ -121,13 +124,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get install mpc ncmpc
 	$ sudo mkdir /etc/ncmpc
 	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
-	$ sudo mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
-	$ sudo mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
+	$#sudo mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
+	$#sudo mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
 
 8. Internet Radio & TTS (Text to Speech)
 
-	$ sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-	$ sudo chmod 755 /usr/local/bin/youtube-dl
+	$#sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+	$#sudo chmod 755 /usr/local/bin/youtube-dl
+	$ sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+	$ sudo chmod a+rx /usr/local/bin/yt-dlp
 	$ sudo mv copy/{kr2mpd,sbs_dec.py,ut2mpd,tts2mpd} /usr/bin/
 	$ sudo mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
 	$ sudo mkdir /var/lib/mpd/music/webradio
@@ -141,7 +146,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 9. Upmpdcli
 
 	$#sudo apt-get install libmpdclient2 libexpat1 libcurl4 python3 python3-requests
-	$ sudo apt-get install libjsoncpp1 libmicrohttpd12
+	$ sudo apt-get install libjsoncpp24 libmicrohttpd12
 	$ sudo dpkg -i copy/lib*upnp*.deb copy/upmpdcli_*.deb
 	$ sudo mv copy/icon.png /usr/share/upmpdcli/
 	$ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
@@ -177,26 +182,27 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$#chmod +x roonbridge-installer-linuxarmv8.sh
 	$#sudo ./roonbridge-installer-linuxarmv8.sh
 
-	$ cat cat /opt/RoonBridge/VERSION
-		100000171
-		1.0 (build 171) stable
+	$ cat /opt/RoonBridge/VERSION
+		100800814
+		1.8 (build 814) stable
 		stable
 	$ sudo nano /etc/systemd/system/roonbridge.service
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
-		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"&>/dev/null 0</dev/null
-		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"&>/dev/null 0</dev/null
-		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"&>/dev/null 0</dev/null
-		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"&>/dev/null 0</dev/null
+		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"
+		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@">/dev/null 2>/dev/null</dev/null
+		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"
+		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@">/dev/null 2>/dev/null</dev/null
 		 fi
 	$ sudo cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	$ sudo sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
 	$ sudo systemctl daemon-reload
+	$ sudo systemctl stop roonbridge roonbridgetoram
 	$ sudo systemctl disable roonbridge roonbridgetoram
 	$#ls -al /etc/init.d/roonbridge
 
 	$ file /opt/RoonBridge/Bridge/processreaper
-	$ ls -al /opt/RoonBridge/Bridge/processreaper	
+	$ ls -al /opt/RoonBridge/Bridge/processreaper
 	$ sudo strip --strip-debug /opt/RoonBridge/Bridge/processreaper
 	$ ls -al /opt/RoonBridge/Bridge/processreaper
 
@@ -205,16 +211,17 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
 
 	$ rm roonbridge-installer*
-	$ cp copy/roonup /usr/bin/
+	$ sudo cp copy/roonup /usr/bin/
 
 11. Librespot
 
 	https://github.com/librespot-org/librespot
 
+	$ sudo apt-get install build-essential libasound2-dev file cargo
 	$ sudo ntpdate pool.ntp.org
-	$ wget https://github.com/librespot-org/librespot/archive/v0.1.3.tar.gz
-	$ tar xvzf v0.1.3.tar.gz && rm v0.1.3.tar.gz
-	$ cd librespot-0.1.3
+	$ wget https://github.com/librespot-org/librespot/archive/refs/tags/v0.3.1.tar.gz
+	$ tar xvzf v0.3.1.tar.gz && rm v0.3.1.tar.gz
+	$ cd librespot-0.3.1
 	$ cargo build --release --no-default-features --features alsa-backend
 
 	$ target/release/librespot -n Librespot --backend ?
@@ -231,7 +238,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	https://github.com/Spotifyd/spotifydf
 	https://github.com/Spotifyd/spotifyd/releases/latest
 
-	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6 | cut -d\" -f2 | wget "https://github.com/$(cat -)"
+	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6.*tar.gz | cut -d\" -f2 | wget "https://github.com/$(cat -)"
 	$ unzip spotifyd-*.zip -d ~/ && rm spotifyd-*.zip
 	$ nano -L ~/spotifyd.conf
 
@@ -243,19 +250,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	mixer = ctl.9
 	device_name = Spotifyd
 	bitrate = 320    
-	  
 
 13. AirConnect (AirPlay)
 
 	https://github.com/philippe44/AirConnect
 
-	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-arm     -P ~/
-	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-aarch64 -P ~/
-	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64  -P ~/
-
+	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-arm-static -P ~/
 	$ chmod +x ~/airupnp*
-	
-	$ mv copy/airupnp* ./
+
+	$ mv copy/airupnp-arm-static ./
 
 14. Shairport-sync (AirPlay - Obsolete)
 
@@ -281,7 +284,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
 15. HQPlayer NAA
-	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/xenial/networkaudiod_3.5.5-39_arm64.deb
+	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/buster/networkaudiod_4.1.1-46_armhf.deb
 	$ sudo dpkg -i networkaudiod*.deb
 	$ sudo sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
 
@@ -300,50 +303,19 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ./build.sh install
 	$ ./build.sh pkgdebian
 
-	$ sudo apt-get install libc6 openssl libid3tag0 libflac8 lrzsz liblua5.3 # libmediainfo0v5
+	$ sudo apt-get install lrzsz liblua5.3-0 # libc6 libid3tag0 libflac8 libmediainfo0v5 openssl
 
 	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 	
 	$ sudo dpkg -i copy/mympd*.deb
+	$ sudo mympd
 	$ sudo mv copy/*.png /var/lib/mympd/pics/
-	$ sudo mv mv copy/*.lua /var/lib/mympd/scripts/
+	$ sudo mv copy/*.lua /var/lib/mympd/scripts/
 
-	$ sudo nano /etc/mympd.conf
-		 host = 127.0.0.1
-		 port = 6600
-		 musicdirectory = /var/lib/mpd/music
-		 playlistdirectory = /var/lib/mpd/playlists
-		 ssl = false
-		 publish = true
-		#webdav = false
-		 loglevel = 1
-		#user = mympd
-		#sticker = false
-		#mixramp = false
-		#syscmds = true
-		 scripting = true
-		 lualibs = base, string, utf8, table, math, mympd, io		
-		 mounts = false
-		 footerstop = both
-		[syscmds]
-		KBS 클래식 FM = kr2mpd 1fm
-		KBS 쿨 FM     = kr2mpd 2fm
-		MBC FM        = kr2mpd mbcm
-		MBC FM4U      = kr2mpd mbc4u
-		SBS 파워 FM   = kr2mpd sbsp
-		SBS 러브 FM   = kr2mpd sbsl
-		HR =
-		웹 설정 - Web Settings   = ttyd -o -O -p 8080 bash audio-config 1</dev/null 2</dev/null 0</dev/null&
-		웹 터미널 - Web Terminal = ttyd -o -O -p 8080 bash -c "cd /home/pi; sudo su pi"1</dev/null 2</dev/null 0</dev/null&
-		HR =
-		다시 시작 - Reboot    = sudo reboot
-		전원 끄기 - Power off = sudo poweroff
-
-	$#sudo chown -R pi /var/lib/mympd
-	$#sudo adduser pi mympd
-	$#sudo chomod -R 775 /var/lib/mympd
-	$ sudo sh -c " echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+	$ sudo sh -c "echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+	$ echo "base, string, utf8, table, math, mympd, io" | sudo tee /var/lib/mympd/config/lualibs
+	$ echo "false" | sudo tee /var/lib/mympd/config/ssl
 	$ sudo cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
 	$ sudo nano /etc/systemd/system/mympd.service
 		#Requires=network.target local-fs.target mpd.service
@@ -355,21 +327,19 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ systemctl status mympd
 	
 	$ sudo mympd
-		설정 > 외관 > 알림 > 페이지에 알림
+		설정 > MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
+		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
 		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
 		IP 주소 읽기, record_voice_over, #28a745, iptts
 		웹 설정, settings, #28a745, settings
 		다시 시작, refresh, #28a745, reboot
 		전원 끄기, power_off, #28a745, poweroff
 
-	$ sudo echo "base, string, utf8, table, math, mympd, io" > /var/lib/mympd/config/lualibs
-	$ sudo echo "false" > /var/lib/mympd/config/ssl
-
 18. ttyd
 
-	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd_linux.armhf/' | wget "$(cat -)" -P ~/
-	$ chmod +x ~/ttyd_linux.armhf
-	$ sudo mv ~/ttyd_linux.armhf /usr/bin/ttyd
+	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd.armhf/' | wget "$(cat -)" -P ~/
+	$ chmod +x ~/ttyd.armhf
+	$ sudo mv ~/ttyd.armhf /usr/bin/ttyd
 
 	# systemctl status  getty@tty1.service
 	# systemctl stop    getty@tty1.service
@@ -379,7 +349,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 19. Gerbera
 
-	$ wget https://www.deb-multimedia.org/pool/main/g/gerbera-dmo/gerbera_1.9.0-dmo1_armhf.deb
+	$ wget https://www.deb-multimedia.org/pool/main/g/gerbera-dmo/gerbera_1.9.2-dmo5_armhf.deb
 	$ sudo dpkg -i gerbera*.deb
 	$ sudo apt-get -f install
 
@@ -388,11 +358,17 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo id -u gerbera
 	$ sudo mkdir /etc/gerbera
 	$ sudo chown -Rv gerbera:gerbera /etc/gerbera
+
+	$ sudo apt-get install gerbera
 	$ sudo nano /etc/gerbera/config.xml
+		<ui enabled="yes" show-tooltips="yes">
+		<port>49155</port>
 		<tmpdir>/dev/shm</tmpdir>
 	$ sudo systemctl daemon-reload
+	$ systemctl status gerbera
+	$ sudo systemctl disable gerbera
 	$ sudo systemctl start gerbera
-	  rpi_ip:49152
+	  rpi_ip:49155
 
 20. Web interface (Obsolete)
 
@@ -470,7 +446,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/libasound.so*
 
 	##ln -sf /etc/libasound.so.2.0.0.orig /usr/lib/arm-linux-gnueabihf/libasound.so
-	$ sudo cp /etc/libasound.so.2.0.0.min /dev/shm/libasound.so.2
+	$ sudo cp /etc/libasound.so.2.0.0.min.dev.shm /dev/shm/libasound.so.2
 
 	$ sudo mv /usr/share/alsa /usr/share/alsa.orig
 	$ sudo systemctl mask alsa-store.service
@@ -503,6 +479,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 24. Edit /etc/rc.local
 
+	$ sudo apt-get install libusb-0.1-4
 	$ mv copy/llctl ./
 	$ sudo nano /etc/rc.local
 
@@ -618,12 +595,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
 	$ sudo systemctl daemon-reload
-	$ sudo youtube-dl --update
+	$#sudo youtube-dl --update
+	$ sudo yt-dlp --update
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" | sudo tee /etc/release
-	
 	$ cat /etc/release
+
 	$ mpc clear
-	
 	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
 	$ sudo poweroff

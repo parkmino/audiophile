@@ -12,17 +12,18 @@
 # By default this script does nothing.
 
 eol () {
- [ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
- ntpdate pool.ntp.org || true
+ [ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd&>/dev/null 0</dev/null&
+#systemctl stop systemd-timesyncd || true
+#ntpdate -d pool.ntp.org || true
  /home/pi/llctl f0 l0 d0 || true
- echo none > /sys/class/leds/led0/trigger
- echo 0    > /sys/class/leds/led0/brightness
+ echo none > /sys/class/leds/led0/trigger || true
+ echo 0    > /sys/class/leds/led0/brightness || true
  sleep 1
- [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+ [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness || true
 }
 
 mpd_bg () {
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -np $(pgrep -x mpd) | grep -q output); do
+ until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pgrep -x mpd) | grep -q output); do
   sleep 1
  done
  sleep 1
@@ -98,9 +99,9 @@ spotifyd () {
 }
 
 airconnect () {
- cp /home/pi/airupnp-arm /dev/shm/
-/dev/shm/airupnp-arm -l 1000:2000 -r -Z -z &>/dev/null</dev/null
- [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-arm) || true
+ cp /home/pi/airupnp-arm-static /dev/shm/
+/dev/shm/airupnp-arm-static -l 1000:2000 -r -Z -z &>/dev/null</dev/null
+ [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-arm-static) || true
 }
 
 naa () {
@@ -129,7 +130,7 @@ else
 fi
 
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /etc/mympd.conf /dev/shm/
+cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
@@ -176,7 +177,6 @@ done
 #done
 pkill alsactl || true
 pkill rngd    || true
-systemctl stop systemd-timesyncd || true
 [ "$dbus" = off ] && systemctl stop dbus  || true
 [ "$wifi" = off ] && pkill wpa_supplicant || true
 swapoff -a
@@ -213,7 +213,7 @@ fi
 [ "$usb" = on ] || uhubctl -a 0 -p "$usb"
 
 ### Turn off HDMI
-/opt/vc/bin/tvservice -o
+#/opt/vc/bin/tvservice -o
 #service getty@tty1 stop
 
 ### Roon Bridge
