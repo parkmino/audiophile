@@ -243,13 +243,6 @@ for i in RoonBridge librespot networkaudiod; do
  fi
 done
 
-### Text to Speech
-#[ "$tts" = on ] && [ "$tts_eng" = on  ] && tts en My I P is $(hostname -I)
-#[ "$tts" = on ] && [ "$tts_eng" = off ] && tts
-
-### Read-only
-#remountro
-
 if [ "$upnp" = on ]; then
  mpd_bg &
  upmpd_bg &
