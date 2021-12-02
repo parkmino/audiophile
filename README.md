@@ -3,7 +3,7 @@
 It is my private audiophile tunings related to Linux and Open Source Software.  
 I hope it could be any help and get your own way.
 
-[Blog in Korean](http://blog.naver.com/parkmino45)  
+[Blog in Korean](https://blog.naver.com/parkmino45)  
 [WordPress in Korean](https://mino170001903.wordpress.com/)  
-[UPnP/DLNA audio renderer 20.06 for Raspberry Pi](https://drive.google.com/file/d/1XfZNM2vw8UsSDrX4kKjDcJNi0E8DtUw8)  
+[UPnP/DLNA audio renderer 21.12 for Raspberry Pi](https://drive.google.com/file/d/1xXj0t2vKre4osyyDL8KUTOp46jk3TyQC)  
 [LibreELEC 9.2.6 audio tuning 20.11 for Raspberry Pi 2/3](https://drive.google.com/file/d/15BD2QacZr9HkTbaMgpBgAPSRQeZnoWQc)
