@@ -100,6 +100,7 @@ spotifyd () {
 
 airconnect () {
  cp /home/pi/airupnp-arm-static /dev/shm/
+ sleep 2
 /dev/shm/airupnp-arm-static -l 1000:2000 -r -Z -z &>/dev/null</dev/null
  [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-arm-static) || true
 }
