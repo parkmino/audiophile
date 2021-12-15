@@ -52,7 +52,7 @@ torqq () {
  for i in $(seq 1 10); do
   movie=$(head -$((i+1)) "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
   chk_movie
-  printf "     \e[34m$(grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" "$tmpfile" | head -$i | tail -1 | cut -d\" -f2)\e[0m\n"
+  printf "    \e[34m$(grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" "$tmpfile" | head -$i | tail -1 | cut -d\" -f2)\e[0m\n"
  done
  rm "$tmpfile"
 }
@@ -66,13 +66,28 @@ torview () {
  for i in $(seq 1 10); do
   movie=$(grep '</a>' "$tmpfile" | head -$i | tail -1 | sed 's/ <\/a>//' | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
   chk_movie
-  printf "     \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g')\e[0m\n"
+  printf "    \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g')\e[0m\n"
+ done
+ rm "$tmpfile"
+}
+
+tfreeca () {
+ url="https://tfreeca22.com"
+ chk_url || return
+ url="$url//top100.php?b_id=tmovie&hit=Week"
+ tmpfile=$(mktemp)
+ curl $curl_opt -L "$url" | grep -m 10 '<span class="ca">' > "$tmpfile"
+ for i in $(seq 1 10); do
+  movie=https://tfreeca22.com/$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f10)
+  chk_movie
+  printf "    \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f13 | sed 's/^> //g; s/ <\/a>.*//g')\e[0m\n"
  done
  rm "$tmpfile"
 }
 
 case $1 in
- view|vw) torview ;;
- qq|*)    torqq   ;;
+ view|vw)   torview ;;
+ tfeeca|tf) tfreeca ;;
+ qq|*)      torqq   ;;
 # *)       torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
 esac
