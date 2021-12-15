@@ -10,7 +10,7 @@ until [ ! -z $(pgrep -x mpd) ]; do
 done
 
 sleep 1
-[ "$mpd_ver" -ge 21 ] && mpc add Etc/blank.mp3 && mpc play $(mpc playlist | wc -l)
+[ "$mpd_ver" -ge 21 ] && mpc add test/blank.mp3 && mpc play $(mpc playlist | wc -l)
 
 sec=0
 until [ ! -z $(pgrep -x mpd) ] && $(pstree -npt $(pgrep -x mpd) | grep -q output); do
