@@ -511,7 +511,8 @@ MPD_CANTATA_MYMPD () {
   if [ -z "$release" ] || [ -z "$date" ]; then
    printf "\t\t\t\t정보 없음\n"
   else
-   printf "$release ($(date -d "$date" +%F))\t\t"
+   printf "$release ($(date -d "$date" +%F))"
+   [ ${#release} -ge 8 ] && printf "\t" || printf "\t\t"
    days_diff
    if [ "$days" -le 1 2>/dev/null ]; then
     echo "  \e[34m$url\e[0m"
@@ -531,7 +532,8 @@ MYMPD_DEV () {
   [ "$i" = master ] || [ "$i" = gh-pages ] && continue || printf "• myMPD Dev\t"
   url="https://github.com/jcorporation/myMPD/commits/$i"
   date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
-  printf "$i ($(date -d "$date" +%F))\t\t"
+  printf "$i ($(date -d "$date" +%F))"
+  [ ${#i} -ge 8 ] && printf "\t" || printf "\t\t"
   days_diff
   if [ "$days" -le 1 2>/dev/null ]; then
    echo "  \e[34m$url\e[0m"
