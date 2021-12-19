@@ -190,9 +190,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"
-		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@">/dev/null 2>/dev/null</dev/null
+		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"&>/dev/null </dev/null
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"
-		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@">/dev/null 2>/dev/null</dev/null
+		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"&>/dev/null </dev/null
 		 fi
 	$ sudo cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	$ sudo sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
