@@ -64,16 +64,14 @@ until [ "$i" = "q" ] ; do
   \e[35mBuild:$(consf build) (IP:$ip) - $card0\e[0m
 
  (\e[32m1\e[0m) [ $([ "$status_dop"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD DoP (DSD over PCM)
- (\e[32m2\e[0m) [ $([ "$status_pcm"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD PCM Decoder
- (\e[32m3\e[0m) [ $([ "$status_vol"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Software Volume
- (\e[32m4\e[0m) [ $([ "$status_sta"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD State File
- (\e[32m5\e[0m) [ $([ "$status_tag"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Tag Metadata
+ (\e[32m2\e[0m) [ $([ "$status_vol"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD Software Volume
+ (\e[32m3\e[0m) [ $([ "$status_sta"     = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] MPD State File
 
- (\e[32m6\e[0m) [ $([ "$status_airplay" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Airplay
- (\e[32m7\e[0m) [ $([ "$status_roon"    = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Roon Bridge
- (\e[32m8\e[0m) [ $([ "$status_spotify" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Spotify
- (\e[32m9\e[0m) [ $([ "$status_sqzlite" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Squeezebox
- (\e[32m0\e[0m) [ $([ "$status_gerbera" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Gerbera
+ (\e[32m4\e[0m) [ $([ "$status_airplay" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Airplay
+ (\e[32m5\e[0m) [ $([ "$status_roon"    = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Roon Bridge
+ (\e[32m6\e[0m) [ $([ "$status_spotify" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Spotify
+ (\e[32m7\e[0m) [ $([ "$status_sqzlite" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Squeezebox
+ (\e[32m8\e[0m) [ $([ "$status_gerbera" = off ] && echo "\e[33mX\e[0m" || echo "\e[33mO\e[0m") ] Gerbera
  (\e[32mn\e[0m) [ \e[33m"$current_name"\e[0m ] Renderer Name / 렌더러 이름 >>
 
  (\e[32mu\e[0m) Update Roon Bridge / 룬 브리지 업데이트
@@ -81,20 +79,20 @@ until [ "$i" = "q" ] ; do
  (\e[32mq\e[0m) Quit               / 나가기
  (\e[32mr\e[0m) Reboot             / 재시작하여 적용
 
-  *  Select / 선택 (\e[32m1-0\e[0m|\e[32mn\e[0m|\e[32mu\e[0m|\e[32ms\e[0m|\e[32mq\e[0m|\e[32mr\e[0m) : "
+  *  Select / 선택 (\e[32m1-8\e[0m|\e[32mn\e[0m|\e[32mu\e[0m|\e[32ms\e[0m|\e[32mq\e[0m|\e[32mr\e[0m) : "
  read i
  echo
  case $i in
   1) [ $status_dop     = off ] && consf mpd dop on || consf mpd dop off ;;
-  2) [ $status_pcm     = off ] && consf mpd pcm on || consf mpd pcm off ;;
-  3) [ $status_vol     = off ] && consf mpd vol on || consf mpd vol off ;;
-  4) [ $status_sta     = off ] && consf mpd sta on || consf mpd sta off ;;
-  5) [ $status_tag     = off ] && consf mpd tag on || consf mpd tag off ;;
-  6) [ $status_airplay = off ] && consf airplay on || consf airplay off ;;
-  7) [ $status_roon    = off ] && consf roon    on || consf roon    off ;;
-  8) [ $status_spotify = off ] && consf spotify on || consf spotify off ;;
-  9) [ $status_sqzlite = off ] && consf sqzlite on || consf sqzlite off ;;
-  0) [ $status_gerbera = off ] && consf gerbera on || consf gerbera off ;;
+# 2) [ $status_pcm     = off ] && consf mpd pcm on || consf mpd pcm off ;;
+  2) [ $status_vol     = off ] && consf mpd vol on || consf mpd vol off ;;
+  3) [ $status_sta     = off ] && consf mpd sta on || consf mpd sta off ;;
+# 5) [ $status_tag     = off ] && consf mpd tag on || consf mpd tag off ;;
+  4) [ $status_airplay = off ] && consf airplay on || consf airplay off ;;
+  5) [ $status_roon    = off ] && consf roon    on || consf roon    off ;;
+  6) [ $status_spotify = off ] && consf spotify on || consf spotify off ;;
+  7) [ $status_sqzlite = off ] && consf sqzlite on || consf sqzlite off ;;
+  8) [ $status_gerbera = off ] && consf gerbera on || consf gerbera off ;;
   n) renderer_name	;;
   u) roonup		;;
   s) bash		;;

@@ -185,12 +185,10 @@ Input renderer name to change.   바꿀 렌더러 이름을 입력합니다." --
 }
 
 mpd_options () {
-i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 11 67 5 \
+i=$(whiptail --title "MPD options / MPD 옵션" --checklist "MPD options / MPD 옵션" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 11 67 3 \
 "dop" "Enable DoP (DSD over PCM)   DoP 사용"              $(consf mpd dop) \
-"pcm" "Enable PCM Decoder          PCM 디코더 사용"       $(consf mpd pcm) \
 "vol" "Enable Software Volume      소프트웨어 볼륨 사용" $(consf mpd vol) \
-"sta" "Enable State File           상태 파일 사용"       $(consf mpd sta) \
-"tag" "Enable Tag Metadata         태그 메타데이터 사용" $(consf mpd tag) 3>&1 1>&2 2>&3)
+"sta" "Enable State File           상태 파일 사용"       $(consf mpd sta) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
@@ -225,64 +223,6 @@ if [ "$exitstatus" = 0 ]; then
 # sudo sed -i '/tidal=/s/=.*/=off/' $audio_conf
 #fi
 fi
-}
-
-upmpd_tidal () {
-while true; do
-
-i=$(whiptail --title "Upmpdcli Tidal / Tidal 설정" --menu "\
-
-    To disable Tidal, just remove username or password.
-   사용자나 비밀번호를 지우면 Tidal을 사용하지 않습니다." --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 13 63 3 \
-"1"  "Tidal ┬ username        사용자        >" \
-"2"  "      │ password        비밀번호      >" \
-"3"  "      └ quality         품질          >" 3>&1 1>&2 2>&3)
-
-exitstatus=$?
-[ "$exitstatus" != 0 ] && return
-
-case $i in
- 1) tidal_user=$(grep "tidaluser =" $upmpdcli_conf | cut -d' ' -f3-)
-    input_user=$(whiptail --title "Tidal username / Tidal 사용자" --inputbox "\
-
-Input Tidal username.   Tidal 사용자를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 10 54 "$tidal_user" 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_user" ]; then
-      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
-      sudo sed -i '/tidaluser =/s/^#*//; /tidaluser =/s/=.*/= '"$input_user"'/' $upmpdcli_conf
-     else
-      sudo sed -i '/tidaluser =/s/^/#/; /tidaluser =/s/=.*/=/' $upmpdcli_conf
-      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
-     fi
-    fi ;;
- 2) tidal_pwd=$(grep "tidalpass =" $upmpdcli_conf | cut -d' ' -f3-)
-    input_pwd=$(whiptail --title "Tidal password / Tidal 비밀번호" --inputbox "\
-
-Input Tidal password.   Tidal 비밀번호를 입력합니다." --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 10 56 "$tidal_pwd" 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ "$exitstatus" = 0 ]; then
-     if [ -n "$input_pwd" ]; then
-      ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
-      sudo sed -i '/tidalpass =/s/^#*//; /tidalpass =/s/=.*/= '"$input_pwd"'/' $upmpdcli_conf
-     else
-      sudo sed -i '/tidalpass =/s/^/#/; /tidalpass =/s/=.*/=/' $upmpdcli_conf
-      [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
-     fi
-    fi ;;
- 3) i=$(whiptail --title "Tidal quality / Tidal 품질" --menu "Tidal quality / Tidal 품질" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" --default-item 3 10 50 3 \
-"1" "low" \
-"2" "high" \
-"3" "loseless" 3>&1 1>&2 2>&3)
-
-    case $i in
-     1) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= low/'      $upmpdcli_conf ;;
-     2) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= high/'     $upmpdcli_conf ;;
-     3) sudo sed -i '/tidalquality =/s/^#*//; /tidalquality =/s/=.*/= loseless/' $upmpdcli_conf ;;
-    esac ;;
-esac
-
-done
 }
 
 while true; do

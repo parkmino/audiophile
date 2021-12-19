@@ -20,7 +20,7 @@ case "$1:$2:$3" in
  mpd:pcm:off)   sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  $mpd_conf			;;
  mpd:pcm:*)     grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo on || echo off	;;
  mpd:vol:on)    sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf			;;
- mpd:vol:off)   sudo sed -i '/mixer_type/s/".*"/"none"/'     $mpd_conf			;;
+ mpd:vol:off)   sudo sed -i '/mixer_type/s/".*"/"\/dev\/null"/' $mpd_conf			;;
  mpd:vol:*)     grep -q 'mixer_type.*software' $mpd_conf && echo on || echo off		;;
  mpd:sta:on)    sudo sed -i '/state_file/s/^#*//' $mpd_conf				;;
  mpd:sta:off)   sudo sed -i '/state_file/s/^/#/'  $mpd_conf				;;
