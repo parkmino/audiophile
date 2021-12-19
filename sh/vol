@@ -74,7 +74,7 @@ case $1 in
 	76 76 76 77 77 78 78 78 79 79
 	80 80 80 81 81 82 82 82 83 83
 	83 84 84 84 85 85 85 86 86 86 87 "
-  if ! amixer get Master 2>/dev/null; then
+  if ! amixer get Master >/dev/null 2>&1; then
    echo "No Master volume control found!"
    sudo sed -i '/ctl.default/d' $alsa_conf
    exit
