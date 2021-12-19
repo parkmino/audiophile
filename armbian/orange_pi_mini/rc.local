@@ -159,9 +159,9 @@ done
 
 hdparm -A1 -a2048 -B255 -M0 /dev/sda
 
-#/dev/shm/rygel -c /dev/shm/rygel.conf 1</dev/null 2</dev/null 0</dev/null
-#/dev/shm/minidlnad -f /dev/shm/minidlna.conf</dev/null&>/dev/null
-/dev/shm/minidlnad -f /dev/shm/minidlna.conf &>/dev/null</dev/null
-#/dev/shm/minidlnad -f /dev/shm/minidlna.conf 1</dev/null 2</dev/null 0</dev/null
+#/dev/shm/rygel -c /dev/shm/rygel.conf&>/dev/null </dev/null
+#/dev/shm/minidlnad -f /dev/shm/minidlna.conf&>/dev/null </dev/null
+/dev/shm/minidlnad -f /dev/shm/minidlna.conf&>/dev/null </dev/null
+#/dev/shm/minidlnad -f /dev/shm/minidlna.conf&>/dev/null </dev/null
 
 exit 0
