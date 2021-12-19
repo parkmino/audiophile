@@ -63,4 +63,4 @@ mpd_bg () {
 
 mpd_bg &
 sleep 1
-/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null 0</dev/null
+/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null

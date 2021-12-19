@@ -46,7 +46,7 @@ mpd_bg () {
  ### Text to Speech
  [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
  [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
-/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf &>/dev/null</dev/null
+/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null </dev/null
 }
 
 upmpd_bg () {
@@ -74,7 +74,7 @@ roon_bridge () {
 
 sqzlite () {
  cp /home/pi/squeezelite /dev/shm/
-/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -z &>/dev/null</dev/null || true
+/dev/shm/squeezelite -o pcm.hw -O /dev/null -C 1 -z&>/dev/null </dev/null || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
 #[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
@@ -93,15 +93,15 @@ sqzlite () {
 spotifyd () {
 #cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
 #sleep 1
-#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf &>/dev/null</dev/null
+#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf&>/dev/null </dev/null
  cp /home/pi/librespot /dev/shm/
-/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.hw --mixer alsa --mixer-card ctl.hw &
+/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.hw --mixer alsa --mixer-card /dev/null &
 }
 
 airconnect () {
  cp /home/pi/airupnp-arm-static /dev/shm/
- sleep 2
-/dev/shm/airupnp-arm-static -l 1000:2000 -r -Z -z &>/dev/null</dev/null
+ sleep 10
+/dev/shm/airupnp-arm-static -l 1000:2000 -r -Z -z&>/dev/null </dev/null
  [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-arm-static) || true
 }
 
@@ -247,7 +247,7 @@ done
 if [ "$upnp" = on ]; then
  mpd_bg &
  upmpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf &>/dev/null</dev/null
+/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
 else
  eol
 fi
