@@ -54,11 +54,11 @@ $ cat debian/changelog
 $ debuild -S -k5109AD1DC308EC34 # -sd
 $ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~focal_source.changes
 
-#$ sed -i '1s/focal/bionic/g' debian/changelog
-#$ cat debian/changelog
+$ sed -i '1s/focal/bionic/g' debian/changelog
+$ cat debian/changelog
 	mympd ($ver-1ppa1~bionic) bionic; urgency=medium
-#$ debuild -S -k5109AD1DC308EC34 -sd
-#$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~bionic_source.changes
+$ debuild -S -k5109AD1DC308EC34 -sd
+$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~bionic_source.changes
 
 #$ sed -i '1s/bionic/xenial/g' debian/changelog
 #$ cat debian/changelog
