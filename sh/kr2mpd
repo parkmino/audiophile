@@ -65,7 +65,7 @@ case $1 in
         #duckdns sbs2fm
         ;;
  cbs)   pls "http://aac.cbs.co.kr/cbs939/cbs939.stream/playlist.m3u8" ;;
- tbs)   pls "https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_720.smil/playlist.m3u8" ;;
+ tbs)   pls "https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8" ;;
  tbse)  pls "https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8" ;;
  gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
  stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
