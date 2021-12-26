@@ -1,19 +1,25 @@
 #!/bin/sh
 
-url="http://saycast.sayclub.com/station/home/index/hifi"
+stream=radioboss #saycast
 host="127.0.0.1"
 
 echo "\
 * ClassicHiFi
   http://hifi.saycast.com (MP3 320kbps@48kHz)
-  http://c15.radioboss.fm:8167/stream (AAC 325kbps@96kHz)"
+  http://c15.radioboss.fm:8167/live (AAC 325kbps@96kHz)"
 
-now=$(curl -s $url | grep -m1 "<div id=\"moreMusic\">" | cut -d\> -f2- | cut -d\< -f1)
+case $stream in
+ saycast)
+  #url=$(curl -s http://hificlass.inlive.co.kr/listen.pls | grep -m1 -i file | cut -d= -f2)
+  #[ -z "$url" ] && url=$(curl -s http://saycast.sayclub.com/station/home/index/hifi | grep -i playmusic | cut -d\> -f3 | cut -d\< -f1)
+  url="http://hifi.saycast.com"
+  now=$(curl -s "http://saycast.sayclub.com/station/home/index/hifi" | grep -m1 "<div id=\"moreMusic\">" | cut -d\> -f2- | cut -d\< -f1)
+  [ -z "$url" ] || ! ffprobe -timeout 5 -listen_timeout 5 -v quiet "$url" && echo "${0##*/} stream ("$url") is not available!" && exit ;;
+ radioboss|*)
+  url="http://c15.radioboss.fm:8167"
+  now=$(curl -s $url | grep -o 'Currently playing'.* | cut -d\> -f3- | cut -d\< -f1)
+  url=$url/live ;;
+esac
+
 [ -n "$now" ] && echo "$now"
-
-if [ "$1" = play ]; then
- url=$(curl -s http://hificlass.inlive.co.kr/listen.pls | grep -m1 -i file | cut -d= -f2)
- [ -z "$url" ] && url=$(curl -s http://saycast.sayclub.com/station/home/index/hifi | grep -i playmusic | cut -d\> -f3 | cut -d\< -f1)
- [ -z "$url" ] || ! ffprobe -timeout 5 -listen_timeout 5 -v quiet "$url" && echo "${0##*/} stream ("$url") is not available!" && exit
- mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
-fi
+[ "$1" = play ] && mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
