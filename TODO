@@ -1,12 +1,4 @@
-01. ALSA library for Sylphid
-
-	# wget -P /etc/ https://github.com/parkmino/audiophile/raw/master/artik710/libasound.so.2.0.0.{min,mix,plug}_1.2.3.1.dev.shm
-	# mv /etc/libasound.so.2.0.0.min_1.2.3.1.dev.shm  /etc/libasound.so.2.0.0.min.dev.shm
-	# mv /etc/libasound.so.2.0.0.mix_1.2.3.1.dev.shm  /etc/libasound.so.2.0.0.mix.dev.shm
-	# mv /etc/libasound.so.2.0.0.plug_1.2.3.1.dev.shm /etc/libasound.so.2.0.0.plug.dev.shm
-	# sed -i 's/libasound.so.2.0.0.min /libasound.so.2.0.0.min.dev.shm /; s/libasound.so.2.0.0.mix /libasound.so.2.0.0.mix.dev.shm /; s/libasound.so.2.0.0.plug /libasound.so.2.0.0.plug.dev.shm /; /^ln.*alsa.conf/s/^/#/' /etc/rc.local
-
-02. ALSA conf
+01. ALSA conf
 
 	$ sudo rm /usr/share/alsa/alsa.conf
 	$ sudo sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0  device 0 sub/' /usr/share/alsa/alsa.conf.min
@@ -20,57 +12,27 @@
 		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
 		type hw  card $CARD  device $DEV subdevice $SUBDEV
 
+02. MPD null log and mixer
+
+	$ sudo nano /etc/mpd.conf.sav
+		log_file "/dev/null"
+		mixer_type "/dev/null"
+
 03. Shell redirection
 
-	&>/dev/null 0</dev/null[=>] &>/dev/null</dev/null
+	/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
 
-	# sed -i 's/\&>\/dev\/null 0<\/dev\/null/ \&>\/dev\/null<\/dev\/null/g' /etc/rc.local /opt/RoonBridge/Bridge/RoonBridge
-
-04. MPD audio buffer
-	$ sudo nano /etc/mpd.conf.sav
-		audio_buffer_size "3684"
-		buffer_before_play "9.9999039749999%"
-
-	$ sudo sed -i 's/0.*%/03974999%/' /etc/mpd.conf.sav
-
-05. hdparm
-
-	$ sudo nano /etc/hdparm.conf
-		read_ahead_sect = 2048
-	$ sudo hdparm -a2048 /dev/sda
-
-06. Tune Kernel Parameters
+04. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 230002
-		kernel.sched_wakeup_granularity_ns = 388321
-		kernel.sched_latency_ns = 1394090
-		kernel.sched_migration_cost_ns = 4899032
+		kernel.sched_min_granularity_ns = 230005
+		kernel.sched_wakeup_granularity_ns = 388326
+		kernel.sched_latency_ns = 1394094
+		kernel.sched_migration_cost_ns = 4899035
 		net.ipv4.tcp_rmem = 4613 88283 3345702
 		net.ipv4.tcp_wmem = 4547 89932 3455682
 
-	$ sudo sed -i 's/229978/230002/g; s/388287/388321/g; s/1394065/1394090/g; s/4899005/4899032/g; s/4604 88254 3345671/4613 88283 3345702/g; s/4528 89899 3455599/4547 89932 3455682/g' /etc/sysctl.conf
-
-07. More CPU Affinities
-
-	$ sudo nano /etc/rc.local
-		#for i in agetty mympd ttyd; do
-		# if [ "$procnr" -ge 2 ] && pidof -q $i; then
-		#  for j in $(pidof $i); do
-		#   taskset -acp $s_task,$h_task,$o_task $j || true
-		#  done
-		# fi
-		#done
-
-	$ sudo nano /etc/rc.local
-		[ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd /dev/shm/mympd.conf&>/dev/null 0</dev/null&
-
-08. Tune squeezelite
-
-	$ sudo nano /etc/rc.local
-		/dev/shm/squeezelite -o pcm.hw -O ctl.hw -C 1 -a 41:10::1 -b 2660:3838
-
-09. myMPD customized navbar
+05. myMPD customized navbar
 
 	$ sudo nano /var/lib/mympd/state/navbar_icons
 		[
@@ -116,7 +78,5 @@
 		    "options": ["Search"],
 		    "badge": ""
 		  }
+
 		]
-
-
-10. Shell redirection tuning for OMV
