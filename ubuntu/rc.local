@@ -19,11 +19,11 @@
  sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
- sysctl -w kernel.sched_min_granularity_ns=230002
- sysctl -w kernel.sched_wakeup_granularity_ns=388321
- sysctl -w kernel.sched_latency_ns=1394090
+ sysctl -w kernel.sched_min_granularity_ns=230005
+ sysctl -w kernel.sched_wakeup_granularity_ns=388326
+ sysctl -w kernel.sched_latency_ns=1394094
  sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899032
+ sysctl -w kernel.sched_migration_cost_ns=4899035
  sysctl -w kernel.sched_nr_migrate=0
  sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window_ns=345997
@@ -163,7 +163,6 @@ hdparm -A1 -a2048 -B255 /dev/sda # -M0
 for i in $(ls /dev/snd/); do
  [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"
 done
-rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
 #for i in dbus-daemon nimf polkitd systemd-journal systemd-logind systemd-udevd udisksd; do
 # if [ "$procnr" -ge 2 ] && pidof -q $i; then
@@ -172,6 +171,8 @@ rm /dev/snd/*D[1-9]* /dev/snd/*c /dev/snd/hw* /dev/snd/seq /dev/snd/timer || tru
 #  done
 # fi
 #done
+
+ps -ef | grep [d]efunct | awk '{print $3}' | xargs -r kill -9
 
 modprobe -r psmouse
 
