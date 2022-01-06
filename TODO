@@ -1,11 +1,9 @@
 01. ALSA conf
 
 	$ sudo rm /usr/share/alsa/alsa.conf
-	$ sudo sed -i 's/pcm.hw.*sub/pcm.hw {  type hw  card 0  device 0 sub/' /usr/share/alsa/alsa.conf.min
-	$ sudo sed -i 's/pcm.hw.*args/pcm.hw {  @args/; s/^type hw.*sub/type hw  card $CARD  device $DEV sub/' /usr/share/alsa/alsa.conf.{mix,plug}
-
-	$ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
+	$ sudo nano /usr/share/alsa/alsa.conf.min
 		pcm.hw {  type hw  card 0  device 0 subdevice 0}
+	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
 		pcm.hw {  @args[CARD DEV SUBDEV]
 		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
 		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
@@ -16,7 +14,13 @@
 
 	$ sudo nano /etc/mpd.conf.sav
 		log_file "/dev/null"
-		mixer_type "/dev/null"
+		audio_output {
+		type "alsa"
+		name "ALSA"
+		device "hw"
+		mixer_type "none"
+		replay_gain_handler "none"
+		}
 
 03. Shell redirection
 
