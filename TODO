@@ -2,13 +2,13 @@
 
 	$ sudo rm /usr/share/alsa/alsa.conf
 	$ sudo nano /usr/share/alsa/alsa.conf.min
-		pcm.hw{type hw card 0 device 0 subdevice 0}
+		pcm.hw{type hw card  0 device 0 subdevice 0}
 	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
 		pcm.hw{@args[CARD DEV SUBDEV]
 		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
 		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
 		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
-		type hw card $CARD device $DEV subdevice $SUBDEV
+		type hw card  $CARD device $DEV subdevice $SUBDEV
 
 02. MPD null log and mixer
 
@@ -24,15 +24,15 @@
 
 03. Shell redirection
 
-	/dev/shm/mpd /dev/shm/mpd.conf</dev/null&>/dev/null
+	/dev/shm/mpd /dev/shm/mpd.conf>/dev/null 2>/dev/null</dev/zero
 
 04. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 230006
-		kernel.sched_wakeup_granularity_ns = 388327
-		kernel.sched_latency_ns = 1394095
-		kernel.sched_migration_cost_ns = 4899036
+		kernel.sched_min_granularity_ns = 230007
+		kernel.sched_wakeup_granularity_ns = 388328
+		kernel.sched_latency_ns = 1394096
+		kernel.sched_migration_cost_ns = 4899037
 		net.ipv4.tcp_rmem = 4614 88303 3345712
 		net.ipv4.tcp_wmem = 4557 89939 3455692
 
