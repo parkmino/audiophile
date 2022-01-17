@@ -33,8 +33,8 @@
 		kernel.sched_wakeup_granularity_ns = 388328
 		kernel.sched_latency_ns = 1394096
 		kernel.sched_migration_cost_ns = 4899037
-		net.ipv4.tcp_rmem = 4614 88303 3345712
-		net.ipv4.tcp_wmem = 4557 89939 3455692
+		net.ipv4.tcp_rmem = 4615 88304 3345714
+		net.ipv4.tcp_wmem = 4558 89940 3455694
 
 05. myMPD customized navbar
 
