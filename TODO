@@ -29,12 +29,15 @@
 04. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 230007
-		kernel.sched_wakeup_granularity_ns = 388328
-		kernel.sched_latency_ns = 1394096
-		kernel.sched_migration_cost_ns = 4899037
-		net.ipv4.tcp_rmem = 4615 88304 3345714
-		net.ipv4.tcp_wmem = 4558 89940 3455694
+		kernel.sched_min_granularity_ns = 230007		# 230012
+		kernel.sched_wakeup_granularity_ns = 388328	# 388333
+		kernel.sched_latency_ns = 1394096		# 1394101
+		kernel.sched_migration_cost_ns = 4899037		# 4899042
+		kernel.sched_nr_migrate = 0			# 26
+		#kernel.sched_cfs_bandwidth_slice_us		# 5000
+		kernel.sched_rr_timeslice_ms = 32		# 100
+		net.ipv4.tcp_rmem = 4618 88307 3345716		# 
+		net.ipv4.tcp_wmem = 4560 89943 3455696		# 
 
 05. myMPD customized navbar
 
