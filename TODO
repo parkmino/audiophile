@@ -2,13 +2,13 @@
 
 	$ sudo rm /usr/share/alsa/alsa.conf
 	$ sudo nano /usr/share/alsa/alsa.conf.min
-		pcm.hw{type hw card  0 device 0 subdevice 0}
+		pcm.hw {type  hw card  0 device 0 subdevice 0}
 	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
-		pcm.hw{@args[CARD DEV SUBDEV]
+		pcm.hw {@args[CARD DEV SUBDEV]
 		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
 		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
 		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
-		type hw card  $CARD device $DEV subdevice $SUBDEV
+		type hw  card  $CARD device $DEV subdevice $SUBDEV
 
 02. MPD null log and mixer
 
@@ -17,7 +17,7 @@
 		audio_output {
 		type "alsa"
 		name "ALSA"
-		device "hw"
+		device "pcm.hw"
 		mixer_type "none"
 		replay_gain_handler "none"
 		}
@@ -29,15 +29,15 @@
 04. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_min_granularity_ns = 230007		# 230012
-		kernel.sched_wakeup_granularity_ns = 388328	# 388333
-		kernel.sched_latency_ns = 1394096		# 1394101
-		kernel.sched_migration_cost_ns = 4899037		# 4899042
-		kernel.sched_nr_migrate = 0			# 26
+		kernel.sched_min_granularity_ns = 230011
+		kernel.sched_wakeup_granularity_ns = 388332
+		kernel.sched_latency_ns = 1394102
+		kernel.sched_migration_cost_ns = 4899042
+		kernel.sched_nr_migrate = 25
 		#kernel.sched_cfs_bandwidth_slice_us		# 5000
-		kernel.sched_rr_timeslice_ms = 32		# 100
-		net.ipv4.tcp_rmem = 4618 88307 3345716		# 
-		net.ipv4.tcp_wmem = 4560 89943 3455696		# 
+		kernel.sched_rr_timeslice_ms = 32
+		net.ipv4.tcp_rmem = 4618 88307 3345716
+		net.ipv4.tcp_wmem = 4560 89943 3455696
 
 05. myMPD customized navbar
 
