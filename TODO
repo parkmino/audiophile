@@ -2,13 +2,13 @@
 
 	$ sudo rm /usr/share/alsa/alsa.conf
 	$ sudo nano /usr/share/alsa/alsa.conf.min
-		pcm.hw {type  hw card  0 device 0 subdevice 0}
+		pcm.hw { type  hw  card 0 device 0 subdevice 0}
 	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
-		pcm.hw {@args[CARD DEV SUBDEV]
+		pcm.hw { @args[CARD DEV SUBDEV]
 		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
 		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
 		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
-		type hw  card  $CARD device $DEV subdevice $SUBDEV
+		type  hw  card $CARD device $DEV subdevice $SUBDEV
 
 02. MPD null log and mixer
 
