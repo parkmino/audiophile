@@ -66,6 +66,8 @@ done
 # fi
 #done
 
+[ -d "/dev/snd/by-id" ] && sudo rm -rf /dev/snd/by-*
 ps -ef | grep [d]efunct | awk '{print $3}' | xargs -r sudo kill -9
+
 
 numlockx off

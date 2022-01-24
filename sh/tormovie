@@ -9,7 +9,7 @@ chk_url () {
  printf "\n[ %s ]\n\n" $url
  if ! fping -q $(echo "$url" | cut -d\/ -f3-) 2>&1 && ! wget --spider -q "$url" 2>&1; then
   echo "$url is not connected!"
-  return
+  exit
  fi
 }
 

@@ -38,8 +38,8 @@ case $1 in
   fi
 
   if [ "$1" = hdmi ] || [ "$1" = usb ]; then
-   sudo sed -i '1s/ card../ card '"$card"'/'    $alsa_conf
-   sudo sed -i '1s/ device../ device '"$dev"'/' $alsa_conf
+   sudo sed -i '1s/card.../card  '"$card"'/'    $alsa_conf
+   sudo sed -i '1s/device.../device  '"$dev"'/'  $alsa_conf
   else
    sudo cp $alsa_orig $alsa_conf
   fi
