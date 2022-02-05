@@ -19,13 +19,18 @@
  sysctl -w kernel.sched_autogroup_enabled=0
 #sysctl -w kernel.sched_rt_period_us=1000000
 #sysctl -w kernel.sched_rt_runtime_us=857422
- sysctl -w kernel.sched_min_granularity_ns=230005
- sysctl -w kernel.sched_wakeup_granularity_ns=388326
- sysctl -w kernel.sched_latency_ns=1394094
- sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899035
- sysctl -w kernel.sched_nr_migrate=0
- sysctl -w kernel.sched_rr_timeslice_ms=1
+#sysctl -w kernel.sched_min_granularity_ns=230007
+#echo 230011  | tee /sys/kernel/debug/sched/min_granularity_ns
+#sysctl -w kernel.sched_wakeup_granularity_ns=388328
+#echo 388332  | tee /sys/kernel/debug/sched/wakeup_granularity_ns
+#sysctl -w kernel.sched_latency_ns=1394096
+#echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
+#sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
+#sysctl -w kernel.sched_migration_cost_ns=4899037
+#echo 4899042 | tee /sys/kernel/debug/sched/migration_cost_ns
+#sysctl -w kernel.sched_nr_migrate=0
+#echo 25      | tee /sys/kernel/debug/sched/nr_migrate
+#sysctl -w kernel.sched_rr_timeslice_ms=32
 #sysctl -w kernel.sched_shares_window_ns=345997
 #sysctl -w kernel.sched_tunable_scaling=1
 #sysctl -w kernel.sched_time_avg_ms=6288
@@ -49,8 +54,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4613 88283 3345702'
- sysctl -w net.ipv4.tcp_wmem='4547 89932 3455682'
+#sysctl -w net.ipv4.tcp_rmem='4618 88307 3345716'
+#sysctl -w net.ipv4.tcp_wmem='4560 89943 3455696'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -65,9 +70,9 @@
 #ifconfig wlp2s0 txqueuelen 1875
 
 #echo hpet > /sys/devices/system/clocksource/clocksource0/current_clocksource || true
- echo 4032 > /sys/class/rtc/rtc0/max_user_freq || true
+#echo 4032 > /sys/class/rtc/rtc0/max_user_freq || true
 #sysctl -w dev.rtc.max-user-freq=4032 || true
- sysctl -w dev.hpet.max-user-freq=2147483520 || true
+#sysctl -w dev.hpet.max-user-freq=2147483520 || true
 
  echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall || true
@@ -97,7 +102,7 @@ swapoff -a
 #ln -sf /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
- cp /usr/bin/mpd /dev/shm/
+ cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mpv /home/parkmino/.config/mpv/mpv.conf /dev/shm/
  cp /etc/mpd.conf.sav /dev/shm/mpd.conf
  cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 #ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
@@ -161,7 +166,7 @@ fi
 hdparm -A1 -a2048 -B255 /dev/sda # -M0
 
 for i in $(ls /dev/snd/); do
- [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && rm -rf "/dev/snd/$i"
+ [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && [ ! "$i" = "pcmC1D0p"  ] && [ ! "$i" = "controlC1"  ] && rm -rf "/dev/snd/$i"
 done
 
 #for i in dbus-daemon nimf polkitd systemd-journal systemd-logind systemd-udevd udisksd; do

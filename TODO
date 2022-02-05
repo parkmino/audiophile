@@ -5,9 +5,7 @@
 		pcm.hw { type  hw  card  0  device  0  subdevice 0}
 	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
 		pcm.hw { @args[CARD DEV SUBDEV]
-		@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]defaul>
-		@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func>
-		@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
+		...
 		type  hw  card  $CARD  device  $DEV  subdevice $SUBDEV
 
 02. MPD null log and mixer
@@ -39,51 +37,5 @@
 		#net.ipv4.tcp_rmem = 4618 88307 3345716
 		#net.ipv4.tcp_wmem = 4560 89943 3455696
 
-05. myMPD customized navbar
+05. Remove takset
 
-	$ sudo nano /var/lib/mympd/state/navbar_icons
-		[
-		  {
-		    "ligature": "home",
-		    "title": "Home",
-		    "options": ["Home"],
-		    "badge":""
-		  },
-		  {
-		    "ligature": "play_arrow",
-		    "title": "Playback",
-		    "options": ["Playback"],
-		    "badge": ""
-		  },
-		  { 
-		    "ligature": "queue_music",
-		    "title":"Queue",
-		    "options": ["Queue"],
-		    "badge":"<span id=\"badgeQueueItems\" class=\"badge badge-secondary\"></span>"
-		  },
-		  {
-		    "ligature": "library_music",
-		    "title":"Browse",
-		    "options": ["Browse"],
-		    "badge":""
-		  },
-		  {
-		    "ligature": "folder",
-		    "title":"Folders",
-		    "options": ["Browse", "Filesystem"],
-		    "badge":""
-		  },
-		  {
-		    "ligature": "list",
-		    "title":"Playlists",
-		    "options": ["Browse", "Playlists"],
-		    "badge":""
-		  },
-		  {
-		    "ligature": "search",
-		    "title": "Search",
-		    "options": ["Search"],
-		    "badge": ""
-		  }
-
-		]

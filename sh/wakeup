@@ -2,45 +2,45 @@
 
 sudo hdparm -B255 /dev/sda
 
-procnr=$(nproc --all)
-if   [ "$procnr" -eq 2 ]; then
- m_task=0; s_task=1; h_task=1; o_task=1
-elif [ "$procnr" -eq 4 ]; then
- m_task=2; s_task=0; h_task=3; o_task=1,3
-elif [ "$procnr" -ge 8 ]; then
- m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
-else
- m_task=0; s_task=0; h_task=0; o_task=0
-fi
+#procnr=$(nproc --all)
+#if   [ "$procnr" -eq 2 ]; then
+# m_task=0; s_task=1; h_task=1; o_task=1
+#elif [ "$procnr" -eq 4 ]; then
+# m_task=2; s_task=0; h_task=3; o_task=1,3
+#elif [ "$procnr" -ge 8 ]; then
+# m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
+#else
+# m_task=0; s_task=0; h_task=0; o_task=0
+#fi
 
-for i in $(awk '/snd/{print +$1}' /proc/interrupts); do
- proc="/proc/irq/$i/smp_affinity"
- sudo sh -c "echo $(echo "2^$m_task" | bc) > $proc" || true
- echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
-done
-
-for i in $(awk '/enp3s0|1f.2/{print +$1}' /proc/interrupts); do
- proc="/proc/irq/$i/smp_affinity"
- sudo sh -c "echo $(echo "2^$s_task" | bc) > $proc" || true
- echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
-done
-
-for i in $(awk '/i915/{print +$1}' /proc/interrupts); do
- proc="/proc/irq/$i/smp_affinity"
- sudo sh -c "echo a > $proc" || true
- echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
-done
-#
-#for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
+#for i in $(awk '/snd/{print +$1}' /proc/interrupts); do
 # proc="/proc/irq/$i/smp_affinity"
-##sudo sh -c "echo $(echo "2^$m_task-1" | bc) > $proc" || true
-# sudo sh -c "echo "F" > $proc" || true
+# sudo sh -c "echo $(echo "2^$m_task" | bc) > $proc" || true
 # echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
 #done
 
-proc="/proc/irq/default_smp_affinity"
-sudo sh -c "echo $(echo "2^$s_task" | bc) > $proc"
-echo "$proc = $(cat $proc) ($(echo $proc | cut -d'/' -f4))"
+#for i in $(awk '/enp3s0|1f.2/{print +$1}' /proc/interrupts); do
+# proc="/proc/irq/$i/smp_affinity"
+# sudo sh -c "echo $(echo "2^$s_task" | bc) > $proc" || true
+# echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+#done
+
+#for i in $(awk '/i915/{print +$1}' /proc/interrupts); do
+# proc="/proc/irq/$i/smp_affinity"
+# sudo sh -c "echo a > $proc" || true
+# echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+#done
+#
+##for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
+## proc="/proc/irq/$i/smp_affinity"
+###sudo sh -c "echo $(echo "2^$m_task-1" | bc) > $proc" || true
+## sudo sh -c "echo "F" > $proc" || true
+## echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+##done
+
+#proc="/proc/irq/default_smp_affinity"
+#sudo sh -c "echo $(echo "2^$s_task" | bc) > $proc"
+#echo "$proc = $(cat $proc) ($(echo $proc | cut -d'/' -f4))"
 
 /home/parkmino/pri set
 
