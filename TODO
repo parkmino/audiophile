@@ -3,6 +3,8 @@
 	$ sudo rm /usr/share/alsa/alsa.conf
 	$ sudo nano /usr/share/alsa/alsa.conf.min
 		pcm.hw { type  hw  card  0  device  0  subdevice 0}
+		pcm.hw={ type  hw card 0 device 0 subdevice 0}
+		pcm.hw{type hw card 0 device 0 subdevice 0}
 	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
 		pcm.hw { @args[CARD DEV SUBDEV]
 		...
