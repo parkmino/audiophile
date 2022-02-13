@@ -284,9 +284,19 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
 15. HQPlayer NAA
-	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/buster/networkaudiod_4.1.1-46_armhf.deb
+	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/bullseye/networkaudiod_4.2.0-50_armhf.deb
 	$ sudo dpkg -i networkaudiod*.deb
-	$ sudo sed -i '/alsa=/s/=.*/=mix/' /etc/default/audio.conf
+	$ sudo systemctl disable networkaudiod
+	$ sudo cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
+	$ sudo nano /lib/systemd/system/networkaudiodtoram.service
+		ExecStart=/dev/shm/networkaudiod
+	$ sudo systemctl daemon-reload
+	$ sudo systemctl start networkaudiod
+	$ sudo systemctl stop  networkaudiod
+	$ sudo cp /usr/sbin/networkaudiod /dev/shm/
+	$ sudo systemctl start networkaudiodtoram
+	$ sudo systemctl stop  networkaudiodtoram
+	$ consf naa
 
 16. Squeezelite
 	$ mv copy/squeezelite ./
@@ -588,14 +598,16 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 	$ ps -ef | grep [d]efunct | awk '{print $3}'
-	$ sudo systemctl disable sshd
+	$ sudo systemctl disable ssh
 	##dietpi-services disable dropbear
 
 	$ sudo ntpdate pool.ntp.org
 	$ sudo apt-get update
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
-	$ sudo systemctl daemon-reload
+	$ 
+
+
 	$#sudo youtube-dl --update
 	$ sudo yt-dlp --update
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" | sudo tee /etc/release
@@ -604,6 +616,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ mpc clear
 	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
+	$ ls /lib/modules/
+	$ sudo rm -rf /lib/modules/...
 	$ sudo poweroff
 
 	$ sudo fdisk -l
