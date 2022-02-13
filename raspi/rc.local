@@ -12,7 +12,7 @@
 # By default this script does nothing.
 
 eol () {
- [ "$mympd" = on ] && taskset -ac $s_task,$h_task,$o_task /dev/shm/mympd&>/dev/null 0</dev/null&
+ [ "$mympd" = on ] && /dev/shm/mympd&
 #systemctl stop systemd-timesyncd || true
 #ntpdate -d pool.ntp.org || true
  /home/pi/llctl f0 l0 d0 || true
@@ -33,31 +33,23 @@ mpd_bg () {
   proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
   proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
   case $proc in
-   mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-   io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-   rtio)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr
+ # mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+ # io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
+   rtio)	#taskset -cp $s_task,$h_task,$o_task	$proc_nr
 		 chrt -opv 0         			$proc_nr ;;
  # player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
  # decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-   output)	 taskset -cp $m_task			$proc_nr
+   output)	#taskset -cp $m_task			$proc_nr
 		 chrt -op 0				$proc_nr ;;
   esac
  done
  ### Text to Speech
  [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
  [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
-/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf&>/dev/null </dev/null
+/dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf
 }
 
 upmpd_bg () {
- sec=0
- until [ ! -z $(pgrep -x upmpdcli) ]; do
-  sleep 1
-  sec=$(($sec+1))
-  [ "$sec" -ge 10 ] && break
- done
- sleep 1
- taskset -acp $s_task,$h_task,$o_task $(pgrep -x upmpdcli) || true
  [ "$airplay" = on ] && airconnect
  eol
  pkill rc.local
@@ -74,7 +66,7 @@ roon_bridge () {
 
 sqzlite () {
  cp /home/pi/squeezelite /dev/shm/
-/dev/shm/squeezelite -o pcm.hw -O /dev/null -C 1 -z&>/dev/null </dev/null || true
+/dev/shm/squeezelite -o pcm.hw -O /dev/null -C 1 -z || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
 #[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
@@ -101,8 +93,7 @@ spotifyd () {
 airconnect () {
  cp /home/pi/airupnp-arm-static /dev/shm/
  sleep 10
-/dev/shm/airupnp-arm-static -l 1000:2000 -r -Z -z&>/dev/null </dev/null
- [ "$h_task" -ge 1 ] && taskset -acp $s_task,$h_task,$o_task $(pidof airupnp-arm-static) || true
+/dev/shm/airupnp-arm-static -l 1000:2000 -r -Z -z
 }
 
 naa () {
@@ -119,7 +110,7 @@ naa () {
 if [ "$alsa" = plug ]; then
  cp /etc/libasound.so.2.0.0.plug.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
-elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ]; then
+elif [ "$alsa" = min ] && [ "$roon" = off ] && [ "$spotify" = off ] && [ "$naa" = off ]; then
  cp /etc/libasound.so.2.0.0.min.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -188,16 +179,16 @@ swapoff -a
 #m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 #[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
-procnr=$(nproc --all)
-if   [ "$procnr" -eq 2 ]; then
- m_task=0; s_task=1; h_task=1; o_task=1
-elif [ "$procnr" -eq 4 ]; then
- m_task=2; s_task=0; h_task=3; o_task=1,3
-elif [ "$procnr" -ge 8 ]; then
- m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
-else
- m_task=0; s_task=0; h_task=0; o_task=0
-fi
+#procnr=$(nproc --all)
+#if   [ "$procnr" -eq 2 ]; then
+# m_task=0; s_task=1; h_task=1; o_task=1
+#elif [ "$procnr" -eq 4 ]; then
+# m_task=2; s_task=0; h_task=3; o_task=1,3
+#elif [ "$procnr" -ge 8 ]; then
+# m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
+#else
+# m_task=0; s_task=0; h_task=0; o_task=0
+#fi
 
 #if [ "$m_task" -ge 1 ];then
 # for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|networkaudiod/ {print $1}'); do
@@ -233,21 +224,21 @@ fi
 [ "$gerbera" = on ] && systemctl start gerbera
 
 ### Taskset
-[ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
+#[ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
 #for pid in 1 $(pgrep -x rc.local); do
 # taskset -acp $s_task $pid || true
 #done
 
-for i in RoonBridge librespot networkaudiod; do
- if [ "$procnr" -ge 2 ] && pidof -q $i; then
-  taskset -acp 0-$procnr $(pidof $i) || true
- fi
-done
+#for i in RoonBridge librespot networkaudiod; do
+# if [ "$procnr" -ge 2 ] && pidof -q $i; then
+#  taskset -acp 0-$procnr $(pidof $i) || true
+# fi
+#done
 
 if [ "$upnp" = on ]; then
  mpd_bg &
  upmpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf&>/dev/null </dev/null
+/dev/shm/mpd /dev/shm/mpd.conf
 else
  eol
 fi

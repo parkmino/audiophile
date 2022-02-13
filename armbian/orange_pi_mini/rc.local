@@ -29,13 +29,13 @@
 #sysctl -w kernel.sched_rt_runtime_us=-1
 #sysctl -w kernel.sched_rt_period_us=1344760
 #sysctl -w kernel.sched_rt_runtime_us=1277522
- sysctl -w kernel.sched_min_granularity_ns=230002
- sysctl -w kernel.sched_wakeup_granularity_ns=388321
- sysctl -w kernel.sched_latency_ns=1394090
- sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
- sysctl -w kernel.sched_migration_cost_ns=4899032
- sysctl -w kernel.sched_nr_migrate=0
- sysctl -w kernel.sched_rr_timeslice_ms=1
+# sysctl -w kernel.sched_min_granularity_ns=230002
+# sysctl -w kernel.sched_wakeup_granularity_ns=388321
+# sysctl -w kernel.sched_latency_ns=1394090
+# sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
+# sysctl -w kernel.sched_migration_cost_ns=4899032
+# sysctl -w kernel.sched_nr_migrate=0
+# sysctl -w kernel.sched_rr_timeslice_ms=1
 #sysctl -w kernel.sched_shares_window=345997
  sysctl -w kernel.sched_tunable_scaling=0
 #sysctl -w kernel.sched_time_avg=6288
@@ -44,8 +44,8 @@
 #sysctl -w net.core.rmem_max=12582912
 #sysctl -w net.core.wmem_max=12582912
 #sysctl -w net.ipv4.conf.default.forwarding=1
-sysctl -w net.ipv4.tcp_rmem='4613 88283 3345702'
-sysctl -w net.ipv4.tcp_wmem='4547 89932 3455682'
+#sysctl -w net.ipv4.tcp_rmem='4613 88283 3345702'
+#sysctl -w net.ipv4.tcp_wmem='4547 89932 3455682'
 #sysctl -w net.ipv4.udp_mem='46464 57912 87618'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
@@ -95,16 +95,16 @@ done
 #m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
 #[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
 
-procnr=$(nproc --all)
-if   [ "$procnr" -eq 2 ]; then
- m_task=0; s_task=1; h_task=1; o_task=1
-elif [ "$procnr" -eq 4 ]; then
- m_task=2; s_task=0; h_task=3; o_task=1,3
-elif [ "$procnr" -ge 8 ]; then
- m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
-else
- m_task=0; s_task=0; h_task=0; o_task=0
-fi
+#procnr=$(nproc --all)
+#if   [ "$procnr" -eq 2 ]; then
+# m_task=0; s_task=1; h_task=1; o_task=1
+#elif [ "$procnr" -eq 4 ]; then
+# m_task=2; s_task=0; h_task=3; o_task=1,3
+#elif [ "$procnr" -ge 8 ]; then
+# m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
+#else
+# m_task=0; s_task=0; h_task=0; o_task=0
+#fi
 
 #if [ "$m_task" -ge 1 ];then
 # for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|mpd|networkaudiod|squeezelite/ {print $1}'); do
@@ -126,14 +126,14 @@ for i in /usr/bin/nohup /usr/bin/rygel /etc/rygel.conf /usr/sbin/minidlnad /etc/
  [ -e $i ] && cp $i /dev/shm/
 done
 
-(
+#(
 #for i in $(awk '/mv64/{print +$1}' /proc/interrupts); do
 # echo 2 > /proc/irq/$i/smp_affinity || true
 #done
 
-for i in $(awk '/sata|eth0/{print +$1}' /proc/interrupts); do
- echo 1 > /proc/irq/$i/smp_affinity || true
-done
+#for i in $(awk '/sata|eth0/{print +$1}' /proc/interrupts); do
+# echo 1 > /proc/irq/$i/smp_affinity || true
+#done
 
 #echo 2 > /proc/irq/default_smp_affinity
 
@@ -145,23 +145,23 @@ done
 #rygel_gmain=$(pstree -npt $(pgrep -x rygel) | grep gmain | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
 #taskset -acp $m_task $(pgrep -x rygel)
 #taskset -acp $m_task $rygel_gmain
-
- until [ $(pgrep -x minidlnad) -gt 0 ] 2>/dev/null; do
-  sleep 1
- done
- sleep 1
- minidlna_sub=$(pstree -npt $(pgrep -x minidlnad) | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
- taskset -acp $m_task $(pgrep -x minidlnad)
- taskset -acp $m_task $minidlna_sub
-
+#
+# until [ $(pgrep -x minidlnad) -gt 0 ] 2>/dev/null; do
+#  sleep 1
+# done
+# sleep 1
+# minidlna_sub=$(pstree -npt $(pgrep -x minidlnad) | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
+# taskset -acp $m_task $(pgrep -x minidlnad)
+# taskset -acp $m_task $minidlna_sub
+#
 #pkill rc.local
-) &
+#) &
 
 hdparm -A1 -a2048 -B255 -M0 /dev/sda
 
 #/dev/shm/rygel -c /dev/shm/rygel.conf&>/dev/null </dev/null
 #/dev/shm/minidlnad -f /dev/shm/minidlna.conf&>/dev/null </dev/null
-/dev/shm/minidlnad -f /dev/shm/minidlna.conf&>/dev/null </dev/null
+/dev/shm/minidlnad -f /dev/shm/minidlna.conf
 #/dev/shm/minidlnad -f /dev/shm/minidlna.conf&>/dev/null </dev/null
 
 exit 0
