@@ -190,10 +190,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"
-		 exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"&>/dev/null </dev/null
+		exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"
 		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"
-		 exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"&>/dev/null </dev/null
-		 fi
+		exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"
 	$ sudo cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	$ sudo sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
 	$ sudo systemctl daemon-reload
@@ -605,8 +604,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get update
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
-	$ 
-
 
 	$#sudo youtube-dl --update
 	$ sudo yt-dlp --update
@@ -617,7 +614,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
 	$ ls /lib/modules/
-	$ sudo rm -rf /lib/modules/...
 	$ sudo poweroff
 
 	$ sudo fdisk -l
