@@ -50,6 +50,13 @@ mpd_bg () {
 }
 
 upmpd_bg () {
+ sec=0
+ until [ ! -z $(pgrep -x upmpdcli) ]; do
+  sleep 1
+  sec=$(($sec+1))
+  [ "$sec" -ge 10 ] && break
+ done
+ sleep 1
  [ "$airplay" = on ] && airconnect
  eol
  pkill rc.local
@@ -87,7 +94,7 @@ spotifyd () {
 #sleep 1
 #/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf&>/dev/null </dev/null
  cp /home/pi/librespot /dev/shm/
-/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.hw --mixer alsa --mixer-card /dev/null &
+/dev/shm/librespot -n Librespot -b 320 --backend alsa --device pcm.hw --mixer alsa --alsa-mixer-device /dev/null &
 }
 
 airconnect () {
