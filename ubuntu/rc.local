@@ -74,7 +74,10 @@
 #sysctl -w dev.rtc.max-user-freq=4032 || true
 #sysctl -w dev.hpet.max-user-freq=2147483520 || true
 
- echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall || true
 
 echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
@@ -118,50 +121,50 @@ for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|m
  renice  -3 $pid || true
 done
 
-procnr=$(nproc --all)
-if   [ "$procnr" -eq 2 ]; then
- m_task=0; s_task=1; h_task=1; o_task=1
-elif [ "$procnr" -eq 4 ]; then
- m_task=2; s_task=0; h_task=3; o_task=1,3
-elif [ "$procnr" -ge 8 ]; then
- m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
-else
- m_task=0; s_task=0; h_task=0; o_task=0
-fi
-
-if [ "$m_task" -ge 1 ];then
- #for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
- # taskset -acp $s_task,$h_task,$o_task $pid 2>/dev/null || true
- #done
-
- until $(grep -q snd /proc/interrupts); do
-  sleep 1
- done
-
- sleep 1
-
- for i in $(awk '/snd/{print +$1}' /proc/interrupts); do
-  proc="/proc/irq/$i/smp_affinity"
-  echo $(echo "2^$m_task" | bc) > $proc || true
-  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
- done
- for i in $(awk '/enp3s0|1f.2/{print +$1}' /proc/interrupts); do
-  proc="/proc/irq/$i/smp_affinity"
-  echo $(echo "2^$s_task" | bc) > $proc || true
-  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
- done
- for i in $(awk '/i915/{print +$1}' /proc/interrupts); do
-  proc="/proc/irq/$i/smp_affinity"
-  sh -c "echo a > $proc" || true
-  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
- done
-# for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
+#procnr=$(nproc --all)
+#if   [ "$procnr" -eq 2 ]; then
+# m_task=0; s_task=1; h_task=1; o_task=1
+#elif [ "$procnr" -eq 4 ]; then
+# m_task=2; s_task=0; h_task=3; o_task=1,3
+#elif [ "$procnr" -ge 8 ]; then
+# m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
+#else
+# m_task=0; s_task=0; h_task=0; o_task=0
+#fi
+#
+#if [ "$m_task" -ge 1 ];then
+# #for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|lightdm|sawfish|mpd/ {print $1}'); do
+# # taskset -acp $s_task,$h_task,$o_task $pid 2>/dev/null || true
+# #done
+#
+# until $(grep -q snd /proc/interrupts); do
+#  sleep 1
+# done
+#
+# sleep 1
+#
+# for i in $(awk '/snd/{print +$1}' /proc/interrupts); do
 #  proc="/proc/irq/$i/smp_affinity"
-#  echo $(echo "2^$m_task-1" | bc) > $proc || true
+#  echo $(echo "2^$m_task" | bc) > $proc || true
 #  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
 # done
- echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
-fi
+# for i in $(awk '/enp3s0|1f.2/{print +$1}' /proc/interrupts); do
+#  proc="/proc/irq/$i/smp_affinity"
+#  echo $(echo "2^$s_task" | bc) > $proc || true
+#  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+# done
+# for i in $(awk '/i915/{print +$1}' /proc/interrupts); do
+#  proc="/proc/irq/$i/smp_affinity"
+#  sh -c "echo a > $proc" || true
+#  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+# done
+## for i in $(awk '/mei|nvkm|i915|iwlwifi|xhci/{print +$1}' /proc/interrupts); do
+##  proc="/proc/irq/$i/smp_affinity"
+##  echo $(echo "2^$m_task-1" | bc) > $proc || true
+##  echo "$proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+## done
+# echo $(echo "2^$s_task" | bc) > /proc/irq/default_smp_affinity
+#fi
 
 hdparm -A1 -a2048 -B255 /dev/sda # -M0
 
