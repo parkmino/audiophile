@@ -1,43 +1,8 @@
-01. ALSA conf
-
-	$ sudo rm /usr/share/alsa/alsa.conf
-	$ sudo nano /usr/share/alsa/alsa.conf.min
-		pcm.hw { type  hw  card  0  device  0  subdevice 0}
-		pcm.hw={ type  hw card 0 device 0 subdevice 0}
-		pcm.hw{type hw card 0 device 0 subdevice 0}
-	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
-		pcm.hw { @args[CARD DEV SUBDEV]
-		...
-		type  hw  card  $CARD  device  $DEV  subdevice $SUBDEV
-
-02. MPD null log and mixer
-
-	$ sudo nano /etc/mpd.conf.sav
-		log_file "/dev/null"
-		audio_output {
-		type "alsa"
-		name "ALSA"
-		device "pcm.hw"
-		mixer_type "none"
-		replay_gain_handler "none"
-		}
-
-03. Shell redirection
-
-	/dev/shm/mpd /dev/shm/mpd.conf#>/dev/null 2>/dev/null</dev/zero
-
-04. Tune Kernel Parameters
+01. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		#kernel.sched_min_granularity_ns = 230011
-		#kernel.sched_wakeup_granularity_ns = 388332
-		#kernel.sched_latency_ns = 1394102
-		#kernel.sched_migration_cost_ns = 4899042
-		#kernel.sched_nr_migrate = 25
-		##kernel.sched_cfs_bandwidth_slice_us		# 5000
-		#kernel.sched_rr_timeslice_ms = 32
-		#net.ipv4.tcp_rmem = 4618 88307 3345716
-		#net.ipv4.tcp_wmem = 4560 89943 3455696
+		kernel.sched_migration_cost_ns=4899041
+		net.ipv4.tcp_rmem = 4619 # 4618 88307 3345716
+		net.ipv4.tcp_wmem = 4560 # 4560 89943 3455696
 
-05. Remove takset
-
+02. USB Signal & Power
