@@ -1,9 +1,17 @@
 01. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_migration_cost_ns=4899042
-		net.ipv4.tcp_rmem = 4621 88291	# 4621 88291 3345716
-		net.ipv4.tcp_wmem = 4560 89953	# 4560 89953 3455696
+
+		#kernel.sched_min_granularity_ns = 230014
+		#kernel.sched_wakeup_granularity_ns = 388334
+		#kernel.sched_latency_ns = 1394106
+		#kernel.sched_nr_migrate = 30
+		#kernel.sched_rr_timeslice_ms = 32
+
+		kernel.sched_migration_cost_ns = 4899042
+		kernel.sched_tunable_scaling = 0
+		net.ipv4.tcp_rmem = 4621 88291 # 3345733
+		net.ipv4.tcp_wmem = 4560 89953 # 3455708
 
 02. USB Signal & Power
 
