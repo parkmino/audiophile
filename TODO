@@ -1,8 +1,35 @@
 01. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
-		kernel.sched_migration_cost_ns=4899041
-		net.ipv4.tcp_rmem = 4619 # 4618 88307 3345716
-		net.ipv4.tcp_wmem = 4560 # 4560 89943 3455696
+		kernel.sched_migration_cost_ns=4899042
+		net.ipv4.tcp_rmem = 4621 88291	# 4621 88291 3345716
+		net.ipv4.tcp_wmem = 4560 89953	# 4560 89953 3455696
 
 02. USB Signal & Power
+
+	$ grep -m 1 -i revision /proc/cpuinfo | cut -d':' -f2 | cut -d' ' -f2
+
+	B+  : 0010 0013 900032
+	2B  : a01041 a21041 a22042
+	3B  : a02082 a22082
+	3B+ : a020d3
+	4B  : a03111 b03111 b03112 b03114 c0311 c03112 c03114 d03114
+	      (sudo rpi-eeprom-update | grep -i -m 1 vl805 | cut -d':' -f2 | cut -d' ' -f2, later than 000137ad)
+
+	RPi version 			variable		B+/2B/3B
+	All on				on
+	All off				PWR_OFF 		uhubctl -a 0 -l 1-1 -p 2
+	USB 4/5 signal off		USB45_SIG_OFF		uhubctl -a 0 -l 1-1 -p 4,5
+	USB 4/5 signal and power off	USB45_SIG_PWR_OFF	uhubctl -a 0 -l 1-1 -p 2,4,5
+
+	RPi version 			variable		3B+
+	All on				on
+	All off				3B+_PWR_OFF		uhubctl -a 0 -l 1-1 -p 2
+	USB 4/5 signal off		3B+_USB45_SIG_OFF	uhubctl -a 0 -l 1-1.1 -p 2,3
+	USB 4/5 signal and power off	3B+_USB45_SIG_PWR_OFF	uhubctl -a 0 -l 1-1 -p 2,4 ; uhubctl -a 0 -l 1-1.1 -p 2,3
+
+	RPi version 			variable		4B
+	All on				on
+	USB2   power off		4B_USB2_PWR_OFF		uhubctl -a 0 -l 2
+	USB3   power off		4B_USB3_PWR_OFF		uhubctl -a 0 -l 1-1
+	USB2&3 power off		4B_USB23_PWR_OFF	uhubctl -a 0 -l 1-1 ; uhubctl -a 0 -l 2
