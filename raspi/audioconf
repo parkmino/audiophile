@@ -52,7 +52,7 @@ until [ "$i" = "q" ] ; do
   eval status_$i="$(consf mpd $i)"
  done
 
- for i in airplay roon spotify sqzlite gerbera; do
+ for i in airplay roon spotify sqzlite gerbera naa; do
   eval status_$i="$(consf $i)"
  done
 
@@ -95,7 +95,7 @@ until [ "$i" = "q" ] ; do
   6) [ $status_spotify = off ] && consf spotify on || consf spotify off ;;
   7) [ $status_sqzlite = off ] && consf sqzlite on || consf sqzlite off ;;
   8) [ $status_gerbera = off ] && consf gerbera on || consf gerbera off ;;
-  9) [ $status_gerbera = off ] && consf naa     on || consf naa     off ;;
+  9) [ $status_naa     = off ] && consf naa     on || consf naa     off ;;
   n) renderer_name	;;
   u) roonup		;;
   s) bash		;;
