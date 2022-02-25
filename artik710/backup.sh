@@ -108,8 +108,8 @@ if [ ! -z user_add_dir ]; then
 fi
 
 # These are added recursively. 
-ADD_FILES="bin etc dev/stdin dev/stderr dev/tty dev/random dev/fd dev/zero dev/full dev/ptmx dev/shm/ dev/urandom dev/null dev/stdout home opt root sbin tmp/.font-unix/ tmp/.Test-unix/ tmp/.XIM-unix/ tmp/.X11-unix/ tmp/.ICE-unix/ usr var/local/ var/nis/ var/log/lastlog var/log/mariadb/ var/log/wtmp var/log/btmp var/log/tallylog var/log/README var/log/journal/ var/lib/ var/mail var/preserve/ var/opt/ var/gopher/ var/kerberos/ var/db/ var/adm/ var/cache/ var/cache/ldconfig/ var/cache/ldconfig/aux-cache var/cache/man/ var/cache/fontconfig/ var/spool/anacron/cron.weekly var/spool/anacron/cron.daily var/spool/anacron/cron.monthly"
-ADD_FILES="$ADD_FILES boot dists lib pool var/backups var/cache/apt var/cache/debconf"
+ADD_FILES="bin etc dev/stdin dev/stderr dev/tty dev/random dev/fd dev/zero dev/full dev/ptmx dev/shm/ dev/urandom dev/null dev/stdout home opt root sbin tmp/.font-unix/ tmp/.Test-unix/ tmp/.XIM-unix/ tmp/.X11-unix/ tmp/.ICE-unix/ usr var/local/ var/nis/ var/log/lastlog var/log/mariadb/ var/log/wtmp var/log/btmp var/log/tallylog var/log/README var/log/journal/ var/lib/ var/mail var/preserve/ var/opt/ var/gopher/ var/kerberos/ var/db/ var/adm/ var/cache/ var/spool/anacron/cron.weekly var/spool/anacron/cron.daily var/spool/anacron/cron.monthly"
+ADD_FILES="$ADD_FILES boot dists lib pool var/backups"
 # See if the user wants to add more
 user_add_file=''
 read -p 'Enter additonal (recursive) Directory or File: ' newfile
