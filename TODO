@@ -9,11 +9,20 @@
 		#kernel.sched_rr_timeslice_ms = 32
 
 		kernel.sched_migration_cost_ns = 4899042
-		kernel.sched_tunable_scaling = 0
+		#kernel.sched_tunable_scaling = 0
 		net.ipv4.tcp_rmem = 4621 88291 # 3345733
 		net.ipv4.tcp_wmem = 4560 89953 # 3455708
 
-02. USB Signal & Power
+02. CPU Performance Scaling
+
+	$ sudo nano /etc/rc.local
+
+		#echo 100000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true # 8000
+		#echo 1 > tee /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+		#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+
+03. USB Signal & Power
 
 	$ grep -m 1 -i revision /proc/cpuinfo | cut -d':' -f2 | cut -d' ' -f2
 
