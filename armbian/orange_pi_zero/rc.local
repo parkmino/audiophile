@@ -63,10 +63,10 @@ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 #ln -sf /dev/shm/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8
 #ln -sf libFLAC.so.8.3.0 /dev/shm/libFLAC.so.8
 
-echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
-echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
-[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+#echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 
 for i in $(ls /sys/block/*/queue/scheduler); do
  if   echo $(cat $i) | grep -q none; then
