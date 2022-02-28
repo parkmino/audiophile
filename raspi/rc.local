@@ -134,10 +134,10 @@ cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
 
-echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
-echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
-[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 
 for i in $(ls /sys/block/*/queue/scheduler); do
  if   echo $(cat $i) | grep -q none; then
@@ -209,7 +209,17 @@ swapoff -a
 #echo "1"   > /sys/class/gpio/gpio22/value
 
 ### Turn off USBs
-[ "$usb" = on ] || uhubctl -a 0 -p "$usb"
+case $usb in
+ PWR_OFF)		uhubctl -a 0 -l 1-1 -p 2 ;;
+ USB45_SIG_OFF)		uhubctl -a 0 -l 1-1 -p 4,5 ;;
+ USB45_SIG_PWR_OFF)	uhubctl -a 0 -l 1-1 -p 2,4,5 ;;
+ 3B+_PWR_OFF)		uhubctl -a 0 -l 1-1 -p 2 ;;
+ 3B+_USB45_SIG_OFF)	uhubctl -a 0 -l 1-1.1 -p 2,3 ;;
+ 3B+_USB45_SIG_PWR_OFF)	uhubctl -a 0 -l 1-1 -p 2,4 ; uhubctl -a 0 -l 1-1.1 -p 2,3 ;;
+ 4B_USB2_PWR_OFF)	uhubctl -a 0 -l 2 ;;
+ 4B_USB3_PWR_OFF)	uhubctl -a 0 -l 1-1 ;;
+ 4B_USB23_PWR_OFF)	uhubctl -a 0 -l 1-1 ; uhubctl -a 0 -l 2 ;;
+esac
 
 ### Turn off HDMI
 #/opt/vc/bin/tvservice -o

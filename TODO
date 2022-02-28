@@ -17,7 +17,7 @@
 
 	$ sudo nano /etc/rc.local
 
-		#echo 100000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true # 8000
+		echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true # 8000
 		#echo 1 > tee /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 		#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
