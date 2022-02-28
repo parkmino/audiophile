@@ -85,6 +85,9 @@ esac
 }
 
 usb_signal_power () {
+rpi_rev=$(grep -m 1 ^Revision /proc/cpuinfo | cut -d':' -f2 | cut -d' ' -f2)
+case $rpi_rev in
+ 0010|0013|900032|a01041|a21041|a22042|a02082|a22082)
 i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
 
               [USB ]      [USB4]
@@ -98,10 +101,58 @@ i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
 "4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/usb=/s/=.*/=on/'    $audio_conf ;;
- 2) sudo sed -i '/usb=/s/=.*/=2-5/'   $audio_conf ;;
- 3) sudo sed -i '/usb=/s/=.*/=4,5/'   $audio_conf ;;
- 4) sudo sed -i '/usb=/s/=.*/=2,4,5/' $audio_conf ;;
+ 1) sudo sed -i '/usb=/s/=.*/=on/'		$audio_conf ;;
+ 2) sudo sed -i '/usb=/s/=.*/=PWR_OFF/'		$audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=USB45_SIG_OFF/'	$audio_conf ;;
+ 4) sudo sed -i '/usb=/s/=.*/=USB45_SIG_PWR_OFF/'	$audio_conf ;;
+esac ;;
+ a020d3)
+i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
+
+              [USB ]      [USB4]
+   [LAN]      [USB3]      [USB5]
+  =============================== 
+    RasPi 3B+ Back Port                 라즈베리 파이 3B+ 뒷면
+    USB3 is recommended for DAC         DAC은 USB3을 추천합니다" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti" 17 75 4 \
+"1" "Enable  USB all signal & power      USB 모든 신호와 전원 켜기" \
+"2" "Disable USB all signal & power      USB 모든 신호와 전원 끄기" \
+"3" "Disable USB 4/5 signal              USB 4/5 신호만 끄기" \
+"4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
+
+case $i in
+ 1) sudo sed -i '/usb=/s/=.*/=on/'			$audio_conf ;;
+ 2) sudo sed -i '/usb=/s/=.*/=3B+_PWR_OFF/'		$audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=3B+_USB45_SIG_OFF/'		$audio_conf ;;
+ 4) sudo sed -i '/usb=/s/=.*/=3B+_USB45_SIG_PWR_OFF/'	$audio_conf ;;
+esac ;;
+ a03111|b03111|b03112|b03114|c0311|c03112|c03114|d03114)
+i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
+
+   [USB2]      [USB3]
+   [USB2]      [USB3]     [LAN]
+  =============================== 
+    RasPi 4B Back Port              라즈베리 파이 4B 뒷면
+    USB3 is recommended for DAC     DAC은 USB3을 추천합니다
+   (VL805 later than 000137ad)     (위 펌웨어 000137ad 이상)" --ok-button "Select/선택" --cancel-button "Back/이전" --backtitle "$bkti / VL805:$(sudo rpi-eeprom-update | grep -i -m 1 vl805 | cut -d':' -f2 | cut -d' ' -f2)" 18 64 4 \
+"1" "Enable  USB all power           USB    모든 전원 켜기" \
+"2" "Disable USB2    power           USB2   전원 끄기" \
+"3" "Disable USB3    power           USB3   전원 끄기" \
+"4" "Disable USB2/3  power           USB2/3 전원 끄기" 3>&1 1>&2 2>&3)
+
+case $i in
+ 1) sudo sed -i '/usb=/s/=.*/=on/'		$audio_conf ;;
+ 2) sudo sed -i '/usb=/s/=.*/=4B_USB2_PWR_OFF/'	$audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=4B_USB3_PWR_OFF/'	$audio_conf ;;
+ 4) sudo sed -i '/usb=/s/=.*/=4B_USB23_PWR_OFF/'	$audio_conf ;;
+esac ;;
+ *)
+whiptail --title "USB signal & power / USB 신호와 전원" --msgbox "\
+
+   Raspberry Pi 1B+/2B/3B/3B+/4B model can not be found!
+
+   라즈베리 파이 1B+/2B/3B/3B+/4B 모델을 찾을 수 없습니다!
+
+" --backtitle "$bkti" 12 66 ;;
 esac
 }
 
