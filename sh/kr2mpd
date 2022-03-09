@@ -22,7 +22,8 @@ kbsr () {
 }
 
 mbcr () {
- pls $(curl -s "https://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
+#pls $(curl -s "https://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
+ pls $(curl -s "https://sminiplay.imbc.com/aacplay.ashx?channel=$1&protocol=M3U8&agent=webapp")
  [ ${#url} -lt 80 ] && url=
 }
 
@@ -52,11 +53,11 @@ case $1 in
  scr)   kbsr I26 ;;
  rki)   kbsr I92 ;;
  mbcm)  mbcr chm ;;
- mbc4u) #mbcr mfm
-        duckdns mbcfm
+ mbc4u) mbcr mfm
+        #duckdns mbcfm
         ;;
- mbcfm) #mbcr sfm
-        duckdns mbcsfm
+ mbcfm) mbcr sfm
+        #duckdns mbcsfm
         ;;
  sbsp)  sbsr powerpc powerfm
         #duckdns sbsfm
