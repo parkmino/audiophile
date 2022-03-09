@@ -51,5 +51,5 @@ fi
 ) &
 
 [ ! -e /dev/shm/squeezelite ] && sudo cp /usr/bin/squeezelite /dev/shm/squeezelite
-/dev/shm/squeezelite -o pcm.hw -O /dev/null -C 1&>/dev/null </dev/null
-#/dev/shm/squeezelite -o pcm.hw -O /dev/null -C 1&
+#/dev/shm/squeezelite -o pcm.hw -O /dev/null -C 1&>/dev/null </dev/null
+/dev/shm/squeezelite -o pcm.hw -O /dev/null -C 1&
