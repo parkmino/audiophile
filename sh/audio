@@ -49,10 +49,10 @@ case $1 in
   else
    sudo sed -i '$s/$/ctl.default{type hw card '"$card"'}/' $alsa_conf
   fi
-  
+
   #amixer -q set IEC958 $IEC958
   #echo "* IEC985 is $(amixer get IEC958 | tail -1 | cut -d '[' -f2 | cut -d ']' -f1)"
-  
+
   sudo sed -i '/^ctl.default/d; s/ctl.default.*//' $alsa_conf
 
 #  for i in $(awk '/'"$irq"'/{print +$1}' /proc/interrupts); do
@@ -65,8 +65,8 @@ case $1 in
   if ! grep -q 'pcm.default' $alsa_conf; then
 #  sudo sed -i 's/pcm.default.*/pcm.default pcm.'"$card"'/' $alsa_conf
 # else
-#  sudo sed -i '1ipcm { default pcm.'"$card"'}' $alsa_conf
-   sudo sed -i '1ipcm { default pcm.hw}' $alsa_conf
+#  sudo sed -i '1ipcm{default pcm.'"$card"'}' $alsa_conf
+   sudo sed -i '1ipcm{default pcm.hw}' $alsa_conf
   fi ;;
  nodef)
    sudo cp $alsa_orig $alsa_conf ;;
