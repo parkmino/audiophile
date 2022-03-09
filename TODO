@@ -9,7 +9,7 @@
 		#kernel.sched_rr_timeslice_ms = 32
 
 		kernel.sched_migration_cost_ns = 4899042
-		#kernel.sched_tunable_scaling = 0
+		kernel.sched_tunable_scaling = 0
 		net.ipv4.tcp_rmem = 4621 88291 # 3345733
 		net.ipv4.tcp_wmem = 4560 89953 # 3455708
 
@@ -50,3 +50,9 @@
 	USB2   power off		4B_USB2_PWR_OFF		uhubctl -a 0 -l 2
 	USB3   power off		4B_USB3_PWR_OFF		uhubctl -a 0 -l 1-1
 	USB2&3 power off		4B_USB23_PWR_OFF	uhubctl -a 0 -l 1-1 ; uhubctl -a 0 -l 2
+
+04. Kodi
+
+	# sudo nano /dev/shm/alsa.conf
+		pcm.hw{type hw card 0 device 0 subdevice 0}pcm{default hw}ctl.default /dev/null
+
