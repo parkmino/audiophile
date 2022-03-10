@@ -55,4 +55,5 @@
 
 	# sudo nano /dev/shm/alsa.conf
 		pcm.hw{type hw card 0 device 0 subdevice 0}pcm{default hw}ctl.default /dev/null
+		pcm.default{type hw card 0 device 0 subdevice 0}ctl.default /dev/null
 
