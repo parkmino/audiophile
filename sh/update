@@ -503,7 +503,7 @@ LIBREELEC () {
 }
 
 MPD_CANTATA_MYMPD () {
- for url in https://github.com/MusicPlayerDaemon/MPD/commits/master https://github.com/CDrummond/cantata/commits/master https://github.com/jcorporation/myMPD/commits/master; do
+ for url in https://github.com/MusicPlayerDaemon/MPD/commits/master; do # https://github.com/CDrummond/cantata/commits/master https://github.com/jcorporation/myMPD/commits/master; do
   id=$(echo "$url" | cut -d\/ -f5)
   [ "$id" = cantata ] && printf "• Cantata\t" || printf "• $id\t\t"
   release=$(curl $curl_opt $(echo "$url" | cut -d\/ -f-5)/tags | grep -m1 'releases/tag/' | cut -d'/' -f6 | cut -d'"' -f1)
@@ -752,7 +752,7 @@ YT_DLP () {
 ### ALSA & MPD & Upmpdcli
  ALSA
  MPD_CANTATA_MYMPD
- MYMPD_DEV
+#MYMPD_DEV
 #MALP
  UPMPDCLI
  UPMPDCLI_DEV
