@@ -33,7 +33,7 @@
 #sysctl -w kernel.sched_rr_timeslice_ms=32
 #sysctl -w kernel.sched_shares_window_ns=345997
 #sysctl -w kernel.sched_tunable_scaling=1
- echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
+#echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 #sysctl -w kernel.sched_time_avg_ms=6288
  sysctl -w kernel.printk="0 0 0 0"
 
@@ -75,10 +75,10 @@
 #sysctl -w dev.rtc.max-user-freq=4032 || true
 #sysctl -w dev.hpet.max-user-freq=2147483520 || true
 
-echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
-echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
-[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+ echo 55696 | tee /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall || true
 
 echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
