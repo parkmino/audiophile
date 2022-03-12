@@ -7,9 +7,11 @@
 		#kernel.sched_latency_ns = 1394106
 		#kernel.sched_nr_migrate = 30
 		#kernel.sched_rr_timeslice_ms = 32
+		#kernel.sched_tunable_scaling = 0			# 1
+		#echo 0 | tee /sys/kernel/debug/sched/tunable_scaling	# 1
 
 		kernel.sched_migration_cost_ns = 4899042
-		kernel.sched_tunable_scaling = 0
+		echo 4899042 | tee /sys/kernel/debug/sched/migration_cost_ns
 		net.ipv4.tcp_rmem = 4621 88291 # 3345733
 		net.ipv4.tcp_wmem = 4560 89953 # 3455708
 

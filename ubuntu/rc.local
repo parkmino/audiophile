@@ -33,7 +33,7 @@
 #sysctl -w kernel.sched_rr_timeslice_ms=32
 #sysctl -w kernel.sched_shares_window_ns=345997
 #sysctl -w kernel.sched_tunable_scaling=1
- echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
+#echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 #sysctl -w kernel.sched_time_avg_ms=6288
  sysctl -w kernel.printk="0 0 0 0"
 
