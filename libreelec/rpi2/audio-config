@@ -23,52 +23,52 @@ printf "
   Sound Card / 사운드카드 설정
  ------------------------------
 
- (\e[32m0\e[0m)  USB Audio Class 2.0\t\t(\e[32m11\e[0m) HiFiBerry Amp/Amp+
- (\e[32m1\e[0m)  Allo Boss DAC\t\t\t(\e[32m12\e[0m) HiFiBerry DAC
- (\e[32m2\e[0m)  Allo DigiOne\t\t\t(\e[32m13\e[0m) HiFiBerry DAC+ADC
- (\e[32m3\e[0m)  Allo Katana DAC\t\t\t(\e[32m14\e[0m) HifiBerry DAC+ADC Pro
- (\e[32m4\e[0m)  Allo Piano DAC\t\t\t(\e[32m15\e[0m) HiFiBerry DAC+/DAC+ Pro
- (\e[32m5\e[0m)  Allo Piano DAC+\t\t\t(\e[32m16\e[0m) HiFiBerry Digi/Digi+
- (\e[32m6\e[0m)  Allo Piano DAC+ (+Kali board)\t(\e[32m17\e[0m) HiFiBerry Digi+ Pro
- (\e[32m7\e[0m)  ApplePi DAC\t\t\t(\e[32m18\e[0m) IQaudIO DAC
- (\e[32m8\e[0m)  Audiophonics I-SABRE Q2M DAC\t(\e[32m19\e[0m) IQaudIO DAC+
- (\e[32m9\e[0m)  Dion Audio LOCO DAC-AMP\t\t(\e[32m20\e[0m) IQaudIO DigiAMP+
- (\e[32m10\e[0m) Dion Audio LOCO-V2 DAC-AMP\t(\e[32m21\e[0m) IQaudIO Digi+
-\t\t\t\t\t(\e[32m22\e[0m) JustBoom DAC
-\t\t\t\t\t(\e[32m23\e[0m) JustBoom Digi
-\t\t\t\t\t(\e[32m24\e[0m) RPi DAC
+ (\e[32m1\e[0m)  USB Audio Class 2.0\t\t(\e[32m12\e[0m) HiFiBerry Amp/Amp+
+ (\e[32m2\e[0m)  Allo Boss DAC\t\t\t(\e[32m13\e[0m) HiFiBerry DAC
+ (\e[32m3\e[0m)  Allo DigiOne\t\t\t(\e[32m14\e[0m) HiFiBerry DAC+ADC
+ (\e[32m4\e[0m)  Allo Katana DAC\t\t\t(\e[32m15\e[0m) HifiBerry DAC+ADC Pro
+ (\e[32m5\e[0m)  Allo Piano DAC\t\t\t(\e[32m16\e[0m) HiFiBerry DAC+/DAC+ Pro
+ (\e[32m6\e[0m)  Allo Piano DAC+\t\t\t(\e[32m17\e[0m) HiFiBerry Digi/Digi+
+ (\e[32m7\e[0m)  Allo Piano DAC+ (+Kali board)\t(\e[32m18\e[0m) HiFiBerry Digi+ Pro
+ (\e[32m8\e[0m)  ApplePi DAC\t\t\t(\e[32m19\e[0m) IQaudIO DAC
+ (\e[32m9\e[0m)  Audiophonics I-SABRE Q2M DAC\t(\e[32m20\e[0m) IQaudIO DAC+
+ (\e[32m10\e[0m) Dion Audio LOCO DAC-AMP\t\t(\e[32m21\e[0m) IQaudIO DigiAMP+
+ (\e[32m11\e[0m) Dion Audio LOCO-V2 DAC-AMP\t(\e[32m22\e[0m) IQaudIO Digi+
+\t\t\t\t\t(\e[32m23\e[0m) JustBoom DAC
+\t\t\t\t\t(\e[32m24\e[0m) JustBoom Digi
+\t\t\t\t\t(\e[32m25\e[0m) RPi DAC
  (\e[32mm\e[0m) Main / 주메뉴
  (\e[32mq\e[0m) Quit / 나가기
 
- * Select / 선택 (\e[32m0-24\e[0m|\e[32mm\e[0m|\e[32mq\e[0m) : "
+ * Select / 선택 (\e[32m1-25\e[0m|\e[32mm\e[0m|\e[32mq\e[0m) : "
 read i
 echo
 case $i in
- 0)  sound_card_initial ; mount -o remount,ro /flash			;;
- 1)  sound_card_selector allo-boss-dac-pcm512x-audio			;;
- 2)  sound_card_selector allo-digione					;;
- 3)  sound_card_selector allo-katana-dac-audio				;;
- 4)  sound_card_selector allo-piano-dac-pcm512x-audio			;;
- 5)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
- 6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
- 7)  sound_card_selector applepi-dac					;;
- 8)  sound_card_selector i-sabre-q2m					;;
- 9)  sound_card_selector dionaudio-loco					;;
- 10) sound_card_selector dionaudio-loco-v2				;;
- 11) sound_card_selector hifiberry-amp					;;
- 12) sound_card_selector hifiberry-dac					;;
- 13) sound_card_selector hifiberry-dacplusadc				;;
- 14) sound_card_selector hifiberry-dacplusadcpro			;;
- 15) sound_card_selector hifiberry-dacplus				;;
- 16) sound_card_selector hifiberry-digi					;;
- 17) sound_card_selector hifiberry-digi-pro				;;
- 18) sound_card_selector iqaudio-dac					;;
- 19) sound_card_selector iqaudio-dacplus				;;
- 20) sound_card_selector iqaudio-dacplus,unmute_amp			;;
- 21) sound_card_selector iqaudio-digi-wm8804-audio			;;
- 22) sound_card_selector justboom-dac					;;
- 23) sound_card_selector justboom-digi					;;
- 24) sound_card_selector rpi-dac					;;
+ 1)  sound_card_initial ; mount -o remount,ro /flash			;;
+ 2)  sound_card_selector allo-boss-dac-pcm512x-audio			;;
+ 3)  sound_card_selector allo-digione					;;
+ 4)  sound_card_selector allo-katana-dac-audio				;;
+ 5)  sound_card_selector allo-piano-dac-pcm512x-audio			;;
+ 6)  sound_card_selector allo-piano-dac-plus-pcm512x-audio		;;
+ 7)  sound_card_selector allo-piano-dac-plus-pcm512x-audio,glb_mclk	;;
+ 8)  sound_card_selector applepi-dac					;;
+ 9)  sound_card_selector i-sabre-q2m					;;
+ 10) sound_card_selector dionaudio-loco					;;
+ 11) sound_card_selector dionaudio-loco-v2				;;
+ 12) sound_card_selector hifiberry-amp					;;
+ 13) sound_card_selector hifiberry-dac					;;
+ 14) sound_card_selector hifiberry-dacplusadc				;;
+ 15) sound_card_selector hifiberry-dacplusadcpro				;;
+ 16) sound_card_selector hifiberry-dacplus				;;
+ 17) sound_card_selector hifiberry-digi					;;
+ 18) sound_card_selector hifiberry-digi-pro				;;
+ 19) sound_card_selector iqaudio-dac					;;
+ 20) sound_card_selector iqaudio-dacplus					;;
+ 21) sound_card_selector iqaudio-dacplus,unmute_amp			;;
+ 22) sound_card_selector iqaudio-digi-wm8804-audio			;;
+ 23) sound_card_selector justboom-dac					;;
+ 24) sound_card_selector justboom-digi					;;
+ 25) sound_card_selector rpi-dac						;;
  m) clear ; return ;;
  q) exit ;;
 esac
@@ -77,16 +77,19 @@ return
 
 usb_signal_power () {
 clear
+rpi_rev=$(grep -m 1 ^Revision /proc/cpuinfo | cut -d':' -f2 | cut -d' ' -f2)
+case $rpi_rev in
+ 0010|0013|900032|a01041|a21041|a22042|a02082|a22082)
 echo -ne "
  --------------------------------------
   USB Signal & Power / USB 신호와 전원
  --------------------------------------
 
-              [USB ]      [USB4]
-   [LAN]      [USB3]      [USB5]
-  =============================== 
-  -  RasPi 1B+/2B/3B Back Port        -  라즈베리 파이 1B+/2B/3B 뒷면
-  -  USB3 is recommended for DAC      -  DAC은 USB3을 추천합니다
+               [USB ]      [USB4]
+    [LAN]      [USB3]      [USB5]
+   =============================== 
+     RasPi 1B+/2B/3B Back Port           라즈베리 파이 1B+/2B/3B 뒷면
+     USB3 is recommended for DAC         DAC은 USB3을 추천합니다
 
  (\e[32m1\e[0m) Enable  All USB Signal & Power  (\e[32m1\e[0m) 모든 USB 신호와 전원 켜기 (기본값)
  (\e[32m2\e[0m) Disable All USB Signal & Power  (\e[32m2\e[0m) 모든 USB 신호와 전원 끄기 (I2S DAC)
@@ -101,12 +104,89 @@ echo -ne "
 read i
 echo
 case $i in
- 1) sed -i '/usb=/s/=.*/=on/'      $audio_conf ;;
- 2) sed -i '/usb=/s/=.*/=2,3,4,5/' $audio_conf ;;
- 3) sed -i '/usb=/s/=.*/=4,5/'     $audio_conf ;;
- 4) sed -i '/usb=/s/=.*/=2,4,5/'   $audio_conf ;;
+ 1) sed -i '/usb=/s/=.*/=on/'			$audio_conf ;;
+ 2) sed -i '/usb=/s/=.*/=PWR_OFF/'		$audio_conf ;;
+ 3) sed -i '/usb=/s/=.*/=USB45_SIG_OFF/'		$audio_conf ;;
+ 4) sed -i '/usb=/s/=.*/=USB45_SIG_PWR_OFF/'	$audio_conf ;;
  m) clear ; return ;;
  q) exit ;;
+esac ;;
+ a020d3)
+echo -ne "
+ --------------------------------------
+  USB Signal & Power / USB 신호와 전원
+ --------------------------------------
+
+               [USB ]      [USB4]
+    [LAN]      [USB3]      [USB5]
+   =============================== 
+     RasPi 1B+/2B/3B Back Port           라즈베리 파이 3B+ 뒷면
+     USB3 is recommended for DAC         DAC은 USB3을 추천합니다
+
+ (\e[32m1\e[0m) Enable  All USB Signal & Power  (\e[32m1\e[0m) 모든 USB 신호와 전원 켜기 (기본값)
+ (\e[32m2\e[0m) Disable All USB Signal & Power  (\e[32m2\e[0m) 모든 USB 신호와 전원 끄기 (I2S DAC)
+ (\e[32m3\e[0m) Disable USB 4,5 Signal          (\e[32m3\e[0m) USB 4,5 신호만 끄기
+ (\e[32m4\e[0m) Disable USB 4,5 Signal & Power  (\e[32m4\e[0m) USB 4,5 신호와 전원 끄기
+    (for Powered USB DAC)               (자체 전원 USB DAC)
+
+ (\e[32mm\e[0m) Main                            (\e[32mm\e[0m) 주메뉴
+ (\e[32mq\e[0m) Quit                            (\e[32mq\e[0m) 나가기
+
+ * Select / 선택 (\e[32m1-4\e[0m|\e[32mm\e[0m|\e[32mq\e[0m) : "
+read i
+echo
+case $i in
+ 1) sed -i '/usb=/s/=.*/=on/'			$audio_conf ;;
+ 2) sed -i '/usb=/s/=.*/=3B+_PWR_OFF/'		$audio_conf ;;
+ 3) sed -i '/usb=/s/=.*/=3B+_USB45_SIG_OFF/'	$audio_conf ;;
+ 4) sed -i '/usb=/s/=.*/=3B+_USB45_SIG_PWR_OFF/'	$audio_conf ;;
+ m) clear ; return ;;
+ q) exit ;;
+esac ;;
+ a03111|b03111|b03112|b03114|c0311|c03112|c03114|d03114)
+echo -ne "
+ --------------------------------------
+  USB Signal & Power / USB 신호와 전원
+ --------------------------------------
+
+    [USB2]      [USB3]
+    [USB2]      [USB3]     [LAN]
+   =============================== 
+  -  RasPi 1B+/2B/3B Back Port        -  라즈베리 파이 4B 뒷면
+  -  USB3 is recommended for DAC      -  DAC은 USB3을 추천합니다
+    (VL805 later than 000137ad)         (위 펌웨어 000137ad 이상)
+
+ (\e[32m1\e[0m) Enable  USB All Power           (\e[32m1\e[0m) USB 모든 전원 켜기 (기본값)
+ (\e[32m2\e[0m) Disable USB  2  Power           (\e[32m2\e[0m) USB  2   전원 끄기
+ (\e[32m3\e[0m) Disable USB  3  Power           (\e[32m3\e[0m) USB  3   전원 끄기
+ (\e[32m4\e[0m) Disable USB 2/3 Power           (\e[32m4\e[0m) USB 2/3  전원 끄기
+
+ (\e[32mm\e[0m) Main                            (\e[32mm\e[0m) 주메뉴
+ (\e[32mq\e[0m) Quit                            (\e[32mq\e[0m) 나가기
+
+ * Select / 선택 (\e[32m1-4\e[0m|\e[32mm\e[0m|\e[32mq\e[0m) : "
+read i
+echo
+case $i in
+ 1) sed -i '/usb=/s/=.*/=on/'			$audio_conf ;;
+ 2) sed -i '/usb=/s/=.*/=4B_USB2_PWR_OFF/'	$audio_conf ;;
+ 3) sed -i '/usb=/s/=.*/=4B_USB3_PWR_OFF/'	$audio_conf ;;
+ 4) sed -i '/usb=/s/=.*/=4B_USB23_PWR_OFF/'	$audio_conf ;;
+ m) clear ; return ;;
+ q) exit ;;
+esac ;;
+ *)
+echo -ne "
+ --------------------------------------
+  USB Signal & Power / USB 신호와 전원
+ --------------------------------------
+
+  Raspberry Pi 1B+/2B/3B/3B+/4B model can not be found!
+  Press any key to return.
+
+  라즈베리 파이 1B+/2B/3B/3B+/4B 모델을 찾을 수 없습니다!
+  아무키나 누르면 돌아갑니다."
+read -p "" ;;
 esac
 return
 }
@@ -136,7 +216,7 @@ until [ "$i" == "q" ] ; do
  (\e[32mr\e[0m) Reboot to apply          (\e[32mr\e[0m) 재시작하여 적용
  (\e[32mp\e[0m) Power off                (\e[32mp\e[0m) 전원 끄기
 
- * Select / 선택 (\e[32m0-8\e[0m|\e[32mq\e[0m|\e[32mr\e[0m|\e[32mp\e[0m) : "
+ * Select / 선택 (\e[32m1-8\e[0m|\e[32mq\e[0m|\e[32mr\e[0m|\e[32mp\e[0m) : "
  read i
  echo
  case $i in

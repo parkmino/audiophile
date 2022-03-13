@@ -6,9 +6,9 @@
 
 rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
 
-echo 1000000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
-echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 
 for i in $(ls /sys/block/*/queue/scheduler); do
  if   echo $(cat $i) | grep -q none; then
@@ -28,13 +28,13 @@ for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd
 done
 
 m_task=2; s_task=0; h_task=3; o_task=1,3 # grep -m1 siblings /proc/cpuinfo | grep -o [0-9*] # getconf _NPROCESSORS_ONLN # echo $(($(cat /sys/devices/system/cpu/present | sed 's/0-//')+1)) # grep -c ^processor /proc/cpuinfo
-
-if [ "$m_task" -ge 1 ]; then
- for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd$|kodi|kodi.bin/ {print $1}'); do
-  taskset -acp $o_task $pid 2>/dev/null || true
- done
-fi
-
+#
+#if [ "$m_task" -ge 1 ]; then
+# for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd$|kodi|kodi.bin/ {print $1}'); do
+#  taskset -acp $o_task $pid 2>/dev/null || true
+# done
+#fi
+#
 #avail_gov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)
 #$(echo $avail_gov | grep -q ondemand)     && gov=ondemand
 #$(echo $avail_gov | grep -q conservative) && gov=conservative
@@ -42,10 +42,17 @@ fi
 #[ "$gov" != "" ] && echo $gov | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 #
 ### Turn off USBs
-#for i in $(seq 2 5); do
-# [ usb$i = off ] && hub-ctrl -h 0 -P $i -p 0
-#done
-[ "$usb" = "on" ] || uhubctl -a 0 -p "$usb"
+case $usb in
+ PWR_OFF)		uhubctl -a 0 -l 1-1 -p 2     ;;
+ USB45_SIG_OFF)		uhubctl -a 0 -l 1-1 -p 4,5   ;;
+ USB45_SIG_PWR_OFF)	uhubctl -a 0 -l 1-1 -p 2,4,5 ;;
+ 3B+_PWR_OFF)		uhubctl -a 0 -l 1-1 -p 2     ;;
+ 3B+_USB45_SIG_OFF)	uhubctl -a 0 -l 1-1.1 -p 2,3 ;;
+ 3B+_USB45_SIG_PWR_OFF)	uhubctl -a 0 -l 1-1 -p 2,4   ; uhubctl -a 0 -l 1-1.1 -p 2,3 ;;
+ 4B_USB2_PWR_OFF)	uhubctl -a 0 -l 2   ;;
+ 4B_USB3_PWR_OFF)	uhubctl -a 0 -l 1-1 ;;
+ 4B_USB23_PWR_OFF)	uhubctl -a 0 -l 1-1 ; uhubctl -a 0 -l 2 ;;
+esac
 
 ### Remove modules
  modprobe -r 8021q || true
@@ -54,7 +61,7 @@ fi
 
 swapoff -a
 
-echo 4 > /proc/irq/default_smp_affinity || true
+#echo 4 > /proc/irq/default_smp_affinity || true
 
 [ "$alsa_conf" = min ] && rm -rf /dev/snd/*c /dev/snd/by* || true
 [ "$lirc"  = off ] && systemctl stop eventlircd
@@ -69,18 +76,18 @@ echo 4 > /proc/irq/default_smp_affinity || true
  done
  sleep 1
 
- pgr_kodi=$(pgrep kodi.bin)
- ppid=$pgr_kodi
+ #pgr_kodi=$(pgrep kodi.bin)
+ #ppid=$pgr_kodi
+ #
+ #until [ $ppid -eq 1 ]; do
+ # ppid=$(ps -o ppid= -p $ppid)
+ # taskset -cp 0,1,3 $ppid
+ #done
 
- until [ $ppid -eq 1 ]; do
-  ppid=$(ps -o ppid= -p $ppid)
-  taskset -cp 0,1,3 $ppid
- done
-
- taskset -acp 0,1,3 $pgr_kodi
- for i in $(pstree -p $pgr_kodi | grep ActiveAE | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1); do
-  taskset -cp $m_task $i
- done
+ #taskset -acp 0,1,3 $pgr_kodi
+ #for i in $(pstree -p $pgr_kodi | grep ActiveAE | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1); do
+ # taskset -cp $m_task $i
+ #done
 
  if [ "$tweak" = on ]; then
   systemctl stop systemd-journald systemd-logind || true

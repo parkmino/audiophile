@@ -1,10 +1,10 @@
-LibreELEC 9 (Libre Embedded Linux Entertainment Center)
+LibreELEC 10.0.2 (Libre Embedded Linux Entertainment Center)
 
 1. Squashfs
 
   1.1 Unsquashfs
 
-	$ ver=9.2.4
+	$ ver=10.0.2
 	$ wget http://releases.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
 	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
 	$ gzip -d LibreELEC-RPi2.arm-$ver.img.gz
@@ -18,22 +18,17 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 
   1.2 ALSA
 
-	$ cp ~/git/audiophile/raspi/libasound.so.2.0.0.min ../copy/
-	$ printf 'pcm { default pcm.hw}\npcm.hw {  type hw  card 0  device 0 subdevice 0}\nctl{default ctl.hw}\n' > ../copy/alsa.conf.min
-	$ cp ~/git/audiophile/alsa/alsa.conf.mix ../copy/
-
-	$ rm usr/lib/libasound.so*
-	$ cp ../copy/libasound.so.2.0.0.min usr/lib/libasound.so
-	$ cp ../copy/libasound.so.2.0.0.min usr/lib/libasound.so.2
-	$ rm -rf usr/share/alsa && mkdir usr/share/alsa
-	$ cp ../copy/alsa.conf.min usr/share/alsa/alsa.conf
+	$ rm usr/lib/libasound.so usr/lib/libasound.so.2
+	$ cp usr/lib/libasound.so.2.0.0 usr/lib/libasound.so
+	$ cp usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2
+	$ cp ../copy/alsa.conf usr/share/alsa/
 	
-	$ sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
-	$ cat usr/lib/modprobe.d/alsa-base.conf
+	$#sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
+	$#cat usr/lib/modprobe.d/alsa-base.conf
 
   1.3 Kodi.bin
 
-	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/aexec /usr/lib/kodi/kodi.bin $SAVED_ARGS 1</dev/null 2</dev/null 0</dev/null' usr/lib/kodi/kodi.sh
+	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/aexec /usr/lib/kodi/kodi.bin $SAVED_ARGS' usr/lib/kodi/kodi.sh
 	$ sed -i '/^\/usr\/lib\/kodi\/kodi.bin/s/^/#/' usr/lib/kodi/kodi.sh
 	$ grep /usr/lib/kodi/kodi.bin usr/lib/kodi/kodi.sh
 
@@ -46,7 +41,7 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ rm usr/bin/ps usr/bin/nohup
 	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,uhubctl,llctl,audio-config} usr/bin/
 	$ cp ../copy/*.pls ../copy/*.m3u etc/
-	$ cp ../../kodi/plugin.{audio.kr2kodi,video.klive}.zip etc/
+	$ cp ../../kodi/plugin.audio.kr2kodi.zip etc/
 	$ cp ../copy/libprocps.so.7 usr/lib/
 	$ cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
 	$ cp ../tuning_audio usr/lib/libreelec/
@@ -98,17 +93,5 @@ LibreELEC 9 (Libre Embedded Linux Entertainment Center)
 	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind connman-vpnd
 
 cf)
-
 https://github.com/soju6jan
 Screenshots : Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
-
-### Korean Transaltion
-https://www.transifex.com/libreelec/
-$ mkdir usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr
-$ cp ../copy/for_use_service_libreelec_settings_stringspo_ko.po usr/share/kodi/addons/service.libreelec.settings/resources/language/resource.language.ko_kr/strings.po
-
-### SYSTEM to RAM
-$ mount -o remount,rw /flash
-$ sed -i '1s/$/toram /' /flash/cmdline.txt
-$ cat /flash/cmdline.txt
-$ reboot
