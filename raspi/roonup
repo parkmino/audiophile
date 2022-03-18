@@ -6,8 +6,12 @@ sudo mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.twea
 
 #[ ! -d /home/pi ] && mkdir /home/pi
 sudo wget -O /home/pi/RoonBridge_linux$arch.tar.bz2 http://download.roonlabs.com/builds/RoonBridge_linux$arch.tar.bz2
+
+sync
 sudo systemctl stop roonbridge roonbridgetoram
 sudo tar -xvf /home/pi/RoonBridge_linux$arch.tar.bz2 -C /opt/
+
+sync
 sudo strip --strip-debug /opt/RoonBridge/Bridge/processreaper
 find /opt/RoonBridge/ -name *.so -exec sudo chmod -x {} \; -exec sudo strip --strip-debug {} 2>/dev/null \;
 
