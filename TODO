@@ -52,10 +52,3 @@
 	USB2   power off		4B_USB2_PWR_OFF		uhubctl -a 0 -l 2
 	USB3   power off		4B_USB3_PWR_OFF		uhubctl -a 0 -l 1-1
 	USB2&3 power off		4B_USB23_PWR_OFF	uhubctl -a 0 -l 1-1 ; uhubctl -a 0 -l 2
-
-04. Kodi
-
-	# sudo nano /dev/shm/alsa.conf
-		pcm.hw{type hw card 0 device 0 subdevice 0}pcm{default hw}ctl.default /dev/null
-		pcm.default{type hw card 0 device 0 subdevice 0}ctl.default /dev/null
-
