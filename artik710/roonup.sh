@@ -11,6 +11,9 @@ sync
 
 systemctl stop roonbridgetoram
 tar -xvf /root/copy/RoonBridge_linuxarmv8.tar.bz2 -C /opt/
+
+sync
+
 strip --strip-debug /opt/RoonBridge/Bridge/processreaper
 find /opt/RoonBridge/ -name *.so -exec chmod -x {} \; -exec strip --strip-debug {} 2>/dev/null \;
 
