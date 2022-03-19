@@ -358,21 +358,34 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 19. Gerbera
 
+	https://www.deb-multimedia.org/dists/stable/main/binary-armhf/package/gerbera
 	$ wget https://www.deb-multimedia.org/pool/main/g/gerbera-dmo/gerbera_1.9.2-dmo5_armhf.deb
 	$ sudo dpkg -i gerbera*.deb
 	$ sudo apt-get -f install
+
+	https://github.com/gerbera/gerbera
+	$ wget https://github.com/gerbera/gerbera/releases/download/v1.10.0/gerbera_1.10.0-bullseye1_armhf.deb
+	$ sudo apt install ./gerbera_1.10.0-bullseye1_armhf.deb
+	$ gerbera --create-config > config.xml
+	$ ! [ -d /etc/gerbera ] && sudo mkdir /etc/gerbera
+	$ sudo mv config.xml /etc/gerbera
+
+	$ sudo apt-get install gerbera
+	$ sudo nano /etc/gerbera/config.xml
+		<ui enabled="yes" show-tooltips="yes">
+		<home>/etc/gerbera/</home>
+		<port>49155</port>
+		<!--
+		<tmpdir>/dev/shm</tmpdir>
+		-->
 
 	https://docs.gerbera.io/en/stable/daemon.html
 	$ sudo useradd --system gerbera
 	$ sudo id -u gerbera
 	$ sudo mkdir /etc/gerbera
 	$ sudo chown -Rv gerbera:gerbera /etc/gerbera
+	$ sudo rm -rf /var/lib/gerbera
 
-	$ sudo apt-get install gerbera
-	$ sudo nano /etc/gerbera/config.xml
-		<ui enabled="yes" show-tooltips="yes">
-		<port>49155</port>
-		<tmpdir>/dev/shm</tmpdir>
 	$ sudo systemctl daemon-reload
 	$ systemctl status gerbera
 	$ sudo systemctl disable gerbera
@@ -598,6 +611,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 	$ ps -ef | grep [d]efunct | awk '{print $3}'
 	$ sudo systemctl disable ssh
+	$ sudo sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
+	$ grep ssh= /etc/default/audio.conf
 	##dietpi-services disable dropbear
 
 	$ sudo ntpdate pool.ntp.org
@@ -614,9 +629,11 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
 	$ ls /lib/modules/
+	$ sync
 	$ sudo poweroff
 
 	$ sudo fdisk -l
+	$ sudo umount /dev/sdc?
 	$ sudo dd bs=4M status=progress if=/dev/sdc of=raspi_audio_renderer_$(date +"%y.%m").img
 	$ sync
 	$ zip -dd raspi_audio_renderer_$(date +"%y.%m").zip raspi_audio_renderer_$(date +"%y.%m").img
