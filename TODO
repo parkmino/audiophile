@@ -1,4 +1,22 @@
-01. Tune Kernel Parameters
+01. Tune alsa.conf
+
+	$ sudo nano /usr/share/alsa/alsa.conf.min
+		pcm.hw{type hw card 0 device 0 subdevice 0}ctl.hw{type null}
+		pcm.default{type hw card 0 device 0 subdevice 0}ctl.default{type null}
+	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
+		pcm.default{type hw card 0 device 0 subdevice 0}ctl.default{type null}
+
+
+	$ sudo nano /etc/rc.local
+		/dev/shm/squeezelite -C 1 -z || true
+		/dev/shm/librespot -n Librespot -b 320 --backend alsa --device default --mixer alsa &
+	$ sudo nano /etc/mpd.conf.sav
+		#device "pcm.hw"
+	$ nano .config/mpv/mpv.conf
+		audio-device=alsa
+		#alsa-mixer-device=null
+
+02. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
 
@@ -15,7 +33,7 @@
 		net.ipv4.tcp_rmem = 4621 88291 # 3345733
 		net.ipv4.tcp_wmem = 4560 89953 # 3455708
 
-02. CPU Performance Scaling
+03. CPU Performance Scaling
 
 	$ sudo nano /etc/rc.local
 
@@ -24,7 +42,7 @@
 		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 		#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 
-03. USB Signal & Power
+04. USB Signal & Power
 
 	$ grep -m 1 -i revision /proc/cpuinfo | cut -d':' -f2 | cut -d' ' -f2
 
