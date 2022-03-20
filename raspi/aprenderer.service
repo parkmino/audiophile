@@ -1,0 +1,14 @@
+[Unit]
+Description=APlayer Media Renderer Service
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=forking
+ExecStartPre=cp -r /home/pi/aprenderer /dev/shm/
+WorkingDirectory=/dev/shm/aprenderer
+ExecStart=/dev/shm/aprenderer/ap2renderer
+StandardOutput=null
+
+[Install]
+WantedBy=multi-user.target
