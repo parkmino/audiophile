@@ -252,22 +252,26 @@ fi
 }
 
 features () {
-i=$(whiptail --title "AirPlay, Roon, Spotify, Squeezebox, Gerbera, NAA" --checklist "AirPlay, Roon Bridge, Spotify, Squeezebox" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 12 59 6 \
-"airplay" "Enable AirPlay       에어플레이 사용" $(consf airplay) \
-"roon"    "Enable Roon Bridge   룬 브리지  사용" $(consf roon) \
-"spotify" "Enable Spotify       스포티파이 사용" $(consf spotify) \
-"sqzlite" "Enable Squeezebox    스퀴즈박스 사용" $(consf sqzlite) \
-"gerbera" "Enable Gerbera       미디어서버 사용" $(consf gerbera) \
-"naa"     "Enable NAA           NAA 사용"         $(consf naa) 3>&1 1>&2 2>&3)
+i=$(whiptail --title "UPnP, AirPlay, NAA, Roon, Spotify, Squeezebox" --checklist "UPnP, AirPlay, NAA, Roon Bridge, Spotify, Squeezebox" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 15 62 8 \
+"aprndr"  "Enable APrenderer     AP렌더러     사용" $(consf aprenderer) \
+"upmpd"   "Enable Upmpdcli       Upmpdcli     사용"  $(consf upmpdcli) \
+"gerbera" "Enable Gerbera        미디어서버   사용" $(consf gerbera) \
+"airplay" "Enable AirPlay        에어플레이   사용" $(consf airplay) \
+"naa"     "Enable HQPlayer NAA   HQPlayer NAA 사용"  $(consf naa) \
+"roon"    "Enable Roon Bridge    룬 브리지    사용" $(consf roon) \
+"spotify" "Enable Spotify        스포티파이   사용" $(consf spotify) \
+"sqzlite" "Enable Squeezebox     스퀴즈박스   사용" $(consf sqzlite) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
- [[ $i =~ airplay ]] && consf airplay on || consf airplay off
- [[ $i =~ roon    ]] && consf roon    on || consf roon    off
- [[ $i =~ spotify ]] && consf spotify on || consf spotify off
- [[ $i =~ sqzlite ]] && consf sqzlite on || consf sqzlite off
- [[ $i =~ gerbera ]] && consf gerbera on || consf gerbera off
- [[ $i =~ naa     ]] && consf naa on     || consf naa     off
+ [[ $i =~ aprndr  ]] && consf aprenderer on || consf aprenderer off
+ [[ $i =~ upmpd   ]] && consf upmpdcli   on || consf upmpdcli   off
+ [[ $i =~ gerbera ]] && consf gerbera    on || consf gerbera    off
+ [[ $i =~ airplay ]] && consf airplay    on || consf airplay    off
+ [[ $i =~ naa     ]] && consf naa        on || consf naa        off
+ [[ $i =~ roon    ]] && consf roon       on || consf roon       off
+ [[ $i =~ spotify ]] && consf spotify    on || consf spotify    off
+ [[ $i =~ sqzlite ]] && consf sqzlite    on || consf sqzlite    off
 #if [[ $i =~ tidal ]]; then
 # ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
 # sudo sed -i '/tidal=/s/=.*/=on/' $audio_conf
@@ -299,7 +303,7 @@ while true; do
  "1"  "Audio device               오디오 장치            >" \
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
- "4"  "Airplay, Roon, Spotify, Squeezebox, Gerbera, NAA  >" \
+ "4"  "UPnP, AirPlay, NAA, Roon, Spotify, Squeezebox     >" \
  "5"  "IP TTS, DBus               IP TTS와 DBus          >" \
  "6"  "Ethernet IP                유선 IP 설정           >" \
  "7"  "USB signal & power         USB 신호와 전원        >" \

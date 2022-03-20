@@ -29,6 +29,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
 	$ sudo apt-get autoremove
+	$ sudo apt-get clean
 
 	$ sudo apt-get install bc exfat-fuse exfat-utils file ntpdate python3-pycryptodome uhubctl
 	# apt-get install openssh-client libusb-0.1-4
@@ -392,7 +393,26 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl start gerbera
 	  rpi_ip:49155
 
-20. Web interface (Obsolete)
+20. APlayer Media Renderer
+
+	$ wget http://albumplayer.ru/linux/aprenderer-arm32.tar.gz
+	$ tar xvzf aprenderer*.tar.gz
+	$ cd aprenderer
+	$ sudo ./ap2renderer
+	$ sudo pkill ap2renderer
+	$ cp copy/aprenderer.service /lib/systemd/system/aprenderer.service
+	$ sudo systemctl daemon-reload
+	$ sudo systemctl disable aprenderer
+	$ sudo mkdir /dev/shm/aprenderer
+	$ sudo systemctl start aprenderer
+		Prload buffer      [108768]
+		Gapless mode       [ ]
+		ALSA Period frames [3735]
+		ALSA Buffer frames [14940]
+		DSP                [original]
+	$ sudo systemctl stop  aprenderer
+
+21. Web interface (Obsolete)
 
 	$ sudo apt-get install lighttpd
 	$#sudo systemctl disable lighttpd.service
@@ -416,7 +436,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		www-data ALL=(ALL) NOPASSWD:ALL
 	$ sudo adduser www-data sudo
 
-21. Build libaudiofile libFLAC
+22. Build libaudiofile libFLAC
 
 	$ sudo apt-get update
 	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
@@ -460,7 +480,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
 	$ sudo rm /usr/local/lib/libFLAC*
 
-22. Tweak ALSA
+23. Tweak ALSA
 
 	$ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
@@ -481,7 +501,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
-23. Tweak decoder libraries
+24. Tweak decoder libraries
 
 	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{audiofile,FLAC.so}*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
@@ -499,25 +519,25 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ldconfig
 	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 
-24. Edit /etc/rc.local
+25. Edit /etc/rc.local
 
 	$ sudo apt-get install libusb-0.1-4
 	$ mv copy/llctl ./
 	$ sudo nano /etc/rc.local
 
-25. Sysctl Configuration
+26. Sysctl Configuration
 
 	$ sudo nano /etc/sysctl.conf
 	$ sudo sysctl -p /etc/sysctl.conf
 
-26. audio-config
+27. audio-config
 
 	$ sudo mv copy/{audio-config,audioconf,consf} /usr/bin/
 	$ sudo mv copy/audio.conf /etc/default/
 	$ audio-config
 	$ audioconf
 
-27. CIFS & NFS & USB mounting
+28. CIFS & NFS & USB mounting
 
 	$#sudo apt-get install cifs-utils nfs-common
 	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
@@ -531,7 +551,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
 
-28. Disabel swap
+29. Disabel swap
 
 	$ cat /proc/swaps
 	$ sudo systemctl disable dphys-swapfile
@@ -543,7 +563,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	# swapoff -a
 	# rm /var/swap
 
-29. USB Mount (Obsolete)
+30. USB Mount (Obsolete)
 
 	https://wiki.archlinux.org/index.php/Fstab#External_devices
 
@@ -558,7 +578,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl restart remote-fs.target
 	$ sudo systemctl restart local-fs.target
 
-30. Plexdrive (Google Drive)
+31. Plexdrive (Google Drive)
 
 	https://github.com/dweidenfeld/plexdrive
 	https://github.com/dweidenfeld/plexdrive/releases/latest
@@ -588,7 +608,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl start plexdrive.service
 	$ sudo systemctl enable plexdrive.service
 
-31. Wondershaper
+32. Wondershaper
 
 	https://github.com/magnific0/wondershaper
 	
@@ -606,7 +626,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		[ "$wondershaper" = on ] && wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 		[ "$wondershaper" = on ] && /home/pi/wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 
-32. Make Image
+33. Make Image
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 	$ ps -ef | grep [d]efunct | awk '{print $3}'
@@ -619,6 +639,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get update
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
+	$ sudo apt-get autoremove
+	$ sudo apt-get clean
 
 	$#sudo youtube-dl --update
 	$ sudo yt-dlp --update
@@ -626,9 +648,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ cat /etc/release
 
 	$ mpc clear
+	$ ls /lib/modules/
 	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
-	$ ls /lib/modules/
 	$ sync
 	$ sudo poweroff
 
@@ -645,12 +667,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip -dd raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
-33. Disable Bluetooth UART for RPI3
+34. Disable Bluetooth UART for RPI3
 
 	$ sudo systemctl disable hciuart
 	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
 
-34. Shirnk Image
+35. Shirnk Image
 
 	http://aoakley.com/articles/2015-10-09-resizing-sd-images.php
 	https://github.com/Drewsif/PiShrink

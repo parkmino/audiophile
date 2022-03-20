@@ -3,7 +3,7 @@
 usage () {
  echo "Usage: $(basename "$0") mpd [dop|pcm|vol|sta|tag] [on|off]"
  echo "   or: $(basename "$0") upmpd [set]"
- echo "   or: $(basename "$0") [airplay|naa|roon|spotify|sqzlite|mympd|ssh|upnp|gerbera] [on|off]"
+ echo "   or: $(basename "$0") [airplay|aprenderer|naa|roon|spotify|sqzlite|mympd|ssh|upmpdcli|upnp|gerbera] [on|off]"
  echo "   or: $(basename "$0") build"
  echo "Consult and configure MPD and other features"
 }
@@ -13,51 +13,60 @@ audio_conf=/etc/default/audio.conf
 [ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
 
 case "$1:$2:$3" in
- mpd:dop:on)    sudo sed -i '/dop/s/^#*//g' $mpd_conf					;;
- mpd:dop:off)   sudo sed -i '/dop/s/^/#/g'  $mpd_conf					;;
- mpd:dop:*)     grep -q '^dop' $mpd_conf && echo on || echo off				;;
- mpd:pcm:on)    sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf			;;
- mpd:pcm:off)   sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  $mpd_conf			;;
- mpd:pcm:*)     grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo on || echo off	;;
- mpd:vol:on)    sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf			;;
- mpd:vol:off)   sudo sed -i '/mixer_type/s/".*"/"\/dev\/null"/' $mpd_conf			;;
- mpd:vol:*)     grep -q 'mixer_type.*software' $mpd_conf && echo on || echo off		;;
- mpd:sta:on)    sudo sed -i '/state_file/s/^#*//' $mpd_conf				;;
- mpd:sta:off)   sudo sed -i '/state_file/s/^/#/'  $mpd_conf				;;
- mpd:sta:*)     grep -q '^state_file' $mpd_conf && echo on || echo off			;;
- mpd:tag:on)    sudo sed -i '/metadata.*none/s/^/#/'  $mpd_conf				;;
- mpd:tag:off)   sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf				;;
- mpd:tag:*)     grep -q '^metadata.*none' $mpd_conf && echo off || echo on			;;
- upmpd:set:*)   shift; shift
-                sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$@"'/' $upmpdcli_conf	;;
- upmpd:*)       grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3-			;;
- airplay:on:*)  sudo sed -i '/airplay=/s/=.*/=on/'  $audio_conf				;;
- airplay:off:*) sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf				;;
- airplay:*)     grep ^airplay= $audio_conf | cut -d= -f2					;;
- naa:on:*)      sudo sed -i '/naa=/s/=.*/=on/'  $audio_conf				;;
- naa:off:*)     sudo sed -i '/naa=/s/=.*/=off/' $audio_conf				;;
- naa:*)         grep ^naa= $audio_conf | cut -d= -f2					;;
- roon:on:*)     sudo sed -i '/roon=/s/=.*/=on/'  $audio_conf				;;
- roon:off:*)    sudo sed -i '/roon=/s/=.*/=off/' $audio_conf				;;
- roon:*)        grep ^roon= $audio_conf | cut -d= -f2					;;
- spotify:on:*)  sudo sed -i '/spotify=/s/=.*/=on/'  $audio_conf				;;
- spotify:off:*) sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf				;;
- spotify:*)     grep ^spotify= $audio_conf | cut -d= -f2					;;
- sqzlite:on:*)  sudo sed -i '/sqzlite=/s/=.*/=on/'  $audio_conf				;;
- sqzlite:off:*) sudo sed -i '/sqzlite=/s/=.*/=off/' $audio_conf				;;
- sqzlite:*)     grep ^sqzlite= $audio_conf | cut -d= -f2					;;
- mympd:on:*)    sudo sed -i '/mympd=/s/=.*/=on/'  $audio_conf				;;
- mympd:off:*)   sudo sed -i '/mympd=/s/=.*/=off/' $audio_conf				;;
- mympd:*)       grep ^mympd= $audio_conf | cut -d= -f2					;;
- ssh:on:*)      sudo sed -i '/ssh=/s/=.*/=on/'  $audio_conf				;;
- ssh:off:*)     sudo sed -i '/ssh=/s/=.*/=off/' $audio_conf				;;
- ssh:*)         grep ^ssh= $audio_conf | cut -d= -f2					;;
- upnp:on:*)     sudo sed -i '/upnp=/s/=.*/=on/'  $audio_conf				;;
- upnp:off:*)    sudo sed -i '/upnp=/s/=.*/=off/' $audio_conf				;;
- upnp:*)        grep ^upnp= $audio_conf | cut -d= -f2					;;
- gerbera:on:*)  sudo sed -i '/gerbera=/s/=.*/=on/'  $audio_conf				;;
- gerbera:off:*) sudo sed -i '/gerbera=/s/=.*/=off/' $audio_conf				;;
- gerbera:*)     grep ^gerbera= $audio_conf | cut -d= -f2					;;
- build:*)       grep -o [0-9].* /etc/release						;;
- *)             usage 									;;
+ mpd:dop:on)       sudo sed -i '/dop/s/^#*//g' $mpd_conf					;;
+ mpd:dop:off)      sudo sed -i '/dop/s/^/#/g'  $mpd_conf					;;
+ mpd:dop:*)        grep -q '^dop' $mpd_conf && echo on || echo off			;;
+ mpd:pcm:on)       sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"yes"/' $mpd_conf			;;
+ mpd:pcm:off)      sudo sed -i '/plugin.*pcm/!b;n;s/".*"/"no"/'  $mpd_conf			;;
+ mpd:pcm:*)        grep -A1 'plugin.*pcm' $mpd_conf | grep -q yes - && echo on || echo off	;;
+ mpd:vol:on)       sudo sed -i '/mixer_type/s/".*"/"software"/' $mpd_conf			;;
+ mpd:vol:off)      sudo sed -i '/mixer_type/s/".*"/"\/dev\/null"/' $mpd_conf		;;
+ mpd:vol:*)        grep -q 'mixer_type.*software' $mpd_conf && echo on || echo off		;;
+ mpd:sta:on)       sudo sed -i '/state_file/s/^#*//' $mpd_conf				;;
+ mpd:sta:off)      sudo sed -i '/state_file/s/^/#/'  $mpd_conf				;;
+ mpd:sta:*)        grep -q '^state_file' $mpd_conf && echo on || echo off			;;
+ mpd:tag:on)       sudo sed -i '/metadata.*none/s/^/#/'  $mpd_conf			;;
+ mpd:tag:off)      sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf			;;
+ mpd:tag:*)        grep -q '^metadata.*none' $mpd_conf && echo off || echo on		;;
+ upmpd:set:*)      shift; shift
+                   sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$@"'/' $upmpdcli_conf	;;
+ upmpd:*)          grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3-			;;
+ aprenderer:on:*)  sudo sed -i '/aprenderer=/s/=.*/=on/'  $audio_conf			;;
+ aprenderer:off:*) sudo sed -i '/aprenderer=/s/=.*/=off/' $audio_conf			;;
+ aprenderer:*)     grep ^aprenderer= $audio_conf | cut -d= -f2				;;
+ airplay:on:*)     sudo sed -i '/airplay=/s/=.*/=on/'  $audio_conf			;;
+ airplay:off:*)    sudo sed -i '/airplay=/s/=.*/=off/' $audio_conf			;;
+ airplay:*)        grep ^airplay= $audio_conf | cut -d= -f2				;;
+ naa:on:*)         sudo sed -i '/naa=/s/=.*/=on/'  $audio_conf				;;
+ naa:off:*)        sudo sed -i '/naa=/s/=.*/=off/' $audio_conf				;;
+ naa:*)            grep ^naa= $audio_conf | cut -d= -f2					;;
+ roon:on:*)        sudo sed -i '/roon=/s/=.*/=on/'  $audio_conf				;;
+ roon:off:*)       sudo sed -i '/roon=/s/=.*/=off/' $audio_conf				;;
+ roon:*)           grep ^roon= $audio_conf | cut -d= -f2					;;
+ spotify:on:*)     sudo sed -i '/spotify=/s/=.*/=on/'  $audio_conf			;;
+ spotify:off:*)    sudo sed -i '/spotify=/s/=.*/=off/' $audio_conf			;;
+ spotify:*)        grep ^spotify= $audio_conf | cut -d= -f2				;;
+ sqzlite:on:*)     sudo sed -i '/sqzlite=/s/=.*/=on/'  $audio_conf			;;
+ sqzlite:off:*)    sudo sed -i '/sqzlite=/s/=.*/=off/' $audio_conf			;;
+ sqzlite:*)        grep ^sqzlite= $audio_conf | cut -d= -f2				;;
+ mpd:on:*)         sudo sed -i '/mpd=/s/=.*/=on/'  $audio_conf				;;
+ mpd:off:*)        sudo sed -i '/mpd=/s/=.*/=off/' $audio_conf				;;
+ mpd:*)            grep ^mpd= $audio_conf | cut -d= -f2					;;
+ mympd:on:*)       sudo sed -i '/mympd=/s/=.*/=on/'  $audio_conf				;;
+ mympd:off:*)      sudo sed -i '/mympd=/s/=.*/=off/' $audio_conf				;;
+ mympd:*)          grep ^mympd= $audio_conf | cut -d= -f2					;;
+ ssh:on:*)         sudo sed -i '/ssh=/s/=.*/=on/'  $audio_conf				;;
+ ssh:off:*)        sudo sed -i '/ssh=/s/=.*/=off/' $audio_conf				;;
+ ssh:*)            grep ^ssh= $audio_conf | cut -d= -f2					;;
+ upmpdcli:on:*)    sudo sed -i '/upmpdcli=/s/=.*/=on/'  $audio_conf			;;
+ upmpdcli:off:*)   sudo sed -i '/upmpdcli=/s/=.*/=off/' $audio_conf			;;
+ upmpdcli:*)       grep ^upmpdcli= $audio_conf | cut -d= -f2				;;
+ upnp:on:*)        sudo sed -i '/upnp=/s/=.*/=on/'  $audio_conf				;;
+ upnp:off:*)       sudo sed -i '/upnp=/s/=.*/=off/' $audio_conf				;;
+ upnp:*)           grep ^upnp= $audio_conf | cut -d= -f2					;;
+ gerbera:on:*)     sudo sed -i '/gerbera=/s/=.*/=on/'  $audio_conf			;;
+ gerbera:off:*)    sudo sed -i '/gerbera=/s/=.*/=off/' $audio_conf			;;
+ gerbera:*)        grep ^gerbera= $audio_conf | cut -d= -f2				;;
+ build:*)          grep -o [0-9].* /etc/release						;;
+ *)                usage									;;
 esac
