@@ -42,6 +42,7 @@ else
 fi
 
 #cmd="googler --colorize -t h$hour -n 9 --np "$find""
-cmd="googler --colorize -n 9 --np "$find" 1080p"
+cmd="ddgr --colorize -n 9 --np -x "$find""
 echo ; echo " $cmd"
 $cmd | more
+
