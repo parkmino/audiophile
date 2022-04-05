@@ -74,7 +74,7 @@ torview () {
 tfreeca () {
  url="https://tfreeca22.com"
  chk_url || return
- url="$url//top100.php?b_id=tmovie&hit=Week"
+ url="$url/top100.php?b_id=tmovie&hit=Week"
  tmpfile=$(mktemp)
  curl $curl_opt -L "$url" | grep -m 10 '<span class="ca">' > "$tmpfile"
  for i in $(seq 1 10); do
