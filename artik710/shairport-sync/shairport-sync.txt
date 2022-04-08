@@ -1,0 +1,53 @@
+$ git clone https://github.com/mikebrady/shairport-sync.git
+$ cd shairport-sync
+$ git checkout development
+$ autoreconf -fi
+$ ./configure --sysconfdir=/etc --with-alsa --with-soxr --with-avahi --with-ssl=openssl --with-systemd
+$ make
+$ sudo make install
+
+$ git clone https://github.com/mikebrady/shairport-sync.git
+$ cd shairport-sync
+$ git checkout development
+$ autoreconf -fi
+$ ./configure --sysconfdir=/etc --with-alsa --with-soxr --with-avahi --with-ssl=openssl --with-systemd
+$ make
+$ sudo make install
+
+[root@ubuntu shairport-sync]# sudo make install
+Unknown host QEMU_IFLA type: 54
+Unknown host QEMU_IFLA type: 54
+/usr/bin/make  install-recursive
+make[1]: Entering directory '/root/shairport-sync'
+Making install in man
+make[2]: Entering directory '/root/shairport-sync/man'
+make[3]: Entering directory '/root/shairport-sync/man'
+make[3]: Nothing to be done for 'install-exec-am'.
+ /bin/mkdir -p '/usr/local/share/man/man7'
+ /usr/bin/install -c -m 644 shairport-sync.7 '/usr/local/share/man/man7'
+make[3]: Leaving directory '/root/shairport-sync/man'
+make[2]: Leaving directory '/root/shairport-sync/man'
+make[2]: Entering directory '/root/shairport-sync'
+make[3]: Entering directory '/root/shairport-sync'
+ /bin/mkdir -p '/usr/local/bin'
+  /usr/bin/install -c shairport-sync '/usr/local/bin'
+/usr/bin/make  install-exec-hook
+make[4]: Entering directory '/root/shairport-sync'
+[ -e /etc ] || mkdir /etc
+cp scripts/shairport-sync.conf /etc/shairport-sync.conf.sample
+[ -f /etc/shairport-sync.conf ] || cp scripts/shairport-sync.conf /etc/shairport-sync.conf
+getent group shairport-sync &>/dev/null || groupadd -r shairport-sync >/dev/null
+getent passwd shairport-sync &> /dev/null || useradd -r -M -g shairport-sync -s /usr/bin/nologin -G audio shairport-sync >/dev/null
+[ -e /lib/systemd/system ] || mkdir -p /lib/systemd/system
+[ -e /lib/systemd/system/shairport-sync.service ] || cp scripts/shairport-sync.service-avahi /lib/systemd/system/shairport-sync.service
+make[4]: Leaving directory '/root/shairport-sync'
+make[3]: Nothing to be done for 'install-data-am'.
+make[3]: Leaving directory '/root/shairport-sync'
+make[2]: Leaving directory '/root/shairport-sync'
+make[1]: Leaving directory '/root/shairport-sync'
+
+/usr/local/bin/shairport-sync
+/etc/shairport-sync.conf
+getent group shairport-sync &>/dev/null || groupadd -r shairport-sync >/dev/null
+getent passwd shairport-sync &> /dev/null || useradd -r -M -g shairport-sync -s /usr/bin/nologin -G audio shairport-sync >/dev/null
+/lib/systemd/system/shairport-sync.service
