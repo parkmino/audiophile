@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") [qq|view]"
+ echo "Usage: $(basename "$0") [qq|tfreeca|tf|view|vw]"
  echo "Scrape torrent movies"
 }
 
@@ -42,8 +42,8 @@ torwal () {
 }
 
 torqq () {
- url="https://토렌트큐큐.com"
-#url="https://torrentqq73.com"
+#url="https://토렌트큐큐.net"
+ url="https://torrentqq138.com"
  chk_url || return
  [ -z "${url##*큐큐*}" ] && url="$(curl $curl_opt -L "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=3d&board=mov"
@@ -58,7 +58,7 @@ torqq () {
 }
 
 torview () {
- url="https://torrentview34.com"
+ url="https://torrentview57.com"
  chk_url || return
  url="$url/bbs/board.php?bo_table=mov"
  tmpfile=$(mktemp)
@@ -86,8 +86,8 @@ tfreeca () {
 }
 
 case $1 in
- view|vw)   torview ;;
- tfeeca|tf) tfreeca ;;
- qq|*)      torqq   ;;
-# *)       torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
+ qq)           torqq   ;;
+ view|vw)      torview ;;
+ tfreeca|tf|*) tfreeca ;;
+# *)           torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
 esac
