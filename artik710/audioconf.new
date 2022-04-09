@@ -52,7 +52,7 @@ until [ "$i" = "q" ] ; do
   eval status_$i="$(consf mpd $i)"
  done
 
- for i in airplay roon spotify naa upnp sound; do
+ for i in airplay roon sqzlite naa upnp sound; do
   eval status_$i="$(consf $i)"
  done
 
