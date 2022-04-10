@@ -51,3 +51,9 @@ make[1]: Leaving directory '/root/shairport-sync'
 getent group shairport-sync &>/dev/null || groupadd -r shairport-sync >/dev/null
 getent passwd shairport-sync &> /dev/null || useradd -r -M -g shairport-sync -s /usr/bin/nologin -G audio shairport-sync >/dev/null
 /lib/systemd/system/shairport-sync.service
+
+# apt-get install libconfig9
+# nano /etc/default/audio.conf
+	shairport=on
+# nano /etc/rc.local
+	[ "$shairport" = on ] && cp /usr/local/bin/shairport-sync /dev/shm/ && systemctl start shairport-sync

@@ -9,8 +9,8 @@ After=network.target network-online.target
 [Service]
 ExecStartPre=cp /usr/local/bin/shairport-sync /dev/shm/
 ExecStart=/dev/shm/shairport-sync
-User=shairport-sync
-Group=shairport-sync
+#User=shairport-sync
+#Group=shairport-sync
 
 [Install]
 WantedBy=multi-user.target
