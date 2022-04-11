@@ -1,0 +1,46 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") m(bc)|d(rama)|e(very1)|m(u)sic|k(pop)|o(n)"
+ echo "   or: $(basename "$0") f(m)|(fm)4(u)|a(llthat)"
+}
+
+[ -z "$1" ] && usage && exit
+
+#H1="User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"
+#H2="X-FORWARDED-FOR: 121.254.133.162"
+#H3="Referer: https://onair.imbc.com/"
+
+H1="Host: mediaapi.imbc.com"
+H2="Origin: https://onair.imbc.com"
+H3="Referer: https://onair.imbc.com/"
+H4="User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36"
+
+m3u_dir="/home/parkmino/Videos"
+
+url_tv0 () {
+ url=$(curl -s -H "$H1" -H "$H2" -H "$H3" -H "$H4" "https://mediaapi.imbc.com/Player/OnAirURLUtil?&type=PC&t=$(date +%s)" | grep -o MediaURL.* | cut -d\" -f3)
+}
+
+url_tv () {
+ url=$(curl -s -H "$H1" -H "$H2" -H "$H3" -H "$H4" "https://mediaapi.imbc.com/Player/OnAirPlusURLUtil?ch=$1&type=PC&t=$(date +%s)" | grep -o MediaURL.* | cut -d\" -f3)
+}
+
+url_radio () {
+ url=$(curl -s "https://sminiplay.imbc.com/aacplay.ashx?channel=$1&protocol=M3U8&agent=webapp")
+}
+
+case $1 in
+ m) url_tv0       ; file=mbc        ;;
+ d) url_tv 1      ; file=mbc_drama  ;;
+ e) url_tv 2      ; file=mbc_every1 ;;
+ u) url_tv 3      ; file=mbc_music  ;;
+ k) url_tv 4      ; file=mbc_kpop   ;;
+ o) url_tv 6      ; file=mbc_on     ;;
+ f) url_radio sfm ; file=mbc_fm     ;;
+ 4) url_radio mfm ; file=mbc_fm4u   ;;
+ a) url_radio chm ; file=mbc_chm    ;;
+esac
+
+echo "$url"
+printf "#EXTM3U\n#EXTINF:-1,$file\n$url\n" > $m3u_dir/${file}.m3u
