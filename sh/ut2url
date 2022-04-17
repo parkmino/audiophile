@@ -50,13 +50,16 @@ case $i in
       prog=$(echo "$label" | sed 's/ \[맛있는.*//')
       printf "\e[32m$prog ($days)\e[0m\n"
      fi
-     uturl=$(curl -s "$url" | grep -o '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
-     if [ -z "$uturl" ]; then
-      printf "YouTube live streaming is not available!\n\e[34m$url\e[0m\n"
-     else
-      printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
-      printf "#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" >> $m3u_dir/$ch.m3u
-     fi
+     count=$(curl -s "$url" | grep -o '실시간"}}}' | wc -l)
+     for i in $(seq $count); do
+      uturl=$(curl -s "$url" | grep -n '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | uniq | head -$i | tail -1 | cut -d\" -f4)
+      if [ -z "$uturl" ]; then
+       printf "YouTube live streaming is not available!\n\e[34m$url\e[0m\n"
+       else
+       printf "\e[34m$url\e[0m\n$ch - https://youtu.be/$uturl\n"
+       printf "#EXTINF:-1,$(echo "$ch" | tr a-z A-Z)\nhttps://youtu.be/$uturl\n" >> $m3u_dir/$ch.m3u
+      fi
+     done
     done
     exit ;;
  0) ch=김기열
