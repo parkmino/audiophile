@@ -5,7 +5,7 @@
 
 mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.tweak
 [ ! -d /root/copy ] && mkdir /root/copy
-wget -O /root/copy/RoonBridge_linuxarmv8.tar.bz2 http://download.roonlabs.com/builds/RoonBridge_linuxarmv8.tar.bz2
+wget -O /root/copy/RoonBridge_linuxarmv8.tar.bz2 https://download.roonlabs.com/builds/RoonBridge_linuxarmv8.tar.bz2
 
 sync
 
