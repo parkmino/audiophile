@@ -5,7 +5,7 @@ arch=armv7hf
 sudo mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.tweak
 
 #[ ! -d /home/pi ] && mkdir /home/pi
-sudo wget -O /home/pi/RoonBridge_linux$arch.tar.bz2 http://download.roonlabs.com/builds/RoonBridge_linux$arch.tar.bz2
+sudo --no-check-certificate wget -O /home/pi/RoonBridge_linux$arch.tar.bz2 https://download.roonlabs.com/builds/RoonBridge_linux$arch.tar.bz2
 
 sync
 sudo systemctl stop roonbridge roonbridgetoram
