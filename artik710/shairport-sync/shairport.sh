@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# bash <(curl -s  https://github.com/parkmino/audiophile/raw/master/artik710/shairport-sync/shairport.sh)
+# bash <(curl -sL https://bit.ly/3xD2lIC)
+
 apt-get update
 apt-get install libconfig9
 
