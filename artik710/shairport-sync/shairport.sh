@@ -18,7 +18,7 @@ sync
 systemctl disable shairport-sync
 systemctl daemon-reload
 
-grep -q shairport /etc/default/audio.conf || sed -i 'ashairportt=on' /etc/default/audio.conf
+grep -q shairport /etc/default/audio.conf || sed -i 'ashairport=on' /etc/default/audio.conf
 grep -q shairport /etc/rc.local || sed -i '/$naa/a\\n[ "$shairport" = on ] && cp /usr/local/bin/shairport-sync /dev/shm/ && systemctl start shairport-sync' /etc/rc.local
 
 sync
