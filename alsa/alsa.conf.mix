@@ -1,4 +1,4 @@
-pcm.default{type hw card 0 device 0 subdevice 0}ctl.default{type null}
+pcm.default{type hw card 0 device 0 subdevice 0}
 defaults{namehint.showall on namehint.basic on namehint.extended on ctl.card 0 pcm.card 0 pcm.device 0 pcm.subdevice 0}
 pcm.hw{@args[CARD DEV SUBDEV]
 @args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]default{@func refer name defaults.pcm.card}}}
