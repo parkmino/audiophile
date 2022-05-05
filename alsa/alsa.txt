@@ -80,7 +80,7 @@ $ sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 $ sudo mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
 
 $ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
-$ sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+$#sudo ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
 
 $ sudo nano /etc/rc.local
 $ sudo reboot

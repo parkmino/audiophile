@@ -8,9 +8,13 @@ dir="/home/parkmino/Downloads"
 opt="--dir=$dir --seed-time=0 --enable-dht6=false --disable-ipv6=true"
 
 if [ $# -lt 1 ]; then
-#usage
- aria2c $opt $dir/*.torrent
- exit
+ if [ -f $dir/*.torrent ]; then
+  for file in $dir/*.torrent; do
+   aria2c $opt "$file"
+  done
+ else
+   usage ; exit
+ fi
 else
  aria2c $opt "$*"
 fi

@@ -33,6 +33,7 @@ case $i in
  a) ch=artetv      ; url="https://www.youtube.com/channel/UCPglj7zGwmOlH8_31Tpgh8Q" ;;
  g) ch=tastyguys
     printf "#EXTM3U\n" > $m3u_dir/$ch.m3u
+     nr=0
     for url in "https://www.youtube.com/channel/UCHcsy2HkeLAus-43nKDm09Q" "https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"; do
      live=
      label=
@@ -50,7 +51,12 @@ case $i in
       prog=$(echo "$label" | sed 's/ \[맛있는.*//')
       printf "\e[32m$prog ($days)\e[0m\n"
      fi
-     count=$(curl -s "$url" | grep -o '실시간"}}}' | wc -l)
+     if [ "$nr" -eq 0 ]; then
+      count=1
+      nr=1
+     else
+      count=$(curl -s "$url" | grep -o '실시간"}}}' | wc -l)
+     fi
      for i in $(seq $count); do
       uturl=$(curl -s "$url" | grep -n '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | uniq | head -$i | tail -1 | cut -d\" -f4)
       if [ -z "$uturl" ]; then

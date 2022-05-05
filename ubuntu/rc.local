@@ -75,7 +75,7 @@
 #sysctl -w dev.rtc.max-user-freq=4032 || true
 #sysctl -w dev.hpet.max-user-freq=2147483520 || true
 
- echo 55696 | tee /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+#echo 55696 | tee /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 #echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 #[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
@@ -188,5 +188,7 @@ modprobe -r psmouse
 uhubctl -a 0 -l 2-1 -p 1-6
 #uhubctl -a 0 -l 1-1 -p 3-6
 uhubctl -a 0 -l 1-1 -p 1-6
+
+pgrep -x kime > /dev/null && pkill kime
 
 exit 0
