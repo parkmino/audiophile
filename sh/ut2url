@@ -11,9 +11,7 @@ echo "\
 (\e[32m2\e[0m) YTN2
 (\e[32mc\e[0m) YTN 사이언스
 (\e[32ma\e[0m) ArteTV
-(\e[32mg\e[0m) 맛있는 녀석들
-(\e[32m0\e[0m) 김기열
-(\e[32m1\e[0m) 여은파"
+(\e[32mg\e[0m) 맛있는 녀석들"
 
 read -p " " i
 
@@ -35,27 +33,27 @@ case $i in
     printf "#EXTM3U\n" > $m3u_dir/$ch.m3u
      nr=0
     for url in "https://www.youtube.com/channel/UCHcsy2HkeLAus-43nKDm09Q" "https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"; do
-     live=
-     label=
-     uturl=
+     if [ "$nr" -eq 0 ]; then
+      count=1
+      nr=1
+     else
+      count=$(curl -s "$url" | grep -o '실시간"}}}' | wc -l)
+     fi
      live=$(curl -s "$url" | grep -o '지금 최초 공개 중.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | head -1 | cut -d\" -f4)
      if [ ! -z "$live" ]; then
       printf "\e[32m#지금 최초 공개 중\e[0m\n"
       printf "$ch - https://youtu.be/$live\n"
      fi
      label=$(curl -s "$url" | grep -o '"label":.*' | head -1 | sed 's/\\"//g' | cut -d\" -f4)
-     if [ -z "$label" ]; then
-      printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n"
+     #if [ -z "$label" ]; then
+     if [ -z "$label" ] || [ -z "${label##*babayo*}" ]; then
+      #printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n"
+      continue
      else
-      days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
-      prog=$(echo "$label" | sed 's/ \[맛있는.*//')
-      printf "\e[32m$prog ($days)\e[0m\n"
-     fi
-     if [ "$nr" -eq 0 ]; then
-      count=1
-      nr=1
-     else
-      count=$(curl -s "$url" | grep -o '실시간"}}}' | wc -l)
+      #days=$(echo "$label" | sed 's/.*) //; s/ 조회수.*//')
+      #prog=$(echo "$label" | sed 's/ \[맛있는.*//')
+      #printf "\e[32m$prog ($days)\e[0m\n"
+     printf "\e[32m$label\e[0m\n"
      fi
      for i in $(seq $count); do
       uturl=$(curl -s "$url" | grep -n '실시간.*' | grep -o '"videoId":"[0-9A-Za-z_-]*"' | uniq | head -$i | tail -1 | cut -d\" -f4)
