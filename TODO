@@ -6,32 +6,19 @@
 		pcm.default{type hw card 0 device 0 subdevice 0}
 
 	$ sudo nano /etc/rc.local
-		/dev/shm/squeezelite -C 1 -z || true
-		/dev/shm/librespot -n Librespot -b 320 --backend alsa --device default --mixer alsa &
-	$ sudo nano /etc/mpd.conf.sav
-		#device "pcm.hw"
-	$ nano .config/mpv/mpv.conf
-		audio-device=alsa
-		#alsa-mixer-device=null
+		#/dev/shm/librespot -n Librespot -b 320 --backend alsa --device default --mixer alsa &
+		/dev/shm/librespot -n Librespot -b 320 &
 
 02. Tune Kernel Parameters
 
 	$ sudo nano /etc/sysctl.conf
 
-		#kernel.sched_min_granularity_ns = 230014
-		#kernel.sched_wakeup_granularity_ns = 388334
-		#kernel.sched_latency_ns = 1394106
-		#kernel.sched_nr_migrate = 30
-		#kernel.sched_rr_timeslice_ms = 32
-		#kernel.sched_tunable_scaling = 0			# 1
-		#echo 0 | tee /sys/kernel/debug/sched/tunable_scaling	# 1
-
-		kernel.sched_migration_cost_ns = 4899042
-		echo 4899042 | tee /sys/kernel/debug/sched/migration_cost_ns
-		net.ipv4.tcp_rmem = 4621 88291 # 3345733
-		net.ipv4.tcp_wmem = 4560 89953 # 3455708
+		net.ipv4.tcp_rmem = 4621 88291 #3345740 > 4622 88295
+		net.ipv4.tcp_wmem = 4560 89953 #3455725 > 4562 89957
 
 03. CPU Performance Scaling
+
+	$ cat /sys/devices/system/cpu/cpu?/cpufreq/scaling_governor
 
 	$ sudo nano /etc/rc.local
 
@@ -39,32 +26,3 @@
 		#echo 1 > tee /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 		#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
-
-04. USB Signal & Power
-
-	$ grep -m 1 -i revision /proc/cpuinfo | cut -d':' -f2 | cut -d' ' -f2
-
-	B+  : 0010 0013 900032
-	2B  : a01041 a21041 a22042
-	3B  : a02082 a22082
-	3B+ : a020d3
-	4B  : a03111 b03111 b03112 b03114 c0311 c03112 c03114 d03114
-	      (sudo rpi-eeprom-update | grep -i -m 1 vl805 | cut -d':' -f2 | cut -d' ' -f2, later than 000137ad)
-
-	RPi version 			variable		B+/2B/3B
-	All on				on
-	All off				PWR_OFF 		uhubctl -a 0 -l 1-1 -p 2
-	USB 4/5 signal off		USB45_SIG_OFF		uhubctl -a 0 -l 1-1 -p 4,5
-	USB 4/5 signal and power off	USB45_SIG_PWR_OFF	uhubctl -a 0 -l 1-1 -p 2,4,5
-
-	RPi version 			variable		3B+
-	All on				on
-	All off				3B+_PWR_OFF		uhubctl -a 0 -l 1-1 -p 2
-	USB 4/5 signal off		3B+_USB45_SIG_OFF	uhubctl -a 0 -l 1-1.1 -p 2,3
-	USB 4/5 signal and power off	3B+_USB45_SIG_PWR_OFF	uhubctl -a 0 -l 1-1 -p 2,4 ; uhubctl -a 0 -l 1-1.1 -p 2,3
-
-	RPi version 			variable		4B
-	All on				on
-	USB2   power off		4B_USB2_PWR_OFF		uhubctl -a 0 -l 2
-	USB3   power off		4B_USB3_PWR_OFF		uhubctl -a 0 -l 1-1
-	USB2&3 power off		4B_USB23_PWR_OFF	uhubctl -a 0 -l 1-1 ; uhubctl -a 0 -l 2
