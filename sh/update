@@ -291,7 +291,7 @@ DAS () {
    printf "\e[34m  $url\e[0m\n"
    for i in $(seq 1 $last); do
     printf '\33[2K\r  \e[32m'
-    grep -oE -e '김어준의 다스뵈이다.{0,250}' -e '총선.{0,250}' -e '대선.{0,250}' "$tmpfile" | head -$i | tail -1 | sed 's/ 게시자.*//; s/.*다스뵈이다 \|.*다스뵈이다] //; s/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+    grep -oE -e '.김어준의 다스뵈이다.{0,250}' -e '.총선.{0,250}' -e '.대선.{0,250}' -e '.선거.{0,250}' "$tmpfile" | head -$i | tail -1 | sed 's/ 게시자.*\|".*//g; s/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    #printf '   https://youtu.be/'
     printf '\33[2K\r  \e[34m'
     grep -o 'watch?v=...........' "$tmpfile" | cut -d= -f2 | head -$i | tail -1 | echo "https://youtu.be/$(cat -)"
@@ -771,7 +771,7 @@ YT_DLP () {
 #AIRCONNECT
  ANDROID_X86
 #APCAST
- BUBBLEUPNP
+#BUBBLEUPNP
 #CELLULOID
 #EXTINF
 #GOOGLER

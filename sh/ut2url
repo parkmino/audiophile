@@ -46,7 +46,7 @@ case $i in
      fi
      label=$(curl -s "$url" | grep -o '"label":.*' | head -1 | sed 's/\\"//g' | cut -d\" -f4)
      #if [ -z "$label" ]; then
-     if [ -z "$label" ] || [ -z "${label##*babayo*}" ]; then
+     if [ -z "$label" ] || [ -z "${label##*babayo*}" ] || [ -z "${label##*바바요*}" ]; then
       #printf "\e[32m정보 없음\e[0m\n\e[36mhttps://youtu.be/$uturl\e[0m\n"
       continue
      else
