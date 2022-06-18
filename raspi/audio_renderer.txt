@@ -405,12 +405,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable aprenderer
 	$ sudo mkdir /dev/shm/aprenderer
 	$ sudo systemctl start aprenderer
-		Prload buffer      [108768]
+		Prload buffer      [108772]
 		Gapless mode       [ ]
-		ALSA Period frames [3735]
-		ALSA Buffer frames [14940]
+		ALSA Period frames [3736]
+		ALSA Buffer frames [14941]
 		DSP                [original]
-	$ sudo systemctl stop  aprenderer
+	$ sudo systemctl stop aprenderer
 
 21. Web interface (Obsolete)
 

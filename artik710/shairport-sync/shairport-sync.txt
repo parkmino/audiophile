@@ -2,17 +2,13 @@ $ git clone https://github.com/mikebrady/shairport-sync.git
 $ cd shairport-sync
 $ git checkout development
 $ autoreconf -fi
-$ ./configure --sysconfdir=/etc --with-alsa --with-soxr --with-avahi --with-ssl=openssl --with-systemd
+$ ./configure --sysconfdir=/etc --with-alsa --with-soxr --with-avahi --with-ssl=openssl --with-systemd # --with-airplay-2
 $ make
 $ sudo make install
-
-$ git clone https://github.com/mikebrady/shairport-sync.git
-$ cd shairport-sync
-$ git checkout development
-$ autoreconf -fi
-$ ./configure --sysconfdir=/etc --with-alsa --with-soxr --with-avahi --with-ssl=openssl --with-systemd
-$ make
-$ sudo make install
+$ file /usr/local/bin/shairport-sync
+$ ls -al /usr/local/bin/shairport-sync
+$ sudo strip --strip-debug /usr/local/bin/shairport-sync
+$ ls -al /usr/local/bin/shairport-sync
 
 [root@ubuntu shairport-sync]# sudo make install
 Unknown host QEMU_IFLA type: 54
@@ -52,6 +48,7 @@ getent group shairport-sync &>/dev/null || groupadd -r shairport-sync >/dev/null
 getent passwd shairport-sync &> /dev/null || useradd -r -M -g shairport-sync -s /usr/bin/nologin -G audio shairport-sync >/dev/null
 /lib/systemd/system/shairport-sync.service
 
+# apt-get update
 # apt-get install libconfig9
 # nano /etc/default/audio.conf
 	shairport=on
