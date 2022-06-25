@@ -406,7 +406,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mkdir /dev/shm/aprenderer
 	$ sudo systemctl start aprenderer
 		Playback mode	   (O) Standard
-		Prload buffer      [108775]
+		Prload buffer      [108776]
 		Gapless mode       [ ]
 		ALSA Period frames [3737]
 		ALSA Buffer frames [14941]
