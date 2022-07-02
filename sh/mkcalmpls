@@ -1,0 +1,18 @@
+#!/bin/sh
+
+lst="/home/parkmino/Downloads/VIP URLs AUTH123(Limux,mac).txt"
+m3u="/home/parkmino/Music/CALMRADIO"
+
+count=$(grep "CALMRADIO - " "$lst" | wc -l)
+
+[ ! -e "$lst" ] || [ "$count" -eq 0 ] && exit
+
+for i in $(seq $count); do
+ url=$(grep -m $i 320/stream     "$lst" | tail -1)
+  ch=$(grep -m $i "CALMRADIO - " "$lst" | tail -1)
+ echo "[playlist]"        >  "$m3u/$ch.pls"
+ echo "File1=$url"        >> "$m3u/$ch.pls"
+ echo "Title1=$ch"        >> "$m3u/$ch.pls"
+ echo "Length1=-1"        >> "$m3u/$ch.pls"
+ echo "NumberOfEntries=1" >> "$m3u/$ch.pls"
+done
