@@ -30,16 +30,17 @@ case $1 in
   done ;;
  hdmi|usb|int)
   if [ "$1" = hdmi ]; then
-   card=0; dev=3; IEC958=on;  irq=snd
+   card=0; dev=3; subdev=0; IEC958=on;  irq=snd
   elif [ "$1" = usb ]; then
-   card=1; dev=0; IEC958=off; irq=xhci
+   card=1; dev=0; subdev=0; IEC958=off; irq=xhci
   else
-   card=0; dev=0; IEC958=off; irq=snd
+   card=0; dev=0; subdev=0; IEC958=off; irq=snd
   fi
 
   if [ "$1" = hdmi ] || [ "$1" = usb ]; then
-   sudo sed -i '1s/card../card '"$card"'/'    $alsa_conf
-   sudo sed -i '1s/device../device '"$dev"'/'  $alsa_conf
+   sudo sed -i '1s/card../card '"$card"'/'             $alsa_conf
+   sudo sed -i '1s/device../device '"$dev"'/'          $alsa_conf
+   sudo sed -i '1s/subdevice../subdevice '"$subdev"'/' $alsa_conf
   else
    sudo cp $alsa_orig $alsa_conf
   fi
