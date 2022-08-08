@@ -347,7 +347,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 18. ttyd
 
-	$ curl -s https://github.com/tsl0922/ttyd/releases/latest | cut -d\" -f2 | sed 's/tag/download/; s/$/\/ttyd.armhf/' | wget "$(cat -)" -P ~/
+	$ wget "https://github.com/tsl0922/ttyd/releases/download/$(curl -s "https://github.com/tsl0922/ttyd/tags" | grep -m1 'releases/tag/' | cut -d\/ -f6 | cut -d\" -f1)/ttyd.armhf" -P ~/
 	$ chmod +x ~/ttyd.armhf
 	$ sudo mv ~/ttyd.armhf /usr/bin/ttyd
 
