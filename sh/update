@@ -9,7 +9,7 @@ upd () {
  sudo ntpdate pool.ntp.org
 #sudo rm -rf /var/lib/apt/lists/partial
 #sudo apt-get update -o Acquire::CompressionTypes::Order::=gz && sudo apt-get dist-upgrade && sudo apt-get clean
- sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get clean
+ sudo apt-get update && sudo apt-get -o APT::Get::Always-Include-Phased-Updates=true dist-upgrade && sudo apt-get clean
  [ -n "$(pgrep packagekitd)" ] && sudo pkill packagekitd
 }
 
