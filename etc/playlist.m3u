@@ -15,12 +15,36 @@ http://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8
 http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8
 #EXTINF:-1,EBSbandi
 http://ebsonair.ebs.co.kr/iradio/iradiolive_m4a/playlist.m3u8
+#EXTINF:-1,KBS1
+http://ye23.vip/z7z8/2021/kbs2020.php?id=1
+#EXTINF:-1,KBS2
+http://ye23.vip/z7z8/2021/kbs2020.php?id=2
+#EXTINF:-1,KBS World
+http://ye23.vip/z7z8/2021/kbs2020.php?id=3
+#EXTINF:-1,KBS News D
+http://ye23.vip/z7z8/2021/kbs2020.php?id=4
+#EXTINF:-1,KBS Drama
+http://ye23.vip/z7z8/2021/kbs2020.php?id=5
+#EXTINF:-1,KBS Joy
+http://ye23.vip/z7z8/2021/kbs2020.php?id=6
+#EXTINF:-1,KBS Life
+http://ye23.vip/z7z8/2021/kbs2020.php?id=7
+#EXTINF:-1,KBS Story
+http://ye23.vip/z7z8/2021/kbs2020.php?id=8
+#EXTINF:-1,KBS Kids
+http://ye23.vip/z7z8/2021/kbs2020.php?id=9
 #EXTINF:-1,MBC강원영동TV
 http://123.254.72.24:1935/tvlive/livestream2/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM
 http://123.254.72.24:1935/amlive/livestream/playlist.m3u8
 #EXTINF:-1,MBC강원영동FM4U
 http://123.254.72.24:1935/fmlive/livestream/playlist.m3u8
+#EXTINF:-1,MBC경남TV
+https://624a79c87201d.streamlock.net/MBCTV/TV1.stream/playlist.m3u8
+#EXTINF:-1,MBC경남표준FM
+https://624a79c87201d.streamlock.net/MBCFM/TV2.stream/playlist.m3u8
+#EXTINF:-1,MBC경남FM4U
+https://624a79c87201d.streamlock.net/MBCFM4U/TV3.stream/playlist.m3u8
 #EXTINF:-1,MBC광주TV
 http://media.kjmbc.co.kr:1935/live/stream/playlist.m3u8
 #EXTINF:-1,MBC광주표준FM
@@ -46,13 +70,13 @@ https://vod.mpmbc.co.kr/live/encoder-am/playlist.m3u8
 #EXTINF:-1,MBC목포FM4U
 https://vod.mpmbc.co.kr/live/encoder-fm/playlist.m3u8
 #EXTINF:-1,MBC부산TV
-http://211.221.46.79:1935/livetv/BusanMBC_TV_livestream/playlist.m3u8
+http://stream.bsmbc.com/livetv/BusanMBC_TV_onairstream/playlist.m3u8
 #EXTINF:-1,MBC부산표준FM
-http://211.221.46.79:1935/live/BusanMBC.Live-AM-0415/playlist.m3u8
+http://stream.bsmbc.com/live/mp4:BusanMBC-AM-LiveStream/playlist.m3u8
 #EXTINF:-1,MBC부산FM4U
-http://211.221.46.79:1935/live/BusanMBC.Live-FM-0415/playlist.m3u8
+http://stream.bsmbc.com/live/mp4:BusanMBC.Live-FM-0415/playlist.m3u8
 #EXTINF:-1,MBC여수TV
-https://5c3639aa99149.streamlock.net/live_TV/TV/playlist.m3u8
+https://5c3639aa99149.streamlock.net/live_TV/tv/playlist.m3u8
 #EXTINF:-1,MBC여수표준FM
 https://5c3639aa99149.streamlock.net/표준FM/표준FM_Audio/playlist.m3u8
 #EXTINF:-1,MBC여수FM4U
@@ -70,29 +94,27 @@ https://5ee9633b25727.streamlock.net:443/jmbc_sfm/myStream/playlist.m3u8
 #EXTINF:-1,MBC전주FM4U
 https://5ee9633b25727.streamlock.net:443/jmbc_fm4u/myStream/playlist.m3u8
 #EXTINF:-1,MBC제주TV
-https://5cf58a556f9b2.streamlock.net:443/live/tv_jejumbc/playlist.m3u8
+https://wowza.jejumbc.com/live/tv_jejumbc/playlist.m3u8
 #EXTINF:-1,MBC제주표준FM
-https://5cf58a556f9b2.streamlock.net:443/live/_definst_/mp3:radio1/playlist.m3u8
+https://wowza.jejumbc.com/live/_definst_/mp3:radio2/playlist.m3u8
 #EXTINF:-1,MBC제주FM4U
-https://5cf58a556f9b2.streamlock.net:443/live/_definst_/mp3:radio2/playlist.m3u8
-#EXTINF:-1,MBC진주TV
-https://5e78e0fa4379e.streamlock.net:443/rud08ska01mbc/mbc0205/playlist.m3u8
-#EXTINF:-1,MBC진주표준FM
-https://5e78e0fa4379e.streamlock.net:443/rud08ska01mbc/Jradio10205/playlist.m3u8
-#EXTINF:-1,MBC진주FM4U
-https://5e78e0fa4379e.streamlock.net:443/rud08ska01mbc/Jradio20205/playlist.m3u8
-#EXTINF:-1,MBC창원TV
-https://5e78e0fa4379e.streamlock.net:443/rud08ska01mbc/mbc0205/playlist.m3u8
-#EXTINF:-1,MBC창원표준FM
-https://5e78e0fa4379e.streamlock.net:443/rud08ska01mbc/radio10205/playlist.m3u8
-#EXTINF:-1,MBC창원FM4U
-https://5e78e0fa4379e.streamlock.net:443/rud08ska01mbc/radio20205/playlist.m3u8
+https://wowza.jejumbc.com/live/_definst_/mp3:radio2/playlist.m3u8
 #EXTINF:-1,MBC춘천TV
 https://stream.chmbc.co.kr/live/TV/playlist.m3u8
 #EXTINF:-1,MBC춘천표준FM
 https://stream.chmbc.co.kr/live_radio/fm2/playlist.m3u8
 #EXTINF:-1,MBC춘천FM4U
 https://stream.chmbc.co.kr/live_radio2/fm1_source/playlist.m3u8
+#EXTINF:-1,MBC충북TV
+http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8
+#EXTINF:-1,MBC충북표준FM
+http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8
+#EXTINF:-1,MBC충북FM4U
+http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8
+#EXTINF:-1,G1강원TV
+http://61.82.49.4:1935/live/_definst_/tv.stream/playlist.m3u8
+#EXTINF:-1,G1강원FM
+http://61.82.49.4:1935/fm/_definst_/myStream/playlist.m3u8
 #EXTINF:-1,KBC광주TV
 http://119.200.131.11:1935/KBCTV/tv/playlist.m3u8
 #EXTINF:-1,KBC광주FM
@@ -116,13 +138,17 @@ http://59.23.231.102:1935/live/UBCstream/playlist.m3u8
 #EXTINF:-1,UBC울산FM
 http://59.23.231.102:1935/live/mp3:UBCfmstream/playlist.m3u8
 #EXTINF:-1,JTV전주TV
-rtsp://61.85.197.50/jtv_live_vod
+https://61ff3340258d2.streamlock.net/jtv_live/myStream/playlist.m3u8
 #EXTINF:-1,JTV전주FM
-rtsp://61.85.197.50/magicfm_live
+https://61ff3340258d2.streamlock.net/jtv_radio/myStream/playlist.m3u8
+#EXTINF:-1,JIBS제주TV
+http://123.140.197.22/stream/1/play.m3u8
+#EXTINF:-1,JIBS제주FM
+http://123.140.197.22/stream/2/play.m3u8
 #EXTINF:-1,CJB청주TV
-https://5ee9be10640ac.streamlock.net/live/cjbtv/playlist.m3u8
+http://1.222.207.80:1935/live/cjbtv/playlist.m3u8
 #EXTINF:-1,CJB청주FM
-https://5ee9be10640ac.streamlock.net/live/cjbradio/playlist.m3u8
+http://1.222.207.80:1935/live/cjbradio/playlist.m3u8
 #EXTINF:-1,국방TV
 http://mediaworks.dema.mil.kr:1935/live_edge/cudo.sdp/playlist.m3u8
 #EXTINF:-1,국방FM
@@ -139,18 +165,16 @@ http://moneytoday1.ktcdn.co.kr:1935/mtnlive/720/playlist.m3u8
 http://cdnlive29.smartucc.kr/smartlive/312/46324be24454bd98f785039457ac695d/playlist.m3u8
 #EXTINF:-1,소상공인방송
 https://cdnlive179.smartucc.kr/smartlive/558/91258ac21591769e21f41b96f26d883e/playlist.m3u8
-#EXTINF:-1,아리랑TV
+#EXTINF:-1,시민방송 RTV
+https://rtv-stream2.a04f922e9e85c8d25ebfeae3dfd22a67.com/rtv/rtv.m3u8
+#EXTINF:-1,아리랑 TV
 http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
-#EXTINF:-1,이데일리TV
-http://edaily.flive.skcdn.com:1935/high/livestream/playlist.m3u8
-#EXTINF:-1,지방자치TV
-http://cdnlive179.smartucc.kr/smartlive/436/101d1ccdeb2cd1794db38206dcec198d/playlist.m3u8
+#EXTINF:-1,아리랑 라디오
+http://amdlive-ch03.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8
 #EXTINF:-1,채널i
-http://121.78.242.199:1935/live/stream.sdp/playlist.m3u8
+http://1.201.160.177:1935/live/myStream/playlist.m3u8
 #EXTINF:-1,토마토증권통
 https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8
-#EXTINF:-1,토마토집통
-http://rtomatofms2.hscdn.com/rtomato/livestream/playlist.m3u8
 #EXTINF:-1,피싱TV
 http://media.fishingtv.kr:1935/mobileLIVE/_definst_/mp4:livestream.sdp/playlist.m3u8
 #EXTINF:-1,한국농업방송
@@ -159,9 +183,9 @@ https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 http://necgokr2-724.acs.wecandeo.com/ms/2528/724/index_1.m3u8
 #EXTINF:-1,한국직업방송
 http://live.worktv.or.kr:1935/live/wowtvlive1.sdp/playlist.m3u8
-#EXTINF:-1,KCTV광주CH05
+#EXTINF:-1,KCTV광주방송 CH05
 http://119.77.96.184:1935/chn05/chn05/playlist.m3u8
-#EXTINF:-1,KCTV광주CH21
+#EXTINF:-1,KCTV광주방송 CH21
 http://119.77.96.184:1935/chn21/chn21/playlist.m3u8
 #EXTINF:-1,KCTV제주방송 채널7
 https://vod.kctvjeju.com/LIVE/ch7/playlist.m3u8
@@ -170,30 +194,22 @@ https://vod.kctvjeju.com/ch7/ch4/playlist.m3u8
 #EXTINF:-1,KTV국민방송
 https://hlive.ktv.go.kr/live/klive_h.stream/playlist.m3u8
 #EXTINF:-1,OBS경인
-http://59.23.231.102:1935/live/obsstream1/myStream.sdp/playlist.m3u8
-#EXTINF:-1,OBS경인W
-https://5ee9633b25727.streamlock.net/live/_definst_/obsw.stream/playlist.m3u8
+https://vod.obs.co.kr:444/live/obsstream1/myStream.sdp/playlist.m3u8
 #EXTINF:-1,tbsTV
-http://58.234.158.60:1935/catvlive/myStream/playlist.m3u8
+https://cdntv.tbs.seoul.kr/tbs/_definst_/tbs_tv_web_720.smil/playlist.m3u8
 #EXTINF:-1,tbsFM
-http://58.234.158.60:1935/fmlive/myStream/playlist.m3u8
+https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8
 #EXTINF:-1,tbseFM
-http://58.234.158.60:1935/efmlive/myStream/playlist.m3u8
-#EXTINF:-1,YTN
-http://slive.ytn.co.kr/ytn/_definst_/ytn_stream_20190306/playlist.m3u8
-#EXTINF:-1,YTN2
-http://slive.ytn.co.kr:1935/weather/weather_20140419_1/playlist.m3u8
-#EXTINF:-1,YTN 사이언스
-http://slive.sciencetv.kr:1935/science/yslive_20140419_1/playlist.m3u8
+https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8
 #EXTINF:-1,YTN 코리안
 http://d3vsrxlpuric1q.cloudfront.net/ytn/main2.m3u8
 #EXTINF:-1,YTN 라디오
 http://slive.ytn.co.kr:1935/live/fmlive_0624_1.sdp/playlist.m3u8
 #EXTINF:-1,연변라지오TV넷 연변위성
-http://live.ybtvyun.com/video/s10016-c5713f73d666/index.m3u8
+http://live.ybtvyun.com/video/s10016-6297f9f7a2d5/index.m3u8
 #EXTINF:-1,연변라지오TV넷 조선어종합채널
-http://live.ybtvyun.com/video/s10016-af95004b6d1a/index.m3u8
+http://live.ybtvyun.com/video/s10016-dac6f31db68f/index.m3u8
 #EXTINF:-1,연변라지오TV넷 한어종합채널
-http://live.ybtvyun.com/video/s10016-20b6acaa07f8/index.m3u8
+http://live.ybtvyun.com/video/s10016-69db3d17167d/index.m3u8
 #EXTINF:-1,연변라지오TV넷 보이는 라지오
 http://live.ybtvyun.com/video/s10016-1be8f17b0ab7/index.m3u8
