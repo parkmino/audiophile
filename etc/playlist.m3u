@@ -177,12 +177,16 @@ http://1.201.160.177:1935/live/myStream/playlist.m3u8
 https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8
 #EXTINF:-1,피싱TV
 http://media.fishingtv.kr:1935/mobileLIVE/_definst_/mp4:livestream.sdp/playlist.m3u8
+#EXTINF:-1,한국가요채널
+http://live.kytv.co.kr:8080/hls/stream.m3u8
 #EXTINF:-1,한국농업방송
 https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 #EXTINF:-1,한국선거방송
 http://necgokr2-724.acs.wecandeo.com/ms/2528/724/index_1.m3u8
 #EXTINF:-1,한국직업방송
 http://live.worktv.or.kr:1935/live/wowtvlive1.sdp/playlist.m3u8
+#EXTINF:-1,JCN 울산중앙방송
+https://jcnonair-1108.acs.wecandeo.com/ms/3162/1108/index_1.m3u8
 #EXTINF:-1,KCTV광주방송 CH05
 http://119.77.96.184:1935/chn05/chn05/playlist.m3u8
 #EXTINF:-1,KCTV광주방송 CH21
