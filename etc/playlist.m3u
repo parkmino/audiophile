@@ -75,6 +75,12 @@ http://stream.bsmbc.com/livetv/BusanMBC_TV_onairstream/playlist.m3u8
 http://stream.bsmbc.com/live/mp4:BusanMBC-AM-LiveStream/playlist.m3u8
 #EXTINF:-1,MBC부산FM4U
 http://stream.bsmbc.com/live/mp4:BusanMBC.Live-FM-0415/playlist.m3u8
+#EXTINF:-1,MBC안동TV
+http://andong.webcasting.co.kr/live/mbc/playlist.m3u8
+#EXTINF:-1,MBC안동표준FM
+http://andong.webcasting.co.kr/live/amlive/playlist.m3u8
+#EXTINF:-1,MBC안동FM4U
+http://andong.webcasting.co.kr/live/fmlive/playlist.m3u8
 #EXTINF:-1,MBC여수TV
 https://5c3639aa99149.streamlock.net/live_TV/tv/playlist.m3u8
 #EXTINF:-1,MBC여수표준FM
@@ -197,6 +203,8 @@ https://vod.kctvjeju.com/LIVE/ch7/playlist.m3u8
 https://vod.kctvjeju.com/ch7/ch4/playlist.m3u8
 #EXTINF:-1,KTV국민방송
 https://hlive.ktv.go.kr/live/klive_h.stream/playlist.m3u8
+#EXTINF:-1,NHTV농협방송
+http://nonghyup.flive.skcdn.com/nonghyup/_definst_/nhlive/playlist.m3u8
 #EXTINF:-1,OBS경인
 https://vod.obs.co.kr:444/live/obsstream1/myStream.sdp/playlist.m3u8
 #EXTINF:-1,tbsTV
@@ -207,6 +215,8 @@ https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8
 https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8
 #EXTINF:-1,YTN 코리안
 http://d3vsrxlpuric1q.cloudfront.net/ytn/main2.m3u8
+#EXTINF:-1,YTN 사이언스
+http://slive.sciencetv.kr:1935/science/yslive_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 라디오
 http://slive.ytn.co.kr:1935/live/fmlive_0624_1.sdp/playlist.m3u8
 #EXTINF:-1,연변라지오TV넷 연변위성
