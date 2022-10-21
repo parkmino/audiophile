@@ -106,7 +106,7 @@ https://wowza.jejumbc.com/live/_definst_/mp3:radio2/playlist.m3u8
 #EXTINF:-1,MBC제주FM4U
 https://wowza.jejumbc.com/live/_definst_/mp3:radio2/playlist.m3u8
 #EXTINF:-1,MBC춘천TV
-https://stream.chmbc.co.kr/live/TV/playlist.m3u8
+https://stream.chmbc.co.kr/TV/myStream/playlist.m3u8
 #EXTINF:-1,MBC춘천표준FM
 https://stream.chmbc.co.kr/live_radio/fm2/playlist.m3u8
 #EXTINF:-1,MBC춘천FM4U
@@ -177,14 +177,14 @@ https://rtv-stream2.a04f922e9e85c8d25ebfeae3dfd22a67.com/rtv/rtv.m3u8
 http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
 #EXTINF:-1,아리랑 라디오
 http://amdlive-ch03.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8
+#EXTINF:-1,지방자치TV
+https://jjctv.ecn.cdn.infralab.net/jjctv/live/playlist.m3u8
 #EXTINF:-1,채널i
 http://1.201.160.177:1935/live/myStream/playlist.m3u8
 #EXTINF:-1,토마토증권통
 https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8
 #EXTINF:-1,피싱TV
 http://media.fishingtv.kr:1935/mobileLIVE/_definst_/mp4:livestream.sdp/playlist.m3u8
-#EXTINF:-1,한국가요채널
-http://live.kytv.co.kr:8080/hls/stream.m3u8
 #EXTINF:-1,한국농업방송
 https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 #EXTINF:-1,한국선거방송
