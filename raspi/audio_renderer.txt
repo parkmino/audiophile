@@ -360,13 +360,17 @@ UPnP/DLNA Audio Render for Raspberry Pi
 19. Gerbera
 
 	https://www.deb-multimedia.org/dists/stable/main/binary-armhf/package/gerbera
-	$ wget https://www.deb-multimedia.org/pool/main/g/gerbera-dmo/gerbera_1.9.2-dmo5_armhf.deb
+	$ wget https://www.deb-multimedia.org/pool/main/g/gerbera-dmo/gerbera_1.9.0-dmo1_armhf.deb
 	$ sudo dpkg -i gerbera*.deb
 	$ sudo apt-get -f install
 
 	https://github.com/gerbera/gerbera
 	$ wget https://github.com/gerbera/gerbera/releases/download/v1.10.0/gerbera_1.10.0-bullseye1_armhf.deb
-	$ sudo apt install ./gerbera_1.10.0-bullseye1_armhf.deb
+
+	https://gerbera.jfrog.io/ui/native/debian/pool/main/g/gerbera/
+	$ wget https://gerbera.jfrog.io/artifactory/debian/pool/main/g/gerbera/gerbera_1.12.0-bullseye1_armhf.deb
+
+	$ sudo apt install ./gerbera_1.12.0-bullseye1_armhf.deb
 	$ gerbera --create-config > config.xml
 	$ ! [ -d /etc/gerbera ] && sudo mkdir /etc/gerbera
 	$ sudo mv config.xml /etc/gerbera
@@ -391,7 +395,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ systemctl status gerbera
 	$ sudo systemctl disable gerbera
 	$ sudo systemctl start gerbera
-	  rpi_ip:49155
+	  http://rpi_ip:49155
 
 20. APlayer Media Renderer
 
