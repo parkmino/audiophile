@@ -55,8 +55,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4622 88295'
- sysctl -w net.ipv4.tcp_wmem='4562 89957'
+ sysctl -w net.ipv4.tcp_rmem='4627 88300 3345763'
+ sysctl -w net.ipv4.tcp_wmem='4579 89960 3455747'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -69,6 +69,8 @@
 
 #ifconfig enp3s0 txqueuelen 1875
 #ifconfig wlp2s0 txqueuelen 1875
+
+echo 0 | tee /sys/module/snd*/parameters/power_save* || true
 
 #echo hpet > /sys/devices/system/clocksource/clocksource0/current_clocksource || true
 #echo 4032 > /sys/class/rtc/rtc0/max_user_freq || true
@@ -102,7 +104,8 @@ done
 swapoff -a
 
 #cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
- cp /etc/libasound.so.2.0.0_1.2.3.1.dev.shm /dev/shm/libasound.so.2
+#cp /etc/libasound.so.2.0.0_1.2.3.1.dev.shm /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0_1.2.8 /dev/shm/libasound.so.2
 #ln -sf /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
@@ -112,6 +115,7 @@ swapoff -a
 #ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
  cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
 #ln -sf /etc/libFLAC.so.8.3.0.sav /usr/lib/x86_64-linux-gnu/libFLAC.so
+#cp -r /home/parkmino/Downloads/aplayer/aprenderer /dev/shm/
 
 for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 && $4 !~ /mpd/ {print $1}'); do
  renice  -2 $pid || true
