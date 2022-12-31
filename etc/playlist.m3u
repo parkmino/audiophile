@@ -126,9 +126,9 @@ http://119.200.131.11:1935/KBCTV/tv/playlist.m3u8
 #EXTINF:-1,KBC광주FM
 http://119.200.131.11:1935/KBCFM/kbcra_aac/playlist.m3u8
 #EXTINF:-1,TBC대구TV
-http://221.157.125.239:1935/live/psike/playlist.m3u8
+http://203.251.91.122:1935/on-air/tv/playlist.m3u8
 #EXTINF:-1,TBC대구FM
-http://221.157.125.239:1935/live/mp3:fmstream/playlist.m3u8
+http://203.251.91.122:1935/on-air/fm/playlist.m3u8
 #EXTINF:-1,TJB대전TV
 http://1.245.74.5:1935/live/tv/playlist.m3u8
 #EXTINF:-1,TJB대전FM
@@ -151,10 +151,6 @@ https://61ff3340258d2.streamlock.net/jtv_radio/myStream/playlist.m3u8
 http://123.140.197.22/stream/1/play.m3u8
 #EXTINF:-1,JIBS제주FM
 http://123.140.197.22/stream/2/play.m3u8
-#EXTINF:-1,CJB청주TV
-http://1.222.207.80:1935/live/cjbtv/playlist.m3u8
-#EXTINF:-1,CJB청주FM
-http://1.222.207.80:1935/live/cjbradio/playlist.m3u8
 #EXTINF:-1,국방TV
 http://mediaworks.dema.mil.kr:1935/live_edge/cudo.sdp/playlist.m3u8
 #EXTINF:-1,국방FM
@@ -183,6 +179,8 @@ https://jjctv.ecn.cdn.infralab.net/jjctv/live/playlist.m3u8
 http://1.201.160.177:1935/live/myStream/playlist.m3u8
 #EXTINF:-1,토마토증권통
 https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8
+#EXTINF:-1,한국가요채널
+http://live.kytv.co.kr:8080/hls/stream.m3u8
 #EXTINF:-1,한국농업방송
 https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 #EXTINF:-1,한국선거방송
@@ -213,10 +211,8 @@ https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8
 https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8
 #EXTINF:-1,YTN 코리안
 http://d3vsrxlpuric1q.cloudfront.net/ytn/main2.m3u8
-#EXTINF:-1,YTN 사이언스
-http://slive.sciencetv.kr:1935/science/yslive_20140419_1/playlist.m3u8
 #EXTINF:-1,YTN 라디오
-http://slive.ytn.co.kr:1935/live/fmlive_0624_1.sdp/playlist.m3u8
+https://radiolive.ytn.co.kr/radio/_definst_/20211118_fmlive/playlist.m3u8
 #EXTINF:-1,연변라지오TV넷 연변위성
 http://live.ybtvyun.com/video/s10016-6297f9f7a2d5/index.m3u8
 #EXTINF:-1,연변라지오TV넷 조선어종합채널
