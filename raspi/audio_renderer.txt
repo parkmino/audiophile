@@ -413,7 +413,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		Preload buffer     [108788]
 		Gapless mode       [ ]
 		ALSA Period frames [3738]
-		ALSA Buffer frames [14941]
+		ALSA Buffer frames [14943]
 		DSP                [original]
 				   [ ] Multi-thread mode
 		System		   [V] Lock memory
