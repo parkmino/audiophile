@@ -13,8 +13,8 @@
 
 	$ sudo nano /etc/sysctl.conf
 
-		net.ipv4.tcp_rmem = 4621 88291 > 4627 88300 3345763 # 4096 131072 6291456
-		net.ipv4.tcp_wmem = 4560 89953 > 4579 89960 3455747 # 4096  16384 4194304
+		net.ipv4.tcp_rmem = 4621 88291 > 4629 88305 3345764 # 4096 131072 6291456
+		net.ipv4.tcp_wmem = 4560 89953 > 4580 89962 3455747 # 4096  16384 4194304
 
 03. CPU Performance Scaling
 
@@ -26,3 +26,4 @@
 		#echo 1 > tee /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 		#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+		echo 0 | tee /sys/module/snd*/parameters/power_save*  || true
