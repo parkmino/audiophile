@@ -32,21 +32,21 @@ duckdns () {
 }
 
 case $1 in
- 1fm)   kbsr 24
-        #duckdns kbsfm
+ 1fm)   #kbsr 24
+        duckdns kbsfm
         ;;
- 2fm)   kbsr 25
-        #duckdns kbs2fm
+ 2fm)   #kbsr 25
+        duckdns kbs2fm
         ;;
- 1r)    kbsr 21
-        #duckdns kbs1radio
+ 1r)    #kbsr 21
+        duckdns kbs1radio
         ;;
- 2r)    kbsr 22
-        #duckdns kbs2radio
+ 2r)    #kbsr 22
+        duckdns kbs2radio
         ;;
- 3r)    kbsr 23  ;;
- scr)   kbsr I26 ;;
- rki)   kbsr I92 ;;
+#3r)    kbsr 23  ;;
+#scr)   kbsr I26 ;;
+#rki)   kbsr I92 ;;
  mbcm)  mbcr chm ;;
  mbc4u) mbcr mfm
         #duckdns mbcfm

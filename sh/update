@@ -264,18 +264,14 @@ BUNKER1 () {
 }
 
 DAS () {
+DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLvbpOOxdLN39xfkJl-Oh0Ct1iQZkyI0nW"
- line=$(curl $curl_opt "$url" | grep 업데이트: | head -1 | sed 's/.*업데이트: //' | cut -d\] -f1)
- days=$(echo "$line" | cut -d\" -f1)
- [ -z "$days" ] && days=$(echo "$line" | cut -d\" -f5,9 | tr -d \" | sed 's/menuRenderer//')
- if [ -n "${days##*오늘*}" ] && [ -n "${days##*일*}" ]; then
-  date=$(echo $days | tr -d '.' | tr ' ' '-')
-  diff=$(($(date +%s)-$(date -ud "$date" +%s)))
-  days="$(($diff/60/60/24))일 전"
+ days=$(curl $curl_opt "$url"  | grep -oE .{0,20}'분 조회수' | head -1 | sed 's/.*딴지방송국 //; s/전.*/전/> if [ -z "${days##*분*}" ] || [ -z "${days##*시간*}" ]; then
+  days="오늘"
  fi
  [ "$days" = "1일 전" ] && days="어제"
- if [ -z "$days" ] || [ ${#days} -gt 12 ]; then
+ if [ -z "$days" ]; then
   printf "정보 없음\n"
  else
   printf "$days\n"
