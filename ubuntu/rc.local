@@ -27,7 +27,7 @@
 #echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
 #sysctl -w kernel.sched_migration_cost_ns=4899037
- echo 4899042 | tee /sys/kernel/debug/sched/migration_cost_ns
+ echo 4899044 | tee /sys/kernel/debug/sched/migration_cost_ns
 #sysctl -w kernel.sched_nr_migrate=0
 #echo 25      | tee /sys/kernel/debug/sched/nr_migrate
 #sysctl -w kernel.sched_rr_timeslice_ms=32
@@ -46,7 +46,7 @@
  sysctl -w vm.overcommit_memory=1
 #sysctl -w vm.page-cluster=0
  sysctl -w vm.panic_on_oom=2
- sysctl -w vm.stat_interval=5
+ sysctl -w vm.stat_interval=0
  sysctl -w vm.swappiness=0
  sysctl -w vm.vfs_cache_pressure=0
 
@@ -55,8 +55,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4627 88300 3345763'
- sysctl -w net.ipv4.tcp_wmem='4579 89960 3455747'
+ sysctl -w net.ipv4.tcp_rmem='4629 88305 3345764'
+ sysctl -w net.ipv4.tcp_wmem='4580 89962 3455747'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -70,7 +70,8 @@
 #ifconfig enp3s0 txqueuelen 1875
 #ifconfig wlp2s0 txqueuelen 1875
 
-echo 0 | tee /sys/module/snd*/parameters/power_save* || true
+echo 0 | tee /sys/module/snd*/parameters/power_save*  || true
+#echo 1 | tee /sys/module/snd*/parameters/pm_blacklist || true
 
 #echo hpet > /sys/devices/system/clocksource/clocksource0/current_clocksource || true
 #echo 4032 > /sys/class/rtc/rtc0/max_user_freq || true
@@ -84,7 +85,7 @@ echo 0 | tee /sys/module/snd*/parameters/power_save* || true
 #echo 1 > /sys/fs/cgroup/cpuset/cpuset.mem_hardwall || true
 
 echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v lo)" | while read dev ; do
- tc qdisc add dev $dev root pfifo_fast
+ tc qdisc add dev $dev root pfifo_fast || true
 #tc qdisc add dev $dev ingress
 #tc -s -d qdisc show dev $dev
 done
@@ -104,8 +105,8 @@ done
 swapoff -a
 
 #cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
-#cp /etc/libasound.so.2.0.0_1.2.3.1.dev.shm /dev/shm/libasound.so.2
- cp /etc/libasound.so.2.0.0_1.2.8 /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0_1.2.3.1.dev.shm /dev/shm/libasound.so.2
+#cp /etc/libasound.so.2.0.0_1.2.8 /dev/shm/libasound.so.2
 #ln -sf /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
