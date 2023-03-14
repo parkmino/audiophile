@@ -22,7 +22,7 @@
 
 	$ sudo nano /etc/rc.local
 
-		echo 4899045 | tee /sys/kernel/debug/sched/migration_cost_ns
+		echo 4899043 | tee /sys/kernel/debug/sched/migration_cost_ns
 		echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true # 8000
 		#echo 1 > tee /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true

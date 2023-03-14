@@ -27,7 +27,7 @@
 #echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
 #sysctl -w kernel.sched_migration_cost_ns=4899037
- echo 4899044 | tee /sys/kernel/debug/sched/migration_cost_ns
+ echo 4899043 | tee /sys/kernel/debug/sched/migration_cost_ns
 #sysctl -w kernel.sched_nr_migrate=0
 #echo 25      | tee /sys/kernel/debug/sched/nr_migrate
 #sysctl -w kernel.sched_rr_timeslice_ms=32
