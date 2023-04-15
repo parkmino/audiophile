@@ -80,7 +80,7 @@ tfreeca () {
  for i in $(seq 1 10); do
   movie=https://tfreeca22.com/$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f10)
   chk_movie
-  printf "    \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f13 | sed 's/^> //g; s/ <\/a>.*//g')\e[0m\n"
+  printf "    \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f11 | sed 's/^.*class> //g; s/ <\/a>.*//g')\e[0m\n"
  done
  rm "$tmpfile"
 }

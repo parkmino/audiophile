@@ -4,7 +4,8 @@
 host="127.0.0.1"
 
 usage () {
- echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r, 3r, scr, rki(KBS라디오)"
+#echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r, 3r, scr, rki(KBS라디오)"
+ echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r(KBS라디오)"
  echo "   or: $(basename "$0") mbcfm(MBC 표준FM), mbc4u(MBC FM4U), mbcm(MBC 올댓뮤직)"
  echo "   or: $(basename "$0") sbsp(SBS파워FM), sbsl(SBS러브FM)"
  echo "   or: $(basename "$0") cbs(CBS음악FM), tbs(tbsFM), tbse(tbseFM), gugak(국악방송)"

@@ -267,7 +267,7 @@ DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLvbpOOxdLN39xfkJl-Oh0Ct1iQZkyI0nW"
  days=$(curl $curl_opt "$url"  | grep -oE '.{0,20}분 조회수' | head -1 | sed 's/.*딴지방송국 //; s/전.*/전/')
- if [ -z "${days##*분*}" ] && [ -z "${days##*시간*}" ]; then
+ if [ -z "${days##*분*}" ] || [ -z "${days##*시간*}" ]; then
   days="오늘"
  fi
  [ "$days" = "1일 전" ] && days="어제"
