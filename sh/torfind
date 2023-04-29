@@ -23,7 +23,7 @@ case $i in
 #0) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:00" || time="last friday 21:00" ;;
 #0) time="last friday   23:00"	;;
 #0) time="last saturday 23:59"	;;
- 1) time="last tuesday  23:59"	;;
+ 1) time="last friday   23:59"	;;
 #1) time="last monday   23:10"	;;
  2) [ $(date +%u) -eq 5 ] && [ $(date +%k) -ge 22 ] && time="today 21:20" || time="last friday 21:20" ;;
  3) time="yesterday"		;;
