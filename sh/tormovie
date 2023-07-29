@@ -43,7 +43,7 @@ torwal () {
 
 torqq () {
 #url="https://토렌트큐큐.net"
- url="https://torrentqq139.com"
+ url="https://torrentqq267.com"
  chk_url || return
  [ -z "${url##*큐큐*}" ] && url="$(curl $curl_opt -L "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=3d&board=mov"
@@ -81,7 +81,7 @@ tfreeca () {
   movie=https://tfreeca22.com/$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f10)
   chk_movie
  #printf "    \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f11 | sed 's/^.*class> //g; s/ <\/a>.*//g')\e[0m\n"
-  printf "    \e[34m$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f13 | sed 's/^> //g; s/ <\/a>.*//g')\e[0m\n"
+  printf "    \e[34m$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f11- | sed 's/^ class=..> //; s/ <\/a>.*//g')\e[0m\n"
  done
  rm "$tmpfile"
 }
@@ -89,6 +89,6 @@ tfreeca () {
 case $1 in
  qq)           torqq   ;;
  view|vw)      torview ;;
- tfreeca|tf|*) tfreeca ;;
-# *)           torqq   ; read -p "Press Enter to continue..." dummy ; torview ;;
+ tfreeca|tf)   tfreeca ;;
+ *)            torqq   ;;
 esac
