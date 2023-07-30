@@ -27,7 +27,7 @@
 #echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
 #sysctl -w kernel.sched_migration_cost_ns=4899037
- echo 4899043 | tee /sys/kernel/debug/sched/migration_cost_ns
+ echo 4899044 | tee /sys/kernel/debug/sched/migration_cost_ns
 #sysctl -w kernel.sched_nr_migrate=0
 #echo 25      | tee /sys/kernel/debug/sched/nr_migrate
 #sysctl -w kernel.sched_rr_timeslice_ms=32
@@ -55,8 +55,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4629 88305 3345764'
- sysctl -w net.ipv4.tcp_wmem='4580 89962 3455747'
+ sysctl -w net.ipv4.tcp_rmem='4630 88309 3345770'
+ sysctl -w net.ipv4.tcp_wmem='4581 89962 3455749'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -110,8 +110,10 @@ swapoff -a
 #ln -sf /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
- cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mpv /home/parkmino/.config/mpv/mpv.conf /dev/shm/
- cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+ cp /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mpv /home/parkmino/.config/mpv/mpv.conf /dev/shm/
+ mkdir /dev/shm/scripts && cp /home/parkmino/.config/mpv/scripts/ytdl_hook.lua /dev/shm/scripts || true
+ cp /usr/bin/mpd.0.20.23 /dev/shm/mpd && cp /etc/mpd.conf.sav       /dev/shm/mpd.conf
+#cp /usr/bin/mpd.0.23.12 /dev/shm/mpd && cp /etc/mpd.conf.resampler /dev/shm/mpd.conf
  cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 #ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
  cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
@@ -176,6 +178,7 @@ hdparm -A1 -a2048 -B255 /dev/sda # -M0
 
 for i in $(ls /dev/snd/); do
  [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && [ ! "$i" = "pcmC1D0p"  ] && [ ! "$i" = "controlC1"  ] && rm -rf "/dev/snd/$i"
+#[ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && [ ! "$i" = "pcmC1D0p"  ] && [ ! "$i" = "controlC1"  ] && [ "$i" = "pcmC0D3p" ] && rm -rf "/dev/snd/$i"
 done
 
 #for i in dbus-daemon nimf polkitd systemd-journal systemd-logind systemd-udevd udisksd; do
