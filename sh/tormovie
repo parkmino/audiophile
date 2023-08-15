@@ -43,10 +43,10 @@ torwal () {
 
 torqq () {
 #url="https://토렌트큐큐.net"
- url="https://torrentqq267.com"
+ url="https://torrentqq269.com"
  chk_url || return
  [ -z "${url##*큐큐*}" ] && url="$(curl $curl_opt -L "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
- url="$url/torrent/popular.html?period=3d&board=mov"
+ url="$url/torrent/popular.html?period=w&board=mov"
  tmpfile=$(mktemp)
  curl $curl_opt -L "$url" | sed 's/title=/\n/g' > "$tmpfile"
  for i in $(seq 1 10); do

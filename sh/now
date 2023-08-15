@@ -1,6 +1,6 @@
 #!/bin/sh
 CPU=$(grep 'cpu ' /proc/stat | awk '{printf "%0.1f", 100*($2+$4)/($2+$4+$5)}')
-MEM=$(free | grep Mem | awk '{printf "%0.1f", 100*$3/$2}')
+MEM=$(free | head -2 | tail -1 | awk '{printf "%0.1f", 100*$3/$2}')
 status=$(cat /sys/class/power_supply/BAT1/status)
 charge=$(cat /sys/class/power_supply/BAT1/capacity)
 ut=$(cat /proc/uptime | cut -d\. -f1)
