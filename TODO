@@ -13,7 +13,7 @@
 
 	$ sudo nano /etc/sysctl.conf
 
-		net.ipv4.tcp_rmem = 4621 88291 > 4630 88309 3345770 # 4096 131072 6291456
+		net.ipv4.tcp_rmem = 4621 88291 > 4630 88309 3345769 # 4096 131072 6291456
 		net.ipv4.tcp_wmem = 4560 89953 > 4581 89962 3455749 # 4096  16384 4194304
 
 03. CPU Performance Scaling
