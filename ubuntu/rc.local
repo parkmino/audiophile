@@ -27,7 +27,7 @@
 #echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
 #sysctl -w kernel.sched_migration_cost_ns=4899037
- echo 4899051 | tee /sys/kernel/debug/sched/migration_cost_ns
+ echo 4899048 | tee /sys/kernel/debug/sched/migration_cost_ns
 #sysctl -w kernel.sched_nr_migrate=0
 #echo 25      | tee /sys/kernel/debug/sched/nr_migrate
 #sysctl -w kernel.sched_rr_timeslice_ms=32
@@ -105,8 +105,8 @@ done
 swapoff -a
 
 #cp /etc/libasound.so.2.0.0.sav /dev/shm/libasound.so.2
- cp /etc/libasound.so.2.0.0_1.2.3.1.dev.shm /dev/shm/libasound.so.2
-#cp /etc/libasound.so.2.0.0_1.2.8 /dev/shm/libasound.so.2
+#cp /etc/libasound.so.2.0.0_1.2.3.1.dev.shm /dev/shm/libasound.so.2
+ cp /etc/libasound.so.2.0.0_1.2.10 /dev/shm/libasound.so.2
 #ln -sf /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf

@@ -11,6 +11,10 @@
 
 02. Tune Kernel Parameters
 
+	$ sudo nano /etc/rc.local
+
+		echo 4899048 | tee /sys/kernel/debug/sched/migration_cost_ns
+
 	$ sudo nano /etc/sysctl.conf
 
 		net.ipv4.tcp_rmem = 4621 88291 > 4630 88309 3345770 # 4096 131072 6291456
@@ -28,3 +32,5 @@
 		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 		#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 		echo 0 | tee /sys/module/snd*/parameters/power_save*  || true
+
+04. alsa-lib 1.2.10
