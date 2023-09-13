@@ -47,7 +47,7 @@
           (top-edge . -24)
           (height . 24)
           (x-justify . center)
-          (text . "×")
+          (text . "Ⅹ")
           (width . 31)
           (class . close-button))
          ((right-edge . 31)
