@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#bash <(curl -sL https://github.com/parkmino/audiophile/raw/master/sh/kr2mpd)
-#bash <(curl -sL https://bit.ly/3roM7lW)
+#bash <(curl -sL https://github.com/parkmino/audiophile/raw/master/artik710/patch231001.sh)
+#bash <(curl -sL https://bit.ly/3LKaUHN)
 
 wget -P /etc/ https://github.com/parkmino/audiophile/raw/master/sh/kr2mpd
 chmod +x /etc/kr2mpd
