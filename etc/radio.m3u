@@ -1,0 +1,19 @@
+#EXTM3U
+#EXTINF:-1,KBS 클래식 FM
+http://serpent0.duckdns.org:8088/kbsfm.pls
+#EXTINF:-1,KBS 쿨 FM
+http://serpent0.duckdns.org:8088/kbs2fm.pls
+#EXTINF:-1,KBS 1라디오
+http://serpent0.duckdns.org:8088/kbs1radio.pls
+#EXTINF:-1,KBS 2라디오
+http://serpent0.duckdns.org:8088/kbs2radio.pls
+#EXTINF:-1,MBC FM4U
+http://serpent0.duckdns.org:8088/mbcfm.pls
+#EXTINF:-1,MBC 표준 FM
+http://serpent0.duckdns.org:8088/mbcsfm.pls
+#EXTINF:-1,SBS 파워 FM
+http://serpent0.duckdns.org:8088/sbsfm.pls
+#EXTINF:-1,SBS 러브 FM
+http://serpent0.duckdns.org:8088/sbs2fm.pls
+#EXTINF:-1,CBS 음악FM
+http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
