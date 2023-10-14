@@ -68,7 +68,7 @@ swapoff -a
 [ "$nfs"   = off ] && systemctl stop rpcbind
 [ "$pulse" = off ] && systemctl stop pulseaudio
 [ "$vpn"   = off ] && systemctl stop connman-vpn
-[ "$wpa"   = off ] && systemctl stop wpa_supplicant
+[ "$wpa"   = off ] && systemctl stop wpa_supplicant  || true
 
 (
  until [ $(pgrep kodi.bin) -gt 0 ] 2>/dev/null && $(pstree -p | grep -q ActiveAE); do

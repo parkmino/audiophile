@@ -1,16 +1,16 @@
-LibreELEC 10.0.2 (Libre Embedded Linux Entertainment Center)
+LibreELEC 11.0-nightly-20231008-3c43828 (Libre Embedded Linux Entertainment Center)
 
 1. Squashfs
 
   1.1 Unsquashfs
 
-	$ ver=10.0.2
+	$ ver=11.0-nightly-20231008-3c43828
 	$ wget http://releases.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
-	$ mkdir ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
+	$ mkdir ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver
 	$ gzip -d LibreELEC-RPi2.arm-$ver.img.gz
 	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-$ver
-	$ mv LibreELEC-RPi2.arm-$ver.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/ && rm LibreELEC-RPi2.arm-$ver.img.gz
-	$ cd ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver
+	$ mv LibreELEC-RPi2.arm-$ver.img ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/ && rm LibreELEC-RPi2.arm-$ver.img.gz
+	$ cd ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -59,16 +59,16 @@ LibreELEC 10.0.2 (Libre Embedded Linux Entertainment Center)
 
   1.6 Make image
 	
-	$ cp ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
-	$ fdisk -l ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
+	$ cp ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver.img ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
+	$ fdisk -l ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
 	$ sudo mkdir /mnt/le
-	$ sudo mount -o loop,offset=$(echo $((512*8192))) ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /mnt/le
+	$ sudo mount -o loop,offset=$(echo $((512*8192))) ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /mnt/le
 	$ sudo rm /mnt/le/SYSTEM*
 	$ sudo cp SYSTEM /mnt/le
 	$ sync
 	
 	## SYSTEM to RAM
-	$ sudo sed -i '1s/$/toram /' /mnt/le/cmdline.txt
+	$ sudo sed -i '1s/$/ toram/' /mnt/le/cmdline.txt
 	$ cat /mnt/le/cmdline.txt
 	
 	$ sudo umount /mnt/le
@@ -76,22 +76,22 @@ LibreELEC 10.0.2 (Libre Embedded Linux Entertainment Center)
 
 2. Flashing & Test
 
+	$ cd
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img of=/dev/sdc
 	$ sync
 
 3. Release
 
-	$ mv ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
-	$ zip -j ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").zip ~/Downloads/libreelec/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
+	$ mv ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
+	$ zip -j ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").zip ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
 
 4. More tweaks
 
 	$ ssh root@192.168.0.x (password: libreelec)
 	$ audio-config			# Disable USB signal & power
-	$ nano .config/autostart.sh	# Disable hciattach systemd-journald/logind connman-vpnd
 
-cf)
-https://github.com/soju6jan
-Screenshots : Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'
+5. Screenshot
+
+	Ctrl+S or 'kodi-send -a "TakeScreenshot"' or 'kodi-remote s'

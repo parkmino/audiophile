@@ -15,5 +15,5 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
  touch /storage/.config/audio_patched
  sync
  sleep 1
- reboot -f
+ reboot --reboot
 fi
