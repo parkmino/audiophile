@@ -10,33 +10,34 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/raspi/*raspios*.img | tail -1) of=/dev/sdc
 	$#sudo dd status=progress bs=4M if=~/Downloads/raspi/DietPi*.img of=/dev/sdc
 	$ sync
-
 	  raspberrypi login : pi
 	  password : raspberry
 	$ sudo raspi-config
 		3 Interface Options > P2 SSH
 
-	$ export ip="192.168.0.32"
+	$ sudo rpi-imager # Ctrl+Shift+X
+
+	$ export ip="192.168.x.x"
 	$ ssh-keygen -f "/home/parkmino/.ssh/known_hosts" -R $ip
 	$ ssh pi@$ip
 	  password: raspberry
-	$#ssh root@$ip
-	  password: dietpi
 
 1. Update & upgrade
 
+	$ sudo apt-get update
+	$ apt-key list
+	$ apt-key export 90FDDD2E | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/raspbian-dists-bookworm.gpg
 	$ sudo apt-get update
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
 	$ sudo apt-get autoremove
 	$ sudo apt-get clean
 
-	$ sudo apt-get install bc exfat-fuse exfat-utils file ntpdate python3-pycryptodome uhubctl
-	# apt-get install openssh-client libusb-0.1-4
+	$ sudo apt-get install bc ntpdate python3-pycryptodome uhubctl
 	$ mkdir ~/copy
 
-	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config audioconf roonup pi@192.168.0.32:/home/pi/copy/
-	$ scp /home/parkmino/Downloads/raspi/copy/* pi@192.168.0.32:/home/pi/copy/
+	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config audioconf roonup pi@$ip:/home/pi/copy/
+	$ scp -r /home/parkmino/Downloads/raspi/copy/* pi@$ip:/home/pi/copy/
 
 2. Configuration file
 
@@ -44,8 +45,19 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#dtparam=audio=on
 		#dtoverlay=vc4-fkms-v3d
 		#max_framebuffers=2
+
+		[pi3+]
+		dtparam=eth_led0=4
+		dtparam=eth_led1=4
+
+		[pi4]
+		dtparam=eth_led0=14
+		dtparam=eth_led1=14
+
+		[all]
 		gpu_mem=16
 		disable_splash=1
+		dtoverlay=disable-bt
 
 	$ cat /proc/cpuinfo
 	$ cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
@@ -102,7 +114,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 6. Disable services
 
 	$ systemctl list-unit-files -t service | awk '$2~/enabled/'
-	$ sudo systemctl disable getty@tty1 cron rsyslog triggerhappy avahi-daemon hciuart # rng-tools systemd-resolved resolvconf dbus.service dbus.socket systemd-timesyncd
+	$ sudo systemctl disable getty@tty1 cron triggerhappy avahi-daemon hciuart bluetooth bthelper@hci0 ModemManager # rng-tools systemd-resolved resolvconf dbus.service dbus.socket rsyslog systemd-timesyncd
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # systemd-journald-audit.service
 
 	# dietpi-services disable cron
@@ -115,18 +127,23 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 7. MPD
 
-	$ sudo apt-get install libcue2 libaudiofile1 libavformat58 libflac8 libid3tag0 libmpdclient2 libupnp13 # libcurl3-gnutls
+	$ sudo apt-get install libcue2 libaudiofile1 libavformat59 libflac12 libid3tag0 libmpdclient2 libupnp13 # libcurl3-gnutls
 	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
 	$ sudo mv copy/mpd /usr/bin/
 	$ sudo mv copy/mpd.conf /etc/mpd.conf.sav
 	$ sudo mpd /etc/mpd.conf.sav
-	  Ctrl+C
 	
 	$ sudo apt-get install mpc ncmpc
 	$ sudo mkdir /etc/ncmpc
 	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
-	$#sudo mv /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo.orig
-	$#sudo mv copy/ncmpc.mo /usr/share/locale/ko/LC_MESSAGES/ncmpc.mo
+
+	$ sudo mkdir /var/lib/mpd/music/do_not_remove
+	$ sudo mv copy/blank.mp3 /var/lib/mpd/music/do_not_remove
+	$ sudo mv copy/musicpd.service /usr/lib/systemd/system/
+	$ sudo mv copy/musicpd /usr/bin/
+	$ sudo cp /usr/bin/mpd /dev/shm/ && sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+	$ sudo systemctl start musicpd
+	$ chrt -aop $(pidof mpd)
 
 8. Internet Radio & TTS (Text to Speech)
 
@@ -138,56 +155,41 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
 	$ sudo mkdir /var/lib/mpd/music/webradio
 	$ sudo mv copy/*.pls /var/lib/mpd/music/webradio
-
-	##mv /usr/share/alsa /usr/share/alsa.orig
-	##mkdir /usr/share/alsa
-	##mv /usr/share/alsa.orig/alsa.conf.{min,mix,orig,plug} /usr/share/alsa/
-	##mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0.orig
+	$ mpc update
 
 9. Upmpdcli
 
 	$#sudo apt-get install libmpdclient2 libexpat1 libcurl4 python3 python3-requests
-	$ sudo apt-get install libjsoncpp24 libmicrohttpd12
-	$ sudo dpkg -i copy/lib*upnp*.deb copy/upmpdcli_*.deb
+	$ sudo apt-get install libjsoncpp25 libmicrohttpd12
+	$ sudo dpkg -i copy/upmpdcli/lib*upnp*.deb copy/upmpdcli/upmpdcli_*.deb
 	$ sudo mv copy/icon.png /usr/share/upmpdcli/
 	$ sudo sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
-	$ sudo sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
-	$ sudo sed -i '/tidalquality =/s/^#//; /tidalquality =/s/= .*/= lossless/' /etc/upmpdcli.conf
-	$ grep -e checkcontentformat -e tidalquality -e radiolist /etc/upmpdcli.conf
+	$#sudo sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
+	$#sudo sed -i '/tidalaudioquality =/s/^#//; /tidalaudioquality =/s/= .*/= LOSSLESS/' /etc/upmpdcli.conf
+	$ grep -e checkcontentformat -e tidalaudioquality -e radiolist /etc/upmpdcli.conf
 		checkcontentformat = 0
 		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
-		tidalquality = lossless
+		tidalaudioquality = LOSSLESS
 	$ sudo systemctl disable upmpdcli.service
 	$ sudo nano /etc/upmpdcli.conf
 	  ...
 
 10. Roon Bridge
 
-	# dietpi-services status
-	# nano /DietPi/dietpi/.dietpi-services_include_exclude
-		- avahi-daemon
-		- mpd
-		- mympd
-		- roonbridge
-		- shairport-sync
-
 	https://kb.roonlabs.com/LinuxInstall
 
 	$ sudo apt update
 
-	$ curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv7hf.sh
+	$ curl -O https://download.roonlabs.net/builds/roonbridge-installer-linuxarmv7hf.sh
 	$ chmod +x roonbridge-installer-linuxarmv7hf.sh
 	$ sudo ./roonbridge-installer-linuxarmv7hf.sh
 
-	$#curl -O http://download.roonlabs.com/builds/roonbridge-installer-linuxarmv8.sh
-	$#chmod +x roonbridge-installer-linuxarmv8.sh
-	$#sudo ./roonbridge-installer-linuxarmv8.sh
-
 	$ cat /opt/RoonBridge/VERSION
-		100800814
-		1.8 (build 814) stable
+		100801125
+		1.8 (build 1125) stable
 		stable
 	$ sudo nano /etc/systemd/system/roonbridge.service
+		#ExecStart=/opt/RoonBridge/start.sh
 		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
 	$ sudo nano /opt/RoonBridge/Bridge/RoonBridge
 		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"
@@ -199,7 +201,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl stop roonbridge roonbridgetoram
 	$ sudo systemctl disable roonbridge roonbridgetoram
-	$#ls -al /etc/init.d/roonbridge
 
 	$ file /opt/RoonBridge/Bridge/processreaper
 	$ ls -al /opt/RoonBridge/Bridge/processreaper
@@ -211,7 +212,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
 
 	$ rm roonbridge-installer*
-	$ sudo cp copy/roonup /usr/bin/
+	$ sudo mv copy/roonup /usr/bin/
 
 11. Librespot
 
@@ -219,9 +220,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo apt-get install build-essential libasound2-dev file cargo
 	$ sudo ntpdate pool.ntp.org
-	$ wget https://github.com/librespot-org/librespot/archive/refs/tags/v0.3.1.tar.gz
-	$ tar xvzf v0.3.1.tar.gz && rm v0.3.1.tar.gz
-	$ cd librespot-0.3.1
+	$ wget https://github.com/librespot-org/librespot/archive/refs/tags/v0.4.2.tar.gz
+	$ tar xvzf v0.4.2.tar.gz && rm v0.4.2.tar.gz
+	$ cd librespot-0.4.2
 	$ cargo build --release --no-default-features --features alsa-backend
 
 	$ target/release/librespot -n Librespot --backend ?
@@ -233,7 +234,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	
 	$ mv copy/librespot ./
 
-12. Spotifyd
+12. Spotifyd (Not in use)
 
 	https://github.com/Spotifyd/spotifydf
 	https://github.com/Spotifyd/spotifyd/releases/latest
@@ -251,16 +252,13 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	device_name = Spotifyd
 	bitrate = 320    
 
-13. AirConnect (AirPlay)
+13. AirConnect
 
 	https://github.com/philippe44/AirConnect
 
-	$ wget https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-arm-static -P ~/
-	$ chmod +x ~/airupnp*
-
 	$ mv copy/airupnp-arm-static ./
 
-14. Shairport-sync (AirPlay - Obsolete)
+14. Shairport-sync (Not in use)
 
 	$ sudo apt-get update
 	$ sudo apt-get install shairport-sync
@@ -284,19 +282,24 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
 15. HQPlayer NAA
-	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/bullseye/networkaudiod_4.2.0-50_armhf.deb
+	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/bullseye/networkaudiod_4.5.0-57_armhf.deb
 	$ sudo dpkg -i networkaudiod*.deb
 	$ sudo systemctl disable networkaudiod
 	$ sudo cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
 	$ sudo nano /lib/systemd/system/networkaudiodtoram.service
 		ExecStart=/dev/shm/networkaudiod
 	$ sudo systemctl daemon-reload
+	$ ps ax | grep networkaudiod
 	$ sudo systemctl start networkaudiod
+	$ ps ax | grep networkaudiod
 	$ sudo systemctl stop  networkaudiod
+	$ ps ax | grep networkaudiod
 	$ sudo cp /usr/sbin/networkaudiod /dev/shm/
 	$ sudo systemctl start networkaudiodtoram
+	$ ps ax | grep networkaudiod
 	$ sudo systemctl stop  networkaudiodtoram
-	$ consf naa
+	$ ps ax | grep networkaudiod
+	$#consf naa
 
 16. Squeezelite
 	$ mv copy/squeezelite ./
@@ -313,21 +316,24 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ./build.sh install
 	$ ./build.sh pkgdebian
 
-	$ sudo apt-get install lrzsz liblua5.3-0 # libc6 libid3tag0 libflac8 libmediainfo0v5 openssl
+	$ sudo apt-get install lrzsz liblua5.4-0 # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
 
 	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 	
 	$ sudo dpkg -i copy/mympd*.deb
+	$ sudo groupadd -r mympd
+	$ sudo useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
 	$ sudo mympd
-	$ sudo mv copy/*.png /var/lib/mympd/pics/
+	$ sudo mv copy/*.png /var/lib/mympd/pics/thumbs/
 	$ sudo mv copy/*.lua /var/lib/mympd/scripts/
+	$#sudo chown -R mympd:mympd /var/lib/mympd
 
 	$ sudo sh -c "echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
-	$ echo "base, string, utf8, table, math, mympd, io" | sudo tee /var/lib/mympd/config/lualibs
+	$#echo "base, string, utf8, table, math, mympd, io" | sudo tee /var/lib/mympd/config/lualibs
 	$ echo "false" | sudo tee /var/lib/mympd/config/ssl
-	$ sudo cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
-	$ sudo nano /etc/systemd/system/mympd.service
+	$#sudo cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
+	$#sudo nano /etc/systemd/system/mympd.service
 		#Requires=network.target local-fs.target mpd.service
 		#After=mpd.service
 		#Protect...
@@ -350,100 +356,48 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ wget "https://github.com/tsl0922/ttyd/releases/download/$(curl -s "https://github.com/tsl0922/ttyd/tags" | grep -m1 'releases/tag/' | cut -d\/ -f6 | cut -d\" -f1)/ttyd.armhf" -P ~/
 	$ chmod +x ~/ttyd.armhf
 	$ sudo mv ~/ttyd.armhf /usr/bin/ttyd
-
-	# systemctl status  getty@tty1.service
-	# systemctl stop    getty@tty1.service
-	# systemctl disable getty@tty1.service
 	
 	$ sudo mv copy/ttyd /usr/bin/
 
 19. Gerbera
 
-	https://www.deb-multimedia.org/dists/stable/main/binary-armhf/package/gerbera
-	$ wget https://www.deb-multimedia.org/pool/main/g/gerbera-dmo/gerbera_1.9.0-dmo1_armhf.deb
-	$ sudo dpkg -i gerbera*.deb
-	$ sudo apt-get -f install
-
-	https://github.com/gerbera/gerbera
-	$ wget https://github.com/gerbera/gerbera/releases/download/v1.10.0/gerbera_1.10.0-bullseye1_armhf.deb
-
 	https://gerbera.jfrog.io/ui/native/debian/pool/main/g/gerbera/
-	$ wget https://gerbera.jfrog.io/artifactory/debian/pool/main/g/gerbera/gerbera_1.12.0-bullseye1_armhf.deb
+	$ wget https://gerbera.jfrog.io/artifactory/debian/pool/main/g/gerbera/gerbera_1.12.1-bookworm1_armhf.deb
+	$ sudo apt install ./gerbera_1.12.1-bookworm1_armhf.deb
 
-	$ sudo apt install ./gerbera_1.12.0-bullseye1_armhf.deb
-	$ gerbera --create-config > config.xml
-	$ ! [ -d /etc/gerbera ] && sudo mkdir /etc/gerbera
-	$ sudo mv config.xml /etc/gerbera
-
-	$ sudo apt-get install gerbera
-	$ sudo nano /etc/gerbera/config.xml
-		<ui enabled="yes" show-tooltips="yes">
-		<home>/etc/gerbera/</home>
-		<port>49155</port>
-		<!--
-		<tmpdir>/dev/shm</tmpdir>
-		-->
-
-	https://docs.gerbera.io/en/stable/daemon.html
-	$ sudo useradd --system gerbera
-	$ sudo id -u gerbera
-	$ sudo mkdir /etc/gerbera
-	$ sudo chown -Rv gerbera:gerbera /etc/gerbera
-	$ sudo rm -rf /var/lib/gerbera
-
-	$ sudo systemctl daemon-reload
 	$ systemctl status gerbera
-	$ sudo systemctl disable gerbera
 	$ sudo systemctl start gerbera
-	  http://rpi_ip:49155
+	  http://rpi_ip:49152
 
 20. APlayer Media Renderer
 
 	$ wget http://albumplayer.ru/linux/aprenderer-arm32.tar.gz
 	$ tar xvzf aprenderer*.tar.gz
 	$ cd aprenderer
-	$ sudo ./ap2renderer
-	$ sudo pkill ap2renderer
-	$ cp copy/aprenderer.service /lib/systemd/system/aprenderer.service
-	$ sudo systemctl daemon-reload
-	$ sudo systemctl disable aprenderer
-	$ sudo mkdir /dev/shm/aprenderer
-	$ sudo systemctl start aprenderer
+	$ ./ap2renderer
+
+	  http://rpi_ip:7779
+
 		Playback mode	   (O) Standard
 		Preload buffer     [108788]
 		Gapless mode       [ ]
-		ALSA Period frames [3738]
-		ALSA Buffer frames [14943]
+		ALSA Period frames [3739]
+		ALSA Buffer frames [14944]
 		DSP                [original]
 				   [ ] Multi-thread mode
 		System		   [V] Lock memory
+
+	$ pkill ap2renderer
+	$ cd
+	$ sudo mv copy/aprenderer.service /lib/systemd/system/aprenderer.service
+	$ sudo systemctl daemon-reload
+	$ systemctl status aprenderer
+	$ sudo mkdir /dev/shm/aprenderer
+	$ sudo systemctl start aprenderer
+	  http://rpi_ip:7779
 	$ sudo systemctl stop aprenderer
 
-21. Web interface (Obsolete)
-
-	$ sudo apt-get install lighttpd
-	$#sudo systemctl disable lighttpd.service
-	$ sudo nano /etc/lighttpd/lighttpd.conf
-		server.modules = (
-			...
-			"mod_cgi",
-		)
-		server.username = "root"
-		static-file.exclude-extensions = ( ..., ".sh" )
-		cgi.assign = ( ".sh" => "/bin/sh" )
-		alias.url += ( "/cgi-bin" => "/var/www/cgi-bin/" )
-		$HTTP["url"] == "/cgi-bin" {
-			cgi.assign = ( ".sh" => "" )
-		    }
-	$ sudo systemctl restart lighttpd
-	$ sudo nano /var/www/cgi-bin/test.sh
-	$ sudo nano /var/www/html/index.html
-		 <form action="/cgi-bin/test.sh" method="get">
-	$ sudo visudo
-		www-data ALL=(ALL) NOPASSWD:ALL
-	$ sudo adduser www-data sudo
-
-22. Build libaudiofile libFLAC
+21. Build libaudiofile libFLAC
 
 	$ sudo apt-get update
 	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
@@ -468,26 +422,26 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo cp /usr/local/lib/libaudiofile.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0.sav
 	$ sudo rm /usr/local/lib/libaudiofile*
 
-	$ wget http://deb.debian.org/debian/pool/main/f/flac/flac_1.3.3.orig.tar.xz
-	$ tar xvf flac_1.3.3.orig.tar.xz
-	$ wget http://deb.debian.org/debian/pool/main/f/flac/flac_1.3.3-1.debian.tar.xz
-	$ tar xvf flac_1.3.3-1.debian.tar.xz
-	$ cp debian/patches/* flac-1.3.3/
+	$ wget http://deb.debian.org/debian/pool/main/f/flac/flac_1.4.2+ds.orig.tar.xz
+	$ tar xvf flac_1.4.2+ds.orig.tar.xz
+	$ wget http://deb.debian.org/debian/pool/main/f/flac/flac_1.4.2+ds-2.debian.tar.xz
+	$ tar xvf flac_1.4.2+ds-2.debian.tar.xz
+	$ cp debian/patches/* flac-1.4.2/
 	$ rm -rf debian/
-	$ cd flac-1.3.3/
+	$ cd flac-1.4.2/
 	$ for i in *.patch; do patch -p1 < $i; done
 	$ ./configure
 	$ make
 	$ sudo make install
-	$ ls -al /usr/local/lib/libFLAC.so.8.3.0
-	$ sudo chmod -x /usr/local/lib/libFLAC.so.8.3.0
-	$ sudo strip --strip-debug /usr/local/lib/libFLAC.so.8.3.0
-	$ ls -al /usr/local/lib/libFLAC.so.8.3.0
-	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.orig
-	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0.sav
+	$ ls -al /usr/local/lib/libFLAC.so.12.0.0
+	$ sudo chmod -x /usr/local/lib/libFLAC.so.12.0.0
+	$ sudo strip --strip-debug /usr/local/lib/libFLAC.so.12.0.0
+	$ ls -al /usr/local/lib/libFLAC.so.12.0.0
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.12.0.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.12.0.0.orig
+	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.12.0.0.sav
 	$ sudo rm /usr/local/lib/libFLAC*
 
-23. Tweak ALSA
+22. Tweak ALSA
 
 	$ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
@@ -508,84 +462,68 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
-24. Tweak decoder libraries
+23. Tweak decoder libraries
 
 	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{audiofile,FLAC.so}*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
-	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.8.3.0 /etc/libFLAC.so.8.3.0.orig
+	$ sudo mv /usr/lib/arm-linux-gnueabihf/libFLAC.so.12.0.0 /etc/libFLAC.so.12.0.0.orig
 	$ echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 sudo cp -v copy/libaudiofile.so.1.0.0
-	$ echo "/etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8" | xargs -n 1 sudo cp -v copy/libFLAC.so.8.3.0
+	$ echo "/etc/libFLAC.so.12.0.0.sav /dev/shm/libFLAC.so.12" | xargs -n 1 sudo cp -v copy/libFLAC.so.12.0.0
 	$ sudo rm -i /usr/lib/arm-linux-gnueabihf/lib{audiofile.so*,FLAC.so*}
-	$ rm copy/{libaudiofile.so.1.0.0,libFLAC.so.8.3.0}
+	$ rm copy/{libaudiofile.so.1.0.0,libFLAC.so.12.0.0}
 	$#sudo ln -sf /etc/libFLAC.so.8.3.0.sav      /usr/lib/arm-linux-gnueabi/libFLAC.so
 	$#sudo ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/arm-linux-gnueabi/libaudiofile.so
 
 	$ ls -al /dev/shm/
-	$ sudo nano /etc/ld.so.conf.d/dev_shm.conf
-		/dev/shm/
+	$ echo "/dev/shm/" | sudo tee /etc/ld.so.conf.d/dev_shm.conf
 	$ sudo ldconfig
 	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 
-25. Edit /etc/rc.local
+24. Edit /etc/rc.local
 
-	$ sudo apt-get install libusb-0.1-4
-	$ mv copy/llctl ./
+	https://github.com/dumpsite/lan951x-led-ctl
+	# sudo apt-get install libusb-1.0-0-dev
+
+	$ mv copy/lan951x-led-ctl ./
+	$ sudo mv copy/*.service /lib/systemd/system/
+	$ sudo systemctl daemon-reload
 	$ sudo nano /etc/rc.local
 
-26. Sysctl Configuration
+25. Sysctl Configuration
 
 	$ sudo nano /etc/sysctl.conf
 	$ sudo sysctl -p /etc/sysctl.conf
 
-27. audio-config
+26. audio-config
 
 	$ sudo mv copy/{audio-config,audioconf,consf} /usr/bin/
 	$ sudo mv copy/audio.conf /etc/default/
 	$ audio-config
 	$ audioconf
 
-28. CIFS & NFS & USB mounting
+27. CIFS & NFS & USB mounting
 
 	$#sudo apt-get install cifs-utils nfs-common
 	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
 	$ sudo ln -s /mnt/ /var/lib/mpd/music
 	$ sudo nano /etc/fstab
-		/dev/mmcblk0p1  /boot           vfat    defaults          0       2
+		#PARTUUID=...
+		#PARTUUID=...
+		/dev/mmcblk0p1  /boot/firmware  vfat    defaults          0       2
 		/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
-		#/var/swap
 		/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
 		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
 
-29. Disabel swap
+28. Disabel swap
 
 	$ cat /proc/swaps
 	$ sudo systemctl disable dphys-swapfile
 	$ sudo swapoff -a
 	$ sudo rm /var/swap
 
-	# nano /etc/fstab
-		#/var/swap ...
-	# swapoff -a
-	# rm /var/swap
-
-30. USB Mount (Obsolete)
-
-	https://wiki.archlinux.org/index.php/Fstab#External_devices
-
-	$ sudo mkdir /mnt/usb
-	$ sudo nano /etc/fstab
-		 /dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.device-timeout=1,ro 0 2
-		#/dev/sda1 /mnt/usb vfat    ro 0 0
-		#/dev/sda1 /mnt/usb ntfs-3g ro 0 0
-	$ sudo nano /etc/rc.local
-		systemd-udevd
-	$ sudo systemctl daemon-reload
-	$ sudo systemctl restart remote-fs.target
-	$ sudo systemctl restart local-fs.target
-
-31. Plexdrive (Google Drive)
+29. Plexdrive (Google Drive)
 
 	https://github.com/dweidenfeld/plexdrive
 	https://github.com/dweidenfeld/plexdrive/releases/latest
@@ -615,7 +553,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl start plexdrive.service
 	$ sudo systemctl enable plexdrive.service
 
-32. Wondershaper
+30. Wondershaper
 
 	https://github.com/magnific0/wondershaper
 	
@@ -633,16 +571,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		[ "$wondershaper" = on ] && wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 		[ "$wondershaper" = on ] && /home/pi/wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 
-33. Make Image
+31. Make Image
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 	$ ps -ef | grep [d]efunct | awk '{print $3}'
 	$ sudo systemctl disable ssh
 	$ sudo sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
 	$ grep ssh= /etc/default/audio.conf
-	##dietpi-services disable dropbear
 
-	$ sudo ntpdate pool.ntp.org
+	$#sudo ntpdate pool.ntp.org
 	$ sudo apt-get update
 	$ sudo apt-get upgrade
 	$ sudo apt-get dist-upgrade
@@ -674,12 +611,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip -dd raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
-34. Disable Bluetooth UART for RPI3
+32. Disable Bluetooth UART for RPI3
 
 	$ sudo systemctl disable hciuart
 	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
 
-35. Shirnk Image
+33. Shirnk Image
 
 	http://aoakley.com/articles/2015-10-09-resizing-sd-images.php
 	https://github.com/Drewsif/PiShrink

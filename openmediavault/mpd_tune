@@ -19,7 +19,7 @@ until [ ! -z $(pgrep -x mpd) ] && $(pstree -npt $(pgrep -x mpd) | grep -q output
  [ "$sec" -ge 5 ] && printf "\nNo MPD audio output and exit!\n" && exit
 done
 
-B[ "$mpd_ver" -ge 21 ] && mpc del $(mpc playlist | wc -l)
+[ "$mpd_ver" -ge 21 ] && mpc del $(mpc playlist | wc -l)
 
 procnr=$(nproc --all)
 if   [ "$procnr" -eq 4 ]; then

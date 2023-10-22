@@ -11,58 +11,8 @@
 #
 # By default this script does nothing.
 
-eol () {
- [ "$mympd" = on ] && /dev/shm/mympd&
-#systemctl stop systemd-timesyncd || true
-#ntpdate -d pool.ntp.org || true
- /home/pi/llctl f0 l0 d0 || true
- echo none > /sys/class/leds/led0/trigger || true
- echo 0    > /sys/class/leds/led0/brightness || true
- sleep 1
- [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness || true
-}
-
-mpd_bg () {
- until [ $(pgrep -x mpd) -gt 0 ] 2>/dev/null && $(pstree -npt $(pgrep -x mpd) | grep -q output); do
-  sleep 1
- done
- sleep 1
- pgr_mpd=$(pgrep -x mpd)
- #taskset -pc $s_task $pgr_mpd
- echo "$(pstree -npt $pgr_mpd)" | while read line ; do
-  proc=$(echo "$line" | cut -d "{" -f2 | cut -d "}" -f1 | cut -d ":" -f1)
-  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-  case $proc in
- # mpd)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
- # io)		 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-   rtio)	#taskset -cp $s_task,$h_task,$o_task	$proc_nr
-		 chrt -opv 0         			$proc_nr ;;
- # player)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
- # decoder)	 taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-   output)	#taskset -cp $m_task			$proc_nr
-		 chrt -op 0				$proc_nr ;;
-  esac
- done
- ### Text to Speech
- [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
- [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
- [ "$upmpdcli" = on ] && /dev/shm/upmpdcli -c /dev/shm/upmpdcli.conf
-}
-
-upmpd_bg () {
- if [ "$upmpdcli" = on ]; then
-  sec=0
-  until [ ! -z $(pgrep -x upmpdcli) ]; do
-   sleep 1
-   sec=$(($sec+1))
-   [ "$sec" -ge 10 ] && break
-  done
- fi
- sleep 1
- [ "$airplay" = on ] && airconnect
- eol
- pkill rc.local
-}
+### SSH
+[ "$mpd" = off ] || [ "$mympd" = off ] || [ "$ssh"   = on ] && systemctl start ssh
 
 roon_bridge () {
  if [ "$roontoram" = on ]; then
@@ -74,8 +24,8 @@ roon_bridge () {
 }
 
 sqzlite () {
- cp /home/pi/squeezelite /dev/shm/
-/dev/shm/squeezelite -C 1 -z || true
+# cp /home/pi/squeezelite /dev/shm/
+#/dev/shm/squeezelite -C 1 -z || true
  pgr_sqz=$(pidof squeezelite)
  [ -z "$pgr_sqz" ] && continue
 #[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
@@ -96,7 +46,8 @@ spotifyd () {
 #sleep 1
 #/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf&>/dev/null </dev/null
  cp /home/pi/librespot /dev/shm/
-/dev/shm/librespot -n Librespot -b 320 --backend alsa --device default --mixer alsa &
+#/dev/shm/librespot -n Librespot -b 320 --backend alsa --device default --mixer alsa &
+/dev/shm/librespot -n Librespot -b 320 &
 }
 
 airconnect () {
@@ -134,18 +85,20 @@ fi
 cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /dev/shm/
 cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
-cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
+cp /etc/libFLAC.so.12.0.0.sav /dev/shm/libFLAC.so.12
 
 echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
+echo 0 > /sys/module/snd*/parameters/power_save*  || true
 #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 #echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 #[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
 
 for i in $(ls /sys/block/*/queue/scheduler); do
  if   echo $(cat $i) | grep -q none; then
-  echo none > $i
+  echo none > $i || true
  elif echo $(cat $i) | grep -q noop; then
-  echo noop > $i
+  echo noop > $i || true
  fi
 done
 
@@ -182,29 +135,6 @@ pkill rngd    || true
 [ "$wifi" = off ] && pkill wpa_supplicant || true
 swapoff -a
 
-### SSH
-[ "$mpd" = off ] || [ "$mympd" = off ] || [ "$ssh"   = on ] && systemctl start ssh
-
-#m_task=$(($(nproc --all)-1)); h_task=0; s_task=0
-#[ "$m_task" -ge 3 ] && h_task=$((m_task-1)) && s_task=$((m_task-2))
-
-#procnr=$(nproc --all)
-#if   [ "$procnr" -eq 2 ]; then
-# m_task=0; s_task=1; h_task=1; o_task=1
-#elif [ "$procnr" -eq 4 ]; then
-# m_task=2; s_task=0; h_task=3; o_task=1,3
-#elif [ "$procnr" -ge 8 ]; then
-# m_task=6; s_task=4; h_task=2; o_task=1,3,5,7
-#else
-# m_task=0; s_task=0; h_task=0; o_task=0
-#fi
-
-#if [ "$m_task" -ge 1 ];then
-# for pid in $(ps -eo pid,comm | awk '$2 !~ /systemd$|networkaudiod/ {print $1}'); do
-#  taskset -acp $o_task $pid 2>/dev/null || true
-# done
-#fi
-
 ### Unmute IQaudIO I2S
 #echo "22"  > /sys/class/gpio/export
 #echo "out" > /sys/class/gpio/gpio22/direction
@@ -227,17 +157,40 @@ esac
 #/opt/vc/bin/tvservice -o
 #service getty@tty1 stop
 
+### MPDS
+if [ "$mpd" = on ]; then
+ systemctl start musicpd
+ sleep 3
+ musicpd
+### Text to Speech
+ [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
+ [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
+### Upmpdcli
+ [ "$upmpdcli" = on ] && systemctl start upmusicpd
+### Airconnect
+ if [ "$upmpdcli" = on ] && [ "$airplay" = on ]; then
+  sec=0
+  until [ ! -z $(pidof upmpdcli) ]; do
+   sleep 1
+   sec=$(($sec+1))
+   [ "$sec" -ge 10 ] && break
+  done
+  sleep 1
+  systemctl start airconnect_run
+ fi
+fi
+
 ### APrenderer
-[ "$aprenderer" = on ] && mkdir /dev/shm/aprenderer && systemctl start aprenderer
+[ "$aplayer" = on ] && mkdir /dev/shm/aprenderer && systemctl start aprenderer
 
 ### Roon Bridge
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Squeezelite
-[ "$sqzlite" = on ] && (sqzlite || true)
+[ "$sqzlite" = on ] && systemctl start sqzlite_run && sleep 3 && sqzlite
 
 ### Spotify
-[ "$spotify" = on ] && (spotifyd &) # && sleep 3
+[ "$spotify" = on ] && systemctl start spotify_run
 
 ### Networkaudiod
 [ "$naa" = on ] && (naa &) && sleep 3
@@ -245,24 +198,17 @@ esac
 ### Gerbera
 [ "$gerbera" = on ] && systemctl start gerbera
 
-### Taskset
-#[ -e /proc/irq/default_smp_affinity ] && echo $(echo "2^$h_task" | bc) > /proc/irq/default_smp_affinity || true
-#for pid in 1 $(pgrep -x rc.local); do
-# taskset -acp $s_task $pid || true
-#done
+### Gerbera
+[ "$mympd" = on ] && systemctl start mymusicpd
 
-#for i in RoonBridge librespot networkaudiod; do
-# if [ "$procnr" -ge 2 ] && pidof -q $i; then
-#  taskset -acp 0-$procnr $(pidof $i) || true
-# fi
-#done
+#systemctl stop systemd-timesyncd || true
+#ntpdate -d pool.ntp.org || true
+/home/pi/llctl f0 l0 d0 || true
+echo none > /sys/class/leds/PWR/trigger || true
+echo 0    > /sys/class/leds/PWR/brightness || true
+sleep 1
+[ -f /sys/class/leds/ACT/brightness ] && echo 0 > /sys/class/leds/ACT/brightness || true
 
-if [ "$mpd" = on ]; then
- mpd_bg &
- upmpd_bg &
-/dev/shm/mpd /dev/shm/mpd.conf
-else
- eol
-fi
+[ "$(pinout | grep Revision | grep -o '[^ ]\+$')" = a02082 ] || [ "$(pinout | grep Revision | grep -o '[^ ]\+$')" = a22082 ] && /home/pi/lan951x-led-ctl --spd=0 --lnk=0
 
 exit 0
