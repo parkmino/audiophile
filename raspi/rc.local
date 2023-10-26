@@ -11,8 +11,10 @@
 #
 # By default this script does nothing.
 
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
 ### SSH
-[ "$mpd" = off ] || [ "$mympd" = off ] || [ "$ssh"   = on ] && systemctl start ssh
+[ "$ssh" = on ] && systemctl start ssh
 
 roon_bridge () {
  if [ "$roontoram" = on ]; then
@@ -64,8 +66,6 @@ naa () {
   systemctl start networkaudiod
  fi
 }
-
-[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
 
 if [ "$alsa" = plug ]; then
  cp /etc/libasound.so.2.0.0.plug.dev.shm /dev/shm/libasound.so.2
@@ -157,7 +157,7 @@ esac
 #/opt/vc/bin/tvservice -o
 #service getty@tty1 stop
 
-### MPDS
+### MPD
 if [ "$mpd" = on ]; then
  systemctl start musicpd
  sleep 3
@@ -167,21 +167,18 @@ if [ "$mpd" = on ]; then
  [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
 ### Upmpdcli
  [ "$upmpdcli" = on ] && systemctl start upmusicpd
-### Airconnect
- if [ "$upmpdcli" = on ] && [ "$airplay" = on ]; then
-  sec=0
-  until [ ! -z $(pidof upmpdcli) ]; do
-   sleep 1
-   sec=$(($sec+1))
-   [ "$sec" -ge 10 ] && break
-  done
-  sleep 1
-  systemctl start airconnect_run
- fi
 fi
 
 ### APrenderer
-[ "$aplayer" = on ] && mkdir /dev/shm/aprenderer && systemctl start aprenderer
+[ "$aprenderer" = on ] && mkdir /dev/shm/aprenderer && systemctl start aprenderer
+
+### Airconnect
+if [ "$upmpdcli" = on ] || [ "$aprenderer" = on ]; then
+ if [ "$airplay" = on ]; then
+  sleep 3
+  systemctl start airconnect_run
+ fi
+fi
 
 ### Roon Bridge
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
