@@ -137,8 +137,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mkdir /etc/ncmpc
 	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
 
-	$ sudo mkdir /var/lib/mpd/music/do_not_remove
-	$ sudo mv copy/blank.mp3 /var/lib/mpd/music/do_not_remove
 	$ sudo mv copy/musicpd.service /usr/lib/systemd/system/
 	$ sudo mv copy/musicpd /usr/bin/
 	$ sudo cp /usr/bin/mpd /dev/shm/ && sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf
