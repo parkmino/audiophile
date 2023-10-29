@@ -25,39 +25,6 @@ roon_bridge () {
  fi
 }
 
-sqzlite () {
-# cp /home/pi/squeezelite /dev/shm/
-#/dev/shm/squeezelite -C 1 -z || true
- pgr_sqz=$(pidof squeezelite)
- [ -z "$pgr_sqz" ] && continue
-#[ "$h_task" -ge 1 ] && taskset -pc $s_task $pgr_sqz || true
- count=2
- echo "$(pstree -npt $pgr_sqz)" | while read line ; do
-  proc_nr=$(echo "$line" | cut -d "}" -f2 | cut -d "(" -f2 | cut -d ")" -f1)
-  case $count in
-   3) #taskset -cp $m_task			$proc_nr >/dev/null
-      chrt    -op 0				$proc_nr ;;
- # *) taskset -cp $s_task,$h_task,$o_task	$proc_nr ;;
-  esac
-  count=$(($count+1))
- done
-}
-
-spotifyd () {
-#cp /home/pi/spotifyd /home/pi/spotifyd.conf /dev/shm/
-#sleep 1
-#/dev/shm/spotifyd --no-daemon --config-path /dev/shm/spotifyd.conf&>/dev/null </dev/null
- cp /home/pi/librespot /dev/shm/
-#/dev/shm/librespot -n Librespot -b 320 --backend alsa --device default --mixer alsa &
-/dev/shm/librespot -n Librespot -b 320 &
-}
-
-airconnect () {
- cp /home/pi/airupnp-arm-static /dev/shm/
- sleep 10
-/dev/shm/airupnp-arm-static -l 1000:2000 -r -Z -z
-}
-
 naa () {
  if [ "$naatoram" = on ]; then
   cp /usr/sbin/networkaudiod /dev/shm/
@@ -160,8 +127,6 @@ esac
 ### MPD
 if [ "$mpd" = on ]; then
  systemctl start musicpd
- sleep 3
- musicpd
 ### Text to Speech
  [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
  [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
@@ -184,7 +149,7 @@ fi
 [ "$roon" = on ] && (roon_bridge &) && sleep 3
 
 ### Squeezelite
-[ "$sqzlite" = on ] && systemctl start sqzlite_run && sleep 3 && sqzlite
+[ "$sqzlite" = on ] && systemctl start sqzlite_run
 
 ### Spotify
 [ "$spotify" = on ] && systemctl start spotify_run

@@ -1,32 +1,40 @@
-01. Tune alsa.conf
+01. Tune mpd.conf
 
-	$ sudo nano /usr/share/alsa/alsa.conf.min
-		pcm.default{type hw card 0 device 0 subdevice 0}
-	$ sudo nano /usr/share/alsa/alsa.conf.{mix,plug}
-		pcm.default{type hw card 0 device 0 subdevice 0}
+$ sudo nano /etc/mpd.conf.sav
 
-	$ sudo nano /etc/rc.local
-		#/dev/shm/librespot -n Librespot -b 320 --backend alsa --device default --mixer alsa &
-		/dev/shm/librespot -n Librespot -b 320 &
+database {
+plugin "simple"
+path "/var/lib/mpd/database"
+cache_directory "/dev/shm"
+}
 
-02. Tune Kernel Parameters
+02. RestrictRealtime=yes in systemd
 
-	$ sudo nano /etc/sysctl.conf
+$ sudo nano /lib/systemd/system/musicpd.service
 
-		net.ipv4.tcp_rmem = 4621 88291 > 4630 88309 3345770 # 4096 131072 6291456
-		net.ipv4.tcp_wmem = 4560 89953 > 4581 89962 3455749 # 4096  16384 4194304
+[Service]
+#StandardInput=null
+StandardOutput=null
+#StandardError=null
+RestrictRealtime=yes
 
-03. CPU Performance Scaling
+#ExecStartPre=cp /usr/local/bin/mpd /etc/mpd.conf /dev/shm/
+ExecStart=/dev/shm/mpd /dev/shm/mpd.conf
+#ExecStartPost=musicpd
 
-	$ cat /sys/devices/system/cpu/cpu?/cpufreq/scaling_governor
+$ sudo nano /lib/systemd/system/sqzlite_run.sevice
 
-	$ sudo nano /etc/rc.local
+[Service]
+...
+RestrictRealtime=yes
 
-		echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
-		echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true # 8000
-		echo 0 > /sys/module/snd*/parameters/power_save*  || true
-		#echo 1 > tee /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
-		#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
-		#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+$ sudo nano /etc/rc.local
 
-04. alsa-lib 1.2.10
+#sleep 3
+#musicpd
+
+#sqzlite () {
+#...
+#
+
+# && sleep 3 && sqzlite
