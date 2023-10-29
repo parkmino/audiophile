@@ -16,23 +16,23 @@ http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8
 #EXTINF:-1,EBSbandi
 http://ebsonair.ebs.co.kr/iradio/iradiolive_m4a/playlist.m3u8
 #EXTINF:-1,KBS1
-http://ye23.vip/z7z8/2021/kbs2020.php?id=1
+https://code.vthanhtivi.pw/getlink/kbs/11/playlist.m3u8
 #EXTINF:-1,KBS2
-http://ye23.vip/z7z8/2021/kbs2020.php?id=2
+https://code.vthanhtivi.pw/getlink/kbs/11/playlist.m3u8
 #EXTINF:-1,KBS World
-http://ye23.vip/z7z8/2021/kbs2020.php?id=3
+https://code.vthanhtivi.pw/getlink/kbs/14/playlist.m3u8
 #EXTINF:-1,KBS News D
-http://ye23.vip/z7z8/2021/kbs2020.php?id=4
+https://code.vthanhtivi.pw/getlink/kbs/81/playlist.m3u8
 #EXTINF:-1,KBS Drama
-http://ye23.vip/z7z8/2021/kbs2020.php?id=5
+https://code.vthanhtivi.pw/getlink/kbs/N91/playlist.m3u8
 #EXTINF:-1,KBS Joy
-http://ye23.vip/z7z8/2021/kbs2020.php?id=6
+https://code.vthanhtivi.pw/getlink/kbs/N92/playlist.m3u8
 #EXTINF:-1,KBS Life
-http://ye23.vip/z7z8/2021/kbs2020.php?id=7
+https://code.vthanhtivi.pw/getlink/kbs/N93/playlist.m3u8
 #EXTINF:-1,KBS Story
-http://ye23.vip/z7z8/2021/kbs2020.php?id=8
+https://code.vthanhtivi.pw/getlink/kbs/N94/playlist.m3u8
 #EXTINF:-1,KBS Kids
-http://ye23.vip/z7z8/2021/kbs2020.php?id=9
+https://code.vthanhtivi.pw/getlink/kbs/N96/playlist.m3u8
 #EXTINF:-1,MBC강원영동TV
 http://123.254.72.24:1935/tvlive/livestream2/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM
@@ -163,12 +163,14 @@ http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
 https://m.webcast.go.kr/live/_definst_/smil:natv_720p.smil/playlist.m3u8
 #EXTINF:-1,머니투데이방송
 http://moneytoday1.ktcdn.co.kr:1935/mtnlive/720/playlist.m3u8
+#EXTINF:-1,방송대학TV
+https://live.knou.ac.kr/knou1/live1/playlist.m3u8
 #EXTINF:-1,복지TV
 http://cdnlive29.smartucc.kr/smartlive/312/46324be24454bd98f785039457ac695d/playlist.m3u8
 #EXTINF:-1,소상공인방송
 https://cdnlive179.smartucc.kr/smartlive/558/91258ac21591769e21f41b96f26d883e/playlist.m3u8
 #EXTINF:-1,시민방송 RTV
-https://rtv-stream3.a04f922e9e85c8d25ebfeae3dfd22a67.com/rtv/rtv.m3u8
+https://rtv-stream2.a04f922e9e85c8d25ebfeae3dfd22a67.com/rtv/rtv.m3u8
 #EXTINF:-1,아리랑 TV
 http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
 #EXTINF:-1,아리랑 라디오
@@ -185,6 +187,8 @@ http://live.kytv.co.kr:8080/hls/stream.m3u8
 https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 #EXTINF:-1,한국직업방송
 http://live.worktv.or.kr:1935/live/wowtvlive1.sdp/playlist.m3u8
+#EXTINF:-1,ABN아름방송
+https://vod2.abn.co.kr/IPHONE/abn.m3u8
 #EXTINF:-1,JCN 울산중앙방송
 https://jcnonair-1108.acs.wecandeo.com/ms/3162/1108/index_1.m3u8
 #EXTINF:-1,KCTV광주방송 CH05
