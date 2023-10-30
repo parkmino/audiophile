@@ -5,7 +5,6 @@ $ sudo nano /etc/mpd.conf.sav
 database {
 plugin "simple"
 path "/var/lib/mpd/database"
-cache_directory "/dev/shm"
 }
 
 02. RestrictRealtime=yes in systemd
