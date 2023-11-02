@@ -97,6 +97,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		blacklist brcmfmac
 		blacklist ip_tables
 		blacklist raspberrypi_hwmon
+		blacklist snd_bcm2835
 		blacklist uio
 		blacklist uio-pdrv-genirq
 		blacklist vc_sm_cma
@@ -137,6 +138,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mkdir /etc/ncmpc
 	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
 
+	$ sudo mkdir /var/lib/mpd/music/do_not_remove
+	$ sudo mv copy/blank.mp3 /var/lib/mpd/music/do_not_remove
 	$ sudo mv copy/musicpd.service /usr/lib/systemd/system/
 	$ sudo mv copy/musicpd /usr/bin/
 	$ sudo cp /usr/bin/mpd /dev/shm/ && sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf
@@ -570,6 +573,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		[ "$wondershaper" = on ] && /home/pi/wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 
 31. Make Image
+
+	# Remove all the sound devices
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 	$ ps -ef | grep [d]efunct | awk '{print $3}'
