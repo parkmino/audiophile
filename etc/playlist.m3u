@@ -170,7 +170,7 @@ http://cdnlive29.smartucc.kr/smartlive/312/46324be24454bd98f785039457ac695d/play
 #EXTINF:-1,소상공인방송
 https://cdnlive179.smartucc.kr/smartlive/558/91258ac21591769e21f41b96f26d883e/playlist.m3u8
 #EXTINF:-1,시민방송 RTV
-https://rtv-stream2.a04f922e9e85c8d25ebfeae3dfd22a67.com/rtv/rtv.m3u8
+https://rtv-stream3.a04f922e9e85c8d25ebfeae3dfd22a67.com/rtv/rtv.m3u8
 #EXTINF:-1,아리랑 TV
 http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
 #EXTINF:-1,아리랑 라디오
@@ -213,10 +213,6 @@ https://cdntv.tbs.seoul.kr/tbs/_definst_/tbs_tv_web_720.smil/playlist.m3u8
 https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8
 #EXTINF:-1,tbseFM
 https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8
-#EXTINF:-1,YTN 코리안
-http://d3vsrxlpuric1q.cloudfront.net/ytn/main2.m3u8
-#EXTINF:-1,YTN 라디오
-https://radiolive.ytn.co.kr/radio/_definst_/20211118_fmlive/playlist.m3u8
 #EXTINF:-1,연변라지오TV넷 연변위성
 http://live.ybtvyun.com/video/s10016-ea30e14ae67c/index.m3u8
 #EXTINF:-1,연변라지오TV넷 조선어종합채널
