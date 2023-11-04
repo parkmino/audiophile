@@ -41,31 +41,26 @@ https://help.ubuntu.com/community/GnuPrivacyGuardHowto
 https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
 
 $ cd /home/parkmino/Downloads/ppa/mympd/
-$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.tar.gz/' | wget --no-check-certificate "$(cat -)" -O ./mympd.tar.gz
-$ export ver=$(curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/.*\/v//')
+$ export location=$(curl -w "%{redirect_url}" -o /dev/null -s "https://github.com/jcorporation/myMPD/releases/latest")
+$ export ver=$(echo "$location" | sed 's/.*\/v//')
+$ echo "$location" | sed 's/releases\/tag/archive\/refs\/tags/; s/$/.tar.gz/' | wget "$(cat -)" -O ./mympd.tar.gz
 $ tar -xvzf mympd.tar.gz
 $ mv mympd.tar.gz mympd_$ver.orig.tar.gz
 $ mv myMPD-$ver/contrib/packaging/debian myMPD-$ver
 $ cd myMPD-$ver
 
-$ sed -i '1s/-1)/-1ppa1~focal)/; 1s/unstable/focal/' debian/changelog
+$ sed -i '1s/-1)/-1ppa1~jammy)/; 1s/unstable/jammy/' debian/changelog
+$ cat debian/changelog
+	mympd ($ver-1ppa1~jammy) jammy; urgency=medium
+$ debuild -S -k5109AD1DC308EC34 # -sd
+$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~jammy_source.changes
+
+$ sed -i '1s/jammy/focal/g' debian/changelog
 $ cat debian/changelog
 	mympd ($ver-1ppa1~focal) focal; urgency=medium
-$ debuild -S -k5109AD1DC308EC34 # -sd
+$ debuild -S -k5109AD1DC308EC34 -sd
 $ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~focal_source.changes
 
-$ sed -i '1s/focal/bionic/g' debian/changelog
-$ cat debian/changelog
-	mympd ($ver-1ppa1~bionic) bionic; urgency=medium
-$ debuild -S -k5109AD1DC308EC34 -sd
-$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~bionic_source.changes
-
-#$ sed -i '1s/bionic/xenial/g' debian/changelog
-#$ cat debian/changelog
-	mympd ($ver-1ppa1~xenial) xenial; urgency=medium
-#$ debuild -S -k5109AD1DC308EC34 -sd
-#$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~xenial_source.changes
-
-$ pkill gpg-agent; pkill gnome-keyring-d; cd
+$ pkill gpg-agent; pkill gnome-keyring-d; unset location ver; cd
 
 https://launchpad.net/~parkmino/+archive/ubuntu/mympd
