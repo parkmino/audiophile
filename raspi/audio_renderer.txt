@@ -495,14 +495,18 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo nano /etc/sysctl.conf
 	$ sudo sysctl -p /etc/sysctl.conf
 
-26. audio-config
+26. Tweak dt-blob.bin
+
+	$ sudo mv copy/dt-blob.bin.twk /boot/firmware/
+
+27. audio-config
 
 	$ sudo mv copy/{audio-config,audioconf,consf} /usr/bin/
 	$ sudo mv copy/audio.conf /etc/default/
 	$ audio-config
 	$ audioconf
 
-27. CIFS & NFS & USB mounting
+28. CIFS & NFS & USB mounting
 
 	$#sudo apt-get install cifs-utils nfs-common
 	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
@@ -517,14 +521,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
 
-28. Disabel swap
+29. Disabel swap
 
 	$ cat /proc/swaps
 	$ sudo systemctl disable dphys-swapfile
 	$ sudo swapoff -a
 	$ sudo rm /var/swap
 
-29. Plexdrive (Google Drive)
+30. Plexdrive (Google Drive)
 
 	https://github.com/dweidenfeld/plexdrive
 	https://github.com/dweidenfeld/plexdrive/releases/latest
@@ -554,7 +558,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl start plexdrive.service
 	$ sudo systemctl enable plexdrive.service
 
-30. Wondershaper
+31. Wondershaper
 
 	https://github.com/magnific0/wondershaper
 	
@@ -572,7 +576,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		[ "$wondershaper" = on ] && wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 		[ "$wondershaper" = on ] && /home/pi/wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 
-31. Make Image
+32. Make Image
 
 	# Remove all the sound devices
 
@@ -614,12 +618,12 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo pishrink.sh raspi_audio_renderer_$(date +"%y.%m").img raspi_audio_renderer_expand_$(date +"%y.%m").img
 	$ zip -dd raspi_audio_renderer_expand_$(date +"%y.%m").zip raspi_audio_renderer_expand_$(date +"%y.%m").img
 
-32. Disable Bluetooth UART for RPI3
+33. Disable Bluetooth UART for RPI3
 
 	$ sudo systemctl disable hciuart
 	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
 
-33. Shirnk Image
+34. Shirnk Image
 
 	http://aoakley.com/articles/2015-10-09-resizing-sd-images.php
 	https://github.com/Drewsif/PiShrink

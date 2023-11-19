@@ -282,6 +282,16 @@ if [ "$exitstatus" = 0 ]; then
 fi
 }
 
+dtblob () {
+i=$(whiptail --title "DT-BLOB.BIN Tweak from Symphonic MPD" --checklist "DT-BLOB.BIN Tweak from Symphonic MPD" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 7 62 1 \
+"dtblob"  "DT-BLOB.BIN Tweak     DT-BLOB.BIN 트윅" $(consf dtblob) 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ "$exitstatus" = 0 ]; then
+ [[ $i =~ dtblob ]] && consf dtblob on || consf dtblob off
+fi
+}
+
 while true; do
  nr=0
  [ -e /proc/asound/cards ] && id=$(grep "^ $nr" /proc/asound/cards | sed 's/.* - //')
@@ -299,16 +309,17 @@ while true; do
  else
   ip=$(echo "$ip" | tr -d ' ')
  fi
- i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti $(consf build) (IP:$ip) - $card0" 16 65 9 \
+ i=$(whiptail --title "audio-config / 오디오 설정" --menu "Main / 주 메뉴" --ok-button "Select/선택" --cancel-button "Finish/마침" --backtitle "$bkti $(consf build) (IP:$ip) - $card0" 17 65 10 \
  "1"  "Audio device               오디오 장치            >" \
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
  "4"  "UPnP, AirPlay, NAA, Roon, Spotify, Squeezebox     >" \
- "5"  "IP TTS, DBus               IP TTS와 DBus          >" \
+ "5"  "DT-BLOB.BIN Tweak          DT-BLOB.BIN 트윅       >" \
  "6"  "Ethernet IP                유선 IP 설정           >" \
  "7"  "USB signal & power         USB 신호와 전원        >" \
- "8"  "Roon Bridge Update         룬 브리지 업데이트      " \
- "9"  "BASH                       쉘 명령어" 3>&1 1>&2 2>&3)
+ "8"  "IP TTS, DBus               IP TTS와 DBus          >" \
+ "9"  "Roon Bridge Update         룬 브리지 업데이트      " \
+ "0"  "BASH                       쉘 명령어" 3>&1 1>&2 2>&3)
 
  exitstatus=$?
  [ "$exitstatus" != 0 ] && break
@@ -318,12 +329,13 @@ while true; do
   2)  mpd_options	;;
   3)  renderer_name	;;
   4)  features		;;
-  5)  dbus_tts		;;
+  5)  dtblob		;;
   6)  ethernet_ip	;;
   7)  usb_signal_power	;;
-  8)  roonup		;;
-  9)  bash		;;
-  0)  sudo ntpdate pool.ntp.org
+  8)  dbus_tts		;;
+  9)  roonup		;;
+  0)  bash		;;
+  u)  sudo ntpdate pool.ntp.org
       sudo apt-get update
       sudo apt-get upgrade
       sudo apt-get dist-upgrade ;;
