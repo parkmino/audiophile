@@ -43,7 +43,7 @@ torwal () {
 
 torqq () {
 #url="https://토렌트큐큐.net"
- url="https://torrentqq279.com"
+ url="https://torrentqq282.com"
  chk_url || return
  [ -z "${url##*큐큐*}" ] && url="$(curl $curl_opt -L "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=w&board=mov"
