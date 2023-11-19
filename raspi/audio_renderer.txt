@@ -118,7 +118,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable getty@tty1 cron triggerhappy avahi-daemon hciuart bluetooth bthelper@hci0 ModemManager # rng-tools systemd-resolved resolvconf dbus.service dbus.socket rsyslog systemd-timesyncd
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # systemd-journald-audit.service
 
-	# dietpi-services disable cron
+	$ sudo nano /etc/network/interfaces
+		auto lo
+		iface lo inet loopback
+
+		auto eth0
+		iface eth0 inet dhcp
+	$ sudo apt-get remove network-manager
+	$ sudo apt-get autoremove
 
 	$ sync
 	$ sudo reboot
