@@ -33,6 +33,44 @@ https://code.vthanhtivi.pw/getlink/kbs/N93/playlist.m3u8
 https://code.vthanhtivi.pw/getlink/kbs/N94/playlist.m3u8
 #EXTINF:-1,KBS Kids
 https://code.vthanhtivi.pw/getlink/kbs/N96/playlist.m3u8
+#EXTINF:-1,KBS 독도라이브
+https://code.vthanhtivi.pw/getlink/kbs/cctv01/playlist.m3u8
+#EXTINF:-1,KBS 쌈, 마이웨이
+https://code.vthanhtivi.pw/getlink/kbs/nvod1/playlist.m3u8
+#EXTINF:-1,KBS 태조 왕건
+https://code.vthanhtivi.pw/getlink/kbs/nvod2/playlist.m3u8
+#EXTINF:-1,KBS 직장의 신
+https://code.vthanhtivi.pw/getlink/kbs/nvod3/playlist.m3u8
+#EXTINF:-1,KBS 아이가 다섯
+https://code.vthanhtivi.pw/getlink/kbs/nvod4/playlist.m3u8
+#EXTINF:-1,KBS 제빵왕 김탁구
+https://code.vthanhtivi.pw/getlink/kbs/nvod5/playlist.m3u8
+#EXTINF:-1,KBS 1박2일
+https://code.vthanhtivi.pw/getlink/kbs/nvod6/playlist.m3u8
+#EXTINF:-1,KBS 내 딸 서영이
+https://code.vthanhtivi.pw/getlink/kbs/nvod7/playlist.m3u8
+#EXTINF:-1,KBS 역사저널 그날
+https://code.vthanhtivi.pw/getlink/kbs/nvod8/playlist.m3u8
+#EXTINF:-1,KBS 인간극장
+https://code.vthanhtivi.pw/getlink/kbs/nvod9/playlist.m3u8
+#EXTINF:-1,KBS 어린이 만화동산
+https://code.vthanhtivi.pw/getlink/kbs/nvod10/playlist.m3u8
+#EXTINF:-1,KBS 1Radio
+https://code.vthanhtivi.pw/getlink/kbs/21/playlist.m3u8
+#EXTINF:-1,KBS HappyFM
+https://code.vthanhtivi.pw/getlink/kbs/22/playlist.m3u8
+#EXTINF:-1,KBS 3Radio
+https://code.vthanhtivi.pw/getlink/kbs/23/playlist.m3u8
+#EXTINF:-1,KBS ClassicFM
+https://code.vthanhtivi.pw/getlink/kbs/24/playlist.m3u8
+#EXTINF:-1,KBS CoolFM
+https://code.vthanhtivi.pw/getlink/kbs/25/playlist.m3u8
+#EXTINF:-1,KBS 한민족방송
+https://code.vthanhtivi.pw/getlink/kbs/26/playlist.m3u8
+#EXTINF:-1,KBS WORLD Multilingual
+https://code.vthanhtivi.pw/getlink/kbs/wink11/playlist.m3u8
+#EXTINF:-1,KBS WORLD English
+https://code.vthanhtivi.pw/getlink/kbs/wink11/playlist.m3u8
 #EXTINF:-1,MBC강원영동TV
 http://123.254.72.24:1935/tvlive/livestream2/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM
@@ -147,6 +185,10 @@ http://59.23.231.102:1935/live/mp3:UBCfmstream/playlist.m3u8
 https://61ff3340258d2.streamlock.net/jtv_live/myStream/playlist.m3u8
 #EXTINF:-1,JTV전주FM
 https://61ff3340258d2.streamlock.net/jtv_radio/myStream/playlist.m3u8
+#EXTINF:-1,CJB청주TV
+http://1.222.207.80:1935/live/cjbtv/playlist.m3u8
+#EXTINF:-1,CJB청주FM
+http://1.222.207.80:1935/live/cjbradio/playlist.m3u8
 #EXTINF:-1,JIBS제주TV
 http://123.140.197.22/stream/1/play.m3u8
 #EXTINF:-1,JIBS제주FM
