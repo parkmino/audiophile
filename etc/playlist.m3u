@@ -173,8 +173,6 @@ http://1.245.74.5:1935/live/tv/playlist.m3u8
 http://1.245.74.5/radiolive/radio_64k/playlist.m3u8
 #EXTINF:-1,KNN부산경남
 https://stream1.knn.co.kr/hls/9ly4534y7dm2xfa123r2_tv/index.m3u8
-#EXTINF:-1,http://211.220.195.200:1935/live/mp4:KnnRadio2FM.sdp/playlist.m3u8
-http://211.220.195.200:1935/live/mp4:KnnRadio2FM.sdp/playlist.m3u8
 #EXTINF:-1,KNN부산경남 파워FM
 http://211.220.195.200:1935/live/mp4:KnnRadio1FM.sdp/playlist.m3u8
 #EXTINF:-1,KNN부산경남 러브FM
