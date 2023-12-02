@@ -107,12 +107,6 @@ https://vod.mpmbc.co.kr/a_live/25246741/ch001/playlist.m3u8
 https://vod.mpmbc.co.kr/live/encoder-am/playlist.m3u8
 #EXTINF:-1,MBC목포FM4U
 https://vod.mpmbc.co.kr/live/encoder-fm/playlist.m3u8
-#EXTINF:-1,MBC부산TV
-https://stream.bsmbc.com/livetv/BusanMBC_TV_onairstream/playlist.m3u8
-#EXTINF:-1,MBC부산표준FM
-https://stream.bsmbc.com/live/mp4:BusanMBC-LiveStream-AM/playlist.m3u8
-#EXTINF:-1,MBC부산FM4U
-https://stream.bsmbc.com/live/mp4:BusanMBC-LiveStream-FM/playlist.m3u8
 #EXTINF:-1,MBC안동TV
 http://andong.webcasting.co.kr/live/mbc/playlist.m3u8
 #EXTINF:-1,MBC안동표준FM
@@ -256,10 +250,10 @@ https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8
 #EXTINF:-1,tbseFM
 https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8
 #EXTINF:-1,연변라지오TV넷 연변위성
-http://live.ybtvyun.com/video/s10016-ea30e14ae67c/index.m3u8
+http://live.ybtvyun.com/video/s10016-2415150c10e5/index.m3u8
 #EXTINF:-1,연변라지오TV넷 조선어종합채널
-http://live.ybtvyun.com/video/s10016-59ad28deee95/index.m3u8
+http://live.ybtvyun.com/video/s10016-d0a77417d5ab/index.m3u8
 #EXTINF:-1,연변라지오TV넷 한어종합채널
-http://live.ybtvyun.com/video/s10016-910c35381584/index.m3u8
+http://live.ybtvyun.com/video/s10016-e5edae3724db/index.m3u8
 #EXTINF:-1,연변라지오TV넷 보이는 라지오
 http://live.ybtvyun.com/video/s10016-1be8f17b0ab7/index.m3u8
