@@ -3,11 +3,13 @@
 
 usage () {
  echo "Usage: $(basename "$0") [ls|hdmi|usb|int] # HDMI/USB/Internal"
- echo "   or: $(basename "$0") [def|nodef]       # PCM Default On/Off"
+ echo "   or: $(basename "$0") [min|mix]         # ALSA Mode Min/Mix"
  echo "Manipulate ALSA output"
 }
 
 alsa_orig="/usr/share/alsa/alsa.conf.min"
+alsa_min="/usr/share/alsa/alsa.conf.min"
+alsa_mix="/usr/share/alsa/alsa.conf.mix"
 alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
@@ -69,8 +71,10 @@ case $1 in
 #  sudo sed -i '1ipcm{default pcm.'"$card"'}' $alsa_conf
    sudo sed -i '1ipcm{default pcm.hw}' $alsa_conf
   fi ;;
- nodef)
-   sudo cp $alsa_orig $alsa_conf ;;
+ min)
+   sudo cp $alsa_min $alsa_conf ;;
+ mix)
+   sudo cp $alsa_mix $alsa_conf ;;
  *) usage ;;
 esac
 
