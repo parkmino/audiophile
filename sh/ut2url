@@ -32,7 +32,7 @@ case $i in
  g) ch=tastyguys
     printf "#EXTM3U\n" > $m3u_dir/$ch.m3u
      nr=0
-    for url in "https://www.youtube.com/channel/UCHcsy2HkeLAus-43nKDm09Q" "https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg"; do
+    for url in "https://www.youtube.com/channel/UCHcsy2HkeLAus-43nKDm09Q" "https://www.youtube.com/channel/UCsOW9TPy2TKkqCchUHL04Fg" "https://www.youtube.com/@TastyGuys/streams"; do
      if [ "$nr" -eq 0 ]; then
       count=1
       nr=1
