@@ -131,7 +131,7 @@ if [ "$mpd" = on ]; then
  [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
  [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
 ### Upmpdcli
- [ "$upmpdcli" = on ] && systemctl start upmusicpd
+ [ "$upmpdcli" = on ] && systemctl start upmusicpdcli
 fi
 
 ### APrenderer
@@ -160,7 +160,7 @@ fi
 ### Gerbera
 [ "$gerbera" = on ] && systemctl start gerbera
 
-### Gerbera
+### myMPD
 [ "$mympd" = on ] && systemctl start mymusicpd
 
 #systemctl stop systemd-timesyncd || true

@@ -65,7 +65,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 3. Kernel option
 
 	$ sudo nano /boot/cmdline.txt
-		##root=/dev/mmcblk0p2
+		root=/dev/mmcblk0p2
 		#console=serial0,115200
 		#console=tty1
 		elevator=noop
@@ -148,10 +148,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mkdir /etc/ncmpc
 	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
 
-	$ sudo mkdir /var/lib/mpd/music/do_not_remove
-	$ sudo mv copy/blank.mp3 /var/lib/mpd/music/do_not_remove
+	$#sudo mkdir /var/lib/mpd/music/do_not_remove
+	$#sudo mv copy/blank.mp3 /var/lib/mpd/music/do_not_remove
 	$ sudo mv copy/musicpd.service /usr/lib/systemd/system/
-	$ sudo mv copy/musicpd /usr/bin/
+	$#sudo mv copy/musicpd /usr/bin/
 	$ sudo cp /usr/bin/mpd /dev/shm/ && sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 	$ sudo systemctl start musicpd
 	$ chrt -aop $(pidof mpd)
@@ -247,7 +247,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 12. Spotifyd (Not in use)
 
-	https://github.com/Spotifyd/spotifydf
+	https://github.com/Spotifyd/spotifyd
 	https://github.com/Spotifyd/spotifyd/releases/latest
 
 	$ curl -s $(curl -s https://github.com/Spotifyd/spotifyd/releases/latest | cut -d\" -f2) | grep -m1 armv6.*tar.gz | cut -d\" -f2 | wget "https://github.com/$(cat -)"
@@ -293,7 +293,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
 15. HQPlayer NAA
-	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/bullseye/networkaudiod_4.5.0-57_armhf.deb
+	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/bookworm/networkaudiod_4.5.0-57_armhf.deb
 	$ sudo dpkg -i networkaudiod*.deb
 	$ sudo systemctl disable networkaudiod
 	$ sudo cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
@@ -360,7 +360,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		IP 주소 읽기, record_voice_over, #28a745, iptts
 		웹 설정, settings, #28a745, settings
 		다시 시작, refresh, #28a745, reboot
-		전원 끄기, power_off, #28a745, poweroff
+		전원 끄기, power_settings_new, #28a745, poweroff
 
 18. ttyd
 
@@ -378,7 +378,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ systemctl status gerbera
 	$ sudo systemctl start gerbera
-	  http://rpi_ip:49152
+	  http://rpi_ip:49152 or 49153
 
 20. APlayer Media Renderer
 
@@ -495,7 +495,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	https://github.com/dumpsite/lan951x-led-ctl
 	# sudo apt-get install libusb-1.0-0-dev
 
-	$ mv copy/lan951x-led-ctl ./
+	$ mv copy/lan951x-led-ctl copy/llctl ./
 	$ sudo mv copy/*.service /lib/systemd/system/
 	$ sudo systemctl daemon-reload
 	$ sudo nano /etc/rc.local
