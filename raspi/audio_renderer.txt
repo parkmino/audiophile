@@ -41,7 +41,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 2. Configuration file
 
-	$ sudo nano /boot/config.txt
+	$ sudo nano /boot/firmware/config.txt
 		#dtparam=audio=on
 		#dtoverlay=vc4-fkms-v3d
 		#max_framebuffers=2
@@ -631,7 +631,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 33. Disable Bluetooth UART for RPI3
 
 	$ sudo systemctl disable hciuart
-	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/config.txt
+	$#printf "\ndtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt\n" | sudo tee -a /boot/firmware/config.txt
 
 34. Shirnk Image
 
