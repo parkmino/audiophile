@@ -1,0 +1,196 @@
+Recommendation for Desktop
+
+1) RAM : 8MB RAM 
+2) Booting Device : MicroSD A1 or above, USB
+3) Cooling : Passive or Active for over-clocking
+4) Power : 5V 5A
+5) OS : Linux - Raspberry Pi OS, Armbian, DietPi(not yet), Ubuntu
+         Android
+         Windows
+
+[Raspberry Pi OS]
+
+https://www.raspberrypi.com/software/operating-systems/
+Raspberry Pi OS(64-bit) with desktop
+
+1 Disable USB Current Limit
+
+1.1 Raspberry Pi configuration
+
+    "Raspberry Pi configuration" > Turn on "Disable USB Current Limit"
+
+1.2 sudo nano /boot/firmware/config.txt
+
+    usb_max_current_enable=1
+
+1.3 Remove Power & Volume "Add/Remove plugins" remove power
+
+2 ALSA Audio
+
+  $ aplay -l ; aplay -L
+  $ sudo nano /boot/firmware/config.txt
+    dtoverlay=vc4-kms-v3d,noaudio
+  $ sudo apt-get remove pluseaudio lxplug-ptbatt
+
+  Install ALSA Library v1.2.10
+
+  https://packages.debian.org/search?keywords=libasound
+  https://packages.debian.org/trixie/libasound2
+  https://packages.debian.org/trixie/libasound2-data
+
+  $ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.orig
+  $ sudo cp alsa.conf.mix /usr/share/alsa/alsa.conf
+
+3 Localization
+
+3.1 Install via English
+
+3.2 Update
+
+    $ sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
+    $ sudo apt-get install synaptic (option)
+
+3.3 Install Korean Fonts
+
+    $ sudo apt-get install fonts-noto-cjk fonts-nanum fonts-naver-d2coding
+
+3.4 Install Korean Input
+
+    ibus, fcitx, nimf, kime
+
+    https://github.com/hamonikr/nimf/wiki/Install-nimf-on-raspberry-pi-4---arm64
+
+3.5 Install chromium for Korean Input
+
+    Install chromium instead of chromium-browser for raspberry pi
+
+    $ sudo update-alternatives --config x-www-browser
+    $ sudo update-alternatives --config gnome-www-browser
+
+4 Install Brave Browser
+
+  https://github.com/brave/brave-browser
+  https://brave.com/ko/download/
+
+5 Install MPV
+
+  https://apt.fruit.je/debian/bookworm/mpv/?C=M;O=D
+
+6 Install Smplayer
+
+  https://packages.debian.org/trixie/arm64/smplayer/download
+
+7 Install MPD
+
+  $ sudo apt-get install mpd mpc ncmpc cantata
+  https://download.opensuse.org/repositories/home:/jcorporation/Debian_12/arm64/
+  https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/
+  https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upplay/
+
+8 System configuration
+
+  $ cat /proc/swaps
+  $ sudo systemctl disable dphys-swapfile
+  $ sudo swapoff -a
+  $ sudo rm /var/swap
+  $ free
+
+  $ sudo nano /etc/rc.local
+    swapoff -a
+    echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+    echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
+
+  $ sudo nano /etc/sysctl.conf
+  $ sudo sysctl -p /etc/sysctl.conf
+
+9 Theme
+
+  $ gsettings set org.gnome.desktop.interface icon-theme   'icon-theme name'
+  $ gsettings set org.gnome.desktop.interface gtk-theme    'gtk-theme name'
+  $ gsettings set org.gnome.desktop.interface cursor-theme 'cursor-theme name'
+  $ sudo apt-get install dconf-editor
+  $ dconf-editor
+
+10 Utilities
+
+   https://github.com/tsl0922/ttyd/releases
+   https://github.com/yt-dlp/yt-dlp/releases
+
+[Armbian]
+
+0 Variants
+
+0.1 Armbian Bookworm XFCE desktop (Debian)
+0.2 Armbian Noble XFCE desktop (Ubuntu Rolling releases)
+
+1 Disable zram swap
+
+  $ cat /proc/swaps
+  $ sudo nano /etc/default/armbian-zram-config
+    SWAP=false
+  $ sudo swapoff -a
+  $ cat /proc/swaps
+  $ free
+
+2 Install Firefox without snap
+
+  https://www.omgubuntu.co.uk/2022/04/how-to-install-firefox-deb-apt-ubuntu-22-04
+
+3 Install desktop environment
+
+  $ sudo apt-get install lxde
+  $ sudo apt-get remove lxappearance-obconf
+
+  $ sudo apt-get install lxqt sawfish
+
+4 Setting the default desktop environment
+
+  $ ls -l /usr/share/xsessions/
+  $ sudo nano /etc/lightdm/lightdm.conf.d/11-armbian.conf
+
+    user-session=xfce > LXDE
+
+5 Diasble services
+
+  $ sudo systemctl disable bluetooth.service cron.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
+  $ sudo systemctl stop    bluetooth.service cron.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
+
+5 Remove bluetooth
+
+  $ sudo apt-get remove pi-bluetooth
+
+[Ubuntu 23.10 mantic]
+
+Best recommendation
+
+https://ubuntu.com/download/raspberry-pi
+
+[Openbox, Sawfish, ...]
+
+1 Font configuration
+
+  $ nano ~/.Xresources
+
+    Xft.antialias: 1
+    Xft.rgba: rgb
+    Xft.hinting: 1
+    Xft.hintstyle: hintsmedium
+    Xft.dpi : 96
+    Xft.autohint: 0
+    Xft.lcdfilter: lcddefault
+
+    Xcursor.theme: DMZ-Black
+    Xcursor.size: 22
+
+2 QT configuration
+
+   $ sudo apt-get install qt5ct
+   $ qt5ct
+
+3 Sawfish error message
+
+  $ mkdir -p ~/.sawfish/lisp
+  $ cd ~/.sawfish/lisp
+  $ ln -s /usr/share/sawfish/lisp/sawfish/wm/integration/gnome.jlc
+
+  $ sudo chmod -r /etc/X11/sawfish/site-init.d/00menu.jl
