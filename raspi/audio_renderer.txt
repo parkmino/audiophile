@@ -43,7 +43,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo nano /boot/firmware/config.txt
 		#dtparam=audio=on
-		#dtoverlay=vc4-fkms-v3d
+		dtoverlay=vc4-fkms-v3d,noaudio
 		#max_framebuffers=2
 
 		[pi3+]
@@ -592,6 +592,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 	$ ps -ef | grep [d]efunct | awk '{print $3}'
+	$ ls -al /boot/config.txt /boot/firmware/config.txt
 	$ sudo systemctl disable ssh
 	$ sudo sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
 	$ grep ssh= /etc/default/audio.conf
