@@ -5,8 +5,8 @@ Recommendation for Desktop
 3) Cooling : Passive or Active for over-clocking
 4) Power : 5V 5A
 5) OS : Linux - Raspberry Pi OS, Armbian, DietPi(not yet), Ubuntu
-         Android
-         Windows
+        Android
+        Windows
 
 [Raspberry Pi OS]
 
@@ -76,6 +76,14 @@ Raspberry Pi OS(64-bit) with desktop
 
   https://apt.fruit.je/debian/bookworm/mpv/?C=M;O=D
 
+  $ nano ~/.config/mpv/mpv.conf
+
+    vo=gpu-next
+    hwdec=mmal-copy 
+    gpu-api=opengl
+    opengl-es=yes
+    opengl-glfinish=yes
+
 6 Install Smplayer
 
   https://packages.debian.org/trixie/arm64/smplayer/download
@@ -102,6 +110,9 @@ Raspberry Pi OS(64-bit) with desktop
 
   $ sudo nano /etc/sysctl.conf
   $ sudo sysctl -p /etc/sysctl.conf
+
+  $ cp dt-blob.bin.twk /boot/firmware/
+  $ cp /boot/firmware/dt-blob.bin.twk /boot/firmware/dt-blob.bin
 
 9 Theme
 
@@ -155,7 +166,7 @@ Raspberry Pi OS(64-bit) with desktop
   $ sudo systemctl disable bluetooth.service cron.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
   $ sudo systemctl stop    bluetooth.service cron.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
 
-5 Remove bluetooth
+6 Remove bluetooth
 
   $ sudo apt-get remove pi-bluetooth
 
