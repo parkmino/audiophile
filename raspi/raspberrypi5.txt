@@ -170,6 +170,12 @@ Raspberry Pi OS(64-bit) with desktop
 
   $ sudo apt-get remove pi-bluetooth
 
+7 Install nimf for Korean input
+
+  https://pkg.hamonikr.org/pool/main/n/nimf/?C=M;O=D
+
+  $ sudo dpkg -i libnimf1_1.3.0hamonikr41.1_arm64.deb nimf-libhangul_1.3.0hamonikr41.1_arm64.deb nimf_1.3.0hamonikr41.1_arm64.deb qtbase-abi-5-9-5-dummy_1.3.0hamonikr41.1_arm64.deb
+
 [Ubuntu 23.10 mantic]
 
 Best recommendation
@@ -185,7 +191,7 @@ https://ubuntu.com/download/raspberry-pi
     Xft.antialias: 1
     Xft.rgba: rgb
     Xft.hinting: 1
-    Xft.hintstyle: hintsmedium
+    Xft.hintstyle: hintslight
     Xft.dpi : 96
     Xft.autohint: 0
     Xft.lcdfilter: lcddefault
