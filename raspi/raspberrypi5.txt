@@ -1,6 +1,6 @@
 Recommendation for Desktop
 
-1) RAM : 8MB RAM 
+1) RAM : 8MB RAM
 2) Booting Device : MicroSD A1 or above, USB
 3) Cooling : Passive or Active for over-clocking
 4) Power : 5V 5A
@@ -38,7 +38,8 @@ Raspberry Pi OS(64-bit) with desktop
   https://packages.debian.org/trixie/libasound2
   https://packages.debian.org/trixie/libasound2-data
 
-  $ sudo mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.conf.orig
+  $ sudo mv /usr/share/alsa /usr/share/alsa.orig
+  $ sudo mkdir /usr/share/alsa
   $ sudo cp alsa.conf.mix /usr/share/alsa/alsa.conf
 
 3 Localization
@@ -107,6 +108,8 @@ Raspberry Pi OS(64-bit) with desktop
     swapoff -a
     echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
     echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
+    pkill pipewire
+    pkill pulseaudio
 
   $ sudo nano /etc/sysctl.conf
   $ sudo sysctl -p /etc/sysctl.conf
@@ -150,7 +153,7 @@ Raspberry Pi OS(64-bit) with desktop
 3 Install desktop environment
 
   $ sudo apt-get install lxde
-  $ sudo apt-get remove lxappearance-obconf
+  $ sudo apt-get remove lxappearance-obconf or sudo rm /usr/lib/aarch64-linux-gnu/lxappearance/plugins/obconf.so
 
   $ sudo apt-get install lxqt sawfish
 
@@ -163,8 +166,8 @@ Raspberry Pi OS(64-bit) with desktop
 
 5 Diasble services
 
-  $ sudo systemctl disable bluetooth.service cron.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
-  $ sudo systemctl stop    bluetooth.service cron.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
+  $ sudo systemctl stop    bluetooth.service cron.service cups.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
+  $ sudo systemctl disable bluetooth.service cron.service cups.service rpcbind.service rpcbind.socket rsyslog.service unattended-upgrades.service
 
 6 Remove bluetooth
 
@@ -174,6 +177,7 @@ Raspberry Pi OS(64-bit) with desktop
 
   https://pkg.hamonikr.org/pool/main/n/nimf/?C=M;O=D
 
+  $ sudo apt-get install libhangul1
   $ sudo dpkg -i libnimf1_1.3.0hamonikr41.1_arm64.deb nimf-libhangul_1.3.0hamonikr41.1_arm64.deb nimf_1.3.0hamonikr41.1_arm64.deb qtbase-abi-5-9-5-dummy_1.3.0hamonikr41.1_arm64.deb
 
 [Ubuntu 23.10 mantic]
@@ -191,7 +195,7 @@ https://ubuntu.com/download/raspberry-pi
     Xft.antialias: 1
     Xft.rgba: rgb
     Xft.hinting: 1
-    Xft.hintstyle: hintslight
+    Xft.hintstyle: hintfull
     Xft.dpi : 96
     Xft.autohint: 0
     Xft.lcdfilter: lcddefault
@@ -204,10 +208,25 @@ https://ubuntu.com/download/raspberry-pi
    $ sudo apt-get install qt5ct
    $ qt5ct
 
-3 Sawfish error message
+3 Sawfish customization
 
   $ mkdir -p ~/.sawfish/lisp
   $ cd ~/.sawfish/lisp
   $ ln -s /usr/share/sawfish/lisp/sawfish/wm/integration/gnome.jlc
 
   $ sudo chmod -r /etc/X11/sawfish/site-init.d/00menu.jl
+
+  $ sudo dpkg -i ssd_0.41-nano_all.deb
+    ssd --systemd ...
+
+  $ sudo mv /usr/share/locale/ko/LC_MESSAGES/sawfish.mo /usr/share/locale/ko/LC_MESSAGES/sawfish.mo.orig
+  $ sudo cp ~/Downloads/sawfish.mo /usr/share/locale/ko/LC_MESSAGES/sawfish.mo
+
+  $ sudo apt-get install plank
+  $ nano ~/.sawfish/rc or ~/.sawfishrc
+    (system "plank &")
+
+4 Accessibility warning message
+
+   $ nano ~/.profile
+     export NO_AT_BRIDGE=1
