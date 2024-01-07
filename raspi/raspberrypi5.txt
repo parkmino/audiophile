@@ -53,7 +53,7 @@ Raspberry Pi OS(64-bit) with desktop
 
 3.3 Install Korean Fonts
 
-    $ sudo apt-get install fonts-noto-cjk fonts-nanum fonts-naver-d2coding
+    $ sudo apt-get install fonts-noto-cjk fonts-nanum fonts-naver-d2coding # fonts-noto-cjk-extra
 
 3.4 Install Korean Input
 
@@ -78,12 +78,27 @@ Raspberry Pi OS(64-bit) with desktop
   https://apt.fruit.je/debian/bookworm/mpv/?C=M;O=D
 
   $ nano ~/.config/mpv/mpv.conf
-
+    audio-device=alsa
+    audio-exclusive=yes
+    alsa-ignore-chmap
+    audio-pitch-correction=no
+    gapless-audio=no
+    no-initial-audio-sync
+    replaygain-clip=no
+    volume-max=100.0
     vo=gpu-next
     hwdec=mmal-copy 
     gpu-api=opengl
     opengl-es=yes
     opengl-glfinish=yes
+    no-terminal
+    #log-file=/dev/null
+    msg-level=all=no
+    sub-codepage=cp949
+    sub-font=KoreanCNML
+    sub-font-size=50
+    geometry=50%:50%
+    ytdl-format='bestvideo[width<=1920][height<=1080]+bestaudio/best[width<=1920][height<=1080]'
 
 6 Install Smplayer
 
@@ -91,7 +106,7 @@ Raspberry Pi OS(64-bit) with desktop
 
 7 Install MPD
 
-  $ sudo apt-get install mpd mpc ncmpc cantata
+  $ sudo apt-get install mpd mpc ncmpc cantata # mympd upmpdcli
   https://download.opensuse.org/repositories/home:/jcorporation/Debian_12/arm64/
   https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/
   https://www.lesbonscomptes.com/upmpdcli/downloads/raspbian/pool/main/u/upplay/
@@ -115,7 +130,7 @@ Raspberry Pi OS(64-bit) with desktop
   $ sudo sysctl -p /etc/sysctl.conf
 
   $ cp dt-blob.bin.twk /boot/firmware/
-  $ cp /boot/firmware/dt-blob.bin.twk /boot/firmware/dt-blob.bin
+  $ sudo cp /boot/firmware/dt-blob.bin.twk /boot/firmware/dt-blob.bin
 
 9 Theme
 
@@ -177,8 +192,9 @@ Raspberry Pi OS(64-bit) with desktop
 
   https://pkg.hamonikr.org/pool/main/n/nimf/?C=M;O=D
 
-  $ sudo apt-get install libhangul1
+  $ sudo apt-get install im-config libhangul1
   $ sudo dpkg -i libnimf1_1.3.0hamonikr41.1_arm64.deb nimf-libhangul_1.3.0hamonikr41.1_arm64.deb nimf_1.3.0hamonikr41.1_arm64.deb qtbase-abi-5-9-5-dummy_1.3.0hamonikr41.1_arm64.deb
+  $ im-config -n nimf
 
 [Ubuntu 23.10 mantic]
 
@@ -220,13 +236,53 @@ https://ubuntu.com/download/raspberry-pi
     ssd --systemd ...
 
   $ sudo mv /usr/share/locale/ko/LC_MESSAGES/sawfish.mo /usr/share/locale/ko/LC_MESSAGES/sawfish.mo.orig
-  $ sudo cp ~/Downloads/sawfish.mo /usr/share/locale/ko/LC_MESSAGES/sawfish.mo
+  $ sudo cp sawfish.mo /usr/share/locale/ko/LC_MESSAGES/sawfish.mo
 
+  $ sudo add-apt-repository ppa:ricotz/docky
   $ sudo apt-get install plank
-  $ nano ~/.sawfish/rc or ~/.sawfishrc
+  $ nano ~/.sawfish/rc or ~/.sawfishrc for old versions
     (system "plank &")
 
 4 Accessibility warning message
 
    $ nano ~/.profile
      export NO_AT_BRIDGE=1
+
+[Android]
+
+https://github.com/raspberry-vanilla
+https://konstakang.com/devices/rpi5/
+
+1 Flash AOSP Image
+
+  $ sudo fdisk -l
+  $ sudo umount /dev/sdb?
+  $ sudo dd status=progress bs=4M if=AOSP14-20240104-KonstaKANG-rpi5.img of=/dev/sdb
+  $ sudo nano /boot/config.txt
+
+    #dtoverlay=android-sdcard
+    dtoverlay=android-usb
+    #dtoverlay=android-nvme
+
+    #dtparam=audio=on
+    dtoverlay=vc4-fkms-v3d,noaudio
+    usb_max_current_enable=1
+
+  $ sudo gparted # expand patition from 7GB to max
+
+2 Google Play (GApps)
+
+  https://github.com/MindTheGapps/14.0.0-arm64/releases
+
+  TWRP Recovery
+  Settings > System > Raspberry Pi settings > Reboot to recovery
+
+  https://www.google.com/android/uncertified/
+
+  Settings > System  > Raspberry Pi settings > ADB
+
+  $ adb connect ip:port
+  $ adb root
+  $ adb shell 'sqlite3 /data/*/*/*/gservices.db "select * from main where name = \"android_id\";"'
+
+  19 digit integer
