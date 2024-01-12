@@ -1,39 +1,5 @@
-01. Tune mpd.conf
+1. sudo nano /etc/rc.local
 
-$ sudo nano /etc/mpd.conf.sav
-
-database {
-plugin "simple"
-path "/var/lib/mpd/database"
-}
-
-02. RestrictRealtime=yes in systemd
-
-$ sudo nano /lib/systemd/system/musicpd.service
-
-[Service]
-#StandardInput=null
-StandardOutput=null
-#StandardError=null
-RestrictRealtime=yes
-
-#ExecStartPre=cp /usr/local/bin/mpd /etc/mpd.conf /dev/shm/
-ExecStart=/dev/shm/mpd /dev/shm/mpd.conf
-#ExecStartPost=musicpd
-
-$ sudo nano /lib/systemd/system/sqzlite_run.sevice
-
-[Service]
-...
-RestrictRealtime=yes
-
-$ sudo nano /etc/rc.local
-
-#sleep 3
-#musicpd
-
-#sqzlite () {
-#...
-#
-
-# && sleep 3 && sqzlite
+echo 4899048 | tee /sys/kernel/debug/sched/migration_cost_ns
+sysctl -w net.ipv4.tcp_rmem='4632 88313 3345774'
+sysctl -w net.ipv4.tcp_wmem='4582 89963 3455751'
