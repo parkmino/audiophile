@@ -123,8 +123,8 @@ Raspberry Pi OS(64-bit) with desktop
     swapoff -a
     echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
     echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
-    pkill pipewire
-    pkill pulseaudio
+    pkill pipewire   || true
+    pkill pulseaudio || true
 
   $ sudo nano /etc/sysctl.conf
   $ sudo sysctl -p /etc/sysctl.conf
