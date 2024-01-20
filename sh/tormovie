@@ -50,7 +50,7 @@ torqq () {
  tmpfile=$(mktemp)
  curl $curl_opt -L "$url" | sed 's/title=/\n/g' > "$tmpfile"
  for i in $(seq 1 10); do
-  movie=$(head -$((i+2)) "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
+  movie=$(head -$((i+3)) "$tmpfile" | tail -1 | cut -d\" -f2 | sed 's/\&amp;/\&/g; s/&#39;\|&#039;/'\''/g')
   chk_movie
   printf "    \e[34m$(grep -o "http[s]://torrentqq[0-9]*.com/torrent/mov/[0-9]*.html" "$tmpfile" | head -$i | tail -1 | cut -d\" -f2)\e[0m\n"
  done
