@@ -504,7 +504,8 @@ MPD_CANTATA_MYMPD () {
   id=$(echo "$url" | cut -d\/ -f5)
   [ "$id" = cantata ] && printf "• Cantata\t" || printf "• $id\t\t"
   release=$(curl $curl_opt $(echo "$url" | cut -d\/ -f-5)/tags | grep -m1 'releases/tag/' | cut -d'/' -f6 | cut -d'"' -f1)
-  date=$(curl $curl_opt "$url" | grep -m1 authoredDate | cut -d'"' -f18)
+ #date=$(curl $curl_opt "$url" | grep -m1 authoredDate | cut -d'"' -f18)
+  date=$(curl $curl_opt "$url" | grep -oE '"authoredDate".{0,40}' | head -1 | cut -d\" -f4)
   if [ -z "$release" ] || [ -z "$date" ]; then
    printf "\t\t\t\t정보 없음\n"
   else
@@ -529,7 +530,8 @@ MYMPD_DEV () {
  for i in $(curl -s https://github.com/jcorporation/myMPD/branches | grep -o 'branch-filter-item branch=.*' | cut -d\" -f2 | sort); do
   [ "$i" = master ] || [ "$i" = gh-pages ] && continue || printf "• myMPD Dev\t"
   url="https://github.com/jcorporation/myMPD/commits/$i"
-  date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
+ #date=$(curl $curl_opt "$url" | grep -m1 datetime | cut -d'"' -f2)
+  date=$(curl $curl_opt "$url" | grep -oE '"authoredDate".{0,40}' | head -1 | cut -d\" -f4)
   printf "$i ($(date -d "$date" +%F))"
   [ ${#i} -ge 8 ] && printf "\t" || printf "\t\t"
   days_diff
