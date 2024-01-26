@@ -1,5 +1,8 @@
 1. sudo nano /etc/rc.local
 
 echo 4899048 | tee /sys/kernel/debug/sched/migration_cost_ns
-sysctl -w net.ipv4.tcp_rmem='4632 88313 3345774'
-sysctl -w net.ipv4.tcp_wmem='4582 89963 3455751'
+
+2. sudo nano /etc/sysctl.conf
+
+net.ipv4.tcp_rmem = 4632 88313 3345774
+net.ipv4.tcp_wmem = 4582 89963 3455751
