@@ -46,18 +46,34 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		dtoverlay=vc4-fkms-v3d,noaudio
 		#max_framebuffers=2
 
+		[pi3]
+		dtparam=pwr_led_trigger=none
+		dtparam=pwr_led_activelow=off
+
 		[pi3+]
+		dtparam=pwr_led_trigger=none
+		dtparam=pwr_led_activelow=off
+		dtparam=eth_led0=14
+		dtparam=eth_led1=14
+
+		[pi4]
+		dtparam=pwr_led_trigger=default-on
+		dtparam=pwr_led_activelow=off
 		dtparam=eth_led0=4
 		dtparam=eth_led1=4
 
-		[pi4]
-		dtparam=eth_led0=14
-		dtparam=eth_led1=14
+		[pi5]
+		dtparam=pwr_led_trigger=default-on
+		dtparam=pwr_led_activelow=off
+		dtparam=eth_led0=4
+		dtparam=eth_led1=4
 
 		[all]
 		gpu_mem=16
 		disable_splash=1
 		dtoverlay=disable-bt
+		dtparam=act_led_trigger=none
+		dtparam=act_led_activelow=off
 
 	$ cat /proc/cpuinfo
 	$ cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
