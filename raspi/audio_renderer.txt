@@ -115,7 +115,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 6. Disable services
 
 	$ systemctl list-unit-files -t service | awk '$2~/enabled/'
-	$ sudo systemctl disable getty@tty1 cron triggerhappy avahi-daemon hciuart bluetooth bthelper@hci0 ModemManager # rng-tools systemd-resolved resolvconf dbus.service dbus.socket rsyslog systemd-timesyncd
+	$ sudo systemctl disable cron triggerhappy avahi-daemon hciuart bluetooth bthelper@hci0 ModemManager # getty@tty1 rng-tools systemd-resolved resolvconf dbus.service dbus.socket rsyslog systemd-timesyncd
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # systemd-journald-audit.service
 
 	$ sudo nano /etc/network/interfaces
