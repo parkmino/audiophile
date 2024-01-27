@@ -1,0 +1,82 @@
+#!/bin/sh
+#complete -W '1fm 2fm 1r 2r 3r scr rki mbcm mbc4u mbcfm sbsp sbsl cbs tbs tbse gugak stop' kr2mpd ./kr2mpd \~/kr2mpd
+
+host="127.0.0.1"
+
+usage () {
+ echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r, 3r, scr, rki(KBS라디오)"
+#echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r(KBS라디오)"
+ echo "   or: $(basename "$0") mbcfm(MBC 표준FM), mbc4u(MBC FM4U), mbcm(MBC 올댓뮤직)"
+ echo "   or: $(basename "$0") sbsp(SBS파워FM), sbsl(SBS러브FM)"
+ echo "   or: $(basename "$0") cbs(CBS음악FM), tbs(tbsFM), tbse(tbseFM), gugak(국악방송)"
+ echo "   or: $(basename "$0") http://...(Stream URL)"
+ echo "   or: $(basename "$0") stop(정지)"
+ echo "Play Korean Radio with MPD"
+}
+
+pls () {
+ url=$(echo "$1" | grep -o '.*/')$(curl -s "$1" | tail -1)
+}
+
+kbsr () {
+ url="https://code.vthanhtivi.pw/getlink/kbs/$1/playlist.m3u8"
+}
+
+mbcr () {
+#pls $(curl -s "https://miniplay.imbc.com/AACLiveURL.ashx?channel=$1&agent=android&protocol=M3U8")
+ pls $(curl -s "https://sminiplay.imbc.com/aacplay.ashx?channel=$1&protocol=M3U8&agent=webapp")
+ [ ${#url} -lt 80 ] && url=
+}
+
+sbsr () {
+ api=$(curl -s "http://api.sbs.co.kr/vod/_v1/Onair_Media_Auth_Security.jsp?channelPath=$1&streamName=$2.stream&playerType=mobile")
+ url=$(curl -s $(sbs_dec.py "$api") | tail -1)
+}
+
+duckdns () {
+ url=$(curl -s http://serpent0.duckdns.org:8088/$1.pls | head -2 | tail -1 | cut -d\= -f2-)
+}
+
+case $1 in
+ 1fm)   kbsr 24
+        #duckdns kbsfm
+        ;;
+ 2fm)   kbsr 25
+        #duckdns kbs2fm
+        ;;
+ 1r)    kbsr 21
+        #duckdns kbs1radio
+        ;;
+ 2r)    kbsr 22
+        #duckdns kbs2radio
+        ;;
+ 3r)    kbsr 23  ;;
+ scr)   kbsr 26  ;;
+ rki)   kbsr I92 ;;
+ mbcm)  mbcr chm ;;
+ mbc4u) mbcr mfm
+        #duckdns mbcfm
+        ;;
+ mbcfm) mbcr sfm
+        #duckdns mbcsfm
+        ;;
+ sbsp)  sbsr powerpc powerfm
+        #duckdns sbsfm
+        ;;
+ sbsl)  sbsr lovepc  lovefm
+        #duckdns sbs2fm
+        ;;
+ cbs)   pls "http://aac.cbs.co.kr/cbs939/cbs939.stream/playlist.m3u8" ;;
+ tbs)   pls "https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8" ;;
+ tbse)  pls "https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8" ;;
+ gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
+ stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
+ *)     if [ -n "$1" ] && [ -z "${1##http*}" ]; then
+         url="$1"
+        else
+         usage ; exit
+        fi ;;
+esac
+
+[ -z "$url" ] && echo "$1 stream is not available!" && exit
+mpc -h $host add "$url" && mpc -h $host play $(mpc -h $host playlist | wc -l)
