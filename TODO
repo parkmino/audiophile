@@ -6,3 +6,4 @@ echo 4899048 | tee /sys/kernel/debug/sched/migration_cost_ns
 
 net.ipv4.tcp_rmem = 4632 88313 3345774
 net.ipv4.tcp_wmem = 4582 89963 3455751
+vm.swappiness = 2

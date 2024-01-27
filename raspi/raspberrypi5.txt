@@ -121,6 +121,7 @@ Raspberry Pi OS(64-bit) with desktop
 
   $ sudo nano /etc/rc.local
     swapoff -a
+    sysctl -w vm.swappiness=2
     echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
     echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
     for i in pipewire pulseaudio; do
