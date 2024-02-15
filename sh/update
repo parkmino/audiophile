@@ -608,14 +608,16 @@ NEWSTAPA () {
 RASPIOS () {
  printf "• RasPiOS\t"
  url="https://www.raspberrypi.com/software/operating-systems/"
- mdy="$(curl $curl_opt "$url" | grep -o 'Raspberry Pi OS Lite.*' | cut -c -200 | grep -o "Release date:.*" | cut -d'>' -f2 | cut -d'<' -f1)"
+#mdy="$(curl $curl_opt "$url" | grep -o 'Raspberry Pi OS Lite.*' | cut -c -200 | grep -o "Release date:.*" | cut -d'>' -f2 | cut -d'<' -f1)"
+ mdy="$(curl $curl_opt https://downloads.raspberrypi.com/raspios_lite_armhf/release_notes.txt | head -1 | cut -d\: -f1)"
  if [ -z "$mdy" ]; then
   printf "\t\t\t\t정보 없음\n"
  else
-  month=$(echo $mdy | cut -d' ' -f1)
-    day=$(echo $mdy | cut -d' ' -f2 | sed 's/st\|nd\|rd\|th//')
-   year=$(echo $mdy | cut -d' ' -f3)
-   date=$(date -d $month-$day-$year +%F)
+ #month=$(echo $mdy | cut -d' ' -f1)
+ #  day=$(echo $mdy | cut -d' ' -f2 | sed 's/st\|nd\|rd\|th//')
+ # year=$(echo $mdy | cut -d' ' -f3)
+ # date=$(date -d $month-$day-$year +%F)
+   date=$(date -d $mdy +%F)
   printf "$date\t\t\t"
   days_diff
  fi
