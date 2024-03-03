@@ -158,6 +158,7 @@ Raspberry Pi OS(64-bit) with desktop
 
   $ cat /proc/swaps
   $ sudo nano /etc/default/armbian-zram-config
+    ENABLED=false
     SWAP=false
   $ sudo swapoff -a
   $ cat /proc/swaps
@@ -200,8 +201,9 @@ Raspberry Pi OS(64-bit) with desktop
 
 8 Remove network-manager
 
+  $ sudo apt-get install ifupdown isc-dhcp-client net-tools
   $ sudo apt-get purge network-manager
-  $ sudo apt-get install net-tools
+  $ sudo apt-get autoremove
   $ sudo nano /etc/network/interfaces
     auto end0
     iface end0 inet dhcp
