@@ -1,0 +1,14 @@
+[Unit]
+Description=minidlna
+
+[Service]
+#StandardInput=null
+StandardOutput=null
+#StandardError=null
+
+ExecStartPre=cp /usr/sbin/minidlnad /etc/minidlna.conf /dev/shm/
+ExecStart=/dev/shm/minidlnad -d -f /dev/shm/minidlna.conf
+#ExecStartPost=
+
+[Install]
+WantedBy=multi-user.target

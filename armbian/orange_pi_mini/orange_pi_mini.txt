@@ -1,6 +1,6 @@
-==================================
- Orange Pi Mini for Debian Buster
-==================================
+====================================
+ Orange Pi Mini for Debian Bookworm
+====================================
 
 01. Orange Pi
 
@@ -8,28 +8,28 @@
 	http://www.orangepi.org/orangepimini/
 	http://linux-sunxi.org/Xunlong_Orange_Pi_Mini
 
-02. Armbian Buster
+02. Armbian Bookworm
 
 	https://www.armbian.com/
 	https://www.armbian.com/orange-pi-mini/
 	https://docs.armbian.com
-	https://dl.armbian.com/bananapi/
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/armbian/Armbian_5.91_Bananapi_Debian_buster_next_4.19.59/Armbian_5.91_Bananapi_Debian_buster_next_4.19.59.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=/home/parkmino/Downloads/armbian/Armbian_community_24.5.0-trunk.93_Bananapi_bookworm_current_6.6.18_minimal.img of=/dev/sdc
 	$ sync
-	$ ssh root@192.168.0.x password:1234
-	  Change to new password
+	$ sudo nano /media/parkmino/armbi_root/boot/armbianEnv.txt
+	  fdtfile=sun7i-a20-orangepi-mini.dtb
+	$ ssh root@192.168.x.x # password:1234
 
+	# reboot
 	# apt-get update
-	# apt-get remove --auto-remove unattended-upgrades alsa-utils
 	# apt-get upgrade
 	# apt-get dist-upgrade
+	##apt-get remove --auto-remove unattended-upgrades alsa-utils
 
-	# dpkg-reconfigure locales
 	# dpkg-reconfigure tzdata
-	
+	# dpkg-reconfigure locales
 	# update-locale LC_ALL=ko_KR.UTF-8 LANG=ko_KR.UTF-8 LANGUAGE=ko_KR.UTF-8 LC_MESSAGES=ko_KR.UTF-8
 	# cat /etc/default/locale
 
@@ -76,96 +76,114 @@
 06. Remove service
 
 	# pstree
+
+	# apt-get install ifupdown isc-dhcp-client net-tools
+	# apt-get purge network-manager
+	# apt-get autoremove
+	# nano /etc/network/interfaces
+		 auto end0
+		 iface end0 inet dhcp
+		#iface end0 inet static
+		#netmask 255.255.255.0
+		#address 192.168.45.7
+		#gateway 192.168.45.1
+
+		#auto wlan0
+		#iface wlan0 inet dhcp
+		#wpa-ssid id
+		#wpa-psk  password
+		#wireless-essid iptime
+	# nano /etc/resolv.conf
+		 nameserver 1.0.0.1
+		#nameserver 127.0.0.1
+
 	# systemctl list-unit-files -t service | awk '$2~/enabled/'
-	# systemctl disable cron getty@tty1 ntp polkit wpa_supplicant armbian-zram-config # haveged serial-getty@ttyS0
-	# systemctl mask cron rsyslog systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # dbus dbus.socket
-	# systemctl disable armbian-hardware-monitor armbian-hardware-optimize armbian-ramlog dbus-org.freedesktop.timesync1 fake-hwclock.service resolvconf sysstat
+	# systemctl stop    cron rsyslog wpa_supplicant
+	# systemctl disable cron rsyslog wpa_supplicant
+	# systemctl mask    cron rsyslog wpa_supplicant
 
-07. Install Pakages
+	##systemctl disable cron getty@tty1 ntp polkit wpa_supplicant armbian-zram-config # haveged serial-getty@ttyS0
+	##systemctl mask cron rsyslog systemd-journald.service systemd-journald.socket systemd-journald-audit.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # dbus dbus.socket
+	##systemctl disable armbian-hardware-monitor armbian-hardware-optimize armbian-ramlog dbus-org.freedesktop.timesync1 fake-hwclock.service resolvconf sysstat
 
-	# apt-get install hdparm minidlna rygel bc ntpdate uhubctl mpc ncmpc sysv-rc-conf
+07. Disable zram swap
+
+	# cat /proc/swaps
+	# nano /etc/default/armbian-zram-config
+		ENABLED=false
+		SWAP=false
+	# swapoff -a
+	# cat /proc/swaps
+	# free
+
+08. Install Pakages
+
+	# apt-get install hdparm minidlna bc ntpdate uhubctl mpc ncmpc # rygel
 
 	# cp /sbin/hdparm /usr/bin/
 	# apt-get remove hdparm
 	# nano /etc/rc.local
-		hdparm -A1 -a1904 -B255 /dev/sda
+		hdparm -A1 -a2048 -B255 /dev/sda
 
 	# mkdir ~/.ncmpc
 	# nano ~/.ncmpc/config
-		host = 192.168.0.10
-		enable-mouse = no
+		#host = 192.168.0.10
+		 host = 127.0.0.1
+		 enable-mouse = no
 		#display-time = yes
-		enable-colors = yes
+		 enable-colors = yes
+		 ...
 
-	# systemctl disable minidlnad
-	# mv /usr/sbin/minidlnad /usr/sbin/minidlnad
-	# mv ~/minidlnad /usr/sbin/minidlnad
-	# nano -L /etc/minidlna.conf
-		media_dir=A,...
-		resize_covers=no
-	# nano /etc/rygel.conf
+	# systemctl disable minidlna
+	# nano /etc/minidlna.conf
+		 media_dir=/mnt/Music
+		#resize_covers=no
+	# nano /usr/lib/systemd/system/minidlnarun.service
+	# cp minidlnarun.service /usr/lib/systemd/system/
+	# systemctl start minidlnarun
+
+	##nano /etc/rygel.conf
 		uris=/mnt/Music
 		interface=eth0
 		monitor-changes=false
 
-	# nano ~/.profile
+	##nano ~/.profile
 		 rmmod axp20x_usb_power industrialio pinctrl_axp209 sun4i_gpadc
 		 systemctl stop systemd-udevd
 		#taskset -acp 1  $(pgrep -ox login)
 		#taskset -acp 1  $(pgrep -ox [bd]ash)
-		 export MPD_HOST=192.168.0.10
+		#export MPD_HOST=192.168.0.10
 		 stty rows 47 cols 199
 
-	# nano /lib/systemd/system/getty@.service
+	##nano /lib/systemd/system/getty@.service
 		ExecStart=-/sbin/getty/ --noclear -a root %I $TERM
 
-	# sysv-rc-conf
-		Disable minidlna
+09. /etc/sysctl.conf
 
-08. /etc/sysctl.conf
+	# nano /etc/sysctl.conf
+	# sysctl -p /etc/sysctl.conf
 
-	#kernel.printk =
-	#vm.swappiness=
+10. /etc/rc.local
 
-09. /etc/rc.local
-
-10. /etc/default/audio.conf
+11. /etc/default/audio.conf
 
 	# nano /etc/default/audio.conf
+		minidlna=on
 		ssh=off
 		serial=on
 		tfc=on
-
-11. Static IP
-
-	# nano /etc/network/interfaces
-		#source /etc/network/interfaces.d/*
-		# Network is managed by Network manager
-		auto lo
-		iface lo inet loopback
-		
-		auto  eth0
-		#iface eth0 inet dhcp
-		iface eth0 inet static
-		address	192.168.0.5
-		netmask	255.255.255.0
-	# systemctl disable network-manager.service
-	# nano /etc/resolv.conf
-		nameserver 127.0.0.1   
+		usb=off
 
 12. Replace bash with dash
 
-	# sed -i '/^root/s/bash/dash/' /etc/passwd
+	##sed -i '/^root/s/bash/dash/' /etc/passwd
 
 
-13. Build minidnla
+cf) Build minidnla
 
-	$ wget https://sourceforge.net/projects/minidlna/files/minidlna/1.2.1/minidlna-1.2.1.tar.gz
-	$ tar xvzf minidlna-1.2.1.tar.gz
-	$ cd minidlna-1.2.1
-	$ cp minidlna-1.2.1-add-support-dsd.patch minidlna-1.2.1-cover-resize.patch ./
-	$ patch -p1 < minidlna-1.2.1-add-support-dsd.patch
-	$ patch -p1 < minidlna-1.2.1-cover-resize.patch
+	$ wget https://sourceforge.net/projects/minidlna/files/minidlna/1.3.3/minidlna-1.3.3.tar.gz/download
+	$ tar xvzf minidlna-1.3.3.tar.gz
+	$ cd minidlna-1.3.3
 	$ sudo apt-get install autopoint debhelper dh-autoreconf libavcodec-dev libavformat-dev libavutil-dev libexif-dev libflac-dev libid3tag0-dev libjpeg-dev libogg-dev libsqlite3-dev libvorbis-dev
 	$ export CFLAGS="-O2" ; export CXXFLAGS="-O2" ; export CPPFLAGS="-O2"
 	$ ./configure
@@ -178,5 +196,5 @@
 	$ minidlnad -V
 	$ cp ./minidlna.conf ./minidlna.conf.orig
 	$ sed -i 's/^[ \t]*//; s/[ \t]*$//; /^#/d; /^$/d' ./minidlna.conf
-	$ nano -L ./minidlna.conf
+	$ nano ./minidlna.conf
 	$ sudo cp ./minidlna.conf /etc/
