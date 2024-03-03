@@ -198,9 +198,27 @@ Raspberry Pi OS(64-bit) with desktop
   $ sudo dpkg -i libnimf1_1.3.0hamonikr41.1_arm64.deb nimf-libhangul_1.3.0hamonikr41.1_arm64.deb nimf_1.3.0hamonikr41.1_arm64.deb qtbase-abi-5-9-5-dummy_1.3.0hamonikr41.1_arm64.deb
   $ im-config -n nimf
 
+8 Remove network-manager
+
+  $ sudo apt-get purge network-manager
+  $ sudo apt-get install net-tools
+  $ sudo nano /etc/network/interfaces
+    auto end0
+    iface end0 inet dhcp
+   #iface end0 inet static
+   #netmask 255.255.255.0
+   #address 192.168.45.7
+   #gateway 192.168.45.1
+
+    auto wlan0
+    iface wlan0 inet dhcp
+    wpa-ssid id
+    wpa-psk  password
+   #wireless-essid iptime
+
 [Ubuntu 23.10 mantic]
 
-Best recommendation
+Recommended
 
 https://ubuntu.com/download/raspberry-pi
 
