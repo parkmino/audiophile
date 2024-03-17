@@ -121,7 +121,6 @@ Raspberry Pi OS(64-bit) with desktop
 
   $ sudo nano /etc/rc.local
     swapoff -a
-    sysctl -w vm.swappiness=2
     echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
     echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
     for i in pipewire pulseaudio; do
@@ -217,6 +216,26 @@ Raspberry Pi OS(64-bit) with desktop
     wpa-ssid id
     wpa-psk  password
    #wireless-essid iptime
+
+9 vm.swappiness
+
+  $ sudo nano /etc/rc.local
+
+    if [ "$(grep vm.swap /etc/sysctl.conf | cut -d\= -f2)" -ne 2 ]; then
+     sed -i 's/vm.swap.*/vm.swappiness = 2/' /etc/sysctl.conf
+     sysctl -w vm.swappiness=2
+    fi
+
+  $ sudo nano /usr/local/bin/update
+
+    sudo apt-get update && sudo apt-get -o APT::Get::Always-Include-Phased-Updates=true dist-upgrade && sudo apt-get clean
+    [ -n "$(pgrep packagekitd)" ] && sudo pkill packagekitd
+    if [ "$(grep vm.swap /etc/sysctl.conf | cut -d\= -f2)" -ne 2 ]; then
+     echo
+     grep vm.swap /etc/sysctl.conf
+     sudo sed -i 's/vm.swap.*/vm.swappiness = 2/' /etc/sysctl.conf
+     sudo sysctl -w vm.swappiness=2
+    fi
 
 [Ubuntu 23.10 mantic]
 
