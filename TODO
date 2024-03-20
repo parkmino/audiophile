@@ -4,8 +4,8 @@ echo 4899048 | tee /sys/kernel/debug/sched/migration_cost_ns
 
 2. sudo nano /etc/sysctl.conf
 
-net.ipv4.tcp_rmem = 4632 88313 3345774
-net.ipv4.tcp_wmem = 4582 89963 3455751
+net.ipv4.tcp_rmem = 4632 88314 3345777
+net.ipv4.tcp_wmem = 4582 89964 3455754
 vm.swappiness = 2
 
 3. sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
