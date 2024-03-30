@@ -4,10 +4,10 @@ echo 4899048 | tee /sys/kernel/debug/sched/migration_cost_ns
 
 2. sudo nano /etc/sysctl.conf
 
-net.ipv4.tcp_rmem = 4632 88314 3345777
-net.ipv4.tcp_wmem = 4582 89964 3455754
-vm.max_map_count = 672152
-vm.swappiness = 2
+ net.ipv4.tcp_rmem = 4632 88314 3345777
+ net.ipv4.tcp_wmem = 4582 89964 3455754
+ vm.max_map_count = 672152
+#vm.swappiness = 0
 
 3. sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
 
@@ -16,11 +16,7 @@ pcm.default{  type hw card 0 device 0 subdevice 0}
 4. sudo nano /etc/mpd.conf
 
 input_cache {
-size "472 MB"
+size "467 MB"
 }
 
-For RPI
-
-input_cache {
-size "128 MB" or "256 MB"
-}
+[ $(cat /proc/meminfo | grep MemFree | awk '{print $2}') -gt 614400 ] && echo cp /etc/mpd.conf.sav.input_cache /dev/shm/mpd.conf || echo /etc/mpd.conf.sav /dev/shm/mpd.conf
