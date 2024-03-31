@@ -16,7 +16,7 @@ pcm.default{  type hw card 0 device 0 subdevice 0}
 4. sudo nano /etc/mpd.conf
 
 input_cache {
-size "467 MB"
+size "464 MB"
 }
 
 [ $(cat /proc/meminfo | grep MemFree | awk '{print $2}') -gt 614400 ] && echo cp /etc/mpd.conf.sav.input_cache /dev/shm/mpd.conf || echo /etc/mpd.conf.sav /dev/shm/mpd.conf
