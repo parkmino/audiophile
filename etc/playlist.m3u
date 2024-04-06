@@ -70,7 +70,7 @@ https://code.vthanhtivi.pw/getlink/kbs/26/playlist.m3u8
 #EXTINF:-1,KBS WORLD Multilingual
 https://code.vthanhtivi.pw/getlink/kbs/wink11/playlist.m3u8
 #EXTINF:-1,KBS WORLD English
-https://code.vthanhtivi.pw/getlink/kbs/wink11/playlist.m3u8
+https://code.vthanhtivi.pw/getlink/kbs/I92/playlist.m3u8
 #EXTINF:-1,MBC강원영동TV
 http://123.254.72.24:1935/tvlive/livestream2/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM
@@ -78,11 +78,11 @@ http://123.254.72.24:1935/amlive/livestream/playlist.m3u8
 #EXTINF:-1,MBC강원영동FM4U
 http://123.254.72.24:1935/fmlive/livestream/playlist.m3u8
 #EXTINF:-1,MBC경남TV
-https://624a79c87201d.streamlock.net/MBCTV/TV1.stream/playlist.m3u8
+https://wowza.mbcgn.kr/MBCTV/TV1.stream/playlist.m3u8
 #EXTINF:-1,MBC경남표준FM
-https://624a79c87201d.streamlock.net/MBCFM/TV2.stream/playlist.m3u8
+https://wowza.mbcgn.kr/MBCFM/TV2.stream/playlist.m3u8
 #EXTINF:-1,MBC경남FM4U
-https://624a79c87201d.streamlock.net/MBCFM4U/TV3.stream/playlist.m3u8
+https://wowza.mbcgn.kr/MBCFM4U/TV3.stream/playlist.m3u8
 #EXTINF:-1,MBC광주TV
 http://media.kjmbc.co.kr:1935/live/stream/playlist.m3u8
 #EXTINF:-1,MBC광주표준FM
@@ -107,24 +107,12 @@ https://vod.mpmbc.co.kr/a_live/25246741/ch001/playlist.m3u8
 https://vod.mpmbc.co.kr/live/encoder-am/playlist.m3u8
 #EXTINF:-1,MBC목포FM4U
 https://vod.mpmbc.co.kr/live/encoder-fm/playlist.m3u8
-#EXTINF:-1,MBC안동TV
-http://andong.webcasting.co.kr/live/mbc/playlist.m3u8
-#EXTINF:-1,MBC안동표준FM
-http://andong.webcasting.co.kr/live/amlive/playlist.m3u8
-#EXTINF:-1,MBC안동FM4U
-http://andong.webcasting.co.kr/live/fmlive/playlist.m3u8
 #EXTINF:-1,MBC여수TV
 https://5c3639aa99149.streamlock.net/live_TV/tv/playlist.m3u8
 #EXTINF:-1,MBC여수표준FM
 https://5c3639aa99149.streamlock.net/표준FM/표준FM_Audio/playlist.m3u8
 #EXTINF:-1,MBC여수FM4U
 https://5c3639aa99149.streamlock.net/FM4U/FM4U_Audio/playlist.m3u8
-#EXTINF:-1,MBC울산TV
-https://5ddfd163bd00d.streamlock.net:443/nHDTV/nHDTV/playlist.m3u8
-#EXTINF:-1,MBC울산표준FM
-https://5ddfd163bd00d.streamlock.net:443/STDFM/STDFM/playlist.m3u8
-#EXTINF:-1,MBC울산FM4U
-https://5ddfd163bd00d.streamlock.net:443/FM4U/FM4U/playlist.m3u8
 #EXTINF:-1,MBC전주TV
 https://5ee9633b25727.streamlock.net:443/jmbc_tv/jmbc_tv.stream/playlist.m3u8
 #EXTINF:-1,MBC전주표준FM
@@ -134,9 +122,9 @@ https://5ee9633b25727.streamlock.net:443/jmbc_fm4u/myStream/playlist.m3u8
 #EXTINF:-1,MBC제주TV
 https://wowza.jejumbc.com/live/tv_jejumbc/playlist.m3u8
 #EXTINF:-1,MBC제주표준FM
-https://wowza.jejumbc.com/live/_definst_/mp3:radio2/playlist.m3u8
+https://onairfm.jejumbc.com/hls/onairfmjejumbc/index.m3u8
 #EXTINF:-1,MBC제주FM4U
-https://wowza.jejumbc.com/live/_definst_/mp3:radio2/playlist.m3u8
+https://onairsfm.jejumbc.com/hls/onairsfmjejumbc/index.m3u8
 #EXTINF:-1,MBC춘천TV
 https://stream.chmbc.co.kr/TV/myStream/playlist.m3u8
 #EXTINF:-1,MBC춘천표준FM
@@ -158,7 +146,7 @@ http://119.200.131.11:1935/KBCTV/tv/playlist.m3u8
 #EXTINF:-1,KBC광주FM
 http://119.200.131.11:1935/KBCFM/kbcra_aac/playlist.m3u8
 #EXTINF:-1,TBC대구TV
-http://203.251.91.122:1935/on-air/tv/playlist.m3u8
+http://203.251.91.122:1935/on-air-Backup/tv/playlist.m3u8
 #EXTINF:-1,TBC대구FM
 http://203.251.91.122:1935/on-air/fm/playlist.m3u8
 #EXTINF:-1,TJB대전TV
@@ -197,8 +185,6 @@ http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8
 http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
 #EXTINF:-1,국회방송
 https://m.webcast.go.kr/live/_definst_/smil:natv_720p.smil/playlist.m3u8
-#EXTINF:-1,머니투데이방송
-http://moneytoday1.ktcdn.co.kr:1935/mtnlive/720/playlist.m3u8
 #EXTINF:-1,방송대학TV
 https://live.knou.ac.kr/knou1/live1/playlist.m3u8
 #EXTINF:-1,복지TV
@@ -219,6 +205,8 @@ http://1.201.160.177:1935/live/myStream/playlist.m3u8
 https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8
 #EXTINF:-1,한국가요채널
 http://live.kytv.co.kr:8080/hls/stream.m3u8
+#EXTINF:-1,한국낚시방송
+http://media.fishingtv.kr:1935/mobileLIVE/_definst_/mp4:livestream.sdp/playlist.m3u8
 #EXTINF:-1,한국농업방송
 https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 #EXTINF:-1,한국직업방송
