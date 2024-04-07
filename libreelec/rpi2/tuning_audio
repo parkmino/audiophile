@@ -12,6 +12,7 @@ if [ ! -e /storage/.config/audio_patched ] && [ -d /storage/.config/ ] && [ -d /
  cp /etc/sysctl.conf /storage/.config/sysctl.d/
  cp /etc/audio.conf /etc/autostart.sh /storage/.config/
  cp /etc/plugin.*.zip /storage/backup/
+ cp /etc/advancedsettings.xml /storage/.kodi/userdata/
  touch /storage/.config/audio_patched
  sync
  sleep 1

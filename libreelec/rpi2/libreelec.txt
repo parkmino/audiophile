@@ -43,7 +43,7 @@ LibreELEC 11.0-nightly-20231008-3c43828 (Libre Embedded Linux Entertainment Cent
 	$ cp ../copy/*.pls ../copy/*.m3u etc/
 	$ cp ../../kodi/plugin.audio.kr2kodi.zip etc/
 	$ cp ../copy/libprocps.so.7 usr/lib/
-	$ cp ../{audio.conf,autostart.sh,sysctl.conf} etc/
+	$ cp ../{audio.conf,autostart.sh,sysctl.conf,advancedsettings.xml} etc/
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.{service,target} usr/lib/systemd/system/
 	$ ln -sf ../tuning_audio.service usr/lib/systemd/system/kodi.service.wants/tuning_audio.service
