@@ -33,10 +33,9 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get autoremove
 	$ sudo apt-get clean
 
-	$ sudo apt-get install bc ntpdate python3-pycryptodome uhubctl
+	$ sudo apt-get install bc python3-pycryptodome uhubctl # ntpdate
 	$ mkdir ~/copy
 
-	$#scp rc.local alsa.conf.{min,mix,plug} libasound.so.2.0.0.{min,mix} libaudiofile.so.1.0.0 libFLAC.so.8.3.0 mpd mpd.conf kr2mpd sbs_dec.py ut2mpd tts2mpd *.pls *.m3u icon.png llctl spotifyd.conf audio.conf audio-config audioconf roonup pi@$ip:/home/pi/copy/
 	$ scp -r /home/parkmino/Downloads/raspi/copy/* pi@$ip:/home/pi/copy/
 
 2. Configuration file
@@ -80,8 +79,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 3. Kernel option
 
-	$ sudo nano /boot/cmdline.txt
-		root=/dev/mmcblk0p2
+	$ sudo nano /boot/firmware/cmdline.txt
+		#root=/dev/mmcblk0p2
 		#console=serial0,115200
 		#console=tty1
 		elevator=noop
@@ -131,7 +130,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 6. Disable services
 
 	$ systemctl list-unit-files -t service | awk '$2~/enabled/'
-	$ sudo systemctl disable cron triggerhappy avahi-daemon hciuart bluetooth bthelper@hci0 ModemManager # getty@tty1 rng-tools systemd-resolved resolvconf dbus.service dbus.socket rsyslog systemd-timesyncd
+	$ sudo systemctl disable cron triggerhappy avahi-daemon hciuart bluetooth ModemManager # bthelper@hci0 getty@tty1 rng-tools systemd-resolved resolvconf dbus.service dbus.socket rsyslog systemd-timesyncd
 	$ sudo systemctl mask systemd-journald.service systemd-journald.socket systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journal-flush systemd-logind # systemd-journald-audit.service
 
 	$ sudo nano /etc/network/interfaces
@@ -157,17 +156,18 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get install libcue2 libaudiofile1 libavformat59 libflac12 libid3tag0 libmpdclient2 libupnp13 # libcurl3-gnutls
 	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
 	$ sudo mv copy/mpd /usr/bin/
-	$ sudo mv copy/mpd.conf /etc/mpd.conf.sav
+	$ sudo mv copy/mpd.conf.* /etc/
 	$ sudo mpd /etc/mpd.conf.sav
 	
 	$ sudo apt-get install mpc ncmpc
 	$ sudo mkdir /etc/ncmpc
 	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
+	$ ncmpc
 
 	$#sudo mkdir /var/lib/mpd/music/do_not_remove
 	$#sudo mv copy/blank.mp3 /var/lib/mpd/music/do_not_remove
-	$ sudo mv copy/musicpd.service /usr/lib/systemd/system/
 	$#sudo mv copy/musicpd /usr/bin/
+	$ sudo mv copy/musicpd.service /usr/lib/systemd/system/
 	$ sudo cp /usr/bin/mpd /dev/shm/ && sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 	$ sudo systemctl start musicpd
 	$ chrt -aop $(pidof mpd)
@@ -283,7 +283,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	https://github.com/philippe44/AirConnect
 
-	$ mv copy/airupnp-arm-static ./
+	$ mv copy/airupnp-linux-arm-static ./
 
 14. Shairport-sync (Not in use)
 
@@ -309,7 +309,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable avahi-daemon shairport-sync
 
 15. HQPlayer NAA
-	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/bookworm/networkaudiod_4.5.0-57_armhf.deb
+	$ wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/bookworm/networkaudiod_5.0.1-60_armhf.deb
 	$ sudo dpkg -i networkaudiod*.deb
 	$ sudo systemctl disable networkaudiod
 	$ sudo cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
@@ -329,11 +329,18 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$#consf naa
 
 16. Squeezelite
-	$ mv copy/squeezelite ./
+
+	https://github.com/ralph-irving/squeezelite
+	https://sourceforge.net/projects/lmsclients/files/squeezelite/linux/
+
 	$#sudo apt-get install squeezelite
 	$#sudo sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"pcm.hw"/' /etc/default/squeezelite
 
+	$ mv copy/squeezelite ./
+
 17. myMPD
+
+	https://github.com/jcorporation/myMPD
 
 	$ sudo apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev # liblua5.3-dev
 	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
@@ -345,7 +352,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo apt-get install lrzsz liblua5.4-0 # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
 
-	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_10/armhf/$(cat -)"
+	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_12/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_12/armhf/$(cat -)"
 	$ sudo dpkg -i mympd*.deb
 	
 	$ sudo dpkg -i copy/mympd*.deb
@@ -384,19 +391,37 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ chmod +x ~/ttyd.armhf
 	$ sudo mv ~/ttyd.armhf /usr/bin/ttyd
 	
-	$ sudo mv copy/ttyd /usr/bin/
+	$#sudo mv copy/ttyd /usr/bin/
 
 19. Gerbera
 
+	https://github.com/gerbera/gerbera
 	https://gerbera.jfrog.io/ui/native/debian/pool/main/g/gerbera/
-	$ wget https://gerbera.jfrog.io/artifactory/debian/pool/main/g/gerbera/gerbera_1.12.1-bookworm1_armhf.deb
-	$ sudo apt install ./gerbera_1.12.1-bookworm1_armhf.deb
+
+	$#apt-cache policy gerbera
+	$#sudo apt-get install gerbera
+
+	$#wget https://gerbera.jfrog.io/artifactory/debian/pool/main/g/gerbera/gerbera_1.12.1-bookworm1_armhf.deb
+	$#wget http://archive.raspbian.org/raspbian/pool/main/g/gerbera/gerbera_2.0.0%2Bdfsg-1_armhf.deb
+	$ sudo apt install ./copy/gerbera_1.12.1-bookworm1_armhf.deb
 
 	$ systemctl status gerbera
 	$ sudo systemctl start gerbera
 	  http://rpi_ip:49152 or 49153
 
-20. APlayer Media Renderer
+20. Logitech Media Server
+
+	https://github.com/LMS-Community/slimserver
+	https://lms-community.github.io/lms-server-repository/
+
+	$ wget https://downloads.slimdevices.com/LogitechMediaServer_v8.5.0/logitechmediaserver_8.5.0_arm.deb
+	$ sudo apt install ./copy/logitechmediaserver_8.5.0_arm.deb
+
+	  http://rpi_ip:9000
+	
+	$ sudo systemctl disable logitechmediaserver
+
+21. APlayer Media Renderer
 
 	$ wget http://albumplayer.ru/linux/aprenderer-arm32.tar.gz
 	$ tar xvzf aprenderer*.tar.gz
@@ -409,7 +434,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		Preload buffer     [108788]
 		Gapless mode       [ ]
 		ALSA Period frames [3739]
-		ALSA Buffer frames [14944]
+		ALSA Buffer frames [14943]
 		DSP                [original]
 				   [ ] Multi-thread mode
 		System		   [V] Lock memory
@@ -424,7 +449,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	  http://rpi_ip:7779
 	$ sudo systemctl stop aprenderer
 
-21. Build libaudiofile libFLAC
+22. Build libaudiofile libFLAC
 
 	$ sudo apt-get update
 	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
@@ -468,7 +493,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo cp /usr/local/lib/libFLAC.so.8.3.0 /usr/lib/arm-linux-gnueabihf/libFLAC.so.12.0.0.sav
 	$ sudo rm /usr/local/lib/libFLAC*
 
-22. Tweak ALSA
+23. Tweak ALSA
 
 	$ ls -al /usr/lib/arm-linux-gnueabihf/libasound*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
@@ -484,12 +509,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo nano /lib/modprobe.d/aliases.conf
 		#options snd-usb-audio index=-2
 	$ sudo mkdir /usr/share/alsa
-	$ sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+	$#sudo cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
 	$ sudo mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
 
-	# sed -i 's/pcm.0.card 0/pcm.0.card 1/' /usr/share/alsa/alsa.conf.{min,mix,plug}
-
-23. Tweak decoder libraries
+24. Tweak decoder libraries
 
 	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{audiofile,FLAC.so}*
 	$ sudo mv /usr/lib/arm-linux-gnueabihf/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
@@ -506,55 +529,56 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo ldconfig
 	$ ls -al /usr/lib/arm-linux-gnueabihf/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 
-24. Edit /etc/rc.local
+25. Edit /etc/rc.local
 
 	https://github.com/dumpsite/lan951x-led-ctl
-	# sudo apt-get install libusb-1.0-0-dev
 
+	$ sudo apt-get install libusb-1.0-0-dev
 	$ mv copy/lan951x-led-ctl copy/llctl ./
 	$ sudo mv copy/*.service /lib/systemd/system/
 	$ sudo systemctl daemon-reload
 	$ sudo nano /etc/rc.local
 
-25. Sysctl Configuration
+26. Sysctl Configuration
 
 	$ sudo nano /etc/sysctl.conf
 	$ sudo sysctl -p /etc/sysctl.conf
 
-26. Tweak dt-blob.bin
+27. Tweak dt-blob.bin
 
 	$ sudo mv copy/dt-blob.bin.twk /boot/firmware/
 
-27. audio-config
+28. audio-config
 
 	$ sudo mv copy/{audio-config,audioconf,consf} /usr/bin/
 	$ sudo mv copy/audio.conf /etc/default/
 	$ audio-config
 	$ audioconf
 
-28. CIFS & NFS & USB mounting
+29. CIFS & NFS & USB mounting
 
 	$#sudo apt-get install cifs-utils nfs-common
 	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
 	$ sudo ln -s /mnt/ /var/lib/mpd/music
 	$ sudo nano /etc/fstab
-		#PARTUUID=...
-		#PARTUUID=...
-		/dev/mmcblk0p1  /boot/firmware  vfat    defaults          0       2
-		/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
-		/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
+		PARTUUID=...
+		PARTUUID=...
+		#/dev/mmcblk0p1  /boot/firmware  vfat    defaults          0       2
+		#/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
+
+		#/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
 		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
 
-29. Disabel swap
+30. Disabel swap
 
 	$ cat /proc/swaps
 	$ sudo systemctl disable dphys-swapfile
 	$ sudo swapoff -a
 	$ sudo rm /var/swap
 
-30. Plexdrive (Google Drive)
+31. Plexdrive (Google Drive)
 
 	https://github.com/dweidenfeld/plexdrive
 	https://github.com/dweidenfeld/plexdrive/releases/latest
@@ -584,7 +608,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl start plexdrive.service
 	$ sudo systemctl enable plexdrive.service
 
-31. Wondershaper
+32. Wondershaper
 
 	https://github.com/magnific0/wondershaper
 	
@@ -602,7 +626,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		[ "$wondershaper" = on ] && wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 		[ "$wondershaper" = on ] && /home/pi/wondershaper -c -a $(ifconfig | grep -o ^[a-z0-9]* | grep -v lo)
 
-32. Make Image
+33. Make Image
 
 	# Remove all the sound devices
 

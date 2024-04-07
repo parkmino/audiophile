@@ -3,7 +3,7 @@
 usage () {
  echo "Usage: $(basename "$0") mpd [dop|pcm|vol|sta|tag] [on|off]"
  echo "   or: $(basename "$0") upmpd [set]"
- echo "   or: $(basename "$0") [airplay|aprenderer|naa|roon|spotify|sqzlite|mympd|ssh|upmpdcli|upnp|gerbera|dtblob] [on|off]"
+ echo "   or: $(basename "$0") [airplay|aprenderer|naa|roon|spotify|sqzlite|mympd|ssh|upmpdcli|upnp|gerbera|lms|dtblob] [on|off]"
  echo "   or: $(basename "$0") build"
  echo "Consult and configure MPD and other features"
 }
@@ -67,6 +67,9 @@ case "$1:$2:$3" in
  gerbera:on:*)     sudo sed -i '/gerbera=/s/=.*/=on/'  $audio_conf				;;
  gerbera:off:*)    sudo sed -i '/gerbera=/s/=.*/=off/' $audio_conf				;;
  gerbera:*)        grep ^gerbera= $audio_conf | cut -d= -f2					;;
+ lms:on:*)         sudo sed -i '/lms=/s/=.*/=on/'  $audio_conf					;;
+ lms:off:*)        sudo sed -i '/lms=/s/=.*/=off/' $audio_conf					;;
+ lms:*)            grep ^lms= $audio_conf | cut -d= -f2						;;
  dtblob:on:*)      sudo cp /boot/firmware/dt-blob.bin.twk /boot/firmware/dt-blob.bin		;;
  dtblob:off:*)     sudo rm /boot/firmware/dt-blob.bin						;;
  dtblob:*)         [ -f /boot/firmware/dt-blob.bin ] && echo on || echo off			;;

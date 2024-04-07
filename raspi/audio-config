@@ -101,9 +101,9 @@ i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
 "4" "Disable USB 4/5 signal & all power  USB 4/5 신호와 모든 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/usb=/s/=.*/=on/'		$audio_conf ;;
- 2) sudo sed -i '/usb=/s/=.*/=PWR_OFF/'		$audio_conf ;;
- 3) sudo sed -i '/usb=/s/=.*/=USB45_SIG_OFF/'	$audio_conf ;;
+ 1) sudo sed -i '/usb=/s/=.*/=on/'			$audio_conf ;;
+ 2) sudo sed -i '/usb=/s/=.*/=PWR_OFF/'			$audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=USB45_SIG_OFF/'		$audio_conf ;;
  4) sudo sed -i '/usb=/s/=.*/=USB45_SIG_PWR_OFF/'	$audio_conf ;;
 esac ;;
  a020d3)
@@ -122,7 +122,7 @@ i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
 case $i in
  1) sudo sed -i '/usb=/s/=.*/=on/'			$audio_conf ;;
  2) sudo sed -i '/usb=/s/=.*/=3B+_PWR_OFF/'		$audio_conf ;;
- 3) sudo sed -i '/usb=/s/=.*/=3B+_USB45_SIG_OFF/'		$audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=3B+_USB45_SIG_OFF/'	$audio_conf ;;
  4) sudo sed -i '/usb=/s/=.*/=3B+_USB45_SIG_PWR_OFF/'	$audio_conf ;;
 esac ;;
  a03111|b03111|b03112|b03114|c0311|c03112|c03114|d03114)
@@ -140,9 +140,9 @@ i=$(whiptail --title "USB signal & power / USB 신호와 전원" --menu "\
 "4" "Disable USB2/3  power           USB2/3 전원 끄기" 3>&1 1>&2 2>&3)
 
 case $i in
- 1) sudo sed -i '/usb=/s/=.*/=on/'		$audio_conf ;;
- 2) sudo sed -i '/usb=/s/=.*/=4B_USB2_PWR_OFF/'	$audio_conf ;;
- 3) sudo sed -i '/usb=/s/=.*/=4B_USB3_PWR_OFF/'	$audio_conf ;;
+ 1) sudo sed -i '/usb=/s/=.*/=on/'			$audio_conf ;;
+ 2) sudo sed -i '/usb=/s/=.*/=4B_USB2_PWR_OFF/'		$audio_conf ;;
+ 3) sudo sed -i '/usb=/s/=.*/=4B_USB3_PWR_OFF/'		$audio_conf ;;
  4) sudo sed -i '/usb=/s/=.*/=4B_USB23_PWR_OFF/'	$audio_conf ;;
 esac ;;
  *)
@@ -250,33 +250,28 @@ fi
 }
 
 features () {
-i=$(whiptail --title "UPnP, AirPlay, NAA, Roon, Spotify, Squeezebox" --checklist "UPnP, AirPlay, NAA, Roon Bridge, Spotify, Squeezebox" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 15 62 8 \
+i=$(whiptail --title "UPnP, AirPlay, NAA, Roon, Spotify, LMS" --checklist "UPnP, AirPlay, NAA, Roon Bridge, Spotify, LMS" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 15 62 9 \
 "aprndr"  "Enable APrenderer     AP렌더러     사용" $(consf aprenderer) \
 "upmpd"   "Enable Upmpdcli       Upmpdcli     사용"  $(consf upmpdcli) \
-"gerbera" "Enable Gerbera        미디어서버   사용" $(consf gerbera) \
 "airplay" "Enable AirPlay        에어플레이   사용" $(consf airplay) \
 "naa"     "Enable HQPlayer NAA   HQPlayer NAA 사용"  $(consf naa) \
 "roon"    "Enable Roon Bridge    룬 브리지    사용" $(consf roon) \
 "spotify" "Enable Spotify        스포티파이   사용" $(consf spotify) \
-"sqzlite" "Enable Squeezebox     스퀴즈박스   사용" $(consf sqzlite) 3>&1 1>&2 2>&3)
+"sqzlite" "Enable Squeezebox     스퀴즈박스   사용" $(consf sqzlite) \
+"gerbera" "Enable Gerbera        미디어서버   사용" $(consf gerbera) \
+"lms"     "Enable LMS            미디어서버   사용" $(consf lms) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then
  [[ $i =~ aprndr  ]] && consf aprenderer on || consf aprenderer off
  [[ $i =~ upmpd   ]] && consf upmpdcli   on || consf upmpdcli   off
- [[ $i =~ gerbera ]] && consf gerbera    on || consf gerbera    off
  [[ $i =~ airplay ]] && consf airplay    on || consf airplay    off
  [[ $i =~ naa     ]] && consf naa        on || consf naa        off
  [[ $i =~ roon    ]] && consf roon       on || consf roon       off
  [[ $i =~ spotify ]] && consf spotify    on || consf spotify    off
  [[ $i =~ sqzlite ]] && consf sqzlite    on || consf sqzlite    off
-#if [[ $i =~ tidal ]]; then
-# ! [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Installing upmpdcli-tidal..." && sudo dpkg -i /home/pi/copy/upmpdcli-tidal*.deb
-# sudo sed -i '/tidal=/s/=.*/=on/' $audio_conf
-#else
-# [ -e /usr/share/upmpdcli/cdplugins/tidal/tidal-app.py ] && echo "Uninstalling upmpdcli-tidal..." && sudo dpkg -r upmpdcli-tidal
-# sudo sed -i '/tidal=/s/=.*/=off/' $audio_conf
-#fi
+ [[ $i =~ gerbera ]] && consf gerbera    on || consf gerbera    off
+ [[ $i =~ lms     ]] && consf lms        on || consf lms        off
 fi
 }
 
@@ -311,10 +306,10 @@ while true; do
  "1"  "Audio device               오디오 장치            >" \
  "2"  "MPD options                MPD 옵션               >" \
  "3"  "Change renderer name       렌더러 이름 바꾸기     >" \
- "4"  "UPnP, AirPlay, NAA, Roon, Spotify, Squeezebox     >" \
- "5"  "DT-BLOB.BIN Tweak          DT-BLOB.BIN 트윅       >" \
+ "4"  "UPnP, NAA, Roon, ...       UPnP, Roon 등 지원     >" \
+ "5"  "USB signal & power         USB 신호와 전원        >" \
  "6"  "Ethernet IP                유선 IP 설정           >" \
- "7"  "USB signal & power         USB 신호와 전원        >" \
+ "7"  "DT-BLOB.BIN Tweak          DT-BLOB.BIN 트윅       >" \
  "8"  "IP TTS, DBus               IP TTS와 DBus          >" \
  "9"  "Roon Bridge Update         룬 브리지 업데이트      " \
  "0"  "BASH                       쉘 명령어" 3>&1 1>&2 2>&3)
@@ -327,9 +322,9 @@ while true; do
   2)  mpd_options	;;
   3)  renderer_name	;;
   4)  features		;;
-  5)  dtblob		;;
+  5)  usb_signal_power	;;
   6)  ethernet_ip	;;
-  7)  usb_signal_power	;;
+  7)  dtblob		;;
   8)  dbus_tts		;;
   9)  roonup		;;
   0)  bash		;;
