@@ -40,6 +40,7 @@
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
+ sysctl -w vm.max_map_count=672152
  sysctl -w vm.memory_failure_recovery=0
  sysctl -w vm.oom_dump_tasks=0
  sysctl -w vm.oom_kill_allocating_task=1
@@ -55,8 +56,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4630 88309 3345770'
- sysctl -w net.ipv4.tcp_wmem='4581 89962 3455749'
+ sysctl -w net.ipv4.tcp_rmem='4632 88314 3345777'
+ sysctl -w net.ipv4.tcp_wmem='4582 89964 3455754'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -112,7 +113,7 @@ swapoff -a
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
  cp /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mpv /home/parkmino/.config/mpv/mpv.conf /dev/shm/
  mkdir /dev/shm/scripts && cp /home/parkmino/.config/mpv/scripts/ytdl_hook.lua /dev/shm/scripts || true
- cp /usr/bin/mpd.0.20.23 /dev/shm/mpd && cp /etc/mpd.conf.sav       /dev/shm/mpd.conf
+ cp /usr/bin/mpd /dev/shm/ && cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 #cp /usr/bin/mpd.0.23.12 /dev/shm/mpd && cp /etc/mpd.conf.resampler /dev/shm/mpd.conf
  cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 #ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
