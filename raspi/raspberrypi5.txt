@@ -221,20 +221,20 @@ Raspberry Pi OS(64-bit) with desktop
 
   $ sudo nano /etc/rc.local
 
-    if [ "$(grep vm.swap /etc/sysctl.conf | cut -d\= -f2)" -ne 2 ]; then
-     sed -i 's/vm.swap.*/vm.swappiness = 2/' /etc/sysctl.conf
-     sysctl -w vm.swappiness=2
+    if [ "$(grep vm.swap /etc/sysctl.conf | cut -d\= -f2)" -ne 0 ]; then
+     sed -i 's/vm.swap.*/vm.swappiness = 0/' /etc/sysctl.conf
+     sysctl -w vm.swappiness=0
     fi
 
   $ sudo nano /usr/local/bin/update
 
     sudo apt-get update && sudo apt-get -o APT::Get::Always-Include-Phased-Updates=true dist-upgrade && sudo apt-get clean
     [ -n "$(pgrep packagekitd)" ] && sudo pkill packagekitd
-    if [ "$(grep vm.swap /etc/sysctl.conf | cut -d\= -f2)" -ne 2 ]; then
+    if [ "$(grep vm.swap /etc/sysctl.conf | cut -d\= -f2)" -ne 0 ]; then
      echo
      grep vm.swap /etc/sysctl.conf
-     sudo sed -i 's/vm.swap.*/vm.swappiness = 2/' /etc/sysctl.conf
-     sudo sysctl -w vm.swappiness=2
+     sudo sed -i 's/vm.swap.*/vm.swappiness = 0/' /etc/sysctl.conf
+     sudo sysctl -w vm.swappiness=0
     fi
 
 [Ubuntu 23.10 mantic]
