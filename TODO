@@ -8,7 +8,7 @@
 
    audio_output {
    type "alsa"
-   device "default"
+   device "pcm.default"
    ...
 
 3. Gerbera
