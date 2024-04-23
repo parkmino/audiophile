@@ -1,21 +1,9 @@
 1. alsa.conf
 
    $ sudo sed -i 's/$/#/' /usr/share/alsa/alsa.conf.{min,mix,plug}
+   $ sudo sed -i 's/#$//' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
-   $ sudo nano /usr/share/alsa/alsa.conf.{min,mix,plug}
-
-     pcm.default.type hw pcm.default.card 0 pcm.default.device 0 pcm.default.subdevice 0
-
-2. mpd.conf
-
-   sudo nano /etc/mpd.conf.sav
-
-   audio_output {
-   type "alsa"
-   device "pcm.default"
-   ...
-
-3. Gerbera
+2. Gerbera
 
    $ sudo mkdir /var/lib/gerbera
    $ sudo chown -R gerbera:gerbera /var/lib/gerbera /usr/share/gerbera
