@@ -15,62 +15,6 @@ http://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8
 http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8
 #EXTINF:-1,EBSbandi
 http://ebsonair.ebs.co.kr/iradio/iradiolive_m4a/playlist.m3u8
-#EXTINF:-1,KBS1
-https://code.vthanhtivi.pw/getlink/kbs/11/playlist.m3u8
-#EXTINF:-1,KBS2
-https://code.vthanhtivi.pw/getlink/kbs/12/playlist.m3u8
-#EXTINF:-1,KBS World
-https://code.vthanhtivi.pw/getlink/kbs/14/playlist.m3u8
-#EXTINF:-1,KBS News D
-https://code.vthanhtivi.pw/getlink/kbs/81/playlist.m3u8
-#EXTINF:-1,KBS Drama
-https://code.vthanhtivi.pw/getlink/kbs/N91/playlist.m3u8
-#EXTINF:-1,KBS Joy
-https://code.vthanhtivi.pw/getlink/kbs/N92/playlist.m3u8
-#EXTINF:-1,KBS Life
-https://code.vthanhtivi.pw/getlink/kbs/N93/playlist.m3u8
-#EXTINF:-1,KBS Story
-https://code.vthanhtivi.pw/getlink/kbs/N94/playlist.m3u8
-#EXTINF:-1,KBS Kids
-https://code.vthanhtivi.pw/getlink/kbs/N96/playlist.m3u8
-#EXTINF:-1,KBS 독도라이브
-https://code.vthanhtivi.pw/getlink/kbs/cctv01/playlist.m3u8
-#EXTINF:-1,KBS 쌈, 마이웨이
-https://code.vthanhtivi.pw/getlink/kbs/nvod1/playlist.m3u8
-#EXTINF:-1,KBS 태조 왕건
-https://code.vthanhtivi.pw/getlink/kbs/nvod2/playlist.m3u8
-#EXTINF:-1,KBS 직장의 신
-https://code.vthanhtivi.pw/getlink/kbs/nvod3/playlist.m3u8
-#EXTINF:-1,KBS 아이가 다섯
-https://code.vthanhtivi.pw/getlink/kbs/nvod4/playlist.m3u8
-#EXTINF:-1,KBS 제빵왕 김탁구
-https://code.vthanhtivi.pw/getlink/kbs/nvod5/playlist.m3u8
-#EXTINF:-1,KBS 1박2일
-https://code.vthanhtivi.pw/getlink/kbs/nvod6/playlist.m3u8
-#EXTINF:-1,KBS 내 딸 서영이
-https://code.vthanhtivi.pw/getlink/kbs/nvod7/playlist.m3u8
-#EXTINF:-1,KBS 역사저널 그날
-https://code.vthanhtivi.pw/getlink/kbs/nvod8/playlist.m3u8
-#EXTINF:-1,KBS 인간극장
-https://code.vthanhtivi.pw/getlink/kbs/nvod9/playlist.m3u8
-#EXTINF:-1,KBS 어린이 만화동산
-https://code.vthanhtivi.pw/getlink/kbs/nvod10/playlist.m3u8
-#EXTINF:-1,KBS 1Radio
-https://code.vthanhtivi.pw/getlink/kbs/21/playlist.m3u8
-#EXTINF:-1,KBS HappyFM
-https://code.vthanhtivi.pw/getlink/kbs/22/playlist.m3u8
-#EXTINF:-1,KBS 3Radio
-https://code.vthanhtivi.pw/getlink/kbs/23/playlist.m3u8
-#EXTINF:-1,KBS ClassicFM
-https://code.vthanhtivi.pw/getlink/kbs/24/playlist.m3u8
-#EXTINF:-1,KBS CoolFM
-https://code.vthanhtivi.pw/getlink/kbs/25/playlist.m3u8
-#EXTINF:-1,KBS 한민족방송
-https://code.vthanhtivi.pw/getlink/kbs/26/playlist.m3u8
-#EXTINF:-1,KBS WORLD Multilingual
-https://code.vthanhtivi.pw/getlink/kbs/wink11/playlist.m3u8
-#EXTINF:-1,KBS WORLD English
-https://code.vthanhtivi.pw/getlink/kbs/I92/playlist.m3u8
 #EXTINF:-1,MBC강원영동TV
 http://123.254.72.24:1935/tvlive/livestream2/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM

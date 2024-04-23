@@ -1,8 +1,9 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename "$0") 1tv|2tv|w(orld)|24|d(rama)|j(oy)|l(ife)|k(ids)"
- echo "   or: $(basename "$0") 1fm|2fm|1r|2r|3r|scr|rki"
+ echo "Usage: $(basename "$0") 1tv|2tv|w(orld)|n(ews d)|d(rama)|j(oy)|l(ife)|s(tory)|k(ids)"
+ echo "   or: $(basename "$0") 1(쌈, 마이웨이)|2(태조 왕건)|3(직장의 신)|4(아이가 다섯)|5(제빵왕 김탁구)|6(1박2일)|7(내 딸 서영이)|8(역사저널 그날)|9(인간극장)|0(어린이 만화동산)"
+ echo "   or: $(basename "$0") 1fm|2fm|1r|2r|3r|han|mul|eng"
 }
 
 [ -z "$1" ] && usage && exit
@@ -11,29 +12,41 @@ m3u_dir="/home/parkmino/Videos"
 fd=16
 
 case $1 in
- 1tv) ch=11  ;;
- 2tv) ch=12  ;;
-# w)  url=http://live.kbskme.gscdn.com/www_kbs_worldtv/_definst_/kbs_worldtv_5.stream/playlist.m3u8 ;;
- 24)  ch=81  ;;
- d)   ch=N91 ;;
- j)   ch=N92 ;;
- W)   ch=N94 ;;
- l)   ch=N93 ;;
- k)   ch=N96 ;;
- 1fm) ch=24  ;;
- 2fm) ch=25  ;;
- 1r)  ch=21  ;;
- 2r)  ch=22  ;;
- 3r)  ch=23  ;;
- scr) ch=I26 ;;
- rki) ch=I92 ;;
- *)   usage  ; exit ;;
+ 1tv) ch=11     ;;
+ 2tv) ch=12     ;;
+ w)   ch=14     ;;
+ n)   ch=81     ;;
+ d)   ch=N91    ;;
+ j)   ch=N92    ;;
+ l)   ch=N93    ;;
+ s)   ch=N94    ;;
+ k)   ch=N96    ;;
+ 1)   ch=nvod1  ;;
+ 2)   ch=nvod2  ;;
+ 3)   ch=nvod3  ;;
+ 4)   ch=nvod4  ;;
+ 5)   ch=nvod5  ;;
+ 6)   ch=nvod6  ;;
+ 7)   ch=nvod7  ;;
+ 8)   ch=nvod8  ;;
+ 9)   ch=nvod9  ;;
+ 0)   ch=nvod10 ;;
+ 1fm) ch=24     ;;
+ 2fm) ch=25     ;;
+ 1r)  ch=21     ;;
+ 2r)  ch=22     ;;
+ 3r)  ch=23     ;;
+ han) ch=24     ;;
+ mul) ch=wink11 ;;
+ eng) ch=I92    ;;
+ *)   usage ; exit ;;
 esac
 
 #api="$(curl -s http://cfpwwwapi.kbs.co.kr/api/v1/landing/live/$ch | cut -d\" -f$fd)"
 #url="$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep service_url | tail -1 | cut -d\" -f$fd | cut -d\\ -f1)"
-[ -z "$url" ] && url="$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep -o https://.*Key-Pair-Id=[0-9A-Z]* | cut -d\\ -f1)"
+#[ -z "$url" ] && url="$(curl -s "https://onair.kbs.co.kr/index.html?sname=onair&stype=live&ch_code=$ch" | grep -o https://.*Key-Pair-Id=[0-9A-Z]* | cut -d\\ -f1)"
 #url="$(echo "$api" | grep -o '.*/' | sed 's/_[1-4].stream/_5.stream/')$(curl -s "$api" | tail -1)"
+url="$(curl -s https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/$ch | grep -o http.* | cut -d\" -f1)"
 
 echo "$url"
 
