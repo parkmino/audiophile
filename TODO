@@ -3,7 +3,13 @@
    $ sudo sed -i 's/$/#/' /usr/share/alsa/alsa.conf.{min,mix,plug}
    $ sudo sed -i 's/#$//' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
-2. Gerbera
+2. sysctl.conf
+
+   $ sudo nano /etc/sysctl.conf
+
+     net.ipv4.tcp_rmem = 4632 88314 3345779
+     
+3. Gerbera
 
    $ sudo mkdir /var/lib/gerbera
    $ sudo chown -R gerbera:gerbera /var/lib/gerbera /usr/share/gerbera
