@@ -8,8 +8,21 @@
    $ sudo nano /etc/sysctl.conf
 
      net.ipv4.tcp_rmem = 4632 88314 3345779
+
+3. rc.local
+
+   $ sudo nano /etc/rc.local
+
+     for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 && $4 !~ /mpd/ {print $1}'); do
+      renice  -2 $pid || true
+     done
+
+     #for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+     # chrt -op 0 $pid || true
+     # renice  -3 $pid || true
+     #done
      
-3. Gerbera
+4. Gerbera
 
    $ sudo mkdir /var/lib/gerbera
    $ sudo chown -R gerbera:gerbera /var/lib/gerbera /usr/share/gerbera
