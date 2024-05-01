@@ -29,16 +29,16 @@ if [ "$tfc" = on ]; then
  done
 fi
 
-for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 {print $1}'); do
  renice  -2 $i
 done
 
-for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
- chrt -op 0 $i
- renice  -3 $i
-done
+#for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+# chrt -op 0 $i
+# renice  -3 $i
+#done
 
-sysctl -w vm.swappiness=2
+sysctl -w vm.swappiness=0
 echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
 

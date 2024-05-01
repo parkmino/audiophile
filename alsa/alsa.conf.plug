@@ -1,21 +1,18 @@
-pcm.default{type hw card 0 device 0 subdevice 0}
-
-defaults{namehint.showall on namehint.basic on namehint.extended on ctl.card 0 pcm.card 0 pcm.device 0 pcm.subdevice 0}
-pcm.hw{@args[CARD DEV SUBDEV]
-@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]default{@func refer name defaults.pcm.card}}}
-@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func refer name defaults.pcm.device}}}
-@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
-type hw card $CARD device $DEV subdevice $SUBDEV
-hint{show{@func refer name defaults.namehint.extended}description "Direct hardware device without any conversions"}}
-
-pcm.plughw{  @args[CARD DEV SUBDEV]
-@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]default{@func refer name defaults.pcm.card}}}
-@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func refer name defaults.pcm.device}}}
-@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}
-type plug slave.pcm{type hw card $CARD device $DEV subdevice $SUBDEV}
-hint{show{@func refer name defaults.namehint.extended}description "Hardware device with all software conversions"}}
-
-ctl.hw{@args[CARD]
-@args.CARD{type string default{@func getenv vars[ALSA_CTL_CARD ALSA_CARD]default{@func refer name defaults.ctl.card}}}
-type hw card $CARD
-hint.description "Direct control device"}
+pcm.default{type hw card 0 device 0 subdevice 0}#
+defaults{namehint.showall on namehint.basic on namehint.extended on ctl.card 0 pcm.card 0 pcm.device 0 pcm.subdevice 0}#
+pcm.hw{@args[CARD DEV SUBDEV]#
+@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]default{@func refer name defaults.pcm.card}}}#
+@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func refer name defaults.pcm.device}}}#
+@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}#
+type hw card $CARD device $DEV subdevice $SUBDEV#
+hint{show{@func refer name defaults.namehint.extended}description "Direct hardware device without any conversions"}}#
+pcm.plughw{  @args[CARD DEV SUBDEV]#
+@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]default{@func refer name defaults.pcm.card}}}#
+@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func refer name defaults.pcm.device}}}#
+@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}#
+type plug slave.pcm{type hw card $CARD device $DEV subdevice $SUBDEV}#
+hint{show{@func refer name defaults.namehint.extended}description "Hardware device with all software conversions"}}#
+ctl.hw{@args[CARD]#
+@args.CARD{type string default{@func getenv vars[ALSA_CTL_CARD ALSA_CARD]default{@func refer name defaults.ctl.card}}}#
+type hw card $CARD#
+hint.description "Direct control device"}#
