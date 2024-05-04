@@ -1,7 +1,7 @@
 1. alsa.conf
 
    $ sudo sed -i 's/$/#/' /usr/share/alsa/alsa.conf.{min,mix,plug}
-   $ sudo sed -i 's/#$//' /usr/share/alsa/alsa.conf.{min,mix,plug}
+   $ sudo truncate -s -1 /usr/share/alsa/alsa.conf.{min,mix,plug}
 
 2. sysctl.conf
 
