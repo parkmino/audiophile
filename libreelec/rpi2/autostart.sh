@@ -18,16 +18,16 @@ for i in $(ls /sys/block/*/queue/scheduler); do
  fi
 done
 
-for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < 0 {print $1}'); do
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 {print $1}'); do
  renice -2 $i || true
 done
 
-for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
- chrt -op 0 $i || true
- renice  -3 $i || true
-done
+#for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+# chrt -op 0 $i || true
+# renice  -3 $i || true
+#done
 
-m_task=2; s_task=0; h_task=3; o_task=1,3 # grep -m1 siblings /proc/cpuinfo | grep -o [0-9*] # getconf _NPROCESSORS_ONLN # echo $(($(cat /sys/devices/system/cpu/present | sed 's/0-//')+1)) # grep -c ^processor /proc/cpuinfo
+#m_task=2; s_task=0; h_task=3; o_task=1,3 # grep -m1 siblings /proc/cpuinfo | grep -o [0-9*] # getconf _NPROCESSORS_ONLN # echo $(($(cat /sys/devices/system/cpu/present | sed 's/0-//')+1)) # grep -c ^processor /proc/cpuinfo
 #
 #if [ "$m_task" -ge 1 ]; then
 # for pid in $(ps -eo pid,comm | awk '$2 !~ /mpd|systemd$|kodi|kodi.bin/ {print $1}'); do
@@ -94,13 +94,13 @@ swapoff -a
   pkill hciattach || true
  #sysctl -w net.ipv4.conf.all.promote_secondaries=0
   for i in $(ls /proc/sys/net/ipv4/conf/*/promote_secondaries); do
-   echo 0 > $i
+   echo 0 > $i || true
   done
  fi
 
- llctl f0 l0 d0
- echo none > /sys/class/leds/led0/trigger
- echo 0    > /sys/class/leds/led0/brightness
- #sleep 1
- [ -f /sys/class/leds/led1/brightness ] && echo 0 > /sys/class/leds/led1/brightness
+ llctl f0 l0 d0 || true
+ echo none > /sys/class/leds/PWR/trigger    || true
+ echo 0    > /sys/class/leds/PWR/brightness || true
+ echo none > /sys/class/leds/ACT/trigger    || true
+ echo 0    > /sys/class/leds/ACT/brightness || true
 ) &

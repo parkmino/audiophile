@@ -1,16 +1,21 @@
-LibreELEC 11.0-nightly-20231008-3c43828 (Libre Embedded Linux Entertainment Center)
+LibreELEC 12.0.0 (Libre Embedded Linux Entertainment Center)
 
 1. Squashfs
 
   1.1 Unsquashfs
 
-	$ ver=11.0-nightly-20231008-3c43828
-	$ wget http://releases.libreelec.tv/LibreELEC-RPi2.arm-$ver.img.gz
-	$ mkdir ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver
-	$ gzip -d LibreELEC-RPi2.arm-$ver.img.gz
-	Mount LibreELEC image and copy SYSTEM to Downloads/libreelec/LibreELEC-RPi2.arm-$ver
-	$ mv LibreELEC-RPi2.arm-$ver.img ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/ && rm LibreELEC-RPi2.arm-$ver.img.gz
-	$ cd ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver
+	$ ver=RPi2.arm-12.0.0
+	$ ver=RPi5.aarch64-12.0.0
+
+	$ wget http://releases.libreelec.tv/LibreELEC-$ver.img.gz
+	$ cd ~/Downloads/kodi
+	$ mkdir LibreELEC-$ver
+	$ gzip -d LibreELEC-$ver.img.gz
+	Mount LibreELEC-$ver.img
+	$ cp /media/parkmino/LIBREELEC/SYSTEM LibreELEC-$ver
+	Unmount LibreELEC-$ver.img
+	$ mv LibreELEC-$ver.img LibreELEC-$ver/
+	$ cd LibreELEC-$ver
 	$ mv SYSTEM SYSTEM.orig
 	$ unsquashfs SYSTEM.orig
 	$ [ ! -d copy  ] && mkdir copy
@@ -18,13 +23,18 @@ LibreELEC 11.0-nightly-20231008-3c43828 (Libre Embedded Linux Entertainment Cent
 
   1.2 ALSA
 
-	$ rm usr/lib/libasound.so usr/lib/libasound.so.2
-	$ cp usr/lib/libasound.so.2.0.0 usr/lib/libasound.so
-	$ cp usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2
+	$#rm usr/lib/libasound.so usr/lib/libasound.so.2
+	$#cp usr/lib/libasound.so.2.0.0 usr/lib/libasound.so
+	$#cp usr/lib/libasound.so.2.0.0 usr/lib/libasound.so.2
+
+	$ rm usr/lib/libasound.so*
+	$ cp ../copy/libasound.so.2.0.0 usr/lib/libasound.so
+	$ cp ../copy/libasound.so.2.0.0 usr/lib/libasound.so.2
+	$ cp ../copy/libasound.so.2.0.0 usr/lib/libasound.so.2.0.0
 	$ cp ../copy/alsa.conf usr/share/alsa/
-	
-	$#sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
+
 	$#cat usr/lib/modprobe.d/alsa-base.conf
+	$#sed -i '/^options snd-usb/s/^/#/' usr/lib/modprobe.d/alsa-base.conf
 
   1.3 Kodi.bin
 
@@ -34,15 +44,15 @@ LibreELEC 11.0-nightly-20231008-3c43828 (Libre Embedded Linux Entertainment Cent
 
   1.4 Patch
 
-	$ cp bin/ps usr/bin/{chrt,nohup,taskset} hub-ctrl uhubctl llctl ../copy/
-	$ cp lib/arm-linux-gnueabihf/libprocps.so.7.1.0 ../copy/libprocps.so.7
+	$ cp bin/ps usr/bin/{chrt,taskset} /usr/sbin/uhubctl llctl ../copy/
+	$ cp lib/arm-linux-gnueabihf/libproc2.so.0.0.1 ../copy/libproc2.so.0
 	$ cp ~/git/audiophile/libreelec/{audio.conf,autostart.sh,sysctl.conf} ../
 
-	$ rm usr/bin/ps usr/bin/nohup
-	$ cp ../copy/{ps,chrt,nohup,taskset,hub-ctrl,uhubctl,llctl,audio-config} usr/bin/
+	$ rm usr/bin/ps
+	$ cp ../copy/{ps,chrt,taskset,uhubctl,llctl,audio-config} usr/bin/
 	$ cp ../copy/*.pls ../copy/*.m3u etc/
 	$ cp ../../kodi/plugin.audio.kr2kodi.zip etc/
-	$ cp ../copy/libprocps.so.7 usr/lib/
+	$ cp ../copy/libproc2.so.0 usr/lib/
 	$ cp ../{audio.conf,autostart.sh,sysctl.conf,advancedsettings.xml} etc/
 	$ cp ../tuning_audio usr/lib/libreelec/
 	$ cp ../tuning_audio.{service,target} usr/lib/systemd/system/
@@ -59,10 +69,10 @@ LibreELEC 11.0-nightly-20231008-3c43828 (Libre Embedded Linux Entertainment Cent
 
   1.6 Make image
 	
-	$ cp ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver.img ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
-	$ fdisk -l ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img
+	$ cp ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver.img ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio.img
+	$ fdisk -l ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio.img
 	$ sudo mkdir /mnt/le
-	$ sudo mount -o loop,offset=$(echo $((512*8192))) ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img /mnt/le
+	$ sudo mount -o loop,offset=$(echo $((512*8192))) ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio.img /mnt/le
 	$ sudo rm /mnt/le/SYSTEM*
 	$ sudo cp SYSTEM /mnt/le
 	$ sync
@@ -79,18 +89,18 @@ LibreELEC 11.0-nightly-20231008-3c43828 (Libre Embedded Linux Entertainment Cent
 	$ cd
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
-	$ sudo dd status=progress bs=4M if=~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img of=/dev/sdc
+	$ sudo dd status=progress bs=4M if=~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio.img of=/dev/sdc
 	$ sync
 
 3. Release
 
-	$ mv ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio.img ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
-	$ zip -j ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").zip ~/Downloads/kodi/LibreELEC-RPi2.arm-$ver/LibreELEC-RPi2.arm-$ver-audio-$(date +"%y.%m").img
+	$ mv ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio.img ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio-$(date +"%y.%m").img
+	$ zip -j ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio-$(date +"%y.%m").zip ~/Downloads/kodi/LibreELEC-$ver/LibreELEC-$ver-audio-$(date +"%y.%m").img
 
 4. More tweaks
 
 	$ ssh root@192.168.0.x (password: libreelec)
-	$ audio-config			# Disable USB signal & power
+	$ audio-config # Disable USB signal & power
 
 5. Screenshot
 
