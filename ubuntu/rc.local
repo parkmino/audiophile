@@ -178,8 +178,8 @@ done
 hdparm -A1 -a2048 -B255 /dev/sda # -M0
 
 for i in $(ls /dev/snd/); do
- [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && [ ! "$i" = "pcmC1D0p"  ] && [ ! "$i" = "controlC1"  ] && rm -rf "/dev/snd/$i"
-#[ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && [ ! "$i" = "pcmC1D0p"  ] && [ ! "$i" = "controlC1"  ] && [ "$i" = "pcmC0D3p" ] && rm -rf "/dev/snd/$i"
+ [ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && [ ! "$i" = "pcmC1D0p"  ] && [ ! "$i" = "controlC1"  ] && rm -rf "/dev/snd/$i" || true
+#[ ! "$i" = "pcmC0D0p"  ] && [ ! "$i" = "controlC0"  ] && [ ! "$i" = "pcmC1D0p"  ] && [ ! "$i" = "controlC1"  ] && [ "$i" = "pcmC0D3p" ] && rm -rf "/dev/snd/$i" || true
 done
 
 #for i in dbus-daemon nimf polkitd systemd-journal systemd-logind systemd-udevd udisksd; do
