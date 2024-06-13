@@ -1,0 +1,25 @@
+#!/bin/sh
+
+usage () {
+ echo "Usage: $(basename "$0") [umount]"
+}
+
+if [ "$1" = "umount" ]; then
+ sudo umount /mnt/usb
+ exit
+fi
+
+  ptn=$(sudo blkid | tail -1)
+drive=$(echo $ptn | cut -d: -f1)
+ type=$(echo $ptn | grep -o TYPE.* | cut -d\" -f2)
+
+case $type in
+ vfat) opt="ro,codepage=949,iocharset=utf8" ;;
+ *)    opt="ro" ;;
+esac
+
+if ! mount | grep -q "$drive"; then
+ sudo mount -o "$opt" "$drive" /mnt/usb || true
+else
+ echo "No mount drive ($drive) found!"
+fi
