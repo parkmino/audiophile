@@ -344,4 +344,4 @@ https://konstakang.com/devices/rpi5/
 4 ALSA
 
   $ sudo mv /media/parkmino/vendor/etc/alsa/alsa.conf /media/parkmino/vendor/etc/alsa/alsa.conf.orig
-  $ sudo cp alsa.conf.mix /media/parkmino/vendor/etc/alsa/alsa.conf
+  $ sudo cp alsa.conf.min /media/parkmino/vendor/etc/alsa/alsa.conf
