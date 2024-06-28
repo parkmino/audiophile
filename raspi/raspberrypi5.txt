@@ -306,7 +306,7 @@ https://konstakang.com/devices/rpi5/
     #dtoverlay=android-nvme
 
     #dtparam=audio=on
-    dtoverlay=vc4-fkms-v3d,noaudio
+    dtoverlay=vc4-kms-v3d,noaudio
     usb_max_current_enable=1
 
   $ sudo cp dt-blob.bin.twk /boot/
@@ -340,3 +340,8 @@ https://konstakang.com/devices/rpi5/
   F5  : Power
   F11 : Volume down
   F12 : Volume up
+
+4 ALSA
+
+  $ sudo mv /media/parkmino/vendor/etc/alsa/alsa.conf /media/parkmino/vendor/etc/alsa/alsa.conf.orig
+  $ sudo cp alsa.conf.mix /media/parkmino/vendor/etc/alsa/alsa.conf
