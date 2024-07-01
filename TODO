@@ -24,5 +24,20 @@
      
 4. Gerbera
 
-   $ sudo mkdir /var/lib/gerbera
+   $ sudo mkdir -p /var/lib/gerbera
    $ sudo chown -R gerbera:gerbera /var/lib/gerbera /usr/share/gerbera
+
+5. mpd.conf
+
+   $ sudo nano /etc/mpd.conf
+
+     audio_output {
+     type "alsa"
+     name "ALSA"
+     mixer_type "none"
+     replay_gain_handler "none"
+     auto_resample "no"
+     auto_format "no"
+     auto_channels "no"
+     }
+     mixer_type "none"
