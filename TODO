@@ -41,3 +41,5 @@
      auto_channels "no"
      }
      mixer_type "none"
+     log_level "error"
+     log_file "/dev/null"
