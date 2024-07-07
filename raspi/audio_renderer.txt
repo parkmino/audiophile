@@ -8,7 +8,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
 	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/raspi/*raspios*.img | tail -1) of=/dev/sdc
-	$#sudo dd status=progress bs=4M if=~/Downloads/raspi/DietPi*.img of=/dev/sdc
 	$ sync
 	  raspberrypi login : pi
 	  password : raspberry
@@ -33,7 +32,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo apt-get autoremove
 	$ sudo apt-get clean
 
-	$ sudo apt-get install bc python3-pycryptodome uhubctl # ntpdate
+	$ sudo apt-get install bc uhubctl # ntpdate python3-pycryptodome
 	$ mkdir ~/copy
 
 	$ scp -r /home/parkmino/Downloads/raspi/copy/* pi@$ip:/home/pi/copy/
@@ -80,7 +79,6 @@ UPnP/DLNA Audio Render for Raspberry Pi
 3. Kernel option
 
 	$ sudo nano /boot/firmware/cmdline.txt
-		#root=/dev/mmcblk0p2
 		#console=serial0,115200
 		#console=tty1
 		elevator=noop
@@ -158,27 +156,25 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo mv copy/mpd /usr/bin/
 	$ sudo mv copy/mpd.conf.* /etc/
 	$ sudo mpd /etc/mpd.conf.sav
+	  Ctrl+C
 	
 	$ sudo apt-get install mpc ncmpc
 	$ sudo mkdir /etc/ncmpc
 	$ sudo mv copy/ncmpc_config /etc/ncmpc/config
 	$ ncmpc
 
-	$#sudo mkdir /var/lib/mpd/music/do_not_remove
-	$#sudo mv copy/blank.mp3 /var/lib/mpd/music/do_not_remove
-	$#sudo mv copy/musicpd /usr/bin/
 	$ sudo mv copy/musicpd.service /usr/lib/systemd/system/
 	$ sudo cp /usr/bin/mpd /dev/shm/ && sudo cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 	$ sudo systemctl start musicpd
 	$ chrt -aop $(pidof mpd)
 
-8. Internet Radio & TTS (Text to Speech)
+8. YouTube & Internet Radio & TTS (Text to Speech)
 
 	$#sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 	$#sudo chmod 755 /usr/local/bin/youtube-dl
 	$ sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 	$ sudo chmod a+rx /usr/local/bin/yt-dlp
-	$ sudo mv copy/{kr2mpd,sbs_dec.py,ut2mpd,tts2mpd} /usr/bin/
+	$ sudo mv copy/{kr2mpd,ut2mpd,tts2mpd} /usr/bin/ # sbs_dec.py
 	$ sudo mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
 	$ sudo mkdir /var/lib/mpd/music/webradio
 	$ sudo mv copy/*.pls /var/lib/mpd/music/webradio
@@ -342,45 +338,38 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	https://github.com/jcorporation/myMPD
 
-	$ sudo apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev # liblua5.3-dev
-	$ curl -s https://github.com/jcorporation/myMPD/releases/latest | cut -d\" -f2 | sed 's/releases\/tag/archive/; s/$/.zip/' | wget --no-check-certificate "$(cat -)" -O ./mympd.zip
-	$ unzip mympd.zip -d ~/ && rm mympd.zip
-	$ cd myMPD*
-	$ ./build.sh release
-	$ sudo ./build.sh install
-	$ ./build.sh pkgdebian
+	$ sudo apt-get install lrzsz liblua5.4-0 jq # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
 
-	$ sudo apt-get install lrzsz liblua5.4-0 # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
-
-	$ curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_12/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_12/armhf/$(cat -)"
-	$ sudo dpkg -i mympd*.deb
+	$#curl -s https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_12/armhf/ | grep -o 'mympd_[0-9.-]*_armhf.deb' | head -1 | wget "https://download.opensuse.org/repositories/home:/jcorporation/Raspbian_12/armhf/$(cat -)"
+	$#sudo dpkg -i mympd*.deb
 	
 	$ sudo dpkg -i copy/mympd*.deb
-	$ sudo groupadd -r mympd
-	$ sudo useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
-	$ sudo mympd
-	$ sudo mv copy/*.png /var/lib/mympd/pics/thumbs/
-	$ sudo mv copy/*.lua /var/lib/mympd/scripts/
-	$#sudo chown -R mympd:mympd /var/lib/mympd
 
-	$ sudo sh -c "echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
-	$#echo "base, string, utf8, table, math, mympd, io" | sudo tee /var/lib/mympd/config/lualibs
-	$ echo "false" | sudo tee /var/lib/mympd/config/ssl
-	$#sudo cp /lib/systemd/system/mympd.service /etc/systemd/system/mympd.service
-	$#sudo nano /etc/systemd/system/mympd.service
-		#Requires=network.target local-fs.target mpd.service
-		#After=mpd.service
-		#Protect...
-		#Restrict...
-	$ sudo systemctl disable mympd
+	$ sudo mv /lib/systemd/system/mympd.service /lib/systemd/system/mympd.service.orig
+	$ sudo cp /lib/systemd/user/mympd.service /lib/systemd/system/mympd.service
+	$ sudo nano /lib/systemd/system/mympd.service
+		ExecStart=/dev/shm/mympd -u pi -w /home/pi/.config/mympd -a /home/pi/.cache/mympd
+		Environment="MYMPD_HTTP_PORT=80"
+		WorkingDirectory=/home/pi/.config/mympd
 	$ sudo systemctl daemon-reload
+	$ mkdir -p ~/.config/mympd ~/.cache/mympd
+	$ sudo systemctl start mympd
+	$ mv copy/*.png ~/.config/mympd/pics/thumbs/
+	$ mv copy/*.lua ~/.config/mympd/scripts/
+	$ echo "false" | tee ~/.config/mympd/config/ssl
+	$ cat ~/.config/mympd/config/http_port
+	$ sudo systemctl restart mympd
+
+	$ sudo systemctl disable mympd
 	$ systemctl status mympd
 	
-	$ sudo mympd
+	$ip
 		설정 > MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
 		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
 		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
-		IP 주소 읽기, record_voice_over, #28a745, iptts
+		Radiobrowser, radio, #28a745, 스크립트 가져오기
+		YouTube, video_library, #28a745, yt-dlp
+		Test to Speech, record_voice_over, #28a745, tts2mpd
 		웹 설정, settings, #28a745, settings
 		다시 시작, refresh, #28a745, reboot
 		전원 끄기, power_settings_new, #28a745, poweroff
@@ -398,15 +387,22 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	https://github.com/gerbera/gerbera
 	https://gerbera.jfrog.io/ui/native/debian/pool/main/g/gerbera/
 
-	$#apt-cache policy gerbera
-	$#sudo apt-get install gerbera
+	$ wget -O - https://pkg.gerbera.io/public.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/gerbera-keyring.gpg >/dev/null
+	$ echo "deb [signed-by=/usr/share/keyrings/gerbera-keyring.gpg] https://pkg.gerbera.io/debian/ $(lsb_release -c --short) main" | sudo tee /etc/apt/sources.list.d/gerbera.list >/dev/null
+	$ sudo apt-get update
+	$ sudo apt-get install gerbera
 
-	$#wget https://gerbera.jfrog.io/artifactory/debian/pool/main/g/gerbera/gerbera_1.12.1-bookworm1_armhf.deb
-	$#wget http://archive.raspbian.org/raspbian/pool/main/g/gerbera/gerbera_2.0.0%2Bdfsg-1_armhf.deb
-	$ sudo apt install ./copy/gerbera_1.12.1-bookworm1_armhf.deb
+	$#ls .config/gerbera /etc/gerbera /var/lib/gerbera
+	$#mkdir -p .config/gerbera/ && sudo mkdir -p /etc/gerbera /var/lib/gerbera
+	$#gerbera --create-config .config/gerbera/config.xml
+	$#sudo cp .config/gerbera/config.xml /etc/gerbera/
+	$#sudo nano /etc/gerbera/config.xml
+	  <home>/var/lib/gerbera/</home>
+	$#sudo chown -R gerbera:gerbera /var/lib/gerbera /usr/share/gerbera
 
 	$ systemctl status gerbera
 	$ sudo systemctl start gerbera
+	$ systemctl status gerbera
 	  http://rpi_ip:49152 or 49153
 
 20. Logitech Media Server
@@ -414,8 +410,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	https://github.com/LMS-Community/slimserver
 	https://lms-community.github.io/lms-server-repository/
 
-	$ wget https://downloads.slimdevices.com/LogitechMediaServer_v8.5.0/logitechmediaserver_8.5.0_arm.deb
-	$ sudo apt install ./copy/logitechmediaserver_8.5.0_arm.deb
+	$ sudo apt install ./copy/logitechmediaserver_8.5.2_arm.deb
 
 	  http://rpi_ip:9000
 	
@@ -449,7 +444,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	  http://rpi_ip:7779
 	$ sudo systemctl stop aprenderer
 
-22. Build libaudiofile libFLAC
+22. Build libaudiofile & libFLAC
 
 	$ sudo apt-get update
 	$ sudo apt-get install libasound2-dev libflac-dev libogg-dev
@@ -552,12 +547,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ sudo mv copy/{audio-config,audioconf,consf} /usr/bin/
 	$ sudo mv copy/audio.conf /etc/default/
+	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" | sudo tee /etc/release
+	$ sudo chmod 744 /etc/release
 	$ audio-config
 	$ audioconf
 
 29. CIFS & NFS & USB mounting
 
 	$#sudo apt-get install cifs-utils nfs-common
+	$ sudo apt-get install exfat-fuse exfat-utils
 	$ sudo mkdir /mnt/cifs /mnt/nfs /mnt/usb
 	$ sudo ln -s /mnt/ /var/lib/mpd/music
 	$ sudo nano /etc/fstab
@@ -647,6 +645,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$#sudo youtube-dl --update
 	$ sudo yt-dlp --update
 	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" | sudo tee /etc/release
+	$ sudo chmod 744 /etc/release
 	$ cat /etc/release
 
 	$ mpc clear

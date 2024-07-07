@@ -127,10 +127,6 @@ case $usb in
  4B_USB23_PWR_OFF)	uhubctl -a 0 -l 1-1 ; uhubctl -a 0 -l 2 ;;
 esac
 
-### Turn off HDMI
-#/opt/vc/bin/tvservice -o
-#service getty@tty1 stop
-
 ### MPD
 if [ "$mpd" = on ]; then
  systemctl start musicpd
@@ -169,10 +165,28 @@ fi
 [ "$lms"     = on ] && systemctl start logitechmediaserver
 
 ### myMPD
-[ "$mympd" = on ] && systemctl start mymusicpd
+[ "$mympd" = on ] && systemctl start mympd
 
 ### tty
-[ "$mympd" = off ] && systemctl stop getty@tty1
+[ "$tty" = off ] && systemctl stop getty@tty1
+
+### usb mount
+if [ "$usbmount" = on ]; then
+   ptn=$(blkid | tail -1)
+ drive=$(echo $ptn | cut -d: -f1)
+  type=$(echo $ptn | grep -o TYPE.* | cut -d\" -f2)
+ case $type in
+  vfat) opt="ro,codepage=949,iocharset=utf8" ;;
+  ntfs) opt="ro,umask=022" ;;
+  *)    opt="ro" ;;
+ esac
+ if ! mount | grep -q "$drive"; then
+  [ ! -d /mnt/usb ] && mkdir /mnt/usb
+  mount -o "$opt" "$drive" /mnt/usb || true
+ else
+  echo "No mount drive ($drive) found!"
+ fi
+fi
 
 #systemctl stop systemd-timesyncd || true
 #ntpdate -d pool.ntp.org || true
