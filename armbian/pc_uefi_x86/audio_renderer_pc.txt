@@ -1,0 +1,488 @@
+UPnP/DLNA Audio Render for PC
+
+0. Flashing
+
+	https://www.armbian.com/uefi-x86/
+	https://dl.armbian.com/uefi-x86/archive/
+
+	$ sudo fdisk -l
+	$ sudo umount /dev/sdb?
+	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/armbian/Armbian*x86*.img | tail -1) of=/dev/sdb
+	$ sync
+
+	$ sudo mkdir /media/parkmino/armbi_root/root/copy
+	$ sudo cp -R  /home/parkmino/Downloads/armbian/copy/* /media/parkmino/armbi_root/root/copy
+
+	$ export ip="192.168.x.x"
+	$ ssh-keygen -f "/home/parkmino/.ssh/known_hosts" -R $ip
+	$ ssh root@$ip
+	  password: 1234
+
+1. Update & upgrade
+
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# apt-get autoremove
+	# apt-get clean
+
+	# nano /etc/grub/grub.cfg
+	
+		### BEGIN /etc/grub.d/30_os-prober ###
+
+		### END /etc/grub.d/30_os-prober ###
+
+	# apt-get install uhubctl # bc ntpdate python3-pycryptodome
+	  
+	##mkdir ~/copy
+	##scp -r /home/parkmino/Downloads/armbian/copy/* root@$ip:/root/copy/
+
+2. Kernel option
+
+	##nano /boot/armbianEnv.txt
+		#console=serial0,115200
+		#console=tty1
+		#elevator=noop consoleblank=0 selinux=0
+
+3. Localisation
+
+	# dpkg-reconfigure locales
+	# dpkg-reconfigure tzdata
+
+	# locale
+	# locale -a
+	# locale -a -v
+	
+	# update-locale
+	# nano /etc/default/locale
+	
+	##ls -al /var/lib/locales/supported.d/
+	##nano /var/lib/locales/supported.d/en
+		en_US UTF-8
+	##rm -rfv /usr/lib/locale/*
+	##locale-gen
+	##locale -a -v
+
+	# apt-get install fbterm fonts-naver-d2coding
+	# nano ~/.fbtermrc
+	  font-size=15
+
+4. Disable modules
+
+	# lsmod | sort
+	##nano /etc/modprobe.d/blacklist.conf
+		blacklist ip_tables
+		blacklist x_tables
+		#blacklist cfg80211
+
+5. Disable zram swap
+
+	# cat /proc/swaps
+	# nano /etc/default/armbian-zram-config
+		ENABLED=false
+		SWAP=false
+	# swapoff -a
+	# cat /proc/swaps
+	# free
+
+6. Disable services
+
+	# systemctl list-unit-files -t service | awk '$2~/enabled/'
+	# systemctl stop    cron.service rpcbind.service rpcbind.socket rsyslog.service syslog.socket unattended-upgrades.service # bluetooth.service cups.service
+	# systemctl disable cron.service rpcbind.service rpcbind.socket rsyslog.service syslog.socket unattended-upgrades.service # bluetooth.service cups.service
+
+	# apt-get install isc-dhcp-client net-tools # ifupdown
+	# apt-get purge network-manager
+	# apt-get autoremove
+	# ifconfig -a
+	# nano /etc/network/interfaces
+
+		auto lo
+		iface lo inet loopback
+
+		#auto  wlps2s0
+		#iface wlps2s0 inet dhcp
+		#wpa-ssid ssid
+		#wpa-psk  password
+		#wireless-essid essid
+
+		auto  enp3s0
+		iface enp3s0 inet dhcp
+		#iface enp3s0 inet static
+		#address 192.168.0.x
+		#netmask 255.255.255.0
+		#gateway 192.168.0.1 
+
+	# sync
+	# reboot
+	
+	$ ssh root@$ip
+	
+	# lsmod | sort
+	# pstree
+
+7. MPD
+
+	# apt-get install libcue2 libaudiofile1 libavformat60 libflac12t64 libid3tag0 libmpdclient2t64 libupnp17t64 # libcurl4t64-gnutls
+	# mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
+	# mv copy/mpd /usr/bin/
+	# mv copy/mpd.conf.* /etc/
+	# mpd /etc/mpd.conf.sav
+	  Ctrl+C
+	
+	# apt-get install mpc ncmpc
+	# mkdir /etc/ncmpc
+	# mv copy/ncmpc_config /etc/ncmpc/config
+	# ncmpc
+
+	# mv copy/musicpd.service /usr/lib/systemd/system/
+	# cp /usr/bin/mpd /dev/shm/ && cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+	# systemctl start musicpd
+	# chrt -aop $(pidof mpd)
+
+8. YouTube & Internet Radio & TTS (Text to Speech)
+
+	##curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+	##chmod 755 /usr/local/bin/youtube-dl
+	# curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+	# chmod 755 /usr/local/bin/yt-dlp
+	# mv copy/{kr2mpd,ut2mpd,tts2mpd} /usr/bin/ # sbs_dec.py
+	# mv copy/internet\ radio.m3u /var/lib/mpd/playlists/
+	# mkdir /var/lib/mpd/music/webradio
+	# mv copy/*.pls /var/lib/mpd/music/webradio
+	# mpc update
+
+9. Upmpdcli
+
+	###apt-get install libmpdclient2 libexpat1 libcurl4 python3 python3-requests
+	##apt-get install libjsoncpp25 libmicrohttpd12
+	##dpkg -i copy/upmpdcli/lib*upnp*.deb copy/upmpdcli/upmpdcli_*.deb
+	
+	# add-apt-repository ppa:jean-francois-dockes/upnpp1
+	# apt-get install upmpdcli
+	
+	# mv copy/icon.png /usr/share/upmpdcli/
+	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
+	##sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
+	##sed -i '/tidalaudioquality =/s/^#//; /tidalaudioquality =/s/= .*/= LOSSLESS/' /etc/upmpdcli.conf
+	# grep -e checkcontentformat -e tidalaudioquality -e radiolist /etc/upmpdcli.conf
+		checkcontentformat = 0
+		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
+		tidalaudioquality = LOSSLESS
+	# systemctl disable upmpdcli.service
+	# nano /etc/upmpdcli.conf
+	  ...
+
+10. Roon Bridge
+
+	https://kb.roonlabs.com/LinuxInstall
+
+	# apt update
+
+	# curl -O https://download.roonlabs.net/builds/roonbridge-installer-linuxx64.sh
+	# chmod +x roonbridge-installer-linuxx64.sh
+	# ./roonbridge-installer-linuxx64.sh
+
+	# cat /opt/RoonBridge/VERSION
+		100801125
+		1.8 (build 1125) stable
+		stable
+	# nano /etc/systemd/system/roonbridge.service
+		#ExecStart=/opt/RoonBridge/start.sh
+		ExecStart=/opt/RoonBridge/Bridge/RoonBridge
+	# nano /opt/RoonBridge/Bridge/RoonBridge
+		#exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --debug --gc=sgen --server $SCRIPT.exe $@"
+		exec /bin/bash -c "exec -a $SCRIPT \"$MONO_DIR/bin/mono-sgen\" --gc=sgen --server $SCRIPT.exe $@"
+		#exec "$MONO_DIR/bin/mono-sgen" --debug --gc=sgen --server $SCRIPT.exe "$@"
+		exec "$MONO_DIR/bin/mono-sgen" --gc=sgen --server $SCRIPT.exe "$@"
+	# cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
+	# sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
+	# systemctl daemon-reload
+	# systemctl stop roonbridge roonbridgetoram
+	# systemctl disable roonbridge roonbridgetoram
+
+	# file /opt/RoonBridge/Bridge/processreaper
+	# ls -al /opt/RoonBridge/Bridge/processreaper
+	# strip --strip-debug /opt/RoonBridge/Bridge/processreaper
+	# ls -al /opt/RoonBridge/Bridge/processreaper
+
+	# find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
+	# find /opt/RoonBridge/ -name *.so -exec chmod -x {} \; -exec strip --strip-debug {} \;
+	# find /opt/RoonBridge/ -name *.so -exec ls -al {} \;
+
+	# rm roonbridge-installer*
+	# mv copy/roonup /usr/bin/
+
+11. Librespot
+
+	https://github.com/librespot-org/librespot
+
+	# apt-get install build-essential libasound2-dev file cargo
+	# ntpdate pool.ntp.org
+	# wget https://github.com/librespot-org/librespot/archive/refs/tags/v0.4.2.tar.gz
+	# tar xvzf v0.4.2.tar.gz && rm v0.4.2.tar.gz
+	# cd librespot-0.4.2
+	# cargo build --release --no-default-features --features alsa-backend
+
+	# target/release/librespot -n Librespot --backend ?
+	# ls -al target/release/librespot
+	# file target/release/librespot
+	# strip --strip-debug target/release/librespot
+	# ls -al target/release/librespot
+	# cp target/release/librespot /home/pi/
+	
+	# mv copy/librespot ./
+
+12. AirConnect
+
+	https://github.com/philippe44/AirConnect
+
+	# mv copy/airupnp-linux-x86_64-static ./
+	# chmod +x ./airupnp-linux-x86_64-static
+
+13. HQPlayer NAA
+	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/jammy/networkaudiod_5.0.1-60_amd64.deb
+	# dpkg -i networkaudiod*.deb
+	# systemctl disable networkaudiod
+	# cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
+	# nano /lib/systemd/system/networkaudiodtoram.service
+		ExecStart=/dev/shm/networkaudiod
+	# systemctl daemon-reload
+	# ps ax | grep networkaudiod
+	# systemctl start networkaudiod && ps ax | grep networkaudiod
+	# systemctl stop  networkaudiod && ps ax | grep networkaudiod
+	# cp /usr/sbin/networkaudiod /dev/shm/
+	# systemctl start networkaudiodtoram && ps ax | grep networkaudiod
+	# systemctl stop  networkaudiodtoram && ps ax | grep networkaudiod
+
+14. Squeezelite
+
+	https://github.com/ralph-irving/squeezelite
+	https://sourceforge.net/projects/lmsclients/files/squeezelite/linux/
+
+	##apt-get install squeezelite
+	##sed -i '/SL_SOUNDCARD/s/^#*//; /SL_SOUNDCARD/s/".*"/"default"/' /etc/default/squeezelite
+
+	# mv copy/squeezelite ./
+
+15. myMPD
+
+	https://github.com/jcorporation/myMPD
+
+	##apt-get install lrzsz liblua5.4-0 jq # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
+	##dpkg -i copy/mympd*.deb
+
+	# add-apt-repository ppa:parkmino/mympd
+	# apt-get install mympd
+	# apt-get install lrzsz # jq
+
+	# mv /usr/lib/systemd/system/mympd.service /usr/lib/systemd/system/mympd.service.orig
+	# cp /usr/lib/systemd/user/mympd.service /usr/lib/systemd/system/mympd.service
+	# getent group mympd > /dev/null || groupadd -r mympd
+	# getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
+	# mkdir -p /home/mympd /home/mympd/.config/mympd /home/mympd/.cache/mympd
+	# chown -R mympd:mympd /home/mympd
+	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+	# nano /usr/lib/systemd/system/mympd.service
+		ExecStart=/dev/shm/mympd -u mympd -w /home/mympd/.config/mympd -a /home/mympd/.cache/mympd
+		Environment="MYMPD_HTTP_PORT=80"
+		WorkingDirectory=/home/mympd/.config/mympd
+	# systemctl daemon-reload
+	# cp /usr/bin/mympd /dev/shm/
+	# systemctl start mympd
+	# mv copy/*.png /home/mympd/.config/mympd/pics/thumbs/
+	# mv copy/*.lua /home/mympd/.config/mympd/scripts/
+	# echo "false" | tee /home/mympd/.config/mympd/config/ssl
+	# cat /home/mympd/.config/mympd/config/http_port
+	# chown -R mympd:mympd /home/mympd
+	# systemctl restart mympd
+
+	# systemctl disable mympd
+	# systemctl status mympd
+	
+	$ip
+		설정 > MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
+		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
+		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
+		Radiobrowser, radio, #28a745, 스크립트 가져오기
+		YouTube, video_library, #28a745, yt-dlp
+		Test to Speech, record_voice_over, #28a745, tts2mpd
+		웹 설정, settings, #28a745, settings
+		다시 시작, refresh, #28a745, reboot
+		전원 끄기, power_settings_new, #28a745, poweroff
+
+16. ttyd
+
+	# wget "https://github.com/tsl0922/ttyd/releases/download/$(curl -s "https://github.com/tsl0922/ttyd/tags" | grep -m1 'releases/tag/' | cut -d\/ -f6 | cut -d\" -f1)/ttyd.x86_64" -P ~/
+	# chmod +x ~/ttyd.x86_64
+	# mv ~/ttyd.x86_64 /usr/bin/ttyd
+	
+	##mv copy/ttyd /usr/bin/
+
+17. Gerbera
+
+	https://github.com/gerbera/gerbera
+	https://gerbera.jfrog.io/ui/native/debian/pool/main/g/gerbera/
+
+	# wget -O - https://pkg.gerbera.io/public.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/gerbera-keyring.gpg >/dev/null
+	# echo "deb [signed-by=/usr/share/keyrings/gerbera-keyring.gpg] https://pkg.gerbera.io/debian/ $(lsb_release -c --short) main" | tee /etc/apt/sources.list.d/gerbera.list >/dev/null
+	# apt-get update
+	# apt-get install gerbera
+
+	# systemctl status gerbera
+	# systemctl start gerbera
+	# systemctl status gerbera
+	  http://rpi_ip:49152 or 49153
+
+18. Logitech Media Server
+
+	https://github.com/LMS-Community/slimserver
+	https://lms-community.github.io/lms-server-repository/
+
+	# apt install ./copy/logitechmediaserver_8.5.2_amd64.deb
+
+	  http://rpi_ip:9000
+	
+	# systemctl disable logitechmediaserver
+
+19. APlayer Media Renderer
+
+	# wget https://albumplayer.ru/linux/aprenderer64.tar.gz
+	# tar xvzf aprenderer*.tar.gz
+	# cd aprenderer
+	# ./ap2renderer
+
+	  http://rpi_ip:7779
+
+		Playback mode	   (O) Standard
+		Preload buffer     [108788]
+		Gapless mode       [ ]
+		ALSA Period frames [3739]
+		ALSA Buffer frames [14943]
+		DSP                [original]
+				   [ ] Multi-thread mode
+		System		   [V] Lock memory
+
+	# pkill ap2renderer
+	# cd
+	# mv copy/aprenderer.service /usr/lib/systemd/system/aprenderer.service
+	# systemctl daemon-reload
+	# systemctl status aprenderer
+	# mkdir /dev/shm/aprenderer
+	# systemctl start aprenderer
+	  http://rpi_ip:7779
+	# systemctl stop aprenderer
+
+20. Tweak ALSA
+
+	# ls -al /usr/lib/x86_64-linux-gnu/libasound*
+	# mv /usr/lib/x86_64-linux-gnu/libasound.so.2.0.0 /etc/libasound.so.2.0.0.orig
+	# mv copy/libasound.so.2.0.0.*  /etc/
+	# rm -i /usr/lib/x86_64-linux-gnu/libasound.so*
+
+	##ln -sf /etc/libasound.so.2.0.0.orig /usr/lib/x86_64-linux-gnu/libasound.so
+	# cp /etc/libasound.so.2.0.0.min.dev.shm /dev/shm/libasound.so.2
+
+	# mv /usr/share/alsa /usr/share/alsa.orig
+	# systemctl mask alsa-store.service
+	# systemctl mask alsa-restore.service
+	##nano /lib/modprobe.d/aliases.conf
+		#options snd-usb-audio index=-2
+	# mkdir /usr/share/alsa
+	##cp /usr/share/alsa.orig/alsa.conf /usr/share/alsa/alsa.conf.orig
+	# mv copy/alsa.conf.{min,mix,plug} /usr/share/alsa/
+
+21. Tweak decoder libraries
+
+	# ls -al /usr/lib/x86_64-linux-gnu/lib{audiofile,FLAC.so}*
+	# mv /usr/lib/x86_64-linux-gnu/libaudiofile.so.1.0.0 /etc/libaudiofile.so.1.0.0.orig
+	# mv /usr/lib/x86_64-linux-gnu/libFLAC.so.12.1.0 /etc/libFLAC.so.12.1.0.orig
+	# echo "/etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1" | xargs -n 1 cp -v copy/libaudiofile.so.1.0.0
+	# echo "/etc/libFLAC.so.12.1.0.sav /dev/shm/libFLAC.so.12" | xargs -n 1 cp -v copy/libFLAC.so.12.1.0
+	# rm -i /usr/lib/x86_64-linux-gnu/lib{audiofile.so*,FLAC.so*}
+	# rm copy/{libaudiofile.so.1.0.0,libFLAC.so.12.1.0}
+	##ln -sf /etc/libFLAC.so.12.1.0.sav     /usr/lib/x86_64-linux-gnu/libFLAC.so
+	##ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
+
+	# ls -al /dev/shm/
+	# echo "/dev/shm/" | tee /etc/ld.so.conf.d/dev_shm.conf
+	# ldconfig
+	# ls -al /usr/lib/x86_64-linux-gnu/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
+
+22. Edit /etc/rc.local
+
+	# mv copy/*.service /lib/systemd/system/
+	# systemctl daemon-reload
+	# nano /etc/rc.local
+
+23. Sysctl Configuration
+
+	# nano /etc/sysctl.conf
+	# sysctl -p /etc/sysctl.conf
+
+24. audio-config
+
+	# mv copy/{audio-config,audioconf,consf} /usr/bin/
+	# mv copy/audio.conf /etc/default/
+	# echo "* Mino's UPnP Audio Renderer for PC $(date +"%y.%m")" | tee /etc/release
+	# apt-get install whiptail
+	# audio-config
+	# audioconf
+
+25. CIFS & NFS & USB mounting
+
+	##apt-get install cifs-utils nfs-common
+	# apt-get install exfat-fuse exfatprogs
+	# mkdir /mnt/cifs /mnt/nfs /mnt/usb
+	# ln -s /mnt/ /var/lib/mpd/music
+	# nano /etc/fstab
+		PARTUUID=...
+		PARTUUID=...
+
+		#/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
+		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
+		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
+		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
+
+26. Make Image
+
+	# Remove all the sound devices
+
+	# ls -al /usr/lib/x86_64-linux-gnu/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
+	# ps -ef | grep [d]efunct | awk '{print $3}'
+	# systemctl disable ssh
+	# sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
+	# grep ssh= /etc/default/audio.conf
+
+	##ntpdate pool.ntp.org
+	# apt-get update
+	# apt-get upgrade
+	# apt-get dist-upgrade
+	# apt-get autoremove
+	# apt-get clean
+
+	# yt-dlp --update
+	# echo "* Mino's UPnP Audio Renderer for PC $(date +"%y.%m")" | tee /etc/release
+	# cat /etc/release
+
+	# mpc clear
+	# ls /lib/modules/
+	# rm -rf /var/roon/* /var/lib/mympd/covercache/*
+	# rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
+	# sync
+	# poweroff
+
+	$ sudo fdisk -l
+	$ sudo umount /dev/sdb?
+	$ sudo dd bs=4M status=progress if=/dev/sdb of=pc_audio_renderer_$(date +"%y.%m").img
+	$ sync
+	$ zip -dd pc_audio_renderer_$(date +"%y.%m").zip pc_audio_renderer_$(date +"%y.%m").img
+
+27. Resize active partition
+
+	# systemctl enable armbian-resize-filesystem
+
+
+28. Install HDD
+
+	# armbian-install

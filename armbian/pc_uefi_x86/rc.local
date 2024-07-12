@@ -1,0 +1,159 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+if [ "$(grep vm.swap /etc/sysctl.conf | cut -d\= -f2)" -ne 0 ]; then
+ sed -i 's/vm.swap.*/vm.swappiness = 0/' /etc/sysctl.conf
+ sysctl -w vm.swappiness=0
+fi
+
+[ -r /etc/default/audio.conf ] && . /etc/default/audio.conf
+
+### SSH
+[ "$ssh" = on ] && systemctl start ssh
+
+roon_bridge () {
+ if [ "$roontoram" = on ]; then
+  cp -r /opt/RoonBridge /dev/shm/
+  systemctl start roonbridgetoram
+ else
+  systemctl start roonbridge
+ fi
+}
+
+naa () {
+ if [ "$naatoram" = on ]; then
+  cp /usr/sbin/networkaudiod /dev/shm/
+  systemctl start networkaudiodtoram
+ else
+  systemctl start networkaudiod
+ fi
+}
+
+if [ "$alsa" = plug ]; then
+ cp /etc/libasound.so.2.0.0.plug.dev.shm /dev/shm/libasound.so.2
+ cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
+elif [ "$alsa_conf" = min ] && [ "$roon" = off ] && [ "$spotify" = off ] && [ "$naa" = off ]; then
+ cp /etc/libasound.so.2.0.0.mix.dev.shm /dev/shm/libasound.so.2
+ cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+ rm -rf /dev/snd/*c /dev/snd/by* || true
+ rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+else
+ cp /etc/libasound.so.2.0.0.mix.dev.shm /dev/shm/libasound.so.2
+ cp /usr/share/alsa/alsa.conf.mix /dev/shm/alsa.conf
+#rm /dev/snd/hw* /dev/snd/seq /dev/snd/timer || true
+fi
+
+#ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
+cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /dev/shm/
+#cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+[ $(cat /proc/meminfo | grep MemFree | awk '{print $2}') -ge 563200 ] && cp /etc/mpd.conf.sav.input_cache /dev/shm/mpd.conf || cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
+cp /etc/libFLAC.so.12.1.0.sav /dev/shm/libFLAC.so.12
+
+echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
+echo 0 > /sys/module/snd*/parameters/power_save*  || true
+#echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
+#echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
+#[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
+
+for i in $(ls /sys/block/*/queue/scheduler); do
+ if   echo $(cat $i) | grep -q none; then
+  echo none > $i || true
+ elif echo $(cat $i) | grep -q noop; then
+  echo noop > $i || true
+ fi
+done
+
+#for i in ondemand conservative powersave; do
+# grep -q $i /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors && gov="$i"
+#done
+#[ "$gov" != "" ] && echo "$gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+if [ "$tfc" = on ]; then
+ echo "$(ifconfig -a | grep -o ^[a-z0-9]* | grep -v -e lo -e dummy)" | while read dev ; do
+  tc qdisc add dev $dev root pfifo_fast || true
+ #tc qdisc add dev $dev ingress
+ #tc -s -d qdisc show dev $dev
+ done
+fi
+
+for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 {print $1}'); do
+ renice -2 $i
+done
+
+#for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
+# chrt -op 0 $i
+# renice  -3 $i
+#done
+
+### Remove services
+#for i in cron rsyslog systemd-journald systemd-logind systemd-timesyncd triggerhappy dbus # systemd-udevd
+#do
+# service $i stop
+#done
+pkill alsactl || true
+pkill rngd    || true
+[ "$dbus" = off ] && systemctl stop dbus  || true
+[ "$wifi" = off ] && pkill wpa_supplicant || true
+swapoff -a
+
+### Unmute IQaudIO I2S
+#echo "22"  > /sys/class/gpio/export
+#echo "out" > /sys/class/gpio/gpio22/direction
+#echo "1"   > /sys/class/gpio/gpio22/value
+
+### MPD
+if [ "$mpd" = on ]; then
+ systemctl start musicpd
+### Text to Speech
+ [ "$tts" = on ] && [ "$tts_eng" = on  ] && tts2mpd en My I P is $(hostname -I)
+ [ "$tts" = on ] && [ "$tts_eng" = off ] && tts2mpd
+### Upmpdcli
+ [ "$upmpdcli" = on ] && systemctl start upmusicpdcli
+fi
+
+### APrenderer
+[ "$aprenderer" = on ] && mkdir /dev/shm/aprenderer && systemctl start aprenderer
+
+### Airconnect
+if [ "$upmpdcli" = on ] || [ "$aprenderer" = on ]; then
+ if [ "$airplay" = on ]; then
+ sleep 3
+  systemctl start airconnect_run
+ fi
+fi
+
+### Roon Bridge
+[ "$roon" = on ] && (roon_bridge &) && sleep 3
+
+### Squeezelite
+[ "$sqzlite" = on ] && systemctl start sqzlite_run
+
+### Spotify
+[ "$spotify" = on ] && systemctl start spotify_run
+
+### Networkaudiod
+[ "$naa" = on ] && (naa &) && sleep 3
+
+### Gerbera & LMS
+[ "$gerbera" = on ] && systemctl start gerbera
+[ "$lms"     = on ] && systemctl start logitechmediaserver
+
+### myMPD
+[ "$mympd" = on ] && systemctl start mympd
+
+### tty
+[ "$tty" = off ] && systemctl stop getty@tty1
+
+exit 0
