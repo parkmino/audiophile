@@ -450,7 +450,7 @@ UPnP/DLNA Audio Render for PC
 
 	# ls -al /usr/lib/x86_64-linux-gnu/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
 	# ps -ef | grep [d]efunct | awk '{print $3}'
-	# systemctl disable ssh
+	# systemctl disable ssh.service ssh.socket
 	# sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
 	# grep ssh= /etc/default/audio.conf
 
