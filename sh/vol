@@ -2,8 +2,7 @@
 
 snd1="Speaker"
 snd2="Bass Speaker"
-#alsa_conf="/usr/share/alsa/alsa.conf"
-alsa_conf="/dev/shm/alsa.conf"
+[ -e /dev/shm/alsa.conf ] && alsa_conf="/dev/shm/alsa.conf" || alsa_conf="/usr/share/alsa/alsa.conf"
 card=$(grep -o 'card[ =\t]*[0-9]' $alsa_conf | head -1 | tail -c 2) # card=0
 
 sudo cp ${alsa_conf} "${alsa_conf}.sav"
@@ -78,7 +77,7 @@ case $1 in
 	83 84 84 84 85 85 85 86 86 86 87 "
   if ! amixer get Master >/dev/null 2>&1; then
    echo "No Master volume control found!"
-   sudo sed -i '/ctl.default/d' $alsa_conf
+   sudo mv "${alsa_conf}.sav" ${alsa_conf}
    exit
   fi
   if [ $1 = st ] || [ $1 = stat ] || [ $1 = status ]; then
