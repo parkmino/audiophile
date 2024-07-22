@@ -328,6 +328,7 @@ UPnP/DLNA Audio Render for PC
 	# echo "deb [signed-by=/usr/share/keyrings/gerbera-keyring.gpg] https://pkg.gerbera.io/debian/ $(lsb_release -c --short) main" | tee /etc/apt/sources.list.d/gerbera.list >/dev/null
 	# apt-get update
 	# apt-get install gerbera
+	$ sudo chown -R gerbera:gerbera /var/lib/gerbera # /usr/share/gerbera
 
 	# systemctl status gerbera
 	# systemctl start gerbera

@@ -391,6 +391,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ echo "deb [signed-by=/usr/share/keyrings/gerbera-keyring.gpg] https://pkg.gerbera.io/debian/ $(lsb_release -c --short) main" | sudo tee /etc/apt/sources.list.d/gerbera.list >/dev/null
 	$ sudo apt-get update
 	$ sudo apt-get install gerbera
+	$ sudo chown -R gerbera:gerbera /var/lib/gerbera # /usr/share/gerbera
 
 	$#ls .config/gerbera /etc/gerbera /var/lib/gerbera
 	$#mkdir -p .config/gerbera/ && sudo mkdir -p /etc/gerbera /var/lib/gerbera
