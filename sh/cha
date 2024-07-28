@@ -1,9 +1,0 @@
-#!/bin/sh
-
-ch="http://ichannela.com/com/cmm/onair.do"
-m3u_dir="/home/parkmino/Videos"
-
-url=$(curl -s $ch -H 'Accept-Language: en-US,en;q=0.5' | grep vUrl | head -1 | cut -d\" -f4)
-
-echo "$url"
-printf "#EXTM3U\n#EXTINF:-1,채널A $1\n$url\n" > $m3u_dir/channela.m3u
