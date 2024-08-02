@@ -18,9 +18,9 @@ for i in $(ls /sys/block/*/queue/scheduler); do
  fi
 done
 
-for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 {print $1}'); do
- renice -2 $i || true
-done
+#for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 {print $1}'); do
+# renice -2 $i || true
+#done
 
 #for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
 # chrt -op 0 $i || true
