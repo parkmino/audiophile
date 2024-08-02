@@ -89,10 +89,10 @@ if [ "$tfc" = on ]; then
  done
 fi
 
-for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 {print $1}'); do
- renice -2 $i
-done
-
+#for i in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 {print $1}'); do
+# renice -2 $i
+#done
+#
 #for i in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
 # chrt -op 0 $i
 # renice  -3 $i
@@ -160,10 +160,6 @@ fi
 ### Networkaudiod
 [ "$naa" = on ] && (naa &) && sleep 3
 
-### Gerbera & LMS
-[ "$gerbera" = on ] && systemctl start gerbera
-[ "$lms"     = on ] && systemctl start logitechmediaserver
-
 ### myMPD
 [ "$mympd" = on ] && systemctl start mympd
 
@@ -187,6 +183,10 @@ if [ "$usbmount" = on ]; then
   echo "No mount drive ($drive) found!"
  fi
 fi
+
+### Minidlna & LMS
+[ "$minidlna" = on ] && systemctl start minidlna
+[ "$lms"      = on ] && systemctl start logitechmediaserver
 
 #systemctl stop systemd-timesyncd || true
 #ntpdate -d pool.ntp.org || true

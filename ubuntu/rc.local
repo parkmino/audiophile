@@ -121,10 +121,10 @@ swapoff -a
 #ln -sf /etc/libFLAC.so.8.3.0.sav /usr/lib/x86_64-linux-gnu/libFLAC.so
 #cp -r /home/parkmino/Downloads/aplayer/aprenderer /dev/shm/
 
-for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 && $4 !~ /mpd/ {print $1}'); do
- renice  -2 $pid || true
-done
-
+#for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -2 && $4 !~ /mpd/ {print $1}'); do
+# renice  -2 $pid || true
+#done
+#
 #for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
 # chrt -op 0 $pid || true
 # renice  -3 $pid || true
