@@ -2,8 +2,8 @@
 #complete -W 'hdmi usb int def nodef' ./audio \~/audio
 
 usage () {
- echo "Usage: $(basename "$0") [ls|hdmi|usb|int] # HDMI/USB/Internal"
- echo "   or: $(basename "$0") [min|mix]         # ALSA Mode Min/Mix"
+ echo "Usage: $(basename "$0") [0|1|2|ls|hdmi|usb|int] # Cards/HDMI/USB/Internal"
+ echo "   or: $(basename "$0") [min|mix]               # ALSA Mode Min/Mix"
  echo "Manipulate ALSA output"
 }
 
@@ -14,6 +14,12 @@ alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
 case $1 in
+ 0)
+  sudo sed -i 's/card ./card 0/g' $alsa_conf ;;
+ 1)
+  sudo sed -i 's/card ./card 1/g' $alsa_conf ;;
+ 2)
+  sudo sed -i 's/card ./card 2/g' $alsa_conf ;;
  ls)
   #nr=0
   #
