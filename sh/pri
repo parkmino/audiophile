@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage () {
- echo "Usage: $(basename $0) [view|set]"
+ echo "Usage: $(basename $0) [view]"
 }
 
 if [ "$1" = view ]; then
@@ -18,12 +18,12 @@ if [ "$1" = view ]; then
  # if [ $(taskset -cp $pid | awk '{print $NF}') != 0-3 ]; then
  #  ps   --no-headers $pid
  #  taskset       -cp $pid
- # fi 
+ # fi
  #done
-elif [ "$1" = set ]; then
- for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -3 && $4 !~ /mpd|mpv/ {print $1}'); do
-  sudo renice -2 $pid
- done
+#elif [ "$1" = set ]; then
+# for pid in $(ps -eo pid,class,ni,comm | grep -i TS | awk '$3 < -3 && $4 !~ /mpd|mpv/ {print $1}'); do
+#  sudo renice -2 $pid
+# done
 #for pid in $(ps -eo pid,class,comm | grep -E '(FF|RR)' | awk '$3 !~ /migration|mpd/ {print $1}'); do
 # sudo chrt -op 0 $pid
 # sudo renice  -3 $pid

@@ -42,7 +42,7 @@ sudo hdparm -B255 /dev/sda
 #sudo sh -c "echo $(echo "2^$s_task" | bc) > $proc"
 #echo "$proc = $(cat $proc) ($(echo $proc | cut -d'/' -f4))"
 
-/home/parkmino/pri set
+#/home/parkmino/pri set
 
 grep ' sysctl.*\| echo.*sys' /etc/rc.local | while read line ; do
  sudo sh -c "$line"
