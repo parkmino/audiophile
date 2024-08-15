@@ -1,3 +1,26 @@
 1. alsa.conf
 
    $ sudo sed -i 's/#$//g' /usr/share/alsa/alsa.conf.{min,mix,plug}
+
+2. /etc/rc.local
+
+   echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+   echo 4899049 > /sys/kernel/debug/sched/migration_cost_ns || true
+
+3. sysctl.conf
+
+   net.ipv4.tcp_rmem = 4634 88316 3345785
+   net.ipv4.tcp_wmem = 4584 89966 3455757
+   vm.max_map_count = 672156
+
+4. mpd.conf
+
+   input_cache {
+   size "465 MB"
+   }
+
+5. mpv.conf
+
+   demuxer-max-bytes=78338 KiB
+   no-icc-cache
+   no-gpu-shader-cache
