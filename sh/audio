@@ -15,11 +15,11 @@ card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
 case $1 in
  0)
-  sudo sed -i 's/card ./card 0/g' $alsa_conf ;;
+  sudo sed -i 's/type hw card . /type hw card 0 /g' $alsa_conf ;;
  1)
-  sudo sed -i 's/card ./card 1/g' $alsa_conf ;;
+  sudo sed -i 's/type hw card . /type hw card 1 /g' $alsa_conf ;;
  2)
-  sudo sed -i 's/card ./card 2/g' $alsa_conf ;;
+  sudo sed -i 's/type hw card . /type hw card 2 /g' $alsa_conf ;;
  ls)
   #nr=0
   #
