@@ -9,7 +9,7 @@ if [ "$1" = "umount" ]; then
  exit
 fi
 
-blkid | tac | while read line; do
+sudo blkid | tac | while read line; do
   uuid=$(echo $line | grep -io uuid.* | cut -d\" -f2)
  drive=$(echo $line | cut -d: -f1)
  if [ -n "$uuid" ] && ! grep -q $uuid /etc/fstab && ! mount | grep -q "$drive"; then
