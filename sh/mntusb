@@ -9,7 +9,7 @@ if [ "$1" = "umount" ]; then
  exit
 fi
 
-sudo blkid | tac | while read line; do
+sudo blkid | while read line; do
   uuid=$(echo $line | grep -io uuid.* | cut -d\" -f2)
  drive=$(echo $line | cut -d: -f1)
  if [ -n "$uuid" ] && ! grep -q $uuid /etc/fstab && ! mount | grep -q "$drive"; then
@@ -19,7 +19,7 @@ sudo blkid | tac | while read line; do
    ntfs) opt="ro,umask=022" ;;
    *)    opt="ro" ;;
   esac
-  sudo mount -o "$opt" "$drive" /mnt/usb
-  break
+  [ -d "/mnt/$uuid" ] || sudo mkdir -p "/mnt/$uuid"
+  sudo mount -o "$opt" "$drive" "/mnt/$uuid"
  fi
 done

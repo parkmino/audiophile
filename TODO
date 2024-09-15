@@ -29,7 +29,7 @@
 
 ### usb mount
 if [ "$usbmount" = on ]; then
- blkid | tac | while read line; do
+ blkid | while read line; do
    uuid=$(echo $line | grep -io uuid.* | cut -d\" -f2)
   drive=$(echo $line | cut -d: -f1)
   if [ -n "$uuid" ] && ! grep -q $uuid /etc/fstab && ! mount | grep -q "$drive"; then
@@ -39,8 +39,8 @@ if [ "$usbmount" = on ]; then
     ntfs) opt="ro,umask=022" ;;
     *)    opt="ro" ;;
    esac
-   sudo mount -o "$opt" "$drive" /mnt/usb
-   break
+   [ -d "/mnt/$uuid" ] || sudo mkdir -p "/mnt/$uuid"
+   sudo mount -o "$opt" "$drive" "/mnt/$uuid"
   fi
  done
 fi
