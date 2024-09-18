@@ -16,12 +16,14 @@
 4. mpd.conf
 
    input_cache {
-   size "465 MB"
+   #size "465 MB"
+   size "487453250"
    }
 
 5. mpv.conf
 
-   demuxer-max-bytes=78346KiB
+   #demuxer-max-bytes = 78338K
+   demuxer-max-bytes=80226745
    #no-icc-cache
    #no-gpu-shader-cache
    icc-cache-dir=/dev/shm/
