@@ -23,7 +23,7 @@
 5. mpv.conf
 
    #demuxer-max-bytes = 78338K
-   demuxer-max-bytes=80226757
+   demuxer-max-bytes=80226758
    #no-icc-cache
    #no-gpu-shader-cache
    icc-cache-dir=/dev/shm/
