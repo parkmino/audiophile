@@ -13,20 +13,24 @@
    net.ipv4.tcp_wmem = 4584 89966 3455757
    vm.max_map_count = 672156
 
-4. mpd.conf
+4. mpd
+
+   meson ... -Db_ndebug=true ...
+
+5. mpd.conf
 
    input_cache {
    #size "465 MB"
-   size "487453249"
+   size "487453253"
    }
 
-5. mpv.conf
+6. mpv.conf
 
    demuxer-max-bytes=80226783
    no-icc-cache
    no-gpu-shader-cache
 
-6. rc.local
+7. rc.local
 
 ### usb mount
 if [ "$usbmount" = on ]; then
