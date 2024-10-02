@@ -33,41 +33,59 @@ duckdns () {
  url=$(curl -s "http://serpent0.duckdns.org:8088/$1.pls" | head -2 | tail -1 | cut -d\= -f2-)
 }
 
+zstream () {
+ url=$(curl -s "https://zstream.win/pls/$1.pls" | head -2 | tail -1 | cut -d\= -f2-)
+}
+
 case $1 in
  1fm)   kbsr 24
         #duckdns kbsfm
+        #zstream kbs_1fm
         ;;
  2fm)   kbsr 25
         #duckdns kbs2fm
+        #zstream kbs_2fm
         ;;
  1r)    kbsr 21
         #duckdns kbs1radio
+        #zstream kbs_1radio
         ;;
  2r)    kbsr 22
         #duckdns kbs2radio
+        #zstream kbs_2radio
         ;;
- 3r)    kbsr 23  ;;
+ 3r)    kbsr 23
+        #zstream kbs_3radio
+        ;;
  han)   kbsr 26 ;;
  mul)   kbsr wink11 ;;
  eng)   kbsr I92 ;;
- mbcm)  mbcr chm ;;
+ mbcm)  mbcr chm 
+        #zstream mbc_chm
+        ;;
  mbc4u) mbcr mfm
         #duckdns mbcfm
+        #zstream mbc_mfm
         ;;
  mbcfm) mbcr sfm
         #duckdns mbcsfm
+        #zstream mbc_sfm
         ;;
  sbsp)  sbsr powerpc  powerfm
         #duckdns sbsfm
+        #zstream sbs_powerfm
         ;;
  sbsl)  sbsr lovepc   lovefm
         #duckdns sbs2fm
+        #zstream sbs_lovefm
         ;;
- sbsg)  sbsr sbsdmbpc sbsdmb ;;
- cbs)   pls "https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8" ;;
- tbs)   pls "https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8" ;;
+ sbsg)  sbsr sbsdmbpc sbsdmb
+        #zstream sbs_sbsdmb
+        ;;
+ cbs)   pls "https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8"    ;;
+ tbs)   pls "https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8"   ;;
  tbse)  pls "https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8" ;;
- gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" ;;
+ gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8"    ;;
  stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
  *)     if [ -n "$1" ] && [ -z "${1##http*}" ]; then
          url="$1"
