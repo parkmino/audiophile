@@ -49,3 +49,7 @@ if [ "$usbmount" = on ]; then
   fi
  done
 fi
+
+8. kr2mpd
+
+   cbs)   pls "https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8" ;;
