@@ -13,24 +13,31 @@
    net.ipv4.tcp_wmem = 4584 89966 3455757
    vm.max_map_count = 672156
 
-4. mpd
+4. No asserts for alsa & mpd
 
-   meson ... -Db_ndebug=true ...
+   ./configure ... --disable-debug --with-debug=no
+   meson ... -Db_ndebug=true
 
 5. mpd.conf
 
    input_cache {
    #size "465 MB"
-   size "487453253"
+   size "487453264"
    }
 
-6. mpv.conf
+6. ap2renderer
 
-   demuxer-max-bytes=80226783
+   Preload buffer     [108794]
+   ALSA Period frames [3744]
+   ALSA Buffer frames [14949]
+
+7. mpv.conf
+
+   demuxer-max-bytes=80226791
    no-icc-cache
    no-gpu-shader-cache
 
-7. rc.local
+8. rc.local
 
 ### usb mount
 if [ "$usbmount" = on ]; then
@@ -50,6 +57,6 @@ if [ "$usbmount" = on ]; then
  done
 fi
 
-8. kr2mpd
+9. kr2mpd
 
    cbs)   pls "https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8" ;;
