@@ -9,9 +9,9 @@
 
 3. sysctl.conf
 
-   net.ipv4.tcp_rmem = 4634 88316 3345785
-   net.ipv4.tcp_wmem = 4584 89966 3455757
-   vm.max_map_count = 672156
+   net.ipv4.tcp_rmem = 4636 88318 3345788
+   net.ipv4.tcp_wmem = 4588 89969 3455760
+   vm.max_map_count = 672159
 
 4. No asserts for alsa & mpd
 
