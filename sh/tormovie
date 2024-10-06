@@ -43,7 +43,7 @@ torwal () {
 
 torqq () {
 #url="https://토렌트큐큐.net"
- url="https://torrentqq335.com"
+ url="https://torrentqq336.com"
  chk_url || return
  [ -z "${url##*큐큐*}" ] && url="$(curl $curl_opt -L "$url" | grep -o href=.* | cut -d\" -f2 | cut -d\/ -f-3)"
  url="$url/torrent/popular.html?period=w&board=mov"
@@ -75,13 +75,15 @@ tfreeca () {
  url="https://tfreeca22.com"
  chk_url || return
  url="$url/top100.php?b_id=tmovie&hit=Week"
+ echo "$url"
+ echo
  tmpfile=$(mktemp)
  curl $curl_opt -L "$url" | grep -m 10 '<span class="ca">' > "$tmpfile"
  for i in $(seq 1 10); do
   movie=https://tfreeca22.com/$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f10)
   chk_movie
  #printf "    \e[34m$(grep '<a href=' "$tmpfile" | head -$i | tail -1 | cut -d\" -f11 | sed 's/^.*class> //g; s/ <\/a>.*//g')\e[0m\n"
-  printf "    \e[34m$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f11- | sed 's/^ class=..> //; s/ <\/a>.*//g')\e[0m\n"
+  printf "    \e[34m$(grep '<span class="ca">' "$tmpfile" | head -$i | tail -1 | cut -d\" -f11- | sed 's/class> //; s/ <\/a>.*//g')\e[0m\n"
  done
  rm "$tmpfile"
 }
@@ -90,5 +92,5 @@ case $1 in
  qq)           torqq   ;;
  view|vw)      torview ;;
  tfreeca|tf)   tfreeca ;;
- *)            torqq   ;;
+ *)            tfreeca ;;
 esac
