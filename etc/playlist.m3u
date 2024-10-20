@@ -109,18 +109,6 @@ http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8
 http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC충북FM4U
 http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8
-#EXTINF:-1,G1강원TV
-http://61.82.49.4:1935/live/_definst_/tv.stream/playlist.m3u8
-#EXTINF:-1,G1강원FM
-http://61.82.49.4:1935/fm/_definst_/myStream/playlist.m3u8
-#EXTINF:-1,KBC광주TV
-http://119.200.131.11:1935/KBCTV/tv/playlist.m3u8
-#EXTINF:-1,KBC광주FM
-http://119.200.131.11:1935/KBCFM/kbcra_aac/playlist.m3u8
-#EXTINF:-1,TBC대구TV
-http://203.251.91.122:1935/on-air-Backup/tv/playlist.m3u8
-#EXTINF:-1,TBC대구FM
-http://203.251.91.122:1935/on-air/fm/playlist.m3u8
 #EXTINF:-1,TJB대전TV
 http://1.245.74.5:1935/live/tv/playlist.m3u8
 #EXTINF:-1,TJB대전FM
@@ -132,7 +120,7 @@ http://211.220.195.200:1935/live/mp4:KnnRadio1FM.sdp/playlist.m3u8
 #EXTINF:-1,KNN부산경남 러브FM
 http://211.220.195.200:1935/live/mp4:KnnRadio2FM.sdp/playlist.m3u8
 #EXTINF:-1,UBC울산TV
-http://59.23.231.102:1935/live/UBCstream/playlist.m3u8
+https://stream.ubc.co.kr/hls/ubctvstream/1_2/index.m3u8
 #EXTINF:-1,UBC울산FM
 http://59.23.231.102:1935/live/mp3:UBCfmstream/playlist.m3u8
 #EXTINF:-1,JTV전주TV
