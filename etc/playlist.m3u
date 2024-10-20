@@ -109,6 +109,10 @@ http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8
 http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC충북FM4U
 http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8
+#EXTINF:-1,KBC광주TV
+http://119.200.131.11:1935/KBCTV/tv/playlist.m3u8
+#EXTINF:-1,KBC광주FM
+http://119.200.131.11:1935/KBCFM/kbcra_aac/playlist.m3u8
 #EXTINF:-1,TJB대전TV
 http://1.245.74.5:1935/live/tv/playlist.m3u8
 #EXTINF:-1,TJB대전FM
@@ -152,7 +156,7 @@ https://cdnlive179.smartucc.kr/smartlive/312/46324be24454bd98f785039457ac695d/pl
 #EXTINF:-1,소상공인방송
 https://cdnlive179.smartucc.kr/smartlive/558/91258ac21591769e21f41b96f26d883e/playlist.m3u8
 #EXTINF:-1,시민방송 RTV
-https://rtv-stream3.a04f922e9e85c8d25ebfeae3dfd22a67.com/rtv/rtv.m3u8
+https://rtv-stream.a04f922e9e85c8d25ebfeae3dfd22a67.com/hls/rtv_1080/index.m3u8
 #EXTINF:-1,아리랑 TV
 http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
 #EXTINF:-1,아리랑 라디오
