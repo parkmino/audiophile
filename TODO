@@ -22,13 +22,15 @@
 
    input_cache {
    #size "465 MB"
-   size "487453264"
+   size "487453253"
    }
    #mixer_type "none"
    database {
    #plugin "simple"
    path "/var/lib/mpd/database"
    }
+
+   $ sudo sed -i '/^#/d' /etc/mpd.conf
 
 6. ap2renderer
 
@@ -38,9 +40,11 @@
 
 7. mpv.conf
 
-   demuxer-max-bytes=80226791
+   demuxer-max-bytes=80226784
    no-icc-cache
    no-gpu-shader-cache
+
+   $ sudo sed -i '/^#/d' .config/mpv/mpv.conf
 
 8. rc.local
 
