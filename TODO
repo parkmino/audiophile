@@ -24,6 +24,11 @@
    #size "465 MB"
    size "487453264"
    }
+   #mixer_type "none"
+   database {
+   #plugin "simple"
+   path "/var/lib/mpd/database"
+   }
 
 6. ap2renderer
 
