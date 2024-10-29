@@ -5,13 +5,13 @@
 2. /etc/rc.local
 
    echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899050 > /sys/kernel/debug/sched/migration_cost_ns || true
+   echo 4899051 > /sys/kernel/debug/sched/migration_cost_ns || true
 
 3. sysctl.conf
 
-   net.ipv4.tcp_rmem = 4636 88318 3345788
-   net.ipv4.tcp_wmem = 4588 89969 3455760
-   vm.max_map_count = 672159
+   net.ipv4.tcp_rmem = 4637 88319 3345789
+   net.ipv4.tcp_wmem = 4589 89970 3455761
+   vm.max_map_count = 672161
 
 4. No asserts for alsa & mpd
 
@@ -22,13 +22,13 @@
 
    input_cache {
    #size "465 MB"
-   size "487453253"
+   size "487453266"
    }
-   #mixer_type "none"
    database {
    #plugin "simple"
    path "/var/lib/mpd/database"
    }
+   #mixer_type "none"
 
    $ sudo sed -i '/^#/d' /etc/mpd.conf
 

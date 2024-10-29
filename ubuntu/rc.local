@@ -27,7 +27,7 @@
 #echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
 #sysctl -w kernel.sched_migration_cost_ns=4899037
- echo 4899049 | tee /sys/kernel/debug/sched/migration_cost_ns
+ echo 4899051 | tee /sys/kernel/debug/sched/migration_cost_ns
 #sysctl -w kernel.sched_nr_migrate=0
 #echo 25      | tee /sys/kernel/debug/sched/nr_migrate
 #sysctl -w kernel.sched_rr_timeslice_ms=32
@@ -37,10 +37,12 @@
 #sysctl -w kernel.sched_time_avg_ms=6288
  sysctl -w kernel.printk="0 0 0 0"
 
+ sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
- sysctl -w vm.max_map_count=672156
+ sysctl -w vm.max_map_count=672161
  sysctl -w vm.memory_failure_recovery=0
  sysctl -w vm.oom_dump_tasks=0
  sysctl -w vm.oom_kill_allocating_task=1
@@ -56,8 +58,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4634 88316 3345785'
- sysctl -w net.ipv4.tcp_wmem='4584 89966 3455757'
+ sysctl -w net.ipv4.tcp_rmem='4637 88319 3345789'
+ sysctl -w net.ipv4.tcp_wmem='4589 89970 3455761'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -113,11 +115,11 @@ swapoff -a
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
  cp /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mpv /home/parkmino/.config/mpv/mpv.conf /dev/shm/
  mkdir /dev/shm/scripts && cp /home/parkmino/.config/mpv/scripts/ytdl_hook.lua /dev/shm/scripts || true
- cp /usr/bin/mpd /dev/shm/ && cp /etc/mpd.conf.sav /dev/shm/mpd.conf
+ cp /usr/local/bin/mpd /dev/shm/ && cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 #cp /usr/bin/mpd.0.23.12 /dev/shm/mpd && cp /etc/mpd.conf.resampler /dev/shm/mpd.conf
- cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
+#cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 #ln -sf /etc/libaudiofile.so.1.0.0.sav /usr/lib/x86_64-linux-gnu/libaudiofile.so
- cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
+#cp /etc/libFLAC.so.8.3.0.sav /dev/shm/libFLAC.so.8
 #ln -sf /etc/libFLAC.so.8.3.0.sav /usr/lib/x86_64-linux-gnu/libFLAC.so
 #cp -r /home/parkmino/Downloads/aplayer/aprenderer /dev/shm/
 
@@ -194,9 +196,8 @@ ps -ef | grep [d]efunct | awk '{print $3}' | xargs -r kill -9
 
 modprobe -r psmouse
 
-uhubctl -a 0 -l 2-1 -p 1-6
-#uhubctl -a 0 -l 1-1 -p 3-6
-uhubctl -a 0 -l 1-1 -p 1-6
+#uhubctl -a 0 -l 2-1 -p 1-6 || true
+#uhubctl -a 0 -l 1-1 -p 1-6 || true
 
 pgrep -x kime > /dev/null && pkill kime
 
