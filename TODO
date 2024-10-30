@@ -22,13 +22,13 @@
 
    input_cache {
    #size "465 MB"
-   size "487453266"
+   size "487453267"
    }
    database {
    #plugin "simple"
    path "/var/lib/mpd/database"
    }
-   #mixer_type "none"
+   mixer_type "none"
 
    $ sudo sed -i '/^#/d' /etc/mpd.conf
 
@@ -40,7 +40,7 @@
 
 7. mpv.conf
 
-   demuxer-max-bytes=80226784
+   demuxer-max-bytes=80226785
    no-icc-cache
    no-gpu-shader-cache
 
