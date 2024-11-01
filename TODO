@@ -22,13 +22,13 @@
 
    input_cache {
    #size "465 MB"
-   size "487453270"
+   size "487453267"
    }
    database {
-   #plugin "simple"
+   plugin "simple"
    path "/var/lib/mpd/database"
    }
-   mixer_type "none"
+   #mixer_type "none"
 
    $ sudo sed -i '/^#/d' /etc/mpd.conf
 
