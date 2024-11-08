@@ -505,7 +505,7 @@ MPD_CANTATA_MYMPD () {
   [ "$id" = cantata ] && printf "• Cantata\t" || printf "• $id\t\t"
   release=$(curl $curl_opt $(echo "$url" | cut -d\/ -f-5)/tags | grep -m1 'releases/tag/' | cut -d'/' -f6 | cut -d'"' -f1)
  #date=$(curl $curl_opt "$url" | grep -m1 authoredDate | cut -d'"' -f18)
-  date=$(curl $curl_opt "$url" | grep -oE '"authoredDate".{0,40}' | head -1 | cut -d\" -f4)
+  date=$(curl $curl_opt "$url" | grep -oE '"committedDate".{0,40}' | head -1 | cut -d\" -f4)
   if [ -z "$release" ] || [ -z "$date" ]; then
    printf "\t\t\t\t정보 없음\n"
   else
