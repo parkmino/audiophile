@@ -1,6 +1,7 @@
 1. alsa.conf
 
    $ sudo sed -i 's/#$//g' /usr/share/alsa/alsa.conf.{min,mix,plug}
+   $ sudo sed -i '0,/^pcm/s/^pcm/!pcm/' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
 2. /etc/rc.local
 
@@ -20,9 +21,12 @@
 
 5. mpd.conf
 
+   audio_output {
+   device "hw"
+   }
    input_cache {
    #size "465 MB"
-   size "487453267"
+   size "487453266"
    }
    database {
    plugin "simple"
@@ -40,7 +44,7 @@
 
 7. mpv.conf
 
-   demuxer-max-bytes=80226786
+   demuxer-max-bytes=80226785
    no-icc-cache
    no-gpu-shader-cache
 
