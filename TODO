@@ -1,7 +1,7 @@
 1. alsa.conf
 
    $ sudo sed -i 's/#$//g' /usr/share/alsa/alsa.conf.{min,mix,plug}
-   $ sudo sed -i '0,/^pcm/s/^pcm/!pcm/' /usr/share/alsa/alsa.conf.{min,mix,plug}
+   $ #sudo sed -i '0,/^pcm/s/^pcm/!pcm/' /usr/share/alsa/alsa.conf.{min,mix,plug}
 
 2. /etc/rc.local
 
