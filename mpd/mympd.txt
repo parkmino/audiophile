@@ -31,6 +31,7 @@ $ git push origin master
 
 ### Build
 
+$ sudo apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev liblua5.4-dev
 $ cd myMPD-master
 $ ./build.sh release
 $ sudo ./build.sh install
@@ -49,10 +50,16 @@ $ mv mympd.tar.gz mympd_$ver.orig.tar.gz
 $ mv myMPD-$ver/contrib/packaging/debian myMPD-$ver
 $ cd myMPD-$ver
 
-$ sed -i '1s/-1)/-1ppa1~jammy)/; 1s/unstable/jammy/' debian/changelog
+$ sed -i '1s/-1)/-1ppa1~noble)/; 1s/unstable/noble/' debian/changelog
+$ cat debian/changelog
+	mympd ($ver-1ppa1~noble) noble; urgency=medium
+$ debuild -S -k5109AD1DC308EC34 # -sd
+$ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~noble_source.changes
+
+$ sed -i '1s/noble/jammy/g' debian/changelog
 $ cat debian/changelog
 	mympd ($ver-1ppa1~jammy) jammy; urgency=medium
-$ debuild -S -k5109AD1DC308EC34 # -sd
+$ debuild -S -k5109AD1DC308EC34 -sd
 $ dput ppa:parkmino/mympd ../mympd_$ver-1ppa1~jammy_source.changes
 
 $ sed -i '1s/jammy/focal/g' debian/changelog
