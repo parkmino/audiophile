@@ -194,7 +194,7 @@ Raspberry Pi OS(64-bit) with desktop
 
   https://pkg.hamonikr.org/pool/main/n/nimf/?C=M;O=D
 
-  $ sudo apt-get install im-config libhangul1
+  $ sudo apt-get install im-config libhangul1 # libayatana-appindicator3-1
   $ sudo dpkg -i libnimf1_1.3.0hamonikr41.1_arm64.deb nimf-libhangul_1.3.0hamonikr41.1_arm64.deb nimf_1.3.0hamonikr41.1_arm64.deb qtbase-abi-5-9-5-dummy_1.3.0hamonikr41.1_arm64.deb
   $ im-config -n nimf
 
