@@ -31,8 +31,17 @@ $ git push origin master
 
 ### Build
 
-$ sudo apt-get install gcc cmake perl libssl-dev libid3tag0-dev libflac-dev liblua5.4-dev
-$ cd myMPD-master
+$ sudo apt-get install debhelper gcc cmake perl libssl-dev libid3tag0-dev libflac-dev liblua5.4-dev lintian lua5.4
+$ export location=$(curl -w "%{redirect_url}" -o /dev/null -s "https://github.com/jcorporation/myMPD/releases/latest")
+$ export ver=$(echo "$location" | sed 's/.*\/v//')
+$ echo "$location" | sed 's/releases\/tag/archive\/refs\/tags/; s/$/.tar.gz/' | wget "$(cat -)" -O ./mympd.tar.gz
+$ tar -xvzf mympd.tar.gz
+$ cd myMPD-$ver
+$ ./build.sh pkgdebian
+$ ls -al package/mympd_*.deb
+
+$ scp pi@192.168.0.x:/home/pi/myMPD-xx.x.x/package/mympd_*.deb Downloads/
+
 $ ./build.sh release
 $ sudo ./build.sh install
 
