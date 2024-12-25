@@ -22,28 +22,10 @@ fi
 ### SSH
 [ "$ssh" = on ] && systemctl start ssh
 
-roon_bridge () {
- if [ "$roontoram" = on ]; then
-  cp -r /opt/RoonBridge /dev/shm/
-  systemctl start roonbridgetoram
- else
-  systemctl start roonbridge
- fi
-}
-
-naa () {
- if [ "$naatoram" = on ]; then
-  cp /usr/sbin/networkaudiod /dev/shm/
-  systemctl start networkaudiodtoram
- else
-  systemctl start networkaudiod
- fi
-}
-
 if [ "$alsa" = plug ]; then
  cp /etc/libasound.so.2.0.0.plug.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
-elif [ "$alsa_conf" = min ] && [ "$roon" = off ] && [ "$spotify" = off ] && [ "$naa" = off ]; then
+elif [ "$alsa_conf" = min ] && [ "$roon" = off ] && [ "$naa" = off ]; then
  cp /etc/libasound.so.2.0.0.mix.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -55,14 +37,14 @@ else
 fi
 
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /dev/shm/
+cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /dev/shm/
 #cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 [ $(cat /proc/meminfo | grep MemFree | awk '{print $2}') -ge 563200 ] && cp /etc/mpd.conf.sav.input_cache /dev/shm/mpd.conf || cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 cp /etc/libFLAC.so.12.0.0.sav /dev/shm/libFLAC.so.12
 
-echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
+echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 4899051 > /sys/kernel/debug/sched/migration_cost_ns || true
 echo 0 > /sys/module/snd*/parameters/power_save*  || true
 #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 #echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
@@ -140,56 +122,73 @@ fi
 ### APrenderer
 [ "$aprenderer" = on ] && mkdir /dev/shm/aprenderer && systemctl start aprenderer
 
-### Airconnect
+### Airconnect & Spotify
 if [ "$upmpdcli" = on ] || [ "$aprenderer" = on ]; then
  if [ "$airplay" = on ]; then
- sleep 3
   systemctl start airconnect_run
+ fi
+ if [ "$spotify" = on ]; then
+  systemctl start spotconnect_run
  fi
 fi
 
 ### Roon Bridge
-[ "$roon" = on ] && (roon_bridge &) && sleep 3
+if [ "$roon" = on ]; then
+ if [ "$roontoram" = on ]; then
+  cp -r /opt/RoonBridge /dev/shm/
+  systemctl start roonbridgetoram
+ else
+  systemctl start roonbridge
+ fi
+fi
 
 ### Squeezelite
 [ "$sqzlite" = on ] && systemctl start sqzlite_run
 
 ### Spotify
-[ "$spotify" = on ] && systemctl start spotify_run
+#[ "$spotify" = on ] && systemctl start raspotify
 
 ### Networkaudiod
-[ "$naa" = on ] && (naa &) && sleep 3
+if [ "$roon" = on ]; then
+ if [ "$naatoram" = on ]; then
+  cp /usr/sbin/networkaudiod /dev/shm/
+  systemctl start networkaudiodtoram
+ else
+  systemctl start networkaudiod
+ fi
+fi
 
 ### myMPD
 [ "$mympd" = on ] && systemctl start mympd
 
-### tty
+### TTY
 [ "$tty" = off ] && systemctl stop getty@tty1
 
-### usb mount
-if [ "$usbmount" = on ]; then
-   ptn=$(blkid | tail -1)
- drive=$(echo $ptn | cut -d: -f1)
-  type=$(echo $ptn | grep -o TYPE.* | cut -d\" -f2)
- case $type in
-  vfat) opt="ro,codepage=949,iocharset=utf8" ;;
-  ntfs) opt="ro,umask=022" ;;
-  *)    opt="ro" ;;
- esac
- if ! mount | grep -q "$drive"; then
-  [ ! -d /mnt/usb ] && mkdir /mnt/usb
-  mount -o "$opt" "$drive" /mnt/usb || true
- else
-  echo "No mount drive ($drive) found!"
- fi
-fi
-
 ### Minidlna & LMS
-[ "$minidlna" = on ] && systemctl start minidlna
-[ "$lms"      = on ] && systemctl start logitechmediaserver
+[ "$minidlna" = on ] && systemctl start minidlnarun
+[ "$lms"      = on ] && systemctl start lyrionmusicserver # logitechmediaserver
+
+### USB Mount
+if [ "$usbmount" = on ]; then
+ blkid | while read line; do
+   uuid=$(echo $line | grep -io uuid.* | cut -d\" -f2)
+  drive=$(echo $line | cut -d: -f1)
+  if [ -n "$uuid" ] && ! grep -q $uuid /etc/fstab && ! mount | grep -q "$drive"; then
+   type=$(echo $line | grep -o TYPE.* | cut -d\" -f2)
+   case $type in
+    vfat) opt="ro,codepage=949,iocharset=utf8" ;;
+    ntfs) opt="ro,umask=022" ;;
+    *)    opt="ro" ;;
+   esac
+   [ -d "/mnt/$uuid" ] || sudo mkdir -p "/mnt/$uuid"
+   sudo mount -o "$opt" "$drive" "/mnt/$uuid"
+  fi
+ done
+fi
 
 #systemctl stop systemd-timesyncd || true
 #ntpdate -d pool.ntp.org || true
+
 /home/pi/llctl f0 l0 d0 || true
 echo none > /sys/class/leds/PWR/trigger || true
 echo 0    > /sys/class/leds/PWR/brightness || true
