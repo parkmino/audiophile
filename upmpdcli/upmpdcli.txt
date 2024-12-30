@@ -75,7 +75,7 @@ url = http://serpent0.duckdns.org:8088/sbs2fm.pls
 artUrl = https://image.cloud.sbs.co.kr/play/radio/love.jpg
 
 [radio CBS 음악FM]
-url = http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8
+url = https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8
 artUrl = https://i.imgur.com/o6YpURo.png
 #artUrl = http://img.cbs.co.kr/cbs/common/top/cbs_ci_main.gif
 
