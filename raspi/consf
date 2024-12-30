@@ -3,7 +3,7 @@
 usage () {
  echo "Usage: $(basename "$0") mpd [dop|pcm|vol|sta|tag] [on|off]"
  echo "   or: $(basename "$0") upmpd [set]"
- echo "   or: $(basename "$0") [airplay|aprenderer|naa|roon|spotify|sqzlite|mympd|ssh|upmpdcli|upnp|gerbera|lms|dtblob] [on|off]"
+ echo "   or: $(basename "$0") [airplay|aprenderer|naa|roon|spotify|sqzlite|mympd|ssh|upmpdcli|upnp|minidlna|lms|dtblob] [on|off]"
  echo "   or: $(basename "$0") build"
  echo "Consult and configure MPD and other features"
 }
@@ -64,9 +64,9 @@ case "$1:$2:$3" in
  upnp:on:*)        sudo sed -i '/upnp=/s/=.*/=on/'  $audio_conf					;;
  upnp:off:*)       sudo sed -i '/upnp=/s/=.*/=off/' $audio_conf					;;
  upnp:*)           grep ^upnp= $audio_conf | cut -d= -f2					;;
- gerbera:on:*)     sudo sed -i '/gerbera=/s/=.*/=on/'  $audio_conf				;;
- gerbera:off:*)    sudo sed -i '/gerbera=/s/=.*/=off/' $audio_conf				;;
- gerbera:*)        grep ^gerbera= $audio_conf | cut -d= -f2					;;
+ minidlna:on:*)    sudo sed -i '/minidlna=/s/=.*/=on/'  $audio_conf				;;
+ minidlna:off:*)   sudo sed -i '/minidlna=/s/=.*/=off/' $audio_conf				;;
+ minidlna:*)       grep ^minidlna= $audio_conf | cut -d= -f2					;;
  lms:on:*)         sudo sed -i '/lms=/s/=.*/=on/'  $audio_conf					;;
  lms:off:*)        sudo sed -i '/lms=/s/=.*/=off/' $audio_conf					;;
  lms:*)            grep ^lms= $audio_conf | cut -d= -f2						;;
