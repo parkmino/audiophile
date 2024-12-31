@@ -164,10 +164,6 @@ fi
 ### TTY
 [ "$tty" = off ] && systemctl stop getty@tty1
 
-### Minidlna & LMS
-[ "$minidlna" = on ] && systemctl start minidlnarun
-[ "$lms"      = on ] && systemctl start lyrionmusicserver # logitechmediaserver
-
 ### USB Mount
 if [ "$usbmount" = on ]; then
  blkid | while read line; do
@@ -185,6 +181,10 @@ if [ "$usbmount" = on ]; then
   fi
  done
 fi
+
+### Minidlna & LMS
+[ "$minidlna" = on ] && systemctl start minidlnarun
+[ "$lms"      = on ] && systemctl start lyrionmusicserver # logitechmediaserver
 
 #systemctl stop systemd-timesyncd || true
 #ntpdate -d pool.ntp.org || true
