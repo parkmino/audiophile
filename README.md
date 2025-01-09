@@ -5,7 +5,7 @@ I hope it could be any help and get your own way.
 
 [Blog in Korean](https://blog.naver.com/parkmino45)
 
-[UPnP/DLNA audio renderer 24.07 for Raspberry Pi](https://drive.google.com/file/d/1GG1wkAO5Gi4tqVY70J_5EYGZ_9gweYrm/view?usp=sharing)  
+[UPnP/DLNA audio renderer 25.01 for Raspberry Pi](https://drive.google.com/file/d/1YILNh5e-QJrCqtgqLNzwEeqV8mQz7lpS/view?usp=sharing)  
 [UPnP/DLNA audio renderer 24.07 for PC](https://drive.google.com/file/d/1ohEHKOG66EdhuCd3J-cbPGXuodfdZr-o/view?usp=sharing)
 
 [LibreELEC 12.0.0 audio tuning 24.05 for Raspberry Pi 2/3](https://drive.google.com/file/d/1Oc5cxkNEKLVS5Y1H3HQ62kgKmvelTRRa/view?usp=sharing)  
