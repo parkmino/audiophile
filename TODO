@@ -2,3 +2,17 @@
 
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=2147483647   || true
+
+2. Adjtimex
+
+   $ sudo apt-get install adjtimex
+   $#sudo adjtimexconfig
+   $#cat /etc/default/adjtimex
+   $#sudo systemctl restart adjtimex
+   $#adjtimex -p
+
+   $ sudo nano /etc/rc.local
+     [ ! -f /etc/default/adjtimex ] && adjtimexconfig && sudo systemctl restart adjtimex
+     exit 0
+
+   $ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
