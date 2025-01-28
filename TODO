@@ -1,4 +1,4 @@
 1. /etc/rc.local
 
-   echo 4032 > /sys/class/rtc/rtc0/max_user_freq || true
-   sysctl -w dev.hpet.max-user-freq=2147483584   || true
+   echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
+   sysctl -w dev.hpet.max-user-freq=2147483647   || true
