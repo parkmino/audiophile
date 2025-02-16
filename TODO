@@ -1,7 +1,7 @@
 1. /etc/rc.local
 
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
-   sysctl -w dev.hpet.max-user-freq=2147483647   || true
+   sysctl -w dev.hpet.max-user-freq=8190         || true
 
 2. Adjtimex
 
@@ -16,3 +16,7 @@
      exit 0
 
    $ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
+
+3. Systemd-timesyncd
+
+   $ sudo nano /etc/systemd/timesyncd.conf
