@@ -3,6 +3,11 @@
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=8190         || true
 
+   echo 4899052 | tee /sys/kernel/debug/sched/migration_cost_ns
+   sysctl -w vm.max_map_count=672162
+   sysctl -w net.ipv4.tcp_rmem='4639 88321 3345791'
+   sysctl -w net.ipv4.tcp_wmem='4590 89971 3455762'
+
 2. Adjtimex
 
    $ sudo apt-get install adjtimex
