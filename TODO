@@ -1,4 +1,8 @@
-1. /etc/rc.local
+1. sudo nano /etc/mpd.conf.sav
+
+   mixer_type "none"
+
+2. sudo nano /etc/rc.local
 
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=8190         || true
@@ -8,7 +12,7 @@
    sysctl -w net.ipv4.tcp_rmem='4639 88321 3345791'
    sysctl -w net.ipv4.tcp_wmem='4590 89971 3455762'
 
-2. Adjtimex
+3. Adjtimex
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
@@ -22,6 +26,6 @@
 
    $ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
 
-3. Systemd-timesyncd
+4. Systemd-timesyncd
 
    $ sudo nano /etc/systemd/timesyncd.conf
