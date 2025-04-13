@@ -1,7 +1,7 @@
 1. sudo nano /etc/mpd.conf.sav
 
    mixer_type "none"
-   size "487453268"
+   size "487453270"
 
 2. sudo nano /etc/rc.local
 
@@ -9,9 +9,9 @@
    sysctl -w dev.hpet.max-user-freq=4095         || true
 
    echo 4899053 | tee /sys/kernel/debug/sched/migration_cost_ns
-   sysctl -w vm.max_map_count=672163
+   sysctl -w vm.max_map_count=672164
    sysctl -w net.ipv4.tcp_rmem='4641 88323 3345793'
-   sysctl -w net.ipv4.tcp_wmem='4592 89973 3455766'
+   sysctl -w net.ipv4.tcp_wmem='4592 89973 3455767'
 
 3. Adjtimex
 
