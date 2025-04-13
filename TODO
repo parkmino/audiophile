@@ -6,12 +6,12 @@
 2. sudo nano /etc/rc.local
 
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
-   sysctl -w dev.hpet.max-user-freq=8190         || true
+   sysctl -w dev.hpet.max-user-freq=4095         || true
 
    echo 4899053 | tee /sys/kernel/debug/sched/migration_cost_ns
-   sysctl -w vm.max_map_count=672162
-   sysctl -w net.ipv4.tcp_rmem='4640 88322 3345792'
-   sysctl -w net.ipv4.tcp_wmem='4591 89972 3455764'
+   sysctl -w vm.max_map_count=672163
+   sysctl -w net.ipv4.tcp_rmem='4641 88323 3345793'
+   sysctl -w net.ipv4.tcp_wmem='4592 89973 3455766'
 
 3. Adjtimex
 
