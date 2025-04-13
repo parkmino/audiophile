@@ -1,7 +1,7 @@
 1. sudo nano /etc/mpd.conf.sav
 
    mixer_type "none"
-   size "487453267"
+   size "487453268"
 
 2. sudo nano /etc/rc.local
 
