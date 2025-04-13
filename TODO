@@ -11,7 +11,7 @@
    echo 4899053 | tee /sys/kernel/debug/sched/migration_cost_ns
    sysctl -w vm.max_map_count=672164
    sysctl -w net.ipv4.tcp_rmem='4641 88323 3345793'
-   sysctl -w net.ipv4.tcp_wmem='4592 89973 3455767'
+   sysctl -w net.ipv4.tcp_wmem='4592 89973 3455768'
 
 3. Adjtimex
 
