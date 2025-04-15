@@ -1,19 +1,21 @@
-1. sudo nano /etc/mpd.conf.sav
+1. alsa-lib-1.2.14
+
+2. sudo nano /etc/mpd.conf.sav
 
    mixer_type "none"
    size "487453270"
 
-2. sudo nano /etc/rc.local
+3. sudo nano /etc/rc.local
 
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=4095         || true
 
    echo 4899053 | tee /sys/kernel/debug/sched/migration_cost_ns
    sysctl -w vm.max_map_count=672164
-   sysctl -w net.ipv4.tcp_rmem='4641 88323 3345793'
-   sysctl -w net.ipv4.tcp_wmem='4592 89973 3455768'
+   sysctl -w net.ipv4.tcp_rmem='4642 88324 3345794'
+   sysctl -w net.ipv4.tcp_wmem='4593 89974 3455769'
 
-3. Adjtimex
+4. Adjtimex
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
@@ -27,6 +29,6 @@
 
    $ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
 
-4. Systemd-timesyncd
+5. Systemd-timesyncd
 
    $ sudo nano /etc/systemd/timesyncd.conf
