@@ -85,7 +85,7 @@ artUrl = https://i.imgur.com/I5KdWVY.png
 #artUrl = http://m.ebs.co.kr/common/img/ebs_logo.png
 
 [radio tbsFM]
-url = http://tbs.hscdn.com/tbsradio/fm/playlist.m3u8
+url = https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8
 artUrl = https://i.imgur.com/ebtVtuV.png
 #artUrl = http://m.tbs.seoul.kr/common/images/default/tbs_logo.jpg
 

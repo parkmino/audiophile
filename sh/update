@@ -267,7 +267,7 @@ DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLvbpOOxdLN39xfkJl-Oh0Ct1iQZkyI0nW"
 #days=$(curl $curl_opt "$url"  | grep -oE '.{0,20}분 조회수' | head -1 | sed 's/.*딴지방송국 //; s/전.*/전/')
- days=$(curl $curl_opt "$url"  | grep -oE '조회수 .{0,50}' | head -1 | sed 's/.*회 //; s/전.*/전/')
+ days=$(curl $curl_opt "$url"  | grep -oE '조회수 .{0,50}' | head -1 | cut -d\" -f9)
  if [ -z "${days##*분*}" ] || [ -z "${days##*시간*}" ]; then
   days="오늘"
  fi
@@ -750,6 +750,24 @@ YT_DLP () {
  fi
 }
 
+PLANK_RELOADED () {
+ printf "• plank\t\t"
+#url="https://github.com/zquestz/plank-reloaded/releases/latest"
+ url="https://github.com/zquestz/plank-reloaded/tags"
+#latest=$(curl $curl_opt "$url" | grep -m1 'opengraph.githubassets.com' | cut -d'/' -f9 | cut -d'"' -f1)
+ latest=$(curl $curl_opt "$url" | grep -m1 'releases/tag/' | cut -d'/' -f6 | cut -d'"' -f1)
+ current=$(plank --version)
+#printf "$current ($(date -d $(echo $current | cut -d'.' -f1-3 | tr . -) +%F))\t\t"
+ printf "$current \t\t\t"
+ if [ -z "$latest" ] || [ ${#latest} -gt 15 ] ; then
+  printf "정보 없음\n"
+ elif [ "$latest" = "$current" ]; then
+  printf "신판\n"
+ else
+  printf "구판 ($latest)\n"
+ fi
+}
+
 ### OS
 #ARMBIAN
 #DIETPI
@@ -784,6 +802,7 @@ YT_DLP () {
 #STRAWBERRY
  TTYD
  YT_DLP
+ PLANK_RELOADED
 
 ### Podcasts
 #GHLIGHTCLUB	# 관훈라이트클럽
