@@ -42,7 +42,7 @@
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
- sysctl -w vm.max_map_count=672165
+ sysctl -w vm.max_map_count=672166
  sysctl -w vm.memory_failure_recovery=0
  sysctl -w vm.oom_dump_tasks=0
  sysctl -w vm.oom_kill_allocating_task=1
@@ -58,8 +58,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4643 88325 3345797'
- sysctl -w net.ipv4.tcp_wmem='4594 89975 3455772'
+ sysctl -w net.ipv4.tcp_rmem='4642 88324 3345796'
+ sysctl -w net.ipv4.tcp_wmem='4593 89974 3455771'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
