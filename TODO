@@ -28,7 +28,7 @@
    sysctl -w net.ipv4.tcp_rmem='4642 88324 3345796'
    sysctl -w net.ipv4.tcp_wmem='4593 89974 3455771'
 
-5. Adjtimex
+5. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
@@ -41,7 +41,3 @@
      exit 0
 
    $ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
-
-6. Systemd-timesyncd
-
-   $ sudo nano /etc/systemd/timesyncd.conf
