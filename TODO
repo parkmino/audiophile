@@ -23,7 +23,9 @@
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=4095         || true
 
+   echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
    echo 4899054 | tee /sys/kernel/debug/sched/migration_cost_ns
+
    sysctl -w vm.max_map_count=672166
    sysctl -w net.ipv4.tcp_rmem='4642 88324 3345796'
    sysctl -w net.ipv4.tcp_wmem='4593 89974 3455771'

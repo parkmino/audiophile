@@ -39,8 +39,8 @@ fi
 #done
 
 sysctl -w vm.swappiness=0
-echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
+echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 4899054 > /sys/kernel/debug/sched/migration_cost_ns || true
 
 systemctl stop dbus.service dbus.socket systemd-udevd rsyslog # polkit
 
