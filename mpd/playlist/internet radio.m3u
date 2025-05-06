@@ -1,8 +1,8 @@
-http://sc-baroque.1.fm:8045#1.fm Otto's Baroque Music
-https://strm112.1.fm/classical_mobile_aac#1.fm Otto's Classical Music
-http://sc-blues.1.fm:8030#1.fm Absolute Blues Hits
-http://sc-tcl.1.fm:8010#1.fm Chillout Lounge
-http://sc-sjazz.1.fm:9010#1.fm Bay Smooth Jazz
+http://strm112.1.fm/ajazz_mobile_mp3#1.fm Adore Jazz
+http://strm112.1.fm/blues_mobile_mp3#1.fm Blues
+http://strm112.1.fm/chilloutlounge_mobile_mp3#1.fm Chillout Lounge
+http://strm112.1.fm/baroque_mobile_mp3#1.fm Otto's Baroque Music
+http://strm112.1.fm/classical_mobile_mp3#1.fm Otto's Classical Music
 http://mediaserv30.live-streams.nl:8088/live#Hi On Line Classical
 http://mediaserv38.live-streams.nl:8006/live#Hi On Line Jazz
 http://mediaserv33.live-streams.nl:8036/live#Hi On Line Lounge
@@ -15,8 +15,10 @@ http://mscp3.live-streams.nl:8250/class-flac.flac#Naim Classical
 https://mscp3.live-streams.nl:8342/jazz-flac.flac#Naim Jazz
 http://mscp3.live-streams.nl:8360/flac.flac#Naim Radio
 http://stream.radioparadise.com/flac#Radio Paradise
-http://rondo.iradio.fi:8000/klasupro.flac#Rondo Classic - Klasu PRO
-http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8#CBS 음악FM
+https://iradio.fi/klasupro.flac#Rondo Classic - Klasu PRO
+https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/chunklist.m3u8#CBS 음악 FM
 http://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8#EBS FM
 https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8#tbs FM
-http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8#국악방송
+http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8#국악 FM
+https://radio.arte.co.kr/listen/arte_classic_station/radio.mp3#아르떼 FM
+https://radio.arte.co.kr/listen/arte_calm_radio_system/calm.mp3#아르떼 FM 캄
