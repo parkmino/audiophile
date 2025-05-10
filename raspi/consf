@@ -10,7 +10,7 @@ usage () {
 
 audio_conf=/etc/default/audio.conf
 [ -e /etc/mpd.conf.sav ] && mpd_conf=/etc/mpd.conf.sav || mpd_conf=/etc/mpd.conf
-[ -e /etc/upmpdcli.conf.sav ] && upmpdcli_conf=/etc/upmpdcli.conf.sav || upmpdcli_conf=/etc/upmpdcli.conf
+upmpdcli_conf=/lib/systemd/system/upmusicpdcli.service
 
 case "$1:$2:$3" in
  mpd:dop:on)       sudo sed -i '/dop/d; /auto_channels/adop "yes"' $mpd_conf			;;
@@ -28,9 +28,11 @@ case "$1:$2:$3" in
  mpd:tag:on)       sudo sed -i '/metadata.*none/s/^/#/'  $mpd_conf				;;
  mpd:tag:off)      sudo sed -i '/metadata.*none/s/^#*//' $mpd_conf				;;
  mpd:tag:*)        grep -q '^metadata.*none' $mpd_conf && echo off || echo on			;;
- upmpd:set:*)      shift; shift
-                   sudo sed -i 's/^#*friendlyname.*/friendlyname = '"$@"'/' $upmpdcli_conf	;;
- upmpd:*)          grep ^#*friendlyname $upmpdcli_conf | cut -d ' ' -f3-			;;
+ upmpd:set:*)      shift; shift;
+		   sudo sed -i '/dev\/shm\/upmpdcli/s/".*"/'\""$@"\"'/' $upmpdcli_conf
+		   sudo systemctl daemon-reload
+		   sudo systemctl restart upmpdcli						;;
+ upmpd:*)          grep '/dev/shm/upmpdcli' $upmpdcli_conf | cut -d\" -f2			;;
  aprenderer:on:*)  sudo sed -i '/aprenderer=/s/=.*/=on/'  $audio_conf				;;
  aprenderer:off:*) sudo sed -i '/aprenderer=/s/=.*/=off/' $audio_conf				;;
  aprenderer:*)     grep ^aprenderer= $audio_conf | cut -d= -f2					;;

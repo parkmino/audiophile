@@ -250,7 +250,7 @@ fi
 }
 
 features () {
-i=$(whiptail --title "UPnP, AirPlay, NAA, Roon, Spotify, LMS" --checklist "UPnP, AirPlay, NAA, Roon Bridge, Spotify, LMS" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 15 63 9 \
+i=$(whiptail --title "UPnP, AirPlay, NAA, Roon, Spotify" --checklist "UPnP, AirPlay, NAA, Roon Bridge, Spotify" --ok-button "OK/확인" --cancel-button "Cancel/취소" --backtitle "$bkti" 15 63 8 \
 "aprndr"   "Enable APrenderer     AP렌더러     사용" $(consf aprenderer) \
 "upmpd"    "Enable Upmpdcli       Upmpdcli     사용"  $(consf upmpdcli) \
 "airplay"  "Enable AirPlay        에어플레이   사용" $(consf airplay) \
@@ -258,8 +258,7 @@ i=$(whiptail --title "UPnP, AirPlay, NAA, Roon, Spotify, LMS" --checklist "UPnP,
 "roon"     "Enable Roon Bridge    룬 브리지    사용" $(consf roon) \
 "spotify"  "Enable Spotify        스포티파이   사용" $(consf spotify) \
 "sqzlite"  "Enable Squeezebox     스퀴즈박스   사용" $(consf sqzlite) \
-"minidlna" "Enable Minidlna       미디어서버   사용" $(consf minidlna) \
-"lms"      "Enable LMS            미디어서버   사용" $(consf lms) 3>&1 1>&2 2>&3)
+"minidlna" "Enable Minidlna       미디어서버   사용" $(consf minidlna) 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 if [ "$exitstatus" = 0 ]; then

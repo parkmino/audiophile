@@ -37,14 +37,14 @@ else
 fi
 
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /dev/shm/
+cp /usr/bin/mpd /usr/bin/upmpdcli /usr/bin/mympd /dev/shm/ # /etc/upmpdcli.conf
 #cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 [ $(cat /proc/meminfo | grep MemFree | awk '{print $2}') -ge 563200 ] && cp /etc/mpd.conf.sav.input_cache /dev/shm/mpd.conf || cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 cp /etc/libFLAC.so.12.0.0.sav /dev/shm/libFLAC.so.12
 
 echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 4899051 > /sys/kernel/debug/sched/migration_cost_ns || true
+echo 4899054 > /sys/kernel/debug/sched/migration_cost_ns || true
 echo 0 > /sys/module/snd*/parameters/power_save*  || true
 #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 #echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true

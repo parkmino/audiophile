@@ -4,6 +4,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	https://www.raspberrypi.com/software/operating-systems/
 	https://downloads.raspberrypi.org/raspios_armhf/images/
+	https://downloads.raspberrypi.org/beta/raspios_lite_armhf/
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdc?
@@ -40,8 +41,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ dpkg --get-selections | grep 'linux-.*x.x.xx.*' | awk '{print $1}' | xargs sudo apt-get -y --purge remove
 	$ dpkg --get-selections | grep 'linux-.*'
 	$ sudo apt-get clean
-	$ mkdir ~/copy
 
+	$ mkdir ~/copy
 	$ scp -r /home/parkmino/Downloads/raspi/copy/* pi@$ip:/home/pi/copy/
 
 	$ sudo apt-get install bc uhubctl fbterm fonts-naver-d2coding # ntpdate python3-pycryptodome
@@ -165,7 +166,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 7. MPD
 
-	$ sudo apt-get install libcue2 libaudiofile1 libavformat59 libflac12 libid3tag0 libmpdclient2 libupnp13 # libcurl3-gnutls
+	$ sudo apt-get install libcue2 libaudiofile1 libavformat59 libid3tag0 libmpdclient2 libupnp13 # libcurl3-gnutls libflac12 
 	$ sudo mkdir -p /var/lib/mpd/music /var/lib/mpd/playlists /var/run/mpd
 	$ sudo mv copy/mpd /usr/bin/
 	$ sudo mv copy/mpd.conf.* /etc/
@@ -215,8 +216,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 		tidalaudioquality = LOSSLESS
 	$ sudo systemctl disable upmpdcli.service
-	$ sudo nano /etc/upmpdcli.conf
+	$#sudo nano /etc/upmpdcli.conf
 	  ...
+
+	$ sudo nano /usr/share/upmpdcli/radio_scripts/radiolist.conf
 
 10. Roon Bridge
 
@@ -401,13 +404,15 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo cp /usr/bin/mympd /dev/shm/
 	$ mkdir -p ~/.config/mympd ~/.cache/mympd
 	$ sudo nano /lib/systemd/system/mympd.service
+		#ExecStartPre=cp /usr/bin/mympd /dev/shm/
 		ExecStart=/dev/shm/mympd -u pi -w /home/pi/.config/mympd -a /home/pi/.cache/mympd
 		Environment="MYMPD_HTTP_PORT=80"
 		WorkingDirectory=/home/pi/.config/mympd
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl start mympd
-	$ mv copy/*.png ~/.config/mympd/pics/thumbs/
-	$ mv copy/*.lua ~/.config/mympd/scripts/
+	$ mv copy/*.png	    ~/.config/mympd/pics/thumbs/
+	$ mv copy/*.lua	    ~/.config/mympd/scripts/
+	$#mv copy/home_list ~/.config/mympd/state/
 	$ echo "false" | tee ~/.config/mympd/config/ssl
 	$ cat ~/.config/mympd/config/http_port
 	$ sudo systemctl restart mympd
@@ -418,6 +423,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ip
 		MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
 		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
+
 		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
 		Radiobrowser, radio, #28a745, 스크립트 가져오기
 		YouTube, video_library, #28a745, yt-dlp
@@ -498,10 +504,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	  http://rpi_ip:7779
 
 		Playback mode	   (O) Standard
-		Preload buffer     [108794]
+		Preload buffer     [108811]
 		Gapless mode       [ ]
-		ALSA Period frames [3744]
-		ALSA Buffer frames [14949]
+		ALSA Period frames [3745]
+		ALSA Buffer frames [14952]
 		DSP                [original]
 				   [ ] Multi-thread mode
 		System		   [V] Lock memory
@@ -524,8 +530,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6.orig.tar.gz
 	$ tar xvzf audiofile_0.3.6.orig.tar.gz
-	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6-5.debian.tar.xz
-	$ tar xvf  audiofile_0.3.6-5.debian.tar.xz
+	$ wget http://deb.debian.org/debian/pool/main/a/audiofile/audiofile_0.3.6-5+deb12u1.debian.tar.xz
+	$ tar xvf  audiofile_0.3.6-5+deb12u1.debian.tar.xz
 	$ cp debian/patches/* audiofile-0.3.6/
 	$ rm -rf debian/
 	$ cd audiofile-0.3.6/
@@ -615,7 +621,8 @@ UPnP/DLNA Audio Render for Raspberry Pi
 30. Tweak dt-blob.bin
 
 	$ sudo mv copy/dt-blob.bin.twk /boot/firmware/
-
+	$ ls -al /boot/firmware/dt-blob.bin.twk
+		
 31. audio-config
 
 	$ sudo mv copy/{audio-config,audioconf,consf} /usr/bin/
@@ -637,7 +644,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		#/dev/mmcblk0p1  /boot/firmware  vfat    defaults          0       2
 		#/dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
 
-		#/dev/sda1 /mnt/usb auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
+		#/dev/sda1         /mnt/usb  auto defaults,nofail,x-systemd.automount,x-systemd.device-timeout=1,ro 0 2
 		#//192.168.0.x/xxx /mnt/cifs cifs guest,ro,iocharset=utf8 0 0
 		#//192.168.0.x/xxx /mnt/cifs cifs username=user,password=pass,ro,iocharset=utf8 0 0
 		#192.168.0.x:/xxx  /mnt/nfs  nfs  ro,sync,hard,intr,iocharset=utf8 0 0
@@ -648,6 +655,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 	$ sudo systemctl disable dphys-swapfile
 	$ sudo swapoff -a
 	$ sudo rm /var/swap
+	$ cat /proc/swaps
 
 34. Plexdrive (Google Drive)
 
@@ -718,14 +726,14 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$#sudo youtube-dl --update
 	$ sudo yt-dlp --update
-	$ echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" | sudo tee /etc/release
-	$ sudo chmod 744 /etc/release
+	$#echo "* Mino's UPnP Audio Renderer for Raspberry Pi $(date +"%y.%m")" | sudo tee /etc/release
+	$#sudo chmod 744 /etc/release
 	$ cat /etc/release
 
 	$ mpc clear
 	$ ls /lib/modules/
 	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
-	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
+	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
 	$ sync
 	$ sudo poweroff
 

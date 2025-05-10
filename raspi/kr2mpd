@@ -7,7 +7,7 @@ usage () {
  echo "Usage: $(basename "$0") 1fm, 2fm, 1r, 2r, 3r, han, mul, eng(KBS라디오)"
  echo "   or: $(basename "$0") mbcfm(MBC 표준FM), mbc4u(MBC FM4U), mbcm(MBC 올댓뮤직)"
  echo "   or: $(basename "$0") sbsp(SBS파워FM), sbsl(SBS러브FM), sbsg(SBS고릴라M)"
- echo "   or: $(basename "$0") cbs(CBS음악FM), tbs(tbsFM), tbse(tbseFM), gugak(국악방송)"
+ echo "   or: $(basename "$0") cbs(CBS음악FM), tbs(tbsFM), tbse(tbseFM), gugak(국악방송), arte(아르떼), artec(아르떼 calm),"
  echo "   or: $(basename "$0") http://...(Stream URL)"
  echo "   or: $(basename "$0") stop(정지)"
  echo "Play Korean Radio with MPD"
@@ -86,6 +86,8 @@ case $1 in
  tbs)   pls "https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8"   ;;
  tbse)  pls "https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8" ;;
  gugak) pls "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8"    ;;
+ arte)  url="https://radio.arte.co.kr/listen/arte_classic_station/radio.mp3"               ;;
+ artec) url="https://radio.arte.co.kr/listen/arte_calm_radio_system/calm.mp3"              ;;
  stop)  mpc stop ; mpc del $(mpc playlist | wc -l) ; exit ;;
  *)     if [ -n "$1" ] && [ -z "${1##http*}" ]; then
          url="$1"
