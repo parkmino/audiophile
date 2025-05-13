@@ -149,7 +149,7 @@ fi
 #[ "$spotify" = on ] && systemctl start raspotify
 
 ### Networkaudiod
-if [ "$roon" = on ]; then
+if [ "$naa" = on ]; then
  if [ "$naatoram" = on ]; then
   cp /usr/sbin/networkaudiod /dev/shm/
   systemctl start networkaudiodtoram
