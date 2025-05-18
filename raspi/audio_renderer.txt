@@ -410,17 +410,19 @@ UPnP/DLNA Audio Render for Raspberry Pi
 		WorkingDirectory=/home/pi/.config/mympd
 	$ sudo systemctl daemon-reload
 	$ sudo systemctl start mympd
-	$ mv copy/*.png	    ~/.config/mympd/pics/thumbs/
-	$ mv copy/*.lua	    ~/.config/mympd/scripts/
-	$#mv copy/home_list ~/.config/mympd/state/
-	$ echo "false" | tee ~/.config/mympd/config/ssl
-	$ cat ~/.config/mympd/config/http_port
-	$ sudo systemctl restart mympd
+	$ sudo systemctl stop mympd
 
+	$ mv copy/*.png      ~/.config/mympd/pics/thumbs/
+	$ mv copy/*.lua	     ~/.config/mympd/scripts/
+	$ mv copy/home_list  ~/.config/mympd/state/
+	$ echo "false" | tee ~/.config/mympd/config/ssl
+	$ cat                ~/.config/mympd/config/http_port
+
+	$ sudo systemctl start mympd
 	$ sudo systemctl disable mympd
 	$ systemctl status mympd
-	
-	$ip
+
+	http://$ip
 		MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
 		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
 
@@ -707,9 +709,10 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 36. Make Image
 
-	# Remove all the sound devices
+	Remove all the sound devices
 
-	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
+	$ systemctl status rc-local
+	$ ls -al /usr/lib/arm-linux-gnueabi/lib{asound.so.*,audiofile.so.*,FLAC.so.*} ~/copy
 	$ ps -ef | grep [d]efunct | awk '{print $3}'
 	$ ls -al /boot/config.txt /boot/firmware/config.txt
 	$ sudo systemctl disable ssh
