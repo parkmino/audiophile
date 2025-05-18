@@ -735,7 +735,7 @@ UPnP/DLNA Audio Render for Raspberry Pi
 
 	$ mpc clear
 	$ ls /lib/modules/
-	$ sudo rm -rf /var/roon/* /var/lib/mympd/covercache/*
+	$ sudo rm -rf /var/roon/* /home/pi/.cache/mympd/* /var/cache/minidlna/*
 	$ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
 	$ sync
 	$ sudo poweroff
