@@ -7,11 +7,12 @@ UPnP/DLNA Audio Render for PC
 
 	$ sudo fdisk -l
 	$ sudo umount /dev/sdb?
-	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/armbian/Armbian*x86*.img | tail -1) of=/dev/sdb
+	$ sudo dd status=progress bs=4M if=$(ls ~/Downloads/armbian/pc_uefi_x86/Armbian*x86*.img | tail -1) of=/dev/sdb
 	$ sync
 
 	$ sudo mkdir /media/parkmino/armbi_root/root/copy
-	$ sudo cp -R  /home/parkmino/Downloads/armbian/copy/* /media/parkmino/armbi_root/root/copy
+	$ sudo cp -R /home/parkmino/Downloads/armbian/pc_uefi_x86/copy/* /media/parkmino/armbi_root/root/copy
+	$ sudo ls /media/parkmino/armbi_root/root/copy
 
 	$ export ip="192.168.x.x"
 	$ ssh-keygen -f "/home/parkmino/.ssh/known_hosts" -R $ip
@@ -20,17 +21,12 @@ UPnP/DLNA Audio Render for PC
 
 1. Update & upgrade
 
-	# apt-get update
-	# apt-get upgrade
-	# apt-get dist-upgrade
-	# apt-get autoremove
-	# apt-get clean
-
-	# nano /etc/grub/grub.cfg
-	
-		### BEGIN /etc/grub.d/30_os-prober ###
-
-		### END /etc/grub.d/30_os-prober ###
+	# armbian-upgrade
+	##apt update
+	##apt upgrade
+	##apt dist-upgrade
+	##apt autoremove
+	##apt-get clean
 
 	# apt-get install uhubctl # bc ntpdate python3-pycryptodome
 	  
@@ -39,10 +35,28 @@ UPnP/DLNA Audio Render for PC
 
 2. Kernel option
 
+	Remove obsolete kernels
+
+	##dpkg --get-selections | grep 'linux-.*'
+	##uname -a
+	##reboot
+	##dpkg --get-selections | grep 'linux-.*x.x.xx.*' | awk '{print $1}' | xargs sudo apt-get -y --purge remove
+	##dpkg --get-selections | grep 'linux-.*'
+	##apt-get clean
+
+	# cat /sys/devices/system/clocksource/clocksource0/available_clocksource
+	# cat /sys/devices/system/clocksource/clocksource0/current_clocksource
+
+	# nano /etc/default/grub.d/98-armbian.cfg
+	  GRUB_CMDLINE_LINUX_DEFAULT="... elevator=noop consoleblank=0 selinux=0 clocksource=hpet # console=serial0,115200 console=tty1"
+	  GRUB_DISABLE_OS_PROBER=true
+	# update-grub
+
 	##nano /boot/armbianEnv.txt
 		#console=serial0,115200
 		#console=tty1
-		#elevator=noop consoleblank=0 selinux=0
+		elevator=noop consoleblank=0 selinux=0
+		clocksource=hpet
 
 3. Localisation
 
@@ -91,7 +105,7 @@ UPnP/DLNA Audio Render for PC
 	# systemctl stop    cron.service rpcbind.service rpcbind.socket rsyslog.service syslog.socket unattended-upgrades.service # bluetooth.service cups.service
 	# systemctl disable cron.service rpcbind.service rpcbind.socket rsyslog.service syslog.socket unattended-upgrades.service # bluetooth.service cups.service
 
-	# apt-get install isc-dhcp-client net-tools # ifupdown
+	# apt-get install ifupdown isc-dhcp-client net-tools
 	# apt-get purge network-manager
 	# apt-get autoremove
 	# ifconfig -a
@@ -116,10 +130,13 @@ UPnP/DLNA Audio Render for PC
 	# sync
 	# reboot
 	
+	$ export ip="192.168.x.x"
 	$ ssh root@$ip
 	
 	# lsmod | sort
 	# pstree
+	# cat /sys/devices/system/clocksource/clocksource0/current_clocksource
+	# cat /proc/swaps
 
 7. MPD
 
@@ -153,14 +170,14 @@ UPnP/DLNA Audio Render for PC
 	# mpc update
 
 9. Upmpdcli
+	
+	##add-apt-repository ppa:jean-francois-dockes/upnpp1
+	##apt-get install upmpdcli
 
-	###apt-get install libmpdclient2 libexpat1 libcurl4 python3 python3-requests
-	##apt-get install libjsoncpp25 libmicrohttpd12
-	##dpkg -i copy/upmpdcli/lib*upnp*.deb copy/upmpdcli/upmpdcli_*.deb
-	
-	# add-apt-repository ppa:jean-francois-dockes/upnpp1
-	# apt-get install upmpdcli
-	
+	##apt-get install libmpdclient2 libexpat1 libcurl4 python3
+	# apt-get install libjsoncpp25 libmicrohttpd12 python3-requests
+	# dpkg -i copy/upmpdcli/lib*upnp*.deb copy/upmpdcli/upmpdcli_*.deb
+
 	# mv copy/icon.png /usr/share/upmpdcli/
 	# sed -i '/checkcontentformat =/s/^#//; /checkcontentformat =/s/= .*/= 0/' /etc/upmpdcli.conf
 	##sed -i '/radiolist/s/^/#/' /etc/upmpdcli.conf
@@ -170,8 +187,10 @@ UPnP/DLNA Audio Render for PC
 		#radiolist = /usr/share/upmpdcli/radio_scripts/radiolist.conf
 		tidalaudioquality = LOSSLESS
 	# systemctl disable upmpdcli.service
-	# nano /etc/upmpdcli.conf
+	
+	##nano /etc/upmpdcli.conf
 	  ...
+	# nano /usr/share/upmpdcli/radio_scripts/radiolist.conf
 
 10. Roon Bridge
 
@@ -198,7 +217,7 @@ UPnP/DLNA Audio Render for PC
 	# cp /etc/systemd/system/roonbridge.service /etc/systemd/system/roonbridgetoram.service
 	# sed -i 's/\/opt\//\/dev\/shm\//' /etc/systemd/system/roonbridgetoram.service
 	# systemctl daemon-reload
-	# systemctl stop roonbridge roonbridgetoram
+	# systemctl stop    roonbridge roonbridgetoram
 	# systemctl disable roonbridge roonbridgetoram
 
 	# file /opt/RoonBridge/Bridge/processreaper
@@ -213,25 +232,11 @@ UPnP/DLNA Audio Render for PC
 	# rm roonbridge-installer*
 	# mv copy/roonup /usr/bin/
 
-11. Librespot
+11. SpotConnect
 
-	https://github.com/librespot-org/librespot
+	https://github.com/philippe44/SpotConnect
 
-	# apt-get install build-essential libasound2-dev file cargo
-	# ntpdate pool.ntp.org
-	# wget https://github.com/librespot-org/librespot/archive/refs/tags/v0.4.2.tar.gz
-	# tar xvzf v0.4.2.tar.gz && rm v0.4.2.tar.gz
-	# cd librespot-0.4.2
-	# cargo build --release --no-default-features --features alsa-backend
-
-	# target/release/librespot -n Librespot --backend ?
-	# ls -al target/release/librespot
-	# file target/release/librespot
-	# strip --strip-debug target/release/librespot
-	# ls -al target/release/librespot
-	# cp target/release/librespot /home/pi/
-	
-	# mv copy/librespot ./
+	$ mv copy/spotupnp-linux-x86_64-static ./
 
 12. AirConnect
 
@@ -241,7 +246,7 @@ UPnP/DLNA Audio Render for PC
 	# chmod +x ./airupnp-linux-x86_64-static
 
 13. HQPlayer NAA
-	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/jammy/networkaudiod_5.0.1-60_amd64.deb
+	# wget --no-check-certificate https://www.signalyst.eu/bins/naa/linux/jammy/networkaudiod_5.1.3-66_amd64.deb
 	# dpkg -i networkaudiod*.deb
 	# systemctl disable networkaudiod
 	# cp /lib/systemd/system/networkaudiod.service /lib/systemd/system/networkaudiodtoram.service
@@ -269,13 +274,13 @@ UPnP/DLNA Audio Render for PC
 
 	https://github.com/jcorporation/myMPD
 
-	##apt-get install lrzsz liblua5.4-0 jq # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
-	##dpkg -i copy/mympd*.deb
+	##add-apt-repository ppa:parkmino/mympd
+	##apt-get install mympd
+	##apt-get install lrzsz # jq
 
-	# add-apt-repository ppa:parkmino/mympd
-	# apt-get install mympd
-	# apt-get install lrzsz # jq
-
+	# apt-get install lrzsz liblua5.4-0 jq # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
+	# dpkg -i copy/mympd*.deb
+	
 	# mv /usr/lib/systemd/system/mympd.service /usr/lib/systemd/system/mympd.service.orig
 	# cp /usr/lib/systemd/user/mympd.service /usr/lib/systemd/system/mympd.service
 	# getent group mympd > /dev/null || groupadd -r mympd
@@ -289,25 +294,35 @@ UPnP/DLNA Audio Render for PC
 		WorkingDirectory=/home/mympd/.config/mympd
 	# systemctl daemon-reload
 	# cp /usr/bin/mympd /dev/shm/
-	# systemctl start mympd
+	# systemctl start  mympd
+	# systemctl status mympd
+	# systemctl stop   mympd
+	
 	# mv copy/*.png /home/mympd/.config/mympd/pics/thumbs/
 	# mv copy/*.lua /home/mympd/.config/mympd/scripts/
 	# echo "false" | tee /home/mympd/.config/mympd/config/ssl
 	# cat /home/mympd/.config/mympd/config/http_port
-	# chown -R mympd:mympd /home/mympd
-	# systemctl restart mympd
-
-	# systemctl disable mympd
-	# systemctl status mympd
 	
-	$ip
-		설정 > MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
+	$ mv copy/*.png      /home/mympd/.config/mympd/pics/thumbs/
+	$ mv copy/*.lua	     /home/mympd/.config/mympd/scripts/
+	$ mv copy/home_list  /home/mympd/.config/mympd/state/
+	$ echo "false" | tee /home/mympd/.config/mympd/config/ssl
+	$ cat                /home/mympd/.config/mympd/config/http_port	
+	
+	# chown -R mympd:mympd /home/mympd
+	# systemctl start mympd
+	
+	http://$ip
+		MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
 		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
+		스크립트 > 가져오기 > Radiobrowser, yt-dlp
+
 		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
 		Radiobrowser, radio, #28a745, 스크립트 가져오기
 		YouTube, video_library, #28a745, yt-dlp
 		Test to Speech, record_voice_over, #28a745, tts2mpd
-		웹 설정, settings, #28a745, settings
+		웹 설정 실행, settings, #28a745, settings
+		SSH 실행, terminal, #28a745, ssh
 		다시 시작, refresh, #28a745, reboot
 		전원 끄기, power_settings_new, #28a745, poweroff
 
@@ -319,23 +334,24 @@ UPnP/DLNA Audio Render for PC
 	
 	##mv copy/ttyd /usr/bin/
 
-17. Gerbera
+17. Minidlna
 
-	https://github.com/gerbera/gerbera
-	https://gerbera.jfrog.io/ui/native/debian/pool/main/g/gerbera/
+	https://sourceforge.net/projects/minidlna/
 
-	# wget -O - https://pkg.gerbera.io/public.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/gerbera-keyring.gpg >/dev/null
-	# echo "deb [signed-by=/usr/share/keyrings/gerbera-keyring.gpg] https://pkg.gerbera.io/debian/ $(lsb_release -c --short) main" | tee /etc/apt/sources.list.d/gerbera.list >/dev/null
-	# apt-get update
-	# apt-get install gerbera
-	$ sudo chown -R gerbera:gerbera /var/lib/gerbera # /usr/share/gerbera
+	$ apt-get install minidlna
+	$ nano /etc/minidlna.conf
+	  media_dir=/mnt
+	  log_level=off
+	 #inotify=yes
+	$ systemctl restart minidlna
+	$ systemctl stop    minidlna
+	$ systemctl disable minidlna
+	$ mv copy/minidlnarun.service /usr/lib/systemd/system/
+	$ systemctl start minidlnarun
+	$ pstree
+	$ systemctl stop  minidlnarun
 
-	# systemctl status gerbera
-	# systemctl start gerbera
-	# systemctl status gerbera
-	  http://rpi_ip:49152 or 49153
-
-18. Logitech Media Server
+18. Logitech Media Server (Logitech Media Server, Not in use)
 
 	https://github.com/LMS-Community/slimserver
 	https://lms-community.github.io/lms-server-repository/
@@ -356,10 +372,10 @@ UPnP/DLNA Audio Render for PC
 	  http://rpi_ip:7779
 
 		Playback mode	   (O) Standard
-		Preload buffer     [108788]
+		Preload buffer     [108811]
 		Gapless mode       [ ]
-		ALSA Period frames [3739]
-		ALSA Buffer frames [14943]
+		ALSA Period frames [3745]
+		ALSA Buffer frames [14952]
 		DSP                [original]
 				   [ ] Multi-thread mode
 		System		   [V] Lock memory
@@ -385,7 +401,7 @@ UPnP/DLNA Audio Render for PC
 	# cp /etc/libasound.so.2.0.0.min.dev.shm /dev/shm/libasound.so.2
 
 	# mv /usr/share/alsa /usr/share/alsa.orig
-	# systemctl mask alsa-store.service
+	##systemctl mask alsa-store.service
 	# systemctl mask alsa-restore.service
 	##nano /lib/modprobe.d/aliases.conf
 		#options snd-usb-audio index=-2
@@ -414,6 +430,7 @@ UPnP/DLNA Audio Render for PC
 
 	# mv copy/*.service /lib/systemd/system/
 	# systemctl daemon-reload
+	# apt-get install adjtimex
 	# nano /etc/rc.local
 
 23. Sysctl Configuration
@@ -426,7 +443,7 @@ UPnP/DLNA Audio Render for PC
 	# mv copy/{audio-config,audioconf,consf} /usr/bin/
 	# mv copy/audio.conf /etc/default/
 	# echo "* Mino's UPnP Audio Renderer for PC $(date +"%y.%m")" | tee /etc/release
-	# apt-get install whiptail
+	##apt-get install whiptail
 	# audio-config
 	# audioconf
 
@@ -447,29 +464,31 @@ UPnP/DLNA Audio Render for PC
 
 26. Make Image
 
-	# Remove all the sound devices
+	Remove all the sound devices
 
-	# ls -al /usr/lib/x86_64-linux-gnu/lib{asound.so.*,audiofile.so.*,FLAC.so.*}
+	# systemctl status rc-local
+	# ls -al /usr/lib/x86_64-linux-gnu/lib{asound.so.*,audiofile.so.*,FLAC.so.*} ~/copy
 	# ps -ef | grep [d]efunct | awk '{print $3}'
 	# systemctl disable ssh.service ssh.socket
 	# sed -i '/ssh=/s/=.*/=off/' /etc/default/audio.conf
 	# grep ssh= /etc/default/audio.conf
 
 	##ntpdate pool.ntp.org
-	# apt-get update
-	# apt-get upgrade
-	# apt-get dist-upgrade
-	# apt-get autoremove
-	# apt-get clean
+	# armbian-upgrade
+	##apt-get update
+	##apt-get upgrade
+	##apt-get dist-upgrade
+	##apt-get autoremove
+	##apt-get clean
 
 	# yt-dlp --update
-	# echo "* Mino's UPnP Audio Renderer for PC $(date +"%y.%m")" | tee /etc/release
+	##echo "* Mino's UPnP Audio Renderer for PC $(date +"%y.%m")" | tee /etc/release
 	# cat /etc/release
 
 	# mpc clear
 	# ls /lib/modules/
 	# rm -rf /var/roon/* /var/lib/mympd/covercache/*
-	# rm -f /root/.bash_history ~/.bash_history /nohup.out; history -c
+	# rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
 	# sync
 	# poweroff
 

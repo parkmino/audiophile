@@ -1,11 +1,11 @@
 vm.dirty_writeback_centisecs = 0
-vm.max_map_count = 672152
+vm.max_map_count = 672166
 vm.memory_failure_recovery = 0
 vm.oom_dump_tasks = 0
 vm.oom_kill_allocating_task = 1
 vm.overcommit_memory = 1
 vm.panic_on_oom = 2
-vm.stat_interval = 5 
+vm.stat_interval = 0
 vm.swappiness = 0
 vm.vfs_cache_pressure = 0
 
@@ -16,8 +16,8 @@ kernel.sched_autogroup_enabled = 0
 net.ipv4.tcp_sack = 0
 net.ipv4.tcp_no_metrics_save = 1
 net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv4.tcp_rmem = 4632 88314 3345779
-net.ipv4.tcp_wmem = 4582 89964 3455754
+net.ipv4.tcp_rmem = 4642 88324 3345796
+net.ipv4.tcp_wmem = 4593 89974 3455771
 net.ipv4.tcp_timestamps = 0
 net.ipv4.tcp_window_scaling = 0
 net.ipv4.tcp_moderate_rcvbuf = 0

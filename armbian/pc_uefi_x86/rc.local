@@ -21,28 +21,10 @@ fi
 ### SSH
 [ "$ssh" = on ] && systemctl start ssh
 
-roon_bridge () {
- if [ "$roontoram" = on ]; then
-  cp -r /opt/RoonBridge /dev/shm/
-  systemctl start roonbridgetoram
- else
-  systemctl start roonbridge
- fi
-}
-
-naa () {
- if [ "$naatoram" = on ]; then
-  cp /usr/sbin/networkaudiod /dev/shm/
-  systemctl start networkaudiodtoram
- else
-  systemctl start networkaudiod
- fi
-}
-
 if [ "$alsa" = plug ]; then
  cp /etc/libasound.so.2.0.0.plug.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.plug /dev/shm/alsa.conf
-elif [ "$alsa_conf" = min ] && [ "$roon" = off ] && [ "$spotify" = off ] && [ "$naa" = off ]; then
+elif [ "$alsa_conf" = min ] && [ "$roon" = off ] && [ "$naa" = off ]; then
  cp /etc/libasound.so.2.0.0.mix.dev.shm /dev/shm/libasound.so.2
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
  rm -rf /dev/snd/*c /dev/snd/by* || true
@@ -54,15 +36,19 @@ else
 fi
 
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
-cp /usr/bin/nohup /usr/bin/mpd /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /dev/shm/
+cp /usr/bin/mpd /usr/bin/upmpdcli /usr/bin/mympd /dev/shm/ # /etc/upmpdcli.conf
 #cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 [ $(cat /proc/meminfo | grep MemFree | awk '{print $2}') -ge 563200 ] && cp /etc/mpd.conf.sav.input_cache /dev/shm/mpd.conf || cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 cp /etc/libFLAC.so.12.1.0.sav /dev/shm/libFLAC.so.12
 
-echo 55696 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 4899048 > /sys/kernel/debug/sched/migration_cost_ns || true
+echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 4899054 > /sys/kernel/debug/sched/migration_cost_ns || true
 echo 0 > /sys/module/snd*/parameters/power_save*  || true
+if [ "$(cat /sys/devices/system/clocksource/clocksource0/current_clocksource)" = hpet ]; then
+ echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
+ sysctl -w dev.hpet.max-user-freq=4095         || true
+fi
 #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 #echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
 #[ -e /sys/fs/cgroup/cpuset/cpuset.sched_load_balance ] && echo 0 > /sys/fs/cgroup/cpuset/cpuset.sched_load_balance || true
@@ -126,34 +112,70 @@ fi
 ### APrenderer
 [ "$aprenderer" = on ] && mkdir /dev/shm/aprenderer && systemctl start aprenderer
 
-### Airconnect
+### Airconnect & Spotify
 if [ "$upmpdcli" = on ] || [ "$aprenderer" = on ]; then
  if [ "$airplay" = on ]; then
- sleep 3
   systemctl start airconnect_run
+ fi
+ if [ "$spotify" = on ]; then
+  systemctl start spotconnect_run
  fi
 fi
 
 ### Roon Bridge
-[ "$roon" = on ] && (roon_bridge &) && sleep 3
+if [ "$roon" = on ]; then
+ if [ "$roontoram" = on ]; then
+  cp -r /opt/RoonBridge /dev/shm/
+  systemctl start roonbridgetoram
+ else
+  systemctl start roonbridge
+ fi
+fi
 
 ### Squeezelite
 [ "$sqzlite" = on ] && systemctl start sqzlite_run
 
 ### Spotify
-[ "$spotify" = on ] && systemctl start spotify_run
+#[ "$spotify" = on ] && systemctl start spotify_run
 
 ### Networkaudiod
-[ "$naa" = on ] && (naa &) && sleep 3
-
-### Gerbera & LMS
-[ "$gerbera" = on ] && systemctl start gerbera
-[ "$lms"     = on ] && systemctl start logitechmediaserver
+if [ "$naa" = on ]; then
+ if [ "$naatoram" = on ]; then
+  cp /usr/sbin/networkaudiod /dev/shm/
+  systemctl start networkaudiodtoram
+ else
+  systemctl start networkaudiod
+ fi
+fi
 
 ### myMPD
 [ "$mympd" = on ] && systemctl start mympd
 
 ### tty
 [ "$tty" = off ] && systemctl stop getty@tty1
+
+### USB Mount
+if [ "$usbmount" = on ]; then
+ blkid | grep -i type | while read line; do
+   uuid=$(echo $line | grep -io uuid.* | cut -d\" -f2)
+  drive=$(echo $line | cut -d: -f1)
+  if [ -n "$uuid" ] && ! grep -q $uuid /etc/fstab && ! mount | grep -q "$drive"; then
+   type=$(echo $line | grep -o TYPE.* | cut -d\" -f2)
+   case $type in
+    vfat) opt="ro,codepage=949,iocharset=utf8" ;;
+    ntfs) opt="ro,umask=022" ;;
+    *)    opt="ro" ;;
+   esac
+   [ -d "/mnt/$uuid" ] || sudo mkdir -p "/mnt/$uuid"
+   sudo mount -o "$opt" "$drive" "/mnt/$uuid"
+  fi
+ done
+fi
+
+### Minidlna & LMS
+[ "$minidlna" = on ] && systemctl start minidlnarun
+[ "$lms"      = on ] && systemctl start lyrionmusicserver # logitechmediaserver
+
+[ ! -f /etc/default/adjtimex ] && adjtimexconfig && sudo systemctl restart adjtimex
 
 exit 0
