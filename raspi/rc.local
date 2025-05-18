@@ -166,7 +166,7 @@ fi
 
 ### USB Mount
 if [ "$usbmount" = on ]; then
- blkid | while read line; do
+ blkid | grep -i type | while read line; do
    uuid=$(echo $line | grep -io uuid.* | cut -d\" -f2)
   drive=$(echo $line | cut -d: -f1)
   if [ -n "$uuid" ] && ! grep -q $uuid /etc/fstab && ! mount | grep -q "$drive"; then
