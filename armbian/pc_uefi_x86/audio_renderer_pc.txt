@@ -280,38 +280,51 @@ UPnP/DLNA Audio Render for PC
 
 	# apt-get install lrzsz liblua5.4-0 jq # libc6 libid3tag0 libflac12 libmediainfo0v5 openssl
 	# dpkg -i copy/mympd*.deb
-	
-	# mv /usr/lib/systemd/system/mympd.service /usr/lib/systemd/system/mympd.service.orig
-	# cp /usr/lib/systemd/user/mympd.service /usr/lib/systemd/system/mympd.service
-	# getent group mympd > /dev/null || groupadd -r mympd
-	# getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
-	# mkdir -p /home/mympd /home/mympd/.config/mympd /home/mympd/.cache/mympd
-	# chown -R mympd:mympd /home/mympd
+
 	# echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 	# nano /usr/lib/systemd/system/mympd.service
-		ExecStart=/dev/shm/mympd -u mympd -w /home/mympd/.config/mympd -a /home/mympd/.cache/mympd
-		Environment="MYMPD_HTTP_PORT=80"
-		WorkingDirectory=/home/mympd/.config/mympd
+		ExecStart=/dev/shm/mympd
 	# systemctl daemon-reload
 	# cp /usr/bin/mympd /dev/shm/
 	# systemctl start  mympd
 	# systemctl status mympd
 	# systemctl stop   mympd
 	
-	# mv copy/*.png /home/mympd/.config/mympd/pics/thumbs/
-	# mv copy/*.lua /home/mympd/.config/mympd/scripts/
-	# echo "false" | tee /home/mympd/.config/mympd/config/ssl
-	# cat /home/mympd/.config/mympd/config/http_port
-	
 	$ mv copy/*.png      /home/mympd/.config/mympd/pics/thumbs/
 	$ mv copy/*.lua	     /home/mympd/.config/mympd/scripts/
 	$ mv copy/home_list  /home/mympd/.config/mympd/state/
-	$ echo "false" | tee /home/mympd/.config/mympd/config/ssl
-	$ cat                /home/mympd/.config/mympd/config/http_port	
+	$ echo "false" >     /home/mympd/.config/mympd/config/ssl
+	$ echo "80"    >     /home/mympd/.config/mympd/config/http_port	
 	
 	# chown -R mympd:mympd /home/mympd
 	# systemctl start mympd
+
+	##mv /usr/lib/systemd/system/mympd.service /usr/lib/systemd/system/mympd.service.orig
+	##cp /usr/lib/systemd/user/mympd.service /usr/lib/systemd/system/mympd.service
+	##getent group mympd > /dev/null || groupadd -r mympd
+	##getent passwd mympd > /dev/null || useradd -r -g mympd -s /bin/false -d /var/lib/mympd mympd
+	##mkdir -p /home/mympd /home/mympd/.config/mympd /home/mympd/.cache/mympd
+	##chown -R mympd:mympd /home/mympd
+	##echo 'mympd ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+	##nano /usr/lib/systemd/system/mympd.service
+		ExecStart=/dev/shm/mympd -u mympd -w /home/mympd/.config/mympd -a /home/mympd/.cache/mympd
+		Environment="MYMPD_HTTP_PORT=80"
+		WorkingDirectory=/home/mympd/.config/mympd
+	##systemctl daemon-reload
+	##cp /usr/bin/mympd /dev/shm/
+	##systemctl start  mympd
+	##systemctl status mympd
+	##systemctl stop   mympd
+
+	##mv copy/*.png      /home/mympd/.config/mympd/pics/thumbs/
+	##mv copy/*.lua	     /home/mympd/.config/mympd/scripts/
+	##mv copy/home_list  /home/mympd/.config/mympd/state/
+	##echo "false" | tee /home/mympd/.config/mympd/config/ssl
+	##cat                /home/mympd/.config/mympd/config/http_port	
 	
+	##chown -R mympd:mympd /home/mympd
+	##systemctl start mympd
+
 	http://$ip
 		MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
 		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
@@ -487,7 +500,8 @@ UPnP/DLNA Audio Render for PC
 
 	# mpc clear
 	# ls /lib/modules/
-	# rm -rf /var/roon/* /home/mympd/.cache/mympd/* /var/cache/minidlna/*
+	# rm -rf /var/roon/* /var/cache/mympd/* /var/cache/minidlna/*
+	##rm -rf /var/roon/* /home/mympd/.cache/mympd/* /var/cache/minidlna/*
 	# rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
 	# sync
 	# poweroff
