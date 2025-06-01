@@ -7,6 +7,7 @@ TODO list
 
    echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
    echo 4899055 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 0 | sudo tee /sys/kernel/debug/sched/tunable_scaling
 
    sysctl -w vm.max_map_count=672167
    sysctl -w net.ipv4.tcp_rmem='4643 88325 3345797'
