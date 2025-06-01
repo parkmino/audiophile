@@ -1,36 +1,18 @@
-1. alsa-lib-1.2.14
+TODO list
 
-2. sudo nano /etc/mpd.conf.sav
-
-   mixer_type "none"
-   size "487453271"
-
-3. sudo nano /usr/lib/systemd/system/upmpdcli.service
-
-   ExecStart=/dev/shm/upmpdcli -f "..." -d /dev/null -l 0
-
-   grep '/dev/shm/upmpdcli' /usr/lib/systemd/system/upmpdcli.service | cut -d\" -f2
-   sudo sed -i '/dev\/shm\/upmpdcli/s/".*"/"..."/' /usr/lib/systemd/system/upmpdcli.service
-   sudo systemctl daemon-reload
-   sudo systemctl restart upmpdcli
-
-   sudo nano /usr/share/upmpdcli/radio_scripts/radiolist.conf
-
-   [radio ...]
-
-4. sudo nano /etc/rc.local
+1. sudo nano /etc/rc.local
 
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=4095         || true
 
    echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
-   echo 4899054 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899055 | tee /sys/kernel/debug/sched/migration_cost_ns
 
-   sysctl -w vm.max_map_count=672166
-   sysctl -w net.ipv4.tcp_rmem='4642 88324 3345796'
-   sysctl -w net.ipv4.tcp_wmem='4593 89974 3455771'
+   sysctl -w vm.max_map_count=672167
+   sysctl -w net.ipv4.tcp_rmem='4643 88325 3345797'
+   sysctl -w net.ipv4.tcp_wmem='4594 89975 3455772'
 
-5. Adjtimex (Not for rpi)
+2. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
