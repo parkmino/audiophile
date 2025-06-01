@@ -27,13 +27,13 @@
 #echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
 #sysctl -w kernel.sched_migration_cost_ns=4899037
- echo 4899054 | tee /sys/kernel/debug/sched/migration_cost_ns
+ echo 4899055 | tee /sys/kernel/debug/sched/migration_cost_ns
 #sysctl -w kernel.sched_nr_migrate=0
 #echo 25      | tee /sys/kernel/debug/sched/nr_migrate
 #sysctl -w kernel.sched_rr_timeslice_ms=32
 #sysctl -w kernel.sched_shares_window_ns=345997
 #sysctl -w kernel.sched_tunable_scaling=1
-#echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
+ echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 #sysctl -w kernel.sched_time_avg_ms=6288
  sysctl -w kernel.printk="0 0 0 0"
 
@@ -42,7 +42,7 @@
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
- sysctl -w vm.max_map_count=672166
+ sysctl -w vm.max_map_count=672167
  sysctl -w vm.memory_failure_recovery=0
  sysctl -w vm.oom_dump_tasks=0
  sysctl -w vm.oom_kill_allocating_task=1
@@ -58,8 +58,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4642 88324 3345796'
- sysctl -w net.ipv4.tcp_wmem='4593 89974 3455771'
+ sysctl -w net.ipv4.tcp_rmem='4643 88325 3345797'
+ sysctl -w net.ipv4.tcp_wmem='4594 89975 3455772'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
