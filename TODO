@@ -11,7 +11,7 @@ TODO list
 
    sysctl -w vm.max_map_count=672167
    sysctl -w net.ipv4.tcp_rmem='4644 88326 3345798'
-   sysctl -w net.ipv4.tcp_wmem='4595 89977 3455774'
+   sysctl -w net.ipv4.tcp_wmem='4595 89976 3455773'
 
 2. Adjtimex (Not for rpi)
 
