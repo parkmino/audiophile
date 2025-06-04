@@ -1,5 +1,12 @@
 #!/bin/sh
 
-[ -n "$1" ] && loc="$1" || loc="구미시"
+wttrin () {
+ curl -H "Accept-Language: ${LANG%_*}" --compressed wttr.in/"$1"?Mn2
+}
 
-curl -H "Accept-Language: ${LANG%_*}" --compressed wttr.in/"$loc"?Mn2
+if ! [ -n "$1" ]; then
+ wttrin "36.1652826,128.3474342" # 경상북도 구미시 고아읍 들성로11길 46-7, 39146
+ wttrin "35.4699579,128.7593461" # 경상남도 밀양시 상남면 예림1길 43, 50451
+else
+ wttrin "$1"
+fi
