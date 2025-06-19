@@ -6,14 +6,20 @@ TODO list
    sysctl -w dev.hpet.max-user-freq=4095         || true
 
    echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899055 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899059 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
-   sysctl -w vm.max_map_count=672167
-   sysctl -w net.ipv4.tcp_rmem='4644 88326 3345798'
-   sysctl -w net.ipv4.tcp_wmem='4595 89976 3455773'
+   sysctl -w vm.max_map_count=672172
+   sysctl -w net.ipv4.tcp_rmem='4648 88331 3345802'
+   sysctl -w net.ipv4.tcp_wmem='4599 89981 3455776'
 
-2. Adjtimex (Not for rpi)
+2. sudo nano /etc/mpd.conf.sav.input_cache
+
+   input_cache {
+   size "487453275"
+   }
+
+3. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
@@ -26,3 +32,7 @@ TODO list
      exit 0
 
    $ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
+
+4. nano ~/.config/mpv.conf
+
+   demuxer-max-bytes=80226786
