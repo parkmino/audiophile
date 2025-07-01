@@ -36,3 +36,16 @@ TODO list
 4. nano ~/.config/mpv.conf
 
    demuxer-max-bytes=80226786
+
+
+5. sudo nano /usr/lib/systemd/system/mympd.service
+
+   #DynamicUser=yes
+   #ProtectHome=yes
+
+   echo 80    | sudo tee /var/lib/mympd/config/http_port
+   echo false | sudo tee /var/lib/mympd/config/ssl
+
+   sudo systemctl daemon-reload
+   sudo systemctl start  mympd
+   sudo systemctl status mympd
