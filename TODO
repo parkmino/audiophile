@@ -5,7 +5,7 @@ TODO list
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=4095         || true
 
-   echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+   echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
    echo 4899059 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
@@ -19,7 +19,31 @@ TODO list
    size "487453275"
    }
 
-3. Adjtimex (Not for rpi)
+3. nano ~/.config/mpv.conf
+
+   demuxer-max-bytes=80226786
+
+4. mympd
+
+   sudo nano /etc/rc.local
+
+   mymusicpd.service
+
+   sudo nano usr/lib/systemd/system/mympd.service
+
+   #DynamicUser=yes
+   #ProtectHome=yes
+   StandardOutput=null
+   #StandardError=null
+
+   echo 80    | sudo tee /var/lib/mympd/config/http_port
+   echo false | sudo tee /var/lib/mympd/config/ssl
+
+   sudo systemctl daemon-reload
+   sudo systemctl start  mympd
+   sudo systemctl status mympd
+
+5. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
@@ -30,22 +54,3 @@ TODO list
    $ sudo nano /etc/rc.local
      [ ! -f /etc/default/adjtimex ] && adjtimexconfig && sudo systemctl restart adjtimex
      exit 0
-
-   $ sudo rm -f /root/.bash_history ~/.bash_history /nohup.out /etc/default/adjtimex; history -c
-
-4. nano ~/.config/mpv.conf
-
-   demuxer-max-bytes=80226786
-
-
-5. sudo nano /usr/lib/systemd/system/mympd.service
-
-   #DynamicUser=yes
-   #ProtectHome=yes
-
-   echo 80    | sudo tee /var/lib/mympd/config/http_port
-   echo false | sudo tee /var/lib/mympd/config/ssl
-
-   sudo systemctl daemon-reload
-   sudo systemctl start  mympd
-   sudo systemctl status mympd
