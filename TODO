@@ -16,7 +16,7 @@ TODO list
 2. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453275"
+   size "487453276"
    }
 
 3. mympd
@@ -45,7 +45,7 @@ TODO list
 
 5. nano ~/.config/mpv.conf
 
-   demuxer-max-bytes=80226786
+   demuxer-max-bytes=80226787
 
 6. Adjtimex (Not for rpi)
 
