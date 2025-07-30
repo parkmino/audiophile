@@ -3,15 +3,15 @@ TODO list
 1. sudo nano /etc/rc.local
 
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
-   sysctl -w dev.hpet.max-user-freq=4095         || true
+   sysctl -w dev.hpet.max-user-freq=2147483520   || true
 
    echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899059 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899061 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
    sysctl -w vm.max_map_count=672172
-   sysctl -w net.ipv4.tcp_rmem='4648 88331 3345802'
-   sysctl -w net.ipv4.tcp_wmem='4599 89981 3455776'
+   sysctl -w net.ipv4.tcp_rmem='4649 88332 3345804'
+   sysctl -w net.ipv4.tcp_wmem='4600 89982 3455778'
 
 2. sudo nano /etc/mpd.conf.sav.input_cache
 
@@ -19,11 +19,7 @@ TODO list
    size "487453275"
    }
 
-3. nano ~/.config/mpv.conf
-
-   demuxer-max-bytes=80226786
-
-4. mympd
+3. mympd
 
    sudo nano /etc/rc.local
 
@@ -33,8 +29,6 @@ TODO list
 
    #DynamicUser=yes
    #ProtectHome=yes
-   StandardOutput=null
-   #StandardError=null
 
    echo 80    | sudo tee /var/lib/mympd/config/http_port
    echo false | sudo tee /var/lib/mympd/config/ssl
@@ -43,7 +37,17 @@ TODO list
    sudo systemctl start  mympd
    sudo systemctl status mympd
 
-5. Adjtimex (Not for rpi)
+4. sudo nano /etc/systemd/system/roonbridge.service
+   sudo nano /lib/systemd/system/networkaudiod.service
+
+   StandardOutput=null
+   #StandardError=null
+
+5. nano ~/.config/mpv.conf
+
+   demuxer-max-bytes=80226786
+
+6. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig

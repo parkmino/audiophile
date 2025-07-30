@@ -27,7 +27,7 @@
 #echo 1394102 | tee /sys/kernel/debug/sched/latency_ns
 #sysctl -w kernel.sched_cfs_bandwidth_slice_us=1
 #sysctl -w kernel.sched_migration_cost_ns=4899037
- echo 4899055 | tee /sys/kernel/debug/sched/migration_cost_ns
+ echo 4899059 | tee /sys/kernel/debug/sched/migration_cost_ns
 #sysctl -w kernel.sched_nr_migrate=0
 #echo 25      | tee /sys/kernel/debug/sched/nr_migrate
 #sysctl -w kernel.sched_rr_timeslice_ms=32
@@ -42,7 +42,7 @@
 #sysctl -w vm.dirty_background_ratio=0
 #sysctl -w vm.dirty_ratio=0
  sysctl -w vm.dirty_writeback_centisecs=0
- sysctl -w vm.max_map_count=672167
+ sysctl -w vm.max_map_count=672172
  sysctl -w vm.memory_failure_recovery=0
  sysctl -w vm.oom_dump_tasks=0
  sysctl -w vm.oom_kill_allocating_task=1
@@ -58,8 +58,8 @@
 #sysctl -w net.core.wmem_max=211000
 #sysctl -w net.core.wmem_default=211000
 #sysctl -w net.ipv4.conf.default.forwarding=1
- sysctl -w net.ipv4.tcp_rmem='4643 88325 3345797'
- sysctl -w net.ipv4.tcp_wmem='4594 89975 3455772'
+ sysctl -w net.ipv4.tcp_rmem='4649 88332 3345804'
+ sysctl -w net.ipv4.tcp_wmem='4600 89982 3455778'
  sysctl -w net.ipv4.tcp_timestamps=0
  sysctl -w net.ipv4.tcp_window_scaling=0
  sysctl -w net.ipv4.tcp_sack=0
@@ -79,7 +79,7 @@ echo 0 | tee /sys/module/snd*/parameters/power_save*  || true
 #echo hpet > /sys/devices/system/clocksource/clocksource0/current_clocksource || true
 echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
 #sysctl -w dev.rtc.max-user-freq=4032 || true
-sysctl -w dev.hpet.max-user-freq=4095 || true
+sysctl -w dev.hpet.max-user-freq=2147483520 || true
 
 #echo 55696 | tee /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
 #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
@@ -113,7 +113,7 @@ swapoff -a
 #ln -sf /etc/libasound.so.2.0.0.sav /usr/lib/x86_64-linux-gnu/libasound.so
  cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
 #ln -sf /dev/shm/alsa.conf /usr/share/alsa/alsa.conf
- cp /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mpv /home/parkmino/.config/mpv/mpv.conf /dev/shm/
+ cp /usr/bin/upmpdcli /etc/upmpdcli.conf /usr/bin/mympd /usr/bin/mpv /home/parkmino/.config/mpv/mpv.conf /dev/shm/
  mkdir /dev/shm/scripts && cp /home/parkmino/.config/mpv/scripts/ytdl_hook.lua /dev/shm/scripts || true
  cp /usr/local/bin/mpd /dev/shm/ && cp /etc/mpd.conf.sav /dev/shm/mpd.conf
 #cp /usr/bin/mpd.0.23.12 /dev/shm/mpd && cp /etc/mpd.conf.resampler /dev/shm/mpd.conf
