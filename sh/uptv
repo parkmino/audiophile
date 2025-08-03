@@ -23,43 +23,41 @@ ch_10=767; prog_10="JTBC4"
 ch_11=658; prog_11="아시아N"
 ch_12=794; prog_12="가요TV"
 ch_13=688; prog_13="GMTV"
-ch_14=001; prog_14="프로야구1"
-ch_15=381; prog_15="SBS스포츠"
-ch_16=382; prog_16="야매중계"
-ch_17=602; prog_17="JTBC골프"
-ch_18=614; prog_18="SBS골프"
-ch_19=795; prog_19="JTBC골프앤스포츠"
-ch_20=668; prog_20="빌리어즈TV"
-ch_21=729; prog_21="CNN International"
-ch_22=771; prog_22="토마토증권통"
-ch_23=174; prog_23="CNBC"
-ch_24=676; prog_24="GS샵"
-ch_25=675; prog_25="현대홈쇼핑"
-ch_26=672; prog_26="CJ온스타일"
-ch_27=674; prog_27="롯데홈쇼핑"
-ch_28=673; prog_28="NS홈쇼핑"
-ch_29=649; prog_29="홈앤쇼핑"
-ch_30=740; prog_30="GS마이샵"
-ch_31=760; prog_31="현대홈쇼핑+샵"
-ch_32=813; prog_32="W쇼핑"
-ch_33=391; prog_33="PLAYY프리미엄"
-ch_34=392; prog_34="PLAYY웰메이드"
-ch_35=683; prog_35="바둑TV"
-ch_36=665; prog_36="FTV"
-ch_37=625; prog_37="한국낚시방송"
-ch_38=726; prog_38="폴라리스TV"
-ch_39=707; prog_39="브레인TV"
-ch_40=703; prog_40="애니맥스"
-ch_41=699; prog_41="애니플러스"
-ch_42=761; prog_42="어린이TV"
-ch_43=728; prog_43="브라보키즈"
-ch_44=629; prog_44="플레이보이"
-ch_45=628; prog_45="미드나잇"
-ch_46=743; prog_46="허니TV"
-ch_47=751; prog_47="비키"
-ch_48=165; prog_48="핑크하우스"
-ch_49=166; prog_49="디자이어TV"
-ch_50=801; prog_50="비너스TV"
+ch_14=382; prog_16="EBS1"
+ch_15=602; prog_17="JTBC골프"
+ch_16=614; prog_18="SBS골프"
+ch_17=795; prog_19="JTBC골프앤스포츠"
+ch_18=668; prog_20="빌리어즈TV"
+ch_19=729; prog_21="CNN International"
+ch_20=771; prog_22="토마토증권통"
+ch_21=174; prog_23="CNBC"
+ch_22=676; prog_24="GS샵"
+ch_23=675; prog_25="현대홈쇼핑"
+ch_24=672; prog_26="CJ온스타일"
+ch_25=674; prog_27="롯데홈쇼핑"
+ch_26=673; prog_28="NS홈쇼핑"
+ch_27=649; prog_29="홈앤쇼핑"
+ch_28=740; prog_30="GS마이샵"
+ch_29=760; prog_31="현대홈쇼핑+샵"
+ch_30=813; prog_32="W쇼핑"
+ch_31=391; prog_33="PLAYY프리미엄"
+ch_32=392; prog_34="PLAYY웰메이드"
+ch_33=683; prog_35="바둑TV"
+ch_34=665; prog_36="FTV"
+ch_35=625; prog_37="한국낚시방송"
+ch_36=726; prog_38="폴라리스TV"
+ch_37=707; prog_39="브레인TV"
+ch_38=703; prog_40="애니맥스"
+ch_39=699; prog_41="애니플러스"
+ch_40=761; prog_42="어린이TV"
+ch_41=728; prog_43="브라보키즈"
+ch_42=629; prog_44="플레이보이"
+ch_43=628; prog_45="미드나잇"
+ch_44=743; prog_46="허니TV"
+ch_45=751; prog_47="비키"
+ch_46=165; prog_48="핑크하우스"
+ch_47=166; prog_49="디자이어TV"
+ch_48=801; prog_50="비너스TV"
 
 uptv_ck () {
  ch="http://123.140.104.150/api/epg/v1/channel/virtual?access_key=C4A0697007C3548D389B&cp_id=S_LGU_HYUK0920&system_id=HDTV&SA_ID=500053434041&STB_MAC=v000.5343.4041&NSC_TYPE=LTE&BASE_GB=Y&BASE_CD=W172.017&YOUTH_YN=N&ORDER_GB=N&POOQ_YN=N&HDTV_VIEW_GB=R&SID=001010005638&CLIENT_IP=172.17.100.15&OS_INFO=android_4.4.2&NW_INFO=WIFI&APP_TYPE=ROSA&DEV_MODEL=SM-N935F&CARRIER_TYPE=E&UI_VER=04.38.04&NOW_PAGE=25&PRE_PAGE=&MENU_NM=&CONTS_GB=&TERM_BINVER=3.8.118.0106"
@@ -91,19 +89,14 @@ uptv_m3u () {
 uptv_ch () {
  echo "\
 (1)  JTBC	(2)  MBN	(3)  채널A	(4)  TV조선	(5)  OBS
-(6)  OBS W	(7)  더라이프	(8)  JTBC2	(9)  K스타	(10) 라이프타임
-(11) JTBC4	(12) 아시아N	(13) STATV	(14) 프로야구1	(15) 프로야구2
-(16) 프로야구3	(17) 프로야구4	(18) 프로야구5	(19) 프로야구6	(20) 스포티비
-(21) SPOTV2	(22) SBS스포츠	(23) MBC스포츠+	(24) JTBC골프	(25) SBS골프
-(26) 골프앤헬스 (27) JTBC골프	(28) 빌리어즈TV	(29) YTN	(30) 연합뉴스TV
-(31) CNN	(32) 토마토증권 (33) CNBC	(34) GS샵	(35) 현대홈쇼핑
-(36) CJ온스타일	(37) 롯데홈쇼핑 (38) NS홈쇼핑	(39) 홈앤쇼핑	(40) GS마이샵
-(41) 현대홈쇼핑 (42) W 쇼핑	(43) U+ 라이브	(44) 가요TV	(45) GMTV
-(46) PLAYY프리	(47) PLAYY웰메	(48) 바둑TV	(49) FTV	(50) 피싱TV
-(51) 폴라리스TV	(52) 브레인TV	(53) 애니맥스	(54) 애니플러스 (55) 어린이TV
-(56) 브라보키즈 (57) EBS1	(58) EBS Kids	(59) EBS+2	(60) EBS+1
-(61) EBS 초등3	(62) EBS 초등4	(63) EBS 초등5	(64) EBS 초등6	(65) EBS 중학1
-(66) EBS 중학2	(67) EBSEnglish	(68) JEI 영어TV	(69) 플레이런TV"
+(6)  더라이프	(7)  JTBC2	(8)  K스타	(9)  라이프타.	(10) JTBC4
+(11) 아시아N	(12) 가요TV	(13) GMTV       (14) EBS1	(15) JTBC골프
+(16) SBS골프	(17) SBS스포츠	(18) 빌리어즈	(19) CNN	(20) 토마토증권
+(21) CNBC	(22) GS샵	(23) 현대홈	(24) CJ온스타	(25) 롯데홈쇼핑
+(26) NS홈쇼핑	(27) 홈앤쇼핑	(28) GS마이샵	(29) 현대홈+샵	(30) W 쇼핑
+(31) PLAYY프.	(32) PLAYY웰.	(33) 바둑TV	(34) FTV	(35) 피싱TV
+(36) 폴라리스	(37) 브레인TV	(38) 애니맥스	(39) 애니+	(40) 어린이TV
+(41) 브라보키	(42) 플레이보.	(43) 미드나잇	(44) 허니TV"
 
  read -p " " i
 
