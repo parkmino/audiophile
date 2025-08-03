@@ -43,6 +43,10 @@ https://zstream.win/pls/kbs_1radio.pls
 https://zstream.win/pls/kbs_2radio.pls
 #EXTINF:-1,KBS 3라디오
 https://zstream.win/pls/kbs_3radio.pls
+#EXTINF:-1,MBC TV
+http://www.hwado.net/webtv/catv/503_CFEA7803.php
+#EXTINF:-1,MBC Net
+http://mytv.dothome.co.kr/ch/catv/28.php
 #EXTINF:-1,MBC강원영동TV
 http://123.254.93.7:1935/tvlive/livestream2/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM
@@ -73,6 +77,12 @@ https://vod.mpmbc.co.kr/a_live/25246741/ch001/playlist.m3u8
 https://vod.mpmbc.co.kr/live/encoder-am/playlist.m3u8
 #EXTINF:-1,MBC목포FM4U
 https://vod.mpmbc.co.kr/live/encoder-fm/playlist.m3u8
+#EXTINF:-1,MBC여수TV
+https://5c3639aa99149.streamlock.net/live_TV/tv/playlist.m3u8
+#EXTINF:-1,MBC여수표준FM
+https://5c3639aa99149.streamlock.net/표준FM/표준FM_Audio/playlist.m3u8
+#EXTINF:-1,MBC여수FM4U
+https://5c3639aa99149.streamlock.net/FM4U/FM4U_Audio/playlist.m3u8
 #EXTINF:-1,MBC전주TV
 https://5ee9633b25727.streamlock.net:443/jmbc_tv/jmbc_tv.stream/playlist.m3u8
 #EXTINF:-1,MBC전주표준FM
@@ -97,6 +107,12 @@ http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8
 http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC충북FM4U
 http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8
+#EXTINF:-1,SBS TV
+http://www.hwado.net/webtv/catv/502_76142D8F.php
+#EXTINF:-1,G1강원TV
+http://61.82.49.4:1935/live/_definst_/tv.stream/playlist.m3u8
+#EXTINF:-1,G1강원FM
+http://61.82.49.4:1935/fm/_definst_/myStream/playlist.m3u8
 #EXTINF:-1,KBC광주TV
 https://vod.ikbc.co.kr/KBCTV/tv/playlist.m3u8
 #EXTINF:-1,KBC광주FM
@@ -127,6 +143,14 @@ http://1.222.207.80:1935/live/cjbradio/playlist.m3u8
 http://123.140.197.22/stream/1/play.m3u8
 #EXTINF:-1,JIBS제주FM
 http://123.140.197.22/stream/2/play.m3u8
+#EXTINF:-1,JTBC
+http://youtv.dothome.co.kr/ch/catv/51_469EE6CC.php
+#EXTINF:-1,JTBC GOLF
+http://mytv.dothome.co.kr/ch/catv/56_F99B7B3E.php
+#EXTINF:-1,JTBC GOLF&SPORTS
+http://mytv.dothome.co.kr/ch/catv/58_6EAEF448.php
+#EXTINF:-1,MBN
+http://mytv.dothome.co.kr/ch/catv/54.php
 #EXTINF:-1,국방TV
 http://mediaworks.dema.mil.kr:1935/live_edge/cudo.sdp/playlist.m3u8
 #EXTINF:-1,국방FM
@@ -137,8 +161,10 @@ http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8
 http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8
 #EXTINF:-1,국회방송
 https://m.webcast.go.kr/live/_definst_/smil:natv_720p.smil/playlist.m3u8
-#EXTINF:-1,딜라이브TV
+#EXTINF:-1,딜라이브TV 서울
 http://112.214.255.230/hls/ch02/playlist.m3u8
+#EXTINF:-1,딜라이브TV 경기
+http://112.214.255.233/hls/ch02/playlist.m3u8
 #EXTINF:-1,방송대학TV
 https://live.knou.ac.kr/knou1/live1/playlist.m3u8
 #EXTINF:-1,복지TV
