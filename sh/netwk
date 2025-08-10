@@ -1,16 +1,26 @@
 #!/bin/sh
-#complete -W 'up on down off quit stop scan list usb puppy' netwk ./netwk \~/netwk
-# 3F_2 ( Cisco Meraki MR42 ) http://10.128.128.128 - 192.168.1.241
 
 usage () {
- echo "Usage: $(basename $0) [up|down|on|off|scan|list|quit|stop]"
- echo "   or: $(basename $0) [usb|puppy|OpenESSID]"
- echo "Manage Network"
+ echo "Usage: $(basename $0) [up|down|on|off|scan|list|quit|stop|view]"
+ echo "   or: $(basename $0) [usb] or [lan(wired)|home|mr|ss] or [bk|puppy|OpenESSID]"
+ echo "Manage Network for personal use"
 }
 
-[ -z "$1" ] && usage && exit
-
 net_inf="/etc/network/interfaces"
+
+if [ -z "$1" ]; then
+ usage
+ echo
+ for i in bk home lan mr ss
+  do
+   if cmp -s $net_inf ${net_inf}.d/$i; then
+    echo "#${net_inf}.d/$i"
+   fi
+  done
+ echo "#$net_inf"
+ grep -v '^ *#' $net_inf
+ exit
+fi
 
 wlan=$(ifconfig -a | grep -o   '^wl\w*')
  lan=$(ifconfig -a | grep -o   '^enp.s.\w*')
@@ -55,15 +65,39 @@ case $1 in
  list)
   prepare_wifi
   sudo iwlist $wlan scan | grep ESSID | cut -d':' -f2 | sort -u | nl -ba ;;
- lan)
-  ifconfig | grep -qs $lan || sudo ifconfig $lan up
-  sudo dhclient -v $lan ;;
+ view)
+  for i in bk home lan mr ss
+   do
+    if cmp -s $net_inf ${net_inf}.d/$i; then
+     echo "#${net_inf}.d/$i"
+    fi
+   done
+  echo "#$net_inf"
+  grep -v '^ *#' $net_inf ;;
  usb)
   if [ -z "$usb" ];then
    echo "Error: USB tethering is not detected"
    exit
   fi
   sudo ifconfig $usb up && sudo dhclient -v $usb ;;
+ lan)
+  sudo cp ${net_inf}.d/$1 $net_inf
+  echo "#$net_inf"
+  grep -v '^ *#' $net_inf
+  ifconfig | grep -qs $lan || sudo ifconfig $lan up ;;
+ home|mr|ss)
+  sudo cp ${net_inf}.d/$1 $net_inf
+  echo "#$net_inf"
+  grep -v '^ *#' $net_inf ;;
+#  ifconfig | grep -qs $lan || sudo ifconfig $lan up
+#  ifconfig | grep -qs $wlan || sudo ifconfig $wlan up
+#  sudo dhclient -v $lan ;;
+#  sudo dhclient -v $wlan ;;
+ bk)
+  sudo cp ${net_inf}.d/$1 $net_inf
+  echo "#$net_inf"
+  grep -v '^ *#' $net_inf
+  ifconfig | grep -qs $wlan || sudo ifconfig $wlan up ;;
  puppy)
   sudo sed -i '/^wpa-\|^wireless-/s/^/#/' $net_inf
   sudo sed -i '/wpa-ssid '"$1"'$/s/^#*//; /wpa-ssid '"$1"'$/!b;n;s/^#*//' $net_inf
