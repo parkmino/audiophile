@@ -84,31 +84,43 @@ case $1 in
   sudo cp ${net_inf}.d/$1 $net_inf
   echo "#$net_inf"
   grep -v '^ *#' $net_inf
-  ifconfig | grep -qs $lan || sudo ifconfig $lan up ;;
+  ifconfig | grep -qs $lan && quit_network
+  sudo ifup $lan ;;
  home|mr|ss)
   sudo cp ${net_inf}.d/$1 $net_inf
   echo "#$net_inf"
-  grep -v '^ *#' $net_inf ;;
-#  ifconfig | grep -qs $lan || sudo ifconfig $lan up
-#  ifconfig | grep -qs $wlan || sudo ifconfig $wlan up
-#  sudo dhclient -v $lan ;;
-#  sudo dhclient -v $wlan ;;
- bk)
+  grep -v '^ *#' $net_inf
+  for i in $lan $wlan; do
+   if ! (ifconfig | grep -qs $i); then
+    echo
+    echo -n "Enable $i? \e[32m[y/N]\e[0m"
+    read answer
+    [ "$answer" = y ] && sudo ifup $i
+   fi
+  done ;;
+# ifconfig | grep -qs $lan  || (sudo ifconfig $lan  up ; sudo dhclient -v $lan)
+# ifconfig | grep -qs $wlan || (sudo ifconfig $wlan up ; sudo dhclient -v $wlan)
+ bk|puppy)
   sudo cp ${net_inf}.d/$1 $net_inf
   echo "#$net_inf"
   grep -v '^ *#' $net_inf
-  ifconfig | grep -qs $wlan || sudo ifconfig $wlan up ;;
- puppy)
-  sudo sed -i '/^wpa-\|^wireless-/s/^/#/' $net_inf
-  sudo sed -i '/wpa-ssid '"$1"'$/s/^#*//; /wpa-ssid '"$1"'$/!b;n;s/^#*//' $net_inf
-  if ifconfig | grep -qs $wlan; then
-   check_wifi "$1"
-   quit_network
-  else
-   sudo ifconfig $wlan up
-   sleep 3
-   check_wifi "$1"
-  fi
+  ifconfig | grep -qs $wlan && quit_network
+  sudo ifup $wlan ;;
+ puppy1)
+# sudo sed -i '/^wpa-\|^wireless-/s/^/#/' $net_inf
+# sudo sed -i '/wpa-ssid '"$1"'$/s/^#*//; /wpa-ssid '"$1"'$/!b;n;s/^#*//' $net_inf
+  sudo cp ${net_inf}.d/home $net_inf
+  echo "#$net_inf"
+  grep -v '^ *#' $net_inf
+# if ifconfig | grep -qs $wlan; then
+#  check_wifi "$1"
+#  quit_network
+# else
+#  sudo ifconfig $wlan up
+#  sleep 3
+#  check_wifi "$1"
+# fi
+  ifconfig | grep -qs $wlan && quit_network
   sudo ifup $wlan ;;
  *)
   quit_network
