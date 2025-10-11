@@ -15,6 +15,7 @@ sudo blkid | while read line; do
  if [ -n "$uuid" ] && ! grep -q $uuid /etc/fstab && ! mount | grep -q "$drive"; then
   type=$(echo $line | grep -o TYPE.* | cut -d\" -f2)
   case $type in
+   swap) continue ;;
    vfat) opt="ro,codepage=949,iocharset=utf8" ;;
    ntfs) opt="ro,umask=022" ;;
    *)    opt="ro" ;;
