@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -d /dev/shm/aprenderer ] || sudo cp -r /home/parkmino/Downloads/aplayer/aprenderer /dev/shm/
+[ -d /dev/shm/aprenderer ] || sudo cp -r /home/parkmino/Downloads/aplayer/2.17/aprenderer /dev/shm/
 cd /dev/shm/aprenderer
 ./ap2renderer
 cd
