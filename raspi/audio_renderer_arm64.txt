@@ -438,10 +438,11 @@ UPnP/DLNA Audio Render for Raspberry Pi for arm64
 	http://$ip
 		MPD 연결 > MPD 호스트 127.0.0.1, 음원 디렉터리 > 지정 /var/lib/mpd/music
 		설정 > 외관 > 아래 > 연주 관리 > 잠시 멈춤과 정지
+		스크립트 가져오기 > Radiobrowser, yt-dlp
 
 		KBS 클래식 FM, KBS 쿨 FM, MBC FM4U, MBC 표준 FM, SBS 파워 FM, SBS 러브 FM
-		Radiobrowser, radio, #28a745, 스크립트 가져오기
-		YouTube, video_library, #28a745, yt-dlp
+		Radiobrowser, radio, #28a745, Radiobrowser (Lua 스크립트)
+		YouTube, video_library, #28a745, yt-dlp (Lua 스크립트)
 		Test to Speech, record_voice_over, #28a745, tts2mpd
 		웹 설정 실행, settings, #28a745, settings
 		SSH 실행, terminal, #28a745, ssh
