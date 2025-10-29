@@ -9,45 +9,21 @@ TODO list
    echo 4899061 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
-   sysctl -w vm.max_map_count=672172
-   sysctl -w net.ipv4.tcp_rmem='4649 88332 3345804'
-   sysctl -w net.ipv4.tcp_wmem='4600 89982 3455778'
+   sysctl -w vm.max_map_count=672173
+   sysctl -w net.ipv4.tcp_rmem='4650 88333 3345805'
+   sysctl -w net.ipv4.tcp_wmem='4601 89983 3455779'
 
 2. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453276"
+   size "487453277"
    }
 
-3. mympd
+3. nano ~/.config/mpv.conf
 
-   sudo nano /etc/rc.local
+   demuxer-max-bytes=80226788
 
-   mymusicpd.service
-
-   sudo nano /usr/lib/systemd/system/mympd.service
-
-   #DynamicUser=yes
-   #ProtectHome=yes
-
-   echo 80    | sudo tee /var/lib/mympd/config/http_port
-   echo false | sudo tee /var/lib/mympd/config/ssl
-
-   sudo systemctl daemon-reload
-   sudo systemctl start  mympd
-   sudo systemctl status mympd
-
-4. sudo nano /etc/systemd/system/roonbridge.service
-   sudo nano /lib/systemd/system/networkaudiod.service
-
-   StandardOutput=null
-   #StandardError=null
-
-5. nano ~/.config/mpv.conf
-
-   demuxer-max-bytes=80226787
-
-6. Adjtimex (Not for rpi)
+4. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
