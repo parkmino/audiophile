@@ -16,23 +16,23 @@ https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8
 #EXTINF:-1,EBSbandi
 https://ebsonair.ebs.co.kr/cloud/iradio/playlist.m3u8
 #EXTINF:-1,KBS1
-http://mytv.dothome.co.kr/ch/public/1.php
+http://youtv.dothome.co.kr/ch/public/1.php
 #EXTINF:-1,KBS2
-http://mytv.dothome.co.kr/ch/public/3.php
+http://youtv.dothome.co.kr/ch/public/3.php
 #EXTINF:-1,KBS World
-http://mytv.dothome.co.kr/ch/catv/7.php
+http://youtv.dothome.co.kr/ch/catv/7.php
 #EXTINF:-1,KBS News D
-http://mytv.dothome.co.kr/ch/catv/1.php
+http://youtv.dothome.co.kr/ch/catv/1.php
 #EXTINF:-1,KBS Drama
-http://mytv.dothome.co.kr/ch/catv/2.php
+http://youtv.dothome.co.kr/ch/catv/2.php
 #EXTINF:-1,KBS Joy
-http://mytv.dothome.co.kr/ch/catv/3.php
+http://youtv.dothome.co.kr/ch/catv/3.php
 #EXTINF:-1,KBS Life
-http://mytv.dothome.co.kr/ch/catv/5.php
+http://youtv.dothome.co.kr/ch/catv/5.php
 #EXTINF:-1,KBS Story
-http://mytv.dothome.co.kr/ch/catv/4.php
+http://youtv.dothome.co.kr/ch/catv/4.php
 #EXTINF:-1,KBS Kids
-http://mytv.dothome.co.kr/ch/catv/6.php
+http://youtv.dothome.co.kr/ch/catv/6.php
 #EXTINF:-1,KBS 클래식 FM
 https://zstream.win/pls/kbs_1fm.pls
 #EXTINF:-1,KBS 쿨 FM
@@ -43,10 +43,8 @@ https://zstream.win/pls/kbs_1radio.pls
 https://zstream.win/pls/kbs_2radio.pls
 #EXTINF:-1,KBS 3라디오
 https://zstream.win/pls/kbs_3radio.pls
-#EXTINF:-1,MBC TV
-http://www.hwado.net/webtv/catv/503_CFEA7803.php
 #EXTINF:-1,MBC Net
-http://mytv.dothome.co.kr/ch/catv/28.php
+http://youtv.dothome.co.kr/ch/catv/28.php
 #EXTINF:-1,MBC FM4U
 https://zstream.win/pls/mbc_mfm.pls
 #EXTINF:-1,MBC 표준 FM
@@ -113,8 +111,6 @@ http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8
 http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC충북FM4U
 http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8
-#EXTINF:-1,SBS TV
-http://www.hwado.net/webtv/catv/502_76142D8F.php
 #EXTINF:-1,SBS 파워 FM
 https://zstream.win/pls/sbs_powerfm.pls
 #EXTINF:-1,SBS 러브 FM
@@ -157,12 +153,8 @@ http://123.140.197.22/stream/1/play.m3u8
 http://123.140.197.22/stream/2/play.m3u8
 #EXTINF:-1,JTBC
 http://youtv.dothome.co.kr/ch/catv/51_469EE6CC.php
-#EXTINF:-1,JTBC GOLF
-http://mytv.dothome.co.kr/ch/catv/56_F99B7B3E.php
-#EXTINF:-1,JTBC GOLF&SPORTS
-http://mytv.dothome.co.kr/ch/catv/58_6EAEF448.php
 #EXTINF:-1,MBN
-http://mytv.dothome.co.kr/ch/catv/54.php
+http://youtv.dothome.co.kr/ch/catv/54.php
 #EXTINF:-1,국방TV
 http://mediaworks.dema.mil.kr:1935/live_edge/cudo.sdp/playlist.m3u8
 #EXTINF:-1,국방FM
