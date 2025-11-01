@@ -13,17 +13,22 @@ TODO list
    sysctl -w net.ipv4.tcp_rmem='4650 88333 3345805'
    sysctl -w net.ipv4.tcp_wmem='4601 89983 3455779'
 
-2. sudo nano /etc/mpd.conf.sav.input_cache
+2. sudo nano /etc/mpd.conf.sav /etc/mpd.conf.sav.input_cache
+
+   log_file "/dev/null"
+   log_level "error"
+
+3. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453277"
+   size "487453279"
    }
 
-3. nano ~/.config/mpv.conf
+4. nano ~/.config/mpv.conf
 
    demuxer-max-bytes=80226788
 
-4. Adjtimex (Not for rpi)
+5. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
