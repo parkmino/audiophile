@@ -43,6 +43,8 @@ https://zstream.win/pls/kbs_1radio.pls
 https://zstream.win/pls/kbs_2radio.pls
 #EXTINF:-1,KBS 3라디오
 https://zstream.win/pls/kbs_3radio.pls
+#EXTINF:-1,MBC
+http://youtv.dothome.co.kr/ch/catv/5001_024A4A43.php
 #EXTINF:-1,MBC Net
 http://youtv.dothome.co.kr/ch/catv/28.php
 #EXTINF:-1,MBC FM4U
@@ -111,6 +113,8 @@ http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8
 http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC충북FM4U
 http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8
+#EXTINF:-1,SBS
+http://youtv.dothome.co.kr/ch/catv/5002_688FE102.php
 #EXTINF:-1,SBS 파워 FM
 https://zstream.win/pls/sbs_powerfm.pls
 #EXTINF:-1,SBS 러브 FM
