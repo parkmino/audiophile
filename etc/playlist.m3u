@@ -155,10 +155,16 @@ http://1.222.207.80:1935/live/cjbradio/playlist.m3u8
 http://123.140.197.22/stream/1/play.m3u8
 #EXTINF:-1,JIBS제주FM
 http://123.140.197.22/stream/2/play.m3u8
+#EXTINF:-1,Channel A
+https://channelaid3.ichannela.com/atv3/playlist.m3u8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXRoIjoiL2F0djMiLCJleHAiOjE3NjIxMzk5MTh9.N-cieKOeL5dPkNxsw8TOdyVS2IvmHNef589Gyb48X8M
 #EXTINF:-1,JTBC
 http://youtv.dothome.co.kr/ch/catv/51_469EE6CC.php
 #EXTINF:-1,MBN
 http://youtv.dothome.co.kr/ch/catv/54.php
+#EXTINF:-1,TV CHOSUN
+https://onaircdn.tvchosun.com/origin1/_definst_/tvchosun_s1/playlist.m3u8
+#EXTINF:-1,TV CHOSUN2
+https://onair2cdn.tvchosun.com/origin2/_definst_/tvchosun_s1/playlist.m3u8
 #EXTINF:-1,국방TV
 http://mediaworks.dema.mil.kr:1935/live_edge/cudo.sdp/playlist.m3u8
 #EXTINF:-1,국방FM
