@@ -6,20 +6,28 @@ TODO list
    sysctl -w dev.hpet.max-user-freq=2147483520   || true
 
    echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899061 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899064 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
-   sysctl -w vm.max_map_count=672173
-   sysctl -w net.ipv4.tcp_rmem='4650 88333 3345805'
-   sysctl -w net.ipv4.tcp_wmem='4601 89983 3455779'
+   sysctl -w vm.max_map_count=672177
+   sysctl -w net.ipv4.tcp_rmem='4652 88336 3345808'
+   sysctl -w net.ipv4.tcp_wmem='4604 89986 3455782'
 
 2. sudo nano /usr/share/alsa/alsa.conf.min
 
-pcm.hw{type hw card 0 device 0 subdevice 0}pcm.default{type hw card 0 device 0 subdevice 0}
+pcm.hw{type hw card 0 device 0 subdevice 0
+},
+pcm.default{type hw card 0 device 0 subdevice 0
+},
 
 sudo nano /usr/share/alsa/alsa.conf.mix
 
-defaults{namehint.showall on namehint.basic on namehint.extended on ctl.card 0 pcm.card 0 pcm.device 0 pcm.subdevice 0}pcm.hw{@args[CARD DEV SUBDEV]@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]default{@func refer name defaults.pcm.card}}}@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func refer name defaults.pcm.device}}}@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}type hw card $CARD device $DEV subdevice $SUBDEV hint{show{@func refer name defaults.namehint.extended}description "Direct hardware device without any conversions"}}pcm.default{type hw card 0 device 0 subdevice 0}ctl.hw{@args[CARD]@args.CARD{type string default{@func getenv vars[ALSA_CTL_CARD ALSA_CARD]default{@func refer name defaults.ctl.card}}}type hw card $CARD hint.description "Direct control device"}
+defaults{namehint.showall on namehint.basic on namehint.extended on ctl.card 0 pcm.card 0 pcm.device 0 pcm.subdevice 0}
+pcm.hw{@args[CARD DEV SUBDEV]@args.CARD{type string default{@func getenv vars[ALSA_PCM_CARD ALSA_CARD]default{@func refer name defaults.pcm.card}}}@args.DEV{type integer default{@func igetenv vars[ALSA_PCM_DEVICE]default{@func refer name defaults.pcm.device}}}@args.SUBDEV{type integer default{@func refer name defaults.pcm.subdevice}}type hw card $CARD device $DEV subdevice $SUBDEV hint{show{@func refer name defaults.namehint.extended}description "Direct hardware device without any conversions"}
+},
+pcm.default{type hw card 0 device 0 subdevice 0
+},
+ctl.hw{@args[CARD]@args.CARD{type string default{@func getenv vars[ALSA_CTL_CARD ALSA_CARD]default{@func refer name defaults.ctl.card}}}type hw card $CARD hint.description "Direct control device"}
 
 3. sudo nano /etc/mpd.conf.sav /etc/mpd.conf.sav.input_cache
 
@@ -29,12 +37,12 @@ defaults{namehint.showall on namehint.basic on namehint.extended on ctl.card 0 p
 4. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453279"
+   size "487453282"
    }
 
-5. nano ~/.config/mpv.conf
+5. nano ~/.config/mpv/mpv.conf
 
-   demuxer-max-bytes=80226788
+   demuxer-max-bytes=80226792
 
 6. Adjtimex (Not for rpi)
 
