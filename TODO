@@ -6,12 +6,12 @@ TODO list
    sysctl -w dev.hpet.max-user-freq=2147483520   || true
 
    echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899064 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899065 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
-   sysctl -w vm.max_map_count=672177
-   sysctl -w net.ipv4.tcp_rmem='4652 88336 3345808'
-   sysctl -w net.ipv4.tcp_wmem='4604 89986 3455782'
+   sysctl -w vm.max_map_count=672180
+   sysctl -w net.ipv4.tcp_rmem='4653 88337 3345809'
+   sysctl -w net.ipv4.tcp_wmem='4605 89987 3455783'
 
 2. sudo nano /usr/share/alsa/alsa.conf.min
 
@@ -37,12 +37,12 @@ ctl.hw{@args[CARD]@args.CARD{type string default{@func getenv vars[ALSA_CTL_CARD
 4. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453282"
+   size "487453283"
    }
 
 5. nano ~/.config/mpv/mpv.conf
 
-   demuxer-max-bytes=80226792
+   demuxer-max-bytes=80226793
 
 6. Adjtimex (Not for rpi)
 
