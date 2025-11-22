@@ -3,13 +3,15 @@
 
 usage () {
  echo "Usage: $(basename "$0") [0|1|2|ls|hdmi|usb|int] # Cards/HDMI/USB/Internal"
- echo "   or: $(basename "$0") [min|mix]               # ALSA Mode Min/Mix"
+ echo "   or: $(basename "$0") [min|def|mix|plug]      # ALSA Mode Min/Default/Mix/Plug"
  echo "Manipulate ALSA output"
 }
 
 alsa_orig="/usr/share/alsa/alsa.conf.min"
 alsa_min="/usr/share/alsa/alsa.conf.min"
+alsa_def="/usr/share/alsa/alsa.conf.def"
 alsa_mix="/usr/share/alsa/alsa.conf.mix"
+alsa_plug="/usr/share/alsa/alsa.conf.plug"
 alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
@@ -70,17 +72,14 @@ case $1 in
 #   echo "* $proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
 #  done
   ;;
- def)
-  if ! grep -q 'pcm.default' $alsa_conf; then
-#  sudo sed -i 's/pcm.default.*/pcm.default pcm.'"$card"'/' $alsa_conf
-# else
-#  sudo sed -i '1ipcm{default pcm.'"$card"'}' $alsa_conf
-   sudo sed -i '1ipcm{default pcm.hw}' $alsa_conf
-  fi ;;
  min)
-   sudo cp $alsa_min $alsa_conf ;;
+   sudo cp $alsa_min  $alsa_conf ;;
+ def)
+   sudo cp $alsa_def  $alsa_conf ;;
  mix)
-   sudo cp $alsa_mix $alsa_conf ;;
+   sudo cp $alsa_mix  $alsa_conf ;;
+ plug)
+   sudo cp $alsa_plug $alsa_conf ;;
  *) usage ;;
 esac
 
