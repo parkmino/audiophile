@@ -8,10 +8,6 @@ usage () {
 }
 
 alsa_orig="/usr/share/alsa/alsa.conf.min"
-alsa_min="/usr/share/alsa/alsa.conf.min"
-alsa_def="/usr/share/alsa/alsa.conf.def"
-alsa_mix="/usr/share/alsa/alsa.conf.mix"
-alsa_plug="/usr/share/alsa/alsa.conf.plug"
 alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
@@ -72,14 +68,8 @@ case $1 in
 #   echo "* $proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
 #  done
   ;;
- min)
-   sudo cp $alsa_min  $alsa_conf ;;
- def)
-   sudo cp $alsa_def  $alsa_conf ;;
- mix)
-   sudo cp $alsa_mix  $alsa_conf ;;
- plug)
-   sudo cp $alsa_plug $alsa_conf ;;
+ min|def|mix|plug)
+   sudo cp /usr/share/alsa/alsa.conf.${1} $alsa_conf ;;
  *) usage ;;
 esac
 
