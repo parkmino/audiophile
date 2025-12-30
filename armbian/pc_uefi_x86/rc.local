@@ -42,12 +42,12 @@ cp /usr/bin/mpd /usr/bin/upmpdcli /usr/bin/mympd /dev/shm/ # /etc/upmpdcli.conf
 cp /etc/libaudiofile.so.1.0.0.sav /dev/shm/libaudiofile.so.1
 cp /etc/libFLAC.so.12.1.0.sav /dev/shm/libFLAC.so.12
 
-echo 55698 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-echo 4899054 > /sys/kernel/debug/sched/migration_cost_ns || true
+echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+echo 4899065 > /sys/kernel/debug/sched/migration_cost_ns || true
 echo 0 > /sys/module/snd*/parameters/power_save*  || true
 if [ "$(cat /sys/devices/system/clocksource/clocksource0/current_clocksource)" = hpet ]; then
  echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
- sysctl -w dev.hpet.max-user-freq=4095         || true
+ sysctl -w dev.hpet.max-user-freq=2147483647   || true
 fi
 #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/ignore_nice_load || true
 #echo 100 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor || true
