@@ -1,0 +1,5 @@
+#!/bin/sh
+
+url="https://ichannela.com/com/cmm/onair.do"
+
+curl -s "$url" | grep m3u8 | cut -d\' -f4

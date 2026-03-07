@@ -6,29 +6,38 @@ TODO list
    sysctl -w dev.hpet.max-user-freq=2147483647   || true # 2147483647
 
    echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899065 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899067 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
-   sysctl -w vm.max_map_count=672186
-   sysctl -w net.ipv4.tcp_rmem='4656 88340 3345814'
-   sysctl -w net.ipv4.tcp_wmem='4609 89991 3455786'
+   sysctl -w vm.max_map_count=672187
+   sysctl -w net.ipv4.tcp_rmem='4658 88342 3345816'
+   sysctl -w net.ipv4.tcp_wmem='4611 89993 3455788'
 
 2. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453285"
+   size "487453288"
    }
 
 3. APlayer Media Renderer
 
-   ALSA Period frames [3746]
-   ALSA Buffer frames [14956]
+   Preload buffer     [108813]
+   ALSA Period frames [3748]
+   ALSA Buffer frames [14958]
 
 4. nano ~/.config/mpv/mpv.conf
 
-   demuxer-max-bytes=80226797
+   demuxer-max-bytes=80226800
 
-5. Adjtimex (Not for rpi)
+5. Remove alsa library and folder
+
+   $ sudo nano /etc/rc.local
+
+     ls /usr/lib/arm-linux-gnueabihf/libasound* 1>/dev/null 2>&1 && rm /usr/lib/x86_64-linux-gnu/libasound*
+     [ -d "/usr/share/alsa/" ] && rm -rf /usr/share/alsa/
+     cp /etc/alsa.conf.min /dev/shm/alsa.conf
+
+6. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig

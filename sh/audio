@@ -7,7 +7,7 @@ usage () {
  echo "Manipulate ALSA output"
 }
 
-alsa_orig="/usr/share/alsa/alsa.conf.min"
+alsa_orig="/etc/alsa.conf.min"
 alsa_conf="/dev/shm/alsa.conf"
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
@@ -69,7 +69,7 @@ case $1 in
 #  done
   ;;
  min|def|mix|plug)
-   sudo cp /usr/share/alsa/alsa.conf.${1} $alsa_conf ;;
+   sudo cp /etc/alsa.conf.${1} $alsa_conf ;;
  *) usage ;;
 esac
 
