@@ -6,17 +6,17 @@ TODO list
    sysctl -w dev.hpet.max-user-freq=2147483647   || true # 2147483647
 
    echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899067 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899068 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
 
-   sysctl -w vm.max_map_count=672187
-   sysctl -w net.ipv4.tcp_rmem='4658 88342 3345816'
-   sysctl -w net.ipv4.tcp_wmem='4611 89993 3455788'
+   sysctl -w vm.max_map_count=672188
+   sysctl -w net.ipv4.tcp_rmem='4659 88343 3345817'
+   sysctl -w net.ipv4.tcp_wmem='4612 89994 3455789'
 
 2. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453288"
+   size "487453289"
    }
 
 3. APlayer Media Renderer
@@ -27,7 +27,7 @@ TODO list
 
 4. nano ~/.config/mpv/mpv.conf
 
-   demuxer-max-bytes=80226800
+   demuxer-max-bytes=80226801
 
 5. Remove alsa library and folder
 
