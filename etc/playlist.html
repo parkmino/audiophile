@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>종합 실시간 TV 플레이어</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { background: #121212; color: #fff; font-family: 'Malgun Gothic', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        .player-box { width: 100%; max-width: 960px; background: #000; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        video { width: 100%; aspect-ratio: 16 / 9; }
+        .content { width: 100%; max-width: 960px; padding: 20px; box-sizing: border-box; }
+        .category-title { border-left: 4px solid #007bff; padding-left: 10px; margin: 20px 0 10px; font-weight: bold; color: #007bff; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+        button { padding: 10px 5px; border: 1px solid #333; background: #222; color: #ccc; cursor: pointer; border-radius: 4px; font-size: 0.85rem; transition: 0.2s; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        button:hover { background: #333; color: #fff; }
+        button.active { background: #007bff; color: #fff; border-color: #007bff; font-weight: bold; }
+        .status-bar { padding: 10px; font-size: 0.8rem; color: #666; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="player-box">
+        <video id="video" controls autoplay></video>
+        <div id="now-playing" class="status-bar">채널을 선택해 주세요.</div>
+    </div>
+
+    <div class="content">
+        <div class="category-title">EBS</div>
+        <div class="grid" id="ebs-grid"></div>
+
+        <div class="category-title">KBS (실시간 주소)</div>
+        <div class="grid" id="kbs-grid"></div>
+
+        <div class="category-title">MBC</div>
+        <div class="grid" id="mbc-grid"></div>
+
+        <div class="category-title">SBS</div>
+        <div class="grid" id="sbs-grid"></div>
+
+        <div class="category-title">기타</div>
+        <div class="grid" id="etc-grid"></div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const status = document.getElementById('now-playing');
+        let hls = new Hls();
+
+        // 1. EBS 채널 정보
+        const ebsChannels = [
+            { name: "EBS1", url: "https://ebsonair.ebs.co.kr/groundwavefamilypc/familypc1m/playlist.m3u8" },
+            { name: "EBS2", url: "https://ebsonair.ebs.co.kr/ebs2familypc/familypc1m/playlist.m3u8" },
+            { name: "EBS Kids", url: "https://ebsonair.ebs.co.kr/ebsufamilypc/familypc1m/playlist.m3u8" },
+            { name: "EBS+1", url: "https://ebsonair.ebs.co.kr/plus1familypc/familypc1m/playlist.m3u8" },
+            { name: "EBS+2", url: "https://ebsonair.ebs.co.kr/plus2familypc/familypc1m/playlist.m3u8" },
+            { name: "EBSe", url: "https://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8" },
+            { name: "EBS FM", url: "https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8" },
+            { name: "EBSbandi", url: "https://ebsonair.ebs.co.kr/cloud1/iradio/playlist.m3u8" }
+        ];
+
+        // 2. KBS 채널 정보
+        const kbsChannels = [
+            { name: "KBS 1TV", ch: "11" }, { name: "KBS 2TV", ch: "12" },
+            { name: "KBS World", ch: "14" }, { name: "KBS 뉴스D", ch: "81" },
+            { name: "KBS Drama", ch: "N91" }, { name: "KBS Joy", ch: "N92" },
+            { name: "KBS Life", ch: "N93" }, { name: "KBS Story", ch: "N94" },
+            { name: "KBS Kids", ch: "N96" }, { name: "썸, 마이웨이", ch: "nvod1" },
+            { name: "태조왕건", ch: "nvod2" }, { name: "직장의 신", ch: "nvod3" },
+            { name: "아이가 다섯", ch: "nvod4" }, { name: "제빵왕 김탁구", ch: "nvod5" },
+            { name: "1박 2일", ch: "nvod6" }, { name: "내 딸 서영이", ch: "nvod7" },
+            { name: "역사저널 그날", ch: "nvod8" }, { name: "인간극장", ch: "nvod9" },
+            { name: "어린이 만화동산", ch: "nvod10" }, { name: "KBS 클래식FM", ch: "24" },
+            { name: "KBS 쿨FM", ch: "25" }, { name: "KBS 1라디오", ch: "21" },
+            { name: "KBS 2라디오", ch: "22" }, { name: "KBS 3라디오", ch: "23" },
+            { name: "KBS 한민족방송", ch: "26" }, { name: "KBS 다언어", ch: "wink11" },
+            { name: "KBS 영어", ch: "I92" }
+        ];
+
+        // 3. MBC 채널 정보
+        const mbcChannels = [
+            { name: "MBC강원영동TV", url: "http://123.254.93.7:1935/tvlive/livestream2/playlist.m3u8" },
+            { name: "MBC강원영동표준FM", url: "http://123.254.72.24:1935/amlive/livestream/playlist.m3u8" },
+            { name: "MBC강원영동FM4U", url: "http://123.254.72.24:1935/fmlive/livestream/playlist.m3u8" },
+            { name: "MBC광주TV", url: "http://media.kjmbc.co.kr:1935/live/stream/playlist.m3u8" },
+            { name: "MBC광주표준FM", url: "http://211.117.193.120:1935/fmlive/GWANGJU-MBC-FM/playlist.m3u8" },
+            { name: "MBC광주FM4U", url: "http://211.117.193.120:1935/fmlive/GWANGJU-MBC-FM/playlist.m3u8" },
+            { name: "MBC대구TV", url: "https://5ee1ec6f32118.streamlock.net/live/livetv/playlist.m3u8" },
+            { name: "MBC대구표준FM", url: "https://5ee1ec6f32118.streamlock.net/amradio/am/playlist.m3u8" },
+            { name: "MBC대구FM4U", url: "https://5ee1ec6f32118.streamlock.net/fmradio/fm/playlist.m3u8" },
+            { name: "MBC대전TV", url: "https://5c482867a8b63.streamlock.net/live/myStream.sdp/playlist.m3u8" },
+            { name: "MBC대전표준FM", url: "https://5c482867a8b63.streamlock.net/live_am/live_am.stream/playlist.m3u8" },
+            { name: "MBC대전FM4U", url: "https://5c482867a8b63.streamlock.net/live_fm/live_fm.stream/playlist.m3u8" },
+            { name: "MBC목포TV", url: "https://vod.mpmbc.co.kr/a_live/25246741/ch001/playlist.m3u8" },
+            { name: "MBC목포표준FM", url: "https://vod.mpmbc.co.kr/live/encoder-am/playlist.m3u8" },
+            { name: "MBC목포FM4U", url: "https://vod.mpmbc.co.kr/live/encoder-fm/playlist.m3u8" },
+            { name: "MBC여수TV", url: "https://5c3639aa99149.streamlock.net/live_TV/tv/playlist.m3u8" },
+            { name: "MBC여수표준FM", url: "https://5c3639aa99149.streamlock.net/표준FM/표준FM_Audio/playlist.m3u8" },
+            { name: "MBC여수FM4U", url: "https://5c3639aa99149.streamlock.net/FM4U/FM4U_Audio/playlist.m3u8" },
+            { name: "MBC전주TV", url: "https://5ee9633b25727.streamlock.net:443/jmbc_tv/jmbc_tv.stream/playlist.m3u8" },
+            { name: "MBC전주표준FM", url: "https://5ee9633b25727.streamlock.net:443/jmbc_sfm/myStream/playlist.m3u8" },
+            { name: "MBC전주FM4U", url: "https://5ee9633b25727.streamlock.net:443/jmbc_fm4u/myStream/playlist.m3u8" },
+            { name: "MBC제주TV", url: "https://wowza.jejumbc.com/live/tv_jejumbc/playlist.m3u8" },
+            { name: "MBC제주표준FM", url: "https://onairfm.jejumbc.com/hls/onairfmjejumbc/index.m3u8" },
+            { name: "MBC제주FM4U", url: "https://onairsfm.jejumbc.com/hls/onairsfmjejumbc/index.m3u8" },
+            { name: "MBC춘천TV", url: "https://stream.chmbc.co.kr/TV/myStream/playlist.m3u8" },
+            { name: "MBC춘천표준FM", url: "https://stream.chmbc.co.kr/live_radio/fm2/playlist.m3u8" },
+            { name: "MBC춘천FM4U", url: "https://stream.chmbc.co.kr/live_radio2/fm1_source/playlist.m3u8" },
+            { name: "MBC충북TV", url: "http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8" },
+            { name: "MBC충북표준FM", url: "http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8" },
+            { name: "MBC충북FM4U", url: "http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8" }
+        ];
+
+        // 4. SBS 채널 정보
+        const sbsChannels = [
+            { name: "G1강원TV", url: "http://61.82.49.4:1935/live/_definst_/tv.stream/playlist.m3u8" },
+            { name: "G1강원FM", url: "http://61.82.49.4:1935/fm/_definst_/myStream/playlist.m3u8" },
+            { name: "KBC광주TV", url: "https://vod.ikbc.co.kr/KBCTV/tv/playlist.m3u8" },
+            { name: "KBC광주FM", url: "https://vod.ikbc.co.kr/KBCFM/kbcra_aac/playlist.m3u8" },
+            { name: "KNN부산경남", url: "https://stream1.knn.co.kr/hls/9ly4534y7dm2xfa123r2_tv/index.m3u8" },
+            { name: "KNN부산경남파워FM", url: "https://stream1.knn.co.kr/hls/lb9ezl87d37uu0vy65bb_pfm/index.m3u8" },
+            { name: "KNN부산경남러브FM", url: "https://stream1.knn.co.kr/hls/b3y26uu6471k8tes9w7h_lfm/index.m3u8" },
+            { name: "UBC울산TV", url: "https://stream.ubc.co.kr/hls/ubctvstream/index.m3u8" },
+            { name: "UBC울산FM", url: "https://stream.ubc.co.kr/hls/ubcfmstream/index.m3u8" },
+            { name: "JTV전주TV", url: "https://61ff3340258d2.streamlock.net/jtv_live/myStream/playlist.m3u8" },
+            { name: "JTV전주FM", url: "https://61ff3340258d2.streamlock.net/jtv_radio/myStream/playlist.m3u8" },
+            { name: "CJB청주TV", url: "http://1.222.207.80:1935/live/cjbtv/playlist.m3u8" },
+            { name: "CJB청주FM", url: "http://1.222.207.80:1935/live/cjbradio/playlist.m3u8" },
+            { name: "JIBS제주TV", url: "http://123.140.197.22/stream/1/play.m3u88" },
+            { name: "JIBS제주FM", url: "http://123.140.197.22/stream/2/play.m3u8" }
+        ];
+
+        // 5. 기타 채널 정보
+        const etcChannels = [
+            { name: "TV CHOSUN", url: "https://onaircdn.tvchosun.com/origin1/_definst_/tvchosun_s1/playlist.m3u8" },
+            { name: "TV CHOSUN2", url: "https://onair2cdn.tvchosun.com/origin2/_definst_/tvchosun_s1/playlist.m3u8" },
+            { name: "국방TV", url: "http://mediaworks.dema.mil.kr:1935/live_edge/cudo.sdp/playlist.m3u8" },
+            { name: "국방FM", url: "http://mediaworks.dema.mil.kr:1935/live_edge/audio.sdp/playlist.m3u8" },
+            { name: "국악방송", url: "http://mgugaklive.nowcdn.co.kr/gugakvideo/gugakvideo.stream/playlist.m3u8" },
+            { name: "국악방송 라디오", url: "http://mgugaklive.nowcdn.co.kr/gugakradio/gugakradio.stream/playlist.m3u8" },
+            { name: "국회방송", url: "https://m.webcast.go.kr/live/_definst_/smil:natv_720p.smil/playlist.m3u8" },
+            { name: "딜라이브TV 서울", url: "http://112.214.255.230/hls/ch02/playlist.m3u8" },
+            { name: "딜라이브TV 경기", url: "http://112.214.255.233/hls/ch02/playlist.m3u8" },
+            { name: "방송대학TV", url: "https://live.knou.ac.kr/knou1/live1/playlist.m3u8" },
+            { name: "복지TV", url: "https://hls.midibus.kinxcdn.com/live/ch_19b36d47/19b35e4c141aebdc/playlist.m3u8" },
+            { name: "서경방송", url: "https://live.iscs.co.kr/live/1080p.stream/playlist.m3u8" },
+            { name: "시민방송 RTV", url: "https://rtv-stream.a04f922e9e85c8d25ebfeae3dfd22a67.com/hls/rtv_1080/index.m3u8" },
+            { name: "아리랑 TV", url: "http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8" },
+            { name: "아리랑 라디오", url: "http://amdlive-ch03.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8" },
+            { name: "지방자치TV", url: "https://jjctv.ecn.cdn.infralab.net/jjctv/live/playlist.m3u8" },
+            { name: "채널i", url: "http://1.201.160.177:1935/live/myStream/playlist.m3u8" },
+            { name: "토마토증권통", url: "https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8" },
+            { name: "한국농업방송", url: "https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8" },
+            { name: "ABN아름방송", url: "https://vod2.abn.co.kr/IPHONE/abn.m3u8" },
+            { name: "CSS 충북방송", url: "https://media.ccstv.co.kr:1936/OnAirEdge/OnAir/playlist.m3u8" },
+            { name: "KCTV광주CH05", url: "http://119.77.96.184:1935/chn05/chn05/playlist.m3u8" },
+            { name: "KCTV광주CH21", url: "http://119.77.96.184:1935/chn21/chn21/playlist.m3u8" },
+            { name: "KCTV제주채널7", url: "https://vod.kctvjeju.com/LIVE/ch7/playlist.m3u8" },
+            { name: "KCTV제주채널20", url: "https://vod.kctvjeju.com/ch7/ch4/playlist.m3u8" },
+            { name: "KTV국민방송", url: "https://hlive.ktv.go.kr/live/klive_h.stream/playlist.m3u8" },
+            { name: "NHTV농협방송", url: "http://nonghyup.flive.skcdn.com/nonghyup/_definst_/nhlive/playlist.m3u8" },
+            { name: "OBS경인TV", url: "https://vod.obs.co.kr:444/live/obsstream1/tv.stream/playlist.m3u8" },
+            { name: "OBS경인라디오", url: "https://vod.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8" },
+            { name: "tbsTV", url: "https://cdntv.tbs.seoul.kr/tbs/_definst_/tbs_tv_web_720.smil/playlist.m3u8" },
+            { name: "tbsFM", url: "https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8" },
+            { name: "tbseFM", url: "https://cdnefm.tbs.seoul.kr/tbs/_definst_/tbs_efm_web_720.smil/playlist.m3u8" }
+        ];
+
+        // 플레이어 재생 함수
+        function playStream(url, name) {
+            status.innerText = "현재 재생 중: " + name;
+            if (Hls.isSupported()) {
+                hls.destroy();
+                hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // KBS 주소 추출 및 재생
+        async function loadKBS(chCode, name, btn) {
+            setActive(btn);
+            const apiUrl = `https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/${chCode}`;
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                const streamUrl = data.channel_item[0].service_url;
+                playStream(streamUrl, name);
+            } catch (e) {
+                alert("KBS 주소를 가져오지 못했습니다.");
+            }
+        }
+
+        function setActive(target) {
+            document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            target.classList.add('active');
+        }
+
+        // 버튼 생성
+        const ebsGrid = document.getElementById('ebs-grid');
+        ebsChannels.forEach(c => {
+            const btn = document.createElement('button');
+            btn.innerText = c.name;
+            btn.onclick = () => { setActive(btn); playStream(c.url, c.name); };
+            ebsGrid.appendChild(btn);
+        });
+
+        const kbsGrid = document.getElementById('kbs-grid');
+        kbsChannels.forEach(c => {
+            const btn = document.createElement('button');
+            btn.innerText = c.name;
+            btn.onclick = () => loadKBS(c.ch, c.name, btn);
+            kbsGrid.appendChild(btn);
+        });
+
+        const mbcGrid = document.getElementById('mbc-grid');
+        mbcChannels.forEach(c => {
+            const btn = document.createElement('button');
+            btn.innerText = c.name;
+            btn.onclick = () => { setActive(btn); playStream(c.url, c.name); };
+            mbcGrid.appendChild(btn);
+        });
+
+        const sbsGrid = document.getElementById('sbs-grid');
+        sbsChannels.forEach(c => {
+            const btn = document.createElement('button');
+            btn.innerText = c.name;
+            btn.onclick = () => { setActive(btn); playStream(c.url, c.name); };
+            sbsGrid.appendChild(btn);
+        });
+
+        const etcGrid = document.getElementById('etc-grid');
+        etcChannels.forEach(c => {
+            const btn = document.createElement('button');
+            btn.innerText = c.name;
+            btn.onclick = () => { setActive(btn); playStream(c.url, c.name); };
+            etcGrid.appendChild(btn);
+        });
+
+    </script>
+</body>
+</html>

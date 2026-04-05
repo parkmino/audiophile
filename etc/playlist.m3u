@@ -14,45 +14,7 @@ https://ebsonair.ebs.co.kr/plus3familypc/familypc1m/playlist.m3u8
 #EXTINF:-1,EBS FM
 https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8
 #EXTINF:-1,EBSbandi
-https://ebsonair.ebs.co.kr/cloud/iradio/playlist.m3u8
-#EXTINF:-1,KBS1
-http://youtv.dothome.co.kr/ch/public/1.php
-#EXTINF:-1,KBS2
-http://youtv.dothome.co.kr/ch/public/3.php
-#EXTINF:-1,KBS World
-http://youtv.dothome.co.kr/ch/catv/7.php
-#EXTINF:-1,KBS News D
-http://youtv.dothome.co.kr/ch/catv/1.php
-#EXTINF:-1,KBS Drama
-http://youtv.dothome.co.kr/ch/catv/2.php
-#EXTINF:-1,KBS Joy
-http://youtv.dothome.co.kr/ch/catv/3.php
-#EXTINF:-1,KBS Life
-http://youtv.dothome.co.kr/ch/catv/5.php
-#EXTINF:-1,KBS Story
-http://youtv.dothome.co.kr/ch/catv/4.php
-#EXTINF:-1,KBS Kids
-http://youtv.dothome.co.kr/ch/catv/6.php
-#EXTINF:-1,KBS 클래식 FM
-https://zstream.win/pls/kbs_1fm.pls
-#EXTINF:-1,KBS 쿨 FM
-https://zstream.win/pls/kbs_2fm.pls
-#EXTINF:-1,KBS 1라디오
-https://zstream.win/pls/kbs_1radio.pls
-#EXTINF:-1,KBS 해피 FM
-https://zstream.win/pls/kbs_2radio.pls
-#EXTINF:-1,KBS 3라디오
-https://zstream.win/pls/kbs_3radio.pls
-#EXTINF:-1,MBC
-http://youtv.dothome.co.kr/ch/catv/5001_024A4A43.php
-#EXTINF:-1,MBC Net
-http://youtv.dothome.co.kr/ch/catv/28.php
-#EXTINF:-1,MBC FM4U
-https://zstream.win/pls/mbc_mfm.pls
-#EXTINF:-1,MBC 표준 FM
-https://zstream.win/pls/mbc_sfm.pls
-#EXTINF:-1,MBC 올댓뮤직
-https://zstream.win/pls/mbc_chm.pls
+https://ebsonair.ebs.co.kr/cloud1/iradio/playlist.m3u8
 #EXTINF:-1,MBC강원영동TV
 http://123.254.93.7:1935/tvlive/livestream2/playlist.m3u8
 #EXTINF:-1,MBC강원영동표준FM
@@ -113,14 +75,6 @@ http://211.33.246.4:32954/cj_live/myStream.sdp/playlist.m3u8
 http://211.33.246.4:32954/radio_stfm/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC충북FM4U
 http://211.33.246.4:32954/radio_fm/myStream.sdp/playlist.m3u8
-#EXTINF:-1,SBS
-http://youtv.dothome.co.kr/ch/catv/5002_688FE102.php
-#EXTINF:-1,SBS 파워 FM
-https://zstream.win/pls/sbs_powerfm.pls
-#EXTINF:-1,SBS 러브 FM
-https://zstream.win/pls/sbs_lovefm.pls
-#EXTINF:-1,SBS 고릴라M
-https://zstream.win/pls/sbs_sbsdmb.pls
 #EXTINF:-1,G1강원TV
 http://61.82.49.4:1935/live/_definst_/tv.stream/playlist.m3u8
 #EXTINF:-1,G1강원FM
@@ -129,10 +83,6 @@ http://61.82.49.4:1935/fm/_definst_/myStream/playlist.m3u8
 https://vod.ikbc.co.kr/KBCTV/tv/playlist.m3u8
 #EXTINF:-1,KBC광주FM
 https://vod.ikbc.co.kr/KBCFM/kbcra_aac/playlist.m3u8
-#EXTINF:-1,TJB대전TV
-http://123.214.216.80/live/tv/playlist.m3u8
-#EXTINF:-1,TJB대전FM
-http://123.214.216.80/radiolive/radio_64k/playlist.m3u8
 #EXTINF:-1,KNN부산경남
 https://stream1.knn.co.kr/hls/9ly4534y7dm2xfa123r2_tv/index.m3u8
 #EXTINF:-1,KNN부산경남 파워FM
@@ -155,12 +105,6 @@ http://1.222.207.80:1935/live/cjbradio/playlist.m3u8
 http://123.140.197.22/stream/1/play.m3u8
 #EXTINF:-1,JIBS제주FM
 http://123.140.197.22/stream/2/play.m3u8
-#EXTINF:-1,Channel A
-http://youtv.dothome.co.kr/ch/catv/5003_440DDPPJ.php
-#EXTINF:-1,JTBC
-http://youtv.dothome.co.kr/ch/catv/51_469EE6CC.php
-#EXTINF:-1,MBN
-http://youtv.dothome.co.kr/ch/catv/54.php
 #EXTINF:-1,TV CHOSUN
 https://onaircdn.tvchosun.com/origin1/_definst_/tvchosun_s1/playlist.m3u8
 #EXTINF:-1,TV CHOSUN2
@@ -182,11 +126,9 @@ http://112.214.255.233/hls/ch02/playlist.m3u8
 #EXTINF:-1,방송대학TV
 https://live.knou.ac.kr/knou1/live1/playlist.m3u8
 #EXTINF:-1,복지TV
-https://cdnlive179.smartucc.kr/smartlive/312/46324be24454bd98f785039457ac695d/playlist.m3u8
+https://hls.midibus.kinxcdn.com/live/ch_19b36d47/19b35e4c141aebdc/playlist.m3u8
 #EXTINF:-1,서경방송
 https://live.iscs.co.kr/live/1080p.stream/playlist.m3u8
-#EXTINF:-1,소상공인방송
-https://cdnlive179.smartucc.kr/smartlive/558/91258ac21591769e21f41b96f26d883e/playlist.m3u8
 #EXTINF:-1,시민방송 RTV
 https://rtv-stream.a04f922e9e85c8d25ebfeae3dfd22a67.com/hls/rtv_1080/index.m3u8
 #EXTINF:-1,아리랑 TV
@@ -205,8 +147,6 @@ https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 https://vod2.abn.co.kr/IPHONE/abn.m3u8
 #EXTINF:-1,CSS 충북방송
 https://media.ccstv.co.kr:1936/OnAirEdge/OnAir/playlist.m3u8
-#EXTINF:-1,JCN 울산중앙방송
-https://jcnonair-1108.acs.wecandeo.com/ms/3162/1108/index_1.m3u8
 #EXTINF:-1,KCTV광주방송 CH05
 http://119.77.96.184:1935/chn05/chn05/playlist.m3u8
 #EXTINF:-1,KCTV광주방송 CH21
@@ -222,7 +162,7 @@ http://nonghyup.flive.skcdn.com/nonghyup/_definst_/nhlive/playlist.m3u8
 #EXTINF:-1,OBS경인TV
 https://vod.obs.co.kr:444/live/obsstream1/tv.stream/playlist.m3u8
 #EXTINF:-1,OBS경인라디오
-https://vod3.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8
+https://vod.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8
 #EXTINF:-1,tbsTV
 https://cdntv.tbs.seoul.kr/tbs/_definst_/tbs_tv_web_720.smil/playlist.m3u8
 #EXTINF:-1,tbsFM
