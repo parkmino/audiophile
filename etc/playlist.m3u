@@ -133,8 +133,6 @@ http://amdlive-ch03.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/pla
 https://jjctv.ecn.cdn.infralab.net/jjctv/live/playlist.m3u8
 #EXTINF:-1,채널i
 http://1.201.160.177:1935/live/myStream/playlist.m3u8
-#EXTINF:-1,토마토증권통
-https://etomatomobile.hscdn.com/etomato.dvr/livestream/playlist.m3u8
 #EXTINF:-1,한국농업방송
 https://media.joycorp.co.kr:4443/live/live_360p/playlist.m3u8
 #EXTINF:-1,ABN아름방송
