@@ -28,11 +28,11 @@ https://5ee1ec6f32118.streamlock.net/amradio/am/playlist.m3u8
 #EXTINF:-1,MBC대구FM4U
 https://5ee1ec6f32118.streamlock.net/fmradio/fm/playlist.m3u8
 #EXTINF:-1,MBC대전TV
-https://5c482867a8b63.streamlock.net/live/myStream.sdp/playlist.m3u8
+https://ns1.tjmbc.co.kr/live/myStream.sdp/playlist.m3u8
 #EXTINF:-1,MBC대전표준FM
-https://5c482867a8b63.streamlock.net/live_am/live_am.stream/playlist.m3u8
+https://ns1.tjmbc.co.kr/live_am/live_am.stream/playlist.m3u8
 #EXTINF:-1,MBC대전FM4U
-https://5c482867a8b63.streamlock.net/live_fm/live_fm.stream/playlist.m3u8
+https://ns1.tjmbc.co.kr/live_fm/live_fm.stream/playlist.m3u8
 #EXTINF:-1,MBC목포TV
 https://vod.mpmbc.co.kr/a_live/25246741/ch001/playlist.m3u8
 #EXTINF:-1,MBC목포표준FM
