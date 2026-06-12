@@ -1,7 +1,7 @@
 ### Build ALSA Library
 
 $ cd ~
-$ export ver=1.2.14
+$ export ver=1.2.15.3
 $ wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-$ver.tar.bz2
 $ tar xvjf alsa-lib-$ver.tar.bz2
 $ cd alsa-lib-$ver
@@ -49,7 +49,7 @@ $ sudo strip --strip-debug /usr/lib/libasound.so.2.0.0
 $ sudo mv /usr/lib/libasound.so.2.0.0 /etc/libasound.so.2.0.0_$ver
 $ sudo rm -i /usr/lib/libasound*
 $ sudo rm -rf /dev/shm/{ctl,pcm,cards,alsa.conf}
-$ sudo cp /usr/share/alsa/alsa.conf.min /dev/shm/alsa.conf
+$ sudo cp /etc/alsa.conf.min /dev/shm/alsa.conf
 $ unset ver
 
 ## RPI for Desktop
