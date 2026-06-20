@@ -36,7 +36,7 @@ case $1 in
  1r)  ch=21     ;;
  2r)  ch=22     ;;
  3r)  ch=23     ;;
- han) ch=24     ;;
+ han) ch=26     ;;
  mul) ch=wink11 ;;
  eng) ch=I92    ;;
  *)   usage ; exit ;;

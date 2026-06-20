@@ -267,7 +267,7 @@ DAS () {
  printf "• 다스 뵈이다\t\t\t\t\t"
  url="https://www.youtube.com/playlist?list=PLvbpOOxdLN39xfkJl-Oh0Ct1iQZkyI0nW"
 #days=$(curl $curl_opt "$url"  | grep -oE '.{0,20}분 조회수' | head -1 | sed 's/.*딴지방송국 //; s/전.*/전/')
- days=$(curl $curl_opt "$url"  | grep -oE '조회수 .{0,50}' | head -1 | cut -d\" -f9)
+ days=$(curl $curl_opt "$url"  | grep -oE '조회수 .{0,50}' | head -1 | cut -d\" -f7)
  if [ -z "${days##*분*}" ] || [ -z "${days##*시간*}" ]; then
   days="오늘"
  fi
@@ -288,7 +288,7 @@ DAS () {
    printf "\e[34m  $url\e[0m\n"
    for i in $(seq 1 $last); do
     printf '\33[2K\r  \e[32m'
-    grep -oE -e '\[김어준의 다스뵈이다.{0,250}' -e '.총선.{0,250}' -e '.대선.{0,250}' -e '.선거.{0,250}' "$tmpfile" | head -$i | tail -1 | sed 's/ 게시자.*\|"}.*\|\\//g; s/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
+    grep -oE -e '\[김어준의 다스뵈이다.{0,250}' -e '.총선.{0,250}' -e '.대선.{0,250}' -e '.선거.{0,250}' "$tmpfile" | grep image | head -$i | tail -1 | sed 's/ 게시자.*\|"}.*\|\\//g; s/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    #printf '   https://youtu.be/'
     printf '\33[2K\r  \e[34m'
     grep -o 'watch?v=...........' "$tmpfile" | cut -d= -f2 | head -$i | tail -1 | echo "https://youtu.be/$(cat -)"
