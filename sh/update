@@ -291,7 +291,7 @@ DAS () {
     grep -oE -e '\[김어준의 다스뵈이다.{0,250}' -e '.총선.{0,250}' -e '.대선.{0,250}' -e '.선거.{0,250}' "$tmpfile" | grep image | head -$i | tail -1 | sed 's/ 게시자.*\|"}.*\|\\//g; s/&apos;\|&#39;/'\''/g; s/&quot;/"/g; s/&#[0-9]*\|&[a-z]*;//g'
    #printf '   https://youtu.be/'
     printf '\33[2K\r  \e[34m'
-    grep -o 'watch?v=...........' "$tmpfile" | cut -d= -f2 | head -$i | tail -1 | echo "https://youtu.be/$(cat -)"
+    grep -o 'watch?v=...........' "$tmpfile" | uniq | cut -d= -f2 | head -$i | tail -1 | echo "https://youtu.be/$(cat -)"
    done
    printf '\e[0m\33[2K\r'
    rm "$tmpfile"
