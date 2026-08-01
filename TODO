@@ -5,32 +5,59 @@ TODO list
    echo 4095 > /sys/class/rtc/rtc0/max_user_freq || true
    sysctl -w dev.hpet.max-user-freq=2147483647   || true # 2147483647
 
-   echo 55699 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899071 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 55701 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
+   echo 4899072 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
+   echo 128 | tee /sys/module/usbcore/parameters/usbfs_memory_mb
 
-   sysctl -w vm.max_map_count=672191
-   sysctl -w net.ipv4.tcp_rmem='4667 88349 3345821'
-   sysctl -w net.ipv4.tcp_wmem='4617 90000 3455798'
+   sysctl -w vm.max_map_count=672193
+   sysctl -w net.ipv4.tcp_rmem='4670 88352 3345824'
+   sysctl -w net.ipv4.tcp_wmem='4624 90000 3455802'
 
-2. sudo nano /etc/mpd.conf.sav.input_cache
+2. sudo nano /etc/sysctl.conf
+
+   vm.dirty_ratio = 13
+   #vm.dirty_background_ratio = 10
+   #vm.page-cluster = 3
+   #vm.panic_on_oom = 0
+   vm.max_map_count = 672193
+
+   kernel.timer_migration = 0
+
+   net.core.rmem_max = 7097304
+   net.core.wmem_max = 7097304
+   net.core.netdev_max_backlog = 3371
+
+   net.ipv4.tcp_rmem = 4670 88352 3345824
+   net.ipv4.tcp_wmem = 4624 90000 3455802
+
+3. Disable USB Autosuspend
+
+   $ lsusb
+   $ grep 045e /sys/bus/usb/devices/*/idVendor
+   $ echo on | sudo tee /sys/bus/usb/devices/2-4/power/control
+
+   $ head /sys/bus/usb/devices/*/idVendor
+   $ head /sys/bus/usb/devices/*/power/control
+
+4. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
    size "487453292"
    }
    #log_level "error"
 
-3. APlayer Media Renderer
+5. APlayer Media Renderer
 
    Preload buffer     [108813]
    ALSA Period frames [3748]
    ALSA Buffer frames [14958]
 
-4. nano ~/.config/mpv/mpv.conf
+6. nano ~/.config/mpv/mpv.conf
 
-   demuxer-max-bytes=80226803
+   demuxer-max-bytes=80226804
 
-5. Remove alsa library and folder
+7. Remove alsa library and folder
 
    $ sudo nano /etc/rc.local
 
@@ -38,7 +65,7 @@ TODO list
      [ -d "/usr/share/alsa/" ] && rm -rf /usr/share/alsa/
      cp /etc/alsa.conf.min /dev/shm/alsa.conf
 
-6. Adjtimex (Not for rpi)
+8. Adjtimex (Not for rpi)
 
    $ sudo apt-get install adjtimex
    $#sudo adjtimexconfig
