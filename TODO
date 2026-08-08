@@ -45,7 +45,7 @@ TODO list
    input_cache {
    size "487453292"
    }
-   #log_level "error"
+   log_level "error"
 
 5. APlayer Media Renderer
 

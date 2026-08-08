@@ -2,7 +2,8 @@
 
 usage () {
  echo "Usage: $(basename $0) [up|down|on|off|scan|list|quit|stop|view]"
- echo "   or: $(basename $0) [usb] or [lan(wired)|home|mr|ss] or [bk|puppy|OpenESSID]"
+ echo "   or: $(basename $0) [usb] or [lan(wired)|home|mr|ss]"
+ echo "   or: $(basename $0) [bk|bk2f|koaroo|puppy|puppyap|public|OpenESSID]"
  echo "Manage Network for personal use"
 }
 
@@ -100,7 +101,7 @@ case $1 in
   done ;;
 # ifconfig | grep -qs $lan  || (sudo ifconfig $lan  up ; sudo dhclient -v $lan)
 # ifconfig | grep -qs $wlan || (sudo ifconfig $wlan up ; sudo dhclient -v $wlan)
- bk|puppy)
+ bk|bk2f|koaroo|puppy|puppyap|public)
   sudo cp ${net_inf}.d/$1 $net_inf
   echo "#$net_inf"
   grep -v '^ *#' $net_inf
