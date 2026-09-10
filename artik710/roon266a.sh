@@ -1,15 +1,18 @@
 #!/bin/sh
 
-# bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/roon266.sh)
-# bash <(curl -sL https://bit.ly/4ynvDad)
+# bash <(curl -s  https://raw.githubusercontent.com/parkmino/audiophile/master/artik710/roon266a.sh)
+# bash <(curl -sL https://bit.ly/4y62FMF)
 
-mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.tweak
+sed -i '/Update Roon Bridge/d' /usr/bin/audioconf
+
+cp /opt/RoonBridge/Bridge/RoonBridge /root/RoonBridge
 [ ! -d /root/copy ] && mkdir /root/copy
 wget --no-check-certificate -O /root/copy/RoonBridge_linuxarmv8.tar.bz2 https://download.roonlabs.net/builds/RoonBridge_linuxarmv8_206601658.tar.bz2
 
 sync
 
 systemctl stop roonbridgetoram
+rm -rf /opt/RoonBridge/
 tar -xvf /root/copy/RoonBridge_linuxarmv8.tar.bz2 -C /opt/
 
 sync
@@ -17,8 +20,8 @@ sync
 strip --strip-debug /opt/RoonBridge/Bridge/processreaper
 find /opt/RoonBridge/ -name *.so -exec chmod -x {} \; -exec strip --strip-debug {} 2>/dev/null \;
 
-mv /opt/RoonBridge/Bridge/RoonBridge       /opt/RoonBridge/Bridge/RoonBridge.orig
-mv /opt/RoonBridge/Bridge/RoonBridge.tweak /opt/RoonBridge/Bridge/RoonBridge
+mv /opt/RoonBridge/Bridge/RoonBridge /opt/RoonBridge/Bridge/RoonBridge.orig
+cp /root/RoonBridge /opt/RoonBridge/Bridge/RoonBridge
 
 sync
 
