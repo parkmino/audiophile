@@ -7,8 +7,9 @@ TODO list
 
    echo 55701 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
    echo 4899072 | tee /sys/kernel/debug/sched/migration_cost_ns
-   echo 0 | tee /sys/kernel/debug/sched/tunable_scaling
+   echo 0   | tee /sys/kernel/debug/sched/tunable_scaling
    echo 128 | tee /sys/module/usbcore/parameters/usbfs_memory_mb
+   echo -1  | tee /sys/module/usbcore/parameters/autosuspend
 
    sysctl -w vm.max_map_count=672193
    sysctl -w net.ipv4.tcp_rmem='4670 88352 3345824'
@@ -61,7 +62,7 @@ TODO list
 
    $ sudo nano /etc/rc.local
 
-     ls /usr/lib/arm-linux-gnueabihf/libasound* 1>/dev/null 2>&1 && rm /usr/lib/x86_64-linux-gnu/libasound*
+     ls /usr/lib/arm-linux-gnueabihf/libasound* 1>/dev/null 2>&1 && rm /usr/lib/arm-linux-gnueabihf/libasound*
      [ -d "/usr/share/alsa/" ] && rm -rf /usr/share/alsa/
      cp /etc/alsa.conf.min /dev/shm/alsa.conf
 
