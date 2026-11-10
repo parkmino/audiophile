@@ -3,12 +3,18 @@
 
 usage () {
  echo "Usage: $(basename "$0") [0|1|2|ls|hdmi|usb|int] # Cards/HDMI/USB/Internal"
- echo "   or: $(basename "$0") [min|def|mix|plug]      # ALSA Mode Min/Default/Mix/Plug"
+ echo "   or: $(basename "$0") [orig|min|def|mix|plug] # ALSA Mode Original/Min/Default/Mix/Plug"
  echo "Manipulate ALSA output"
 }
 
-alsa_orig="/etc/alsa.conf.min"
+alsa_lib="/dev/shm/libasound.so.2"
+alsa_lib_orig="/etc/libasound.so.2.0.0.orig"
+alsa_lib_tweak="/etc/libasound.so.2.0.0_1.2.15.3"
 alsa_conf="/dev/shm/alsa.conf"
+alsa_conf_orig="/usr/share/alsa/alsa.conf"
+alsa_conf_tweak="/etc/alsa.conf.min"
+alsa_conf_dir="/usr/share/alsa"
+
 card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
 
 case $1 in
@@ -48,7 +54,7 @@ case $1 in
    sudo sed -i '1s/device../device '"$dev"'/'          $alsa_conf
    sudo sed -i '1s/subdevice../subdevice '"$subdev"'/' $alsa_conf
   else
-   sudo cp $alsa_orig $alsa_conf
+   sudo cp "$alsa_conf_tweak" "$alsa_conf"
   fi
 
 #  if grep -q ' \?ctl.default' $alsa_conf; then
@@ -68,11 +74,25 @@ case $1 in
 #   echo "* $proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
 #  done
   ;;
+ orig)
+  sudo cp "$alsa_lib_orig" "$alsa_lib"
+  if [ ! -d "$alsa_conf_dir" ]; then
+   sudo mkdir "$alsa_conf_dir"
+   sudo cp -R /usr/share/alsa.orig/* "$alsa_conf_dir"
+  fi ;;
  min|def|mix|plug)
-   sudo cp /etc/alsa.conf.${1} $alsa_conf ;;
+   sudo cp $alsa_lib_tweak "$alsa_lib"
+   sudo cp /etc/alsa.conf.${1} "$alsa_conf"
+   [ -d "$alsa_conf_dir" ] && sudo rm -rf "$alsa_conf_dir" ;;
  *) usage ;;
 esac
 
-set -x
-cat $alsa_conf
-cat $alsa_orig
+if [ -f "$alsa_conf_orig" ]; then
+ set -x
+ cat "$alsa_conf_orig"
+else
+ set -x
+ cat "$alsa_conf_tweak"
+fi
+
+cat $alsa_conf_tweak

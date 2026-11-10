@@ -57,6 +57,7 @@ TODO list
 6. nano ~/.config/mpv/mpv.conf
 
    demuxer-max-bytes=80226804
+   demuxer-max-bytes=80226809 # mpv 0.42
 
 7. Remove alsa library and folder
 

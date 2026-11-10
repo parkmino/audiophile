@@ -60,7 +60,7 @@ case $1 in
  up|on)     ifconfig | grep -qs $wlan || sudo ifconfig $wlan up   ;;
  down|off)  ifconfig | grep -qs $wlan && sudo ifconfig $wlan down ;;
  quit|stop) quit_network ;;
- scan) 
+ scan)
   prepare_wifi
   sudo iwlist $wlan scan | sed -n '/Cell/,+8p' ;;
  list)
@@ -87,7 +87,7 @@ case $1 in
   grep -v '^ *#' $net_inf
   ifconfig | grep -qs $lan && quit_network
   sudo ifup $lan ;;
- home|mr|ss)
+ home|mr)
   sudo cp ${net_inf}.d/$1 $net_inf
   echo "#$net_inf"
   grep -v '^ *#' $net_inf
@@ -101,7 +101,7 @@ case $1 in
   done ;;
 # ifconfig | grep -qs $lan  || (sudo ifconfig $lan  up ; sudo dhclient -v $lan)
 # ifconfig | grep -qs $wlan || (sudo ifconfig $wlan up ; sudo dhclient -v $wlan)
- bk|bk2f|koaroo|puppy|puppyap|public)
+ bk|bk2f|koaroo|puppy|puppyap|public|ss)
   sudo cp ${net_inf}.d/$1 $net_inf
   echo "#$net_inf"
   grep -v '^ *#' $net_inf
