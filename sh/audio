@@ -15,15 +15,8 @@ alsa_conf_orig="/usr/share/alsa/alsa.conf"
 alsa_conf_tweak="/etc/alsa.conf.min"
 alsa_conf_dir="/usr/share/alsa"
 
-card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
-
 case $1 in
- 0)
-  sudo sed -i 's/type hw card . /type hw card 0 /g' $alsa_conf ;;
- 1)
-  sudo sed -i 's/type hw card . /type hw card 1 /g' $alsa_conf ;;
- 2)
-  sudo sed -i 's/type hw card . /type hw card 2 /g' $alsa_conf ;;
+ 0|1|2|hdmi|usb|init) ;;
  ls)
   #nr=0
   #
@@ -40,40 +33,6 @@ case $1 in
     ! [ -z "$id" ] && ! [ -z "$card" ] && echo "$nr.$i: $id ($card)"
    done
   done ;;
- hdmi|usb|int)
-  if [ "$1" = hdmi ]; then
-   card=0; dev=3; subdev=0; IEC958=on;  irq=snd
-  elif [ "$1" = usb ]; then
-   card=1; dev=0; subdev=0; IEC958=off; irq=xhci
-  else
-   card=0; dev=0; subdev=0; IEC958=off; irq=snd
-  fi
-
-  if [ "$1" = hdmi ] || [ "$1" = usb ]; then
-   sudo sed -i '1s/card../card '"$card"'/'             $alsa_conf
-   sudo sed -i '1s/device../device '"$dev"'/'          $alsa_conf
-   sudo sed -i '1s/subdevice../subdevice '"$subdev"'/' $alsa_conf
-  else
-   sudo cp "$alsa_conf_tweak" "$alsa_conf"
-  fi
-
-#  if grep -q ' \?ctl.default' $alsa_conf; then
-#   sudo sed -i '$ s/ \?ctl.*/\nctl.default{type hw card '"$card"'}/' $alsa_conf
-#  else
-#   sudo sed -i '$s/$/ctl.default{type hw card '"$card"'}/' $alsa_conf
-#  fi
-
-  #amixer -q set IEC958 $IEC958
-  #echo "* IEC985 is $(amixer get IEC958 | tail -1 | cut -d '[' -f2 | cut -d ']' -f1)"
-
-#  sudo sed -i '/^ctl.default/d; s/ctl.default.*//' $alsa_conf
-
-#  for i in $(awk '/'"$irq"'/{print +$1}' /proc/interrupts); do
-#   proc="/proc/irq/$i/smp_affinity"
-#   sudo sh -c "echo $(echo "2^$(($(nproc --all)-1))" | bc) > $proc"
-#   echo "* $proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
-#  done
-  ;;
  orig)
   sudo cp "$alsa_lib_orig" "$alsa_lib"
   if [ ! -d "$alsa_conf_dir" ]; then
@@ -88,12 +47,51 @@ case $1 in
  *) usage ;;
 esac
 
+if [ -f "$alsa_conf" ]; then
+ card=$(grep -m1 -o 'card..' $alsa_conf | cut -b6)
+ case $1 in
+  0|1|2) sudo sed -i "s/type hw card . /type hw card $1 /g" $alsa_conf ;;
+  hdmi|usb|int)
+   if [ "$1" = hdmi ]; then
+    card=0; dev=3; subdev=0; IEC958=on;  irq=snd
+   elif [ "$1" = usb ]; then
+    card=1; dev=0; subdev=0; IEC958=off; irq=xhci
+   else
+    card=0; dev=0; subdev=0; IEC958=off; irq=snd
+   fi
+   if [ "$1" = hdmi ] || [ "$1" = usb ]; then
+    sudo sed -i '1s/card../card '"$card"'/'             $alsa_conf
+    sudo sed -i '1s/device../device '"$dev"'/'          $alsa_conf
+    sudo sed -i '1s/subdevice../subdevice '"$subdev"'/' $alsa_conf
+   else
+    sudo cp "$alsa_conf_tweak" "$alsa_conf"
+   fi
+   #if grep -q ' \?ctl.default' $alsa_conf; then
+   # sudo sed -i '$ s/ \?ctl.*/\nctl.default{type hw card '"$card"'}/' $alsa_conf
+   #else
+   # sudo sed -i '$s/$/ctl.default{type hw card '"$card"'}/' $alsa_conf
+   #fi
+
+   #amixer -q set IEC958 $IEC958
+   #echo "* IEC985 is $(amixer get IEC958 | tail -1 | cut -d '[' -f2 | cut -d ']' -f1)"
+
+   #sudo sed -i '/^ctl.default/d; s/ctl.default.*//' $alsa_conf
+
+   #for i in $(awk '/'"$irq"'/{print +$1}' /proc/interrupts); do
+   # proc="/proc/irq/$i/smp_affinity"
+   # sudo sh -c "echo $(echo "2^$(($(nproc --all)-1))" | bc) > $proc"
+   # echo "* $proc = $(cat $proc) ($(awk '$1 ~ /'"$i"'/{print $NF}' /proc/interrupts))"
+   #done
+ ;;
+ esac
+fi
+
 if [ -f "$alsa_conf_orig" ]; then
  set -x
  head -15 "$alsa_conf_orig"
 else
  set -x
- cat "$alsa_conf_tweak"
+ cat "$alsa_conf"
 fi
 
 cat $alsa_conf_tweak
