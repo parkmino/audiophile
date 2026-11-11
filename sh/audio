@@ -79,6 +79,7 @@ case $1 in
   if [ ! -d "$alsa_conf_dir" ]; then
    sudo mkdir "$alsa_conf_dir"
    sudo cp -R /usr/share/alsa.orig/* "$alsa_conf_dir"
+   [ -f "$alsa_conf" ] && sudo rm "$alsa_conf"
   fi ;;
  min|def|mix|plug)
    sudo cp $alsa_lib_tweak "$alsa_lib"
@@ -89,7 +90,7 @@ esac
 
 if [ -f "$alsa_conf_orig" ]; then
  set -x
- cat "$alsa_conf_orig"
+ head -15 "$alsa_conf_orig"
 else
  set -x
  cat "$alsa_conf_tweak"
