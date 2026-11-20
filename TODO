@@ -78,3 +78,7 @@ TODO list
    $ sudo nano /etc/rc.local
      [ ! -f /etc/default/adjtimex ] && adjtimexconfig && sudo systemctl restart adjtimex
      exit 0
+
+9. /dev/snd/timer
+
+   Do not remove ALSA timer in rc.local

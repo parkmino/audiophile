@@ -35,15 +35,16 @@ case $1 in
   done ;;
  orig)
   sudo cp "$alsa_lib_orig" "$alsa_lib"
-  if [ ! -d "$alsa_conf_dir" ]; then
-   #sudo mkdir "$alsa_conf_dir"
-   #sudo cp -R /usr/share/alsa.orig/* "$alsa_conf_dir"
-   #[ -f "$alsa_conf" ] && sudo rm "$alsa_conf"
-   sudo mkdir "/dev/shm/alsa"
-   sudo cp -R /usr/share/alsa.orig/* /dev/shm/alsa/
-   sudo ln -s /dev/shm/alsa/ /usr/share
-   [ -f "$alsa_conf" ] && sudo rm "$alsa_conf"
-  fi
+  #if [ ! -d "$alsa_conf_dir" ]; then
+  # sudo mkdir "$alsa_conf_dir"
+  # sudo cp -R /usr/share/alsa.orig/* "$alsa_conf_dir"
+  # [ -f "$alsa_conf" ] && sudo rm "$alsa_conf"
+  #fi
+  [ ! -d /dev/shm/alsa ] && sudo mkdir /dev/shm/alsa
+  sudo cp -R /usr/share/alsa.orig/* /dev/shm/alsa/
+  [ -d "$alsa_conf_dir" ] && sudo rm -rf "$alsa_conf_dir"
+  sudo ln -s /dev/shm/alsa/ /usr/share
+  [ -f "$alsa_conf" ] && sudo rm "$alsa_conf"
   if [ ! -e /dev/snd/timer ] && [ -e /sys/class/sound/timer ]; then
    sudo mknod /dev/snd/timer c 116 33
    sudo chmod 660 /dev/snd/timer
@@ -52,7 +53,8 @@ case $1 in
  min|def|mix|plug)
    sudo cp $alsa_lib_tweak "$alsa_lib"
    sudo cp /etc/alsa.conf.${1} "$alsa_conf"
-   [ -d "$alsa_conf_dir" ] && sudo rm -rf "$alsa_conf_dir" ;;
+   [ -e "$alsa_conf_dir" ] && sudo rm -rf "$alsa_conf_dir"
+   [ -d /dev/shm/alsa ] && sudo rm -rf /dev/shm/alsa ;;
  *) usage ;;
 esac
 
