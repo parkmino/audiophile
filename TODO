@@ -81,4 +81,25 @@ TODO list
 
 9. /dev/snd/timer
 
-   Do not remove ALSA timer in rc.local
+   $ sudo nano /etc/rc.local
+
+     Do not remove /dev/snd/timer
+
+   $ ls -al /dev/snd/timer
+
+   $ sudo nano /etc/udev/rules.d/99-remove-snd-acl.rules
+
+     SUBSYSTEM=="sound", KERNEL=="timer", TAG-="uaccess"
+
+   $ sudo udevadm control --reload-rules
+   $ sudo udevadm trigger --subsystem-match=sound
+
+   $ ls -al /dev/snd/timer
+
+10. alsa.conf
+
+   pcm.hw{type hw card 0 device 0 subdevice 0}
+   timer_query.hw{type hw}timer.hw{type hw class 1 sclass 0 card 0 device 0 subdevice 0}
+
+   pcm.hw{type hw card 0 device 0 subdevice 0}pcm{default hw}
+   timer_query.hw{type hw}timer.hw{type hw class 1 sclass 0 card 0 device 0 subdevice 0}timer_query{default hw}timer{default hw}
