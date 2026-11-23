@@ -6,14 +6,14 @@ TODO list
    sysctl -w dev.hpet.max-user-freq=2147483647   || true # 2147483647
 
    echo 55701 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate || true
-   echo 4899075 | tee /sys/kernel/debug/sched/migration_cost_ns
+   echo 4899076 | tee /sys/kernel/debug/sched/migration_cost_ns
    echo 0   | tee /sys/kernel/debug/sched/tunable_scaling
-   echo 130 | tee /sys/module/usbcore/parameters/usbfs_memory_mb
+   echo 131 | tee /sys/module/usbcore/parameters/usbfs_memory_mb
    echo -1  | tee /sys/module/usbcore/parameters/autosuspend
 
-   sysctl -w vm.max_map_count=672195
-   sysctl -w net.ipv4.tcp_rmem='4675 88358 3345831'
-   sysctl -w net.ipv4.tcp_wmem='4626 90004 3455811'
+   sysctl -w vm.max_map_count=672196
+   sysctl -w net.ipv4.tcp_rmem='4676 88360 3345833'
+   sysctl -w net.ipv4.tcp_wmem='4627 90006 3455813'
 
 2. sudo nano /etc/sysctl.conf
 
@@ -21,16 +21,16 @@ TODO list
    #vm.dirty_background_ratio = 10
    #vm.page-cluster = 3
    #vm.panic_on_oom = 0
-   vm.max_map_count = 672193
+   vm.max_map_count = 672196
 
    kernel.timer_migration = 0
 
-   net.core.rmem_max = 7097304
-   net.core.wmem_max = 7097304
-   net.core.netdev_max_backlog = 3371
+   net.core.rmem_max = 7097305
+   net.core.wmem_max = 7097305
+   net.core.netdev_max_backlog = 3372
 
-   net.ipv4.tcp_rmem = 4670 88352 3345824
-   net.ipv4.tcp_wmem = 4624 90000 3455802
+   net.ipv4.tcp_rmem = 4675 88360 3345833
+   net.ipv4.tcp_wmem = 4627 90006 3455813
 
 3. Disable USB Autosuspend
 
@@ -44,7 +44,7 @@ TODO list
 4. sudo nano /etc/mpd.conf.sav.input_cache
 
    input_cache {
-   size "487453294"
+   size "487453296"
    }
    log_level "error"
 
@@ -57,7 +57,7 @@ TODO list
 6. nano ~/.config/mpv/mpv.conf
 
    demuxer-max-bytes=80226804
-   demuxer-max-bytes=80226814 # mpv 0.42
+   demuxer-max-bytes=80226816 # mpv 0.42
 
 7. Remove alsa library and folder
 
@@ -79,7 +79,7 @@ TODO list
      [ ! -f /etc/default/adjtimex ] && adjtimexconfig && sudo systemctl restart adjtimex
      exit 0
 
-9. /dev/snd/timer
+9. /dev/snd/timer (X)
 
    $ sudo nano /etc/rc.local
 
@@ -99,7 +99,7 @@ TODO list
 10. alsa.conf
 
    pcm.hw{type hw card 0 device 0 subdevice 0}
-   timer_query.hw{type hw}timer.hw{type hw class 1 sclass 0 card 0 device 0 subdevice 0}
+   timer_query.hw{type hw}timer.hw{type hw class 3 sclass 0 card 0 device 0 subdevice 0}
 
    pcm.hw{type hw card 0 device 0 subdevice 0}pcm{default hw}
-   timer_query.hw{type hw}timer.hw{type hw class 1 sclass 0 card 0 device 0 subdevice 0}timer_query{default hw}timer{default hw}
+   timer_query.hw{type hw}timer.hw{type hw class 3 sclass 0 card 0 device 0 subdevice 0}timer_query{default hw}timer{default hw}
